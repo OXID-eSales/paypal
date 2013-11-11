@@ -1,5 +1,4 @@
-
-#sukure 3 naujus shiping metodus Test paypal
+# add 3 new shipping methods
 INSERT INTO `oxdeliveryset` (`OXID`,      `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`, `OXACTIVE`, `OXTITLE`,      		   `OXTITLE_1`,  		 `OXPOS`) VALUES
                             ('testdelset1', 1,          1,            0,            1,         'Test Paypal:6hour', 	   'Test Paypal:6 hour', 	  0),
 				('testdelset2', 1,          1,            0,            1,         'Test Paypal:12hour', 	   'Test Paypal:12 hour', 	  0),
@@ -7,7 +6,7 @@ INSERT INTO `oxdeliveryset` (`OXID`,      `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`
 							
 							
 							
-#Sitam shiping metodui priskyre paypala:
+# assigned PayPal to these shipping methods
 INSERT INTO `oxobject2payment` (`OXID`,            `OXPAYMENTID`,    `OXOBJECTID`,      `OXTYPE`) VALUES
 				   ('paymentmethode1', 'oxidpaypal',    'testdelset1',     'oxdelset'),
 				   ('paymentmethode2', 'oxidpaypal',    'testdelset2',     'oxdelset'),
@@ -15,13 +14,13 @@ INSERT INTO `oxobject2payment` (`OXID`,            `OXPAYMENTID`,    `OXOBJECTID
 						
 								
 
-#Sitiem 3 shiping metodam priskiriam sali austria:
+# assigned country Austria
 INSERT INTO `oxobject2delivery` (`OXID`,      `OXDELIVERYID`,    `OXOBJECTID`,                `OXTYPE`) VALUES
                                 ('country1', 'testdelset1',      'a7c40f6320aeb2ec2.72885259', 'oxdelset'),
 				    ('country2', 'testdelset2',      'a7c40f6320aeb2ec2.72885259', 'oxdelset'),
 				    ('country3', 'testdelset3',      'a7c40f6320aeb2ec2.72885259', 'oxdelset');
    
-#sukuriam  shipping cost rulsus    
+# added shipping cost rules
 INSERT INTO `oxdelivery` (`OXID`,  `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`, `OXACTIVE`, `OXTITLE`,       				 `OXTITLE_1`,    				`OXADDSUMTYPE`, `OXADDSUM`, `OXDELTYPE`, `OXPARAM`, `OXPARAMEND`, `OXFIXED`, `OXSORT`, `OXFINALIZE`) VALUES						
 		           ('rules1', 1,          1,            0,            1,         'test paypal from 0  till 10:6hours',    'test paypal from 0  till 10:6hours',  'abs',           0.5,         'p',          0,        10,        0,         9999,     0),
 			    ('rules2', 1,          1,            0,            1,         'test paypal from 10 till 20:6hours',    'test paypal from 10 till 20:6hours',  'abs',    	  0.4,         'p',         10,        20,        0,         9999,     0),
@@ -35,7 +34,7 @@ INSERT INTO `oxdelivery` (`OXID`,  `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`, `OXAC
 						 
 						 
 						
-#3 shipping cost rulsams priskiriam Austria sali:
+# assigned Austria to these shipping cost rules
 INSERT INTO `oxobject2delivery`     (`OXID`,    	`OXDELIVERYID`,   `OXOBJECTID`,                 `OXTYPE`)   VALUES
                                    ('rulescountry1', 'rules1',      'a7c40f6320aeb2ec2.72885259', 'oxcountry'),
 					('rulescountry2', 'rules2',      'a7c40f6320aeb2ec2.72885259', 'oxcountry'),
@@ -49,14 +48,13 @@ INSERT INTO `oxobject2delivery`     (`OXID`,    	`OXDELIVERYID`,   `OXOBJECTID`,
 								
 								
 								
-#3 shiping kostui prisikiriam produkta:
+# assigned product to shipping cost
 INSERT INTO `oxobject2delivery` (`OXID`,          `OXDELIVERYID`, 	`OXOBJECTID`,   `OXTYPE`) VALUES
                                 ('rulesproduct1', 'rules7',      '1000', 		'oxarticles');
 								
 								
 
-#priskiriam shiping metodui "Test paypal" situs 7 rulsus:
-
+# to shipping method "Test PayPal" assign 7 shipping cost rules
 INSERT INTO `oxdel2delset` (`OXID`,     		`OXDELID`, `OXDELSETID`) VALUES
                            ('shipingtopayment1', 'rules1', 'testdelset1'),
 			      ('shipingtopayment2', 'rules2', 'testdelset1'),

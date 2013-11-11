@@ -21,6 +21,7 @@
 
 
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
+//require_once 'test_config.inc.php';
 
 class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCase
 {
@@ -622,6 +623,48 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->dragAndDropToObject($item, $container);
     }
 
+//------------------------ Subshop related functions ----------------------------------------
+
+    /**
+     * login to admin with admin pass, selects subshop and opens needed menu.
+     * @param string $menuLink1 menu link (e.g. master settings, shop settings).
+     * @param string $menuLink2 sub menu link (e.g. administer products, discounts, vat).
+     */
+    public function loginSubshopAdmin($menuLink1, $menuLink2)
+    {
+        $this->selectWindow(null);
+        $this->windowMaximize(null);
+        $this->selectFrame("relative=top");
+        $this->open(shopURL."_cc.php");
+        $this->open(shopURL."admin");
+        $this->checkForErrors();
+        $this->type("user","admin@myoxideshop.com");
+        $this->type("pwd","admin0303");
+        $this->select("chlanguage", "label=English");
+        $this->select("profile", "label=Standard");
+        $this->click("//input[@type='submit']");
+        $this->waitForElement("nav");
+        $this->selectFrame("relative=top");
+        $this->selectFrame("navigation");
+        $this->selectAndWaitFrame("selectshop", "label=subshop", "edit");
+        $this->waitForElement("link=".$menuLink1);
+        $this->checkForErrors();
+        $this->click("link=".$menuLink1);
+        $this->clickAndWaitFrame("link=".$menuLink2, "edit");
+        //testing edit frame for errors
+        $this->frame("edit");
+        //testing list frame for errors
+        $this->frame("list");
+    }
+
+    /**
+     * opens subshop frontend and switch to EN language.
+     */
+    public function openSubshopFrontend()
+    {
+        $this->openShop(false, true);
+    }
+
 //---------------------------- Setup related functions ------------------------------
     /**
      * prints error message, closes active browsers windows and stops.
@@ -643,6 +686,33 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         echo " Selenium tests terminated.";
         $this->stop();
         exit(1);
+    }
+
+//----------------------------- eFire modules for shop ------------------------------------
+    /**
+     * downloads eFire connector.
+     *
+     * @param string $sNameEfi user name for eFire.
+     * @param string $sPswEfi  user password for eFire.
+     */
+    public function downloadConnector($sNameEfi, $sPswEfi)
+    {
+        $this->selectFrame("relative=top");
+        $this->selectFrame("navigation");
+        $this->waitForElement("link=OXID eFire");
+        $this->checkForErrors();
+        $this->click("link=OXID eFire");
+        $this->clickAndWaitFrame("link=Shop connector", "edit");
+
+        //testing edit frame for errors
+        $this->frame("edit");
+        $this->assertFalse($this->isTextPresent("Shop connector downloaded successfully"));
+        $this->type("etUsername", $sNameEfi);
+        $this->type("etPassword", $sPswEfi);
+        $this->clickAndWait("etSubmit");
+        $this->assertTrue($this->isTextPresent("Shop connector downloaded successfully"), "connector was not downloaded successfully");
+        $this->clearTmp();
+        echo " connector downloaded successfully. ";
     }
 
 //----------------------------- new templates for eShop frontend ------------------------------------
@@ -686,7 +756,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     public function searchFor($searchParam)
     {
         $this->type("//input[@id='searchParam']", $searchParam);
-        $this->keyPress("searchParam", "\\13"); //pressing enter key
+        $this->keyPress("searchParam", "\\13"); //presing enter key
         $this->waitForPageToLoad();
         $this->checkForErrors();
     }
@@ -708,7 +778,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     }
 
     /**
-     * selects specified value from drop-down (sorting, items per page etc).
+     * selects specified value from dropdown (sorting, items per page etc).
      *
      * @param int    $elementId  drop down element id.
      * @param string $itemValue  item to select.
@@ -728,7 +798,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     }
 
     /**
-     * selects specified value from drop-down (for multidimensional variants).
+     * selects specified value from dropdown (for multidimensional variants).
      *
      * @param string $elementId  container id.
      * @param int    $elementNr  select list number (e.g. 1, 2).
@@ -786,6 +856,44 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->waitForItemAppear("languages");
         $this->clickAndWait("//ul[@id='languages']//li/a/span[text()='".$language."']");
         $this->assertFalse($this->isVisible("//ul[@id='languages']"));
+    }
+
+    // --------------------------- trusted shops ------------------------------
+
+    /**
+     * login to trusted shops in admin.
+     * @param string $link1
+     * @param string $link2
+     */
+    public function loginAdminTs($link1 = "link=Seal of quality", $link2 = "link=Trusted Shops")
+    {
+        oxDb::getInstance()->getDb()->Execute("UPDATE `oxconfig` SET `OXVARVALUE` = 0xce92 WHERE `OXVARNAME` = 'sShopCountry';");
+        $this->selectWindow(null);
+        $this->windowMaximize(null);
+        $this->selectFrame("relative=top");
+        $this->open(shopURL."_cc.php");
+        $this->open(shopURL."admin");
+        $this->checkForErrors();
+        $this->type("user", "admin@myoxideshop.com");
+        $this->type("pwd", "admin0303");
+        $this->select("chlanguage", "label=English");
+        $this->select("profile", "label=Standard");
+        $this->click("//input[@type='submit']");
+        $this->waitForElement("nav");
+        $this->selectFrame("relative=top");
+        $this->selectFrame("navigation");
+        /* if ( OXID_VERSION_EE ) : */
+        if ( isSUBSHOP ) { // selecting active subshop
+            $this->selectAndWaitFrame("selectshop", "label=subshop", "edit");
+        }
+        /* endif; */
+        $this->waitForElement($link1);
+        $this->checkForErrors();
+        $this->click($link1);
+        $this->clickAndWaitFrame($link2, "edit");
+
+        //testing edit frame for errors
+        $this->frame("edit");
     }
 
     /**

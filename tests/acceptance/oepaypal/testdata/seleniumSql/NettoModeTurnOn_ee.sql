@@ -1,5 +1,4 @@
-DELETE FROM `oxconfig`
-WHERE `OXVARNAME` IN ('blShowNetPrice', 'blShowVATForDelivery');
+DELETE FROM `oxconfig` WHERE `OXVARNAME` IN ('blShowNetPrice', 'blShowVATForDelivery');
 
 INSERT INTO `oxconfig` (`OXID`, `OXSHOPID`, `OXMODULE`, `OXVARNAME`, `OXVARTYPE`, `OXVARVALUE`) VALUES
 ('__fd147c4d0af42f3f27f5e8914fd35f', 1, '', 'blShowNetPrice', 'bool', 0x07),

@@ -1,6 +1,5 @@
-#turn off PayPal options: PayPal Basis; PayPal Express; Enable Express Checkout in mini cart; Show express checkout in product details page ;
-DELETE FROM `oxconfig`
-WHERE `OXVARNAME` IN ('blOEPayPalStandardCheckout','blOEPayPalExpressCheckout','blOEPayPalECheckoutInMiniBasket','blOEPayPalECheckoutInDetails');
+# turn off PayPal options: PayPal Basis; PayPal Express; Enable Express Checkout in mini cart; Show express checkout in product details page;
+DELETE FROM `oxconfig` WHERE `OXVARNAME` IN ('blOEPayPalStandardCheckout','blOEPayPalExpressCheckout','blOEPayPalECheckoutInMiniBasket','blOEPayPalECheckoutInDetails');
 
 INSERT INTO `oxconfig` (`OXID`, `OXSHOPID`, `OXMODULE`, `OXVARNAME`, `OXVARTYPE`, `OXVARVALUE`) VALUES
 ('__blOEPayPalStandardCheckout', 'oxbaseshop', 'module:oepaypal', 'blOEPayPalStandardCheckout', 'bool', ''),

@@ -1,5 +1,5 @@
 [{if $oViewConf->oePayPalIsModuleActive('oethemeswitcher', '1.1') && $oViewConf->isExpressCheckoutEnabledInDetails() && !$oDetailsProduct->isNotBuyable()}]
-    [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/css/paypal_mobile.css') }]
+    [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/css/paypal_mobile.css')}]
 
     [{ $oViewConf->getHiddenSid() }]
     <div id="paypalExpressCheckoutDetailsBox" class="paypalExpressCheckoutBox paypalExpressCheckoutDetailsBox">
@@ -17,4 +17,3 @@
 [{/if}]
 
 [{$smarty.block.parent}]
-[{oxstyle inWidget=true}]

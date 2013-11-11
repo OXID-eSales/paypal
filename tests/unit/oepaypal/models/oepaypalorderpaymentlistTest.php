@@ -33,17 +33,8 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
      */
     protected function setUp()
     {
-        oePayPalEvents::addOrderPaymentsTable();
-        oePayPalEvents::addOrderTableFields();
-    }
-
-    /**
-     *  Remove created tables
-     */
-    protected function tearDown()
-    {
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_order`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpayments`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
     }
 
     /**

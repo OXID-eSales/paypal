@@ -2,7 +2,7 @@
 
 [{if $oViewConf->oePayPalIsModuleActive('oethemeswitcher', '1.1') && $oViewConf->isExpressCheckoutEnabledInDetails() && !$oDetailsProduct->isNotBuyable()}]
 
-    [{if $oView->showECSPopup()}]
+    [{if $oView->oePayPalShowECSPopup()}]
         <div id="ECConfirmation" class="container">
             <ul class="nav nav-list main-nav-list">
                 <li>
@@ -14,10 +14,10 @@
             </ul>
             <div class="content">
                 <p>
-                    [{if $oView->getArticleAmount() gt 1}]
-                    [{oxmultilang ident="OEPAYPAL_SAME_ITEMS_QUESTION" args=$oView->getArticleAmount()}]
+                    [{if $oView->oePayPalGetArticleAmount() gt 1}]
+                    [{oxmultilang ident="OEPAYPAL_SAME_ITEMS_QUESTION" args=$oView->oePayPalGetArticleAmount()}]
                     [{else}]
-                    [{oxmultilang ident="OEPAYPAL_SAME_ITEM_QUESTION" args=$oView->getArticleAmount()}]
+                    [{oxmultilang ident="OEPAYPAL_SAME_ITEM_QUESTION" args=$oView->oePayPalGetArticleAmount()}]
                     [{/if}]
                 </p>
                 <ul class="form">
@@ -47,12 +47,12 @@
         [{oxscript add='$( "#actionNotAddToBasketAndGoToCheckout" ).oePayPalOnClickProceedAction( {sAction: "actionNotAddToBasketAndGoToCheckout", sFormContainer: "#productinfo"} );'}]
         [{oxscript add='$( "#actionAddToBasketAndGoToCheckout" ).oePayPalOnClickProceedAction( {sAction: "actionAddToBasketAndGoToCheckout", sFormContainer: "#productinfo"} );'}]
         [{*Add same label to #persistentParam input*}]
-        [{if $oView->getPersistentParam()}]
-            [{oxscript add='$( "#persistentParam" ).val( "'|cat:$oView->getPersistentParam()|cat:'" );'}]
+        [{if $oView->oePayPalGetPersistentParam()}]
+            [{oxscript add='$( "#persistentParam" ).val( "'|cat:$oView->oePayPalGetPersistentParam()|cat:'" );'}]
         [{/if}]
         [{*Add same values to selection list*}]
-        [{if $oView->getSelection()}]
-            [{foreach from=$oView->getSelection() item=sSelection key=iKey}]
+        [{if $oView->oePayPalGetSelection()}]
+            [{foreach from=$oView->oePayPalGetSelection() item=sSelection key=iKey}]
                 [{oxscript add='
                     $( "#productSelections input[name=\'sel['|cat:$iKey|cat:']\']" ).val( "'|cat:$sSelection|cat:'" );
                     var sSelectionName'|cat:$iKey|cat:' = $( "#productSelections div.dropdown:eq('|cat:$iKey|cat:') ul li a[data-selection-id='|cat:$sSelection|cat:']" ).text();

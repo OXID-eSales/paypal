@@ -50,7 +50,7 @@ $aData = array(
         'oxzip'       => 'ZipCode',
         'oxfon'       => 'PhoneNr',
         'oxcountryid' => '8f241f11096877ac0.98748826', // United States
-        'oxstateid'   => 'IL', // Illinois
+        'oxstateid'   => '30', // Illinois
     ),
     'config' => array(
         'blSeoMode' => false

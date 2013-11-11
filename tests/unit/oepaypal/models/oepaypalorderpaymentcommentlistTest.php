@@ -33,19 +33,9 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentListTest extends OxidTestC
      */
     protected function setUp()
     {
-        oePayPalEvents::addOrderPaymentsCommentsTable();
-        oePayPalEvents::addOrderPaymentsTable();
-        oePayPalEvents::addOrderTableFields();
-    }
-
-    /**
-     *  Remove created tables
-     */
-    protected function tearDown()
-    {
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_orderpaymentcomments`' );
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_order`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpaymentcomments`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpayments`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
     }
 
     /**

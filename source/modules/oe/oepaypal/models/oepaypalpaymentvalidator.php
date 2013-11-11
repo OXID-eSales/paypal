@@ -282,19 +282,33 @@ class oePayPalPaymentValidator
      */
     protected function _checkUserGroup()
     {
-        $blIsValid = false;
+        $blIsValid = true;
 
         $oPayPalPayment = $this->getPayment();
-        $oUser = $this->getUser();
-
         $oGroups = $oPayPalPayment->getGroups();
 
-        if ( $oGroups && count( $oGroups ) > 0 ) {
-            foreach ( $oGroups as $oGroup ) {
-                if ( $oUser->inGroup( $oGroup->getId() ) ) {
-                    $blIsValid = true;
-                    break;
-                }
+        if ( $oGroups && !empty( $oGroups ) ) {
+            $blIsValid = $this->_isUserAssignedToGroup( $oGroups );
+        }
+
+        return $blIsValid;
+    }
+
+    /**
+     * Checks whether user is assigned to given groups array
+     * @param oxList $oGroups
+     *
+     * @return bool
+     */
+    protected function _isUserAssignedToGroup( $oGroups )
+    {
+        $blIsValid = false;
+
+        $oUser = $this->getUser();
+        foreach ( $oGroups as $oGroup ) {
+            if ( $oUser->inGroup( $oGroup->getId() ) ) {
+                $blIsValid = true;
+                break;
             }
         }
 

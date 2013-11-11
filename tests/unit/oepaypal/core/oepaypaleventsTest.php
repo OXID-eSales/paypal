@@ -30,7 +30,7 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
     /**
      * Tear down the fixture.
      */
-    protected function tearDown()
+    protected function setUp()
     {
         // Dropping order payments table
         oxDb::getDB()->execute( "DROP TABLE IF EXISTS `oepaypal_orderpayments`");
@@ -45,6 +45,19 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
         // Deleting enabled PayPal RDFA
         $sSql = "DELETE FROM `oxobject2payment` WHERE `OXID` = 'oepaypalrdfa'";
         oxDb::getDb()->execute( $sSql );
+
+        parent::setUp();
+    }
+
+    public function tearDown()
+    {
+        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`' );
+        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpayments`' );
+        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_order`' );
+
+        oePayPalEvents::addOrderPaymentsCommentsTable();
+        oePayPalEvents::addOrderPaymentsTable();
+        oePayPalEvents::addOrderTableFields();
 
         parent::tearDown();
     }
@@ -106,8 +119,7 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
      */
     public function testDisablePayPalRDFA()
     {
-        $sInsertSql = "INSERT INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) VALUES('oepaypalrdfa', 'oxidpaypal', 'PayPal', 'rdfapayment')";
-        oxDb::getDb()->execute( $sInsertSql );
+        oePayPalEvents::enablePayPalRDFA();
         oePayPalEvents::disablePayPalRDFA();
         $this->assertFalse( $this->_getPayPalRDFaFromOxObject2PaymentTable() );
     }

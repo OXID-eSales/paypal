@@ -24,15 +24,15 @@
     var oePayPalOnClickProceedAction = {
         options: {
             sAction: 'actionExpressCheckoutFromDetailsPage',
-            sFormContainer: '#detailsMain'
+            sForm: '#detailsMain form.js-oxProductForm'
         },
 
         _create: function() {
             var self = this;
 
             $( self.element ).click( function() {
-                $( self.options.sFormContainer + ' input[name="fnc"]' ).val( self.options.sAction );
-                $( self.options.sFormContainer + ' form' ).submit();
+                $( self.options.sForm + ' input[name="fnc"]' ).val( self.options.sAction );
+                $( self.options.sForm ).submit();
             } );
         }
     };

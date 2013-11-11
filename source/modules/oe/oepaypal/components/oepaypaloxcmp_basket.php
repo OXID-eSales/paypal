@@ -26,6 +26,13 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
 {
 
     /**
+     * Show ECS PopUp
+     *
+     * @var bool
+     */
+    protected $_blShopPopUp = false;
+
+    /**
      * Method returns URL to checkout products OR to show popup.
      *
      * @return string
@@ -41,13 +48,24 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
             $sRes = $this->actionAddToBasketAndGoToCheckout();
         } else {
             $sRes = $this->_getRedirectUrl();
-            //redirect back to details page and display popup if amount is more than 0
+            //if amount is more than 0, do not redirect, show ESC popup instead
             if ( $oCurrentArticle->getArticleAmount() > 0 ) {
-                $sRes .= "&showECSPopup=1&ECSArticle={$this->_getSerializedCurrentArticleInfo()}&displayCartInPayPal=" . ( ( int ) $this->_getRequest()->getPostParameter( 'displayCartInPayPal' ) );
+                $this->_blShopPopUp = true;
+                $sRes = null;
             }
         }
 
         return $sRes;
+    }
+
+    /**
+     * Returns whether ECS popup should be shown
+     *
+     * @return bool
+     */
+    public function shopECSPopUp()
+    {
+        return $this->_blShopPopUp;
     }
 
     /**
@@ -86,16 +104,16 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      *
      * @return string
      */
-    protected function _getSerializedCurrentArticleInfo()
+    public function getCurrentArticleInfo()
     {
         $aProducts = $this->_getItems();
         $sCurrentArticleId = $this->getConfig()->getRequestParameter( 'aid' );
-        $sSerializedParams = null;
+        $aParams = null;
         if ( !is_null( $aProducts[$sCurrentArticleId] ) ) {
-            $sSerializedParams = serialize( $aProducts[$sCurrentArticleId] );
+            $aParams = $aProducts[$sCurrentArticleId];
         }
 
-        return $sSerializedParams;
+        return $aParams;
     }
 
     /**

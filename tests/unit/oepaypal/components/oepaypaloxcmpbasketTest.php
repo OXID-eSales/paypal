@@ -28,11 +28,11 @@ class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends OxidTestCase
     {
         return array(
             // Article valid
-            array( true, 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=', 1 ),
+            array( true, 1, 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' ),
             // Article not valid
-            array( false, 'start?&showECSPopup=1&ECSArticle=&displayCartInPayPal=0', 1 ),
+            array( false, 1, null ),
             // Article not not valid- amount is zero
-            array( false, 'start?', 0 )
+            array( false, 0, 'start?' )
         );
     }
 
@@ -43,7 +43,7 @@ class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends OxidTestCase
      * @param $iArticleAmount
      * @dataProvider providerActionExpressCheckoutFromDetailsPage
      */
-    public function testActionExpressCheckoutFromDetailsPage( $blIsArticleValid, $sExpectedUrl, $iArticleAmount )
+    public function testActionExpressCheckoutFromDetailsPage( $blIsArticleValid, $iArticleAmount, $sExpectedUrl )
     {
         $oValidator = $this->getMock( 'oePayPalArticleToExpressCheckoutValidator', array( 'isArticleValid' ) );
         $oValidator->expects( $this->any() )->method( 'isArticleValid' )->will( $this->returnValue( $blIsArticleValid ) );

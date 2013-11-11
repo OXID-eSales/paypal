@@ -28,16 +28,13 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
 {
     public function setUp()
     {
+        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`' );
+        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpayments`' );
+        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_order`' );
+
         oePayPalEvents::addOrderPaymentsCommentsTable();
         oePayPalEvents::addOrderPaymentsTable();
         oePayPalEvents::addOrderTableFields();
-    }
-
-    public function tearDown()
-    {
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_orderpaymentcomments`' );
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_order`' );
     }
 
     /**

@@ -31,10 +31,8 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
     {
         parent::setUp();
 
-        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`' );
-        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpayments`' );
-        oePayPalEvents::addOrderPaymentsCommentsTable();
-        oePayPalEvents::addOrderPaymentsTable();
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpaymentcomments`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpayments`' );
     }
 
     public function testSetGetRequest()

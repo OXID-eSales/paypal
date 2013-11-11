@@ -33,15 +33,7 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentTest extends OxidTestCase
      */
     public function setUp()
     {
-        oePayPalEvents::addOrderPaymentsCommentsTable();
-    }
-
-    /**
-     *  Remove created tables
-     */
-    public function tearDown()
-    {
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_orderpaymentcomments`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpaymentcomments`' );
     }
 
     /**

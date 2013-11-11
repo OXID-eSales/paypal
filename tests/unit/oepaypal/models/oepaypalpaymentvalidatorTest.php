@@ -109,16 +109,26 @@ class Unit_oePayPal_Models_oePayPalPaymentValidatorTest extends OxidTestCase
         $oGroup2->expects( $this->any() )->method( "getId" )->will( $this->returnValue( "someGroup2" ) );
 
         return array(
+            // price outside range, user has account, payment has no set countries, and no user groups set - expects false
             array ( 1, 10, 100, 5,   array(), null, "someCountry", true, array(), array(), false ),
+            // price outside range, user has account, payment has no set countries, but has user group set, user belongs to the same group - expects false
             array ( 1, 10, 100, 110, array(), null, "someCountry", true, array( $oGroup1 ), array( 'someGroup1'=>"data" ), false ),
+            // price inside range, user has account, payment has no set countries, but has user group set, user belongs to the same group - expects true
             array ( 1, 10, 100, 10,  array(), null, "someCountry", true, array( $oGroup1 ), array( 'someGroup1'=>"data" ), true ),
+            // paypal payment is not active - expects false
             array ( 0, 10, 100, 10,  array(), null, "someCountry", true, array(), array(), false ),
             // Shipping country not equal to given countries
+            // price inside range, user has account, payment has countries and groups set, but user is from other country, but belongs to the same group - expects false
             array ( 1, 10, 100, 10,  array( "someOtherCountry", "andAnotherCountry" ), "someCountry", null, true, array( $oGroup1 ), array( 'someGroup1'=>"data" ), false ),
+            // price inside range, user has account, payment has countries and groups set, but user is from the same country and belongs to the same group - expects true
             array ( 1, 10, 100, 100, array( "someOtherCountry", "someCountry", "andAnotherCountry" ), null, "someCountry", true, array( $oGroup1 ), array( 'someGroup1'=>"data" ), true ),
+            // price inside range, user has account, payment does not have countries set, but has user groups set, user does not belong to any user group - expects false
             array ( 1, 10, 100, 10,  array(), null, "someCountry", true, array( $oGroup1, $oGroup2 ), array(), false ),
+            // price inside range, user has account, payment does not have countries set, but has user groups set, user belongs to one user group - expects true
             array ( 1, 10, 100, 10,  array(), null, "someCountry", true, array( $oGroup1, $oGroup2 ), array( 'someGroup1'=>"data" ), true ),
+            // price inside range, user has account, payment does not have countries set, but has user groups set, user belongs to different user group - expects false
             array ( 1, 10, 100, 10,  array(), null, "someCountry", true, array( $oGroup1, $oGroup2 ), array( 'someGroup3'=>"data"  ), false ),
+            // price inside range, user does not have account (anonymous), payment has groups set - expects true
             array ( 1, 10, 100, 10,  array(), null, "someCountry", false, array( $oGroup1, $oGroup2 ), array(), true ),
             // Shipping country not given, but user address is given
             array ( 1, 10, 100, 10,  array(), "someCountry", null, false, array( $oGroup1, $oGroup2 ), array(), true ),
@@ -163,6 +173,28 @@ class Unit_oePayPal_Models_oePayPalPaymentValidatorTest extends OxidTestCase
         $oValidator->setPrice( $dPrice );
 
         $this->assertEquals( $blExpectedResult, $oValidator->isPaymentValid() );
+    }
+
+    /**
+     * Testing PayPal payment validator all cases
+     *
+     */
+    public function testIsPaymentValid_NoGroupsAssignedToPayment_True()
+    {
+        $oPayment = $this->getMock( "oxPayment", array("getCountries", "getGroups") );
+        $oPayment->oxpayments__oxactive = new oxField( 1 );
+        $oPayment->expects( $this->any() )->method( "getGroups" )->will( $this->returnValue( array() ) );
+
+        $oUser = $this->getMock( "oxUser", array( "hasAccount" ) );
+        $oUser->expects( $this->any() )->method( "hasAccount" )->will( $this->returnValue( 1 ) );
+
+        $oValidator = new oePayPalPaymentValidator();
+
+        $oValidator->setConfig( $this->getConfig() );
+        $oValidator->setPayment( $oPayment );
+        $oValidator->setUser( $oUser );
+
+        $this->assertEquals( true, $oValidator->isPaymentValid() );
     }
 
     /**

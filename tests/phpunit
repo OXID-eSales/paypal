@@ -5,9 +5,10 @@ if ! test -z "$SEL" ; then
     options="--dbreset=TF21"
 fi
 
+
 options="--verbose"
 
-proj_prefix="/var/www/eshop/eshop"
+proj_prefix="/var/www/oxideshop_dev"
 
 php_settings="-d memory_limit=1024M -d include_path=.:$proj_prefix/library/PHPUnit:$proj_prefix/library/"
 

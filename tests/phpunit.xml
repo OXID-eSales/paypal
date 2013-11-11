@@ -18,18 +18,11 @@
          strict="false"
          verbose="false">
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true" addUncoveredFilesFromWhitelist="true">
+        <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">modules/oe/oepaypal/components</directory>
             <directory suffix=".php">modules/oe/oepaypal/controllers</directory>
             <directory suffix=".php">modules/oe/oepaypal/core</directory>
             <directory suffix=".php">modules/oe/oepaypal/models</directory>
         </whitelist>
-        <blacklist>
-            <directory suffix=".php">modules/oe/oepaypal/views</directory>
-            <directory suffix=".php">modules/oe/oepaypal/translations</directory>
-            <directory suffix=".php">modules/oe/oepaypal/out</directory>
-            <directory suffix=".php">modules/oe/oepaypal/logs</directory>
-            <file>modules/oe/oepaypal/metadata.php</file>
-        </blacklist>
     </filter>
 </phpunit>

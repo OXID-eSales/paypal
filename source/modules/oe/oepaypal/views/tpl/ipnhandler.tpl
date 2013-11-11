@@ -1,0 +1,1 @@
+[{* ipn handler template *}]

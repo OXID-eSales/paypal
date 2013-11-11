@@ -1,0 +1,7 @@
+[{if $oViewConf->oePayPalIsModuleActive('oethemeswitcher', '1.1') && $sPaymentID == "oxidpaypal" }]
+    [{if $oViewConf->isStandardCheckoutEnabled() }]
+        [{ $smarty.block.parent }]
+    [{/if}]
+[{else}]
+    [{ $smarty.block.parent }]
+[{/if}]

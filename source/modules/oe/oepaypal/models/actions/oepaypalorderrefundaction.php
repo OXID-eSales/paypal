@@ -1,0 +1,64 @@
+<?php
+/**
+ * This file is part of OXID eSales PayPal module.
+ *
+ * OXID eSales PayPal module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OXID eSales PayPal module is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @link      http://www.oxid-esales.com
+ * @copyright (C) OXID eSales AG 2003-2013
+ */
+
+/**
+ * PayPal order action refund class
+ */
+class oePayPalOrderRefundAction extends oePayPalOrderAction
+{
+
+    /**
+     * Processes PayPal response
+     */
+    public function process()
+    {
+        $oHandler = $this->getHandler();
+        $oResponse = $oHandler->getPayPalResponse();
+        $oData = $oHandler->getData();
+
+        $oOrder = $this->getOrder();
+        $oOrder->addRefundedAmount( $oResponse->getRefundAmount() );
+        $oOrder->setPaymentStatus( $oData->getOrderStatus() );
+        $oOrder->save();
+
+        $oPayment = oxNew( 'oePayPalOrderPayment' );
+        $oPayment->setDate($this->getDate());
+        $oPayment->setTransactionId( $oResponse->getTransactionId() );
+        $oPayment->setCorrelationId( $oResponse->getCorrelationId() );
+        $oPayment->setAction('refund');
+        $oPayment->setStatus( $oResponse->getPaymentStatus() );
+        $oPayment->setAmount( $oResponse->getRefundAmount() );
+        $oPayment->setCurrency( $oResponse->getCurrency() );
+
+        $oRefundedPayment = $oData->getPaymentBeingRefunded();
+        $oRefundedPayment->addRefundedAmount( $oResponse->getRefundAmount() );
+        $oRefundedPayment->save();
+
+        $oPayment = $oOrder->getPaymentList()->addPayment( $oPayment );
+
+        if ( $oData->getComment() ) {
+            $oComment = oxNew('oePayPalOrderPaymentComment');
+            $oComment->setComment( $oData->getComment() );
+            $oPayment->addComment( $oComment );
+        }
+    }
+
+}

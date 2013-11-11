@@ -1,0 +1,145 @@
+/**
+ * This file is part of OXID eSales PayPal module.
+ *
+ * OXID eSales PayPal module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OXID eSales PayPal module is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @link      http://www.oxid-esales.com
+ * @copyright (C) OXID eSales AG 2003-2013
+ */
+.paypalExpressCheckoutBox {
+    min-width: 145px;
+    float: right;
+    height: 66px;
+    padding-right: 15px;
+    margin-right: 18px;
+    border-right: 1px solid #ccc;
+}
+
+.paypalExpressCheckoutMsg {
+    position: relative;
+    margin: 0;
+    line-height: 20px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.paypalExpressCheckoutMsg input {
+    float: left;
+    line-height: 20px;
+}
+
+.payment .paypalDescBox {
+    position: relative;
+    margin: 10px 0;
+}
+
+.payment .paypalPaymentDesc {
+    margin: 12px 0 5px;
+}
+
+.paypalHelpIcon {
+    position: absolute;
+    left: 163px;
+    top: 23px;
+    display: block;
+    width: 18px;
+    height: 18px;
+    background: #eee;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    line-height: 18px;
+    text-align: center;
+    font-weight: bold;
+    color: #777;
+}
+
+.paypalHelpIcon.small {
+    top: 0;
+    left: -20px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+
+.paypalDescBox .helpIcon:hover {
+    color: #777;
+    border-color: #aaa;
+}
+
+.paypalHelpBox {
+    top: 22px;
+    left: -20px;
+    width: 190px;
+    white-space: normal;
+    color: #333;
+}
+
+#paypalPartnerLogo {
+    margin-top: 15px;
+}
+
+/*Express checkout in mini basket*/
+#paypalExpressCheckoutMiniBasketImage {
+    height: 32px;
+}
+
+#paypalExpressCheckoutMiniBasketBox {
+    border: none;
+    float: left;
+    height: auto;
+    margin-top: 10px;
+}
+
+#paypalExpressCheckoutMiniBasketBox .paypalExpressCheckoutMsg {
+    margin-left: 20px;
+}
+
+/*Express checkout in details page*/
+.paypalExpressCheckoutDetailsBox {
+    border: none;
+    float: left;
+    height: auto;
+    margin: 0px;
+    padding: 0px;
+    width: 150px;
+}
+
+.paypalExpressCheckoutDetailsBox .paypalExpressCheckoutMsg {
+    float: left;
+    margin-left: 22px;
+}
+
+.paypalExpressCheckoutDetailsButton {
+    padding-top: 10px;
+}
+
+.paypalExpressCheckoutDetailsButton[disabled] {
+    opacity: 0.5;
+}
+
+#productPrice, #amountToBasket {
+    float: left;
+}
+
+/*Express checkout popup*/
+.oePayPalPopupNav {
+    text-align: right;
+    margin-top: 10px;
+}
+.oePayPalPopupNav a {
+    font-weight: bold;
+}
+.oePayPalPopupNav button {
+    margin-left: 15px;
+}

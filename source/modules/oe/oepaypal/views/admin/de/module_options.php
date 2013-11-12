@@ -28,7 +28,7 @@ $aLang = array(
     'SHOP_MODULE_GROUP_oepaypal_checkout'                => 'Integration von PayPal',
     'SHOP_MODULE_GROUP_oepaypal_payment'                 => 'Warenkorb auf PayPal-Zahlungsseite',
     'SHOP_MODULE_GROUP_oepaypal_transaction'             => 'Geldeinzug',
-    'SHOP_MODULE_GROUP_oepaypal_api'                     => 'API-Berechtigung',
+    'SHOP_MODULE_GROUP_oepaypal_api'                     => 'API Signatur',
     'SHOP_MODULE_GROUP_oepaypal_development'             => 'Einstellungen für Entwicklung',
 
     'SHOP_MODULE_sOEPayPalBrandName'                     => 'Name des Shops',
@@ -68,12 +68,14 @@ $aLang = array(
 
     'SHOP_MODULE_sOEPayPalUserEmail'                     => 'E-Mail-Adresse des PayPal-Benutzers',
     'SHOP_MODULE_sOEPayPalUsername'                      => 'API-Benutzername',
+    'HELP_SHOP_MODULE_sOEPayPalUsername'                 => 'Loggen Sie sich in Ihr <a target="_blank" href="https://www.paypal.com/de/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true">PayPal-Konto</a> ein, um Ihre API-Signatur zu erhalten.',
     'SHOP_MODULE_sOEPayPalPassword'                      => 'API-Passwort',
     'SHOP_MODULE_sOEPayPalSignature'                     => 'Unterschrift',
 
     'SHOP_MODULE_blOEPayPalSandboxMode'                  => 'Sandbox aktivieren',
     'SHOP_MODULE_sOEPayPalSandboxUserEmail'              => 'Sandbox: E-Mail-Adresse des PayPal-Benutzers',
     'SHOP_MODULE_sOEPayPalSandboxUsername'               => 'Sandbox: API-Benutzername',
+    'HELP_SHOP_MODULE_sOEPayPalSandboxUsername'          => 'Loggen Sie sich in Ihr <a target="_blank" href="https://www.sandbox.paypal.com/de/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true">PayPal-Konto</a> ein, um Ihre API-Signatur für die PayPal-Sandbox zu erhalten.',
     'SHOP_MODULE_sOEPayPalSandboxPassword'               => 'Sandbox: API-Passwort',
     'SHOP_MODULE_sOEPayPalSandboxSignature'              => 'Sandbox: Unterschrift',
 

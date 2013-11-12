@@ -17,3 +17,4 @@
 [{/if}]
 
 [{$smarty.block.parent}]
+[{oxstyle inWidget=true}]

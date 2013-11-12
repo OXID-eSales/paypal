@@ -186,7 +186,7 @@ $aModule = array(
         array('group' => 'oepaypal_payment',     'name' => 'blOEPayPalSendToPayPal',          'type' => 'bool',   'value' => 'true'),
         array('group' => 'oepaypal_payment',     'name' => 'blOEPayPalDefaultUserChoice',     'type' => 'bool',   'value' => 'true'),
 
-        array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalTransactionMode',        'type' => 'select', 'constrains' => 'Authorization|Sale|Automatic', 'value' => 'Authorization'),
+        array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalTransactionMode',        'type' => 'select', 'constrains' => 'Sale|Authorization|Automatic', 'value' => 'Sale'),
         array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalEmptyStockLevel',        'type' => 'str',    'value' => '0'),
 
         array('group' => 'oepaypal_api',         'name' => 'sOEPayPalUserEmail',              'type' => 'str',    'value' => ''),

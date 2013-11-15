@@ -6,7 +6,7 @@
     <div id="paypalExpressCheckoutDetailsBox" class="paypalExpressCheckoutBox paypalExpressCheckoutDetailsBox">
         [{ $oViewConf->getHiddenSid() }]
         <input type="hidden" name="oePayPalCancelURL" value="[{$oViewConf->getCurrentURL()}]"/>
-        <input id="paypalExpressCheckoutDetailsButton" class="paypalExpressCheckoutDetailsButton" type="image" name="paypalExpressCheckoutButton" [{if !$blCanBuy}]disabled="disabled"[{/if}] src="[{oxmultilang ident="OEPAYPAL_BASKET_XPRESSBTN_IMG"}]" title="[{$oViewConf->getPayPalPaymentDescription()|strip_tags:false|trim|oxescape}]">
+        <input type="image" name="paypalExpressCheckoutButton" id="paypalExpressCheckoutDetailsButton" class="paypalExpressCheckoutDetailsButton" [{if !$blCanBuy}]disabled="disabled"[{/if}] src="[{$oViewConf->getModuleUrl('oepaypal','out/img/')}][{$oViewConf->getActLanguageAbbr()}]-btn-expresscheckout.png" title="[{$oViewConf->getPayPalPaymentDescription()|strip_tags:false|trim|oxescape}]">
 
         <div class="paypalExpressCheckoutMsg">
             [{if $oViewConf->sendOrderInfoToPayPal()}]

@@ -9,7 +9,7 @@
                 [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="cl" value="oePayPalExpressCheckoutDispatcher">
                 <input type="hidden" name="fnc" value="setExpressCheckout">
-                <input type="image" name="paypalExpressCheckoutButton" src="[{oxmultilang ident="OEPAYPAL_BASKET_XPRESSBTN_IMG"}]" title="[{$oViewConf->getPayPalPaymentDescription()|strip_tags:false|trim|oxescape}]">
+                <input type="image" name="paypalExpressCheckoutButton" class="paypalCheckoutBtn" src="[{$oViewConf->getModuleUrl('oepaypal','out/img/')}][{$oViewConf->getActLanguageAbbr()}]-btn-expresscheckout.png" title="[{$oViewConf->getPayPalPaymentDescription()|strip_tags:false|trim|oxescape}]">
 
                 <div class="paypalExpressCheckoutMsg">
                     [{if $oViewConf->sendOrderInfoToPayPal()}]

@@ -27,7 +27,6 @@ $aLang = array(
 'OEPAYPAL_LOCALE'                            => 'en_US',
 'OEPAYPAL_PARTNERBOX_LINK'                   => 'https://www.paypal.com/en/webapps/mpp/paypal-popup',
 'OEPAYPAL_ERROR_USER_ADDRESS'                => 'The delivery addresses in your shop account and in PayPal do not match. For security reasons we have to check your identity. Please log in to your shop account and re-start the PayPal Express Checkout.',
-'OEPAYPAL_BASKET_XPRESSBTN_IMG'              => 'https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif',
 'OEPAYPAL_LOGO_IMG'                          => 'logo-paypal-medium.png',
 'OEPAYPAL_PAYMENT_HELP_LINK'                 => 'https://www.paypal.com/en/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside',
 'OEPAYPAL_PAYMENT_HELP_LINK_TEXT'            => 'What is PayPal?',

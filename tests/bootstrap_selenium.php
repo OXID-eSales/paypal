@@ -69,7 +69,12 @@ if (OXID_VERSION_PE) :
 endif;
 define ('oxSHOPID', $sShopId );
 
-define ('oxCCTempDir', oxPATH.'/tmp/');
+define ('oxCCTempDir', oxPATH.'/oxCCTempDir/');
+if (!is_dir(oxCCTempDir)) {
+    mkdir(oxCCTempDir, 0777, 1);
+} else {
+    array_map('unlink', glob(oxCCTempDir."/*"));
+}
 
 define('shopPrefix', '');
 

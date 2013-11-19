@@ -123,7 +123,7 @@ require_once getShopBasePath() . 'core/oxconfig.php';
 
 // dumping database for selenium tests
 try {
-    require_once 'acceptance/oxidAdditionalSeleniumFunctions.php';
+    require_once 'acceptance/oepaypal/oxidAdditionalSeleniumFunctions.php';
     $oAdditionalFunctions = new oxidAdditionalSeleniumFunctions();
     $oAdditionalFunctions->dumpDB();
 } catch (Exception $e) {

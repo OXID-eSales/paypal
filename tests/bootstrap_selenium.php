@@ -120,3 +120,12 @@ require_once getShopBasePath() . 'core/oxsession.php';
 
 // config
 require_once getShopBasePath() . 'core/oxconfig.php';
+
+// dumping database for selenium tests
+try {
+    require_once 'acceptance/oxidAdditionalSeleniumFunctions.php';
+    $oAdditionalFunctions = new oxidAdditionalSeleniumFunctions();
+    $oAdditionalFunctions->dumpDB();
+} catch (Exception $e) {
+    $oAdditionalFunctions->stopTesting("Failed dumping db");
+}

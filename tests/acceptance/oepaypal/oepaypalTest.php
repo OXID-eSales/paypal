@@ -139,8 +139,11 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->frame( "list" );
         $this->clickAndWait( "//a[text()='Settings']" );
         $this->frame( "edit" );
+        $this->click( "//b[text()='Capture']" );
         $this->click( "//b[text()='API signature']" );
         $this->click( "//b[text()='Development settings']" );
+
+        $this->select( "//select[@name='confselects[sOEPayPalTransactionMode]']", "value=Authorization" );
 
         $this->type( "//input[@name='confstrs[sOEPayPalUsername]']", $this->getLoginDataByName( 'sOEPayPalUsername' ) );
         $this->type( "//input[@name='confstrs[sOEPayPalPassword]']", $this->getLoginDataByName( 'sOEPayPalPassword' ) );
@@ -202,14 +205,16 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("Shop payment status:"),"record 'Shop payment status:' is not displayed in admin PayPal tab");
         $this->assertTrue($this->isTextPresent("Full order price:"),"record 'Full order price:': is not displayed in admin PayPal tab");
         $this->assertTrue($this->isTextPresent("Captured amount:"),"record 'Captured amount:': is not displayed in admin PayPal tab");
-        $this->assertTrue($this->isTextPresent("Voided amount:"),"record 'Voided amount:': is not displayed in admin PayPal tab");
         $this->assertTrue($this->isTextPresent("Refunded amount:"),"Refunded amount:': is not displayed in admin PayPal tab");
+        $this->assertTrue($this->isTextPresent("Resulting payment amount:"),"Resulting payment amount:': is not displayed in admin PayPal tab");
+        $this->assertTrue($this->isTextPresent("Voided amount:"),"record 'Voided amount:': is not displayed in admin PayPal tab");
         $this->assertTrue($this->isTextPresent("Money capture:"),"Money capture:': is not displayed in admin PayPal tab");
         $this->assertTrue($this->isTextPresent("Pending"),"status 'Pending': is not displayed in admin PayPal tab");
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[2]/td[2]/b"),"Captured amount is not displayed in admin PayPal tab");
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[3]/td[2]/b"),"Voided amount is not displayed in admin PayPal tab");
+        $this->assertEquals("0,99 EUR", $this->getText("//tr[2]/td[2]/b"),"Full amount is not displayed in admin PayPal tab");
+        $this->assertEquals("0,00 EUR", $this->getText("//tr[3]/td[2]/b"),"Captured amount is not displayed in admin PayPal tab");
         $this->assertEquals("0,00 EUR", $this->getText("//tr[4]/td[2]/b"),"Refunded amount is not displayed in admin PayPal tab");
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[5]/td[2]/b"),"Money capture status is not displayed in admin PayPal tab");
+        $this->assertEquals("0,00 EUR", $this->getText("//tr[5]/td[2]/b"),"Resulting amount is not displayed in admin PayPal tab");
+        $this->assertEquals("0,00 EUR", $this->getText("//tr[6]/td[2]/b"),"Voided amount is not displayed in admin PayPal tab");
         $this->assertTrue($this->isElementPresent("id=captureButton"));
         $this->assertTrue($this->isElementPresent("id=voidButton"));
         $this->assertEquals("authorization", $this->getText("//table[2]/tbody/tr[2]/td[2]"),"Money status is not displayed in admin PayPal tab");
@@ -255,7 +260,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals("0.99 EUR", $this->getText("//tr[2]/td[3]"));
         $this->assertEquals("Instant", $this->getText("//tr[2]/td[4]"),"Money status is not displayed in admin PayPal tab");
         $this->assertEquals("capture", $this->getText("//table[2]/tbody/tr[3]/td[2]"),"Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("9.99 EUR", $this->getText("//tr[3]/td[3]"));
+        $this->assertEquals("0.99 EUR", $this->getText("//tr[3]/td[3]"));
         $this->assertEquals("Completed", $this->getText("//tr[3]/td[4]"),"Money status is not displayed in admin PayPal tab");
         $this->assertEquals("authorization", $this->getText("//table[2]/tbody/tr[4]/td[2]"),"Money status is not displayed in admin PayPal tab");
         $this->assertEquals("0.99 EUR", $this->getText("//tr[4]/td[3]"));

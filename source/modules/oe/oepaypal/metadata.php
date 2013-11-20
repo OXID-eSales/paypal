@@ -128,7 +128,6 @@ $aModule = array(
         'oePayPalOrderAction'                             => 'oe/oepaypal/models/actions/oepaypalorderaction.php',
         'oePayPalOrderCaptureAction'                      => 'oe/oepaypal/models/actions/oepaypalordercaptureaction.php',
         'oePayPalOrderRefundAction'                       => 'oe/oepaypal/models/actions/oepaypalorderrefundaction.php',
-        'oePayPalOrderReauthorizeAction'                  => 'oe/oepaypal/models/actions/oepaypalorderreauthorizeaction.php',
         'oePayPalOrderVoidAction'                         => 'oe/oepaypal/models/actions/oepaypalordervoidaction.php',
         'oePayPalOrderActionData'                         => 'oe/oepaypal/models/actions/data/oepaypalorderactiondata.php',
         'oePayPalOrderCaptureActionData'                  => 'oe/oepaypal/models/actions/data/oepaypalordercaptureactiondata.php',

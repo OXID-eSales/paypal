@@ -28,7 +28,7 @@ $aLang = array(
     'SHOP_MODULE_GROUP_oepaypal_checkout'                => 'Integration von PayPal',
     'SHOP_MODULE_GROUP_oepaypal_payment'                 => 'Warenkorb auf PayPal-Zahlungsseite',
     'SHOP_MODULE_GROUP_oepaypal_transaction'             => 'Geldeinzug',
-    'SHOP_MODULE_GROUP_oepaypal_api'                     => 'API Signatur',
+    'SHOP_MODULE_GROUP_oepaypal_api'                     => 'API-Signatur',
     'SHOP_MODULE_GROUP_oepaypal_development'             => 'Einstellungen für Entwicklung',
 
     'SHOP_MODULE_sOEPayPalBrandName'                     => 'Name des Shops',

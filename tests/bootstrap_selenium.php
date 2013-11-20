@@ -22,7 +22,7 @@
 error_reporting( (E_ALL ^ E_NOTICE) | E_STRICT );
 ini_set('display_errors', true);
 
-chdir( dirname(__FILE__));
+chdir( dirname(__FILE__) );
 
 include_once "test_config.php";
 
@@ -34,29 +34,33 @@ define( 'oxPATH', getenv('oxPATH')? getenv('oxPATH') : $sShopPath );
 define( 'hostUrl', getenv('SELENIUM_SERVER')? getenv('SELENIUM_SERVER') : $sSeleniumServerIp );
 define('browserName', getenv('BROWSER_NAME')? getenv('BROWSER_NAME') : $sBrowserName );
 
-switch ( getenv('OXID_VERSION')? getenv('OXID_VERSION') : $sShopEdition ) {
-    case 'EE':
-        define('OXID_VERSION_EE', true );
-        define('OXID_VERSION_PE', false);
-        define('OXID_VERSION_PE_PE', false );
-        define('OXID_VERSION_PE_CE', false );
-        break;
-    case 'PE':
-        define('OXID_VERSION_EE',    false);
-        define('OXID_VERSION_PE',    true );
-        define('OXID_VERSION_PE_PE', true );
-        define('OXID_VERSION_PE_CE', false );
-        break;
-    case 'CE':
-        define('OXID_VERSION_EE',    false);
-        define('OXID_VERSION_PE',    true );
-        define('OXID_VERSION_PE_PE', false );
-        define('OXID_VERSION_PE_CE', true );
-        break;
+if (file_exists(oxPATH . "/_version_define.php")) {
+    include_once oxPATH . "/_version_define.php";
+} else {
+    switch ( getenv('OXID_VERSION')? getenv('OXID_VERSION') : $sShopEdition ) {
+        case 'EE':
+            define('OXID_VERSION_EE', true );
+            define('OXID_VERSION_PE', false);
+            define('OXID_VERSION_PE_PE', false );
+            define('OXID_VERSION_PE_CE', false );
+            break;
+        case 'PE':
+            define('OXID_VERSION_EE',    false);
+            define('OXID_VERSION_PE',    true );
+            define('OXID_VERSION_PE_PE', true );
+            define('OXID_VERSION_PE_CE', false );
+            break;
+        case 'CE':
+            define('OXID_VERSION_EE',    false);
+            define('OXID_VERSION_PE',    true );
+            define('OXID_VERSION_PE_PE', false );
+            define('OXID_VERSION_PE_CE', true );
+            break;
 
-    default:
-        die('bad version--- : '."'".getenv('OXID_VERSION')."'");
-        break;
+        default:
+            die('bad version--- : '."'".getenv('OXID_VERSION')."'");
+            break;
+    }
 }
 
 define('isSUBSHOP', false);

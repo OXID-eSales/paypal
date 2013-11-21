@@ -1046,7 +1046,12 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
             $sParsedText = $this->getText( $sPath );
             return ( strpos( $sParsedText, $sText) !== false );
         } else {
-            return parent::isTextPresent( $sText );
+            try {
+                return parent::isTextPresent( $sText );
+            } catch (Exception $e) {
+                sleep(1);
+                return parent::isTextPresent( $sText );
+            }
         }
     }
 

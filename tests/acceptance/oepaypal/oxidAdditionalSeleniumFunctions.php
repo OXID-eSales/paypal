@@ -770,7 +770,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         if ($language == 'Deutsch') {
             $sLink = "Warenkorb zeigen";
         } else {
-            $sLink = "Display Cart";
+            $sLink = "Display cart";
         }
         $this->click("//div[@id='miniBasket']/img");
         $this->waitForItemAppear("//div[@id='basketFlyout']//a[text()='".$sLink."']");

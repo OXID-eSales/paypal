@@ -1621,7 +1621,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->frame( "edit" );
         $this->assertTrue( $this->isTextPresent( "Internal Status: OK" ) );
         $this->assertEquals( "15,00 EUR", $this->getText( "//td[5]" ) );
-        $this->assertEquals( "Billing Address: {$this->getLoginDataByName( 'sBuyerFirstName' )} gerlastname ESpachstr. 1 79111 Freiburg Germany E-mail: {$this->getLoginDataByName( 'sBuyerLogin' )}", $this->clearString( $this->getText( "//td[1]/table[1]/tbody/tr/td[1]" ) ) );
+        $this->assertEquals( "Billing Address: {$this->getLoginDataByName( 'sBuyerFirstName' )} {$this->getLoginDataByName( 'sBuyerLastName' )} ESpachstr. 1 79111 Freiburg Germany E-mail: {$this->getLoginDataByName( 'sBuyerLogin' )}", $this->clearString( $this->getText( "//td[1]/table[1]/tbody/tr/td[1]" ) ) );
         $this->assertEquals( "15,00", $this->getText( "//table[@id='order.info']/tbody/tr[1]/td[2]" ) );
         $this->assertEquals( "- 0,00", $this->getText( "//table[@id='order.info']/tbody/tr[2]/td[2]" ) );
         $this->assertEquals( "12,61", $this->getText( "//table[@id='order.info']/tbody/tr[3]/td[2]" ) );

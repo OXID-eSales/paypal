@@ -71,6 +71,16 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
     }
 
     /**
+     * Checks if showECSPopup parameter was passed.
+     *
+     * @return bool
+     */
+    public function oePayPalGetCancelUrl()
+    {
+        return $this->getComponent( 'oxcmp_basket' )->getPayPalCancelURL();
+    }
+
+    /**
      * Checks if displayCartInPayPal parameter was passed.
      *
      * @return bool

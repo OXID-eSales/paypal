@@ -96,7 +96,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      */
     protected function _getExpressCheckoutUrl()
     {
-        return 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=' . ( int )$this->_getRequest()->getPostParameter( 'displayCartInPayPal' ) . '&oePayPalCancelURL=' . $this->_getPayPalCancelURL();
+        return 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=' . ( int )$this->_getRequest()->getPostParameter( 'displayCartInPayPal' ) . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
     }
 
     /**
@@ -162,11 +162,42 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      *
      * @return string
      */
-    protected function _getPayPalCancelURL()
+    public function getPayPalCancelURL()
     {
-        $sURL = $this->_getRequest()->getPostParameter( 'oePayPalCancelURL' );
-        $sReplacedURL = str_replace( 'showECSPopup=1', 'showECSPopup=0', $sURL );
+        $sUrl = $this->_formatUrl( $this->_getRedirectUrl() );
+        $sReplacedURL = str_replace( 'showECSPopup=1', 'showECSPopup=0', $sUrl );
 
         return urlencode( $sReplacedURL );
+    }
+
+    /**
+     * Formats Redirect URL to normal url
+     *
+     * @param string $sUnformedUrl
+     * @return string
+     */
+    protected function _formatUrl( $sUnformedUrl )
+    {
+        $myConfig  = $this->getConfig();
+        $aParams = explode( '?', $sUnformedUrl );
+        $sPageParams = isset( $aParams[1] )?$aParams[1]:null;
+        $aParams    = explode( '/', $aParams[0] );
+        $sClassName = $aParams[0];
+
+        $sHeader  = ( $sClassName )?"cl=$sClassName&":'';  // adding view name
+        $sHeader .= ( $sPageParams )?"$sPageParams&":'';   // adding page params
+        $sHeader .= $this->getSession()->sid();            // adding session Id
+
+        $sUrl = $myConfig->getCurrentShopUrl($this->isAdmin());
+
+        $sUrl = "{$sUrl}index.php?{$sHeader}";
+
+        $sUrl = oxRegistry::get("oxUtilsUrl")->processUrl($sUrl);
+
+        if ( oxRegistry::getUtils()->seoIsActive() && $sSeoUrl = oxRegistry::get( "oxSeoEncoder" )->getStaticUrl( $sUrl ) ) {
+            $sUrl = $sSeoUrl;
+        }
+
+        return $sUrl;
     }
 }

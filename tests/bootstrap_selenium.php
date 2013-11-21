@@ -73,7 +73,12 @@ if (OXID_VERSION_PE) :
 endif;
 define ('oxSHOPID', $sShopId );
 
-define ('oxCCTempDir', oxPATH.'/tmp/');
+define ('oxCCTempDir', oxPATH.'/oxCCTempDir/');
+if (!is_dir(oxCCTempDir)) {
+    mkdir(oxCCTempDir, 0777, 1);
+} else {
+    array_map('unlink', glob(oxCCTempDir."/*"));
+}
 
 define('shopPrefix', '');
 
@@ -119,3 +124,12 @@ require_once getShopBasePath() . 'core/oxsession.php';
 
 // config
 require_once getShopBasePath() . 'core/oxconfig.php';
+
+// dumping database for selenium tests
+try {
+    require_once 'acceptance/oepaypal/oxidAdditionalSeleniumFunctions.php';
+    $oAdditionalFunctions = new oxidAdditionalSeleniumFunctions();
+    $oAdditionalFunctions->dumpDB();
+} catch (Exception $e) {
+    $oAdditionalFunctions->stopTesting("Failed dumping db");
+}

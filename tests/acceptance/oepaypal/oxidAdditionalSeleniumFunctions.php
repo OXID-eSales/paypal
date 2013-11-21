@@ -85,7 +85,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     /**
      * adds some demo data to database.
      */
-    public function addDemoData($demo)
+    public function addDemoData( $demo )
     {
         if (filesize($demo)) {
             $myConfig = oxConfig::getInstance();
@@ -918,7 +918,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         if (!$sTmpPrefix) {
             $sTmpPrefix = 'tmp_db_dump';
         }
-        $demo = '/tmp/'.$sTmpPrefix.'_'.$sDbName;
+        $demo = oxCCTempDir.'/'.$sTmpPrefix.'_'.$sDbName;
 
         $sCmd = 'mysql -h'.escapeshellarg($sHost).' -u'.escapeshellarg($sUser).' -p'.escapeshellarg($sPass).' --default-character-set=utf8 '.escapeshellarg($sDbName).'  < '.escapeshellarg($demo).' 2>&1';
         exec($sCmd, $sOut, $ret);
@@ -950,7 +950,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         if (!$sTmpPrefix) {
             $sTmpPrefix = 'tmp_db_dump';
         }
-        $demo = '/tmp/'.$sTmpPrefix.'_'.$sDbName;
+        $demo = oxCCTempDir.'/'.$sTmpPrefix.'_'.$sDbName;
 
         $sCmd = 'mysqldump -h'.escapeshellarg($sHost).' -u'.escapeshellarg($sUser).' -p'.escapeshellarg($sPass).' --add-drop-table '.escapeshellarg($sDbName).'  > '.escapeshellarg($demo);
         exec($sCmd, $sOut, $ret);
@@ -1164,29 +1164,33 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     }
 
     /**
-     * Fix for showing stack trace with phpunit 3.6
+     * Fix for showing stack trace with phpunit 3.6 and later
      *
      * @param Exception $e
+     * @throws PHPUnit_Framework_Error
+     * @throws PHPUnit_Framework_IncompleteTestError
+     * @throws PHPUnit_Framework_SkippedTestError
      */
-    protected function onNotSuccessfulTest(Exception $e) {
+    protected function onNotSuccessfulTest(Exception $e)
+    {
         try {
             parent::onNotSuccessfulTest($e);
         }
         catch (PHPUnit_Framework_IncompleteTestError $e) {
-            // Don't do anything with the incomplete test exception
             throw $e;
         }
         catch (PHPUnit_Framework_SkippedTestError $e) {
-            // Don't do anything with the skipped test exception
             throw $e;
         }
-        catch (Exception $e_parent) {
-            $error_msg = "\n\n".
-                PHPUnit_Util_Filter::getFilteredStacktrace(
-                    $e
-                );
 
-            throw new PHPUnit_Framework_Error($e_parent->getMessage().$error_msg, $e_parent->getCode(), $e_parent->getFile(), $e_parent->getLine(), $e_parent->getTrace());
+        catch (Exception $e_parent) {
+            $error_msg = "\n\n". PHPUnit_Util_Filter::getFilteredStacktrace( $e );
+
+            $oTrace = $e_parent;
+            if ( version_compare(PHPUnit_Runner_Version::id(), '3.7', '<') ) {
+                $oTrace = $e_parent->getTrace();
+            }
+            throw new PHPUnit_Framework_Error($e_parent->getMessage().$error_msg, $e_parent->getCode(), $e_parent->getFile(), $e_parent->getLine(), $oTrace);
         }
     }
 

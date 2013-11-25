@@ -228,7 +228,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         }
     }
 
-    /*
+    /**
      * testing PayPal ECS in basket
      *
      * @group paypal_standalone_mobile

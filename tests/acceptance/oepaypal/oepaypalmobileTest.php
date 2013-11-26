@@ -113,7 +113,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->frame( "list" );
         $this->clickAndWait( "//a[text()='Settings']" );
         $this->frame( "edit" );
-        $this->click( "//b[text()='API authorization']" );
+        $this->click( "//b[text()='API signature']" );
         $this->click( "//b[text()='Development settings']" );
         $this->type( "//input[@name='confstrs[sOEPayPalUsername]']", $this->getLoginDataByName( 'sOEPayPalUsername' ) );
         $this->type( "//input[@name='confstrs[sOEPayPalPassword]']", $this->getLoginDataByName( 'sOEPayPalPassword' ) );

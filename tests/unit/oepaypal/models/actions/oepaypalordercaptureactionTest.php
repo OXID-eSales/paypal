@@ -229,7 +229,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
      */
     protected function _getOrder( $aTestMethods = array() )
     {
-        $aMethods = array( 'getPaymentList' => $this->_getPaymentList() );
+        $aMethods = array( 'getPaymentList' => $this->_getPaymentList(), 'save' => true );
         $oOrder = $this->_createStub( 'oePayPalPayPalOrder', $aMethods, $aTestMethods );
         return $oOrder;
     }

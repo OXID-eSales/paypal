@@ -70,9 +70,9 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
     public function providerGetUser()
     {
         return array(
-            array( 'oxidpaypal', 'testPayPalUser', 'oxdefaultadmin', 'testPayPalUser' ),
+            array( 'oxidpaypal', '_testPayPalUser', 'oxdefaultadmin', '_testPayPalUser' ),
             array( 'oxidpaypal', null, 'oxdefaultadmin', 'oxdefaultadmin' ),
-            array( 'nonpaypalpayment', 'testPayPalUser', 'oxdefaultadmin', 'oxdefaultadmin' ),
+            array( 'nonpaypalpayment', '_testPayPalUser', 'oxdefaultadmin', 'oxdefaultadmin' ),
         );
     }
 

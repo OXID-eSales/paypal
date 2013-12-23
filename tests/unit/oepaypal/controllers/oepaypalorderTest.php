@@ -42,6 +42,8 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
     {
         oxDb::getDB()->execute( "delete from oxpayments where OXID = 'oxidpaypal' ");
 
+        $this->cleanUpTable('oxuser', 'oxid');
+
         parent::tearDown();
     }
 

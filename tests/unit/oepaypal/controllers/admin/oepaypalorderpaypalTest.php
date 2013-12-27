@@ -34,15 +34,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
      */
     public function setUp()
     {
-        oePayPalEvents::addOrderTableFields();
-    }
-
-    /**
-     *  Remove created tables
-     */
-    public function tearDown()
-    {
-        oxDb::getDb()->execute( 'DROP TABLE `oepaypal_order`' );
+        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
     }
 
     /**

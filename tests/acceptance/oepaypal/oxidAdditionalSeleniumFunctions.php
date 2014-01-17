@@ -661,7 +661,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->type("//div[@id='loginBox']//input[@name='lgn_usr']", $userName);
         $this->type("//div[@id='loginBox']//input[@name='lgn_pwd']", $userPass);
         if ($waitForLogin) {
-            $this->clickAndWait("//div[@id='loginBox']//button[@type='submit']", "//a[text()='Logout']");
+            $this->clickAndWait("//div[@id='loginBox']//button[@type='submit']", "//a[@id='logoutLink']");
         } else {
             $this->clickAndWait("//div[@id='loginBox']//button[@type='submit']");
         }

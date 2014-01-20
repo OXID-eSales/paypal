@@ -218,7 +218,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
     public function loginInFrontendMobile($userName, $userPass, $waitForLogin = true)
     {
         $this->selectWindow(null);
-        $this->clickAndWait("//a[text()='Login']");
+        $this->clickAndWait("//a[text()='Log in']");
         $this->type("//input[@id='loginUser']", $userName);
         $this->type("//input[@id='loginPwd']", $userPass);
         if ($waitForLogin) {

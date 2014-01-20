@@ -254,8 +254,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         // Perform Refund and check all info
         $this->click("id=refundButton0");
-        $this->click("id=refundSubmit");
-        $this->waitForPageToLoad("30000");
+        $this->clickAndWait("id=refundSubmit");
         $this->assertEquals("refund", $this->getText("//table[2]/tbody/tr[2]/td[2]"),"Money status is not displayed in admin PayPal tab");
         $this->assertEquals("0.99 EUR", $this->getText("//tr[2]/td[3]"));
         $this->assertEquals("Instant", $this->getText("//tr[2]/td[4]"),"Money status is not displayed in admin PayPal tab");

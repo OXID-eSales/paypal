@@ -183,7 +183,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         $this->waitForItemAppear( "id=continue" );
         $this->click( "id=continue" );
-        $this->waitForText( "Senden Sie Ihre Bestellung am unteren Ende dieser Übersicht ab" );
+        $this->waitForText( "Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!" );
         $this->assertEquals("0,99 €", $this->getText("basketGrandTotal"),"Grand total price changed or didn't displayed");
         $this->assertEquals( "Zahlungsart Ändern PayPal", $this->clearString( $this->getText( "orderPayment" ) ) );
         $this->assertEquals( "Versandart Ändern Test S&H set", $this->clearString( $this->getText( "orderShipping" ) ) );
@@ -399,7 +399,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click( "id=continue" );
 
         //User is on the 4th page
-        $this->waitForText( "Senden Sie Ihre Bestellung am unteren Ende dieser Übersicht ab" );
+        $this->waitForText( "Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!" );
         $this->assertEquals("0,99 €", $this->getText("basketGrandTotal"),"Grand total price changed or didn't displayed");
         $this->assertEquals( "Zahlungsart Ändern PayPal", $this->clearString( $this->getText( "orderPayment" ) ) );
         $this->assertEquals( "Adressen Ändern Rechnungsadresse E-Mail: {$this->getLoginDataByName( 'sBuyerLogin' )} {$this->getLoginDataByName( 'sBuyerFirstName' )} {$this->getLoginDataByName( 'sBuyerLastName' )} ESpachstr. 1 79111 Freiburg Deutschland", $this->clearString( $this->getText( "orderAddress" ) ) );
@@ -485,7 +485,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         $this->waitForItemAppear( "id=continue" );
         $this->click( "id=continue" );
-        $this->waitForText( "Senden Sie Ihre Bestellung am unteren Ende dieser Übersicht ab" );
+        $this->waitForText( "Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!" );
         $this->clickAndWait( "//button[text()='Zahlungspflichtig bestellen']", null, 90 );
         $this->assertTrue( $this->isTextPresent( "Vielen Dank für Ihre Bestellung im OXID eShop" ), "The order not finished successful" );
 
@@ -2197,7 +2197,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear("id=continue");
         $this->click("id=continue");
 
-        $this->waitForText("Senden Sie Ihre Bestellung am unteren Ende dieser Übersicht ab");
+        $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
     }
 
     /**

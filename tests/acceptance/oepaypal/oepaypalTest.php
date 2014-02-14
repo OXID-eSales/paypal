@@ -2086,7 +2086,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForText("Steuer");
         $this->assertTrue($this->isTextPresent("Harness SOL KITE"), "Purchased product name is not displayed in PayPal");
         $this->assertTrue($this->isTextPresent("Warenwert€122,22"), "Product price is not displayed in PayPal");
-        $this->assertTrue($this->isTextPresent("Steuer€23,23"), "Product VAT is not displayed in PayPal");
+        $this->assertTrue($this->isTextPresent("Steuer:€23,23"), "Product VAT is not displayed in PayPal");
         $this->waitForItemAppear("id=displayShippingAmount");
         $this->assertTrue($this->isTextPresent("Gesamtbetrag €158,45 EUR"), "Total price is not displayed in PayPal");
 
@@ -2177,7 +2177,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("Artikelpreis: €24,79"),"Gift wrapping is not correct. Should be in Netto mode.");
         $this->assertTrue($this->isTextPresent("Artikelpreis: €2,52"),"Gift card is not correct. Should be in Netto mode.");
         $this->assertTrue($this->isTextPresent("Warenwert€1.120,95"),"Total items sum should be displayed");
-        $this->assertTrue($this->isTextPresent("Steuer€212,99"), "Product VAT is not displayed in Paypal");
+        $this->assertTrue($this->isTextPresent("Steuer:€212,99"), "Product VAT is not displayed in PayPal");
         $this->assertTrue($this->isTextPresent("Versandkosten:€13,00"), "Product shipping cost is not displayed in PayPal");
         $this->assertTrue($this->isTextPresent("Gesamtbetrag €1.346,94 EUR"), "Total price is not displayed in PayPal");
 
@@ -2188,7 +2188,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear("id=displayShippingAmount");
         $this->assertTrue($this->isTextPresent("Trapez ION SOL KITE 2011"), "Purchased product name is not displayed in PayPal");
         $this->assertTrue($this->isTextPresent("Warenwert€1.120,95"), "Product price is not displayed in Paypal");
-        $this->assertTrue($this->isTextPresent("Steuer€212,99"), "Product VAT is not displayed in Paypal");
+        $this->assertTrue($this->isTextPresent("Steuer:€212,99"), "Product VAT is not displayed in Paypal");
         $this->assertTrue($this->isTextPresent("Gesamtbetrag €1.346,94 EUR"), "Total price is not displayed in PayPal");
 
         // Continue button is visible before PayPal does callback.

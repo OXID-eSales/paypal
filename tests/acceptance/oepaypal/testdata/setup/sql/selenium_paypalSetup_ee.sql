@@ -100,7 +100,7 @@ UPDATE `oxconfig` SET `OXVARVALUE` = 0x4dba222b70e349f0c9d1aba6133981af1e8d79724
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x4dba422a71e248f1c8d0aa1651570011febb9efc98177f036b0a6020a634f31d0bd0c20d9eb4818881fc066e5334236637f87dffd86e5583f7e63e579da1b5d11a7990967a63fe149e97097b5bcf3b2fb5cb5c19ef40b566b2d429e74af7223fd7c0b7a349a3dfcf42978929ba59931a4f2bff23326b91c5c9e0638593db43262e66202998b8c5e9a73b9ead14370a7528ef08393dbd998a6fc9322a21ab682a0f387784fcfe05f555b302f7f2e0d83380f551dd97040e99bbed30d37a3355dc28 WHERE `OXVARNAME` = 'aRssSelected' AND `OXSHOPID` = 1;
 
 #updating smtp and emails data
-UPDATE `oxshops` SET `OXINFOEMAIL` = 'birute_test@nfq.lt', `OXORDEREMAIL` = 'birute_test@nfq.lt', `OXOWNEREMAIL` = 'birute_test@nfq.lt', `OXSMTP` = 'localhost', `OXDEFCAT` = '', `OXVERSION`='4.6.3' WHERE `OXID` = '1';
+UPDATE `oxshops` SET `OXINFOEMAIL` = 'birute_test@nfq.lt', `OXORDEREMAIL` = 'birute_test@nfq.lt', `OXOWNEREMAIL` = 'birute_test@nfq.lt', `OXSMTP` = 'localhost', `OXDEFCAT` = '' WHERE `OXID` = '1';
 
 
 #paypal demodata

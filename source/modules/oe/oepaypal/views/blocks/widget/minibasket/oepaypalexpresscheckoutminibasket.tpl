@@ -1,7 +1,7 @@
 [{$smarty.block.parent}]
 
 [{if $oViewConf->isExpressCheckoutEnabledInMiniBasket() }]
-    <link rel="stylesheet" type="text/css" href="[{$oViewConf->getModuleUrl('oepaypal','out/src/css/paypal.css')}]" />
+    [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/src/css/paypal.css')}]
     <div id="paypalExpressCheckoutMiniBasketBox" class="paypalExpressCheckoutBox">
         <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
             <div>

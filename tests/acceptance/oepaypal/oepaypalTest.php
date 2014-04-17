@@ -788,15 +788,8 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
             $this->click( "//input[@id='continueBabySlider']" );
         }
         // selecting Belgium address
-        if ( OXID_VERSION_EE ):
-            $this->click( "//input[@id='3']" );
-        endif;
-        if ( OXID_VERSION_PE_PE ) :
-            $this->click( "//input[@id='3']" );
-        endif;
-        if ( OXID_VERSION_PE_CE ) :
-            $this->click( "//input[@id='5']" );
-        endif;
+        $this->click( "//label[@class='radio' and contains(.,'Test address in Belgium 15, Antwerp, Belgien')]/input" );
+
         $this->click( "//input[@id='continueBabySlider']" );
 
         $this->waitForItemAppear( "id=continue" );

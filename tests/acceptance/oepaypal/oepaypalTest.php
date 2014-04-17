@@ -2089,7 +2089,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("Gesamtbetrag €158,45 EUR"), "Total price is not displayed in PayPal");
 
         $this->click("id=continue");
-        $this->waitForText("Submit your order at the bottom of this overview");
+        $this->waitForText("Please check all data on this overview before submitting your order!");
     }
 
     /**

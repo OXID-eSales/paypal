@@ -243,25 +243,25 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
 
         //Open basket and press top ECS button
         $this->clickAndWait("id=miniBasket");
-        $this->assertTrue($this->isTextPresent("159,00 €"),"Item price doesn't mach or doesn't displayed");
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page");
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page");
+        $this->assertTrue($this->isTextPresent("159,00 €"),"Item price doesn't mach or doesn't displayed 1");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page 1");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page 1");
         $this->clickAndWait("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']");
 
         //Cancel order in PayPal and return to the basket
-        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed");
+        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed 2");
+        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed 2");
         $this->clickAndWait("name=cancel_return");
 
         //Press bottom ECS button
         $this->clickAndWait("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']");
-        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed");
+        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed 3");
+        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed 3");
         $this->clickAndWait("name=cancel_return");
 
         //Checking whether user was redirected back to the basket
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page");
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page 3");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page 3");
     }
 
     /**

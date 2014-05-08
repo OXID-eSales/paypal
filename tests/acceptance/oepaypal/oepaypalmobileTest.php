@@ -222,7 +222,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->type("//input[@id='loginUser']", $userName);
         $this->type("//input[@id='loginPwd']", $userPass);
         if ($waitForLogin) {
-            $this->clickAndWait("//form[@name='login']//input[@type='submit']", "//a[text()='Logout']");
+            $this->clickAndWait("//form[@name='login']//input[@type='submit']", "//a[text()='Log out']");
         } else {
             $this->clickAndWait("//form[@name='login']//input[@type='submit']");
         }

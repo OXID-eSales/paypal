@@ -13,7 +13,7 @@
 
     [{oxscript add='$("#paypalExpressCheckoutDetailsButton").click(function (){$("<input />").attr("type", "hidden").attr("name", "doPaypalExpressCheckoutFromDetailsPage").attr("value", "true").appendTo(".js-oxProductForm");return true;});'}]
     [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/src/js/oepaypalonclickproceedaction.js') priority=10 }]
-    [{oxscript add='$( "#paypalExpressCheckoutDetailsButton" ).oePayPalOnClickProceedAction( {sAction: "actionExpressCheckoutFromDetailsPage", sFormContainer: "#productinfo" } );'}]
+    [{oxscript add='$( "#paypalExpressCheckoutDetailsButton" ).oePayPalOnClickProceedAction( {sAction: "actionExpressCheckoutFromDetailsPage", sForm: "#productinfo form.js-oxProductForm" } );'}]
 [{/if}]
 
 [{$smarty.block.parent}]

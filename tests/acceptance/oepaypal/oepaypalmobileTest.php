@@ -206,7 +206,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->waitForItemAppear( "id=miniBasket" );
 
         $this->assertTrue( $this->isElementPresent( "link=Test product 1" ), "Purchased product name is not displayed in last order step" );
-        $this->assertEquals("Grand Total 1,98 €", $this->getText("basketGrandTotal"),"Grand total price changed  or didn't displayed");
+        $this->assertEquals("Grand total 1,98 €", $this->getText("basketGrandTotal"),"Grand total price changed  or didn't displayed");
         $this->assertTrue( $this->isTextPresent( "PayPal" ), "Payment method not displayed in last order step" );
         $this->clickAndWait( "//button[text()='Order now']" );
         $this->assertTrue( $this->isTextPresent( "Thank you for your order in OXID eShop" ), "Order is not finished successful" );

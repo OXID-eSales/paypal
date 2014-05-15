@@ -110,8 +110,6 @@ class oePayPalOrder extends oePayPalOrder_parent
             $sNextStep  = ( $iPayPalType == 2 ) ? "basket" : "order";
         }
 
-       // die($sNextStep);
-
         return $sNextStep;
     }
 }

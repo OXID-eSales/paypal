@@ -542,7 +542,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isElementPresent( "//tr[@id='cartItem_1']/td[3]/div[2]" ), "There product:Test product 1 is not shown in 1st order step" );
         //  $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle(), "Tittle of the page is incorrect" );
         $this->assertEquals( "Grand total: 0,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Grand Total is not displayed correctly" );
-        $this->assertFalse( $this->isTextPresent( "Shipping cost" ), "Shipping cost should not be displayed" );
+        $this->assertFalse( $this->isTextPresent( "Shipping costs:" ), "Shipping costs should not be displayed" );
         $this->assertTrue( $this->isTextPresent( "exact:?" ) );
         $this->storeChecked( "//input[@name='displayCartInPayPal' and @value='1']" );
         $this->assertTrue( $this->isTextPresent( "Display cart in PayPal" ), "An option text:Display cart in PayPal is not displayed" );
@@ -562,12 +562,12 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear( "id=displayShippingAmount" );
         $this->assertTrue( $this->isTextPresent( "Test product 1" ), "Purchased product name is not displayed in PayPal" );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Purchased product is not displayed in basket in PayPal" );
-        $this->assertFalse( $this->isTextPresent( "Shipping method: Stadard Price:€6.90 EUR" ), "Standard Price:€6.90 EUR shipping cost for this user should not be displayed in PayPal" );
+        $this->assertFalse( $this->isTextPresent( "Shipping method: Stadard Price:€6.90 EUR" ), "Standard Price:€6.90 EUR Shipping costs for this user should not be displayed in PayPal" );
         $this->assertTrue( $this->isTextPresent( $this->getLoginDataByName( 'sBuyerUSLogin' ) ), "User login name is not displayed in PayPal " );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Purchased product name is not displayed in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Item number: 1001" ), "Product number is not displayed in PayPal " );
         $this->assertTrue( $this->isTextPresent( "Quantity: 1" ), "Product quantities is not displayed in PayPal" );
-        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping costs is not calculated in PayPal" );
 
         //Go to shop
         $this->waitForTextPresent( "Total €7.89 EUR" );
@@ -583,7 +583,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isElementPresent( "//tr[@id='cartItem_1']/td[3]/div[2]" ), "There product:Test product 1 is not shown in 1st order step" );
         //  $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle(), " Title in 1st order step is incorrect" );
         $this->assertEquals( "Grand total: 7,73 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
-        $this->assertEquals( "Shipping cost 6,90 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 6,90 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
 
         $this->assertTrue( $this->isTextPresent( "Display cart in PayPal" ), "Text:Display cart in PayPal for checkbox not displayed" );
         $this->assertTrue( $this->isElementPresent( "name=displayCartInPayPal" ), "Checkbox:Display cart in PayPal not displayed in cart" );
@@ -658,7 +658,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForElementPresent( "orderAddress" );
         $this->assertTrue( $this->isElementPresent( "link=Test product 1" ), "Product name is not displayed in last order step" );
         $this->assertTrue( $this->isTextPresent( "Item #: 1001" ), "Product number not displayed in last order step" );
-        $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
         //   $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle(), "Page tittle is incorect in last order step" );
         $this->assertEquals( "Surcharge Payment Method 7,50 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Payment price is not displayed in carts" );
         $this->assertEquals( "Grand total: 12,45 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
@@ -712,7 +712,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isElementPresent( "//tr[@id='cartItem_1']/td[3]/div[2]" ) );
         // $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle() );
         $this->assertEquals( "Grand total: 0,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
-        $this->assertTrue( $this->isTextPresent( "Shipping cost" ), "Shipping cost is not displayed correctly" );
+        $this->assertTrue( $this->isTextPresent( "Shipping costs:" ), "Shipping costs is not displayed correctly" );
         $this->assertTrue( $this->isTextPresent( "exact:?" ) );
         $this->storeChecked( "//input[@name='displayCartInPayPal' and @value='1']" );
         $this->assertTrue( $this->isTextPresent( "Display cart in PayPal" ), "Text:Display cart in PayPal for checkbox not displayed" );
@@ -731,7 +731,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear( "id=displayShippingAmount" );
         $this->assertTrue( $this->isTextPresent( "Test product 1" ), "Purchased product name is not displayed in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Warenwert€0,99" ), "Product price is not displayed in PayPal" );
-        $this->assertTrue( $this->isTextPresent( "exact:Versandkosten:" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "exact:Versandkosten:" ), "Shipping costs is not calculated in PayPal" );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Product name is not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Versandmethode: Test S&H set: €0,00 EUR" ), "Shipping method is not shown in PayPal" );
         // $this->assertEquals("Testing user acc Äß&amp;#039;ü PayPal Äß&amp;#039;ü Musterstr. Äß&#039;ü 1 79098 Musterstadt Äß&#039;ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString($this->getText("//div[@class='inset confidential']")));
@@ -740,7 +740,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isTextPresent( "Artikelnummer: 1001" ), "Product number not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Artikelpreis: €0,99" ), "Product price not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Anzahl: 1" ), "Product quantity is not shown in PayPal" );
-        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping costs: is not calculated in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Gesamtbetrag €0,99 EUR" ), "Total price is not displayed in PayPal" );
 
         //Cancel order and go back to the shop with uncecked option
@@ -761,7 +761,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear( "id=displayShippingAmount" );
         $this->assertFalse( $this->isTextPresent( "Test product 1" ), "Purchased product name is not displayed in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Warenwert€0,99" ), "Product price is not displayed in PayPal" );
-        $this->assertTrue( $this->isTextPresent( "exact:Versandkosten:" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "exact:Versandkosten:" ), "Shipping costs: is not calculated in PayPal" );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Product name is not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Versandmethode: Test S&H set: €0,00 EUR" ) );
         // $this->assertEquals("Testing user acc Äß&amp;#039;ü PayPal Äß&amp;#039;ü Musterstr. Äß&#039;ü 1 79098 Musterstadt Äß&#039;ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString($this->getText("//div[@class='inset confidential']")));
@@ -770,7 +770,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         //$this->assertTrue($this->isTextPresent("Artikelnummer: 1001"));
         $this->assertTrue( $this->isTextPresent( "Artikelpreis: €0,99" ), "Product price not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Anzahl: 1" ), "Product quantity is not shown in PayPal" );
-        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping costs: is not calculated in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Gesamtbetrag €0,99 EUR" ), "Total price is not displayed in PayPal" );
 
         //Change delivery address with country which has not PayPal assigned as payment method inside Paypal
@@ -824,7 +824,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->clickAndWait( "link=1. Cart" );
         $this->assertFalse( $this->isElementPresent( "paypalPartnerLogo" ), "PayPal logo should not be displayed fot US" );
 
-        //Created additional 3 shipping methods with shipping cost rules for Austria
+        //Created additional 3 shipping methods with Shipping costs rules for Austria
         if ( OXID_VERSION_EE ):
             $this->open( shopURL . "/_updateDB.php?filename=newDeliveryMethod_ee.sql" );
         endif;
@@ -858,18 +858,18 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear( "id=continue" );
         $this->waitForItemAppear( "id=displayShippingAmount" );
         $this->assertTrue( $this->isTextPresent( "Warenwert€0,99" ), "Product price is not displayed in PayPal" );
-        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,50" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,50" ), "Shipping costs is not calculated in PayPal" );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Product name is not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( $this->getLoginDataByName( 'sBuyerLogin' ) ) );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Product name is not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Artikelpreis: €0,99" ), "Product price not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Anzahl: 1" ), "Product quantity is not shown in PayPal" );
-        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping costs is not calculated in PayPal" );
         $this->waitForTextPresent( "Gesamtbetrag €1,49 EUR" );
         $this->select( "id=shipping_method", "label=Test Paypal:12 hour Price: €0,90 EUR" );
         $this->waitForTextPresent( "Gesamtbetrag €1,89 EUR" );
         $this->assertTrue( $this->isTextPresent( "Warenwert€0,99" ), "Product price is not displayed in PayPal" );
-        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,90" ), "Shipping cost is not displayed in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,90" ), "Shipping costs is not displayed in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Artikelpreis: €0,99" ), "Product price not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Gesamtbetrag €1,89 EUR" ), "Total price is not displayed in PayPal" );
 
@@ -880,7 +880,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         //Check are all info in the last order step correct
         $this->assertTrue( $this->isElementPresent( "link=Test product 1" ), "Purchased product name is not displayed in last order step" );
         $this->assertTrue( $this->isTextPresent( "Item #: 1001" ), "Product number not displayed in last order step" );
-        $this->assertEquals( "Shipping cost 0,90 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 0,90 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
         // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
         $this->assertEquals( "Grand total: 1,89 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
         $this->assertTrue( $this->isTextPresent( "Test Paypal:12 hour" ), "Shipping method not displayed in order " );
@@ -911,19 +911,19 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear( "id=continue" );
         $this->waitForItemAppear( "id=displayShippingAmount" );
         $this->assertTrue( $this->isTextPresent( "Warenwert€19,80" ), "Product price is not displayed in PayPal" );
-        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,80" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,80" ), "Shipping costs is not calculated in PayPal" );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Product name is not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( $this->getLoginDataByName( 'sBuyerLogin' ) ) );
         $this->assertTrue( $this->isElementPresent( "id=showname0" ), "Product name is not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Artikelpreis: €0,99" ), "Product price not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Anzahl: 20" ), "Product quantity is not shown in PayPal" );
-        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping costs is not calculated in PayPal" );
         $this->waitForTextPresent( "Gesamtbetrag €19,80 EUR" );
         $this->waitForItemAppear( "id=shipping_method" );
         $this->select( "id=shipping_method", "label=Test Paypal:6 hour Price: €0,40 EUR" );
         $this->waitForTextPresent( "Gesamtbetrag €20,20 EUR" );
         $this->assertTrue( $this->isTextPresent( "Warenwert€19,80" ), "Product price is not displayed in PayPal" );
-        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,40" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,40" ), "Shipping costs is not calculated in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Artikelpreis: €0,99" ), "Product price not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Gesamtbetrag €20,20 EUR" ), "Total price is not displayed in PayPal" );
 
@@ -934,10 +934,10 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         //Check are all info in the last order step correct
         $this->assertTrue( $this->isElementPresent( "link=Test product 1" ), "Purchased product name is not displayed in last order step" );
         $this->assertTrue( $this->isTextPresent( "Item #: 1001" ), "Product number not displayed in last order step" );
-        $this->assertEquals( "Shipping cost 0,40 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 0,40 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
         // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
         $this->assertEquals( "Grand total: 20,20 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
-        $this->assertTrue( $this->isTextPresent( "Test Paypal:6 hour" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "Test Paypal:6 hour" ), "Shipping costs is not calculated in PayPal" );
         $this->assertTrue( $this->isTextPresent( "PayPal" ), "Payment method not displayed in last order step" );
         $this->clickAndWait( "//button[text()='Order now']" );
         $this->assertTrue( $this->isTextPresent( "Thank you for your order in OXID eShop" ), "Order is not finished successful" );
@@ -1183,7 +1183,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Discount discount from 10 till 20 -0,30 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
         $this->assertEquals( "Total products (excl. tax): 12,35 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,35 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
-        $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping costs is not displayed correctly" );
         $this->assertEquals( "Grand total: 14,70 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
 
         //Go back to 1st order step and change product quantities to 3
@@ -1243,7 +1243,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Discount discount from 20 till 50 -2,25 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
         $this->assertEquals( "Total products (excl. tax): 35,92 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 6,83 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
-        $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping costs is not displayed correctly" );
         $this->assertEquals( "Grand total: 42,75 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
         $this->clickAndWait( "//button[text()='Order now']" );
         $this->assertTrue( $this->isTextPresent( "Thank you for your order in OXID eShop" ), "Order is not finished successful" );
@@ -1343,7 +1343,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Total products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "Total products (excl. tax): 4,20 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 0,80 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
-        $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping costs: is not displayed correctly" );
         $this->assertEquals( "Grand total: 5,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
         $this->clickAndWait( "//button[text()='Order now']" );
         $this->assertTrue( $this->isTextPresent( "Thank you for your order in OXID eShop" ), "Order is not finished successful" );
@@ -1551,7 +1551,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Total products (excl. tax): 12,61 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,39 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
         $this->assertEquals( "Total products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
-        $this->assertEquals( "Shipping cost 3,90 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 3,90 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
         $this->assertEquals( "2,95 €", $this->getText( "basketWrappingGross" ), "Wrapping price changed or didn't displayed" );
         $this->assertEquals( "24,85 €", $this->getText( "basketGrandTotal" ), "Grand total price changed or didn't displayed" );
 
@@ -1605,7 +1605,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Total products (excl. tax): 12,61 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,39 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
         $this->assertEquals( "Total products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
-        $this->assertEquals( "Shipping cost 13,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 13,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
         $this->assertEquals( "Surcharge Payment Method 10,50 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ) );
         $this->assertEquals( "2,95 €", $this->getText( "basketWrappingGross" ), "Wrapping price changed or didn't displayed" );
         $this->assertEquals( "44,45 €", $this->getText( "basketGrandTotal" ), "Grand total price changed or didn't displayed" );
@@ -1659,7 +1659,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isElementPresent( "//tr[@id='cartItem_1']/td[3]/div[2]" ) );
         //   $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle() );
         $this->assertEquals( "Grand total: 0,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
-        $this->assertTrue( $this->isTextPresent( "Shipping cost" ), "Shipping cost is not displayed correctly" );
+        $this->assertTrue( $this->isTextPresent( "Shipping costs:" ), "Shipping costs is not displayed correctly" );
         $this->assertTrue( $this->isTextPresent( "exact:?" ) );
         $this->storeChecked( "//input[@name='displayCartInPayPal' and @value='1']" );
         $this->assertTrue( $this->isTextPresent( "Display cart in PayPal" ), "Text:Display cart in PayPal for checkbox not displayed" );
@@ -1679,7 +1679,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         $this->assertTrue( $this->isTextPresent( "Test product 1" ), "Purchased product name is not displayed in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Warenwert€0,99" ), "Product price is not displayed in PayPal" );
-        $this->assertTrue( $this->isTextPresent( "exact:Versandkosten:" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "exact:Versandkosten:" ), "Shipping costs is not calculated in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Test product 1" ), "Product name is not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Versandmethode: Test S&H set: €0,00 EUR" ), "Shipping method is not shown in PayPal" );
         $this->assertEquals( "Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString( $this->getText( "//div[@class='inset confidential']" ) ) );
@@ -1688,16 +1688,16 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isTextPresent( "Artikelpreis: €0,99" ), "Product price not shown in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Anzahl: 1" ), "Product quantity is not shown in PayPal" );
 
-        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping costs is not calculated in PayPal" );
 
         $this->assertTrue( $this->isTextPresent( "Gesamtbetrag €0,99 EUR" ), "Total price is not displayed in PayPal" );
         $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,00" ), "Total price is not displayed in PayPal" );
 
         $this->waitForTextPresent( "Gesamtbetrag €0,99 EUR" );
         $this->waitForTextPresent( "Versandkosten:€0,00" );
-        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,00" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isTextPresent( "Versandkosten:€0,00" ), "Shipping costs is not calculated in PayPal" );
         $this->waitForItemAppear( "id=shippingHandling" );
-        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping cost is not calculated in PayPal" );
+        $this->assertTrue( $this->isElementPresent( "id=shippingHandling" ), "Shipping costs is not calculated in PayPal" );
 
         $this->waitForItemAppear( "id=continue" );
 
@@ -1710,7 +1710,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         //Check are all info in the last order step correct
         $this->assertTrue( $this->isElementPresent( "link=Test product 1" ), "Purchased product name is not displayed in last order step" );
         $this->assertTrue( $this->isTextPresent( "Item #: 1001" ), "Product number not displayed in last order step" );
-        $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
+        $this->assertEquals( "Shipping costs: 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
         // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
         $this->assertEquals( "Grand total: 0,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
         $this->assertTrue( $this->isTextPresent( "PayPal" ), "Payment method not displayed in last order step" );
@@ -2177,7 +2177,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("Artikelpreis: €2,52"),"Gift card is not correct. Should be in Net mode.");
         $this->assertTrue($this->isTextPresent("Warenwert€1.120,95"),"Total items sum should be displayed");
         $this->assertTrue($this->isTextPresent("Steuer:€212,99"), "Product VAT is not displayed in PayPal");
-        $this->assertTrue($this->isTextPresent("Versandkosten:€13,00"), "Product shipping cost is not displayed in PayPal");
+        $this->assertTrue($this->isTextPresent("Versandkosten:€13,00"), "Product Shipping costs is not displayed in PayPal");
         $this->assertTrue($this->isTextPresent("Gesamtbetrag €1.346,94 EUR"), "Total price is not displayed in PayPal");
 
         $this->_loginToSandbox();

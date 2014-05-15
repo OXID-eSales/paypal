@@ -890,14 +890,14 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         //Go back to 1st order step and change product quantities to 20
         $this->clickAndWait( "link=1. Cart" );
 
-        $this->assertEquals( "Total Products (incl. tax): 0,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ), "Total price not displayed in basket" );
-        $this->assertEquals( "Total Products (net): 0,83 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ), "Total price not displayed in basket" );
+        $this->assertEquals( "Total products (incl. tax): 0,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ), "Total price not displayed in basket" );
+        $this->assertEquals( "Total products (net): 0,83 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ), "Total price not displayed in basket" );
         $this->assertEquals( "Grand total: 1,89 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
         $this->type( "id=am_1", "20" );
         $this->click( "id=basketUpdate" );
         sleep( 3 );
-        $this->assertEquals( "Total Products (incl. tax): 19,80 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ), "Total price not displayed in basket" );
-        $this->assertEquals( "Total Products (net): 16,64 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ), "Total price not displayed in basket" );
+        $this->assertEquals( "Total products (incl. tax): 19,80 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ), "Total price not displayed in basket" );
+        $this->assertEquals( "Total products (net): 16,64 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ), "Total price not displayed in basket" );
         $this->assertEquals( "Grand total: 20,60 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
 
         //Go to PayPal to make an order
@@ -1179,9 +1179,9 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isTextPresent( "1 +1" ) );
         $this->assertEquals( "-0,30 €", $this->getText( "//div[@id='basketSummary']/table/tbody/tr[2]/td" ) );
 
-        $this->assertEquals( "Total Products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "Discount discount from 10 till 20 -0,30 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
-        $this->assertEquals( "Total Products (net): 12,35 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
+        $this->assertEquals( "Total products (net): 12,35 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,35 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
         $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping cost is not displayed correctly" );
         $this->assertEquals( "Grand total: 14,70 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
@@ -1239,9 +1239,9 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isTextPresent( "1 +1" ) );
         $this->assertEquals( "-2,25 €", $this->getText( "//div[@id='basketSummary']/table/tbody/tr[2]/td" ) );
 
-        $this->assertEquals( "Total Products (incl. tax): 45,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 45,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "Discount discount from 20 till 50 -2,25 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
-        $this->assertEquals( "Total Products (net): 35,92 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
+        $this->assertEquals( "Total products (net): 35,92 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 6,83 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
         $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping cost is not displayed correctly" );
         $this->assertEquals( "Grand total: 42,75 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
@@ -1340,8 +1340,8 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isTextPresent( "Test product 3" ) );
         $this->assertEquals( "Item #: 1003", $this->getText( "//tr[@id='cartItem_1']/td[2]/div[2]" ), "Product number not displayed in last order step" );
 
-        $this->assertEquals( "Total Products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
-        $this->assertEquals( "Total Products (net): 4,20 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
+        $this->assertEquals( "Total products (net): 4,20 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 0,80 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
         $this->assertEquals( "Shipping cost 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Shipping cost is not displayed correctly" );
         $this->assertEquals( "Grand total: 5,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
@@ -1411,9 +1411,9 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click( "id=chosen_81b40cf0cd383d3a9.70988998" );
         $this->clickAndWait( "//button[text()='Apply']" );
 
-        $this->assertEquals( "Total Products (net): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (net): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,85 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
-        $this->assertEquals( "Total Products (incl. tax): 17,85 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 17,85 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "Shipping (net): 13,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,47 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ) );
         $this->assertEquals( "3,51 €", $this->getText( "basketWrappingGross" ), "Wrapping price changed or didn't displayed" );
@@ -1476,9 +1476,9 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "3,57 €", $this->getText( "id=orderCardTotalPrice" ) );
         $this->assertEquals( "3,51 €", $this->getText( "//div[@id='basketSummary']/table/tbody/tr[8]/td" ) );
 
-        $this->assertEquals( "Total Products (net): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (net): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,85 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
-        $this->assertEquals( "Total Products (incl. tax): 17,85 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 17,85 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "Shipping (net): 13,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,47 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ) );
         $this->assertEquals( "Surcharge Payment Method 10,50 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ) );
@@ -1548,9 +1548,9 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click( "id=chosen_81b40cf0cd383d3a9.70988998" );
         $this->clickAndWait( "//button[text()='Apply']" );
 
-        $this->assertEquals( "Total Products (net): 12,61 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (net): 12,61 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,39 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
-        $this->assertEquals( "Total Products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "Shipping cost 3,90 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
         $this->assertEquals( "2,95 €", $this->getText( "basketWrappingGross" ), "Wrapping price changed or didn't displayed" );
         $this->assertEquals( "24,85 €", $this->getText( "basketGrandTotal" ), "Grand total price changed or didn't displayed" );
@@ -1602,9 +1602,9 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isTextPresent( "Greeting card" ) );
         $this->assertEquals( "3,00 €", $this->getText( "id=orderCardTotalPrice" ) );
 
-        $this->assertEquals( "Total Products (net): 12,61 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (net): 12,61 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,39 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
-        $this->assertEquals( "Total Products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "Shipping cost 13,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping cost is not displayed correctly" );
         $this->assertEquals( "Surcharge Payment Method 10,50 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ) );
         $this->assertEquals( "2,95 €", $this->getText( "basketWrappingGross" ), "Wrapping price changed or didn't displayed" );
@@ -1761,13 +1761,13 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click( "id=wrapping_a6840cc0ec80b3991.74884864" );
         $this->click( "id=chosen_81b40cf0cd383d3a9.70988998" );
         $this->clickAndWait( "//button[text()='Apply']" );
-        $this->assertEquals( "Total Products (net): 36,33 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (net): 36,33 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 2% Amount: 0,20 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
         $this->assertEquals( "plus VAT 13% Amount: 0,11 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "plus VAT 15% Amount: 1,96 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,39 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ) );
 
-        $this->assertEquals( "Total Products (incl. tax): 40,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 40,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ) );
         $this->assertEquals( "Shipping (net): 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[7]" ) ) );
         $this->assertEquals( "Gift Wrapping (net): 2,89 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[8]" ) ) );
         $this->assertEquals( "2,89 €", $this->getText( "basketWrappingNetto" ), "Wrapping price changed or didn't displayed" );
@@ -1893,13 +1893,13 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click( "id=chosen_81b40cf0cd383d3a9.70988998" );
         $this->clickAndWait( "//button[text()='Apply']" );
 
-        $this->assertEquals( "Total Products (net): 36,33 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
+        $this->assertEquals( "Total products (net): 36,33 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[1]" ) ) );
         $this->assertEquals( "plus VAT 2% Amount: 0,20 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[2]" ) ) );
         $this->assertEquals( "plus VAT 13% Amount: 0,11 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[3]" ) ) );
         $this->assertEquals( "plus VAT 15% Amount: 1,96 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
         $this->assertEquals( "plus VAT 19% Amount: 2,39 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ) );
 
-        $this->assertEquals( "Total Products (incl. tax): 40,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ) );
+        $this->assertEquals( "Total products (incl. tax): 40,99 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ) );
         $this->assertEquals( "Shipping (net): 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[7]" ) ) );
         $this->assertEquals( "Gift Wrapping (net): 2,89 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[8]" ) ) );
         $this->assertEquals( "2,89 €", $this->getText( "basketWrappingNetto" ), "Wrapping price changed or didn't displayed" );

@@ -109,7 +109,7 @@ function oxRemClassModule($sModuleClass, $sClass = '')
 
     if ($sClass) {
 // force for now        if ($aModules[$sClass] == $sModuleClass)
-            unset($aModules[$sClass]);
+        unset($aModules[$sClass]);
     } else {
         while (($sKey = array_search($sModuleClass, $aModules))!==false) {
             unset($aModules[$sKey]);
@@ -121,6 +121,11 @@ function oxRemClassModule($sModuleClass, $sClass = '')
     oxClassCacheKey(true);
 }
 
+/**
+ * Class oxTestModules
+ *
+ * @deprecated
+ */
 class oxTestModules
 {
     private static $_addedmods = array();
@@ -200,38 +205,38 @@ class oxTestModules
         }
 
         if (method_exists($last, $fncName)) {
-                $oReflection   = new ReflectionClass($last);
-                $aMethodParams = $oReflection->getMethod($fncName)->getParameters();
+            $oReflection   = new ReflectionClass($last);
+            $aMethodParams = $oReflection->getMethod($fncName)->getParameters();
 
-                $fncName.='(';
-                $blFirst = true;
-                foreach ($aMethodParams AS $iKey => $oParam) {
+            $fncName.='(';
+            $blFirst = true;
+            foreach ($aMethodParams AS $iKey => $oParam) {
 
-                    if(!$blFirst) {
-                        $fncName.=', ';
-                    }else{
-                        $blFirst = false;
-                    }
+                if(!$blFirst) {
+                    $fncName.=', ';
+                }else{
+                    $blFirst = false;
+                }
 
-                    if ( isset( $aFncParams[$iKey] ) ) {
-                        $fncName .= $aFncParams[$iKey];
+                if ( isset( $aFncParams[$iKey] ) ) {
+                    $fncName .= $aFncParams[$iKey];
 
-                        if(strpos( $aFncParams[$iKey], '=' ) === false && $oParam->isDefaultValueAvailable() ) {
-                            $fncName .= ' = '.var_export($oParam->getDefaultValue(),true);
-                        }
-
-                        continue;
-                    }
-
-                    if($oParam->getClass()){
-                        $fncName.= $oParam->getClass()->getName().' ';
-                    }
-                    $fncName.= '$'.$oParam->getName();
-                    if($oParam->isDefaultValueAvailable() ) {
+                    if(strpos( $aFncParams[$iKey], '=' ) === false && $oParam->isDefaultValueAvailable() ) {
                         $fncName .= ' = '.var_export($oParam->getDefaultValue(),true);
                     }
+
+                    continue;
                 }
-                $fncName.=')';
+
+                if($oParam->getClass()){
+                    $fncName.= $oParam->getClass()->getName().' ';
+                }
+                $fncName.= '$'.$oParam->getName();
+                if($oParam->isDefaultValueAvailable() ) {
+                    $fncName .= ' = '.var_export($oParam->getDefaultValue(),true);
+                }
+            }
+            $fncName.=')';
         } else {
             if ( empty( $aFncParams ) ) {
                 $fncName.='($p1=null, $p2=null, $p3=null, $p4=null, $p5=null, $p6=null, $p7=null, $p8=null, $p9=null, $p10=null)';
@@ -325,8 +330,8 @@ class oxTestModules
         self::$_oOrigOxUtilsObj = null;
         foreach (self::$_addedmods as $class => $arr) {
 //            foreach ($arr as $mod) {
-                oxRemClassModule('allmods', $class);
-  //          }
+            oxRemClassModule('allmods', $class);
+            //          }
         }
         self::$_addedmods = array();
     }
@@ -444,7 +449,7 @@ abstract class modOXID
         $oConfig->setUser( null );
         $oConfig->setAdminMode( null );
 
-        if ( OXID_VERSION_EE ) :
+        if ( defined('OXID_VERSION_EE') && OXID_VERSION_EE ) :
             $oConfig->setRights( null );
         endif;
         oxTestModules::cleanAllModules();
@@ -494,8 +499,8 @@ abstract class modOXID
 
     public function __get($nm)
     {
-    // maybe should copy var line in __set function ???
-    // if it would help to clone object properties...
+        // maybe should copy var line in __set function ???
+        // if it would help to clone object properties...
         if (array_key_exists($nm, $this->_vars))
             return $this->_vars[$nm];
         return $this->_oRealInstance->getConfigParam( $nm );
@@ -503,15 +508,15 @@ abstract class modOXID
 
     public function __set($nm, $val)
     {
-    // this is commented out for the reason:
-    // all tests are INDEPENDANT, so no real changes should be made to the real
-    // instance.
-    // NOTE: after cleanup, all changes to oxConfig while modConfig was active are LOST.
-    //        if (array_key_exists($nm, $this->_vars)) {
-            $this->_vars[$nm] = $val;
-    //            return;
-    //        }
-    //        $this->_oRealInstance->$nm = &$val;
+        // this is commented out for the reason:
+        // all tests are INDEPENDANT, so no real changes should be made to the real
+        // instance.
+        // NOTE: after cleanup, all changes to oxConfig while modConfig was active are LOST.
+        //        if (array_key_exists($nm, $this->_vars)) {
+        $this->_vars[$nm] = $val;
+        //            return;
+        //        }
+        //        $this->_oRealInstance->$nm = &$val;
     }
 
     public function __isset($nm)
@@ -533,7 +538,11 @@ abstract class modOXID
 }
 
 //-----------------
-
+/**
+ * config class for test
+ *
+ * @deprecated
+ */
 class modConfig extends modOXID
 {
     // needed 4 modOXID
@@ -554,7 +563,7 @@ class modConfig extends modOXID
     }
 
     /**
-     * @return modconfig
+     * @return modConfig
      */
     static function getInstance()
     {
@@ -628,21 +637,28 @@ class modConfig extends modOXID
         self::getInstance()->_aConfigparams[$paramName] = $paramValue;
     }
 
-    // needed 4 oxConfig
+    /**
+     * @param $paramName
+     * @param bool $blRaw
+     *
+     * @deprecated since v5.2.0 (2014-07-02); Use static getRequestParameter()
+     *
+     * @return string
+     */
     static function getParameter(  $paramName, $blRaw = false)
     {
-        // should throw exception if original functionality is needed.
-        if ( array_key_exists( $paramName, self::getInstance()->_params ) ) {
-            return self::getInstance()->_params[$paramName];
-        } else {
-            return modSession::getInstance()->getVar( $paramName );
-        }
+        return self::getRequestParameter($paramName, $blRaw);
     }
 
+    /**
+     * @param $paramName
+     * @param $paramValue
+     *
+     * @deprecated since v5.2.0 (2014-07-02); Use static setRequestParameter()
+     */
     static function setParameter( $paramName, $paramValue )
     {
-        // should throw exception if original functionality is needed.
-        self::getInstance()->_params[$paramName] = $paramValue;
+        self::setRequestParameter($paramName, $paramValue);
     }
 
     /**
@@ -686,7 +702,11 @@ class modConfig extends modOXID
 }
 
 //-----------------
-
+/**
+ * Class modSession
+ *
+ * @deprecated
+ */
 class modSession extends modOXID
 {
     public static $unitMOD = null;
@@ -694,7 +714,7 @@ class modSession extends modOXID
     protected static $_inst = null;
     protected $_id = null;
 
-   /**
+    /**
      * Keeps test session vars
      *
      * @var array
@@ -704,7 +724,7 @@ class modSession extends modOXID
     function modAttach($oObj = null)
     {
         parent::modAttach($oObj);
-        $this->_oRealInstance = oxSession::getInstance();
+        $this->_oRealInstance = oxRegistry::getSession();
         if (!$oObj) {
             $oObj = $this;
         }
@@ -765,8 +785,8 @@ class modSession extends modOXID
      */
     public function __get($nm)
     {
-    // maybe should copy var line in __set function ???
-    // if it would help to clone object properties...
+        // maybe should copy var line in __set function ???
+        // if it would help to clone object properties...
         if (array_key_exists($nm, $this->_vars))
             return $this->_vars[$nm];
         return $this->_oRealInstance->$nm;
@@ -774,7 +794,11 @@ class modSession extends modOXID
 }
 
 //-----------------
-
+/**
+ * Class modDB
+ *
+ * @deprecated
+ */
 class modDB extends modOXID
 {
     // needed 4 modOXID
@@ -811,7 +835,7 @@ class modDB extends modOXID
 
 //-----------------
 
-// usefull for extending getDB()->Execute method
+// useful for extending getDB()->Execute method
 class modResource
 {
     public $recordCount = 0;
@@ -978,7 +1002,7 @@ if (!function_exists('findphp')) {
         preparePathArray($aFileWhiteList, $baseDir);
 
 
-        //get directorys (do not go to blacklist)
+        //get directories (do not go to blacklist)
         while (list (, $dir) = each($dirs)) {
             foreach (glob($dir.DIRECTORY_SEPARATOR.'*', GLOB_ONLYDIR) as $sdir) {
                 if (array_search($sdir, $aDirBlackList) === false) {
@@ -987,7 +1011,7 @@ if (!function_exists('findphp')) {
             }
         }
 
-        // get PHP files form directorys
+        // get PHP files form directories
         $aFiles = array();
         foreach ($dirs as $dir) {
             $aFiles = array_merge($aFiles, glob($dir.DIRECTORY_SEPARATOR."*.php", GLOB_NOSORT));
@@ -1048,7 +1072,7 @@ if (!function_exists('stripCodeLines')) {
             $aFile = preg_replace('#//.*#', '', $aFile);
             $aFile = preg_replace_callback('#/\*.*?\*/#sm', 'preg_stripper', $aFile);
 
-            // for viariables
+            // for variables
             $aFile = preg_replace('#(public|static|protected|private|var|\{|\}).*;#', '', $aFile);
             //for functions
             $aFile = preg_replace('#(public|static|protected|private|var|\{|\})#', '', $aFile);

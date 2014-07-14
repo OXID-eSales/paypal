@@ -113,7 +113,7 @@ class dbMaintenance
                             foreach ($aRow as $sColumn => $sEntry) {
                                 if ($sColumn == "OXVARVALUE") {
                                     //special handeling of blob values of oxconfig
-                                    $sEntry= oxUtils::getInstance()->strMan($sEntry, $myConfig->getConfigParam( 'sConfigKey' ) );
+                                    $sEntry= oxRegistry::getUtils()->strMan($sEntry, $myConfig->getConfigParam( 'sConfigKey' ) );
                                 }
                                 if (!isset($this->_oDBDump[$sTable][$oxid][$sColumn])) {
                                     //a new colum
@@ -271,7 +271,7 @@ class dbMaintenance
                     $this->_aData[$sTable][$oxid]["_sql_"] = $this->getInsertString($aRow, $sTable);
                     foreach ($aRow as $sColumn => $sEntry) {
                         if ($sColumn == "OXVARVALUE") {
-                            $sEntry= oxUtils::getInstance()->strMan($sEntry, $myConfig->getConfigParam( 'sConfigKey' ) );
+                            $sEntry= oxRegistry::getUtils()->strMan($sEntry, $myConfig->getConfigParam( 'sConfigKey' ) );
                         }
                         $this->_aData[$sTable][$oxid][$sColumn] = $sEntry;
                     }

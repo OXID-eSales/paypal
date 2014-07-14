@@ -646,6 +646,36 @@ class modConfig extends modOXID
     }
 
     /**
+     * Returns value of parameter stored in POST,GET for tests.
+     *
+     * @param $paramName
+     * @param bool $blRaw
+     *
+     * @return string
+     */
+    public static function getRequestParameter(  $paramName, $blRaw = false)
+    {
+        // should throw exception if original functionality is needed.
+        if ( array_key_exists( $paramName, self::getInstance()->_params ) ) {
+            return self::getInstance()->_params[$paramName];
+        } else {
+            return modSession::getInstance()->getVar( $paramName );
+        }
+    }
+
+    /**
+     * Sets request parameter for test.
+     *
+     * @param $paramName
+     * @param $paramValue
+     */
+    public static function setRequestParameter( $paramName, $paramValue )
+    {
+        // should throw exception if original functionality is needed.
+        self::getInstance()->_params[$paramName] = $paramValue;
+    }
+
+    /**
      * needed for Erp test where it checks it with method_exists
      *
      */

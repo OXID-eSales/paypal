@@ -111,7 +111,7 @@ $oDb->setConfig( $oConfigFile );
 $oLegacyDb = $oDb->getDb();
 OxRegistry::set( 'OxDb', $oLegacyDb );
 
-oxConfig::getInstance();
+oxRegistry::getConfig();
 
 // Utility class
 require_once getShopBasePath() . 'core/oxutils.php';

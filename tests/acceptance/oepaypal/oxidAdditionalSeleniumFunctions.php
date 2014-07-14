@@ -88,7 +88,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     public function addDemoData( $demo )
     {
         if (filesize($demo)) {
-            $myConfig = oxConfig::getInstance();
+            $myConfig = oxRegistry::getConfig();
 
             $sUser    = $myConfig->getConfigParam( 'dbUser' );
             $sPass    = $myConfig->getConfigParam( 'dbPwd' );
@@ -909,7 +909,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      */
     public function restoreDB( $sTmpPrefix = null)
     {
-        $myConfig = oxConfig::getInstance();
+        $myConfig = oxRegistry::getConfig();
 
         $sUser    = $myConfig->getConfigParam( 'dbUser' );
         $sPass    = $myConfig->getConfigParam( 'dbPwd' );
@@ -941,7 +941,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     public function dumpDB( $sTmpPrefix = null )
     {
         $time = microtime (true);
-        $myConfig = oxConfig::getInstance();
+        $myConfig = oxRegistry::getConfig();
 
         $sUser    = $myConfig->getConfigParam( 'dbUser' );
         $sPass    = $myConfig->getConfigParam( 'dbPwd' );

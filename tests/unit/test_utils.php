@@ -546,7 +546,7 @@ class modConfig extends modOXID
     {
         parent::modAttach($oObj);
         self::$unitMOD = null;
-        $this->_oRealInstance = oxConfig::getInstance();
+        $this->_oRealInstance = oxRegistry::getConfig();
         if (!$oObj) {
             $oObj = $this;
         }
@@ -575,7 +575,7 @@ class modConfig extends modOXID
 
         parent::cleanup();
 
-        if (oxConfig::getInstance() === $this) {
+        if (oxRegistry::getConfig() === $this) {
             throw new Exception("clean config failed");
         }
     }
@@ -595,7 +595,7 @@ class modConfig extends modOXID
             return $sValue;
         } else {
             if (!$oInst->_oRealInstance) {
-                $_i = oxConfig::getInstance();
+                $_i = oxRegistry::getConfig();
                 if ( $_i instanceof oxConfig ) {
                     return $_i->getConfigParam( $paramName );
                 }

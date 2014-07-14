@@ -46,8 +46,8 @@ class dbMaintenance
         modConfig::$unitMOD = null;
 
         $time = microtime(true);
-        $myConfig = oxConfig::getInstance();
-        $sDbName = oxConfig::getInstance()->getConfigParam('dbName');
+        $myConfig = oxRegistry::getConfig();
+        $sDbName = oxRegistry::getConfig()->getConfigParam('dbName');
         $this->_oDBDump = file_get_contents(oxCCTempDir.'/tmp_db_dump_'.$sDbName);
         $this->_oDBDump = unserialize($this->_oDBDump);
 
@@ -230,19 +230,19 @@ class dbMaintenance
      */
     public function dumpDB()
     {
-        $sDbName = oxConfig::getInstance()->getConfigParam('dbName');
+        $sDbName = oxRegistry::getConfig()->getConfigParam('dbName');
         $time = microtime (true);
         $this->myDB = oxDb::getDb();
-        $myConfig = oxConfig::getInstance();
+        $myConfig = oxRegistry::getConfig();
         $this->myDB->SetFetchMode(ADODB_FETCH_NUM);
 
         if (!($rs = $this->myDB->Query("SHOW TABLES"))) {
             throw new Exception("no tables on "
-                . oxConfig::getInstance()->getConfigParam('dbHost')
+                . oxRegistry::getConfig()->getConfigParam('dbHost')
                 . ":$sDbName, using "
-                . oxConfig::getInstance()->getConfigParam('dbUser')
+                . oxRegistry::getConfig()->getConfigParam('dbUser')
                 . ":"
-                . oxConfig::getInstance()->getConfigParam('dbPwd'));
+                . oxRegistry::getConfig()->getConfigParam('dbPwd'));
         }
 
         $this->myDB->SetFetchMode(ADODB_FETCH_ASSOC);

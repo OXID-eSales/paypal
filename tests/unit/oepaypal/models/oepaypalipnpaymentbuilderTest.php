@@ -120,13 +120,10 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
 
         // Request Payment should be called with request object.
         $oPayPalIPNPaymentSetter = $this->_prepareRequestPaymentSetter( $oRequest, $oRequestOrderPayment );
-        // Cloning as after return parent check once more if object is same as before to match mock conditions.
-        $oRequestOrderPaymentClone = clone $oRequestOrderPayment;
-        // Validator should be called with payment setter result.
-        $oOrderPaymentClone = clone $oOrderPayment;
-        $oPayPalIPNPaymentValidator = $this->_prepareIPNPaymentValidator( $oRequestOrderPaymentClone, $oOrderPaymentClone, $oLang, $blPaymentValid, $sValidationMessage );
+        $oPayPalIPNPaymentValidator = $this->_prepareIPNPaymentValidator( $oRequestOrderPayment, $oOrderPayment, $oLang, $blPaymentValid, $sValidationMessage );
 
         // Mock order loading, so we do not touch database.
+        /** @var oePayPalIPNPaymentBuilder $oPaymentBuilder */
         $oPaymentBuilder = $this->getMock( 'oePayPalIPNPaymentBuilder', array( '_loadOrderPayment' ) );
         $oPaymentBuilder->expects( $this->atLeastOnce() )->method( '_loadOrderPayment' )->with( $sTransactionIdRequestPayment )->will( $this->returnValue( $oOrderPayment ) );
         $oPaymentBuilder->setRequest( $oRequest );

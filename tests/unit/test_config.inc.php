@@ -84,6 +84,11 @@ class modOxUtilsDate extends oxUtilsDate
 {
     protected $_sTime = null;
 
+    public static function getInstance()
+    {
+        return oxRegistry::get("oxUtilsDate");
+    }
+
     public function UNITSetTime($sTime)
     {
         $this->_sTime = $sTime;
@@ -120,13 +125,14 @@ function initDbDump()
     if ($done) {
         throw new Exception("init already done");
     }
-    if (file_exists('unit/dbMaintenance.php')) {
-        include_once 'unit/dbMaintenance.php';
+    if (file_exists('unit/dbRestore.php')) {
+        include_once 'unit/dbRestore.php';
     } else {
-        include_once 'dbMaintenance.php';
+        include_once 'dbRestore.php';
     }
-    $dbM = new dbMaintenance();
-    $dbM->dumpDB();
+    $oDbRestore = new DbRestore();
+    $oDbRestore->dumpDB();
     $done = true;
 }
 initDbDump();
+

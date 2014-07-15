@@ -59,8 +59,7 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oOrder = $this->_prepareOrder( $sOrderId );
         $oOrderPayment = $this->_prepareOrderPayment( $sOrderId );
         $OrderCalculatedStatus = 'completed';
-        $oClonedOrder = clone $oOrder;
-        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oClonedOrder, $OrderCalculatedStatus );
+        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oOrder, $OrderCalculatedStatus );
 
         $oPayPalOrderManager = new oePayPalOrderManager();
         $oPayPalOrderManager->setOrderPayment( $oOrderPayment );
@@ -84,8 +83,7 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oOrder = $this->_prepareOrder( $sOrderId );
         $oOrderPayment = null;
         $OrderCalculatedStatus = 'completed';
-        $oClonedOrder = clone $oOrder;
-        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oClonedOrder, $OrderCalculatedStatus );
+        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oOrder, $OrderCalculatedStatus );
 
         $oPayPalOrderManager = new oePayPalOrderManager();
         $oPayPalOrderManager->setOrder( $oOrder );
@@ -108,8 +106,7 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oOrder = $this->_prepareOrder( $sOrderId );
         $oOrderPayment = $this->_prepareOrderPayment( $sOrderId );
         $OrderCalculatedStatus = 'completed';
-        $oClonedOrder = clone $oOrder;
-        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oClonedOrder, $OrderCalculatedStatus );
+        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oOrder, $OrderCalculatedStatus );
 
         // Mock order manager to check if order is created from given payment. This prevents from database usage.
         $oPayPalOrderManager = $this->getMock( 'oePayPalOrderManager', array( '_getOrderFromPayment' ) );

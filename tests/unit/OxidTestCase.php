@@ -548,4 +548,30 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
     {
         return iconv("ISO-8859-1", "UTF-8", $sVal);
     }
+
+    /**
+     * Creates stub object from given class
+     *
+     * @param string $sClass class name
+     * @param array $aMethods assoc array with method => value
+     * @param array $aTestMethods array with test methods for mocking
+     *
+     * @return mixed
+     */
+    protected function _createStub( $sClass, $aMethods, $aTestMethods = array() )
+    {
+        $aMockedMethods = array_unique( array_merge( array_keys( $aMethods ), $aTestMethods ) );
+
+        $oObject = $this->getMock( $sClass, $aMockedMethods, array(), '', false );
+
+        foreach ( $aMethods as $sMethod => $sValue ) {
+            if ( !in_array( $sMethod, $aTestMethods ) ) {
+                $oObject->expects($this->any())
+                    ->method( $sMethod )
+                    ->will($this->returnValue( $sValue ));
+            }
+        }
+
+        return $oObject;
+    }
 }

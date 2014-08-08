@@ -1475,7 +1475,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Shipping (excl. tax): 13,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ) );
         $this->assertEquals( "plus 19% tax, amount: 2,47 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ) );
         $this->assertEquals( "Surcharge Payment method: 10,50 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ) );
-        $this->assertEquals( "Surcharge VAT 19% Amount: 2,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[7]" ) ) );
+        $this->assertEquals( "Surcharge 19% tax, amount: 2,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[7]" ) ) );
         $this->assertEquals( "3,51 €", $this->getText( "basketWrappingGross" ), "Wrapping price changed or didn't displayed" );
         $this->assertEquals( "3,57 €", $this->getText( "basketGiftCardGross" ), "Card price changed or didn't displayed" );
         $this->assertEquals( "52,90 €", $this->getText( "basketGrandTotal" ), "Grand total price changed or didn't displayed" );

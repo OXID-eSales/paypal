@@ -1291,7 +1291,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue( $this->isTextPresent( "Test product 3" ) );
         $this->assertEquals( "Grand total: 15,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Grand total is not displayed correctly" );
         $this->type( "name=voucherNr", "111111" );
-        $this->clickAndWait( "//button[text()='Submit Coupon']" );
+        $this->clickAndWait( "//button[text()='Submit coupon']" );
         $this->assertTrue( $this->isTextPresent( "Remove" ) );
         $this->assertTrue( $this->isTextPresent( "Coupon (No. 111111)" ) );
         $this->assertEquals( "Coupon (No. 111111) Remove -10,00 €", $this->getText( "//div[@id='basketSummary']//tr[4]" ) );

@@ -673,18 +673,18 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->openTab( "link=3", "setfolder" );
         $this->assertTextPresent( "Internal Status: OK" );
         $this->assertTextPresent( "Order No.: 3", "Order number is not displayed in admin" );
-        $this->assertEquals( "5 *", $this->getText( "//table[2]/tbody/tr/td[1]" ) );
+        $this->assertEquals( "1 *", $this->getText( "//table[2]/tbody/tr/td[1]" ) );
         $this->assertEquals( "Test product 1", $this->getText( "//td[3]" ), "Purchased product name is not displayed in Admin" );
-        $this->assertEquals( "12,45", $this->getText( "//table[@id='order.info']/tbody/tr[7]/td[2]" ) );
+        $this->assertEquals( "8,49", $this->getText( "//table[@id='order.info']/tbody/tr[7]/td[2]" ) );
         $this->frame( "list" );
         $this->openTab( "link=Products", "//input[@value='Update']" );
         $this->assertEquals( "7,50", $this->getText( "//table[@id='order.info']/tbody/tr[6]/td[2]" ), "charges of payment method is not displayed" );
-        $this->assertEquals( "0,79", $this->getText( "//table[@id='order.info']/tbody/tr[4]/td[2]" ), "VAT is not displayed" );
-        $this->assertEquals( "4,16", $this->getText( "//table[@id='order.info']/tbody/tr[3]/td[2]" ), "Product Net price is not displayed" );
+        $this->assertEquals( "0,16", $this->getText( "//table[@id='order.info']/tbody/tr[4]/td[2]" ), "VAT is not displayed" );
+        $this->assertEquals( "0,83", $this->getText( "//table[@id='order.info']/tbody/tr[3]/td[2]" ), "Product Net price is not displayed" );
         $this->frame( "list" );
         $this->openTab( "link=Main", "setDelSet" );
         $this->assertEquals( "Test S&H set", $this->getSelectedLabel( "setDelSet" ), "Shipping method is not displayed in admin" );
-        $this->assertEquals( "COD (Cash on Delivery) (7,50 €)", $this->getSelectedLabel( "setPayment" ), "Payment method is not displayed in admin" );
+        $this->assertEquals( "COD (Cash on Delivery)", $this->getSelectedLabel( "setPayment" ), "Payment method is not displayed in admin" );
 
     }
 

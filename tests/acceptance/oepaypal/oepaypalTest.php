@@ -636,8 +636,6 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Test S&H set", $this->getSelectedLabel( "setDelSet" ), "Shipping method is incorrect in admin" );
 
         //Go to basket and make an order,
-        //TODO there is a bug #4501: after updating quantities in admin in table saves this info and now then user goes to
-        //cart there are left 5 quantities instead of 1, then this bug will be fixed need to change selenium
         $this->open( shopURL . "_cc.php" );
         $this->openShop();
         $this->searchFor( "1001" );
@@ -661,7 +659,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertEquals( "Shipping costs: 0,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[4]" ) ), "Shipping costs is not displayed correctly" );
         //   $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle(), "Page tittle is incorect in last order step" );
         $this->assertEquals( "Surcharge Payment method: 7,50 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[5]" ) ), "Payment price is not displayed in carts" );
-        $this->assertEquals( "Grand total: 12,45 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
+        $this->assertEquals( "Grand total: 8,49 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
         $this->assertTrue( $this->isTextPresent( "Test S&H set" ) );
         // $this->assertFalse($this->isTextPresent("PayPal"));
         $this->assertTrue( $this->isTextPresent( "COD" ) );

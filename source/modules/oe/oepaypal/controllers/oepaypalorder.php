@@ -94,7 +94,7 @@ class oePayPalOrder extends oePayPalOrder_parent
     }
 
     /**
-     * Checks if order payment is PayPal and redirects to payment processing part
+     * Checks if order payment is PayPal and redirects to payment processing part.
      *
      * @param int $iSuccess order state
      *
@@ -112,8 +112,6 @@ class oePayPalOrder extends oePayPalOrder_parent
             $iPayPalType = (int) $this->getSession()->getVariable( "oepaypal" );
             $sNextStep  = ( $iPayPalType == 2 ) ? "basket" : "order";
         }
-
-       // die($sNextStep);
 
         return $sNextStep;
     }

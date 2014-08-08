@@ -115,9 +115,14 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->frame( "edit" );
         $this->click( "//b[text()='API signature']" );
         $this->click( "//b[text()='Development settings']" );
+
+        $this->select( "//select[@name='confselects[sOEPayPalTransactionMode]']", "value=Authorization" );
+
         $this->type( "//input[@name='confstrs[sOEPayPalUsername]']", $this->getLoginDataByName( 'sOEPayPalUsername' ) );
         $this->type( "//input[@name='confstrs[sOEPayPalPassword]']", $this->getLoginDataByName( 'sOEPayPalPassword' ) );
         $this->type( "//input[@name='confstrs[sOEPayPalSignature]']", $this->getLoginDataByName( 'sOEPayPalSignature' ) );
+
+        $this->click( "//input[@name='confbools[blOEPayPalSandboxMode]' and @type='checkbox']" );
         $this->type( "//input[@name='confstrs[sOEPayPalSandboxUsername]']", $this->getLoginDataByName( 'sOEPayPalSandboxUsername' ) );
         $this->type( "//input[@name='confstrs[sOEPayPalSandboxPassword]']", $this->getLoginDataByName( 'sOEPayPalSandboxPassword' ) );
         $this->type( "//input[@name='confstrs[sOEPayPalSandboxSignature]']", $this->getLoginDataByName( 'sOEPayPalSandboxSignature' ) );
@@ -201,7 +206,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->waitForItemAppear( "id=miniBasket" );
 
         $this->assertTrue( $this->isElementPresent( "link=Test product 1" ), "Purchased product name is not displayed in last order step" );
-        $this->assertEquals("Grand Total: 1,98 €", $this->getText("basketGrandTotal"),"Grand total price changed  or didn't displayed");
+        $this->assertEquals("Grand total 1,98 €", $this->getText("basketGrandTotal"),"Grand total price changed  or didn't displayed");
         $this->assertTrue( $this->isTextPresent( "PayPal" ), "Payment method not displayed in last order step" );
         $this->clickAndWait( "//button[text()='Order now']" );
         $this->assertTrue( $this->isTextPresent( "Thank you for your order in OXID eShop" ), "Order is not finished successful" );
@@ -222,7 +227,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->type("//input[@id='loginUser']", $userName);
         $this->type("//input[@id='loginPwd']", $userPass);
         if ($waitForLogin) {
-            $this->clickAndWait("//form[@name='login']//input[@type='submit']", "//a[text()='Logout']");
+            $this->clickAndWait("//form[@name='login']//input[@type='submit']", "//a[text()='Log out']");
         } else {
             $this->clickAndWait("//form[@name='login']//input[@type='submit']");
         }
@@ -243,25 +248,25 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
 
         //Open basket and press top ECS button
         $this->clickAndWait("id=miniBasket");
-        $this->assertTrue($this->isTextPresent("159,00 €"),"Item price doesn't mach or doesn't displayed");
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page");
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page");
+        $this->assertTrue($this->isTextPresent("159,00 €"),"Item price doesn't mach or doesn't displayed 1");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page 1");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page 1");
         $this->clickAndWait("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']");
 
         //Cancel order in PayPal and return to the basket
-        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed");
+        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed 2");
+        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed 2");
         $this->clickAndWait("name=cancel_return");
 
         //Press bottom ECS button
         $this->clickAndWait("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']");
-        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed");
+        $this->assertTrue($this->isTextPresent("€159.00"),"Item price doesn't mach or doesn't displayed 3");
+        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"),"Item quantity doesn't mach or doesn't displayed 3");
         $this->clickAndWait("name=cancel_return");
 
         //Checking whether user was redirected back to the basket
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page");
-        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepTop']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on top of basket's page 3");
+        $this->assertTrue($this->isElementPresent("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']"), "No ECS button on bottom of basket's page 3");
     }
 
     /**

@@ -2075,6 +2075,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
         sleep(10);
+        $this->waitForEditable('id=continue_abovefold');
         $this->waitForText("Steuer");
         $this->assertTrue($this->isTextPresent("Harness SOL KITE"), "Purchased product name is not displayed in PayPal");
         $this->assertTrue($this->isTextPresent("Warenwert€122,22"), "Product price is not displayed in PayPal");
@@ -2083,7 +2084,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("Gesamtbetrag €158,45 EUR"), "Total price is not displayed in PayPal");
 
         $this->click("id=continue");
-        $this->waitForText("Submit your order at the bottom of this overview");
+        $this->waitForText("Please check all data on this overview before submitting your order!");
     }
 
     /**

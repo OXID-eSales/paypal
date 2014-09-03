@@ -8,7 +8,7 @@ INSERT INTO `oxarticles` (`OXID`, `OXMAPID`, `OXSHOPID`, `OXACTIVE`, `OXARTNUM`,
                          ('1004',  104,        1,          1,         '1004',     'Test product 4', 'Test product 4 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1004',    1,            50,             'Test product 4', 'Test product 4 short desc', 'oxarticle',   1);
 
 REPLACE INTO `oxarticles2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
-  (1, 100), (1, 101), (1, 103), (1, 104);
+  (1, 101), (1, 102), (1, 103), (1, 104);
 
 # Articles long desc
 INSERT INTO `oxartextends` (`OXID`, `OXLONGDESC`,                             `OXLONGDESC_1`) VALUES

@@ -1,12 +1,14 @@
 SET @@session.sql_mode = '';
 
 # Articles demo data
-INSERT INTO `oxarticles` (`OXID`, `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`, `OXACTIVE`, `OXARTNUM`, `OXTITLE`,        `OXSHORTDESC`,              `OXPRICE`, `OXUNITNAME`, `OXUNITQUANTITY`, `OXVAT`, `OXWEIGHT`, `OXSTOCK`, `OXSTOCKFLAG`, `OXINSERT`,   `OXTIMESTAMP`,        `OXLENGTH`, `OXWIDTH`, `OXHEIGHT`, `OXSEARCHKEYS`, `OXISSEARCH`, `OXVARMINPRICE`, `OXTITLE_1`,      `OXSHORTDESC_1`,             `OXSUBCLASS`, `OXVPE`) VALUES
-                         ('1000',  1,          1,            0,            1,         '1000',     'Test product 0', 'Test product 0 short desc', 10,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1000',    1,            50,             'Test product 0', 'Test product 0 short desc', 'oxarticle',   1),
-                         ('1001',  1,          1,            0,            1,         '1001',     'Test product 1', 'Test product 1 short desc', 0.99,      '',            0,                NULL,    0,          0,         1,            '2008-02-04', '2008-02-04 17:35:43', 0,          0,         0,         'search1001',    1,            100,            'Test product 1', 'Test product 1 short desc', 'oxarticle',   1),
-			    ('1003',  1,          1,            0,            1,         '1003',     'Test product 3', 'Test product 3 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1003',    1,            50,             'Test product 3', 'Test product 0 short desc', 'oxarticle',   1),
-			    ('1004',  1,          1,            0,            1,         '1004',     'Test product 4', 'Test product 4 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1004',    1,            50,             'Test product 4', 'Test product 4 short desc', 'oxarticle',   1);
+INSERT INTO `oxarticles` (`OXID`, `OXMAPID`, `OXSHOPID`, `OXACTIVE`, `OXARTNUM`, `OXTITLE`,        `OXSHORTDESC`,              `OXPRICE`, `OXUNITNAME`, `OXUNITQUANTITY`, `OXVAT`, `OXWEIGHT`, `OXSTOCK`, `OXSTOCKFLAG`, `OXINSERT`,   `OXTIMESTAMP`,        `OXLENGTH`, `OXWIDTH`, `OXHEIGHT`, `OXSEARCHKEYS`, `OXISSEARCH`, `OXVARMINPRICE`, `OXTITLE_1`,      `OXSHORTDESC_1`,             `OXSUBCLASS`, `OXVPE`) VALUES
+                         ('1000',  101,        1,          1,         '1000',     'Test product 0', 'Test product 0 short desc', 10,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1000',    1,            50,             'Test product 0', 'Test product 0 short desc', 'oxarticle',   1),
+                         ('1001',  102,        1,          1,         '1001',     'Test product 1', 'Test product 1 short desc', 0.99,      '',            0,                NULL,    0,          0,         1,            '2008-02-04', '2008-02-04 17:35:43', 0,          0,         0,         'search1001',    1,            100,            'Test product 1', 'Test product 1 short desc', 'oxarticle',   1),
+                         ('1003',  103,        1,          1,         '1003',     'Test product 3', 'Test product 3 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1003',    1,            50,             'Test product 3', 'Test product 0 short desc', 'oxarticle',   1),
+                         ('1004',  104,        1,          1,         '1004',     'Test product 4', 'Test product 4 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1004',    1,            50,             'Test product 4', 'Test product 4 short desc', 'oxarticle',   1);
 
+REPLACE INTO `oxarticles2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
+  (1, 100), (1, 101), (1, 103), (1, 104);
 
 # Articles long desc
 INSERT INTO `oxartextends` (`OXID`, `OXLONGDESC`,                             `OXLONGDESC_1`) VALUES
@@ -14,33 +16,43 @@ INSERT INTO `oxartextends` (`OXID`, `OXLONGDESC`,                             `O
                            ('1001', '<p>Test product 1 long description</p>', '<p>Test product 1 long description</p>');
 
 # Categories demo data
-INSERT INTO `oxcategories` (`OXID`,          `OXPARENTID`, `OXLEFT`, `OXRIGHT`, `OXROOTID`,     `OXSORT`, `OXACTIVE`, `OXHIDDEN`, `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`, `OXTITLE`,         `OXDESC`,               `OXLONGDESC`,                  `OXDEFSORT`, `OXDEFSORTMODE`, `OXACTIVE_1`, `OXTITLE_1`,       `OXDESC_1`,             `OXLONGDESC_1`,                `OXVAT`, `OXSKIPDISCOUNTS`, `OXSHOWSUFFIX`) VALUES
-                           ('testcategory0', 'oxrootid',    1,        4,        'testcategory0', 1,        1,          0,          1,          1,            0,           'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>', 'oxartnum',   0,               1,           'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>',  NULL,    0,                 1);
+INSERT INTO `oxcategories` (`OXID`,          `OXMAPID`, `OXPARENTID`, `OXLEFT`, `OXRIGHT`, `OXROOTID`,     `OXSORT`, `OXACTIVE`, `OXHIDDEN`, `OXSHOPID`, `OXTITLE`,         `OXDESC`,               `OXLONGDESC`,                  `OXDEFSORT`, `OXDEFSORTMODE`, `OXACTIVE_1`, `OXTITLE_1`,       `OXDESC_1`,             `OXLONGDESC_1`,                `OXVAT`, `OXSKIPDISCOUNTS`, `OXSHOWSUFFIX`) VALUES
+                           ('testcategory0', 101,        'oxrootid',    1,        4,        'testcategory0', 1,        1,          0,          1,        'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>', 'oxartnum',   0,               1,           'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>',  NULL,    0,                 1);
+
+REPLACE INTO `oxcategories2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
+  (1, 101);
 
 # Payment demo data
 INSERT INTO `oxpayments` (`OXID`,       `OXACTIVE`, `OXDESC`,             `OXADDSUM`, `OXADDSUMTYPE`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXCHECKED`, `OXDESC_1`,            `OXLONGDESC`,                `OXLONGDESC_1`,             `OXSORT`) VALUES
                          ('testpayment', 1,         'Test payment method', 0,         'abs',           0,            0,              99999,        0,          'Test payment method', 'Short payment description', 'Short payment description', 0);
 
 # Delivery set demo data
-INSERT INTO `oxdeliveryset` (`OXID`,      `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`, `OXACTIVE`, `OXTITLE`,      `OXTITLE_1`,   `OXPOS`) VALUES
-                            ('testdelset', 1,          1,            0,            1,         'Test S&H set', 'Test S&H set', 0);
+INSERT INTO `oxdeliveryset` (`OXID`,      `OXMAPID`,  `OXSHOPID`, `OXACTIVE`, `OXTITLE`,      `OXTITLE_1`,   `OXPOS`) VALUES
+                            ('testdelset', 101,        1,            1,         'Test S&H set', 'Test S&H set', 0);
+
+REPLACE INTO `oxdeliveryset2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
+  (1, 101);
+
 
 # Delivery demo data
-INSERT INTO `oxdelivery` (`OXID`,   `OXSHOPID`, `OXSHOPINCL`, `OXSHOPEXCL`, `OXACTIVE`, `OXTITLE`,       `OXTITLE_1`,     `OXADDSUMTYPE`, `OXADDSUM`, `OXDELTYPE`, `OXPARAM`, `OXPARAMEND`, `OXFIXED`, `OXSORT`, `OXFINALIZE`) VALUES
-                         ('testdel', 1,          1,            0,            1,         'Test delivery', 'Test delivery', 'abs',           0,         'a',          1,         99999,        0,         9998,     1);
+INSERT INTO `oxdelivery` (`OXID`,   `OXMAPID`,  `OXSHOPID`, `OXACTIVE`, `OXTITLE`,       `OXTITLE_1`,     `OXADDSUMTYPE`, `OXADDSUM`, `OXDELTYPE`, `OXPARAM`, `OXPARAMEND`, `OXFIXED`, `OXSORT`, `OXFINALIZE`) VALUES
+                         ('testdel', 101,        1,           1,         'Test delivery', 'Test delivery', 'abs',           0,         'a',          1,         99999,        0,         9998,     1);
+
+REPLACE INTO `oxdelivery2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
+  (1, 101);
 
 # User demo data
-INSERT INTO `oxuser` (`OXID`, `OXACTIVE`, `OXRIGHTS`, `OXSHOPID`, `OXUSERNAME`, `OXPASSWORD`, `OXPASSSALT`, `OXCUSTNR`, `OXUSTID`, `OXUSTIDSTATUS`, `OXCOMPANY`, `OXFNAME`, `OXLNAME`, `OXSTREET`, `OXSTREETNR`, `OXADDINFO`, `OXCITY`, `OXCOUNTRYID`, `OXZIP`, `OXFON`, `OXFAX`, `OXSAL`, `OXBONI`, `OXCREATE`, `OXREGISTER`, `OXPRIVFON`, `OXMOBFON`, `OXBIRTHDATE`, `OXURL`, `OXDISABLEAUTOGRP`, `OXLDAPKEY`, `OXWRONGLOGINS`, `OXUPDATEKEY`, `OXUPDATEEXP`) VALUES
-                     ('testuser',  1, 'user', 1, 'testing_account@oxid-esales.com', 'c9dadd994241c9e5fa6469547009328a', '7573657275736572',   8, '', 0, 'SeleniumTestCase Äß\'ü', 'Testing user acc Äß\'ü', 'PayPal Äß\'ü', 'Musterstr. Äß\'ü', '1', 'Testing acc for Selenium', 'Musterstadt Äß\'ü', 'a7c40f631fc920687.20179984', '79098', '', '', 'MR',  500, '2008-02-05 14:42:42', '2008-02-05 14:42:42', '', '', '0000-00-00', '', 0, '', 0, '', 0),
-                     ('testusera', 1, 'user', 1, 'testing_account2@oxid-esales.com',    'a233c8b71a465807980f4b2b18f50fec', '757365724175736572', 9, '', 0, 'SeleniumTestCase',       'Testing user acc',       'PayPal',     'Musterstr.',       '2', 'Testing acc for Selenium', 'Musterstadt',       'a7c40f631fc920687.20179984', '79098', '', '', 'MRS', 500, '2008-02-05 14:49:31', '2008-02-05 14:49:31', '', '', '0000-00-00', '', 0, '', 0, '', 0);
+INSERT INTO `oxuser` (`OXID`, `OXACTIVE`, `OXRIGHTS`, `OXSHOPID`, `OXUSERNAME`, `OXPASSWORD`, `OXPASSSALT`, `OXCUSTNR`, `OXUSTID`, `OXUSTIDSTATUS`, `OXCOMPANY`, `OXFNAME`, `OXLNAME`, `OXSTREET`, `OXSTREETNR`, `OXADDINFO`, `OXCITY`, `OXCOUNTRYID`, `OXZIP`, `OXFON`, `OXFAX`, `OXSAL`, `OXBONI`, `OXCREATE`, `OXREGISTER`, `OXPRIVFON`, `OXMOBFON`, `OXBIRTHDATE`, `OXURL`, `OXLDAPKEY`, `OXWRONGLOGINS`, `OXUPDATEKEY`, `OXUPDATEEXP`) VALUES
+                     ('testuser',  1, 'user', 1, 'testing_account@oxid-esales.com', 'c9dadd994241c9e5fa6469547009328a', '7573657275736572',   8, '', 0, 'SeleniumTestCase Äß\'ü', 'Testing user acc Äß\'ü', 'PayPal Äß\'ü', 'Musterstr. Äß\'ü', '1', 'Testing acc for Selenium', 'Musterstadt Äß\'ü', 'a7c40f631fc920687.20179984', '79098', '', '', 'MR',  500, '2008-02-05 14:42:42', '2008-02-05 14:42:42', '', '', '0000-00-00', '', '', 0, '', 0),
+                     ('testusera', 1, 'user', 1, 'testing_account2@oxid-esales.com',    'a233c8b71a465807980f4b2b18f50fec', '757365724175736572', 9, '', 0, 'SeleniumTestCase',       'Testing user acc',       'PayPal',     'Musterstr.',       '2', 'Testing acc for Selenium', 'Musterstadt',       'a7c40f631fc920687.20179984', '79098', '', '', 'MRS', 500, '2008-02-05 14:49:31', '2008-02-05 14:49:31', '', '', '0000-00-00', '', '', 0, '', 0);
 
 # Delivery2DeliverySet
 INSERT INTO `oxdel2delset` (`OXID`,                       `OXDELID`, `OXDELSETID`) VALUES
                            ('15947a84ade6246c1.43630378', 'testdel', 'testdelset');
 # article2category
-INSERT INTO `oxobject2category` (`OXID`,                      `OXSHOPID`, `OXSHOPINCL`,         `OXSHOPEXCL`, `OXOBJECTID`, `OXCATNID`,     `OXPOS`, `OXTIME`) VALUES
-                                ('96047a71f4d4e34d9.76958590', 1,          18446744073709551615, 0,           '1000',       'testcategory0', 0,       1202134861),
-                                ('96047a72713424e14.02408995', 1,          18446744073709551615, 0,           '1001',       'testcategory0', 0,       1202136851);
+INSERT INTO `oxobject2category` (`OXID`,                      `OXSHOPID`, `OXOBJECTID`, `OXCATNID`,     `OXPOS`, `OXTIME`) VALUES
+                                ('96047a71f4d4e34d9.76958590', 1,          '1000',       'testcategory0', 0,       1202134861),
+                                ('96047a72713424e14.02408995', 1,          '1001',       'testcategory0', 0,       1202136851);
 
 # object2delivery
 INSERT INTO `oxobject2delivery` (`OXID`,                       `OXDELIVERYID`, `OXOBJECTID`,                 `OXTYPE`) VALUES

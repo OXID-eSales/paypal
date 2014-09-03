@@ -1,8 +1,8 @@
 # add 3 new shipping methods
 INSERT INTO `oxdeliveryset` (`OXID`,       `OXMAPID`, `OXSHOPID`, `OXACTIVE`, `OXTITLE`,      		   `OXTITLE_1`,  		 `OXPOS`) VALUES
-                            ('testdelset1', 101,       1,          1,            0,            1,         'Test Paypal:6hour', 	   'Test Paypal:6 hour', 	  0),
-                            ('testdelset2', 102,       1,          1,            0,            1,         'Test Paypal:12hour', 	   'Test Paypal:12 hour', 	  0),
-                            ('testdelset3', 103,       1,          1,            0,            1,         'Test Paypal:specproduct', 'Test Paypal:specproduct', 0);
+                            ('testdelset1', 101,       1,          1,          'Test Paypal:6hour', 	   'Test Paypal:6 hour', 	  0),
+                            ('testdelset2', 102,       1,          1,          'Test Paypal:12hour', 	   'Test Paypal:12 hour', 	  0),
+                            ('testdelset3', 103,       1,          1,          'Test Paypal:specproduct', 'Test Paypal:specproduct', 0);
 							
 REPLACE INTO `oxdeliveryset2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
   (1, 101), (1, 102), (1, 103);

@@ -28,6 +28,9 @@ ob_start();
 
 class _config {
     function __construct(){
+        if (file_exists('_version_define.php')) {
+            include_once '_version_define.php';
+        }
         include "config.inc.php";
         include "core/oxconfk.php";
     }

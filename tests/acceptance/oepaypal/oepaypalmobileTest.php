@@ -297,6 +297,8 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->click("link=PayPal");
         $this->assertTrue($this->isElementPresent("css=img.paypalPaymentImg"),"No PayPal logo in 3rd payment step");
         $this->assertTrue($this->isElementPresent("link=exact:?"),"No sign '?' near PayPal logo");
+        $this->assertTrue($this->isElementPresent("id=displayCartInPayPal"),"No Display Cart In PayBal checkbox in payment step");
+        $this->assertTrue($this->isChecked("id=displayCartInPayPal"),"Display Cart In PayPal checkbox is not checked in payment step");
         $this->clickAndWait("id=paymentNextStepBottom");
 
         //Go to sandbox to make order

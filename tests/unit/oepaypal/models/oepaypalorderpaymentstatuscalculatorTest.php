@@ -34,7 +34,7 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     public function setUp()
     {
         oePayPalEvents::addOrderPaymentsTable();
-        oePayPalEvents::addOrderTableFields();
+        oePayPalEvents::addOrderTable();
         oxDb::getDb()->execute( 'TRUNCATE TABLE `oepaypal_order`' );
         oxDb::getDb()->execute( 'TRUNCATE TABLE `oepaypal_orderpayments`' );
     }
@@ -414,7 +414,7 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     protected function getOrderPayment()
     {
         oePayPalEvents::addOrderPaymentsTable();
-        oePayPalEvents::addOrderTableFields();
+        oePayPalEvents::addOrderTable();
 
         $oOrderPayment = new oePayPalOrderPayment();
         $oOrderPayment->setTransactionId( 'asdadsd45a4sd5a4sd54a5' );

@@ -28,7 +28,7 @@ class oePayPalEvents
     /**
      * Add additional fields: payment status, captured amount, refunded amount in oxOrder table
      */
-    public static function addOrderTableFields()
+    public static function addOrderTable()
     {
         $sSql = "CREATE TABLE IF NOT EXISTS `oepaypal_order` (
               `OEPAYPAL_ORDERID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
@@ -39,6 +39,7 @@ class oePayPalEvents
               `OEPAYPAL_TOTALORDERSUM`  decimal(9,2) NOT NULL,
               `OEPAYPAL_CURRENCY` varchar(32) NOT NULL,
               `OEPAYPAL_TRANSACTIONMODE` enum('Sale','Authorization') NOT NULL DEFAULT 'Sale',
+              `OEPAYPAL_TIMESTAMP` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
               PRIMARY KEY (`OEPAYPAL_ORDERID`),
               KEY `OEPAYPAL_PAYMENTSTATUS` (`OEPAYPAL_PAYMENTSTATUS`)
             ) ENGINE=InnoDB;";
@@ -143,6 +144,7 @@ class oePayPalEvents
               `OEPAYPAL_REFUNDEDAMOUNT` decimal(9,2) NOT NULL,
               `OEPAYPAL_DATE` datetime NOT NULL,
               `OEPAYPAL_STATUS` varchar(20) NOT NULL,
+              `OEPAYPAL_TIMESTAMP` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
               PRIMARY KEY (`OEPAYPAL_PAYMENTID`),
               KEY `OEPAYPAL_ORDERID` (`OEPAYPAL_ORDERID`),
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
@@ -161,6 +163,7 @@ class oePayPalEvents
               `OEPAYPAL_PAYMENTID` int(11) unsigned NOT NULL,
               `OEPAYPAL_COMMENT` varchar(256) NOT NULL,
               `OEPAYPAL_DATE` datetime NOT NULL,
+              `OEPAYPAL_TIMESTAMP` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
               PRIMARY KEY (`OEPAYPAL_COMMENTID`),
               KEY `OEPAYPAL_ORDERID` (`OEPAYPAL_PAYMENTID`),
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
@@ -194,18 +197,40 @@ class oePayPalEvents
     }
 
     /**
+     * Add missing field if it activates on old DB
+     */
+    public static function addMissingFieldsOnUpdate()
+    {
+        $oDbMetaDataHandler = oxNew('oxDbMetaDataHandler');
+
+        $aTableFields = array(
+            'oepaypal_order' => 'OEPAYPAL_TIMESTAMP',
+            'oepaypal_orderpayments' => 'OEPAYPAL_TIMESTAMP',
+            'oepaypal_orderpaymentcomments' => 'OEPAYPAL_TIMESTAMP',
+        );
+
+        foreach($aTableFields as $sTableName => $sFieldName){
+            if(!$oDbMetaDataHandler->fieldExists($sFieldName,$sTableName) ){
+                oxDb::getDb()->execute("ALTER TABLE `".$sTableName."` ADD `".$sFieldName."` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;");
+            }
+        }
+    }
+
+    /**
      * Execute action on activate event
      */
     public static function onActivate()
     {
         // add additional field to order
-        self::addOrderTableFields();
+        self::addOrderTable();
 
         // create orders payments table
         self::addOrderPaymentsTable();
 
         // payment comments
         self::addOrderPaymentsCommentsTable();
+
+        self::addMissingFieldsOnUpdate();
 
         // adding record to oxPayment table
         self::addPaymentMethod();

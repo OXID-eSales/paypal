@@ -35,7 +35,7 @@ class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
         oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`' );
 
         oePayPalEvents::addOrderPaymentsTable();
-        oePayPalEvents::addOrderTableFields();
+        oePayPalEvents::addOrderTable();
         oePayPalEvents::addOrderPaymentsCommentsTable();
 
     }

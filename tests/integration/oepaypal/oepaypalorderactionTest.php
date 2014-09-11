@@ -34,7 +34,7 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
 
         oePayPalEvents::addOrderPaymentsCommentsTable();
         oePayPalEvents::addOrderPaymentsTable();
-        oePayPalEvents::addOrderTableFields();
+        oePayPalEvents::addOrderTable();
     }
 
     /**

@@ -61,6 +61,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         $oSession = $this->getSession();
         $oSession->setVariable( "oepaypal", "2" );
         try {
+            /** @var oePayPalSetExpressCheckoutRequestBuilder $oBuilder */
             $oBuilder = oxNew( 'oePayPalSetExpressCheckoutRequestBuilder' );
 
             $oBasket = $oSession->getBasket();

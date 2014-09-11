@@ -53,7 +53,7 @@ class oePayPalEvents
     {
         $aPaymentDescriptions = array(
             'en' => '<div>When selecting this payment method you are being redirected to PayPal where you can login into your account or open a new account. In PayPal you are able to authorize the payment. As soon you have authorized the payment, you are again redirected to our shop where you can confirm your order.</div> <div style="margin-top: 5px">Only after confirming the order, transfer of money takes place.</div>',
-            'de' => '<div>Bei Auswahl der Zahlungsart PayPal werden Sie im nächsten Schritt zu PayPal weitergeleitet. Dort können Sie sich in Ihr PayPal-Konto einloggen oder ein neues PayPal-Konto eröffnen und die Zahlung autorisieren. Sobald Sie Ihre Daten für die Zahlung bestätigt haben, werden Sie automatisch wieder zurück in den Shop geleitet, um die Bestellung abzuschließen.</div> <div style="margin-top: 5px">Erst dann wird die Zahlung ausgeführt.</div>'
+            'de' => '<div>Bei Auswahl der Zahlungsart PayPal werden Sie im n&auml;chsten Schritt zu PayPal weitergeleitet. Dort k&ouml;nnen Sie sich in Ihr PayPal-Konto einloggen oder ein neues PayPal-Konto er&ouml;ffnen und die Zahlung autorisieren. Sobald Sie Ihre Daten f&uuml;r die Zahlung best&auml;tigt haben, werden Sie automatisch wieder zur&uuml;ck in den Shop geleitet, um die Bestellung abzuschlie&szlig;en.</div> <div style="margin-top: 5px">Erst dann wird die Zahlung ausgef&uuml;hrt.</div>'
         );
 
         $oPayment = oxNew( 'oxPayment' );

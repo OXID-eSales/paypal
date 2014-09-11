@@ -28,6 +28,12 @@ ob_start();
 
 class _config {
     function __construct(){
+        if (file_exists('_version_define.php')) {
+            include_once '_version_define.php';
+            define('EDITION_PREFIX', '_' );
+        } else {
+            define('EDITION_PREFIX', '' );
+        }
         include "config.inc.php";
         include "core/oxconfk.php";
     }
@@ -111,6 +117,8 @@ echo "<ol>";
         $sPaypalSetupFile = '/setup/sql/selenium_paypalSetup_pe.sql';
     endif;
 
+    $sSQLDirectoryName = EDITION_PREFIX ? 'sql' . EDITION_PREFIX . strtolower($sVersion) : 'sql';
+
     $_key      = $_cfg->sConfigKey;
     $oDB       = mysql_connect( 'localhost', $_cfg->dbUser, $_cfg->dbPwd);
 
@@ -137,13 +145,13 @@ echo "<ol>";
     mysql_select_db( $_cfg->dbName , $oDB);
 
     echo "<li>insert 'database.sql'</li>";
-    passthru ('mysql -u'.$_cfg->dbUser.' -p'.$_cfg->dbPwd.' '.$_cfg->dbName.' < '.dirname(__FILE__).'/setup/sql/database.sql');
+    passthru ('mysql -u'.$_cfg->dbUser.' -p'.$_cfg->dbPwd.' '.$_cfg->dbName.' < '.dirname(__FILE__)."/setup/$sSQLDirectoryName/database.sql");
 
     echo "<li>insert 'demodata.sql'</li>";
-    passthru ('mysql -u'.$_cfg->dbUser.' -p'.$_cfg->dbPwd.' '.$_cfg->dbName.' < '.dirname(__FILE__).'/setup/sql/demodata.sql');
+    passthru ('mysql -u'.$_cfg->dbUser.' -p'.$_cfg->dbPwd.' '.$_cfg->dbName.' < '.dirname(__FILE__)."/setup/$sSQLDirectoryName/demodata.sql");
 
     echo "<li><b>Configuring shop - 'selenium_shopConfig.sql'</b></li>";
-    passthru ('mysql -u'.$_cfg->dbUser.' -p'.$_cfg->dbPwd.' '.$_cfg->dbName.' < '.dirname(__FILE__).'/setup/sql/selenium_shopConfig.sql');
+    passthru ('mysql -u'.$_cfg->dbUser.' -p'.$_cfg->dbPwd.' '.$_cfg->dbName.' < '.dirname(__FILE__)."/setup/$sSQLDirectoryName/selenium_shopConfig.sql");
 
     echo "<li><b>Adding PayPal data - 'selenium_paypalSetup.sql'</b></li>";
     $sUtf8Mode = $_cfg->iUtfMode? "--default-character-set=utf8" : "";

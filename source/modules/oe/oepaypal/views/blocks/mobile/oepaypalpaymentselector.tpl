@@ -1,4 +1,4 @@
-[{if $oViewConf->oePayPalIsModuleActive('oethemeswitcher', '1.1') && $sPaymentID == "oxidpaypal" }]
+[{if $sPaymentID == "oxidpaypal" }]
     [{if $oViewConf->isStandardCheckoutEnabled()}]
     [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/css/paypal_mobile.css')}]
 

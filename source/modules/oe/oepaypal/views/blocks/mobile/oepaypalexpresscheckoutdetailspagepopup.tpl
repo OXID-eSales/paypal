@@ -1,6 +1,6 @@
 [{$smarty.block.parent}]
 
-[{if $oViewConf->oePayPalIsModuleActive('oethemeswitcher', '1.1') && $oViewConf->isExpressCheckoutEnabledInDetails() && !$oDetailsProduct->isNotBuyable()}]
+[{if $oViewConf->isExpressCheckoutEnabledInDetails() && !$oDetailsProduct->isNotBuyable()}]
 
     [{if $oView->oePayPalShowECSPopup()}]
         <div id="ECConfirmation" class="container">

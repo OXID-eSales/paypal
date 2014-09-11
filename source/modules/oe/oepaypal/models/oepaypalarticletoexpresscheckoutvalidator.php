@@ -108,7 +108,7 @@ class oePayPalArticleToExpressCheckoutValidator
 
     /**
      * Checks if Article params equals with current items params
-     * @param oePayPalOxBasketItem $oBasketItem
+     * @param oxBasketItem $oBasketItem
      *
      * @return bool
      */

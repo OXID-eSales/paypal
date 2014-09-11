@@ -49,6 +49,8 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
     protected function tearDown()
     {
         $this->callUrl( shopURL . "/_restoreDB.php", "restoreDb=1" );
+
+        // For the first time to activate module locally- comment this out, so module would be active for other tests.
         parent::tearDown();
     }
 
@@ -1291,7 +1293,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->clickAndWait( "//button[text()='Submit coupon']" );
         $this->assertTrue( $this->isTextPresent( "Remove" ) );
         $this->assertTrue( $this->isTextPresent( "Coupon (No. 111111)" ) );
-        $this->assertEquals( "Coupon (No. 111111) Remove -10,00 €", $this->getText( "//div[@id='basketSummary']//tr[4]" ) );
+        $this->assertEquals( "Coupon (No. 111111) Remove -10,00 €", $this->getText( "//div[@id='basketSummary']//tr[2]" ) );
         $this->assertEquals( "Grand total: 5,00 €", $this->clearString( $this->getText( "//div[@id='basketSummary']//tr[6]" ) ), "Grand total is not displayed correctly" );
 
         // Go to 2nd step

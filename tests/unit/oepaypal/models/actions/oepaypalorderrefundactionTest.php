@@ -130,7 +130,11 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      */
     public function testProcess_ProcessingOfServiceResponse_CommentAdded()
     {
+        $oUtilsDate = $this->getMock('oxUtilsDate', array('getTime'));
+        $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
+        oxRegistry::set('oxUtilsDate', $oUtilsDate);
         $sComment = 'testComment';
+
         $oComment = new oePayPalOrderPaymentComment();
         $oComment->setComment( $sComment );
 

@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal IPN request validator class
+ * PayPal IPN request validator class.
  */
 class oePayPalIPNRequestValidator
 {
@@ -50,6 +50,7 @@ class oePayPalIPNRequestValidator
 
     /**
      * Set shop owner user name - payPal ID.
+     *
      * @param string $sShopOwnerUserName
      */
     public function setShopOwnerUserName($sShopOwnerUserName)
@@ -59,6 +60,7 @@ class oePayPalIPNRequestValidator
 
     /**
      * get shop owner user name - payPal ID.
+     *
      * @return string
      */
     public function getShopOwnerUserName()
@@ -68,6 +70,7 @@ class oePayPalIPNRequestValidator
 
     /**
      * Set PayPal response object.
+     *
      * @param oePayPalResponseDoVerifyWithPayPal $sPayPalResponse
      */
     public function setPayPalResponse($sPayPalResponse)
@@ -77,6 +80,7 @@ class oePayPalIPNRequestValidator
 
     /**
      * Get PayPal response object.
+     *
      * @return oePayPalResponseDoVerifyWithPayPal
      */
     public function getPayPalResponse()
@@ -86,6 +90,7 @@ class oePayPalIPNRequestValidator
 
     /**
      * Set PayPal request array.
+     *
      * @param array $sPayPalRequest
      */
     public function setPayPalRequest($sPayPalRequest)
@@ -95,6 +100,7 @@ class oePayPalIPNRequestValidator
 
     /**
      * Get PayPal request array.
+     *
      * @return array
      */
     public function getPayPalRequest()
@@ -103,6 +109,8 @@ class oePayPalIPNRequestValidator
     }
 
     /**
+     * Returns validation failure messages.
+     *
      * @return array
      */
     public function getValidationFailureMessage()

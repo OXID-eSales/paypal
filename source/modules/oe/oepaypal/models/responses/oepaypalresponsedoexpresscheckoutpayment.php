@@ -74,5 +74,4 @@ class oePayPalResponseDoExpressCheckoutPayment extends oePayPalResponse
     {
         return $this->_getValue('PAYMENTINFO_0_CURRENCYCODE');
     }
-
 }

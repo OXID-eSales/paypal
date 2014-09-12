@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -19,6 +18,10 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
+
+/**
+ * Class oePayPalOrderManager.
+ */
 class oePayPalOrderManager
 {
     /**
@@ -37,6 +40,8 @@ class oePayPalOrderManager
     protected $_oOrderPaymentStatusCalculator = null;
 
     /**
+     * Sets order payment.
+     *
      * @param oePayPalOrderPayment $oOrderPayment
      */
     public function setOrderPayment($oOrderPayment)
@@ -45,6 +50,8 @@ class oePayPalOrderManager
     }
 
     /**
+     * Returns order payment.
+     *
      * @return oePayPalOrderPayment
      */
     public function getOrderPayment()
@@ -53,6 +60,8 @@ class oePayPalOrderManager
     }
 
     /**
+     * Sets order.
+     *
      * @param oePayPalPayPalOrder $oOrder
      */
     public function setOrder($oOrder)
@@ -63,6 +72,7 @@ class oePayPalOrderManager
     /**
      * Create object oePayPalPayPalOrder.
      * If Order is not set, create order from Order Payment.
+     *
      * @return object
      */
     public function getOrder()
@@ -76,6 +86,8 @@ class oePayPalOrderManager
     }
 
     /**
+     * Sets oePayPalOrderPaymentStatusCalculator.
+     *
      * @param oePayPalOrderPaymentStatusCalculator $oOrderPaymentStatusCalculator
      */
     public function setOrderPaymentStatusCalculator($oOrderPaymentStatusCalculator)
@@ -84,6 +96,8 @@ class oePayPalOrderManager
     }
 
     /**
+     * Returns oePayPalOrderPaymentStatusCalculator.
+     *
      * @return oePayPalOrderPaymentStatusCalculator
      */
     public function getOrderPaymentStatusCalculator()
@@ -116,8 +130,8 @@ class oePayPalOrderManager
     /**
      * Wrapper for order payment calculator.
      *
-     * @param oePayPalOrderPayment $oOrderPayment order payment to set to calculator.
-     * @param oePayPalPayPalOrder $oOrder order to be set to validator.
+     * @param oePayPalOrderPayment $oOrderPayment Order payment to set to calculator.
+     * @param oePayPalPayPalOrder  $oOrder        Order to be set to validator.
      *
      * @return null|string
      */
@@ -134,8 +148,8 @@ class oePayPalOrderManager
     /**
      * Update order to given status.
      *
-     * @param oePayPalPayPalOrder $oOrder order to be updated.
-     * @param string $sNewOrderStatus new order status.
+     * @param oePayPalPayPalOrder $oOrder          Order to be updated.
+     * @param string              $sNewOrderStatus New order status.
      */
     protected function _updateOrderStatus($oOrder, $sNewOrderStatus)
     {

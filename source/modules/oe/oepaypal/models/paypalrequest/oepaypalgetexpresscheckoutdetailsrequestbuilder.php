@@ -39,7 +39,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     protected $_oSession = null;
 
     /**
-     * Sets PayPal request object
+     * Sets PayPal request object.
      *
      * @param oePayPalPayPalRequest $oRequest
      */
@@ -49,7 +49,9 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     }
 
     /**
-     * Returns PayPal request object
+     * Returns PayPal request object.
+     *
+     * @return oePayPalPayPalRequest
      */
     public function getPayPalRequest()
     {
@@ -60,7 +62,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     }
 
     /**
-     * Sets Session
+     * Sets Session.
      *
      * @param oxSession $oSession
      */
@@ -70,7 +72,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     }
 
     /**
-     * Returns Session
+     * Returns Session.
      *
      * @return oxSession
      *
@@ -89,7 +91,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     }
 
     /**
-     * Builds Request
+     * Builds Request.
      *
      * @return oePayPalPayPalRequest
      */

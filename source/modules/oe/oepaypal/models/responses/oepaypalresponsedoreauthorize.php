@@ -26,7 +26,7 @@ class oePayPalResponseDoReAuthorize extends oePayPalResponse
 {
 
     /**
-     * Return authorization id
+     * Return authorization id.
      *
      * @return string
      */
@@ -35,9 +35,8 @@ class oePayPalResponseDoReAuthorize extends oePayPalResponse
         return $this->_getValue('AUTHORIZATIONID');
     }
 
-
     /**
-     * Return payment status
+     * Return payment status.
      *
      * @return string
      */
@@ -47,7 +46,7 @@ class oePayPalResponseDoReAuthorize extends oePayPalResponse
     }
 
     /**
-     * Return transaction id
+     * Return transaction id.
      *
      * @return string
      */

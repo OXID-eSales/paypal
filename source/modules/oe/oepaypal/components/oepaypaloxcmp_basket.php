@@ -174,6 +174,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      * Formats Redirect URL to normal url
      *
      * @param string $sUnformedUrl
+     *
      * @return string
      */
     protected function _formatUrl($sUnformedUrl)

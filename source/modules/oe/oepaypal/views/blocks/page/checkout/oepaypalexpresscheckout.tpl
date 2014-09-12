@@ -1,8 +1,6 @@
 [{if $oViewConf->isExpressCheckoutEnabled()}]
     [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/src/css/paypal.css')}]
-
     [{$smarty.block.parent}]
-
     <div class="paypalExpressCheckoutBox">
         <form action="[{$oViewConf->getSslSelfLink()}]" method="post">
             <div>
@@ -29,10 +27,8 @@
             </div>
         </form>
     </div>
-
     [{oxscript add='$(".paypalHelpIcon").hover(function (){$(this).parent(".paypalExpressCheckoutMsg").children(".paypalHelpBox").toggle();});'}]
-    [{oxscript add='$(".paypalHelpIcon").click(function (){return false;});'}]
-
-    [{else}]
+    [{oxscript add='$(".paypalHelpIcon").clicks(function (){return false;});'}]
+[{else}]
     [{$smarty.block.parent}]
-    [{/if}]
+[{/if}]

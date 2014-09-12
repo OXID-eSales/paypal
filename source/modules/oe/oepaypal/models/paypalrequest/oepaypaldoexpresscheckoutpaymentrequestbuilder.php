@@ -60,11 +60,13 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     protected $_oOrder = null;
 
     /**
-     * @var oePayPalConfig
+     * @var oxLang
      */
     protected $_oLang = null;
 
     /**
+     * Sets request object.
+     *
      * @param oePayPalPayPalRequest $oRequest
      */
     public function setRequest($oRequest)
@@ -73,7 +75,9 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
-     * Returns request object
+     * Returns request object.
+     *
+     * @return oePayPalPayPalRequest
      */
     public function getRequest()
     {
@@ -94,7 +98,9 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
-     * Returns request object
+     * Returns oePayPalConfig object.
+     *
+     * @return oePayPalConfig
      */
     public function getPayPalConfig()
     {
@@ -102,6 +108,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Sets basket.
+     *
      * @param oxBasket $oBasket
      */
     public function setBasket($oBasket)
@@ -110,6 +118,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Returns basket object.
+     *
      * @return oxBasket
      *
      * @throws oePayPalMissingParameterException
@@ -127,6 +137,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Sets order object.
+     *
      * @param oxOrder $oOrder
      */
     public function setOrder($oOrder)
@@ -135,6 +147,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Tries to return basket object, but if fails throws exception.
+     *
      * @return oxBasket
      *
      * @throws oePayPalResponseException
@@ -153,6 +167,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Sets session.
+     *
      * @param oxSession $oSession
      */
     public function setSession($oSession)
@@ -161,6 +177,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Returns session.
+     *
      * @return oxSession
      */
     public function getSession()
@@ -169,7 +187,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
-     * Returns request object
+     * Returns request object.
      *
      * @param oxLang $oLang
      */
@@ -179,7 +197,9 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
-     * Returns request object
+     * Returns request object.
+     *
+     * @return oxLang
      */
     public function getLang()
     {
@@ -190,6 +210,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Sets transaction mode.
+     *
      * @param string $sTransactionMode
      */
     public function setTransactionMode($sTransactionMode)
@@ -198,6 +220,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
+     * Returns transaction mode.
+     *
      * @return string $sTransactionMode
      */
     public function getTransactionMode()
@@ -206,7 +230,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
-     * Sets User object
+     * Sets User object.
      *
      * @param oePayPalOxUser $oUser
      */
@@ -219,6 +243,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
      * Returns User object
      *
      * @return oePayPalOxUser
+     *
+     * @throws oePayPalMissingParameterException
      */
     public function getUser()
     {
@@ -233,7 +259,9 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     }
 
     /**
-     * Sets base parameters to request
+     * Sets base parameters to request.
+     *
+     * @return oePayPalPayPalRequest
      */
     public function buildRequest()
     {
@@ -245,6 +273,8 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
 
     /**
      * Sets Address parameters to request.
+     *
+     * @return null
      */
     public function addAddressParams()
     {

@@ -20,16 +20,16 @@
  */
 
 /**
- * Order payment comment db gateway class
+ * Order payment comment db gateway class.
  */
 class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
 {
     /**
-     * Save PayPal order payment comment data to database
+     * Save PayPal order payment comment data to database.
      *
      * @param array $aData
      *
-     * return bool
+     * @return bool
      */
     public function save($aData)
     {
@@ -55,11 +55,11 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Load PayPal order payment comment data from Db
+     * Load PayPal order payment comment data from Db.
      *
      * @param string $sPaymentId order id
      *
-     * return array
+     * @return array
      */
     public function getList($sPaymentId)
     {
@@ -69,11 +69,11 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Load PayPal order payment comment data from Db
+     * Load PayPal order payment comment data from Db.
      *
-     * @param string $sCommentId order id
+     * @param string $sCommentId Order id.
      *
-     * return array
+     * @return array
      */
     public function load($sCommentId)
     {
@@ -83,9 +83,9 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Delete PayPal order payment comment data from database
+     * Delete PayPal order payment comment data from database.
      *
-     * @param string $sCommentId order id
+     * @param string $sCommentId Order id.
      *
      * @return bool
      */

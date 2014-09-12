@@ -31,10 +31,10 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     protected $_oReauthorizeHandler = null;
 
     /**
-     * Sets dependencies
+     * Sets dependencies.
      *
-     * @param oePayPalOrderCaptureActionHandler $oHandler
-     * @param oePayPalPayPalOrder $oOrder
+     * @param oePayPalOrderCaptureActionHandler     $oHandler
+     * @param oePayPalPayPalOrder                   $oOrder
      * @param oePayPalOrderReauthorizeActionHandler $oReauthorizeHandler
      */
     public function __construct($oHandler, $oOrder, $oReauthorizeHandler)
@@ -45,7 +45,7 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     }
 
     /**
-     * Returns reauthorize action handler
+     * Returns reauthorize action handler.
      *
      * @return oePayPalOrderReauthorizeActionHandler
      */
@@ -55,7 +55,7 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     }
 
     /**
-     * Processes PayPal response
+     * Processes PayPal response.
      */
     public function process()
     {
@@ -76,7 +76,7 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     }
 
     /**
-     * Reauthorizes payment if order was captured at least once
+     * Reauthorizes payment if order was captured at least once.
      */
     protected function _reauthorize()
     {
@@ -102,11 +102,10 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     }
 
     /**
-     * Updates order with PayPal response info
+     * Updates order with PayPal response info.
      *
-     * @param $oResponse
-     * @param $oData
-     * @return oePayPalPayPalOrder
+     * @param object $oResponse
+     * @param object $oData
      */
     protected function _updateOrder($oResponse, $oData)
     {
@@ -117,9 +116,11 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     }
 
     /**
-     * Creates Payment object with PayPal response data
+     * Creates Payment object with PayPal response data.
      *
-     * @param $oResponse
+     * @param object $oResponse
+     *
+     * @return oePayPalOrderPayment
      */
     protected function _createPayment($oResponse)
     {
@@ -136,10 +137,10 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     }
 
     /**
-     * Adds comment to given Payment object
+     * Adds comment to given Payment object.
      *
-     * @param $oPayment
-     * @param $sComment
+     * @param object $oPayment
+     * @param string $sComment
      */
     protected function _addComment($oPayment, $sComment)
     {

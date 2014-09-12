@@ -60,7 +60,7 @@ $aLang = array(
 
     'SHOP_MODULE_sOEPayPalTransactionMode'               => 'Time of money transfer',
     'HELP_SHOP_MODULE_sOEPayPalTransactionMode'          => 'Select the time when money should be transferred. You\'ll have the option to capture the value on PayPal site immediately automated during the purchase (SALE) or manually shortly before the shipping of the products (AUTH). You can also decide that the time of money transfer is automatically handled by the shop depending on the stock amount of the ordered products (AUTOMATIC).',
- 
+
     'SHOP_MODULE_sOEPayPalTransactionMode_Automatic'     => 'AUTOMATIC - depending on the stock amount of the ordered products',
     'SHOP_MODULE_sOEPayPalTransactionMode_Sale'          => 'SALE - immediately automated',
     'SHOP_MODULE_sOEPayPalTransactionMode_Authorization' => 'AUTH - manually before the shipment',

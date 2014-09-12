@@ -18,7 +18,7 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
- 
+
 // -------------------------------
 // RESOURCE IDENTIFIER = STRING
 // -------------------------------
@@ -60,7 +60,7 @@ $aLang = array(
 
     'SHOP_MODULE_sOEPayPalTransactionMode'               => 'Zeitpunkt des Geldtransfers',
     'HELP_SHOP_MODULE_sOEPayPalTransactionMode'          => 'Wählen Sie aus, zu welchem Zeitpunkt der Geldtransfer stattfinden soll. Sie haben die Möglichkeit, den Einzug des Geldes auf der PayPal-Seite sofort beim Kauf (SALE), oder erst unmittelbar vor Versand der Ware manuell durchzuführen (AUTH). Sie können auch festlegen, dass der Zeitpunkt des Geldtransfers in Abhängigkeit vom Lagerbestand der bestellten Artikel vom Shop automatisch bestimmt wird (AUTOMATIC).',
-	'SHOP_MODULE_sOEPayPalTransactionMode_Automatic'     => 'AUTOMATIC - abhängig vom Lagerbestand der bestellten Artikel',
+    'SHOP_MODULE_sOEPayPalTransactionMode_Automatic'     => 'AUTOMATIC - abhängig vom Lagerbestand der bestellten Artikel',
     'SHOP_MODULE_sOEPayPalTransactionMode_Sale'          => 'SALE - sofort durchführen',
     'SHOP_MODULE_sOEPayPalTransactionMode_Authorization' => 'AUTH - vor Versand manuell durchführen',
     'SHOP_MODULE_sOEPayPalEmptyStockLevel'               => 'Restlagerbestand',

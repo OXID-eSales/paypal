@@ -55,6 +55,7 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
         parent::save();
 
         $oConfig = $this->getConfig();
+        /** @var oePayPalConfig $oPayPalConfig */
         $oPayPalConfig = oxNew('oePayPalConfig');
 
         $sDeliverySetId = $this->getEditObjectId();

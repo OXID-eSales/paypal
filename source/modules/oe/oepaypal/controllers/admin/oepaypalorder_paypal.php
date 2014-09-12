@@ -52,11 +52,13 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     public function processAction()
     {
         try {
+            /** @var oePayPalRequest $oRequest */
             $oRequest = oxNew('oePayPalRequest');
             $sAction = $oRequest->getRequestParameter('action');
 
             $oOrder = $this->getEditObject();
 
+            /** @var oePayPalOrderActionFactory $oActionFactory */
             $oActionFactory = oxNew('oePayPalOrderActionFactory', $oRequest, $oOrder);
             $oAction = $oActionFactory->createAction($sAction);
 
@@ -74,6 +76,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      */
     public function getOrderActionManager()
     {
+        /** @var oePayPalOrderActionManager $oManager */
         $oManager = oxNew('oePayPalOrderActionManager');
         $oManager->setOrder($this->getEditObject()->getPayPalOrder());
 
@@ -99,6 +102,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      */
     public function getOrderPaymentStatusCalculator()
     {
+        /** @var oePayPalOrderPaymentStatusCalculator $oStatusCalculator */
         $oStatusCalculator = oxNew('oePayPalOrderPaymentStatusCalculator');
         $oStatusCalculator->setOrder($this->getEditObject()->getPayPalOrder());
 

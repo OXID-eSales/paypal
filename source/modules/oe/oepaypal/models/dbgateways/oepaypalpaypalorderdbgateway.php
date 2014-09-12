@@ -25,11 +25,11 @@
 class oePayPalPayPalOrderDbGateway extends oePayPalModelDbGateway
 {
     /**
-     * Save PayPal order data to database
+     * Save PayPal order data to database.
      *
      * @param array $aData
      *
-     * return bool
+     * @return bool
      */
     public function save($aData)
     {
@@ -56,11 +56,11 @@ class oePayPalPayPalOrderDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Load PayPal order data from Db
+     * Load PayPal order data from Db.
      *
-     * @param string $sOrderId order id
+     * @param string $sOrderId Order id.
      *
-     * return array
+     * @return array
      */
     public function load($sOrderId)
     {
@@ -70,9 +70,9 @@ class oePayPalPayPalOrderDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Delete PayPal order data from database
+     * Delete PayPal order data from database.
      *
-     * @param string $sOrderId order id
+     * @param string $sOrderId Order id.
      *
      * @return bool
      */
@@ -81,8 +81,8 @@ class oePayPalPayPalOrderDbGateway extends oePayPalModelDbGateway
         $oDb = $this->_getDb();
         $oDb->startTransaction();
 
-        $blDeleteCommentsResult = $oDb->execute('
-            DELETE
+        $blDeleteCommentsResult = $oDb->execute(
+            'DELETE
                 `oepaypal_orderpaymentcomments`
             FROM `oepaypal_orderpaymentcomments`
                 INNER JOIN `oepaypal_orderpayments` ON `oepaypal_orderpayments`.`oepaypal_paymentid` = `oepaypal_orderpaymentcomments`.`oepaypal_paymentid`

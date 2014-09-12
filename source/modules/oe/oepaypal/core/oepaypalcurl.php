@@ -91,6 +91,7 @@ class oePayPalCurl
 
     /**
      * Sets host.
+     *
      * @param string $sHost
      */
     public function setHost($sHost)
@@ -110,6 +111,7 @@ class oePayPalCurl
 
     /**
      * Set header.
+     *
      * @param array $aHeader
      */
     public function setHeader($aHeader)
@@ -163,6 +165,8 @@ class oePayPalCurl
 
     /**
      * Set data charset
+     *
+     * @param string $sDataCharset
      */
     public function setDataCharset($sDataCharset)
     {
@@ -192,8 +196,8 @@ class oePayPalCurl
     /**
      * Sets one of Curl parameter.
      *
-     * @param string $sName Curl parameter name.
-     * @param mixed $mValue Curl parameter value
+     * @param string $sName  Curl parameter name.
+     * @param mixed  $mValue Curl parameter value
      */
     public function setEnvironmentParameter($sName, $mValue)
     {
@@ -213,7 +217,7 @@ class oePayPalCurl
     /**
      * Return parameters to be added to call url.
      *
-     * return array
+     * @return array
      */
     public function getParameters()
     {
@@ -222,6 +226,8 @@ class oePayPalCurl
 
     /**
      * Set query like "param1=value1&param2=values2.."
+     *
+     * @param string $sQuery
      */
     public function setQuery($sQuery)
     {
@@ -247,6 +253,8 @@ class oePayPalCurl
     }
 
     /**
+     * Set PayPal URL to call.
+     *
      * @param string $sUrlToCall PayPal URL to call.
      *
      * @throws oePayPalException if url is not valid
@@ -330,7 +338,7 @@ class oePayPalCurl
     /**
      * Wrapper function to be mocked for testing.
      *
-     * @param string $sName curl field name to set value to.
+     * @param string $sName  curl field name to set value to.
      * @param string $sValue curl field value to set.
      */
     protected function _setOption($sName, $sValue)
@@ -443,7 +451,6 @@ class oePayPalCurl
         $sCharset = $this->getDataCharset();
         if ($sCharset !== $this->getConnectionCharset()) {
             $sString = iconv($sCharset, $this->getConnectionCharset(), $sString);
-
         }
 
         return $sString;

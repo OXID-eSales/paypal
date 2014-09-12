@@ -86,6 +86,7 @@ class oePayPalConfig
 
     /**
      * Return PayPal module id.
+     *
      * @return string
      */
     public function getModuleId()
@@ -95,6 +96,7 @@ class oePayPalConfig
 
     /**
      * Sets PayPal host.
+     *
      * @param string $sPayPalHost
      */
     public function setPayPalHost($sPayPalHost)
@@ -271,6 +273,7 @@ class oePayPalConfig
 
     /**
      * Get PayPal url.
+     *
      * @return string
      */
     public function getUrl()
@@ -512,7 +515,7 @@ class oePayPalConfig
     /**
      * Returns redirect url.
      *
-     * @param string $sToken token to append to redirect url.
+     * @param string $sToken      token to append to redirect url.
      * @param string $sUserAction checkout button action - continue (standard checkout) or commit (express checkout)
      *
      * @return string
@@ -572,6 +575,7 @@ class oePayPalConfig
 
     /**
      * Wrapper to get language object from registry.
+     *
      * @return oxLang
      */
     public function getLang()
@@ -581,6 +585,7 @@ class oePayPalConfig
 
     /**
      * Wrapper to get utils object from registry.
+     *
      * @return oxUtils
      */
     public function getUtils()

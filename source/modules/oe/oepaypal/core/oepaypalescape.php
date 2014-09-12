@@ -79,9 +79,11 @@ class oePayPalEscape
      */
     private function _escapeStringSpecialChars($sValue)
     {
-        $sValue = str_replace(array('&', '<', '>', '"', "'", chr(0), '\\'),
+        $sValue = str_replace(
+            array('&', '<', '>', '"', "'", chr(0), '\\'),
             array('&amp;', '&lt;', '&gt;', '&quot;', '&#039;', '', '&#092;'),
-            $sValue);
+            $sValue
+        );
 
         return $sValue;
     }

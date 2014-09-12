@@ -225,5 +225,4 @@ class oePayPalCaller
     {
         $this->setParameters($oRequest->getData());
     }
-
 }

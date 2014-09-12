@@ -123,7 +123,7 @@ class oePayPalExtensionChecker
      *
      * @return  bool
      */
-    function isActive()
+    public function isActive()
     {
         $sModuleId = $this->getExtensionId();
         $blModuleIsActive = false;

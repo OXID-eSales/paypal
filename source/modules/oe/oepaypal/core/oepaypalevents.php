@@ -23,6 +23,9 @@ if (!class_exists('oePayPalExtensionChecker')) {
     require_once getShopBasePath() . 'modules/oe/oepaypal/core/oepaypalextensionchecker.php';
 }
 
+/**
+ * Class defines what module does on Shop events.
+ */
 class oePayPalEvents
 {
     /**
@@ -82,7 +85,9 @@ class oePayPalEvents
     }
 
     /**
-     * Check if PayPal is used for sub-shops
+     * Check if PayPal is used for sub-shops.
+     *
+     * @return bool
      */
     public static function isPayPalActiveOnSubShops()
     {
@@ -174,6 +179,8 @@ class oePayPalEvents
 
     /**
      * Enables PayPal RDF
+     *
+     * @return null
      */
     public static function enablePayPalRDFA()
     {
@@ -209,9 +216,12 @@ class oePayPalEvents
             'oepaypal_orderpaymentcomments' => 'OEPAYPAL_TIMESTAMP',
         );
 
-        foreach($aTableFields as $sTableName => $sFieldName){
-            if(!$oDbMetaDataHandler->fieldExists($sFieldName,$sTableName) ){
-                oxDb::getDb()->execute("ALTER TABLE `".$sTableName."` ADD `".$sFieldName."` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;");
+        foreach ($aTableFields as $sTableName => $sFieldName) {
+            if (!$oDbMetaDataHandler->fieldExists($sFieldName, $sTableName)) {
+                oxDb::getDb()->execute(
+                    "ALTER TABLE `". $sTableName
+                    ."` ADD `". $sFieldName ."` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;"
+                );
             }
         }
     }
@@ -244,6 +254,8 @@ class oePayPalEvents
 
     /**
      * Execute action on deactivate event
+     *
+     * @return null
      */
     public static function onDeactivate()
     {

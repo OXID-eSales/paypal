@@ -40,7 +40,7 @@ class oePayPalCheckValidator
     /**
      * Returns if order should be rechecked by PayPal
      *
-     * return bool
+     * @return bool
      */
     public function isPayPalCheckValid()
     {
@@ -93,5 +93,4 @@ class oePayPalCheckValidator
     {
         return (float)$this->_dOldBasketAmount;
     }
-
 }

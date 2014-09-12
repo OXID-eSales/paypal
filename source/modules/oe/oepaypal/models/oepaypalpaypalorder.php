@@ -25,7 +25,7 @@
 class oePayPalPayPalOrder extends oePayPalModel
 {
     /**
-     * List of order payments
+     * List of order payments.
      *
      * @var oePayPalOrderPaymentList
      */

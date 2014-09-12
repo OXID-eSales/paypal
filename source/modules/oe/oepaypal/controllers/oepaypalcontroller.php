@@ -91,7 +91,9 @@ class oePayPalController extends oxUBase
 
 
     /**
-     * Logs passed value
+     * Logs passed value.
+     *
+     * @param mixed $mValue
      */
     public function log($mValue)
     {

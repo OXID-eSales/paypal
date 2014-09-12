@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal IPN processor class
+ * PayPal IPN processor class.
  */
 class oePayPalIPNProcessor
 {
@@ -61,6 +61,8 @@ class oePayPalIPNProcessor
     }
 
     /**
+     * Sets language object.
+     *
      * @param oxLang $oLang
      */
     public function setLang($oLang)
@@ -69,6 +71,8 @@ class oePayPalIPNProcessor
     }
 
     /**
+     * Returns language object.
+     *
      * @return oxLang
      */
     public function getLang()
@@ -77,6 +81,8 @@ class oePayPalIPNProcessor
     }
 
     /**
+     * Sets payment builder.
+     *
      * @param oePayPalIPNPaymentBuilder $oPaymentBuilder
      */
     public function setPaymentBuilder($oPaymentBuilder)
@@ -85,6 +91,8 @@ class oePayPalIPNProcessor
     }
 
     /**
+     * Creates oePayPalIPNPaymentBuilder, sets if it was not set and than returns it.
+     *
      * @return oePayPalIPNPaymentBuilder
      */
     public function getPaymentBuilder()
@@ -96,6 +104,8 @@ class oePayPalIPNProcessor
     }
 
     /**
+     * Sets order manager.
+     *
      * @param oePayPalOrderManager $oPayPalOrderManager
      */
     public function setOrderManager($oPayPalOrderManager)
@@ -104,6 +114,8 @@ class oePayPalIPNProcessor
     }
 
     /**
+     * Returns order manager.
+     *
      * @return oePayPalOrderManager
      */
     public function getOrderManager()

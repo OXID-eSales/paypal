@@ -229,8 +229,7 @@
 
                         <p>
                             [{oxmultilang ident="OEPAYPAL_HISTORY_ACTION"}]: <b>[{ $listitem->getAction() }]</b><br/>
-                            [{oxmultilang ident="OEPAYPAL_HISTORY_PAYPAL_STATUS"}]: <b>[{ $listitem->getStatus()
-                                }]</b><br/>
+                            [{oxmultilang ident="OEPAYPAL_HISTORY_PAYPAL_STATUS"}]: <b>[{ $listitem->getStatus()}]</b><br/>
                         </p>
 
                         <p>
@@ -241,8 +240,7 @@
                             [{oxmultilang ident="OEPAYPAL_REFUNDED"}]: <b>[{ $listitem->getRefundedAmount() }]
                             <small>[{$currency}]</small>
                         </b><br/>
-                            [{oxmultilang ident="OEPAYPAL_CAPTURED_NET"}]: <b>[{ $listitem->getRemainingRefundAmount()
-                            }]
+                            [{oxmultilang ident="OEPAYPAL_CAPTURED_NET"}]: <b>[{ $listitem->getRemainingRefundAmount()}]
                             <small>[{$currency}]</small>
                         </b><br/>
                             [{else}]

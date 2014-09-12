@@ -250,5 +250,4 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     {
         return $this->_getPayPalConfig()->getCurrentUrl();
     }
-
 }

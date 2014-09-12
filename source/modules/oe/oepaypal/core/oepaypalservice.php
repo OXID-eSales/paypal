@@ -289,5 +289,4 @@ class oePayPalService
     {
         return $this->getCaller()->setParameter($sKey, $sValue);
     }
-
 }

@@ -26,7 +26,7 @@ class oePayPalOrderVoidActionData extends oePayPalOrderActionData
 {
 
     /**
-     * returns action amount
+     * Returns action amount.
      *
      * @return string
      */
@@ -36,7 +36,7 @@ class oePayPalOrderVoidActionData extends oePayPalOrderActionData
     }
 
     /**
-     * returns currency
+     * Returns currency.
      *
      * @return string
      */

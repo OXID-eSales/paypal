@@ -20,12 +20,12 @@
  */
 
 /**
- * PayPal order payment class
+ * PayPal order payment class.
  */
 class oePayPalOrderPayment extends oePayPalModel
 {
     /**
-     * Set PayPal order comment Id
+     * Set PayPal order comment Id.
      *
      * @param string $sPaymentId
      */
@@ -35,7 +35,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Set PayPal comment Id
+     * Set PayPal comment Id.
      *
      * @return string
      */
@@ -60,7 +60,7 @@ class oePayPalOrderPayment extends oePayPalModel
 
 
     /**
-     * Set PayPal order comment Id
+     * Set PayPal order comment Id.
      *
      * @param string $sPaymentId
      */
@@ -70,7 +70,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Set PayPal comment Id
+     * Set PayPal comment Id.
      *
      * @return string
      */
@@ -80,7 +80,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Sets PayPal payment actions
+     * Sets PayPal payment actions.
      *
      * @param string $sValue
      */
@@ -90,7 +90,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Returns PayPal payment action
+     * Returns PayPal payment action.
      *
      * @return string
      */
@@ -100,7 +100,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Sets PayPal payment OrderId
+     * Sets PayPal payment OrderId.
      *
      * @param string $sValue
      */
@@ -110,7 +110,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Returns PayPal payment OrderId
+     * Returns PayPal payment OrderId.
      *
      * @return string
      */
@@ -120,7 +120,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Sets PayPal payment amount
+     * Sets PayPal payment amount
      *
      * @param float $flValue
      */
@@ -130,7 +130,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Returns PayPal payment amount
+     * Returns PayPal payment amount.
      *
      * @return float
      */
@@ -140,7 +140,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Set PayPal refunded amount
+     * Set PayPal refunded amount.
      *
      * @param double $dAmount
      */
@@ -150,7 +150,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Adds given amount to PayPal refunded amount
+     * Adds given amount to PayPal refunded amount.
      *
      * @param double $dAmount
      */
@@ -181,7 +181,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Returns PayPal payment status
+     * Returns PayPal payment status.
      *
      * @return string
      */
@@ -191,7 +191,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Returns PayPal payment status
+     * Returns PayPal payment status.
      *
      * @param string $sValue status
      */
@@ -201,7 +201,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Sets PayPal payment date
+     * Sets PayPal payment date.
      *
      * @param string $sValue
      */
@@ -211,7 +211,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Returns PayPal payment date
+     * Returns PayPal payment date.
      *
      * @return string
      */
@@ -221,7 +221,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Returns PayPal payment currency
+     * Returns PayPal payment currency.
      *
      * @param string $sCurrency
      */
@@ -241,7 +241,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     *  Set PayPal payment transaction id
+     * Set PayPal payment transaction id.
      *
      * @param string $sTransactionId
      */
@@ -335,7 +335,9 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Set comments
+     * Set comments.
+     *
+     * @param array $aComments
      */
     public function setCommentList($aComments)
     {
@@ -343,7 +345,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Add comment
+     * Add comment.
      *
      * @param oePaypalOrderPaymentComment $oComment comment
      */
@@ -353,7 +355,7 @@ class oePayPalOrderPayment extends oePayPalModel
     }
 
     /**
-     * Return database gateway
+     * Return database gateway.
      *
      * @return oePayPalOrderPaymentDbGateway
      */
@@ -365,5 +367,4 @@ class oePayPalOrderPayment extends oePayPalModel
 
         return $this->_oDbGateway;
     }
-
 }

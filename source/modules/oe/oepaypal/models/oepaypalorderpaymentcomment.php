@@ -24,17 +24,30 @@
  */
 class oePayPalOrderPaymentComment extends oePayPalModel
 {
+
+    /**
+     * Sets date value.
+     */
     public function __construct()
     {
         $this->_setValue('oepaypal_date', date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime()));
     }
 
-
+    /**
+     * Sets comment id.
+     *
+     * @param string $sCommentId
+     */
     public function setId($sCommentId)
     {
         $this->setCommentId($sCommentId);
     }
 
+    /**
+     * Returns comment id.
+     *
+     * @return string
+     */
     public function getId()
     {
         return $this->getCommentId();

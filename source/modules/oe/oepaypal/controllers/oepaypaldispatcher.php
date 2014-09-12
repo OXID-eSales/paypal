@@ -52,6 +52,8 @@ abstract class oePayPalDispatcher extends oePayPalController
     abstract public function getExpressCheckoutDetails();
 
     /**
+     * Sets PayPal checkout service.
+     *
      * @param oePayPalService $oPayPalCheckoutService
      */
     public function setPayPalCheckoutService($oPayPalCheckoutService)

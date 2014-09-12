@@ -71,7 +71,7 @@ class oePayPalOrderCaptureActionHandler extends oePayPalOrderActionHandler
     /**
      * Sets PayPal request
      *
-     * @param $oPayPalRequest
+     * @param oePayPalRequest $oPayPalRequest
      */
     public function setPayPalRequest($oPayPalRequest)
     {

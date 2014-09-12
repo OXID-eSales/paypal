@@ -31,19 +31,36 @@ class oePayPalOrderPaymentList extends oePayPalList
      */
     protected $_oDbGateway = null;
 
-
+    /**
+     * @var string|null
+     */
     protected $_sOrderId = null;
 
+    /**
+     * Sets order id.
+     *
+     * @param string $sOrderId
+     */
     public function setOrderId($sOrderId)
     {
         $this->_sOrderId = $sOrderId;
     }
 
+    /**
+     * Returns order id.
+     *
+     * @return null|string
+     */
     public function getOrderId()
     {
         return $this->_sOrderId;
     }
 
+    /**
+     * Returns oePayPalPayPalDbGateway or creates and sets it if it was not set.
+     *
+     * @return oePayPalPayPalDbGateway
+     */
     protected function _getDbGateway()
     {
         if (is_null($this->_oDbGateway)) {
@@ -53,9 +70,9 @@ class oePayPalOrderPaymentList extends oePayPalList
     }
 
     /**
-     * Set model database gateway
+     * Set model database gateway.
      *
-     * @var object
+     * @param object $oDbGateway
      */
     protected function _setDbGateway($oDbGateway)
     {
@@ -63,10 +80,9 @@ class oePayPalOrderPaymentList extends oePayPalList
     }
 
     /**
-     * Selects and loads order payment history
+     * Selects and loads order payment history.
      *
-     * @param string $sOrderId order id
-     *
+     * @param string $sOrderId Order id.
      */
     public function load($sOrderId)
     {
@@ -87,9 +103,9 @@ class oePayPalOrderPaymentList extends oePayPalList
     }
 
     /**
-     * Check if list has payment with defined status
+     * Check if list has payment with defined status.
      *
-     * @param string $sStatus payment status
+     * @param string $sStatus Payment status.
      *
      * @return bool
      */
@@ -109,7 +125,7 @@ class oePayPalOrderPaymentList extends oePayPalList
     }
 
     /**
-     * Check if list has pending payment
+     * Check if list has pending payment.
      *
      * @return bool
      */
@@ -119,7 +135,7 @@ class oePayPalOrderPaymentList extends oePayPalList
     }
 
     /**
-     * Check if list has failed payment
+     * Check if list has failed payment.
      *
      * @return bool
      */
@@ -129,7 +145,7 @@ class oePayPalOrderPaymentList extends oePayPalList
     }
 
     /**
-     * Returns not yet captured (remaining) order sum
+     * Returns not yet captured (remaining) order sum.
      *
      * @param oePayPalOrderPayment $oPayment order payment
      *

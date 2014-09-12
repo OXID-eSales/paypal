@@ -91,7 +91,10 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
     }
 
     /**
-     * @param $oBasket
+     * Returns transaction mode.
+     *
+     * @param oxBasket $oBasket
+     *
      * @return string
      */
     protected function _getTransactionMode($oBasket)

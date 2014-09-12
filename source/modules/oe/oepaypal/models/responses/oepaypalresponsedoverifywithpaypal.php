@@ -126,5 +126,4 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
     {
         return $this->_getValue(self::MC_GROSS);
     }
-
 }

@@ -76,6 +76,8 @@ class oePayPalIPNHandler extends oePayPalController
     }
 
     /**
+     * Sets IPN request verifier.
+     *
      * @param oePayPalIPNRequestVerifier $oIPNRequestVerifier
      */
     public function setIPNRequestVerifier($oIPNRequestVerifier)
@@ -84,6 +86,8 @@ class oePayPalIPNHandler extends oePayPalController
     }
 
     /**
+     * Returns IPN request verifier.
+     *
      * @return oePayPalIPNRequestVerifier
      */
     public function getIPNRequestVerifier()
@@ -96,6 +100,8 @@ class oePayPalIPNHandler extends oePayPalController
     }
 
     /**
+     * oePayPalIPNProcessor setter.
+     *
      * @param oePayPalIPNProcessor $oProcessor
      */
     public function setProcessor($oProcessor)
@@ -104,6 +110,8 @@ class oePayPalIPNHandler extends oePayPalController
     }
 
     /**
+     * Returns oePayPalIPNProcessor object. If object is not set, than it creates it and sets.
+     *
      * @return oePayPalIPNProcessor
      */
     public function getProcessor()

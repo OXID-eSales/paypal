@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal IPN request payment setter class
+ * PayPal IPN request payment setter class.
  */
 class oePayPalIPNRequestPaymentSetter
 {
@@ -66,6 +66,7 @@ class oePayPalIPNRequestPaymentSetter
 
     /**
      * Sets request object to get params for IPN request.
+     *
      * @param oePayPalRequest $oRequest
      */
     public function setRequest($oRequest)
@@ -75,6 +76,7 @@ class oePayPalIPNRequestPaymentSetter
 
     /**
      * Gets request object to get params for IPN request.
+     *
      * @return oePayPalRequest
      */
     public function getRequest()
@@ -83,6 +85,8 @@ class oePayPalIPNRequestPaymentSetter
     }
 
     /**
+     * Sets request order payment object.
+     *
      * @param oePayPalOrderPayment $oOrderPayment
      */
     public function setRequestOrderPayment($oOrderPayment)
@@ -91,6 +95,8 @@ class oePayPalIPNRequestPaymentSetter
     }
 
     /**
+     * Returns order payment object.
+     *
      * @return oePayPalOrderPayment
      */
     public function getRequestOrderPayment()

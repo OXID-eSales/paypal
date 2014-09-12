@@ -29,10 +29,10 @@
         </div>
     </div>
 
-    [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
-    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/src/js/oepaypalonclickproceedaction.js') priority=10 }]
+    [{oxscript include="js/widgets/oxmodalpopup.js" priority=10}]
+    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/src/js/oepaypalonclickproceedaction.js') priority=10}]
     [{*Show popup*}]
-    [{oxscript add='$(function(){$("body").oxModalPopup({target: "#popupECS", openDialog: true});})' }]
+    [{oxscript add='$(function(){$("body").oxModalPopup({target: "#popupECS", openDialog: true});})'}]
     [{*Change actions on button click*}]
     [{oxscript add='$( "#actionNotAddToBasketAndGoToCheckout" ).oePayPalOnClickProceedAction( {sAction: "actionNotAddToBasketAndGoToCheckout"} );'}]
     [{oxscript add='$( "#actionAddToBasketAndGoToCheckout" ).oePayPalOnClickProceedAction( {sAction: "actionAddToBasketAndGoToCheckout"} );'}]

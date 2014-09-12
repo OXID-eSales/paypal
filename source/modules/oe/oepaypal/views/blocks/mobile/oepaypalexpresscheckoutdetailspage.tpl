@@ -1,7 +1,7 @@
 [{if $oViewConf->isExpressCheckoutEnabledInDetails() && !$oDetailsProduct->isNotBuyable()}]
     [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/css/paypal_mobile.css')}]
 
-    [{ $oViewConf->getHiddenSid() }]
+    [{$oViewConf->getHiddenSid()}]
     <div id="paypalExpressCheckoutDetailsBox" class="paypalExpressCheckoutBox paypalExpressCheckoutDetailsBox">
         <input type="hidden" name="oePayPalCancelURL" value="[{$oViewConf->getCurrentURL()}]"/>
         <input id="paypalExpressCheckoutDetailsButton" class="paypalCheckoutBtn"
@@ -16,7 +16,7 @@
     </div>
 
     [{oxscript add='$("#paypalExpressCheckoutDetailsButton").click(function (){$("<input />").attr("type", "hidden").attr("name", "doPaypalExpressCheckoutFromDetailsPage").attr("value", "true").appendTo(".js-oxProductForm");return true;});'}]
-    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/src/js/oepaypalonclickproceedaction.js') priority=10 }]
+    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/src/js/oepaypalonclickproceedaction.js') priority=10}]
     [{oxscript add='$( "#paypalExpressCheckoutDetailsButton" ).oePayPalOnClickProceedAction( {sAction: "actionExpressCheckoutFromDetailsPage", sForm: "#productinfo form.js-oxProductForm" } );'}]
     [{/if}]
 

@@ -42,8 +42,8 @@
         </div>
     </div>
 
-    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/src/js/oepaypalonclickproceedaction.js') priority=10 }]
-    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/js/ecconfirmation.js') priority=10 }]
+    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/src/js/oepaypalonclickproceedaction.js') priority=10}]
+    [{oxscript include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/js/ecconfirmation.js') priority=10}]
     [{*Change actions on button click*}]
     [{oxscript add='$( "#actionNotAddToBasketAndGoToCheckout" ).oePayPalOnClickProceedAction( {sAction: "actionNotAddToBasketAndGoToCheckout", sForm: "#productinfo form.js-oxProductForm"} );'}]
     [{oxscript add='$( "#actionAddToBasketAndGoToCheckout" ).oePayPalOnClickProceedAction( {sAction: "actionAddToBasketAndGoToCheckout", sForm: "#productinfo form.js-oxProductForm"} );'}]

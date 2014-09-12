@@ -4,9 +4,9 @@
     [{$smarty.block.parent}]
 
     <div class="paypalExpressCheckoutBox">
-        <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
+        <form action="[{$oViewConf->getSslSelfLink()}]" method="post">
             <div>
-                [{ $oViewConf->getHiddenSid() }]
+                [{$oViewConf->getHiddenSid()}]
                 <input type="hidden" name="cl" value="oePayPalExpressCheckoutDispatcher">
                 <input type="hidden" name="fnc" value="setExpressCheckout">
                 <input type="image" name="paypalExpressCheckoutButton" class="paypalCheckoutBtn"

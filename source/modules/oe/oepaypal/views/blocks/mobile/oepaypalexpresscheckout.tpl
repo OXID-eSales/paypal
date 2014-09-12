@@ -2,8 +2,8 @@
     [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/css/paypal_mobile.css')}]
 
     <div class="paypalExpressCheckoutBox">
-        <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
-            [{ $oViewConf->getHiddenSid() }]
+        <form action="[{$oViewConf->getSslSelfLink()}]" method="post">
+            [{$oViewConf->getHiddenSid()}]
             <input type="hidden" name="cl" value="oePayPalExpressCheckoutDispatcher">
             <input type="hidden" name="fnc" value="setExpressCheckout">
             <input class="paypalCheckoutBtn" type="image" name="paypalExpressCheckoutButton"

@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
     window.onload = function () {
-        top.oxid.admin.updateList('[{ $sOxid }]')
+        top.oxid.admin.updateList('[{$sOxid}]')
     };
 </script>
 
@@ -83,12 +83,12 @@
     }
 </style>
 
-<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
-    [{ $oViewConf->getHiddenSid() }]
-    <input type="hidden" name="oxid" value="[{ $oxid }]">
-    <input type="hidden" name="oxidCopy" value="[{ $oxid }]">
+<form name="transfer" id="transfer" action="[{$oViewConf->getSelfLink()}]" method="post">
+    [{$oViewConf->getHiddenSid()}]
+    <input type="hidden" name="oxid" value="[{$oxid}]">
+    <input type="hidden" name="oxidCopy" value="[{$oxid}]">
     <input type="hidden" name="cl" value="delivery_main">
-    <input type="hidden" name="language" value="[{ $actlang }]">
+    <input type="hidden" name="language" value="[{$actlang}]">
 </form>
 
 [{if $oOrder}]
@@ -163,7 +163,7 @@
                     <button id="captureButton" class="actionLink"
                             data-action="capture"
                             data-type="Complete"
-                            data-amount="[{ $oPayPalOrder->getRemainingOrderSum() }]"
+                            data-amount="[{$oPayPalOrder->getRemainingOrderSum()}]"
                             data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('capture')|@json_encode}]'
                             data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('capture')}]"
                             href="#">
@@ -204,59 +204,57 @@
                 <td class="listheader">[{oxmultilang ident="OEPAYPAL_AMOUNT"}]</td>
                 <td class="listheader">
                     [{oxmultilang ident="OEPAYPAL_HISTORY_PAYPAL_STATUS"}]
-                    [{ oxinputhelp ident="OEPAYPAL_HISTORY_PAYPAL_STATUS_HELP" }]
+                    [{oxinputhelp ident="OEPAYPAL_HISTORY_PAYPAL_STATUS_HELP"}]
                 </td>
                 <td class="listheader">[{oxmultilang ident="OEPAYPAL_HISTORY_ACTIONS"}]</td>
             </tr>
             [{foreach from=$oPayPalOrder->getPaymentList() item=listitem name=paypalHistory}]
             [{cycle values='listitem,listitem2' assign='class'}]
             <tr>
-                <td valign="top" class="[{ $class}]">[{ $listitem->getDate() }]</td>
-                <td valign="top" class="[{ $class}]">[{ $listitem->getAction() }]</td>
-                <td valign="top" class="[{ $class}]">
-                    [{ $listitem->getAmount() }]
+                <td valign="top" class="[{$class}]">[{$listitem->getDate()}]</td>
+                <td valign="top" class="[{$class}]">[{$listitem->getAction()}]</td>
+                <td valign="top" class="[{$class}]">
+                    [{$listitem->getAmount()}]
                     <small>[{$currency}]</small>
                 </td>
-                <td valign="top" class="[{ $class}]">[{ $listitem->getStatus() }]</td>
-                <td valign="top" class="[{ $class}]">
+                <td valign="top" class="[{$class}]">[{$listitem->getStatus()}]</td>
+                <td valign="top" class="[{$class}]">
                     <a class="popUpLink" href="#"
                        data-block="historyDetailsBlock[{$smarty.foreach.paypalHistory.index}]"><img
                                 src="[{$oViewConf->getModuleUrl('oepaypal','out/admin/src/bg/ico-details.png')}]"
                                 title="[{oxmultilang ident="OEPAYPAL_DETAILS"}]"/></a>
 
                     <div id="historyDetailsBlock[{$smarty.foreach.paypalHistory.index}]" class="paypalPopUp">
-                        <h3>[{oxmultilang ident="OEPAYPAL_DETAILS"}] ([{ $listitem->getDate() }])</h3>
+                        <h3>[{oxmultilang ident="OEPAYPAL_DETAILS"}] ([{$listitem->getDate()}])</h3>
 
                         <p>
-                            [{oxmultilang ident="OEPAYPAL_HISTORY_ACTION"}]: <b>[{ $listitem->getAction() }]</b><br/>
-                            [{oxmultilang ident="OEPAYPAL_HISTORY_PAYPAL_STATUS"}]: <b>[{ $listitem->getStatus()}]</b><br/>
+                            [{oxmultilang ident="OEPAYPAL_HISTORY_ACTION"}]: <b>[{$listitem->getAction()}]</b><br/>
+                            [{oxmultilang ident="OEPAYPAL_HISTORY_PAYPAL_STATUS"}]: <b>[{$listitem->getStatus()}]</b><br/>
                         </p>
 
                         <p>
                             [{if $listitem->getRefundedAmount() > 0}]
-                            [{oxmultilang ident="OEPAYPAL_CAPTURED"}]: </label><b>[{ $listitem->getAmount() }]
+                            [{oxmultilang ident="OEPAYPAL_CAPTURED"}]: </label><b>[{$listitem->getAmount()}]
                             <small>[{$currency}]</small>
                         </b><br/>
-                            [{oxmultilang ident="OEPAYPAL_REFUNDED"}]: <b>[{ $listitem->getRefundedAmount() }]
+                            [{oxmultilang ident="OEPAYPAL_REFUNDED"}]: <b>[{$listitem->getRefundedAmount()}]
                             <small>[{$currency}]</small>
                         </b><br/>
-                            [{oxmultilang ident="OEPAYPAL_CAPTURED_NET"}]: <b>[{ $listitem->getRemainingRefundAmount()}]
+                            [{oxmultilang ident="OEPAYPAL_CAPTURED_NET"}]: <b>[{$listitem->getRemainingRefundAmount()}]
                             <small>[{$currency}]</small>
                         </b><br/>
                             [{else}]
-                            [{oxmultilang ident="OEPAYPAL_AMOUNT"}]: </label><b>[{ $listitem->getAmount() }]
+                            [{oxmultilang ident="OEPAYPAL_AMOUNT"}]: </label><b>[{$listitem->getAmount()}]
                             <small>[{$currency}]</small>
                         </b><br/>
                             [{/if}]
                         </p>
                         <p>
-                            <label>[{oxmultilang ident="OEPAYPAL_TRANSACTIONID"}]: </label><b>[{
-                                $listitem->getTransactionId() }]</b><br/>
-                            <label>[{oxmultilang ident="OEPAYPAL_CORRELATIONID"}]: </label><b>[{
-                                $listitem->getCorrelationId() }]</b><br/>
+                            <label>[{oxmultilang ident="OEPAYPAL_TRANSACTIONID"}]: </label><b>[{$listitem->getTransactionId()}]</b><br/>
+                            <label>[{oxmultilang ident="OEPAYPAL_CORRELATIONID"}]: </label><b>[{$listitem->getCorrelationId()}]</b><br/>
                         </p>
                         [{assign var="aComments" value=$listitem->getCommentList()}]
-                        [{if $aComments->getArray() }]
+                        [{if $aComments->getArray()}]
                         <div class="paypalHistoryComments">
                             <span>[{oxmultilang ident="OEPAYPAL_COMMENT"}]: </span>
                             [{foreach from=$aComments item=oComment}]
@@ -273,8 +271,8 @@
                     <a id="refundButton[{$smarty.foreach.paypalHistory.index}]" class="actionLink"
                        data-action="refund"
                        data-type="[{if $listitem->getRefundedAmount() > 0}]Partial[{else}]Full[{/if}]"
-                       data-amount="[{ $listitem->getRemainingRefundAmount() }]"
-                       data-transid="[{ $listitem->getTransactionId() }]"
+                       data-amount="[{$listitem->getRemainingRefundAmount()}]"
+                       data-transid="[{$listitem->getTransactionId()}]"
                        data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('refund')|@json_encode}]'
                        data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('refund')}]"
                        href="#">
@@ -293,47 +291,46 @@
         <b>[{oxmultilang ident="OEPAYPAL_ORDER_PRODUCTS"}]: </b>
         <table cellspacing="0" cellpadding="0" border="0" width="98%">
             <tr>
-                <td class="listheader first">[{ oxmultilang ident="GENERAL_SUM" }]</td>
-                <td class="listheader" height="15">&nbsp;&nbsp;&nbsp;[{ oxmultilang ident="GENERAL_ITEMNR" }]</td>
-                <td class="listheader">&nbsp;&nbsp;&nbsp;[{ oxmultilang ident="GENERAL_TITLE" }]</td>
-                [{if $oOrder->isNettoMode() }]
-                <td class="listheader">[{ oxmultilang ident="ORDER_ARTICLE_ENETTO" }]</td>
+                <td class="listheader first">[{oxmultilang ident="GENERAL_SUM"}]</td>
+                <td class="listheader" height="15">&nbsp;&nbsp;&nbsp;[{oxmultilang ident="GENERAL_ITEMNR"}]</td>
+                <td class="listheader">&nbsp;&nbsp;&nbsp;[{oxmultilang ident="GENERAL_TITLE"}]</td>
+                [{if $oOrder->isNettoMode()}]
+                <td class="listheader">[{oxmultilang ident="ORDER_ARTICLE_ENETTO"}]</td>
                 [{else}]
-                <td class="listheader">[{ oxmultilang ident="ORDER_ARTICLE_EBRUTTO" }]</td>
+                <td class="listheader">[{oxmultilang ident="ORDER_ARTICLE_EBRUTTO"}]</td>
                 [{/if}]
-                <td class="listheader">[{ oxmultilang ident="GENERAL_ATALL" }]</td>
-                <td class="listheader" colspan="3">[{ oxmultilang ident="ORDER_ARTICLE_MWST" }]</td>
+                <td class="listheader">[{oxmultilang ident="GENERAL_ATALL"}]</td>
+                <td class="listheader" colspan="3">[{oxmultilang ident="ORDER_ARTICLE_MWST"}]</td>
             </tr>
             [{assign var="blWhite" value=""}]
             [{foreach from=$oOrder->getOrderArticles() item=listitem name=orderArticles}]
-            [{if $listitem->oxorderarticles__oxstorno->value == 1 }]
-            [{assign var="listclass" value=listitem3 }]
+            [{if $listitem->oxorderarticles__oxstorno->value == 1}]
+            [{assign var="listclass" value=listitem3}]
             [{else}]
-            [{assign var="listclass" value=listitem$blWhite }]
+            [{assign var="listclass" value=listitem$blWhite}]
             [{/if}]
             <tr id="art.[{$smarty.foreach.orderArticles.iteration}]">
-                <td valign="top" class="[{ $listclass}]">[{ $listitem->oxorderarticles__oxamount->value }]</td>
-                <td valign="top" class="[{ $listclass}]" height="15">[{ $listitem->oxorderarticles__oxartnum->value }]
+                <td valign="top" class="[{$listclass}]">[{$listitem->oxorderarticles__oxamount->value}]</td>
+                <td valign="top" class="[{$listclass}]" height="15">[{$listitem->oxorderarticles__oxartnum->value}]
                 </td>
-                <td valign="top" class="[{ $listclass}]">[{
-                    $listitem->oxorderarticles__oxtitle->value|oxtruncate:20:""|strip_tags }]
+                <td valign="top" class="[{$listclass}]">[{$listitem->oxorderarticles__oxtitle->value|oxtruncate:20:""|strip_tags}]
                 </td>
-                [{if $oOrder->isNettoMode() }]
-                <td valign="top" class="[{ $listclass}]">[{ $listitem->getNetPriceFormated() }]
-                    <small>[{ $oOrder->oxorder__oxcurrency->value }]</small>
+                [{if $oOrder->isNettoMode()}]
+                <td valign="top" class="[{$listclass}]">[{$listitem->getNetPriceFormated()}]
+                    <small>[{$oOrder->oxorder__oxcurrency->value}]</small>
                 </td>
-                <td valign="top" class="[{ $listclass}]">[{ $listitem->getTotalNetPriceFormated() }]
-                    <small>[{ $oOrder->oxorder__oxcurrency->value }]</small>
+                <td valign="top" class="[{$listclass}]">[{$listitem->getTotalNetPriceFormated()}]
+                    <small>[{$oOrder->oxorder__oxcurrency->value}]</small>
                 </td>
                 [{else}]
-                <td valign="top" class="[{ $listclass}]">[{ $listitem->getBrutPriceFormated() }]
-                    <small>[{ $oOrder->oxorder__oxcurrency->value }]</small>
+                <td valign="top" class="[{$listclass}]">[{$listitem->getBrutPriceFormated()}]
+                    <small>[{$oOrder->oxorder__oxcurrency->value}]</small>
                 </td>
-                <td valign="top" class="[{ $listclass}]">[{ $listitem->getTotalBrutPriceFormated() }]
-                    <small>[{ $oOrder->oxorder__oxcurrency->value }]</small>
+                <td valign="top" class="[{$listclass}]">[{$listitem->getTotalBrutPriceFormated()}]
+                    <small>[{$oOrder->oxorder__oxcurrency->value}]</small>
                 </td>
                 [{/if}]
-                <td valign="top" class="[{ $listclass}]">[{ $listitem->oxorderarticles__oxvat->value}]</td>
+                <td valign="top" class="[{$listclass}]">[{$listitem->oxorderarticles__oxvat->value}]</td>
             </tr>
             [{if $blWhite == "2"}]
             [{assign var="blWhite" value=""}]
@@ -457,7 +454,7 @@
         </div>
     </div>
     [{else}]
-    <div class="messagebox">[{ $sMessage }]</div>
+    <div class="messagebox">[{$sMessage}]</div>
     [{/if}]
 
 [{include file="bottomnaviitem.tpl"}]

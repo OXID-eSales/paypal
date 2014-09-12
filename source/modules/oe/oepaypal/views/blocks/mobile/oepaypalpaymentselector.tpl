@@ -1,4 +1,4 @@
-[{if $sPaymentID == "oxidpaypal" }]
+[{if $sPaymentID == "oxidpaypal"}]
     [{if $oViewConf->isStandardCheckoutEnabled()}]
     [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/css/paypal_mobile.css')}]
 
@@ -17,7 +17,7 @@
 
             [{if $paymentmethod->oxpayments__oxlongdesc|trim}]
             <div class="paypalPaymentDesc">
-                [{ $paymentmethod->oxpayments__oxlongdesc->getRawValue()}]
+                [{$paymentmethod->oxpayments__oxlongdesc->getRawValue()}]
             </div>
             [{/if}]
         </div>
@@ -32,5 +32,5 @@
     </div>
     [{/if}]
     [{else}]
-    [{ $smarty.block.parent }]
+    [{$smarty.block.parent}]
     [{/if}]

@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal IPN Payment validator class
+ * PayPal IPN Payment validator class.
  */
 class oePayPalIPNPaymentValidator
 {
@@ -44,6 +44,7 @@ class oePayPalIPNPaymentValidator
 
     /**
      * Sets language object to get translations from.
+     *
      * @param object $oLang get translations from.
      */
     public function setLang($oLang)
@@ -53,6 +54,7 @@ class oePayPalIPNPaymentValidator
 
     /**
      * Gets language object to get translations from.
+     *
      * @return object
      */
     public function getLang()
@@ -61,6 +63,8 @@ class oePayPalIPNPaymentValidator
     }
 
     /**
+     * Sets request object.
+     *
      * @param oePayPalOrderPayment $oRequestPayment
      */
     public function setRequestOrderPayment($oRequestPayment)
@@ -69,6 +73,8 @@ class oePayPalIPNPaymentValidator
     }
 
     /**
+     * Returns request payment object.
+     *
      * @return oePayPalOrderPayment
      */
     public function getRequestOrderPayment()
@@ -77,6 +83,8 @@ class oePayPalIPNPaymentValidator
     }
 
     /**
+     * Sets order payment object.
+     *
      * @param oePayPalOrderPayment $oPayment
      */
     public function setOrderPayment($oPayment)
@@ -85,6 +93,8 @@ class oePayPalIPNPaymentValidator
     }
 
     /**
+     * Returns order payment object.
+     *
      * @return oePayPalOrderPayment
      */
     public function getOrderPayment()
@@ -93,6 +103,8 @@ class oePayPalIPNPaymentValidator
     }
 
     /**
+     * Returns validation failure message.
+     *
      * @return string
      */
     public function getValidationFailureMessage()

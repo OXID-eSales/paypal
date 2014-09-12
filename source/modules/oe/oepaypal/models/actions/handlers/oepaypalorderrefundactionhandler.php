@@ -71,11 +71,10 @@ class oePayPalOrderRefundActionHandler extends oePayPalOrderActionHandler
     /**
      * Sets PayPal request
      *
-     * @param $oPayPalRequest
+     * @param oePayPalRequest $oPayPalRequest
      */
     public function setPayPalRequest($oPayPalRequest)
     {
         $this->_oPayPalRequest = $oPayPalRequest;
     }
-
 }

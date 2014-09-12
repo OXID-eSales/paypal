@@ -36,7 +36,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return price amount
+     * Return price amount.
      *
      * @return string
      */
@@ -46,7 +46,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return payer id
+     * Return payer id.
      *
      * @return string
      */
@@ -56,7 +56,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return email
+     * Return email.
      *
      * @return string
      */
@@ -66,7 +66,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return first name
+     * Return first name.
      *
      * @return string
      */
@@ -76,7 +76,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return last name
+     * Return last name.
      *
      * @return string
      */
@@ -86,7 +86,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return shipping street
+     * Return shipping street.
      *
      * @return string
      */
@@ -96,7 +96,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return shipping city
+     * Return shipping city.
      *
      * @return string
      */
@@ -106,7 +106,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return name
+     * Return name.
      *
      * @return string
      */
@@ -116,7 +116,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return shipping country
+     * Return shipping country.
      *
      * @return string
      */
@@ -126,7 +126,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return shipping state
+     * Return shipping state.
      *
      * @return string
      */
@@ -136,7 +136,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return shipping zip code
+     * Return shipping zip code.
      *
      * @return string
      */
@@ -146,7 +146,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return phone number
+     * Return phone number.
      *
      * @return string
      */
@@ -156,7 +156,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return second shipping street
+     * Return second shipping street.
      *
      * @return string
      */
@@ -166,7 +166,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Return salutation
+     * Return salutation.
      *
      * @return string
      */
@@ -176,7 +176,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     }
 
     /**
-     * Returns company
+     * Returns company.
      *
      * @return string
      */
@@ -184,5 +184,4 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
     {
         return $this->_getValue('BUSINESS');
     }
-
 }

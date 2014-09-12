@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal IPN request verifier class
+ * PayPal IPN request verifier class.
  */
 class oePayPalIPNRequestVerifier
 {
@@ -78,6 +78,8 @@ class oePayPalIPNRequestVerifier
     }
 
     /**
+     * Sets shop owner.
+     *
      * @param string $sShopOwner
      */
     public function setShopOwner($sShopOwner)
@@ -86,6 +88,8 @@ class oePayPalIPNRequestVerifier
     }
 
     /**
+     * Returns shop owner.
+     *
      * @return string
      */
     public function getShopOwner()
@@ -117,6 +121,8 @@ class oePayPalIPNRequestVerifier
     }
 
     /**
+     * Sets IPN request validator.
+     *
      * @param oePayPalIPNRequestValidator $oIPNRequestValidator
      */
     public function setIPNRequestValidator($oIPNRequestValidator)
@@ -125,6 +131,8 @@ class oePayPalIPNRequestVerifier
     }
 
     /**
+     * Returns IPN request validator object.
+     *
      * @return oePayPalIPNRequestValidator
      */
     public function getIPNRequestValidator()
@@ -136,6 +144,8 @@ class oePayPalIPNRequestVerifier
     }
 
     /**
+     * Sets request object.
+     *
      * @param oePayPalPayPalRequest $oPayPalRequest
      */
     public function setPayPalRequest($oPayPalRequest)
@@ -157,6 +167,8 @@ class oePayPalIPNRequestVerifier
     }
 
     /**
+     * Sets failure message.
+     *
      * @param string $sFailureMessage
      */
     public function setFailureMessage($sFailureMessage)
@@ -165,6 +177,8 @@ class oePayPalIPNRequestVerifier
     }
 
     /**
+     * Returns failure message.
+     *
      * @return string
      */
     public function getFailureMessage()

@@ -26,7 +26,7 @@ class oePayPalOrderPaymentActionManager
 {
 
     /**
-     * Array of available actions for payment action
+     * Array of available actions for payment action.
      *
      * @var array
      */
@@ -39,14 +39,14 @@ class oePayPalOrderPaymentActionManager
     );
 
     /**
-     * Order object
+     * Order object.
      *
      * @var oePayPalOrderPayment
      */
     protected $_oPayment = null;
 
     /**
-     * Sets order
+     * Sets order.
      *
      * @param oePayPalOxOrder $oPayment
      */
@@ -56,7 +56,7 @@ class oePayPalOrderPaymentActionManager
     }
 
     /**
-     * Returns order
+     * Returns order.
      *
      * @return oePayPalOrderPayment
      */
@@ -68,8 +68,8 @@ class oePayPalOrderPaymentActionManager
     /**
      * Returns available actions for given payment action
      *
-     * @param $sPaymentAction
-     * @param $sPaymentStatus
+     * @param string $sPaymentAction
+     * @param string $sPaymentStatus
      *
      * @return array
      */
@@ -83,8 +83,8 @@ class oePayPalOrderPaymentActionManager
     /**
      * Checks whether action is available for given order
      *
-     * @param $oPayment
-     * @param $sAction
+     * @param string $sAction
+     * @param object $oPayment
      *
      * @return bool
      */
@@ -110,5 +110,4 @@ class oePayPalOrderPaymentActionManager
 
         return $blIsAvailable;
     }
-
 }

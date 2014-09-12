@@ -26,7 +26,7 @@ class oePayPalResponseDoVoid extends oePayPalResponse
 {
 
     /**
-     * Return authorization id
+     * Return authorization id.
      *
      * @return string
      */
@@ -36,7 +36,7 @@ class oePayPalResponseDoVoid extends oePayPalResponse
     }
 
     /**
-     * Return transaction id
+     * Return transaction id.
      *
      * @return string
      */

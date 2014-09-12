@@ -31,19 +31,36 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
      */
     protected $_oDbGateway = null;
 
-
+    /**
+     * @var string|null
+     */
     protected $_sPaymentId = null;
 
+    /**
+     * Sets payment id.
+     *
+     * @param string $sPaymentId
+     */
     public function setPaymentId($sPaymentId)
     {
         $this->_sPaymentId = $sPaymentId;
     }
 
+    /**
+     * Returns payment id.
+     *
+     * @return null|string
+     */
     public function getPaymentId()
     {
         return $this->_sPaymentId;
     }
 
+    /**
+     * Returns DB gateway. If it's not set- creates object and sets.
+     *
+     * @return oePayPalPayPalDbGateway
+     */
     protected function _getDbGateway()
     {
         if (is_null($this->_oDbGateway)) {
@@ -53,9 +70,9 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
     }
 
     /**
-     * Set model database gateway
+     * Set model database gateway.
      *
-     * @var object
+     * @param object $oDbGateway
      */
     protected function _setDbGateway($oDbGateway)
     {
@@ -63,10 +80,9 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
     }
 
     /**
-     * Selects and loads order payment history
+     * Selects and loads order payment history.
      *
-     * @param string $sPaymentId order id
-     *
+     * @param string $sPaymentId Order id.
      */
     public function load($sPaymentId)
     {
@@ -87,7 +103,11 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
     }
 
     /**
-     * Add comment
+     * Add comment.
+     *
+     * @param object $oComment
+     *
+     * @return mixed
      */
     public function addComment($oComment)
     {

@@ -78,7 +78,8 @@ class oePayPalOrderActionManager
     /**
      * Checks whether action is available for given order
      *
-     * @param $sAction
+     * @param string $sAction
+     *
      * @return bool
      */
     public function isActionAvailable($sAction)
@@ -105,5 +106,4 @@ class oePayPalOrderActionManager
 
         return $blIsAvailable;
     }
-
 }

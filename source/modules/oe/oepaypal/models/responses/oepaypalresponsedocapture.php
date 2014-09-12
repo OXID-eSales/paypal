@@ -74,5 +74,4 @@ class oePayPalResponseDoCapture extends oePayPalResponse
     {
         return $this->_getValue('CURRENCYCODE');
     }
-
 }

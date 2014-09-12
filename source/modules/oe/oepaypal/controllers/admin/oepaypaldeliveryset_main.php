@@ -19,6 +19,10 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
+
+/**
+ * Adds additional functionality needed for PayPal when managing delivery sets.
+ */
 class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
 {
     /**
@@ -32,6 +36,7 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
 
         $sDeliverySetId = $this->getEditObjectId();
         if ($sDeliverySetId != "-1" && isset($sDeliverySetId)) {
+            /** @var oePayPalConfig $oConfig */
             $oConfig = oxNew('oePayPalConfig');
 
             $blIsPayPalDefaultMobilePayment = ($sDeliverySetId == $oConfig->getMobileECDefaultShippingId());
@@ -44,8 +49,6 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
 
     /**
      * Saves default PayPal mobile payment.
-     *
-     * @return mixed
      */
     public function save()
     {
@@ -68,8 +71,8 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
     /**
      * Save default shipping id.
      *
-     * @param oxConfig $oConfig config object to save.
-     * @param string $sShippingId shipping id.
+     * @param oxConfig       $oConfig       Config object to save.
+     * @param string         $sShippingId   Shipping id.
      * @param oePayPalConfig $oPayPalConfig PayPal config.
      */
     protected function _saveECDefaultShippingId($oConfig, $sShippingId, $oPayPalConfig)

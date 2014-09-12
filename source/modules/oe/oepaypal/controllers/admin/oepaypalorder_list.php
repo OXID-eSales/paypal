@@ -43,6 +43,7 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
 
         $this->_aViewData["paypalpayment"] = $sPayment ? $sPayment : -1;
 
+        /** @var oxList $oPaymentList */
         $oPaymentList = oxNew('oxList');
         $oPaymentList->init('oxPayment');
 
@@ -54,7 +55,7 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
     /**
      * Builds and returns SQL query string. Adds additional order check.
      *
-     * @param object $oListObject list main object
+     * @param object $oListObject list main object.
      *
      * @return string
      */
@@ -74,10 +75,10 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
     }
 
     /**
-     * Adding folder check
+     * Adding folder check.
      *
-     * @param array $aWhere SQL condition array
-     * @param string $sqlFull SQL query string
+     * @param array  $aWhere  SQL condition array.
+     * @param string $sqlFull SQL query string.
      *
      * @return string
      */

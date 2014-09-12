@@ -47,8 +47,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     }
 
     /**
-     * Processes PayPal actions
-     *
+     * Processes PayPal actions.
      */
     public function processAction()
     {
@@ -69,7 +68,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     }
 
     /**
-     * Returns PayPal order action manager
+     * Returns PayPal order action manager.
      *
      * @return oePayPalOrderActionManager
      */

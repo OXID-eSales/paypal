@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal IPN payment builder class
+ * PayPal IPN payment builder class.
  */
 class oePayPalIPNPaymentBuilder
 {
@@ -50,6 +50,8 @@ class oePayPalIPNPaymentBuilder
     protected $_oLang = null;
 
     /**
+     * Sets oePayPalIPNRequestPaymentSetter.
+     *
      * @param oePayPalIPNRequestPaymentSetter $oPayPalIPNPaymentSetter
      */
     public function setOrderPaymentSetter($oPayPalIPNPaymentSetter)
@@ -58,6 +60,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Creates and sets oePayPalIPNRequestPaymentSetter object if it was not set.
+     *
      * @return oePayPalIPNRequestPaymentSetter
      */
     public function getOrderPaymentSetter()
@@ -70,6 +74,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Sets oePayPalIPNPaymentValidator object.
+     *
      * @param oePayPalIPNPaymentValidator $oPayPalIPNPaymentValidator
      */
     public function setOrderPaymentValidator($oPayPalIPNPaymentValidator)
@@ -78,6 +84,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Creates and sets oePayPalIPNPaymentValidator object if it was not set.
+     *
      * @return oePayPalIPNPaymentValidator
      */
     public function getOrderPaymentValidator()
@@ -90,6 +98,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Sets request object.
+     *
      * @param oePayPalRequest $oRequest
      */
     public function setRequest($oRequest)
@@ -98,6 +108,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Returns oePayPalRequest.
+     *
      * @return oePayPalRequest
      */
     public function getRequest()
@@ -106,6 +118,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Sets oxLang object
+     *
      * @param oxLang $oLang
      */
     public function setLang($oLang)
@@ -114,6 +128,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Returns oxLang object.
+     *
      * @return oxLang
      */
     public function getLang()
@@ -181,6 +197,8 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
+     * Adds payment validation information.
+     *
      * @param oePayPalOrderPayment $oRequestOrderPayment
      * @param oePayPalOrderPayment $oOrderPayment
      *
@@ -219,5 +237,4 @@ class oePayPalIPNPaymentBuilder
         $oOrderPayment->setStatus($oRequestOrderPayment->getStatus());
         return $oOrderPayment;
     }
-
 }

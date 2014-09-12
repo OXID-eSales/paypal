@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal Current item Article container class
+ * PayPal Current item Article container class.
  */
 class oePayPalArticleToExpressCheckoutCurrentItem
 {
@@ -49,7 +49,8 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     protected $_iArticleAmount;
 
     /**
-     * Method sets persistent param
+     * Method sets persistent param.
+     *
      * @param array $aPersistParam
      */
     public function setPersistParam($aPersistParam)
@@ -58,7 +59,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     }
 
     /**
-     * Method returns persistent param
+     * Method returns persistent param.
      *
      * @return array
      */
@@ -68,7 +69,8 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     }
 
     /**
-     * Method sets select list
+     * Method sets select list.
+     *
      * @param array $aSelectList
      */
     public function setSelectList($aSelectList)
@@ -77,7 +79,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     }
 
     /**
-     * Method returns select list
+     * Method returns select list.
      *
      * @return array
      */
@@ -87,7 +89,8 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     }
 
     /**
-     * Method sets article id
+     * Method sets article id.
+     *
      * @param string $sArticleId
      */
     public function setArticleId($sArticleId)
@@ -96,7 +99,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     }
 
     /**
-     * Method returns article id
+     * Method returns article id.
      *
      * @return string
      */
@@ -106,7 +109,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     }
 
     /**
-     * Method sets article amount
+     * Method sets article amount.
      *
      * @param int $iArticleAmount
      */
@@ -116,7 +119,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     }
 
     /**
-     * Method returns article amount
+     * Method returns article amount.
      *
      * @return int
      */
@@ -124,5 +127,4 @@ class oePayPalArticleToExpressCheckoutCurrentItem
     {
         return ( int )$this->_iArticleAmount;
     }
-
 }

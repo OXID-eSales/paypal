@@ -26,8 +26,9 @@ class oePayPalResponseException extends oePayPalException
 {
     /**
      * Exception constructor. Adds additional prefix string to error message.
-     * @param string $sMessage exception message
-     * @param integer $iCode exception code
+     *
+     * @param string  $sMessage exception message
+     * @param integer $iCode    exception code
      */
     public function __construct($sMessage = "", $iCode = 0)
     {

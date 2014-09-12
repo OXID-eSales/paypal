@@ -20,12 +20,12 @@
  */
 
 /**
- * PayPal Current item Article validator class
+ * PayPal Current item Article validator class.
  */
 class oePayPalArticleToExpressCheckoutValidator
 {
     /**
-     * Item that will be validated
+     * Item that will be validated.
      * @var object
      */
     protected $_oItemToValidate;
@@ -37,7 +37,7 @@ class oePayPalArticleToExpressCheckoutValidator
     protected $_oBasket;
 
     /**
-     *Sets current item of details page
+     *Sets current item of details page.
      *
      * @param object $oItemToValidate
      */
@@ -47,7 +47,7 @@ class oePayPalArticleToExpressCheckoutValidator
     }
 
     /**
-     * Returns details page current item
+     * Returns details page current item.
      *
      * @return oePayPalArticleToExpressCheckoutCurrentItem
      */
@@ -57,8 +57,9 @@ class oePayPalArticleToExpressCheckoutValidator
     }
 
     /**
-     * Method sets basket object
-     * @param oxBasket
+     * Method sets basket object.
+     *
+     * @param oxBasket $oBasket
      */
     public function setBasket($oBasket)
     {
@@ -66,7 +67,7 @@ class oePayPalArticleToExpressCheckoutValidator
     }
 
     /**
-     * Methods returns basket object
+     * Methods returns basket object.
      *
      * @return oxBasket
      */
@@ -91,7 +92,7 @@ class oePayPalArticleToExpressCheckoutValidator
     }
 
     /**
-     * Check if same article is in basket
+     * Check if same article is in basket.
      *
      * @return bool
      */
@@ -107,7 +108,8 @@ class oePayPalArticleToExpressCheckoutValidator
     }
 
     /**
-     * Checks if Article params equals with current items params
+     * Checks if Article params equals with current items params.
+     *
      * @param oxBasketItem $oBasketItem
      *
      * @return bool
@@ -120,7 +122,7 @@ class oePayPalArticleToExpressCheckoutValidator
     }
 
     /**
-     * Checks if article amount 0
+     * Checks if article amount 0.
      *
      * @return bool
      */
@@ -129,5 +131,4 @@ class oePayPalArticleToExpressCheckoutValidator
         $iArticleAmount = $this->getItemToValidate()->getArticleAmount();
         return 0 == $iArticleAmount;
     }
-
 }

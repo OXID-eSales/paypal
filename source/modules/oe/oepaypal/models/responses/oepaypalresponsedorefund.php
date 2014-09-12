@@ -26,7 +26,7 @@ class oePayPalResponseDoRefund extends oePayPalResponse
 {
 
     /**
-     * Return transaction id
+     * Return transaction id.
      *
      * @return string
      */
@@ -36,7 +36,7 @@ class oePayPalResponseDoRefund extends oePayPalResponse
     }
 
     /**
-     * Return transaction id
+     * Return transaction id.
      *
      * @return string
      */
@@ -46,7 +46,7 @@ class oePayPalResponseDoRefund extends oePayPalResponse
     }
 
     /**
-     * Return payment status
+     * Return payment status.
      *
      * @return string
      */
@@ -56,7 +56,7 @@ class oePayPalResponseDoRefund extends oePayPalResponse
     }
 
     /**
-     * Return payment status
+     * Return payment status.
      *
      * @return string
      */
@@ -66,7 +66,7 @@ class oePayPalResponseDoRefund extends oePayPalResponse
     }
 
     /**
-     * Return currency
+     * Return currency.
      *
      * @return string
      */
@@ -74,5 +74,4 @@ class oePayPalResponseDoRefund extends oePayPalResponse
     {
         return $this->_getValue('CURRENCYCODE');
     }
-
 }

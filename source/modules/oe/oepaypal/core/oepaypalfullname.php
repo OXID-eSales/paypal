@@ -34,7 +34,7 @@ class oePayPalFullName
      *
      * @param string $sFullName
      */
-    function __construct($sFullName)
+    public function __construct($sFullName)
     {
         $this->_split($sFullName);
     }

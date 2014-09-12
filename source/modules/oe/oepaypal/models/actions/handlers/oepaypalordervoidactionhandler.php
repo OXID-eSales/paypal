@@ -20,19 +20,19 @@
  */
 
 /**
- * PayPal order action void class
+ * PayPal order action void class.
  */
 class oePayPalOrderVoidActionHandler extends oePayPalOrderActionHandler
 {
     /**
-     * PayPal Request
+     * PayPal Request.
      *
      * @var oePayPalRequest
      */
     protected $_oPayPalRequest = null;
 
     /**
-     * Returns PayPal response; initiates if not set
+     * Returns PayPal response; initiates if not set.
      *
      * @return mixed
      */
@@ -44,7 +44,7 @@ class oePayPalOrderVoidActionHandler extends oePayPalOrderActionHandler
     }
 
     /**
-     * Returns PayPal request; initiates if not set
+     * Returns PayPal request; initiates if not set.
      *
      * @return oePayPalPayPalRequest
      */
@@ -66,9 +66,9 @@ class oePayPalOrderVoidActionHandler extends oePayPalOrderActionHandler
     }
 
     /**
-     * Sets PayPal request
+     * Sets PayPal request.
      *
-     * @param $oPayPalRequest
+     * @param oePayPalRequest $oPayPalRequest Request object.
      */
     public function setPayPalRequest($oPayPalRequest)
     {

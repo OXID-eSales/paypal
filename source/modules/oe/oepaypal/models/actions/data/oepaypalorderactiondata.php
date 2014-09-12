@@ -40,9 +40,9 @@ class oePayPalOrderActionData
     protected $_oOrder = null;
 
     /**
-     * Sets dependencies
+     * Sets dependencies.
      *
-     * @param oePayPalRequest $oRequest
+     * @param oePayPalRequest     $oRequest
      * @param oePayPalPayPalOrder $oOrder
      */
     public function __construct($oRequest, $oOrder)
@@ -100,5 +100,4 @@ class oePayPalOrderActionData
     {
         return $this->getRequest()->getRequestParameter('order_status');
     }
-
 }

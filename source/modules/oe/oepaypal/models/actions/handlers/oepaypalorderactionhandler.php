@@ -42,9 +42,11 @@ abstract class oePayPalOrderActionHandler
     protected $_oPayPalRequestBuilder = null;
 
     /**
+     * Sets data object.
+     *
      * @param object $oData
      */
-    function __construct($oData)
+    public function __construct($oData)
     {
         $this->_oData = $oData;
     }

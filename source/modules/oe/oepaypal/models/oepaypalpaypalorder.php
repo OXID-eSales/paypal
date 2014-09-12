@@ -31,18 +31,28 @@ class oePayPalPayPalOrder extends oePayPalModel
      */
     protected $_oPaymentList = null;
 
+    /**
+     * Sets order id.
+     *
+     * @param string $sOrderId
+     */
     public function setId($sOrderId)
     {
         $this->setOrderId($sOrderId);
     }
 
+    /**
+     * Returns order id.
+     *
+     * @return string
+     */
     public function getId()
     {
         return $this->getOrderId();
     }
 
     /**
-     * Set PayPal order Id
+     * Set PayPal order Id.
      *
      * @param string $sOrderId
      */
@@ -52,7 +62,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Set PayPal order Id
+     * Set PayPal order Id.
      *
      * @return string
      */
@@ -62,7 +72,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Set PayPal captured amount
+     * Set PayPal captured amount.
      *
      * @param double $dAmount
      */
@@ -72,7 +82,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Adds given amount to PayPal captured amount
+     * Adds given amount to PayPal captured amount.
      *
      * @param double $dAmount
      */
@@ -82,7 +92,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Get PayPal captured amount
+     * Get PayPal captured amount.
      *
      * @return string
      */
@@ -92,7 +102,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Set PayPal refunded amount
+     * Set PayPal refunded amount.
      *
      * @param double $dAmount
      */
@@ -102,7 +112,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Adds given amount to PayPal refunded amount
+     * Adds given amount to PayPal refunded amount.
      *
      * @param double $dAmount
      */
@@ -112,7 +122,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Get PayPal refunded amount
+     * Get PayPal refunded amount.
      *
      * @return string
      */
@@ -122,7 +132,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Returns not yet captured (remaining) order sum
+     * Returns not yet captured (remaining) order sum.
      *
      * @return string
      */
@@ -132,7 +142,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Set PayPal refunded amount
+     * Set PayPal refunded amount.
      *
      * @param double $dAmount
      */
@@ -142,7 +152,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Get PayPal refunded amount
+     * Get PayPal refunded amount.
      *
      * @return string
      */
@@ -152,7 +162,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Set transaction mode
+     * Set transaction mode.
      *
      * @param string $sMode
      */
@@ -162,7 +172,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Get transaction mode
+     * Get transaction mode.
      *
      * @return string
      */
@@ -172,7 +182,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Set payment status
+     * Set payment status.
      *
      * @param string $sStatus
      */
@@ -182,7 +192,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Get payment status
+     * Get payment status.
      *
      * @return string
      */
@@ -196,9 +206,9 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Sets total order sum
+     * Sets total order sum.
      *
-     * @param $dAmount
+     * @param double $dAmount
      */
     public function setTotalOrderSum($dAmount)
     {
@@ -206,7 +216,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Returns total order sum
+     * Returns total order sum.
      *
      * @return string
      */
@@ -216,7 +226,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Returns not yet captured (remaining) order sum
+     * Returns not yet captured (remaining) order sum.
      *
      * @return string
      */
@@ -226,7 +236,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Set order currency
+     * Set order currency.
      *
      * @param string $sStatus
      */
@@ -236,7 +246,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Returns order currency
+     * Returns order currency.
      *
      * @return string
      */
@@ -246,11 +256,9 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Adds new payment
+     * Adds new payment.
      *
      * @param oePayPalOrderPayment $oPayment order payment
-     *
-     * @return bool
      */
     public function addPayment(oePayPalOrderPayment $oPayment)
     {
@@ -260,7 +268,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Return database gateway
+     * Return database gateway.
      *
      * @return oePayPalPayPalOrderDbGateway
      */
@@ -274,7 +282,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Return order payment list
+     * Return order payment list.
      *
      * @return oePayPalOrderPaymentList
      */
@@ -290,15 +298,12 @@ class oePayPalPayPalOrder extends oePayPalModel
     }
 
     /**
-     * Return order payment list
+     * Return order payment list.
      *
-     * @param oePayPal $oPaymentList payment list
-     *
-     * @return oePayPalOrderPaymentList
+     * @param oePayPal $oPaymentList Payment list.
      */
     public function setPaymentList($oPaymentList)
     {
         $this->_oPaymentList = $oPaymentList;
     }
-
 }

@@ -52,7 +52,7 @@ class oePayPalOrderPaymentStatusList extends oePayPalList
     /**
      * Returns the list of available statuses to choose from for admin
      *
-     * @param $sAction
+     * @param string $sAction
      *
      * @return array
      */

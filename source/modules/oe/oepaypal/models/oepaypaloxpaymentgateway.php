@@ -156,7 +156,10 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
     }
 
     /**
-     * @param $oBasket
+     * Returns transaction mode.
+     *
+     * @param object $oBasket
+     *
      * @return string
      */
     protected function _getTransactionMode($oBasket)

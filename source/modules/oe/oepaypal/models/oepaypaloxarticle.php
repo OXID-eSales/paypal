@@ -47,6 +47,7 @@ class oePayPalOxArticle extends oePayPalOxArticle_parent
 
     /**
      * Gets stock amount for article
+     *
      * @return float
      */
     public function getStockAmount()

@@ -20,7 +20,7 @@
  */
 
 /**
- * PayPal oxUser class
+ * PayPal oxUser class.
  */
 class oePayPalOxUser extends oePayPalOxUser_parent
 {
@@ -112,7 +112,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Returns user from session associated with current PayPal order
+     * Returns user from session associated with current PayPal order.
      *
      * @return oxUser
      */
@@ -124,10 +124,9 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Creates user from PayPal data
+     * Creates user from PayPal data.
      *
-     * @param oePayPalResponseGetExpressCheckoutDetails $oPayPalData - data returned from PayPal
-     *
+     * @param oePayPalResponseGetExpressCheckoutDetails $oPayPalData Data returned from PayPal.
      */
     public function createPayPalUser($oPayPalData)
     {
@@ -162,9 +161,9 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Prepare address data array from PayPal response data
+     * Prepare address data array from PayPal response data.
      *
-     * @param oePayPalResponseGetExpressCheckoutDetails $oPayPalData - PayPal data
+     * @param oePayPalResponseGetExpressCheckoutDetails $oPayPalData PayPal data.
      *
      * @return array
      */
@@ -204,9 +203,9 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Check required fields
+     * Check required fields.
      *
-     * @param array $aAddressData - PayPal data
+     * @param array $aAddressData PayPal data.
      *
      * @return bool
      */
@@ -225,9 +224,9 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Split street nr from address
+     * Split street nr from address.
      *
-     * @param string $sShipToStreet address string
+     * @param string $sShipToStreet Address string.
      *
      * @return array
      */
@@ -238,7 +237,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Returns true if user has callback state
+     * Returns true if user has callback state.
      *
      * @return bool
      */
@@ -248,9 +247,9 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Returns user group list
+     * Returns user group list.
      *
-     * @param $sOxId oxId identifier
+     * @param string $sOxId oxId identifier.
      *
      * @return oxList
      */
@@ -270,9 +269,9 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     }
 
     /**
-     * Initializes call back user
+     * Initializes call back user.
      *
-     * @param array $aPayPalData callback user data
+     * @param array $aPayPalData Callback user data.
      *
      * @return null
      */

@@ -296,7 +296,8 @@ class oePayPalPaymentValidator
     }
 
     /**
-     * Checks whether user is assigned to given groups array
+     * Checks whether user is assigned to given groups array.
+     *
      * @param oxList $oGroups
      *
      * @return bool
@@ -332,5 +333,4 @@ class oePayPalPaymentValidator
 
         return $sCountryId;
     }
-
 }

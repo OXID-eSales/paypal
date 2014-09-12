@@ -28,19 +28,21 @@ class oePayPalOutOfStockValidator
     /**
      * Basket object
      *
-     * @var mixed
+     * @var object
      */
     private $_oBasket;
 
     /**
      * Level of empty stock level
      *
-     * @var integer
+     * @var int
      */
     private $_iEmptyStockLevel;
 
     /**
-     * @param mixed $iEmptyStockLevel
+     * Sets empty stock level.
+     *
+     * @param int $iEmptyStockLevel
      */
     public function setEmptyStockLevel($iEmptyStockLevel)
     {
@@ -48,7 +50,9 @@ class oePayPalOutOfStockValidator
     }
 
     /**
-     * @return mixed
+     * Returns empty stock level.
+     *
+     * @return int
      */
     public function getEmptyStockLevel()
     {
@@ -56,7 +60,9 @@ class oePayPalOutOfStockValidator
     }
 
     /**
-     * @param mixed $oBasket
+     * Sets basket object.
+     *
+     * @param object $oBasket
      */
     public function setBasket($oBasket)
     {
@@ -64,7 +70,9 @@ class oePayPalOutOfStockValidator
     }
 
     /**
-     * @return mixed
+     * Returns basket object.
+     *
+     * @return object
      */
     public function getBasket()
     {
@@ -72,7 +80,9 @@ class oePayPalOutOfStockValidator
     }
 
     /**
-     * Checks if basket has Articles that are out of stock
+     * Checks if basket has Articles that are out of stock.
+     *
+     * @return bool
      */
     public function hasOutOfStockArticles()
     {
@@ -90,5 +100,4 @@ class oePayPalOutOfStockValidator
 
         return $blResult;
     }
-
 }

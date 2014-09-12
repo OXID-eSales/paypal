@@ -52,7 +52,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     }
 
     /**
-     *
+     * Updates order number.
      *
      * @return bool
      */
@@ -81,10 +81,11 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     }
 
     /**
-     * Delete order together with PayPal order data
+     * Delete order together with PayPal order data.
      *
-     * @param null $sOxId
-     * @return bool|void
+     * @param string $sOxId
+     *
+     * @return null
      */
     public function delete($sOxId = null)
     {
@@ -95,9 +96,8 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     /**
      * Updates order transaction status, ID and date.
      *
-     * @param string $sTransactionId order transaction ID
-     * @param string $sDate order transaction date
-     *
+     * @param string $sTransactionId Order transaction ID
+     * @param string $sDate          Order transaction date
      */
     protected function _setPaymentInfoPayPalOrder($sTransactionId, $sDate)
     {
@@ -113,15 +113,11 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     }
 
     /**
-     * Finalizes PayPal order
+     * Finalizes PayPal order.
      *
-     * @param  oePayPalResponseDoExpressCheckoutPayment $oResult PayPal results array
-     * @param oxUser $oUser User object
-     * @param oxBasket $oBasket Basket object
-     * @param oxPayment $oPayment Payment object
-     * @param string $sTransactionMode transaction mode Sale|Authorization
-     *
-     * @return null
+     * @param oePayPalResponseDoExpressCheckoutPayment $oResult          PayPal results array.
+     * @param oxBasket                                 $oBasket          Basket object.
+     * @param string                                   $sTransactionMode Transaction mode Sale|Authorization.
      */
     public function finalizePayPalOrder($oResult, $oBasket, $sTransactionMode)
     {
@@ -171,7 +167,6 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
         $this->getSession()->deleteVariable("oepaypal-payerId");
         $this->getSession()->deleteVariable("oepaypal-userId");
         $this->getSession()->deleteVariable('oepaypal-basketAmount');
-
     }
 
     /**
@@ -180,7 +175,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      *
      * @param oxbasket $oBasket basket object
      *
-     * @return null
+     * @return int
      */
     public function validateDelivery($oBasket)
     {
@@ -202,9 +197,9 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     }
 
     /**
-     * Returns PayPal order object
+     * Returns PayPal order object.
      *
-     * @param null $sOxId
+     * @param string $sOxId
      *
      * @return oePayPalPayPalOrder|null
      */
@@ -230,7 +225,9 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     }
 
     /**
-     * Returns PayPal Authorization id
+     * Returns PayPal Authorization id.
+     *
+     * @return string
      */
     public function getAuthorizationId()
     {
@@ -238,10 +235,11 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     }
 
     /**
-     * Checks whether PayPal payment is available
-     * @param $oUser
-     * @param $dBasketPrice
-     * @param $sShippingId
+     * Checks whether PayPal payment is available.
+     *
+     * @param object $oUser
+     * @param double $dBasketPrice
+     * @param string $sShippingId
      *
      * @return bool
      */
@@ -260,9 +258,10 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
 
     /**
      * Checks whether Empty payment is available.
-     * @param $sShippingId
-     * @param $dBasketPrice
-     * @param $oUser
+     *
+     * @param object $oUser
+     * @param double $dBasketPrice
+     * @param string $sShippingId
      *
      * @return bool
      */
@@ -278,5 +277,4 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
 
         return $blValid;
     }
-
 }

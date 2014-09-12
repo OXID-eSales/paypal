@@ -25,11 +25,10 @@
 class oePayPalOxAddress extends oePayPalOxAddress_parent
 {
     /**
-     * Creates user shipping address from PayPal data and set to session
+     * Creates user shipping address from PayPal data and set to session.
      *
-     * @param oePayPalResponseGetExpressCheckoutDetails $oDetails - PayPal data
-     * @param string $sUserId - user id
-     *
+     * @param oePayPalResponseGetExpressCheckoutDetails $oDetails PayPal data.
+     * @param string                                    $sUserId  user id.
      */
     public function createPayPalAddress($oDetails, $sUserId)
     {
@@ -56,7 +55,7 @@ class oePayPalOxAddress extends oePayPalOxAddress_parent
     }
 
     /**
-     * Prepare address data array from PayPal response data
+     * Prepare address data array from PayPal response data.
      *
      * @param oePayPalResponseGetExpressCheckoutDetails $oDetails - PayPal data
      *
@@ -95,9 +94,9 @@ class oePayPalOxAddress extends oePayPalOxAddress_parent
     }
 
     /**
-     * Check required fields
+     * Check required fields.
      *
-     * @param array $aAddressData - PayPal data
+     * @param array $aAddressData - PayPal data.
      *
      * @return bool
      */
@@ -116,6 +115,13 @@ class oePayPalOxAddress extends oePayPalOxAddress_parent
         return $blResult;
     }
 
+    /**
+     * Checks if exists PayPal address.
+     *
+     * @param array $aAddressData
+     *
+     * @return bool|string
+     */
     protected function _existPayPalAddress($aAddressData)
     {
         $oDb = oxDb::getDb();

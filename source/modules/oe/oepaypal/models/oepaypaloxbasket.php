@@ -80,7 +80,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     }
 
     /**
-     * Returns payment costs netto or brutto value
+     * Returns payment costs netto or brutto value.
+     *
      * @return double
      */
     public function getPayPalPaymentCosts()
@@ -96,7 +97,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     }
 
     /**
-     * Returns Trusted shops costs netto or brutto value
+     * Returns Trusted shops costs netto or brutto value.
+     *
      * @return double
      */
     public function getPayPalTsProtectionCosts()
@@ -171,7 +173,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     }
 
     /**
-     * Returns absolute VAT value
+     * Returns absolute VAT value.
+     *
      * @return float
      */
     public function getPayPalBasketVatValue()
@@ -188,6 +191,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
 
     /**
      * Return products VAT.
+     *
      * @return double
      */
     public function getPayPalProductVat()
@@ -199,6 +203,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
 
     /**
      * Return wrapping VAT.
+     *
      * @return double
      */
     public function getPayPalWrappingVat()
@@ -215,6 +220,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
 
     /**
      * Return gift card VAT.
+     *
      * @return double
      */
     public function getPayPalGiftCardVat()
@@ -231,6 +237,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
 
     /**
      * Return payment VAT.
+     *
      * @return double
      */
     public function getPayPalPayCostVat()
@@ -246,6 +253,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
 
     /**
      * Return payment VAT.
+     *
      * @return double
      */
     public function getPayPalTsProtectionCostVat()
@@ -257,5 +265,4 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
         }
         return $dVAT;
     }
-
 }

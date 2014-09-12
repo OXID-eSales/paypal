@@ -113,7 +113,7 @@ class oePayPalService
     /**
      * Executes "SetExpressCheckout". Returns response object from PayPal.
      *
-     * @var oePayPalPayPalRequest $oRequest
+     * @param oePayPalPayPalRequest $oRequest
      *
      * @return oePayPalResponseSetExpressCheckout
      */
@@ -131,7 +131,7 @@ class oePayPalService
     /**
      * Executes "GetExpressCheckoutDetails". Returns response object from PayPal.
      *
-     * @var oePayPalPayPalRequest $oRequest
+     * @param oePayPalPayPalRequest $oRequest
      *
      * @return oePayPalResponseGetExpressCheckoutDetails
      */
@@ -149,7 +149,7 @@ class oePayPalService
     /**
      * Executes "DoExpressCheckoutPayment". Returns response object from PayPal.
      *
-     * @var oePayPalPayPalRequest $oRequest
+     * @param oePayPalPayPalRequest $oRequest
      *
      * @return oePayPalResponseDoExpressCheckoutPayment
      */

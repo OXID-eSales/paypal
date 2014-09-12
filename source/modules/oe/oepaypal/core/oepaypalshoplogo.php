@@ -20,69 +20,70 @@
  */
 
 /**
- * PayPal shop logo class
+ * PayPal shop logo class.
  */
 class oePayPalShopLogo
 {
     /**
-     * Suffix for image resizing
+     * Suffix for image resizing.
      *
      * @var string
      */
     protected $_suffix = "resized_";
 
     /**
-     * Image directory to work in
+     * Image directory to work in.
      *
      * @var string
      */
     protected $_sImageDir = null;
 
     /**
-     * Image directory to work in
+     * Image directory to work in.
      *
      * @var string
      */
     protected $_sImageDirUrl = null;
 
     /**
-     * Image name
+     * Image name.
+     *
      * @var string
      */
     protected $_sImageName = null;
 
     /**
-     * Path to an image, not null only when it exists
+     * Path to an image, not null only when it exists.
      *
      * @var string
      */
     protected $_sImagePath = null;
     /**
-     * Image maximum width
+     * Image maximum width.
      *
      * @var int
      */
     protected $_iWidth = 190;
 
     /**
-     * Image maximum height
+     * Image maximum height.
      *
      * @var int
      */
     protected $_iHeight = 160;
 
     /**
-     * Provided image handler
+     * Provided image handler.
      *
-     * @var object|oxUtilsPic
+     * @var oxUtilsPic
      */
     protected $_oImageHandler = null;
 
     /**
-     * Set image handler to handle images
-     * Needs to have resizeImage method
+     * Set image handler to handle images.
+     * Needs to have resizeImage method.
      *
-     * @param $oImageHandler
+     * @param oxUtilsPic $oImageHandler
      */
     public function setImageHandler($oImageHandler)
     {
@@ -90,7 +91,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Returns image handler object
+     * Returns image handler object.
      *
      * @return object|oxUtilsPic
      */
@@ -100,9 +101,9 @@ class oePayPalShopLogo
     }
 
     /**
-     * Sets image maximum width
+     * Sets image maximum width.
      *
-     * @param $iWidth
+     * @param int $iWidth
      */
     public function setWidth($iWidth)
     {
@@ -110,7 +111,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Return image maximum width
+     * Return image maximum width.
      *
      * @return int
      */
@@ -120,9 +121,9 @@ class oePayPalShopLogo
     }
 
     /**
-     * Sets image maximum height
+     * Sets image maximum height.
      *
-     * @param $iHeight
+     * @param int $iHeight
      */
     public function setHeight($iHeight)
     {
@@ -130,7 +131,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Return image maximum height
+     * Return image maximum height.
      *
      * @return int
      */
@@ -140,7 +141,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Calculates if logo should be resized
+     * Calculates if logo should be resized.
      *
      * @return bool
      */
@@ -163,9 +164,9 @@ class oePayPalShopLogo
     }
 
     /**
-     * Sets image directory
+     * Sets image directory.
      *
-     * @param $sImagePath string
+     * @param string $sImagePath
      */
     public function setImageDir($sImagePath)
     {
@@ -173,7 +174,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Returns image directory
+     * Returns image directory.
      *
      * @return string
      */
@@ -183,6 +184,8 @@ class oePayPalShopLogo
     }
 
     /**
+     * Set image directory URL.
+     *
      * @param string $sImageDirUrl
      */
     public function setImageDirUrl($sImageDirUrl)
@@ -191,6 +194,8 @@ class oePayPalShopLogo
     }
 
     /**
+     * Getter for image directory URL.
+     *
      * @return string
      */
     public function getImageDirUrl()
@@ -199,9 +204,9 @@ class oePayPalShopLogo
     }
 
     /**
-     * Set name of an image
+     * Set name of an image.
      *
-     * @param $sImageName string
+     * @param string $sImageName
      */
     public function setImageName($sImageName)
     {
@@ -209,7 +214,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Get name of an image
+     * Get name of an image.
      *
      * @return string
      */
@@ -219,7 +224,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Gives new name for image to be resized
+     * Gives new name for image to be resized.
      *
      * @return string
      */
@@ -234,7 +239,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Returns path to an image
+     * Returns path to an image.
      *
      * @return null|string
      */
@@ -253,7 +258,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Returns path to an image
+     * Returns path to an image.
      *
      * @return null|string
      */
@@ -269,7 +274,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Returns resized image path
+     * Returns resized image path.
      *
      * @return null|string
      */
@@ -286,7 +291,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Returns resized image path
+     * Returns resized image path.
      *
      * @return null|string
      */
@@ -302,7 +307,7 @@ class oePayPalShopLogo
     }
 
     /**
-     * Get logo image path for PayPal express checkout
+     * Get logo image path for PayPal express checkout.
      *
      * @return string
      */
@@ -328,8 +333,10 @@ class oePayPalShopLogo
     }
 
     /**
-     * Checks if given image file exists
-     * @param $sPath
+     * Checks if given image file exists.
+     *
+     * @param string $sPath
+     *
      * @return bool
      */
     protected function _fileExists($sPath)
@@ -340,7 +347,8 @@ class oePayPalShopLogo
     /**
      * Returns array with width and height of given image
      *
-     * @param $sImagePath
+     * @param string $sImagePath
+     *
      * @return array
      */
     protected function _getImageSize($sImagePath)

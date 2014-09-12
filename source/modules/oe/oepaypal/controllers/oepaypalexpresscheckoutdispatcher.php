@@ -213,7 +213,10 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     }
 
     /**
-     * @param $oBasket
+     * Returns transaction mode.
+     *
+     * @param oxBasket $oBasket
+     *
      * @return string
      */
     protected function _getTransactionMode($oBasket)
@@ -268,9 +271,9 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     }
 
     /**
-     *  Initialize new user from user data
+     *  Initialize new user from user data.
      *
-     * @param $aData User data array
+     * @param array $aData User data array.
      *
      * @return oxUser
      */
@@ -353,10 +356,10 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Sets delivery sets parameters to PayPal callback
      *
-     * @param oePayPalService $oPayPalService PayPal service
-     * @param oxDeliverySetList $aDeliverySetList Delivery list
-     * @param oxUser $oUser User object
-     * @param oxBasket $oBasket Basket object
+     * @param oePayPalService   $oPayPalService   PayPal service.
+     * @param oxDeliverySetList $aDeliverySetList Delivery list.
+     * @param oxUser            $oUser            User object.
+     * @param oxBasket          $oBasket          Basket object.
      *
      * @return int Total amount of deliveries
      */
@@ -475,8 +478,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Extracts shipping id from given parameter
      *
-     * @param string $sShippingOptionName shipping option name, which comes from PayPal
-     * @param string $oUser
+     * @param string $sShippingOptionName Shipping option name, which comes from PayPal.
+     * @param oxUser $oUser               User object.
      *
      * @return string
      */
@@ -552,8 +555,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Creates user address and sets address id into session
      *
-     * @param oePayPalResponseGetExpressCheckoutDetails $oDetails user address info
-     * @param string $sUserId user id
+     * @param oePayPalResponseGetExpressCheckoutDetails $oDetails User address info.
+     * @param string                                    $sUserId  User id.
      *
      * @return bool
      */
@@ -566,7 +569,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Checking if PayPal payment is available in user country
      *
-     * @param oxUser $oUser User object
+     * @param oxUser $oUser User object.
      *
      * @return boolean
      */
@@ -585,11 +588,11 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     }
 
     /**
-     * Checks if selected delivery set has PayPal payment
+     * Checks if selected delivery set has PayPal payment.
      *
-     * @param string $sDelSetId Delivery set ID
-     * @param double $dBasketPrice Basket price
-     * @param oxUser $oUser User object
+     * @param string $sDelSetId    Delivery set ID.
+     * @param double $dBasketPrice Basket price.
+     * @param oxUser $oUser        User object.
      *
      * @return boolean
      */
@@ -607,7 +610,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Disables PayPal payment in PayPal side
      *
-     * @param oePayPalService $oPayPalService PayPal service
+     * @param oePayPalService $oPayPalService PayPal service.
      *
      * @return null
      */
@@ -621,7 +624,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Get delivery set list for PayPal callback
      *
-     * @param oxUser $oUser User object
+     * @param oxUser $oUser User object.
      *
      * @return array
      */
@@ -633,7 +636,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     }
 
     /**
-     * Returns user shipping address country id
+     * Returns user shipping address country id.
+     *
      * @param oxUser $oUser
      *
      * @return string
@@ -650,9 +654,10 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
     /**
      * Checks whether PayPal payment is available
-     * @param $oUser
-     * @param $dBasketPrice
-     * @param $sShippingId
+     *
+     * @param oxUser $oUser
+     * @param double $dBasketPrice
+     * @param string $sShippingId
      *
      * @return bool
      */
@@ -671,9 +676,10 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
     /**
      * Checks whether Empty payment is available.
-     * @param $sShippingId
-     * @param $dBasketPrice
-     * @param $oUser
+     *
+     * @param oxUser $oUser
+     * @param double $dBasketPrice
+     * @param string $sShippingId
      *
      * @return bool
      */

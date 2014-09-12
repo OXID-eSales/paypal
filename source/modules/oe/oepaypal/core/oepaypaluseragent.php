@@ -34,14 +34,14 @@ class oePayPalUserAgent
     protected $_sDeviceType = null;
 
     /**
-     * Mobile device types
+     * Mobile device types.
      *
      * @var string
      */
     protected $_sMobileDevicesTypes = 'iphone|ipod|android|webos|htc|fennec|iemobile|blackberry|symbianos|opera mobi';
 
     /**
-     * Function returns all supported mobile devices types
+     * Function returns all supported mobile devices types.
      *
      * @return string
      */
@@ -51,7 +51,7 @@ class oePayPalUserAgent
     }
 
     /**
-     * Returns device type: mobile | desktop
+     * Returns device type: mobile | desktop.
      *
      * @return string
      */
@@ -65,7 +65,9 @@ class oePayPalUserAgent
     }
 
     /**
-     * Set device type
+     * Set device type.
+     *
+     * @param string $sDeviceType
      */
     public function setDeviceType($sDeviceType)
     {
@@ -73,7 +75,9 @@ class oePayPalUserAgent
     }
 
     /**
-     * Set mobile device types
+     * Set mobile device types.
+     *
+     * @param string $sMobileDeviceTypes
      */
     public function setMobileDeviceTypes($sMobileDeviceTypes)
     {
@@ -81,7 +85,7 @@ class oePayPalUserAgent
     }
 
     /**
-     * Detects device type from global variable. Device types: mobile, desktop
+     * Detects device type from global variable. Device types: mobile, desktop.
      *
      * @return string
      */

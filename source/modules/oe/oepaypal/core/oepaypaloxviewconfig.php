@@ -20,43 +20,51 @@
  */
 
 /**
- * oxViewConfig class wrapper for PayPal module
+ * oxViewConfig class wrapper for PayPal module.
  */
 class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
 {
+    /** @var null oePayPalConfig */
     protected $_oPayPalConfig = null;
 
     /**
-     * PayPal payment object
+     * PayPal payment object.
+     *
      * @var bool
      */
     protected $_oPayPalPayment = null;
 
     /**
-     * Status if Express checkout is ON
+     * Status if Express checkout is ON.
+     *
      * @var bool
      */
     protected $_blExpressCheckoutEnabled = null;
 
     /**
-     * Status if Standard checkout is ON
+     * Status if Standard checkout is ON.
+     *
      * @var bool
      */
     protected $_blStandardCheckoutEnabled = null;
 
     /**
-     * Status if PayPal is ON
+     * Status if PayPal is ON.
+     *
      * @var bool
      */
     protected $_blPayPalEnabled = null;
 
     /**
-     * PayPal Payment Validator object
+     * PayPal Payment Validator object.
+     *
      * @var oePayPalPaymentValidator
      */
     protected $_oPaymentValidator = null;
 
     /**
+     * Set oePayPalPaymentValidator.
+     *
      * @param oePayPalPaymentValidator $oPaymentValidator
      */
     public function setPaymentValidator($oPaymentValidator)
@@ -65,6 +73,8 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
+     * Get oePayPalPaymentValidator. Create new if does not exist.
+     *
      * @return oePayPalPaymentValidator
      */
     public function getPaymentValidator()
@@ -76,7 +86,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns TRUE if express checkout is enabled
+     * Returns TRUE if express checkout is enabled.
      * Does payment amount or user country/group check.
      *
      * @return bool
@@ -100,7 +110,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns TRUE if express checkout and displaying it in mini basket is enabled
+     * Returns TRUE if express checkout and displaying it in mini basket is enabled.
      *
      * @return bool
      */
@@ -115,7 +125,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns TRUE if express checkout is enabled
+     * Returns TRUE if express checkout is enabled.
      * Does payment amount or user country/group check.
      *
      * @return bool
@@ -164,7 +174,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns PayPal payment description text
+     * Returns PayPal payment description text.
      *
      * @return string
      */
@@ -178,7 +188,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns PayPal payment object
+     * Returns PayPal payment object.
      *
      * @return oxPayment
      */
@@ -198,7 +208,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns state if order info should be send to PayPal
+     * Returns state if order info should be send to PayPal.
      *
      * @return bool
      */
@@ -208,7 +218,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns default (on/off) state if order info should be send to PayPal
+     * Returns default (on/off) state if order info should be send to PayPal.
      *
      * @return bool
      */
@@ -218,7 +228,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns PayPal config
+     * Returns PayPal config.
      *
      * @return oePayPalConfig
      */
@@ -232,7 +242,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     }
 
     /**
-     * Returns current URL
+     * Returns current URL.
      *
      * @return string
      */

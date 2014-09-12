@@ -25,7 +25,8 @@
 class oePayPalLogger
 {
     /**
-     * Logger session id
+     * Logger session id.
+     *
      * @var string
      */
     protected $_sLoggerSessionId;
@@ -36,11 +37,9 @@ class oePayPalLogger
     protected $_sLogTitle = '';
 
     /**
-     * Sets logger session id
+     * Sets logger session id.
      *
      * @param string $sId session id
-     *
-     * @return null
      */
     public function setLoggerSessionId($sId)
     {
@@ -48,7 +47,7 @@ class oePayPalLogger
     }
 
     /**
-     * Returns loggers session id
+     * Returns loggers session id.
      *
      * @return string
      */
@@ -58,7 +57,7 @@ class oePayPalLogger
     }
 
     /**
-     * Returns full log file path
+     * Returns full log file path.
      *
      * @return string
      */
@@ -68,11 +67,9 @@ class oePayPalLogger
     }
 
     /**
-     * Set log title
+     * Set log title.
      *
      * @param string $sTitle Log title
-     *
-     * @return bool
      */
     public function setTitle($sTitle)
     {
@@ -80,7 +77,7 @@ class oePayPalLogger
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -90,7 +87,7 @@ class oePayPalLogger
     }
 
     /**
-     * Writes log message
+     * Writes log message.
      *
      * @param mixed $mLogData logger data
      *

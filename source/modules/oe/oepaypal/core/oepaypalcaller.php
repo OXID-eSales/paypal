@@ -25,25 +25,28 @@
 class oePayPalCaller
 {
     /**
-     * Service call parameters
+     * Service call parameters.
+     *
      * @var array
      */
     protected $_aParams = array();
 
     /**
-     * PayPal logger
+     * PayPal logger.
+     *
      * @var oePayPalLogger
      */
     protected $_oLogger = null;
 
     /**
      * PayPal curl object.
+     *
      * @var object
      */
     protected $_oCurl = null;
 
     /**
-     * Setter for logger
+     * Setter for logger.
      *
      * @param oePayPalLogger $oLogger logger
      */
@@ -53,7 +56,7 @@ class oePayPalCaller
     }
 
     /**
-     * Getter for PayPal logger
+     * Getter for PayPal logger.
      *
      * @return oePayPalLogger
      */
@@ -65,7 +68,7 @@ class oePayPalCaller
     /**
      * Sets PayPal curl object.
      *
-     * @parameter object curl PayPal curl object.
+     * @param oePayPalCurl $oPayPalCurl PayPal curl object.
      */
     public function setCurl($oPayPalCurl)
     {
@@ -90,8 +93,8 @@ class oePayPalCaller
     /**
      * PayPal request parameters setter.
      *
-     * @param string $sParamName parameter name
-     * @param mixed $mParamValue parameter value
+     * @param string $sParamName  parameter name
+     * @param mixed  $mParamValue parameter value
      *
      * @return null
      */
@@ -113,7 +116,7 @@ class oePayPalCaller
     }
 
     /**
-     * Returns PayPal request parameters array
+     * Returns PayPal request parameters array.
      *
      * @return array
      */
@@ -148,6 +151,8 @@ class oePayPalCaller
     }
 
     /**
+     * Set method name to execute like DoExpressCheckoutPayment or GetExpressCheckoutDetails.
+     *
      * @param string $sName Name of a method
      */
     protected function _setMethod($sName)
@@ -158,7 +163,7 @@ class oePayPalCaller
     }
 
     /**
-     * Validates response from PayPal errors
+     * Validates response from PayPal errors.
      *
      * @param array $aResponse
      *
@@ -176,7 +181,7 @@ class oePayPalCaller
     }
 
     /**
-     * Outputs given request data
+     * Outputs given request data.
      *
      * @param string $sMethodName
      *
@@ -196,9 +201,9 @@ class oePayPalCaller
     }
 
     /**
-     * Logs given request and responds parameters to log file
+     * Logs given request and responds parameters to log file.
      *
-     * @param array $aValue request / response parameters
+     * @param array  $aValue request / response parameters
      * @param string $sTitle section title in log file
      *
      * @return null
@@ -212,7 +217,7 @@ class oePayPalCaller
     }
 
     /**
-     * Set parameter from request
+     * Set parameter from request.
      *
      * @param oePayPalPayPalRequest $oRequest request
      */

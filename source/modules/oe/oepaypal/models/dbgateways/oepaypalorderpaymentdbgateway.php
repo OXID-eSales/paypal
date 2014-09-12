@@ -25,11 +25,11 @@
 class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
 {
     /**
-     * Save PayPal order payment data to database
+     * Save PayPal order payment data to database.
      *
      * @param array $aData
      *
-     * return int
+     * @return int
      */
     public function save($aData)
     {
@@ -55,11 +55,11 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Load PayPal order payment data from Db
+     * Load PayPal order payment data from Db.
      *
-     * @param string $sPaymentId order id
+     * @param string $sPaymentId Order id.
      *
-     * return array
+     * @return array
      */
     public function load($sPaymentId)
     {
@@ -70,11 +70,11 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Load PayPal order payment data from Db
+     * Load PayPal order payment data from Db.
      *
-     * @param string $sTransactionId order id
+     * @param string $sTransactionId Order id.
      *
-     * return array
+     * @return array
      */
     public function loadByTransactionId($sTransactionId)
     {
@@ -84,9 +84,9 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
     }
 
     /**
-     * Delete PayPal order payment data from database
+     * Delete PayPal order payment data from database.
      *
-     * @param string $sPaymentId order id
+     * @param string $sPaymentId Order id.
      *
      * @return bool
      */
@@ -111,11 +111,11 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
 
 
     /**
-     * Load PayPal order payment data from Db
+     * Load PayPal order payment data from Db.
      *
-     * @param string $sOrderId order id
+     * @param string $sOrderId Order id.
      *
-     * return array
+     * @return array
      */
     public function getList($sOrderId)
     {

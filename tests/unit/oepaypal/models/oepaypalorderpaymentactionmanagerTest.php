@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOxState class.
@@ -36,16 +36,16 @@ class Unit_oePayPal_models_oePayPalOrderPaymentActionManagerTest extends OxidTes
     public function isActionValid_dataProvider()
     {
         return array(
-            array( 'capture', 1000, 0,    'Completed', 'refund', true ),
-            array( 'capture', 1000, 50,   'Completed', 'refund', true ),
-            array( 'capture', 1000, 1000, 'Completed', 'refund', false ),
-            array( 'capture', 0,    0,    'Completed', 'refund', false ),
-            array( 'capture', 0,    20,   'Completed', 'refund', false ),
-            array( 'capture', -30,  20,   'Completed', 'refund', false ),
-            array( 'capture', 1000, 0,    'Pending',   'refund', false ),
-            array( 'void',    1000, 0,    'Voided',    'refund', false ),
-            array( 'authorization', 1000, 0, 'Pending', 'refund', false ),
-            array( 'testAction',    -99, -8, 'test',    'testAction', false ),
+            array('capture', 1000, 0, 'Completed', 'refund', true),
+            array('capture', 1000, 50, 'Completed', 'refund', true),
+            array('capture', 1000, 1000, 'Completed', 'refund', false),
+            array('capture', 0, 0, 'Completed', 'refund', false),
+            array('capture', 0, 20, 'Completed', 'refund', false),
+            array('capture', -30, 20, 'Completed', 'refund', false),
+            array('capture', 1000, 0, 'Pending', 'refund', false),
+            array('void', 1000, 0, 'Voided', 'refund', false),
+            array('authorization', 1000, 0, 'Pending', 'refund', false),
+            array('testAction', -99, -8, 'test', 'testAction', false),
         );
     }
 
@@ -54,19 +54,19 @@ class Unit_oePayPal_models_oePayPalOrderPaymentActionManagerTest extends OxidTes
      *
      * @dataProvider isActionValid_dataProvider
      */
-    public function testIsActionAvailable( $sPayment, $dAmount , $dRefunded, $sState, $sAction, $dIsValid )
+    public function testIsActionAvailable($sPayment, $dAmount, $dRefunded, $sState, $sAction, $dIsValid)
     {
         $oPayment = new oePayPalOrderPayment();
 
-        $oPayment->setAction( $sPayment );
-        $oPayment->setAmount( $dAmount );
-        $oPayment->setRefundedAmount( $dRefunded );
-        $oPayment->setStatus( $sState );
+        $oPayment->setAction($sPayment);
+        $oPayment->setAmount($dAmount);
+        $oPayment->setRefundedAmount($dRefunded);
+        $oPayment->setStatus($sState);
 
         $oActionManager = new oePayPalOrderPaymentActionManager();
-        $oActionManager->setPayment( $oPayment );
+        $oActionManager->setPayment($oPayment);
 
-        $this->assertEquals( $dIsValid, $oActionManager->isActionAvailable( $sAction ) );
+        $this->assertEquals($dIsValid, $oActionManager->isActionAvailable($sAction));
     }
 
 }

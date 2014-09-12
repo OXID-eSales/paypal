@@ -37,14 +37,14 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return bool
      */
-    public function isRealPayPalUser( $sUserEmail )
+    public function isRealPayPalUser($sUserEmail)
     {
         $oDb = oxDb::getDb();
-        $sQ = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = " . $oDb->quote( $sUserEmail ) . " AND `oxpassword` != ''";
-        if ( !$this->getConfig()->getConfigParam( 'blMallUsers' ) ) {
-            $sQ .= " AND `oxshopid` = " . $oDb->quote( $this->getConfig()->getShopId() );
+        $sQ = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = " . $oDb->quote($sUserEmail) . " AND `oxpassword` != ''";
+        if (!$this->getConfig()->getConfigParam('blMallUsers')) {
+            $sQ .= " AND `oxshopid` = " . $oDb->quote($this->getConfig()->getShopId());
         }
-        if ( $sUserId = $oDb->getOne( $sQ ) ){
+        if ($sUserId = $oDb->getOne($sQ)) {
             return $sUserId;
         }
         return false;
@@ -58,17 +58,17 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return bool
      */
-    public function isSamePayPalUser( $oDetails )
+    public function isSamePayPalUser($oDetails)
     {
         $aUserData = array();
-        $aUserData[] = getStr()->html_entity_decode( $this->oxuser__oxfname->value );
-        $aUserData[] = getStr()->html_entity_decode( $this->oxuser__oxlname->value );
+        $aUserData[] = getStr()->html_entity_decode($this->oxuser__oxfname->value);
+        $aUserData[] = getStr()->html_entity_decode($this->oxuser__oxlname->value);
 
         $aCompareData = array();
         $aCompareData[] = $oDetails->getFirstName();
         $aCompareData[] = $oDetails->getLastName();
 
-        return ( ($aUserData == $aCompareData) && $this->isSameAddressPayPalUser( $oDetails ) );
+        return (($aUserData == $aCompareData) && $this->isSameAddressPayPalUser($oDetails));
     }
 
     /**
@@ -79,14 +79,14 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return bool
      */
-    public function isSameAddressPayPalUser( $oDetails )
+    public function isSameAddressPayPalUser($oDetails)
     {
         $aUserData = array();
-        $aUserData[] = getStr()->html_entity_decode( $this->oxuser__oxstreet->value );
-        $aUserData[] = getStr()->html_entity_decode($this->oxuser__oxstreetnr->value );
-        $aUserData[] = getStr()->html_entity_decode($this->oxuser__oxcity->value );
+        $aUserData[] = getStr()->html_entity_decode($this->oxuser__oxstreet->value);
+        $aUserData[] = getStr()->html_entity_decode($this->oxuser__oxstreetnr->value);
+        $aUserData[] = getStr()->html_entity_decode($this->oxuser__oxcity->value);
 
-        $aStreet = $this->_splitShipToStreetPayPalUser( $oDetails->getShipToStreet() );
+        $aStreet = $this->_splitShipToStreetPayPalUser($oDetails->getShipToStreet());
 
         $aCompareData = array();
         $aCompareData[] = $aStreet['street'];
@@ -104,9 +104,9 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return bool
      */
-    public function isSameAddressUserPayPalUser( $oDetails )
+    public function isSameAddressUserPayPalUser($oDetails)
     {
-        $aFullUserName = getStr()->html_entity_decode( $this->oxuser__oxfname->value ) . ' ' . getStr()->html_entity_decode( $this->oxuser__oxlname->value );
+        $aFullUserName = getStr()->html_entity_decode($this->oxuser__oxfname->value) . ' ' . getStr()->html_entity_decode($this->oxuser__oxlname->value);
 
         return $aFullUserName == $oDetails->getShipToName();
     }
@@ -118,8 +118,8 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      */
     public function loadUserPayPalUser()
     {
-        if ( ( $sUserId = oxRegistry::getSession()->getVariable( "oepaypal-userId" ) ) ) {
-            return $this->load( $sUserId );
+        if (($sUserId = oxRegistry::getSession()->getVariable("oepaypal-userId"))) {
+            return $this->load($sUserId);
         }
     }
 
@@ -129,35 +129,35 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      * @param oePayPalResponseGetExpressCheckoutDetails $oPayPalData - data returned from PayPal
      *
      */
-    public function createPayPalUser( $oPayPalData )
+    public function createPayPalUser($oPayPalData)
     {
-        $aUserData = $this->_prepareDataPayPalUser( $oPayPalData );
+        $aUserData = $this->_prepareDataPayPalUser($oPayPalData);
 
-        $sUserId = $this->getIdByUserName( $oPayPalData->getEmail() );
-        if ( $sUserId ){
-            $this->load( $sUserId );
+        $sUserId = $this->getIdByUserName($oPayPalData->getEmail());
+        if ($sUserId) {
+            $this->load($sUserId);
         }
 
-        $this->oxuser__oxactive   	= new oxField( 1 );
-        $this->oxuser__oxusername 	= new oxField( $oPayPalData->getEmail() );
-        $this->oxuser__oxfname    	= new oxField( $aUserData['oxfname'] );
-        $this->oxuser__oxlname    	= new oxField( $aUserData['oxlname'] );
-        $this->oxuser__oxfon      	= new oxField( $aUserData['oxfon'] );
-        $this->oxuser__oxsal      	= new oxField( $aUserData['oxsal'] );
-        $this->oxuser__oxcompany  	= new oxField( $aUserData['oxcompany'] );
-        $this->oxuser__oxstreet 	= new oxField( $aUserData['oxstreet'] );
-        $this->oxuser__oxstreetnr 	= new oxField( $aUserData['oxstreetnr'] );
-        $this->oxuser__oxcity     	= new oxField( $aUserData['oxcity'] );
-        $this->oxuser__oxzip       	= new oxField( $aUserData['oxzip'] );
-        $this->oxuser__oxcountryid	= new oxField( $aUserData['oxcountryid'] );
-        $this->oxuser__oxstateid 	= new oxField( $aUserData['oxstateid'] );
-        $this->oxuser__oxaddinfo 	= new oxField( $aUserData['oxaddinfo'] );
+        $this->oxuser__oxactive = new oxField(1);
+        $this->oxuser__oxusername = new oxField($oPayPalData->getEmail());
+        $this->oxuser__oxfname = new oxField($aUserData['oxfname']);
+        $this->oxuser__oxlname = new oxField($aUserData['oxlname']);
+        $this->oxuser__oxfon = new oxField($aUserData['oxfon']);
+        $this->oxuser__oxsal = new oxField($aUserData['oxsal']);
+        $this->oxuser__oxcompany = new oxField($aUserData['oxcompany']);
+        $this->oxuser__oxstreet = new oxField($aUserData['oxstreet']);
+        $this->oxuser__oxstreetnr = new oxField($aUserData['oxstreetnr']);
+        $this->oxuser__oxcity = new oxField($aUserData['oxcity']);
+        $this->oxuser__oxzip = new oxField($aUserData['oxzip']);
+        $this->oxuser__oxcountryid = new oxField($aUserData['oxcountryid']);
+        $this->oxuser__oxstateid = new oxField($aUserData['oxstateid']);
+        $this->oxuser__oxaddinfo = new oxField($aUserData['oxaddinfo']);
 
-        if ( $this->save() ) {
-            $this->_setAutoGroups( $this->oxuser__oxcountryid->value );
+        if ($this->save()) {
+            $this->_setAutoGroups($this->oxuser__oxcountryid->value);
 
             // and adding to group "oxidnotyetordered"
-            $this->addToGroup( "oxidnotyetordered" );
+            $this->addToGroup("oxidnotyetordered");
         }
     }
 
@@ -168,29 +168,29 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return array
      */
-    protected function _prepareDataPayPalUser( $oPayPalData )
+    protected function _prepareDataPayPalUser($oPayPalData)
     {
         $aUserData = array();
 
-        $oFullName = oxNew( 'oePayPalFullName', $oPayPalData->getShipToName() );
+        $oFullName = oxNew('oePayPalFullName', $oPayPalData->getShipToName());
 
         $aUserData['oxfname'] = $oFullName->getFirstName();
         $aUserData['oxlname'] = $oFullName->getLastName();
 
-        $aStreet = $this->_splitShipToStreetPayPalUser( $oPayPalData->getShipToStreet() );
+        $aStreet = $this->_splitShipToStreetPayPalUser($oPayPalData->getShipToStreet());
         $aUserData['oxstreet'] = $aStreet['street'];
         $aUserData['oxstreetnr'] = $aStreet['streetnr'];
 
         $aUserData['oxcity'] = $oPayPalData->getShipToCity();
 
-        $oCountry = oxNew( 'oxCountry' );
-        $sCountryId = $oCountry->getIdByCode( $oPayPalData->getShipToCountryCode() );
+        $oCountry = oxNew('oxCountry');
+        $sCountryId = $oCountry->getIdByCode($oPayPalData->getShipToCountryCode());
         $aUserData['oxcountryid'] = $sCountryId;
 
         $sStateId = '';
-        if ( $oPayPalData->getShipToState() ) {
-            $oState = oxNew( 'oxState' );
-            $sStateId = $oState->getIdByCode($oPayPalData->getShipToState(), $sCountryId );
+        if ($oPayPalData->getShipToState()) {
+            $oState = oxNew('oxState');
+            $sStateId = $oState->getIdByCode($oPayPalData->getShipToState(), $sCountryId);
         }
         $aUserData['oxstateid'] = $sStateId;
 
@@ -210,14 +210,13 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return bool
      */
-    protected function _checkRequiredFieldsPayPalUser( $aAddressData )
+    protected function _checkRequiredFieldsPayPalUser($aAddressData)
     {
-        $aReqFields = $this->getConfig()->getConfigParam( 'aMustFillFields' );
+        $aReqFields = $this->getConfig()->getConfigParam('aMustFillFields');
         $blResult = true;
 
-        foreach ($aReqFields as $sField)
-        {
-            if( strpos( $sField, 'oxuser__' ) === 0 && empty( $aAddressData[str_replace('oxuser__', '', $sField)] ) ){
+        foreach ($aReqFields as $sField) {
+            if (strpos($sField, 'oxuser__') === 0 && empty($aAddressData[str_replace('oxuser__', '', $sField)])) {
                 return false;
             }
         }
@@ -225,17 +224,17 @@ class oePayPalOxUser extends oePayPalOxUser_parent
         return $blResult;
     }
 
-     /**
+    /**
      * Split street nr from address
      *
      * @param string $sShipToStreet address string
      *
      * @return array
      */
-    protected function _splitShipToStreetPayPalUser( $sShipToStreet )
+    protected function _splitShipToStreetPayPalUser($sShipToStreet)
     {
-        $oAddress = oxNew( "oxAddress" );
-        return $oAddress->splitShipToStreetPayPalAddress( $sShipToStreet );
+        $oAddress = oxNew("oxAddress");
+        return $oAddress->splitShipToStreetPayPalAddress($sShipToStreet);
     }
 
     /**
@@ -255,17 +254,17 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return oxList
      */
-    public function getUserGroups( $sOxId = null )
+    public function getUserGroups($sOxId = null)
     {
-        if ( !$this->isCallBackUserPayPalUser() ) {
+        if (!$this->isCallBackUserPayPalUser()) {
             return parent::getUserGroups();
         }
 
-        if ( !$this->_oGroups ) {
-            $sViewName = getViewName( "oxgroups" );
-            $sSelect  = "select {$sViewName}.* from {$sViewName} where ({$sViewName}.oxid = 'oxidnotyetordered' OR {$sViewName}.oxid = 'oxidnewcustomer')";
-            $this->_oGroups = oxNew( 'oxlist', 'oxgroups' );
-            $this->_oGroups->selectString( $sSelect );
+        if (!$this->_oGroups) {
+            $sViewName = getViewName("oxgroups");
+            $sSelect = "select {$sViewName}.* from {$sViewName} where ({$sViewName}.oxid = 'oxidnotyetordered' OR {$sViewName}.oxid = 'oxidnewcustomer')";
+            $this->_oGroups = oxNew('oxlist', 'oxgroups');
+            $this->_oGroups->selectString($sSelect);
         }
         return $this->_oGroups;
     }
@@ -277,31 +276,31 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @return null
      */
-    public function initializeUserForCallBackPayPalUser( $aPayPalData )
+    public function initializeUserForCallBackPayPalUser($aPayPalData)
     {
         // setting mode..
         $this->_blCallBackUser = true;
 
         // setting data..
-        $aStreet = $this->_splitShipToStreetPayPalUser( $aPayPalData['SHIPTOSTREET'] );
+        $aStreet = $this->_splitShipToStreetPayPalUser($aPayPalData['SHIPTOSTREET']);
 
         // setting object id as it is requested later while processing user object
-        $this->setId( oxUtilsObject::getInstance()->generateUID() );
+        $this->setId(oxUtilsObject::getInstance()->generateUID());
 
-        $this->oxuser__oxstreet   = new oxField( $aStreet['street'] );
-        $this->oxuser__oxstreetnr = new oxField( $aStreet['streetnr'] );
-        $this->oxuser__oxcity     = new oxField( $aPayPalData['SHIPTOCITY'] );
-        $this->oxuser__oxzip      = new oxField( $aPayPalData['SHIPTOZIP'] );
+        $this->oxuser__oxstreet = new oxField($aStreet['street']);
+        $this->oxuser__oxstreetnr = new oxField($aStreet['streetnr']);
+        $this->oxuser__oxcity = new oxField($aPayPalData['SHIPTOCITY']);
+        $this->oxuser__oxzip = new oxField($aPayPalData['SHIPTOZIP']);
 
-        $oCountry = oxNew( 'oxCountry' );
-        $sCountryId = $oCountry->getIdByCode( $aPayPalData["SHIPTOCOUNTRY"] );
-        $this->oxuser__oxcountryid  = new oxField( $sCountryId );
+        $oCountry = oxNew('oxCountry');
+        $sCountryId = $oCountry->getIdByCode($aPayPalData["SHIPTOCOUNTRY"]);
+        $this->oxuser__oxcountryid = new oxField($sCountryId);
 
         $sStateId = '';
-        if ( isset( $aPayPalData["SHIPTOSTATE"] ) ) {
-            $oState = oxNew( 'oxState' );
-            $sStateId = $oState->getIdByCode( $aPayPalData["SHIPTOSTATE"], $sCountryId );
+        if (isset($aPayPalData["SHIPTOSTATE"])) {
+            $oState = oxNew('oxState');
+            $sStateId = $oState->getIdByCode($aPayPalData["SHIPTOSTATE"], $sCountryId);
         }
-        $this->oxuser__oxstateid  = new oxField( $sStateId );
+        $this->oxuser__oxstateid = new oxField($sStateId);
     }
 }

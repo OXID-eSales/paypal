@@ -41,7 +41,7 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
     {
         $oService = $this->getPayPalService();
         $oRequest = $this->getPayPalRequest();
-        return $oService->doReAuthorization( $oRequest );
+        return $oService->doReAuthorization($oRequest);
     }
 
     /**
@@ -51,13 +51,13 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
      */
     public function getPayPalRequest()
     {
-        if ( is_null( $this->_oPayPalRequest ) ) {
+        if (is_null($this->_oPayPalRequest)) {
             $oRequestBuilder = $this->getPayPalRequestBuilder();
 
             $oData = $this->getData();
 
-            $oRequestBuilder->setAuthorizationId( $oData->getAuthorizationId() );
-            $oRequestBuilder->setAmount( $oData->getAmount(), $oData->getCurrency() );
+            $oRequestBuilder->setAuthorizationId($oData->getAuthorizationId());
+            $oRequestBuilder->setAmount($oData->getAmount(), $oData->getCurrency());
 
             $this->_oPayPalRequest = $oRequestBuilder->getRequest();
         }
@@ -70,7 +70,7 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
      *
      * @param oePayPalPayPalRequest $oPayPalRequest
      */
-    public function setPayPalRequest( $oPayPalRequest )
+    public function setPayPalRequest($oPayPalRequest)
     {
         $this->_oPayPalRequest = $oPayPalRequest;
     }

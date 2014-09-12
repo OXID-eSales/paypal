@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalConfig class.
@@ -34,7 +34,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      */
     protected function tearDown()
     {
-        oxDb::getDb()->execute( "delete from oxconfig where oxvarname like 'paypal_%'" );
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname like 'paypal_%'");
 
         parent::tearDown();
     }
@@ -45,15 +45,15 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     protected function _cleanUp()
     {
         $sImgDir = $this->getConfig()->getImageDir();
-        if ( !$sShopLogo = $this->getConfig()->getConfigParam( 'sShopLogo' ) ) {
+        if (!$sShopLogo = $this->getConfig()->getConfigParam('sShopLogo')) {
             return;
         }
         $sLogoDir = $sImgDir . "resized_$sShopLogo";
-        if ( !file_exists( $sLogoDir ) ) {
+        if (!file_exists($sLogoDir)) {
             return;
         }
 
-        unlink( $sLogoDir );
+        unlink($sLogoDir);
     }
 
     /**
@@ -63,16 +63,16 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     {
         $oConfig = new oePayPalConfig();
         $PayPalId = $oConfig->getModuleId();
-        $this->assertEquals( 'oepaypal', $PayPalId, 'PayPal module should be oepaypal not '. $PayPalId );
+        $this->assertEquals('oepaypal', $PayPalId, 'PayPal module should be oepaypal not ' . $PayPalId);
     }
 
     public function providerGetBrandName()
     {
-        return array (
-            array( '',  '', '' ),
-            array( '',  'testShopName', 'testShopName' ),
-            array( 'testPayPalShopName', 'testBrandName',  'testPayPalShopName' ),
-            array( 'testPayPalShopName', '',  'testPayPalShopName' ),
+        return array(
+            array('', '', ''),
+            array('', 'testShopName', 'testShopName'),
+            array('testPayPalShopName', 'testBrandName', 'testPayPalShopName'),
+            array('testPayPalShopName', '', 'testPayPalShopName'),
         );
     }
 
@@ -81,16 +81,16 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetBrandName
      */
-    public function testGetBrandName( $sParamName, $sShopName, $sResultName )
+    public function testGetBrandName($sParamName, $sShopName, $sResultName)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'sOEPayPalBrandName', $sParamName );
+        $this->getConfig()->setConfigParam('sOEPayPalBrandName', $sParamName);
 
         $oShop = $this->getConfig()->getActiveShop();
         $oShop->oxshops__oxname = new oxField($sShopName);
         $oShop->save();
 
-        $this->assertEquals( $sResultName, $oConfig->getBrandName() );
+        $this->assertEquals($sResultName, $oConfig->getBrandName());
     }
 
     /**
@@ -101,11 +101,11 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testSendOrderInfoToPayPal()
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSendToPayPal', true );
-        $this->assertTrue( $oConfig->sendOrderInfoToPayPal() );
+        $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
+        $this->assertTrue($oConfig->sendOrderInfoToPayPal());
 
-        $this->getConfig()->setConfigParam( 'blOEPayPalSendToPayPal', false );
-        $this->assertFalse( $oConfig->sendOrderInfoToPayPal() );
+        $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', false);
+        $this->assertFalse($oConfig->sendOrderInfoToPayPal());
     }
 
     /**
@@ -116,11 +116,11 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testIsGuestBuyEnabled()
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalGuestBuyRole', true );
-        $this->assertTrue( $oConfig->isGuestBuyEnabled() );
+        $this->getConfig()->setConfigParam('blOEPayPalGuestBuyRole', true);
+        $this->assertTrue($oConfig->isGuestBuyEnabled());
 
-        $this->getConfig()->setConfigParam( 'blOEPayPalGuestBuyRole', false );
-        $this->assertFalse( $oConfig->isGuestBuyEnabled() );
+        $this->getConfig()->setConfigParam('blOEPayPalGuestBuyRole', false);
+        $this->assertFalse($oConfig->isGuestBuyEnabled());
     }
 
     /**
@@ -131,7 +131,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testIsGiroPayEnabled()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertFalse( $oConfig->isGiroPayEnabled() );
+        $this->assertFalse($oConfig->isGiroPayEnabled());
     }
 
     /**
@@ -142,28 +142,28 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testIsSandboxEnabled()
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', true );
-        $this->assertTrue( $oConfig->isSandboxEnabled() );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
+        $this->assertTrue($oConfig->isSandboxEnabled());
 
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', false );
-        $this->assertFalse( $oConfig->isSandboxEnabled() );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
+        $this->assertFalse($oConfig->isSandboxEnabled());
     }
 
     public function providerGetPayPalHost()
     {
-        return array (
+        return array(
             // Default PayPal sandbox host
-            array( true,  null,            null,           'api-3t.sandbox.paypal.com' ),
+            array(true, null, null, 'api-3t.sandbox.paypal.com'),
             // Default PayPal host.
-            array( false, null,            null,           'api-3t.paypal.com' ),
+            array(false, null, null, 'api-3t.paypal.com'),
             // Sandbox on; PayPal sandbox host NOT set; PayPal host set; Sandbox default host return.
-            array( true,  null,            'paypalApiUrl', 'api-3t.sandbox.paypal.com' ),
+            array(true, null, 'paypalApiUrl', 'api-3t.sandbox.paypal.com'),
             // Sandbox off; PayPal sandbox host set; PayPal host NOT set; PayPal default host return.
-            array( false, 'sandboxApiUrl', null,           'api-3t.paypal.com' ),
+            array(false, 'sandboxApiUrl', null, 'api-3t.paypal.com'),
             // Sandbox on; PayPal sandbox host set; PayPal host set; PayPal set sandbox host return.
-            array( true,  'sandboxApiUrl', 'paypalApiUrl', 'sandboxApiUrl' ),
+            array(true, 'sandboxApiUrl', 'paypalApiUrl', 'sandboxApiUrl'),
             // Sandbox off; PayPal sandbox host set; PayPal host set; PayPal set host return.
-            array( false, 'sandboxApiUrl', 'paypalApiUrl', 'paypalApiUrl' ),
+            array(false, 'sandboxApiUrl', 'paypalApiUrl', 'paypalApiUrl'),
         );
     }
 
@@ -173,189 +173,189 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetPayPalHost
      */
-    public function testGetHost( $bSandboxEnabled, $sPayPalSandboxHost, $sPayPalHost, $sResult )
+    public function testGetHost($bSandboxEnabled, $sPayPalSandboxHost, $sPayPalHost, $sResult)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', $bSandboxEnabled );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', $bSandboxEnabled);
 
-        if ( !empty( $sPayPalSandboxHost ) ) {
-            $oConfig->setPayPalSandboxHost( $sPayPalSandboxHost );
+        if (!empty($sPayPalSandboxHost)) {
+            $oConfig->setPayPalSandboxHost($sPayPalSandboxHost);
         }
-        if ( !empty( $sPayPalHost ) ) {
-            $oConfig->setPayPalHost( $sPayPalHost );
+        if (!empty($sPayPalHost)) {
+            $oConfig->setPayPalHost($sPayPalHost);
         }
 
-        $this->assertEquals( $sResult, $oConfig->getHost() );
+        $this->assertEquals($sResult, $oConfig->getHost());
     }
 
     public function testGetPayPalHost_setWithSetter_setValue()
     {
         $oConfig = new oePayPalConfig();
-        $oConfig->setPayPalHost( 'PayPalHost' );
+        $oConfig->setPayPalHost('PayPalHost');
 
-        $this->assertEquals( 'PayPalHost', $oConfig->getPayPalHost(), 'Getter must return what is set in setter.' );
+        $this->assertEquals('PayPalHost', $oConfig->getPayPalHost(), 'Getter must return what is set in setter.');
     }
 
     public function testGetPayPalHost_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'api-3t.paypal.com', $oConfig->getPayPalHost() );
+        $this->assertEquals('api-3t.paypal.com', $oConfig->getPayPalHost());
     }
 
     public function testGetPayPalHost_overrideWithConfig_configValue()
     {
         $this->getConfig()->setConfigParam('sPayPalHost', 'configHost');
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'configHost', $oConfig->getPayPalHost() );
+        $this->assertEquals('configHost', $oConfig->getPayPalHost());
     }
 
     public function testGetPayPalSandboxHost_setWithSetter_setValue()
     {
         $oConfig = new oePayPalConfig();
-        $oConfig->setPayPalSandboxHost( 'PayPalSandboxHost' );
+        $oConfig->setPayPalSandboxHost('PayPalSandboxHost');
 
-        $this->assertEquals( 'PayPalSandboxHost', $oConfig->getPayPalSandboxHost() );
+        $this->assertEquals('PayPalSandboxHost', $oConfig->getPayPalSandboxHost());
     }
 
     public function testGetPayPalSandboxHost_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'api-3t.sandbox.paypal.com', $oConfig->getPayPalSandboxHost());
+        $this->assertEquals('api-3t.sandbox.paypal.com', $oConfig->getPayPalSandboxHost());
     }
 
     public function testGetPayPalSandboxHost_overrideWithConfig_configValue()
     {
         $this->getConfig()->setConfigParam('sPayPalSandboxHost', 'configHost');
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'configHost', $oConfig->getPayPalSandboxHost() );
+        $this->assertEquals('configHost', $oConfig->getPayPalSandboxHost());
     }
 
 
     public function providerGetApiUrl()
     {
-        return array (
-            array( true,  null,            null,           'https://api-3t.sandbox.paypal.com/nvp' ),
-            array( false, null,            null,           'https://api-3t.paypal.com/nvp' ),
-            array( true,  null,            'paypalApiUrl', 'https://api-3t.sandbox.paypal.com/nvp' ),
-            array( false, 'sandboxApiUrl', null,           'https://api-3t.paypal.com/nvp' ),
-            array( true,  'sandboxApiUrl', 'paypalApiUrl', 'sandboxApiUrl' ),
-            array( false, 'sandboxApiUrl', 'paypalApiUrl', 'paypalApiUrl' ),
+        return array(
+            array(true, null, null, 'https://api-3t.sandbox.paypal.com/nvp'),
+            array(false, null, null, 'https://api-3t.paypal.com/nvp'),
+            array(true, null, 'paypalApiUrl', 'https://api-3t.sandbox.paypal.com/nvp'),
+            array(false, 'sandboxApiUrl', null, 'https://api-3t.paypal.com/nvp'),
+            array(true, 'sandboxApiUrl', 'paypalApiUrl', 'sandboxApiUrl'),
+            array(false, 'sandboxApiUrl', 'paypalApiUrl', 'paypalApiUrl'),
         );
     }
 
-     /**
+    /**
      * Test case for oePayPalConfig::getEndPointUrl()
      *
      * @dataProvider providerGetApiUrl
      */
-    public function testApiUrl( $bSandBoxEnabled, $sSandBoxApiUrl, $sApiUrl, $sResult )
+    public function testApiUrl($bSandBoxEnabled, $sSandBoxApiUrl, $sApiUrl, $sResult)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', $bSandBoxEnabled );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', $bSandBoxEnabled);
 
-        if ( !empty( $sSandBoxApiUrl ) ) {
-            $oConfig->setPayPalSandboxApiUrl( $sSandBoxApiUrl );
+        if (!empty($sSandBoxApiUrl)) {
+            $oConfig->setPayPalSandboxApiUrl($sSandBoxApiUrl);
         }
-        if ( !empty( $sApiUrl ) ) {
-            $oConfig->setPayPalApiUrl( $sApiUrl );
+        if (!empty($sApiUrl)) {
+            $oConfig->setPayPalApiUrl($sApiUrl);
         }
 
-        $this->assertEquals( $sResult, $oConfig->getApiUrl() );
+        $this->assertEquals($sResult, $oConfig->getApiUrl());
     }
 
     public function testGetPayPalSandboxApiUrl_setWithSetter_setValue()
     {
         $oConfig = new oePayPalConfig();
-        $oConfig->setPayPalSandboxApiUrl( 'ApiPayPalSandboxHost' );
+        $oConfig->setPayPalSandboxApiUrl('ApiPayPalSandboxHost');
 
-        $this->assertEquals( 'ApiPayPalSandboxHost', $oConfig->getPayPalSandboxApiUrl() );
+        $this->assertEquals('ApiPayPalSandboxHost', $oConfig->getPayPalSandboxApiUrl());
     }
 
     public function testGetPayPalSandboxApiUrl_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'https://api-3t.sandbox.paypal.com/nvp', $oConfig->getPayPalSandboxApiUrl());
+        $this->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $oConfig->getPayPalSandboxApiUrl());
     }
 
     public function testGetPayPalSandboxApiUrl_overrideWithConfig_configValue()
     {
         $this->getConfig()->setConfigParam('sPayPalSandboxApiUrl', 'apiConfigHost');
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'apiConfigHost', $oConfig->getPayPalSandboxApiUrl() );
+        $this->assertEquals('apiConfigHost', $oConfig->getPayPalSandboxApiUrl());
     }
 
     public function testGetPayPalApiUrl_setWithSetter_setValue()
     {
         $oConfig = new oePayPalConfig();
-        $oConfig->setPayPalApiUrl( 'ApiPayPalSandboxHost' );
+        $oConfig->setPayPalApiUrl('ApiPayPalSandboxHost');
 
-        $this->assertEquals( 'ApiPayPalSandboxHost', $oConfig->getPayPalApiUrl() );
+        $this->assertEquals('ApiPayPalSandboxHost', $oConfig->getPayPalApiUrl());
     }
 
     public function testGetPayPalApiUrl_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'https://api-3t.paypal.com/nvp', $oConfig->getPayPalApiUrl());
+        $this->assertEquals('https://api-3t.paypal.com/nvp', $oConfig->getPayPalApiUrl());
     }
 
     public function testGetPayPalApiUrl_overrideWithConfig_configValue()
     {
         $this->getConfig()->setConfigParam('sPayPalApiUrl', 'apiConfigHost');
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'apiConfigHost', $oConfig->getPayPalApiUrl() );
+        $this->assertEquals('apiConfigHost', $oConfig->getPayPalApiUrl());
     }
 
     public function testGetPayPalSandboxUrl_setWithSetter_setValue()
     {
         $oConfig = new oePayPalConfig();
-        $oConfig->setPayPalSandboxUrl( 'ApiPayPalSandboxHost' );
+        $oConfig->setPayPalSandboxUrl('ApiPayPalSandboxHost');
 
-        $this->assertEquals( 'ApiPayPalSandboxHost', $oConfig->getPayPalSandboxUrl() );
+        $this->assertEquals('ApiPayPalSandboxHost', $oConfig->getPayPalSandboxUrl());
     }
 
     public function testGetPayPalSandboxUrl_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'https://www.sandbox.paypal.com/webscr', $oConfig->getPayPalSandboxUrl());
+        $this->assertEquals('https://www.sandbox.paypal.com/webscr', $oConfig->getPayPalSandboxUrl());
     }
 
     public function testGetPayPalSandboxUrl_overrideWithConfig_configValue()
     {
         $this->getConfig()->setConfigParam('sPayPalSandboxUrl', 'ConfigHost');
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'ConfigHost', $oConfig->getPayPalSandboxUrl() );
+        $this->assertEquals('ConfigHost', $oConfig->getPayPalSandboxUrl());
     }
 
     public function testGetPayPalUrl_setWithSetter_setValue()
     {
         $oConfig = new oePayPalConfig();
-        $oConfig->setPayPalUrl( 'ApiPayPalSandboxHost' );
+        $oConfig->setPayPalUrl('ApiPayPalSandboxHost');
 
-        $this->assertEquals( 'ApiPayPalSandboxHost', $oConfig->getPayPalUrl() );
+        $this->assertEquals('ApiPayPalSandboxHost', $oConfig->getPayPalUrl());
     }
 
     public function testGetPayPalUrl_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'https://www.paypal.com/webscr', $oConfig->getPayPalUrl());
+        $this->assertEquals('https://www.paypal.com/webscr', $oConfig->getPayPalUrl());
     }
 
     public function testGetPayPalUrl_overrideWithConfig_configValue()
     {
         $this->getConfig()->setConfigParam('sPayPalUrl', 'ConfigUrl');
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 'ConfigUrl', $oConfig->getPayPalUrl() );
+        $this->assertEquals('ConfigUrl', $oConfig->getPayPalUrl());
     }
 
     public function providerGetPayPalCommunicationUrl()
     {
-        return array (
-            array( true,  null,            null,           'TestToken',  'continue', 'https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=TestToken&useraction=continue' ),
-            array( false, null,            null,           'TestToken',  'commit', 'https://www.paypal.com/webscr&cmd=_express-checkout&token=TestToken&useraction=commit' ),
-            array( true,  null,            'paypalApiUrl', 'TestToken1', 'commit', 'https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=TestToken1&useraction=commit' ),
-            array( false, 'sandboxApiUrl', null,           'TestToken1', 'continue', 'https://www.paypal.com/webscr&cmd=_express-checkout&token=TestToken1&useraction=continue' ),
-            array( true,  'sandboxApiUrl', 'paypalApiUrl', 'TestToken2', 'action', 'sandboxApiUrl&cmd=_express-checkout&token=TestToken2&useraction=action' ),
-            array( false, 'sandboxApiUrl', 'paypalApiUrl', 'TestToken2', 'action', 'paypalApiUrl&cmd=_express-checkout&token=TestToken2&useraction=action' ),
+        return array(
+            array(true, null, null, 'TestToken', 'continue', 'https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=TestToken&useraction=continue'),
+            array(false, null, null, 'TestToken', 'commit', 'https://www.paypal.com/webscr&cmd=_express-checkout&token=TestToken&useraction=commit'),
+            array(true, null, 'paypalApiUrl', 'TestToken1', 'commit', 'https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=TestToken1&useraction=commit'),
+            array(false, 'sandboxApiUrl', null, 'TestToken1', 'continue', 'https://www.paypal.com/webscr&cmd=_express-checkout&token=TestToken1&useraction=continue'),
+            array(true, 'sandboxApiUrl', 'paypalApiUrl', 'TestToken2', 'action', 'sandboxApiUrl&cmd=_express-checkout&token=TestToken2&useraction=action'),
+            array(false, 'sandboxApiUrl', 'paypalApiUrl', 'TestToken2', 'action', 'paypalApiUrl&cmd=_express-checkout&token=TestToken2&useraction=action'),
         );
     }
 
@@ -364,24 +364,24 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetPayPalCommunicationUrl
      */
-    public function testGetPayPalCommunicationUrl( $bSandBoxEnabled, $sSandBoxApiUrl, $sApiUrl, $sToken, $sUserAction, $sResult )
+    public function testGetPayPalCommunicationUrl($bSandBoxEnabled, $sSandBoxApiUrl, $sApiUrl, $sToken, $sUserAction, $sResult)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', $bSandBoxEnabled );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', $bSandBoxEnabled);
 
-        if ( !empty( $sSandBoxApiUrl ) )
-            $oConfig->setPayPalSandboxUrl( $sSandBoxApiUrl );
-        if ( !empty( $sApiUrl ) )
-            $oConfig->setPayPalUrl( $sApiUrl );
+        if (!empty($sSandBoxApiUrl))
+            $oConfig->setPayPalSandboxUrl($sSandBoxApiUrl);
+        if (!empty($sApiUrl))
+            $oConfig->setPayPalUrl($sApiUrl);
 
-        $this->assertEquals( $sResult, $oConfig->getPayPalCommunicationUrl( $sToken, $sUserAction ) );
+        $this->assertEquals($sResult, $oConfig->getPayPalCommunicationUrl($sToken, $sUserAction));
     }
 
     public function providerGetTextConfig()
     {
-        return array (
-            array( true,  'text1', 'text2', 'text1' ),
-            array( false, 'text1', 'text2', 'text2' ),
+        return array(
+            array(true, 'text1', 'text2', 'text1'),
+            array(false, 'text1', 'text2', 'text2'),
         );
     }
 
@@ -390,13 +390,13 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetTextConfig
      */
-    public function testGetPassword( $bSandBoxEnabled, $sSandBoxPassword, $sPassword, $sResult )
+    public function testGetPassword($bSandBoxEnabled, $sSandBoxPassword, $sPassword, $sResult)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', $bSandBoxEnabled );
-        $this->getConfig()->setConfigParam( 'sOEPayPalSandboxPassword', $sSandBoxPassword );
-        $this->getConfig()->setConfigParam( 'sOEPayPalPassword', $sPassword );
-        $this->assertEquals( $sResult, $oConfig->getPassword() );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', $bSandBoxEnabled);
+        $this->getConfig()->setConfigParam('sOEPayPalSandboxPassword', $sSandBoxPassword);
+        $this->getConfig()->setConfigParam('sOEPayPalPassword', $sPassword);
+        $this->assertEquals($sResult, $oConfig->getPassword());
     }
 
     /**
@@ -404,13 +404,13 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetTextConfig
      */
-    public function testGetUserName( $bSandBoxEnabled, $sSandBoxUsername, $sUsername, $sResult )
+    public function testGetUserName($bSandBoxEnabled, $sSandBoxUsername, $sUsername, $sResult)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', $bSandBoxEnabled );
-        $this->getConfig()->setConfigParam( 'sOEPayPalSandboxUsername', $sSandBoxUsername );
-        $this->getConfig()->setConfigParam( 'sOEPayPalUsername', $sUsername );
-        $this->assertEquals( $sResult, $oConfig->getUserName() );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', $bSandBoxEnabled);
+        $this->getConfig()->setConfigParam('sOEPayPalSandboxUsername', $sSandBoxUsername);
+        $this->getConfig()->setConfigParam('sOEPayPalUsername', $sUsername);
+        $this->assertEquals($sResult, $oConfig->getUserName());
     }
 
     /**
@@ -418,13 +418,13 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetTextConfig
      */
-    public function testGetSignature( $bSandBoxEnabled, $sSandBoxSignature, $sSignature, $sResult )
+    public function testGetSignature($bSandBoxEnabled, $sSandBoxSignature, $sSignature, $sResult)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', $bSandBoxEnabled );
-        $this->getConfig()->setConfigParam( 'sOEPayPalSandboxSignature', $sSandBoxSignature );
-        $this->getConfig()->setConfigParam( 'sOEPayPalSignature', $sSignature );
-        $this->assertEquals( $sResult, $oConfig->getSignature() );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', $bSandBoxEnabled);
+        $this->getConfig()->setConfigParam('sOEPayPalSandboxSignature', $sSandBoxSignature);
+        $this->getConfig()->setConfigParam('sOEPayPalSignature', $sSignature);
+        $this->assertEquals($sResult, $oConfig->getSignature());
     }
 
     /**
@@ -434,9 +434,9 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     {
         $sTransMode = 'Sale';
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'sOEPayPalTransactionMode', $sTransMode );
+        $this->getConfig()->setConfigParam('sOEPayPalTransactionMode', $sTransMode);
 
-        $this->assertEquals( $sTransMode, $oConfig->getTransactionMode() );
+        $this->assertEquals($sTransMode, $oConfig->getTransactionMode());
     }
 
     /**
@@ -445,11 +445,11 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testIsLoggingEnabled()
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blPayPalLoggerEnabled', true );
-        $this->assertTrue($oConfig->isLoggingEnabled() );
+        $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', true);
+        $this->assertTrue($oConfig->isLoggingEnabled());
 
-        $this->getConfig()->setConfigParam( 'blPayPalLoggerEnabled', false );
-        $this->assertFalse( $oConfig->isLoggingEnabled() );
+        $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', false);
+        $this->assertFalse($oConfig->isLoggingEnabled());
     }
 
     /**
@@ -458,11 +458,11 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testIsExpressCheckoutInMiniBasketEnabled()
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalECheckoutInMiniBasket', true );
-        $this->assertTrue( $oConfig->isExpressCheckoutInMiniBasketEnabled() );
+        $this->getConfig()->setConfigParam('blOEPayPalECheckoutInMiniBasket', true);
+        $this->assertTrue($oConfig->isExpressCheckoutInMiniBasketEnabled());
 
-        $this->getConfig()->setConfigParam( 'blOEPayPalECheckoutInMiniBasket', false );
-        $this->assertFalse( $oConfig->isExpressCheckoutInMiniBasketEnabled() );
+        $this->getConfig()->setConfigParam('blOEPayPalECheckoutInMiniBasket', false);
+        $this->assertFalse($oConfig->isExpressCheckoutInMiniBasketEnabled());
     }
 
 
@@ -470,11 +470,11 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     {
         $sShopImageLocation = $this->getConfig()->getImageUrl();
         return array(
-            array( "noLogo", "logo.png", "", false ),
-            array( "shopLogo", "logo.png", "logo_ee.png", $sShopImageLocation . "resized_logo.png" ),
-            array( "customLogo", "logo.png", "logo.png", $sShopImageLocation . "resized_logo.png" ),
-            array( "shopLogo", "login-fb.png", "logo.png", $sShopImageLocation . "login-fb.png" ),
-            array( "customLogo", "logo.png", "login-fb.png", $sShopImageLocation . "login-fb.png" ),
+            array("noLogo", "logo.png", "", false),
+            array("shopLogo", "logo.png", "logo_ee.png", $sShopImageLocation . "resized_logo.png"),
+            array("customLogo", "logo.png", "logo.png", $sShopImageLocation . "resized_logo.png"),
+            array("shopLogo", "login-fb.png", "logo.png", $sShopImageLocation . "login-fb.png"),
+            array("customLogo", "logo.png", "login-fb.png", $sShopImageLocation . "login-fb.png"),
         );
     }
 
@@ -483,14 +483,14 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetShopLogoUrl
      */
-    public function testGetShopLogoUrl( $sOption, $sShopLogoImage, $sCustomLogoImage, $sExpected )
+    public function testGetShopLogoUrl($sOption, $sShopLogoImage, $sCustomLogoImage, $sExpected)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( "sOEPayPalLogoImageOption", $sOption );
-        $this->getConfig()->setConfigParam( "sOEPayPalCustomShopLogoImage", $sCustomLogoImage );
-        $this->getConfig()->setConfigParam( "sShopLogo", $sShopLogoImage );
+        $this->getConfig()->setConfigParam("sOEPayPalLogoImageOption", $sOption);
+        $this->getConfig()->setConfigParam("sOEPayPalCustomShopLogoImage", $sCustomLogoImage);
+        $this->getConfig()->setConfigParam("sShopLogo", $sShopLogoImage);
 
-        $this->assertEquals( $sExpected, $oConfig->getLogoUrl() );
+        $this->assertEquals($sExpected, $oConfig->getLogoUrl());
         $this->_cleanUp();
     }
 
@@ -502,8 +502,8 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function providerGetShopLogoUrlIncorrectFilename()
     {
         return array(
-            array( "shopLogo", "", "notexisting.png" ),
-            array( "customLogo", "notexisting.png", "" ),
+            array("shopLogo", "", "notexisting.png"),
+            array("customLogo", "notexisting.png", ""),
         );
     }
 
@@ -512,14 +512,14 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetShopLogoUrlIncorrectFilename
      */
-    public function testGetShopLogoUrlIncorrectFilename( $sOption, $sShopLogoImage, $sCustomLogoImage )
+    public function testGetShopLogoUrlIncorrectFilename($sOption, $sShopLogoImage, $sCustomLogoImage)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( "sOEPayPalLogoImageOption", $sOption );
-        $this->getConfig()->setConfigParam( "sOEPayPalCustomShopLogoImage", $sCustomLogoImage );
-        $this->getConfig()->setConfigParam( "sShopLogo", $sShopLogoImage );
+        $this->getConfig()->setConfigParam("sOEPayPalLogoImageOption", $sOption);
+        $this->getConfig()->setConfigParam("sOEPayPalCustomShopLogoImage", $sCustomLogoImage);
+        $this->getConfig()->setConfigParam("sShopLogo", $sShopLogoImage);
 
-        $this->assertFalse( $oConfig->getLogoUrl() );
+        $this->assertFalse($oConfig->getLogoUrl());
         $this->_cleanUp();
     }
 
@@ -530,7 +530,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     {
         $oConfig = new oePayPalConfig();
         $sCallbackBaseUrl = $oConfig->getIPNCallbackUrl();
-        $this->assertEquals( $sCallbackBaseUrl, $this->getConfig()->getCurrentShopUrl() . "index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp=".$this->getConfig()->getShopId() );
+        $this->assertEquals($sCallbackBaseUrl, $this->getConfig()->getCurrentShopUrl() . "index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp=" . $this->getConfig()->getShopId());
     }
 
     /**
@@ -541,7 +541,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( $oConfig->getIPNResponseUrl(), 'https://www.paypal.com/webscr&cmd=_notify-validate' );
+        $this->assertEquals($oConfig->getIPNResponseUrl(), 'https://www.paypal.com/webscr&cmd=_notify-validate');
     }
 
     /**
@@ -552,7 +552,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( $oConfig->getIPNResponseUrl(), 'https://www.sandbox.paypal.com/webscr&cmd=_notify-validate' );
+        $this->assertEquals($oConfig->getIPNResponseUrl(), 'https://www.sandbox.paypal.com/webscr&cmd=_notify-validate');
     }
 
     /**
@@ -563,7 +563,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( $oConfig->getUrl(), 'https://www.paypal.com/webscr' );
+        $this->assertEquals($oConfig->getUrl(), 'https://www.paypal.com/webscr');
     }
 
     /**
@@ -574,7 +574,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( $oConfig->getUrl(), 'https://www.sandbox.paypal.com/webscr' );
+        $this->assertEquals($oConfig->getUrl(), 'https://www.sandbox.paypal.com/webscr');
     }
 
     /**
@@ -584,7 +584,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     {
         $oConfig = new oePayPalConfig();
         $sShopUrl = $oConfig->getShopUrl();
-        $this->assertEquals( $sShopUrl, $this->getConfig()->getCurrentShopUrl() );
+        $this->assertEquals($sShopUrl, $this->getConfig()->getCurrentShopUrl());
     }
 
     /**
@@ -595,7 +595,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $oConfig = new oePayPalConfig();
         $oLang = $oConfig->getLang();
 
-        $this->assertTrue( is_a( $oLang, 'oxLang' ), 'Method getLang() should return language object.' );
+        $this->assertTrue(is_a($oLang, 'oxLang'), 'Method getLang() should return language object.');
     }
 
     /**
@@ -606,14 +606,14 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $oConfig = new oePayPalConfig();
         $oUtils = $oConfig->getUtils();
 
-        $this->assertTrue( is_a( $oUtils, 'oxUtils' ), 'Method getUtils() should return utils object.' );
+        $this->assertTrue(is_a($oUtils, 'oxUtils'), 'Method getUtils() should return utils object.');
     }
 
     public function providerIsExpressCheckoutInDetailsPage()
     {
         return array(
-            array( true ),
-            array( false )
+            array(true),
+            array(false)
         );
     }
 
@@ -621,11 +621,11 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      * Test blOEPayPalECheckoutInDetails config
      * @dataProvider providerIsExpressCheckoutInDetailsPage
      */
-    public function testIsExpressCheckoutInDetailsPage( $blOEPayPalECheckoutInDetails )
+    public function testIsExpressCheckoutInDetailsPage($blOEPayPalECheckoutInDetails)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'blOEPayPalECheckoutInDetails', $blOEPayPalECheckoutInDetails );
-        $this->assertEquals( $blOEPayPalECheckoutInDetails, $oConfig->isExpressCheckoutInDetailsPage() );
+        $this->getConfig()->setConfigParam('blOEPayPalECheckoutInDetails', $blOEPayPalECheckoutInDetails);
+        $this->assertEquals($blOEPayPalECheckoutInDetails, $oConfig->isExpressCheckoutInDetailsPage());
     }
 
     /**
@@ -634,22 +634,20 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testGetCurrentUrl()
     {
         $sCurrentUrl = 'http://oxideshop.com/test';
-        $oUtilsUrl = $this->getMock( 'oxUtilsUrl', array( 'getCurrentUrl' ) );
-        $oUtilsUrl->expects( $this->any() )->method( 'getCurrentUrl' )->will( $this->returnValue( $sCurrentUrl ) );
-        oxRegistry::set( 'oxUtilsUrl', $oUtilsUrl );
+        $oUtilsUrl = $this->getMock('oxUtilsUrl', array('getCurrentUrl'));
+        $oUtilsUrl->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($sCurrentUrl));
+        oxRegistry::set('oxUtilsUrl', $oUtilsUrl);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( $sCurrentUrl, $oConfig->getCurrentUrl() );
+        $this->assertEquals($sCurrentUrl, $oConfig->getCurrentUrl());
     }
-
-
 
 
     public function providerGetMaxPayPalDeliveryAmount()
     {
         return array(
-            array( 40.5, 40.5 ),
-            array( -0.51, -0.51 )
+            array(40.5, 40.5),
+            array(-0.51, -0.51)
         );
     }
 
@@ -658,19 +656,19 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetMaxPayPalDeliveryAmount
      */
-    public function testGetMaxPayPalDeliveryAmount_configSetWithProperValues_configValue( $dMaxAmount, $dExpectedAmount )
+    public function testGetMaxPayPalDeliveryAmount_configSetWithProperValues_configValue($dMaxAmount, $dExpectedAmount)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'dMaxPayPalDeliveryAmount', $dMaxAmount );
-        $this->assertEquals( $dExpectedAmount, $oConfig->getMaxPayPalDeliveryAmount() );
+        $this->getConfig()->setConfigParam('dMaxPayPalDeliveryAmount', $dMaxAmount);
+        $this->assertEquals($dExpectedAmount, $oConfig->getMaxPayPalDeliveryAmount());
     }
 
     public function providerGetMaxPayPalDeliveryAmountBadConfigs()
     {
         return array(
-            array( null, 30 ),
-            array( 0, 30 ),
-            array( false, 30 ),
+            array(null, 30),
+            array(0, 30),
+            array(false, 30),
         );
     }
 
@@ -679,11 +677,11 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
      *
      * @dataProvider providerGetMaxPayPalDeliveryAmountBadConfigs
      */
-    public function testGetMaxPayPalDeliveryAmount_configSetWithFalseValues_30( $dMaxAmount, $dExpectedAmount )
+    public function testGetMaxPayPalDeliveryAmount_configSetWithFalseValues_30($dMaxAmount, $dExpectedAmount)
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'dMaxPayPalDeliveryAmount', $dMaxAmount );
-        $this->assertEquals( $dExpectedAmount, $oConfig->getMaxPayPalDeliveryAmount() );
+        $this->getConfig()->setConfigParam('dMaxPayPalDeliveryAmount', $dMaxAmount);
+        $this->assertEquals($dExpectedAmount, $oConfig->getMaxPayPalDeliveryAmount());
     }
 
     /**
@@ -694,7 +692,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testGetMaxPayPalDeliveryAmount_default_30()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals( 30, $oConfig->getMaxPayPalDeliveryAmount() );
+        $this->assertEquals(30, $oConfig->getMaxPayPalDeliveryAmount());
     }
 
     /**
@@ -703,28 +701,28 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testGetPartnerCode()
     {
         $oConfig = $this->getConfig();
-        if ( $oConfig->getEdition() == 'EE' ) {
+        if ($oConfig->getEdition() == 'EE') {
             $sResult = 'OXID_Cart_EnterpriseECS';
-        } else if ( $oConfig->getEdition() == 'PE' ) {
+        } else if ($oConfig->getEdition() == 'PE') {
             $sResult = 'OXID_Cart_ProfessionalECS';
-        } else if ( $oConfig->getEdition() == 'CE' ) {
+        } else if ($oConfig->getEdition() == 'CE') {
             $sResult = 'OXID_Cart_CommunityECS';
         }
         $oPayPalConfig = new oePayPalConfig();
-        $this->assertEquals( $sResult, $oPayPalConfig->getPartnerCode() );
+        $this->assertEquals($sResult, $oPayPalConfig->getPartnerCode());
     }
 
     public function testGetMobileECDefaultShippingId_notSet_null()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertNull( $oConfig->getMobileECDefaultShippingId() );
+        $this->assertNull($oConfig->getMobileECDefaultShippingId());
     }
 
     public function testGetMobileECDefaultShippingId_setPayment_paymentId()
     {
         $oConfig = new oePayPalConfig();
-        $this->getConfig()->setConfigParam( 'sOEPayPalMECDefaultShippingId', 'shippingId' );
-        $this->assertEquals( 'shippingId', $oConfig->getMobileECDefaultShippingId() );
+        $this->getConfig()->setConfigParam('sOEPayPalMECDefaultShippingId', 'shippingId');
+        $this->assertEquals('shippingId', $oConfig->getMobileECDefaultShippingId());
     }
 
     public function testIsMobile_mobileDevice_true()

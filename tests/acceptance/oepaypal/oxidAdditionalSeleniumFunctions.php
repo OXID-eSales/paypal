@@ -21,6 +21,7 @@
 
 
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
+
 //require_once 'test_config.inc.php';
 
 class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCase
@@ -28,19 +29,19 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     protected $captureScreenshotOnFailure = TRUE;
 
     protected $screenshotPath = null;
-    protected $screenshotUrl  = null;
-    protected $skipDbRestore  = false;
+    protected $screenshotUrl = null;
+    protected $skipDbRestore = false;
 
     /**
      * @param  string $name
-     * @param  array  $data
+     * @param  array $data
      * @param  string $dataName
-     * @param  array  $browser
+     * @param  array $browser
      * @throws InvalidArgumentException
      */
     public function __construct($name = NULL, array $data = array(), $dataName = '', array $browser = array())
     {
-        $this->screenshotUrl  = getenv('SELENIUM_SCREENSHOTS_URL');
+        $this->screenshotUrl = getenv('SELENIUM_SCREENSHOTS_URL');
         $this->screenshotPath = getenv('SELENIUM_SCREENSHOTS_PATH');
 
         parent::__construct($name, $data, $dataName, $browser);
@@ -53,11 +54,11 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @param bool $skipDemoData
      */
-    protected function setUp($skipDemoData=false)
+    protected function setUp($skipDemoData = false)
     {
         try {
             if (is_string(hostUrl)) {
-                $this->setHost( hostUrl );
+                $this->setHost(hostUrl);
             }
             $this->setBrowser(browserName);
             $this->setBrowserUrl(shopURL);
@@ -65,11 +66,11 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
             $this->setTimeout(90000);
 
         } catch (Exception $e) {
-            $this->stopTesting("Failed preparing testing environment! Reason: ".$e->getMessage());
+            $this->stopTesting("Failed preparing testing environment! Reason: " . $e->getMessage());
         }
     }
 
-   /**
+    /**
      * Restores database after every test.
      */
     protected function tearDown()
@@ -85,24 +86,24 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     /**
      * adds some demo data to database.
      */
-    public function addDemoData( $demo )
+    public function addDemoData($demo)
     {
         if (filesize($demo)) {
             $myConfig = oxRegistry::getConfig();
 
-            $sUser    = $myConfig->getConfigParam( 'dbUser' );
-            $sPass    = $myConfig->getConfigParam( 'dbPwd' );
-            $sDbName  = $myConfig->getConfigParam( 'dbName' );
-            $sHost    = $myConfig->getConfigParam( 'dbHost' );
-            $sCmd = 'mysql -h'.escapeshellarg($sHost).' -u'.escapeshellarg($sUser).' -p'.escapeshellarg($sPass).' --default-character-set=utf8 '.escapeshellarg($sDbName).'  < '.escapeshellarg($demo).' 2>&1';
+            $sUser = $myConfig->getConfigParam('dbUser');
+            $sPass = $myConfig->getConfigParam('dbPwd');
+            $sDbName = $myConfig->getConfigParam('dbName');
+            $sHost = $myConfig->getConfigParam('dbHost');
+            $sCmd = 'mysql -h' . escapeshellarg($sHost) . ' -u' . escapeshellarg($sUser) . ' -p' . escapeshellarg($sPass) . ' --default-character-set=utf8 ' . escapeshellarg($sDbName) . '  < ' . escapeshellarg($demo) . ' 2>&1';
             exec($sCmd, $sOut, $ret);
-            $sOut = implode("\n",$sOut);
-            if ( $ret > 0 ) {
-                throw new Exception( $sOut );
+            $sOut = implode("\n", $sOut);
+            if ($ret > 0) {
+                throw new Exception($sOut);
             }
-            if ( OXID_VERSION_EE ) :
-                oxDb::getDb()->execute( "delete from oxcache" );
-             endif;
+            if (OXID_VERSION_EE) :
+                oxDb::getDb()->execute("delete from oxcache");
+            endif;
         }
     }
 
@@ -111,7 +112,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      */
     public function clearTmp()
     {
-        $this->open(shopURL."_deleteTmp.php");
+        $this->open(shopURL . "_deleteTmp.php");
     }
 
     /**
@@ -124,15 +125,15 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->windowMaximize(null);
         $this->selectFrame("relative=top");
         // Remove port if there is one, as we want to call _cc.php directly.
-        $this->open(preg_replace('/:{1}\d{1,}/','',shopURL)."_cc.php?no_redirect=1");
+        $this->open(preg_replace('/:{1}\d{1,}/', '', shopURL) . "_cc.php?no_redirect=1");
         $this->open(shopURL);
         /* if ( OXID_VERSION_EE ) : */
-        if ( isSUBSHOP || $isSubShop ) {
+        if (isSUBSHOP || $isSubShop) {
             if (!$blForceMainShop) {
                 $this->clickAndWait("link=subshop");
             } else {
                 $sShopNr = $this->getShopVersionNumber();
-                $this->clickAndWait("link=OXID eShop ". $sShopNr);
+                $this->clickAndWait("link=OXID eShop " . $sShopNr);
             }
         }
         /* endif; */
@@ -144,13 +145,14 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      */
     public function checkForErrors()
     {
-        if (($this->isTextPresent("Warning: "))  ||  ($this->isTextPresent("ADODB_Exception"))||
-            ($this->isTextPresent("Fatal error: "))  || ($this->isTextPresent("Catchable fatal error: ")) ||
-            ($this->isTextPresent("Notice: "))  || ($this->isTextPresent("exception '")) ||
-            ($this->isTextPresent("ERROR : Tran")) ||($this->isTextPresent("does not exist or is not accessible!")) ||
-            ($this->isTextPresent("EXCEPTION_")) ) {
-				$this->refresh();
-			}
+        if (($this->isTextPresent("Warning: ")) || ($this->isTextPresent("ADODB_Exception")) ||
+            ($this->isTextPresent("Fatal error: ")) || ($this->isTextPresent("Catchable fatal error: ")) ||
+            ($this->isTextPresent("Notice: ")) || ($this->isTextPresent("exception '")) ||
+            ($this->isTextPresent("ERROR : Tran")) || ($this->isTextPresent("does not exist or is not accessible!")) ||
+            ($this->isTextPresent("EXCEPTION_"))
+        ) {
+            $this->refresh();
+        }
         $this->assertFalse($this->isTextPresent("Warning: "), "PHP Warning is in the page");
         $this->assertFalse($this->isTextPresent("ADODB_Exception"), "ADODB Exception is in the page");
         $this->assertFalse($this->isTextPresent("Fatal error: "), "PHP Fatal error is in the page");
@@ -169,7 +171,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @return string formatted string with single spaces and no \n signs.
      */
-    public function clearString( $sLine )
+    public function clearString($sLine)
     {
         return trim(preg_replace("/[ \t\r\n]+/", ' ', $sLine));
     }
@@ -181,7 +183,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param string $locator link/button locator in the page.
      * @param string $element element locator for additional check if page is fully loaded (optional).
      */
-    public function clickAndWait($locator, $element=null)
+    public function clickAndWait($locator, $element = null)
     {
         if (!$this->isElementPresent($locator)) {
             $this->waitForElement($locator);
@@ -201,10 +203,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * recommended to use in frontend. use in admin only, if this select wont reload frames.
      *
      * @param string $locator select list locator.
-     * @param string $selection   option to select.
+     * @param string $selection option to select.
      * @param string $element element locator for additional check if page is fully loaded (optional).
      */
-    public function selectAndWait($locator, $selection, $element=null)
+    public function selectAndWait($locator, $selection, $element = null)
     {
         if (!$this->isElementPresent($locator)) {
             $this->waitForElement($locator);
@@ -225,24 +227,24 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param $sElement string element locator.
      * @param $iTime    int    seconds to wait
      */
-    public function waitForElement( $sElement, $iTime = 30 )
+    public function waitForElement($sElement, $iTime = 30)
     {
         $blRefreshed = false;
-        for ( $iSecond = 0; $iSecond <= $iTime; $iSecond++ ) {
-            if ( $iSecond >= $iTime && !$blRefreshed ) {
+        for ($iSecond = 0; $iSecond <= $iTime; $iSecond++) {
+            if ($iSecond >= $iTime && !$blRefreshed) {
                 $blRefreshed = true;
                 $iSecond = 0;
                 $this->refresh();
-            } else if ( $iSecond >= $iTime ) {
-                $this->assertTrue( $this->isElementPresent( $sElement ), "timeout while waiting for element " . $sElement );
+            } else if ($iSecond >= $iTime) {
+                $this->assertTrue($this->isElementPresent($sElement), "timeout while waiting for element " . $sElement);
             }
             try {
-                if ( $this->isElementPresent( $sElement ) ) {
+                if ($this->isElementPresent($sElement)) {
                     break;
                 }
-            } catch ( Exception $e ) {
+            } catch (Exception $e) {
             }
-            sleep( 1 );
+            sleep(1);
         }
     }
 
@@ -252,12 +254,12 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param string $locator element locator.
      * @param int $iTime number
      */
-    public function waitForItemAppear( $locator, $iTime = 90 )
+    public function waitForItemAppear($locator, $iTime = 90)
     {
         for ($second = 0; ; $second++) {
             if ($second >= $iTime) {
-                $this->assertTrue($this->isElementPresent($locator), "timeout waiting for element ".$locator);
-                $this->assertTrue($this->isVisible($locator), "element ".$locator." is not visible");
+                $this->assertTrue($this->isElementPresent($locator), "timeout waiting for element " . $locator);
+                $this->assertTrue($this->isVisible($locator), "element " . $locator . " is not visible");
             }
             try {
                 if ($this->isElementPresent($locator)) {
@@ -265,7 +267,9 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
                         break;
                     }
                 }
-            } catch (Exception $e) {echo $e->getMessage();}
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
             sleep(1);
         }
     }
@@ -275,17 +279,18 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @param string $locator element locator.
      */
-    public function waitForItemDisappear( $locator )
+    public function waitForItemDisappear($locator)
     {
         for ($second = 0; ; $second++) {
             if ($second >= 90) {
-                $this->assertFalse($this->isVisible($locator), "timeout. Element ".$locator." still visible");
+                $this->assertFalse($this->isVisible($locator), "timeout. Element " . $locator . " still visible");
             }
             try {
                 if (!$this->isVisible($locator)) {
                     break;
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
             sleep(1);
         }
     }
@@ -297,7 +302,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param bool $printSource print source (default false).
      * @param int $timeout timeout (default 90).
      */
-    public function waitForText($textMsg, $printSource = false, $timeout=90 )
+    public function waitForText($textMsg, $printSource = false, $timeout = 90)
     {
         if (is_array($textMsg)) {
             $aMsg = $textMsg;
@@ -307,9 +312,9 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         for ($second = 0; ; $second++) {
             if ($second >= $timeout) {
                 if ($printSource) {
-                    echo "<hr> ".$this->getHtmlSource()." <hr>";
+                    echo "<hr> " . $this->getHtmlSource() . " <hr>";
                 }
-                $this->assertTrue(false, "Timeout while waiting for text: ".implode(' | ', $aMsg));
+                $this->assertTrue(false, "Timeout while waiting for text: " . implode(' | ', $aMsg));
                 break;
             }
             try {
@@ -318,7 +323,8 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
                         break 2;
                     }
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
             sleep(1);
         }
     }
@@ -328,17 +334,18 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @param string $textLine text.
      */
-    public function waitForTextDisappear( $textLine )
+    public function waitForTextDisappear($textLine)
     {
         for ($second = 0; ; $second++) {
             if ($second >= 90) {
-                $this->assertFalse($this->isTextPresent($textLine), "timeout. Text ".$textLine. " still visible");
+                $this->assertFalse($this->isTextPresent($textLine), "timeout. Text " . $textLine . " still visible");
             }
             try {
                 if (!$this->isTextPresent($textLine)) {
                     break;
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
             sleep(1);
         }
     }
@@ -348,21 +355,21 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     /**
      * login to admin with default admin pass and opens needed menu.
      *
-     * @param string $menuLink1     menu link (e.g. master settings, shop settings).
-     * @param string $menuLink2     sub menu link (e.g. administer products, discounts, vat).
-     * @param string $editElement   element to check in edit frame (optional).
-     * @param string $listElement   element to check in list frame (optional).
-     * @param bool   $forceMainShop force main shop.
-     * @param string $user          shop admin username.
-     * @param string $pass          shop admin password.
+     * @param string $menuLink1 menu link (e.g. master settings, shop settings).
+     * @param string $menuLink2 sub menu link (e.g. administer products, discounts, vat).
+     * @param string $editElement element to check in edit frame (optional).
+     * @param string $listElement element to check in list frame (optional).
+     * @param bool $forceMainShop force main shop.
+     * @param string $user shop admin username.
+     * @param string $pass shop admin password.
      */
-    public function loginAdmin($menuLink1, $menuLink2, $editElement=null, $listElement=null, $forceMainShop=false, $user="admin@myoxideshop.com", $pass="admin0303")
+    public function loginAdmin($menuLink1, $menuLink2, $editElement = null, $listElement = null, $forceMainShop = false, $user = "admin@myoxideshop.com", $pass = "admin0303")
     {
         $this->selectWindow(null);
         $this->windowMaximize(null);
         $this->selectFrame("relative=top");
-        $this->open(shopURL."_cc.php?no_redirect=1");
-        $this->open(shopURL."admin");
+        $this->open(shopURL . "_cc.php?no_redirect=1");
+        $this->open(shopURL . "admin");
         $this->checkForErrors();
         $this->assertTrue($this->isElementPresent("user"), "Admin login page failed to load");
         $this->assertTrue($this->isElementPresent("pwd"), "Admin login page failed to load");
@@ -379,10 +386,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
             $this->selectAndWaitFrame("selectshop", "label=subshop", "edit");
         }
         /* endif; */
-        $this->waitForElement("link=".$menuLink1);
+        $this->waitForElement("link=" . $menuLink1);
         $this->checkForErrors();
-        $this->click("link=".$menuLink1);
-        $this->clickAndWaitFrame("link=".$menuLink2, "edit");
+        $this->click("link=" . $menuLink1);
+        $this->clickAndWaitFrame("link=" . $menuLink2, "edit");
         //testing edit frame for errors
         $this->frame("edit", $editElement);
         //testing list frame for errors
@@ -392,21 +399,21 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     /**
      * login to admin for PayPal shop with admin pass and opens needed menu.
      *
-    * @param string $menuLink1     menu link (e.g. master settings, shop settings).
-    * @param string $menuLink2     sub menu link (e.g. administer products, discounts, vat).
-    * @param string $editElement   element to check in edit frame (optional).
-    * @param string $listElement   element to check in list frame (optional).
-    * @param bool   $forceMainShop force main shop.
-    * @param string $user          shop admin username.
-    * @param string $pass          shop admin password.
-    */
-    public function loginAdminForModule($menuLink1, $menuLink2, $editElement=null, $listElement=null, $forceMainShop=false, $user="admin", $pass="admin")
+     * @param string $menuLink1 menu link (e.g. master settings, shop settings).
+     * @param string $menuLink2 sub menu link (e.g. administer products, discounts, vat).
+     * @param string $editElement element to check in edit frame (optional).
+     * @param string $listElement element to check in list frame (optional).
+     * @param bool $forceMainShop force main shop.
+     * @param string $user shop admin username.
+     * @param string $pass shop admin password.
+     */
+    public function loginAdminForModule($menuLink1, $menuLink2, $editElement = null, $listElement = null, $forceMainShop = false, $user = "admin", $pass = "admin")
     {
         $this->selectWindow(null);
         $this->windowMaximize(null);
         $this->selectFrame("relative=top");
-        $this->open(shopURL."_cc.php");
-        $this->open(shopURL."admin");
+        $this->open(shopURL . "_cc.php");
+        $this->open(shopURL . "admin");
         $this->checkForErrors();
         $this->assertTrue($this->isElementPresent("user"), "Admin login page failed to load");
         $this->assertTrue($this->isElementPresent("pwd"), "Admin login page failed to load");
@@ -425,10 +432,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         }
         /* endif; */
 
-        $this->waitForElement("link=".$menuLink1);
+        $this->waitForElement("link=" . $menuLink1);
         $this->checkForErrors();
-        $this->click("link=".$menuLink1);
-        $this->clickAndWaitFrame("link=".$menuLink2, "edit");
+        $this->click("link=" . $menuLink1);
+        $this->clickAndWaitFrame("link=" . $menuLink2, "edit");
 
         //testing edit frame for errors
         $this->frame("edit", $editElement);
@@ -440,20 +447,20 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     /**
      * selects other menu in admin interface.
      *
-     * @param string $menuLink1   menu link (e.g. master settings, shop settings).
-     * @param string $menuLink2   sub menu link (e.g. administer products, discounts, vat).
+     * @param string $menuLink1 menu link (e.g. master settings, shop settings).
+     * @param string $menuLink2 sub menu link (e.g. administer products, discounts, vat).
      * @param string $editElement element to check in edit frame (optional).
      * @param string $listElement element to check in list frame (optional).
      */
-    public function selectMenu($menuLink1, $menuLink2, $editElement=null, $listElement=null)
+    public function selectMenu($menuLink1, $menuLink2, $editElement = null, $listElement = null)
     {
         $this->selectWindow(null);
         $this->selectFrame("relative=top");
         $this->selectFrame("navigation");
-        $this->waitForElement("link=".$menuLink1);
+        $this->waitForElement("link=" . $menuLink1);
         $this->checkForErrors();
-        $this->click("link=".$menuLink1);
-        $this->clickAndWaitFrame("link=".$menuLink2, "edit");
+        $this->click("link=" . $menuLink1);
+        $this->clickAndWaitFrame("link=" . $menuLink2, "edit");
 
         //testing edit frame for errors
         $this->frame("edit", $editElement);
@@ -468,7 +475,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param string $frameLocator name of needed admin frame.
      * @param string $frameElement name of element to check (optional).
      */
-    public function frame($frameLocator, $frameElement=null)
+    public function frame($frameLocator, $frameElement = null)
     {
         $this->selectFrame("relative=top");
         $this->selectFrame("basefrm");
@@ -487,12 +494,12 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     /**
      * selects element and waits till needed frame will be loaded. same frame as before will be selected.
      *
-     * @param string $locator   select list locator.
+     * @param string $locator select list locator.
      * @param string $selection option to select.
-     * @param string $frame     frame which should be also loaded (this frame will be loaded after current frame is loaded).
-     * @param string $element   element locator for additional check if page is fully loaded (optional).
+     * @param string $frame frame which should be also loaded (this frame will be loaded after current frame is loaded).
+     * @param string $element element locator for additional check if page is fully loaded (optional).
      */
-    public function selectAndWaitFrame($locator, $selection, $frame, $element=null)
+    public function selectAndWaitFrame($locator, $selection, $frame, $element = null)
     {
         if (!$this->isElementPresent($locator)) {
             $this->waitForElement($locator);
@@ -510,11 +517,11 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * selects element and waits till needed frame will be loaded. same frame as before will be selected.
      *
      * @param string $locator select list locator.
-     * @param string $frame   frame which should be also loaded (this frame will be loaded after current frame is loaded).
+     * @param string $frame frame which should be also loaded (this frame will be loaded after current frame is loaded).
      * @param string $element element locator for additional check if page is fully loaded (optional).
-     * @param int    $sleep   seconds to wait, default 1.
+     * @param int $sleep seconds to wait, default 1.
      */
-    public function clickAndWaitFrame($locator, $frame, $element=null, $sleep = 1)
+    public function clickAndWaitFrame($locator, $frame, $element = null, $sleep = 1)
     {
         if (!$this->isElementPresent($locator)) {
             $this->waitForElement($locator);
@@ -532,18 +539,18 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     /**
      * clicks entered link in list frame and selects edit frame.
      *
-     * @param string $linkLocator    link name or tab name that is pressed.
+     * @param string $linkLocator link name or tab name that is pressed.
      * @param string $elementLocator locator for element which will be checked for page loading success (optional).
-     * @param int    $sleep          seconds to wait, default 1.
+     * @param int $sleep seconds to wait, default 1.
      */
-    public function openTab($linkLocator, $elementLocator="btn.help", $sleep = 1)
+    public function openTab($linkLocator, $elementLocator = "btn.help", $sleep = 1)
     {
-        $frameLocator="edit";
+        $frameLocator = "edit";
         $this->click($linkLocator);
         $this->waitForFrameToLoad($frameLocator, "90000");
         sleep($sleep);
         $this->waitForElement($linkLocator);
-        $this->assertTrue($this->isElementPresent($linkLocator), "problems with reloading frame. Element ".$linkLocator." not found in it.");
+        $this->assertTrue($this->isElementPresent($linkLocator), "problems with reloading frame. Element " . $linkLocator . " not found in it.");
         $this->checkForErrors();
         $this->frame($frameLocator, $elementLocator);
     }
@@ -553,9 +560,9 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @param string $locator locator for delete button.
      * @param string $element locator for element which will be checked for page loading success.
-     * @param string $frame   frame which should be also loaded (this frame will be loaded after current frame is loaded).
+     * @param string $frame frame which should be also loaded (this frame will be loaded after current frame is loaded).
      */
-    public function clickAndConfirm($locator, $element=null, $frame="edit")
+    public function clickAndConfirm($locator, $element = null, $frame = "edit")
     {
         if (!$this->isElementPresent($locator)) {
             $this->waitForElement($locator);
@@ -577,7 +584,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * selects popUp window and waits till it is fully loaded.
      * @param string $popUpElement element used to check if popUp is fully loaded.
      */
-    public function usePopUp($popUpElement="//div[@id='container1_c']/table/tbody[2]/tr[1]/td[1]")
+    public function usePopUp($popUpElement = "//div[@id='container1_c']/table/tbody[2]/tr[1]/td[1]")
     {
         $this->waitForPopUp("ajaxpopup", "90000");
         $this->selectWindow("name=ajaxpopup");
@@ -589,10 +596,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
 
     /**
      * waits for element to show up in specific place.
-     * @param string $value   expected text to show up.
+     * @param string $value expected text to show up.
      * @param string $locator place where specified text must show up.
      */
-    public function waitForAjax( $value, $locator )
+    public function waitForAjax($value, $locator)
     {
         for ($second = 0; ; $second++) {
             if ($second >= 90) {
@@ -602,10 +609,11 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
             try {
                 if ($this->isElementPresent($locator)) {
                     if ($value == $this->getText($locator)) {
-                        return ;
+                        return;
                     }
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
             sleep(1);
         }
         $this->checkForErrors();
@@ -613,7 +621,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
 
     /**
      * drags and drops element to specified location.
-     * @param string $item      element which will be dragged and dropped.
+     * @param string $item element which will be dragged and dropped.
      * @param string $container place where to drop specified element.
      */
     public function dragAndDrop($item, $container)
@@ -635,11 +643,11 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->selectWindow(null);
         $this->windowMaximize(null);
         $this->selectFrame("relative=top");
-        $this->open(shopURL."_cc.php");
-        $this->open(shopURL."admin");
+        $this->open(shopURL . "_cc.php");
+        $this->open(shopURL . "admin");
         $this->checkForErrors();
-        $this->type("user","admin@myoxideshop.com");
-        $this->type("pwd","admin0303");
+        $this->type("user", "admin@myoxideshop.com");
+        $this->type("pwd", "admin0303");
         $this->select("chlanguage", "label=English");
         $this->select("profile", "label=Standard");
         $this->click("//input[@type='submit']");
@@ -647,10 +655,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->selectFrame("relative=top");
         $this->selectFrame("navigation");
         $this->selectAndWaitFrame("selectshop", "label=subshop", "edit");
-        $this->waitForElement("link=".$menuLink1);
+        $this->waitForElement("link=" . $menuLink1);
         $this->checkForErrors();
-        $this->click("link=".$menuLink1);
-        $this->clickAndWaitFrame("link=".$menuLink2, "edit");
+        $this->click("link=" . $menuLink1);
+        $this->clickAndWaitFrame("link=" . $menuLink2, "edit");
         //testing edit frame for errors
         $this->frame("edit");
         //testing list frame for errors
@@ -668,7 +676,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
 //---------------------------- Setup related functions ------------------------------
     /**
      * prints error message, closes active browsers windows and stops.
-     * @param string    $sErrorMsg       message to display about error place (more easy to find for programmers).
+     * @param string $sErrorMsg message to display about error place (more easy to find for programmers).
      * @param Exception $oErrorException Exception to throw on error.
      */
     public function stopTesting($sErrorMsg, $oErrorException = null)
@@ -678,7 +686,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
                 $this->onNotSuccessfulTest($oErrorException);
             } catch (Exception $oE) {
                 if ($oE instanceof PHPUnit_Framework_ExpectationFailedException) {
-                    $sErrorMsg .= "\n\n---\n".$oE->getCustomMessage();
+                    $sErrorMsg .= "\n\n---\n" . $oE->getCustomMessage();
                 }
             }
         }
@@ -693,7 +701,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * downloads eFire connector.
      *
      * @param string $sNameEfi user name for eFire.
-     * @param string $sPswEfi  user password for eFire.
+     * @param string $sPswEfi user password for eFire.
      */
     public function downloadConnector($sNameEfi, $sPswEfi)
     {
@@ -763,9 +771,9 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
 
     /**
      * opens basket.
-     * @param string $language  active language in shop.
+     * @param string $language active language in shop.
      */
-    public function openBasket($language="English")
+    public function openBasket($language = "English")
     {
         if ($language == 'Deutsch') {
             $sLink = "Warenkorb zeigen";
@@ -773,45 +781,45 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
             $sLink = "Display cart";
         }
         $this->click("//div[@id='miniBasket']/img");
-        $this->waitForItemAppear("//div[@id='basketFlyout']//a[text()='".$sLink."']");
-        $this->clickAndWait("//div[@id='basketFlyout']//a[text()='".$sLink."']");
+        $this->waitForItemAppear("//div[@id='basketFlyout']//a[text()='" . $sLink . "']");
+        $this->clickAndWait("//div[@id='basketFlyout']//a[text()='" . $sLink . "']");
     }
 
     /**
      * selects specified value from dropdown (sorting, items per page etc).
      *
-     * @param int    $elementId  drop down element id.
-     * @param string $itemValue  item to select.
+     * @param int $elementId drop down element id.
+     * @param string $itemValue item to select.
      * @param string $extraIdent additional identification for element.
      */
-    public function selectDropDown($elementId, $itemValue='', $extraIdent='')
+    public function selectDropDown($elementId, $itemValue = '', $extraIdent = '')
     {
         $this->assertTrue($this->isElementPresent($elementId));
-        $this->assertFalse($this->isVisible("//div[@id='".$elementId."']//ul"));
-        $this->click("//div[@id='".$elementId."']//p");
-        $this->waitForItemAppear("//div[@id='".$elementId."']//ul");
+        $this->assertFalse($this->isVisible("//div[@id='" . $elementId . "']//ul"));
+        $this->click("//div[@id='" . $elementId . "']//p");
+        $this->waitForItemAppear("//div[@id='" . $elementId . "']//ul");
         if ('' == $itemValue) {
-            $this->clickAndWait("//div[@id='".$elementId."']//ul/".$extraIdent."/a");
+            $this->clickAndWait("//div[@id='" . $elementId . "']//ul/" . $extraIdent . "/a");
         } else {
-            $this->clickAndWait("//div[@id='".$elementId."']//ul/".$extraIdent."/a[text()='".$itemValue."']");
+            $this->clickAndWait("//div[@id='" . $elementId . "']//ul/" . $extraIdent . "/a[text()='" . $itemValue . "']");
         }
     }
 
     /**
      * selects specified value from dropdown (for multidimensional variants).
      *
-     * @param string $elementId  container id.
-     * @param int    $elementNr  select list number (e.g. 1, 2).
-     * @param string $itemValue  item to select.
-     * @param string $textMsg    text that must appear after selecting md variant.
+     * @param string $elementId container id.
+     * @param int $elementNr select list number (e.g. 1, 2).
+     * @param string $itemValue item to select.
+     * @param string $textMsg text that must appear after selecting md variant.
      */
-    public function selectVariant($elementId, $elementNr, $itemValue, $textMsg='')
+    public function selectVariant($elementId, $elementNr, $itemValue, $textMsg = '')
     {
         $this->assertTrue($this->isElementPresent($elementId));
-        $this->assertFalse($this->isVisible("//div[@id='".$elementId."']/div[".$elementNr."]//ul"));
-        $this->click("//div[@id='".$elementId."']/div[".$elementNr."]//p");
-        $this->waitForItemAppear("//div[@id='".$elementId."']/div[".$elementNr."]//ul");
-        $this->click("//div[@id='".$elementId."']/div[".$elementNr."]//ul//a[text()='".$itemValue."']");
+        $this->assertFalse($this->isVisible("//div[@id='" . $elementId . "']/div[" . $elementNr . "]//ul"));
+        $this->click("//div[@id='" . $elementId . "']/div[" . $elementNr . "]//p");
+        $this->waitForItemAppear("//div[@id='" . $elementId . "']/div[" . $elementNr . "]//ul");
+        $this->click("//div[@id='" . $elementId . "']/div[" . $elementNr . "]//ul//a[text()='" . $itemValue . "']");
         if (!empty($textMsg)) {
             $this->waitForText($textMsg);
         } else {
@@ -821,13 +829,13 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
 
     /**
      * executes given sql. for EE version cash is also cleared.
-     * @param string $sql  sql line.
+     * @param string $sql sql line.
      */
     public function executeSql($sql)
     {
         oxDb::getDb()->execute($sql);
-        if ( OXID_VERSION_EE ) :
-            oxDb::getDb()->execute( "delete from oxcache" );
+        if (OXID_VERSION_EE) :
+            oxDb::getDb()->execute("delete from oxcache");
         endif;
     }
 
@@ -839,8 +847,8 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     public function getHeadingText($element)
     {
         $text = $this->getText($element);
-        if ($this->isElementPresent($element."/a")) {
-            $search = $this->getText($element."/a");
+        if ($this->isElementPresent($element . "/a")) {
+            $search = $this->getText($element . "/a");
             $text = str_replace($search, "", $text);
         }
         return trim($text);
@@ -854,7 +862,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     {
         $this->click("languageTrigger");
         $this->waitForItemAppear("languages");
-        $this->clickAndWait("//ul[@id='languages']//li/a/span[text()='".$language."']");
+        $this->clickAndWait("//ul[@id='languages']//li/a/span[text()='" . $language . "']");
         $this->assertFalse($this->isVisible("//ul[@id='languages']"));
     }
 
@@ -871,8 +879,8 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->selectWindow(null);
         $this->windowMaximize(null);
         $this->selectFrame("relative=top");
-        $this->open(shopURL."_cc.php");
-        $this->open(shopURL."admin");
+        $this->open(shopURL . "_cc.php");
+        $this->open(shopURL . "admin");
         $this->checkForErrors();
         $this->type("user", "admin@myoxideshop.com");
         $this->type("pwd", "admin0303");
@@ -883,7 +891,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         $this->selectFrame("relative=top");
         $this->selectFrame("navigation");
         /* if ( OXID_VERSION_EE ) : */
-        if ( isSUBSHOP ) { // selecting active subshop
+        if (isSUBSHOP) { // selecting active subshop
             $this->selectAndWaitFrame("selectshop", "label=subshop", "edit");
         }
         /* endif; */
@@ -907,24 +915,24 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @return null
      */
-    public function restoreDB( $sTmpPrefix = null)
+    public function restoreDB($sTmpPrefix = null)
     {
         $myConfig = oxRegistry::getConfig();
 
-        $sUser    = $myConfig->getConfigParam( 'dbUser' );
-        $sPass    = $myConfig->getConfigParam( 'dbPwd' );
-        $sDbName  = $myConfig->getConfigParam( 'dbName' );
-        $sHost    = $myConfig->getConfigParam( 'dbHost' );
+        $sUser = $myConfig->getConfigParam('dbUser');
+        $sPass = $myConfig->getConfigParam('dbPwd');
+        $sDbName = $myConfig->getConfigParam('dbName');
+        $sHost = $myConfig->getConfigParam('dbHost');
         if (!$sTmpPrefix) {
             $sTmpPrefix = 'tmp_db_dump';
         }
-        $demo = oxCCTempDir.'/'.$sTmpPrefix.'_'.$sDbName;
+        $demo = oxCCTempDir . '/' . $sTmpPrefix . '_' . $sDbName;
 
-        $sCmd = 'mysql -h'.escapeshellarg($sHost).' -u'.escapeshellarg($sUser).' -p'.escapeshellarg($sPass).' --default-character-set=utf8 '.escapeshellarg($sDbName).'  < '.escapeshellarg($demo).' 2>&1';
+        $sCmd = 'mysql -h' . escapeshellarg($sHost) . ' -u' . escapeshellarg($sUser) . ' -p' . escapeshellarg($sPass) . ' --default-character-set=utf8 ' . escapeshellarg($sDbName) . '  < ' . escapeshellarg($demo) . ' 2>&1';
         exec($sCmd, $sOut, $ret);
-        $sOut = implode("\n",$sOut);
-        if ( $ret > 0 ) {
-            throw new Exception( "ERROR: Failed restoring database after test: " . $sOut . " " . $ret . " " . $sCmd);
+        $sOut = implode("\n", $sOut);
+        if ($ret > 0) {
+            throw new Exception("ERROR: Failed restoring database after test: " . $sOut . " " . $ret . " " . $sCmd);
         }
     }
 
@@ -938,27 +946,27 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @return null
      */
-    public function dumpDB( $sTmpPrefix = null )
+    public function dumpDB($sTmpPrefix = null)
     {
-        $time = microtime (true);
+        $time = microtime(true);
         $myConfig = oxRegistry::getConfig();
 
-        $sUser    = $myConfig->getConfigParam( 'dbUser' );
-        $sPass    = $myConfig->getConfigParam( 'dbPwd' );
-        $sDbName  = $myConfig->getConfigParam( 'dbName' );
-        $sHost    = $myConfig->getConfigParam( 'dbHost' );
+        $sUser = $myConfig->getConfigParam('dbUser');
+        $sPass = $myConfig->getConfigParam('dbPwd');
+        $sDbName = $myConfig->getConfigParam('dbName');
+        $sHost = $myConfig->getConfigParam('dbHost');
         if (!$sTmpPrefix) {
             $sTmpPrefix = 'tmp_db_dump';
         }
-        $demo = oxCCTempDir.'/'.$sTmpPrefix.'_'.$sDbName;
+        $demo = oxCCTempDir . '/' . $sTmpPrefix . '_' . $sDbName;
 
-        $sCmd = 'mysqldump -h'.escapeshellarg($sHost).' -u'.escapeshellarg($sUser).' -p'.escapeshellarg($sPass).' --add-drop-table '.escapeshellarg($sDbName).'  > '.escapeshellarg($demo);
+        $sCmd = 'mysqldump -h' . escapeshellarg($sHost) . ' -u' . escapeshellarg($sUser) . ' -p' . escapeshellarg($sPass) . ' --add-drop-table ' . escapeshellarg($sDbName) . '  > ' . escapeshellarg($demo);
         exec($sCmd, $sOut, $ret);
-        $sOut = implode("\n",$sOut);
-        if ( $ret > 0 ) {
-            throw new Exception( $sOut );
+        $sOut = implode("\n", $sOut);
+        if ($ret > 0) {
+            throw new Exception($sOut);
         }
-        echo("db Dumptime: ".(microtime (true)-$time)."\n");
+        echo("db Dumptime: " . (microtime(true) - $time) . "\n");
     }
 
     /**
@@ -968,7 +976,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param string $sCl class name.
      * @param string $sFnc function name.
      * @param string $sOxid id of object.
-     * @param array  $aClassParams params to set to object.
+     * @param array $aClassParams params to set to object.
      * @param string $sShopId object shop id.
      *
      * @return void
@@ -979,10 +987,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
 
         $sShopUrl = $oConfig->getShopMainUrl() . '/_sc.php';
 
-        $sScFilePath =  $oConfig->getConfigParam( 'sShopDir' ) . '/_sc.php';
+        $sScFilePath = $oConfig->getConfigParam('sShopDir') . '/_sc.php';
 
-        if ( !file_exists( $sScFilePath ) ) {
-            $this->fail( "File not found: $sScFilePath" );
+        if (!file_exists($sScFilePath)) {
+            $this->fail("File not found: $sScFilePath");
         }
 
         $sClassParams = '';
@@ -990,23 +998,23 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
             if (is_array($sParamValue)) {
                 foreach ($sParamValue as $sSubParamKey => $sSubParamValue) {
                     $sSubParamValue = urlencode($sSubParamValue);
-                    $sClassParams = $sClassParams ."&". "classparams[". $sParamKey ."][".$sSubParamKey."]=". $sSubParamValue;
+                    $sClassParams = $sClassParams . "&" . "classparams[" . $sParamKey . "][" . $sSubParamKey . "]=" . $sSubParamValue;
                 }
             } else {
                 $sParamValue = urlencode($sParamValue);
-                $sClassParams = $sClassParams ."&". "classparams[". $sParamKey ."]=". $sParamValue;
+                $sClassParams = $sClassParams . "&" . "classparams[" . $sParamKey . "]=" . $sParamValue;
             }
         }
-        $sParams = "?cl=". $sCl ."&fnc=". $sFnc
-            . (!empty($sOxid) ? ("&oxid=". $sOxid) : "")
+        $sParams = "?cl=" . $sCl . "&fnc=" . $sFnc
+            . (!empty($sOxid) ? ("&oxid=" . $sOxid) : "")
             . (!empty($sClassParams) ? $sClassParams : "");
 
 
         // Pass shopId as to change in different shop we need to make it active.
         if ($sShopId && oxSHOPID != 'oxbaseshop') {
-            $sParams .= "&shp=".$sShopId;
+            $sParams .= "&shp=" . $sShopId;
         } elseif (isSUBSHOP) {
-            $sParams .= "&shp=".oxSHOPID;
+            $sParams .= "&shp=" . oxSHOPID;
         }
 
         $ch = curl_init();
@@ -1015,7 +1023,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Cache-Control: no-cache;'));
 
-        curl_setopt( $ch, CURLOPT_USERAGENT, "OXID-SELENIUMS-CONNECTOR" );
+        curl_setopt($ch, CURLOPT_USERAGENT, "OXID-SELENIUMS-CONNECTOR");
         $sRes = curl_exec($ch);
         curl_close($ch);
     }
@@ -1025,7 +1033,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @param string $sClassName class name.
      * @param string $sOxid id of object.
-     * @param array  $aClassParams params to set to object.
+     * @param array $aClassParams params to set to object.
      *
      * @return bool
      */
@@ -1068,7 +1076,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     public function getObject($sClassName, $sOxid)
     {
         $oObject = oxNew($sClassName);
-        if ( !$oObject->load($sOxid) ) {
+        if (!$oObject->load($sOxid)) {
             $oObject = null;
         }
         return $oObject;
@@ -1082,10 +1090,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     public function getLatestCreateRowId($sClassName)
     {
         $sOxid = null;
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
 
         $sTableName = $this->getTableNameFromClassName($sClassName);
-        $sSql = 'SELECT OXID FROM '. $sTableName .' ORDER BY OXTIMESTAMP LIMIT 1';
+        $sSql = 'SELECT OXID FROM ' . $sTableName . ' ORDER BY OXTIMESTAMP LIMIT 1';
         $rs = $oDb->select($sSql);
 
         if ($rs != false && $rs->recordCount() > 0) {
@@ -1105,7 +1113,7 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     public function getDBFieldName($sClassName, $sParamKey)
     {
         $sTableName = $this->getTableNameFromClassName($sClassName);
-        $sDBFieldName = $sTableName .'__'. $sParamKey;
+        $sDBFieldName = $sTableName . '__' . $sParamKey;
         return $sDBFieldName;
     }
 
@@ -1116,14 +1124,14 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      */
     public function getTableNameFromClassName($sClassName)
     {
-        $aClassNameWithoutS   = array("oxarticle", "oxrole", "oxrating", "oxreview", "oxrecommlist", "oxmanufacturer", "oxvoucherserie");
+        $aClassNameWithoutS = array("oxarticle", "oxrole", "oxrating", "oxreview", "oxrecommlist", "oxmanufacturer", "oxvoucherserie");
         $aClassNameWithoutIes = array("oxcategory");
 
         $sTableName = strtolower($sClassName);
         if (in_array(strtolower($sClassName), $aClassNameWithoutS)) {
-            $sTableName = strtolower($sClassName) ."s";
+            $sTableName = strtolower($sClassName) . "s";
         } elseif (in_array(strtolower($sClassName), $aClassNameWithoutIes)) {
-            $sTableName = substr(strtolower($sClassName), 0, -1) ."ies";
+            $sTableName = substr(strtolower($sClassName), 0, -1) . "ies";
         }
         return $sTableName;
     }
@@ -1148,17 +1156,17 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @return bool
      */
-    public function isTextPresent($sText, $sPath=null)
+    public function isTextPresent($sText, $sPath = null)
     {
-        if ( $sPath ) {
-            $sParsedText = $this->getText( $sPath );
-            return ( strpos( $sParsedText, $sText) !== false );
+        if ($sPath) {
+            $sParsedText = $this->getText($sPath);
+            return (strpos($sParsedText, $sText) !== false);
         } else {
             try {
-                return parent::isTextPresent( $sText );
+                return parent::isTextPresent($sText);
             } catch (Exception $e) {
                 sleep(1);
-                return parent::isTextPresent( $sText );
+                return parent::isTextPresent($sText);
             }
         }
     }
@@ -1175,22 +1183,18 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
     {
         try {
             parent::onNotSuccessfulTest($e);
-        }
-        catch (PHPUnit_Framework_IncompleteTestError $e) {
+        } catch (PHPUnit_Framework_IncompleteTestError $e) {
             throw $e;
-        }
-        catch (PHPUnit_Framework_SkippedTestError $e) {
+        } catch (PHPUnit_Framework_SkippedTestError $e) {
             throw $e;
-        }
-
-        catch (Exception $e_parent) {
-            $error_msg = "\n\n". PHPUnit_Util_Filter::getFilteredStacktrace( $e );
+        } catch (Exception $e_parent) {
+            $error_msg = "\n\n" . PHPUnit_Util_Filter::getFilteredStacktrace($e);
 
             $oTrace = $e_parent;
-            if ( version_compare(PHPUnit_Runner_Version::id(), '3.7', '<') ) {
+            if (version_compare(PHPUnit_Runner_Version::id(), '3.7', '<')) {
                 $oTrace = $e_parent->getTrace();
             }
-            throw new PHPUnit_Framework_Error($e_parent->getMessage().$error_msg, $e_parent->getCode(), $e_parent->getFile(), $e_parent->getLine(), $oTrace);
+            throw new PHPUnit_Framework_Error($e_parent->getMessage() . $error_msg, $e_parent->getCode(), $e_parent->getFile(), $e_parent->getLine(), $oTrace);
         }
     }
 
@@ -1201,10 +1205,10 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param $sFilePath
      * @return string
      */
-    public function getArrayValueFromFile( $sVarName, $sFilePath )
+    public function getArrayValueFromFile($sVarName, $sFilePath)
     {
         $aData = null;
-        if ( file_exists( $sFilePath ) ) {
+        if (file_exists($sFilePath)) {
             $aData = include $sFilePath;
         }
 
@@ -1218,11 +1222,11 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * @param string $sWindowID the JavaScript window ID of the window to select
      * @param string $sTimeout a timeout in milliseconds, after which this command will return with an error
      */
-    public function openWindowAndWait( $sUrl, $sWindowID, $sTimeout = "30000" )
+    public function openWindowAndWait($sUrl, $sWindowID, $sTimeout = "30000")
     {
-        $this->openWindow( $sUrl, $sWindowID );
-        $this->selectWindow( $sWindowID );
-        $this->waitForPageToLoad( $sTimeout );
+        $this->openWindow($sUrl, $sWindowID);
+        $this->selectWindow($sWindowID);
+        $this->waitForPageToLoad($sTimeout);
     }
 
     /**
@@ -1232,11 +1236,11 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      *
      * @return bool
      */
-    public function skipTestBlockUntil( $sDate )
+    public function skipTestBlockUntil($sDate)
     {
         $blSkip = false;
-        $oDate = DateTime::createFromFormat( 'Y-m-d', $sDate );
-        if ( time() >= $oDate->getTimestamp() ) {
+        $oDate = DateTime::createFromFormat('Y-m-d', $sDate);
+        if (time() >= $oDate->getTimestamp()) {
             $blSkip = true;
         }
         return $blSkip;
@@ -1246,17 +1250,17 @@ class oxidAdditionalSeleniumFunctions extends PHPUnit_Extensions_SeleniumTestCas
      * Mark the test as skipped until given date.
      * Wrapper function for PHPUnit_Framework_Assert::markTestSkipped.
      *
-     * @param string $sDate    Date string in format 'Y-m-d'.
+     * @param string $sDate Date string in format 'Y-m-d'.
      * @param string $sMessage Message.
      *
      * @throws PHPUnit_Framework_SkippedTestError
      */
-    public function markTestSkippedUntil( $sDate, $sMessage = '' )
+    public function markTestSkippedUntil($sDate, $sMessage = '')
     {
-        $oDate = DateTime::createFromFormat( 'Y-m-d', $sDate );
-        if ( time() < $oDate->getTimestamp() ) {
+        $oDate = DateTime::createFromFormat('Y-m-d', $sDate);
+        if (time() < $oDate->getTimestamp()) {
             $this->captureScreenshotOnFailure = false; // Workaround for phpunit 3.6, disable screenshots before skip!
-            $this->markTestSkipped( $sMessage );
+            $this->markTestSkipped($sMessage);
         }
     }
 }

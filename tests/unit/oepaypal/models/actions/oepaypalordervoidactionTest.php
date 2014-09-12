@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderVoidAction class.
@@ -36,15 +36,15 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
         $oPayPalResponse = new oePayPalResponseDoVoid();
         $dAmount = 5.19;
 
-        $oOrder = $this->_getOrder( array( 'getRemainingOrderSum', 'setVoidedAmount' ) );
-        $oOrder->expects( $this->once() )
-            ->method( 'getRemainingOrderSum' )
-            ->will( $this->returnValue( $dAmount ) );
-        $oOrder->expects( $this->once() )
-            ->method( 'setVoidedAmount' )
-            ->with( $this->equalTo( $dAmount ) );
+        $oOrder = $this->_getOrder(array('getRemainingOrderSum', 'setVoidedAmount'));
+        $oOrder->expects($this->once())
+            ->method('getRemainingOrderSum')
+            ->will($this->returnValue($dAmount));
+        $oOrder->expects($this->once())
+            ->method('setVoidedAmount')
+            ->with($this->equalTo($dAmount));
 
-        $oAction = $this->_getAction( $oPayPalResponse, $oOrder );
+        $oAction = $this->_getAction($oPayPalResponse, $oOrder);
 
         $oAction->process();
     }
@@ -63,26 +63,26 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
             'getAuthorizationId' => $sAuthentificationId,
             'getCorrelationId' => $sCorrelationId
         );
-        $oPayPalResponse = $this->_createStub( 'oePayPalResponseDoVoid', $aPayPalResponseMethods );
+        $oPayPalResponse = $this->_createStub('oePayPalResponseDoVoid', $aPayPalResponseMethods);
 
         $oPayment = new oePayPalOrderPayment();
-        $oPayment->setDate( $sDate );
-        $oPayment->setTransactionId( $sAuthentificationId );
-        $oPayment->setCorrelationId( $sCorrelationId );
-        $oPayment->setAction( 'void' );
-        $oPayment->setStatus( 'Voided' );
-        $oPayment->setAmount( $dAmount );
+        $oPayment->setDate($sDate);
+        $oPayment->setTransactionId($sAuthentificationId);
+        $oPayment->setCorrelationId($sCorrelationId);
+        $oPayment->setAction('void');
+        $oPayment->setStatus('Voided');
+        $oPayment->setAmount($dAmount);
 
-        $oPaymentList = $this->_getPaymentList( array( 'addPayment' ) );
-        $oPaymentList->expects( $this->once() )->method( 'addPayment' )
-            ->with( $oPayment )
-            ->will( $this->returnValue( $this->_getPayment() ) );
+        $oPaymentList = $this->_getPaymentList(array('addPayment'));
+        $oPaymentList->expects($this->once())->method('addPayment')
+            ->with($oPayment)
+            ->will($this->returnValue($this->_getPayment()));
 
-        $oOrder = $this->_getOrder( array( 'getPaymentList', 'getRemainingOrderSum' ) );
-        $oOrder->expects( $this->once() )->method( 'getRemainingOrderSum' )->will( $this->returnValue( $dAmount ) );
-        $oOrder->expects( $this->once() )->method( 'getPaymentList' )->will( $this->returnValue( $oPaymentList ) );
+        $oOrder = $this->_getOrder(array('getPaymentList', 'getRemainingOrderSum'));
+        $oOrder->expects($this->once())->method('getRemainingOrderSum')->will($this->returnValue($dAmount));
+        $oOrder->expects($this->once())->method('getPaymentList')->will($this->returnValue($oPaymentList));
 
-        $oAction = $this->_getAction( $oPayPalResponse, $oOrder );
+        $oAction = $this->_getAction($oPayPalResponse, $oOrder);
 
         $oAction->process();
     }
@@ -94,25 +94,25 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
     {
         $sComment = 'testComment';
         $oComment = new oePayPalOrderPaymentComment();
-        $oComment->setComment( $sComment );
+        $oComment->setComment($sComment);
 
         $oPayPalResponse = $this->_getPayPalResponse();
 
         $oPayment = $this->_getPayment();
-        $oPayment->expects( $this->once() )
-            ->method( 'addComment' )
-            ->with( $this->equalTo( $oComment ) );
+        $oPayment->expects($this->once())
+            ->method('addComment')
+            ->with($this->equalTo($oComment));
 
-        $oPaymentList = $this->_getPaymentList( array( 'addPayment' ) );
-        $oPaymentList->expects( $this->any() )->method( 'addPayment' )->will( $this->returnValue( $oPayment ) );
+        $oPaymentList = $this->_getPaymentList(array('addPayment'));
+        $oPaymentList->expects($this->any())->method('addPayment')->will($this->returnValue($oPayment));
 
-        $oOrder = $this->_getOrder( array( 'getPaymentList', 'getRemainingOrderSum' ) );
-        $oOrder->expects( $this->once() )->method( 'getPaymentList' )->will( $this->returnValue( $oPaymentList ) );
+        $oOrder = $this->_getOrder(array('getPaymentList', 'getRemainingOrderSum'));
+        $oOrder->expects($this->once())->method('getPaymentList')->will($this->returnValue($oPaymentList));
 
         $oData = $this->_getData();
-        $oData->expects($this->any())->method('getComment')->will($this->returnValue( $sComment ) );
+        $oData->expects($this->any())->method('getComment')->will($this->returnValue($sComment));
 
-        $oAction = $this->_getAction( $oPayPalResponse, $oOrder, $oData );
+        $oAction = $this->_getAction($oPayPalResponse, $oOrder, $oData);
 
         $oAction->process();
     }
@@ -124,7 +124,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      */
     protected function _getPayment()
     {
-        $oPayment = $this->getMock( 'oePayPalOrderPayment', array( 'addComment' ));
+        $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
         return $oPayment;
     }
 
@@ -134,10 +134,10 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * @param array $aTestMethods
      * @return oePayPalOrderPaymentList
      */
-    protected function _getPaymentList( $aTestMethods = array() )
+    protected function _getPaymentList($aTestMethods = array())
     {
-        $aMethods = array( 'addPayment' => $this->_getPayment() );
-        $oPaymentList = $this->_createStub( 'oePayPalOrderPaymentList', $aMethods, $aTestMethods );
+        $aMethods = array('addPayment' => $this->_getPayment());
+        $oPaymentList = $this->_createStub('oePayPalOrderPaymentList', $aMethods, $aTestMethods);
 
         return $oPaymentList;
     }
@@ -148,10 +148,10 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * @param array $aTestMethods
      * @return oePayPalPayPalOrder
      */
-    protected function _getOrder( $aTestMethods = array() )
+    protected function _getOrder($aTestMethods = array())
     {
-        $aMethods = array( 'getPaymentList' => $this->_getPaymentList() );
-        $oOrder = $this->_createStub( 'oePayPalPayPalOrder', $aMethods, $aTestMethods );
+        $aMethods = array('getPaymentList' => $this->_getPaymentList());
+        $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
         return $oOrder;
     }
 
@@ -161,12 +161,12 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * @param array $aTestMethods
      * @return oePayPalResponseDoCapture
      */
-    protected function _getPayPalResponse( $aTestMethods = array() )
+    protected function _getPayPalResponse($aTestMethods = array())
     {
-        $aMethods = array( 'getRefundAmount', 'getPaymentStatus', 'getTransactionId', 'getCurrency'  );
-        $aMockedMethods = array_unique( array_merge( $aMethods, $aTestMethods ) );
+        $aMethods = array('getRefundAmount', 'getPaymentStatus', 'getTransactionId', 'getCurrency');
+        $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
-        $oOrder = $this->getMock( 'oePayPalResponseDoVoid', $aMockedMethods );
+        $oOrder = $this->getMock('oePayPalResponseDoVoid', $aMockedMethods);
         return $oOrder;
     }
 
@@ -176,9 +176,9 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * @param $aMethods
      * @return oePayPalOrderCaptureActionData
      */
-    protected function _getData( $aMethods = array() )
+    protected function _getData($aMethods = array())
     {
-        $oData = $this->_createStub( 'oePayPalOrderVoidActionData', $aMethods );
+        $oData = $this->_createStub('oePayPalOrderVoidActionData', $aMethods);
         return $oData;
     }
 
@@ -190,12 +190,12 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * @param $oData
      * @return oePayPalOrderCaptureAction
      */
-    protected function _getAction( $oPayPalResponse, $oOrder, $oData = null )
+    protected function _getAction($oPayPalResponse, $oOrder, $oData = null)
     {
-        $oData = $oData? $oData : $this->_getData();
-        $oHandler = $this->_createStub( 'ActionHandler', array( 'getPayPalResponse' => $oPayPalResponse, 'getData' => $oData ) );
+        $oData = $oData ? $oData : $this->_getData();
+        $oHandler = $this->_createStub('ActionHandler', array('getPayPalResponse' => $oPayPalResponse, 'getData' => $oData));
 
-        $oAction = $this->getMock( 'oePayPalOrderVoidAction', array( 'getDate' ), array( $oHandler, $oOrder) );
+        $oAction = $this->getMock('oePayPalOrderVoidAction', array('getDate'), array($oHandler, $oOrder));
         $oAction->expects($this->any())->method('getDate')->will($this->returnValue('date'));
 
         return $oAction;

@@ -38,15 +38,15 @@ class AllTestsSelenium extends PHPUnit_Framework_TestCase
         $suite = new PHPUnit_Framework_TestSuite('PHPUnit');
 
         //adding ACCEPTANCE Tests
-        if ( !( $sFilter = getenv( 'TEST_FILE_FILTER' ) ) ) {
+        if (!($sFilter = getenv('TEST_FILE_FILTER'))) {
             $sFilter = '*';
         }
-        $aTestFiles = glob( oxTESTSUITEDIR."/{$sFilter}Test.php" );
+        $aTestFiles = glob(oxTESTSUITEDIR . "/{$sFilter}Test.php");
 
-        foreach ( $aTestFiles as $sFilename) {
+        foreach ($aTestFiles as $sFilename) {
             include_once $sFilename;
-            $sClassName = str_replace("/", "_", oxTESTSUITEDIR).'_'.str_replace("/", "_", str_replace( array( ".php", oxTESTSUITEDIR.'/'), "", $sFilename));
-            $suite->addTestSuite( $sClassName );
+            $sClassName = str_replace("/", "_", oxTESTSUITEDIR) . '_' . str_replace("/", "_", str_replace(array(".php", oxTESTSUITEDIR . '/'), "", $sFilename));
+            $suite->addTestSuite($sClassName);
         }
 
         return $suite;

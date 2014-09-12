@@ -74,7 +74,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
     public function isPayPalAck()
     {
         $aResponse = $this->getData();
-        return isset( $aResponse[ self::PAYPAL_ACK ] );
+        return isset($aResponse[self::PAYPAL_ACK]);
     }
 
     /**
@@ -84,7 +84,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
      */
     public function getReceiverEmail()
     {
-        return $this->_getValue( self::RECEIVER_EMAIL );
+        return $this->_getValue(self::RECEIVER_EMAIL);
     }
 
     /**
@@ -94,7 +94,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
      */
     public function getPaymentStatus()
     {
-        return $this->_getValue( self::PAYPAL_PAYMENT_STATUS );
+        return $this->_getValue(self::PAYPAL_PAYMENT_STATUS);
     }
 
     /**
@@ -104,7 +104,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
      */
     public function getTransactionId()
     {
-        return $this->_getValue( self::PAYPAL_TRANSACTION_ID );
+        return $this->_getValue(self::PAYPAL_TRANSACTION_ID);
     }
 
     /**
@@ -114,7 +114,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
      */
     public function getCurrency()
     {
-        return $this->_getValue( self::MC_CURRENCY );
+        return $this->_getValue(self::MC_CURRENCY);
     }
 
     /**
@@ -124,7 +124,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
      */
     public function getAmount()
     {
-        return $this->_getValue( self::MC_GROSS );
+        return $this->_getValue(self::MC_GROSS);
     }
 
 }

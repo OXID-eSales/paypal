@@ -29,9 +29,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sPaymentId
      */
-    public function setId( $sPaymentId )
+    public function setId($sPaymentId)
     {
-        $this->setPaymentId( $sPaymentId );
+        $this->setPaymentId($sPaymentId);
     }
 
     /**
@@ -64,9 +64,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sPaymentId
      */
-    public function setPaymentId( $sPaymentId )
+    public function setPaymentId($sPaymentId)
     {
-        $this->_setValue( 'oepaypal_paymentid', $sPaymentId );
+        $this->_setValue('oepaypal_paymentid', $sPaymentId);
     }
 
     /**
@@ -76,7 +76,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getPaymentId()
     {
-        return $this->_getValue( 'oepaypal_paymentid' );
+        return $this->_getValue('oepaypal_paymentid');
     }
 
     /**
@@ -84,9 +84,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sValue
      */
-    public function setAction( $sValue )
+    public function setAction($sValue)
     {
-        $this->_setValue( 'oepaypal_action',  $sValue);
+        $this->_setValue('oepaypal_action', $sValue);
     }
 
     /**
@@ -96,7 +96,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getAction()
     {
-        return $this->_getValue( 'oepaypal_action' );
+        return $this->_getValue('oepaypal_action');
     }
 
     /**
@@ -104,9 +104,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sValue
      */
-    public function setOrderId( $sValue )
+    public function setOrderId($sValue)
     {
-        $this->_setValue( 'oepaypal_orderid', $sValue );
+        $this->_setValue('oepaypal_orderid', $sValue);
     }
 
     /**
@@ -116,7 +116,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getOrderId()
     {
-        return $this->_getValue( 'oepaypal_orderid' );
+        return $this->_getValue('oepaypal_orderid');
     }
 
     /**
@@ -124,9 +124,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param float $flValue
      */
-    public function setAmount( $flValue )
+    public function setAmount($flValue)
     {
-        $this->_setValue( 'oepaypal_amount', $flValue );
+        $this->_setValue('oepaypal_amount', $flValue);
     }
 
     /**
@@ -136,7 +136,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getAmount()
     {
-        return $this->_getValue( 'oepaypal_amount' );
+        return $this->_getValue('oepaypal_amount');
     }
 
     /**
@@ -144,9 +144,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param double $dAmount
      */
-    public function setRefundedAmount( $dAmount )
+    public function setRefundedAmount($dAmount)
     {
-        $this->_setValue( 'oepaypal_refundedamount', $dAmount );
+        $this->_setValue('oepaypal_refundedamount', $dAmount);
     }
 
     /**
@@ -154,9 +154,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param double $dAmount
      */
-    public function addRefundedAmount( $dAmount )
+    public function addRefundedAmount($dAmount)
     {
-        $this->setRefundedAmount( $dAmount + $this->getRefundedAmount() );
+        $this->setRefundedAmount($dAmount + $this->getRefundedAmount());
     }
 
     /**
@@ -166,7 +166,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getRefundedAmount()
     {
-        return $this->_getValue( 'oepaypal_refundedamount' );
+        return $this->_getValue('oepaypal_refundedamount');
     }
 
     /**
@@ -177,7 +177,7 @@ class oePayPalOrderPayment extends oePayPalModel
     public function getRemainingRefundAmount()
     {
         $dAmount = $this->getAmount() - $this->getRefundedAmount();
-        return sprintf( "%.2f", round( $dAmount, 2 ) );
+        return sprintf("%.2f", round($dAmount, 2));
     }
 
     /**
@@ -187,7 +187,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getStatus()
     {
-        return $this->_getValue( 'oepaypal_status' );
+        return $this->_getValue('oepaypal_status');
     }
 
     /**
@@ -195,9 +195,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sValue status
      */
-    public function setStatus( $sValue )
+    public function setStatus($sValue)
     {
-        $this->_setValue( 'oepaypal_status', $sValue );
+        $this->_setValue('oepaypal_status', $sValue);
     }
 
     /**
@@ -205,9 +205,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sValue
      */
-    public function setDate( $sValue )
+    public function setDate($sValue)
     {
-        $this->_setValue( 'oepaypal_date', $sValue );
+        $this->_setValue('oepaypal_date', $sValue);
     }
 
     /**
@@ -217,7 +217,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getDate()
     {
-        return $this->_getValue( 'oepaypal_date' );
+        return $this->_getValue('oepaypal_date');
     }
 
     /**
@@ -225,9 +225,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sCurrency
      */
-    public function setCurrency( $sCurrency )
+    public function setCurrency($sCurrency)
     {
-        $this->_setValue( 'oepaypal_currency', $sCurrency );
+        $this->_setValue('oepaypal_currency', $sCurrency);
     }
 
     /**
@@ -237,7 +237,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getCurrency()
     {
-        return $this->_getValue( 'oepaypal_currency' );
+        return $this->_getValue('oepaypal_currency');
     }
 
     /**
@@ -245,9 +245,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sTransactionId
      */
-    public function setTransactionId( $sTransactionId )
+    public function setTransactionId($sTransactionId)
     {
-        $this->_setValue( 'oepaypal_transactionid', $sTransactionId );
+        $this->_setValue('oepaypal_transactionid', $sTransactionId);
     }
 
     /**
@@ -257,7 +257,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getTransactionId()
     {
-        return $this->_getValue( 'oepaypal_transactionid' );
+        return $this->_getValue('oepaypal_transactionid');
     }
 
     /**
@@ -265,9 +265,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param string $sCorrelationId
      */
-    public function setCorrelationId( $sCorrelationId )
+    public function setCorrelationId($sCorrelationId)
     {
-        $this->_setValue( 'oepaypal_correlationid', $sCorrelationId );
+        $this->_setValue('oepaypal_correlationid', $sCorrelationId);
     }
 
     /**
@@ -277,7 +277,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getCorrelationId()
     {
-        return $this->_getValue( 'oepaypal_correlationid' );
+        return $this->_getValue('oepaypal_correlationid');
     }
 
     /**
@@ -287,12 +287,12 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @return bool
      */
-    public function loadByTransactionId( $sTransactionId )
+    public function loadByTransactionId($sTransactionId)
     {
         $blResult = false;
-        $aData = $this->_getDbGateway()->loadByTransactionId( $sTransactionId );
-        if ( $aData ) {
-            $this->setData( $aData );
+        $aData = $this->_getDbGateway()->loadByTransactionId($sTransactionId);
+        if ($aData) {
+            $this->setData($aData);
             $blResult = true;
         }
 
@@ -304,9 +304,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param boolean $blIsValid payment is valid.
      */
-    public function setIsValid( $blIsValid )
+    public function setIsValid($blIsValid)
     {
-        $this->_blIsValid = (bool) $blIsValid;
+        $this->_blIsValid = (bool)$blIsValid;
     }
 
     /**
@@ -326,10 +326,10 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function getCommentList()
     {
-        if ( is_null( $this->_oCommentList ) ) {
-            $oComments = oxNew( 'oePayPalOrderPaymentCommentList' );
-            $oComments->load( $this->getPaymentId() );
-            $this->setCommentList( $oComments );
+        if (is_null($this->_oCommentList)) {
+            $oComments = oxNew('oePayPalOrderPaymentCommentList');
+            $oComments->load($this->getPaymentId());
+            $this->setCommentList($oComments);
         }
         return $this->_oCommentList;
     }
@@ -337,7 +337,7 @@ class oePayPalOrderPayment extends oePayPalModel
     /**
      * Set comments
      */
-    public function setCommentList( $aComments )
+    public function setCommentList($aComments)
     {
         $this->_oCommentList = $aComments;
     }
@@ -347,9 +347,9 @@ class oePayPalOrderPayment extends oePayPalModel
      *
      * @param oePaypalOrderPaymentComment $oComment comment
      */
-    public function addComment( $oComment )
+    public function addComment($oComment)
     {
-        $this->getCommentList()->addComment( $oComment );
+        $this->getCommentList()->addComment($oComment);
     }
 
     /**
@@ -359,8 +359,8 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     protected function _getDbGateway()
     {
-        if ( is_null( $this->_oDbGateway ) ) {
-            $this->_setDbGateway( oxNew( 'oePayPalOrderPaymentDbGateway' ) );
+        if (is_null($this->_oDbGateway)) {
+            $this->_setDbGateway(oxNew('oePayPalOrderPaymentDbGateway'));
         }
 
         return $this->_oDbGateway;

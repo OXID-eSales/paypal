@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderReauthorizeAction class.
@@ -35,8 +35,8 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
     {
         $sAmount = 59.92;
         $oAction = $this->_getAction();
-        $oAction->setAmount( $sAmount );
-        $this->assertEquals( $sAmount, $oAction->getAmount() );
+        $oAction->setAmount($sAmount);
+        $this->assertEquals($sAmount, $oAction->getAmount());
     }
 
     /**
@@ -47,9 +47,9 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
         $oPayPalRequest = new oePayPalPayPalRequest();
 
         $oAction = $this->_getAction();
-        $oAction->setPayPalRequest( $oPayPalRequest );
+        $oAction->setPayPalRequest($oPayPalRequest);
 
-        $this->assertEquals( $oPayPalRequest, $oAction->getPayPalRequest() );
+        $this->assertEquals($oPayPalRequest, $oAction->getPayPalRequest());
     }
 
     /**
@@ -59,14 +59,14 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
     {
         $sRemainingOrderSum = 59.67;
 
-        $oOrder = $this->_createStub( 'oePayPalPayPalOrder', array( 'getRemainingOrderSum' => $sRemainingOrderSum ) );
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getPost' => array() ) );
+        $oOrder = $this->_createStub('oePayPalPayPalOrder', array('getRemainingOrderSum' => $sRemainingOrderSum));
+        $oRequest = $this->_createStub('oePayPalRequest', array('getPost' => array()));
 
         $oAction = $this->_getAction();
-        $oAction->setOrder( $oOrder );
-        $oAction->setRequest( $oRequest );
+        $oAction->setOrder($oOrder);
+        $oAction->setRequest($oRequest);
 
-        $this->assertEquals( $sRemainingOrderSum, $oAction->getAmount() );
+        $this->assertEquals($sRemainingOrderSum, $oAction->getAmount());
     }
 
     /**
@@ -78,20 +78,20 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
         $sCurrency = 'LTU';
         $dAmount = 59.67;
 
-        $oBuilder = $this->getMock( 'oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType') );
-        $oBuilder->expects( $this->once() )->method( 'setAuthorizationId' )->with( $this->equalTo( $sAuthId ) );
-        $oBuilder->expects( $this->once() )->method( 'setAmount' )->with( $this->equalTo( $dAmount ), $this->equalTo( $sCurrency ) );
+        $oBuilder = $this->getMock('oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType'));
+        $oBuilder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($sAuthId));
+        $oBuilder->expects($this->once())->method('setAmount')->with($this->equalTo($dAmount), $this->equalTo($sCurrency));
 
-        $oOrder = $this->_createStub( 'oePayPalPayPalOrder', array( 'getCurrency' => $sCurrency ) );
+        $oOrder = $this->_createStub('oePayPalPayPalOrder', array('getCurrency' => $sCurrency));
 
         $oAction = $this->_getAction();
-        $oAction->setAuthorizationId( $sAuthId );
-        $oAction->setAmount( $dAmount );
+        $oAction->setAuthorizationId($sAuthId);
+        $oAction->setAmount($dAmount);
 
-        $oAction->setOrder( $oOrder );
-        $oAction->setPayPalRequestBuilder( $oBuilder );
+        $oAction->setOrder($oOrder);
+        $oAction->setPayPalRequestBuilder($oBuilder);
 
-        $this->assertTrue( $oAction->getPayPalRequest() instanceof oePayPalPayPalRequest );
+        $this->assertTrue($oAction->getPayPalRequest() instanceof oePayPalPayPalRequest);
     }
 
     /**
@@ -99,14 +99,14 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      */
     public function testGetPayPalResponse_SetsCorrectRequestToService()
     {
-        $oPayPalRequest = $this->getMock( 'oePayPalPayPalRequest' );
+        $oPayPalRequest = $this->getMock('oePayPalPayPalRequest');
 
-        $oCheckoutService = $this->getMock( 'oePayPalService', array( 'doReAuthorization' ) );
-        $oCheckoutService->expects( $this->once() )->method( 'doReAuthorization' )->with( $this->equalTo( $oPayPalRequest ) );
+        $oCheckoutService = $this->getMock('oePayPalService', array('doReAuthorization'));
+        $oCheckoutService->expects($this->once())->method('doReAuthorization')->with($this->equalTo($oPayPalRequest));
 
         $oAction = new oePayPalOrderReauthorizeAction();
-        $oAction->setPayPalService( $oCheckoutService );
-        $oAction->setPayPalRequest( $oPayPalRequest );
+        $oAction->setPayPalService($oCheckoutService);
+        $oAction->setPayPalRequest($oPayPalRequest);
 
         $oAction->getPayPalResponse();
     }
@@ -126,27 +126,27 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
             'getCorrelationId' => $sCorrelationId,
             'getPaymentStatus' => $sPaymentStatus,
         );
-        $oPayPalResponse = $this->_createStub( 'oePayPalOrderReauthorizeAction', $aMethods );
+        $oPayPalResponse = $this->_createStub('oePayPalOrderReauthorizeAction', $aMethods);
 
         $oPayment = new oePayPalOrderPayment();
         $oPayment->setDate($sDate);
         $oPayment->setTransactionId($sAuthId);
-        $oPayment->setCorrelationId( $sCorrelationId );
+        $oPayment->setCorrelationId($sCorrelationId);
         $oPayment->setAction('re-authorization');
         $oPayment->setStatus($sPaymentStatus);
 
 
-        $oPaymentList = $this->_getPaymentList( array( 'addPayment' ) );
-        $oPaymentList->expects( $this->once() )->method( 'addPayment' )
-            ->with( $oPayment )
-            ->will( $this->returnValue( $this->_getPayment() ) );
+        $oPaymentList = $this->_getPaymentList(array('addPayment'));
+        $oPaymentList->expects($this->once())->method('addPayment')
+            ->with($oPayment)
+            ->will($this->returnValue($this->_getPayment()));
 
-        $oOrder = $this->_getOrder( array( 'getPaymentList' ) );
-        $oOrder->expects( $this->once() )->method( 'getPaymentList' )->will( $this->returnValue( $oPaymentList ) );
+        $oOrder = $this->_getOrder(array('getPaymentList'));
+        $oOrder->expects($this->once())->method('getPaymentList')->will($this->returnValue($oPaymentList));
 
         $oAction = $this->_getAction();
-        $oAction->setPayPalResponse( $oPayPalResponse );
-        $oAction->setOrder( $oOrder );
+        $oAction->setPayPalResponse($oPayPalResponse);
+        $oAction->setOrder($oOrder);
 
         $oAction->process();
     }
@@ -156,11 +156,11 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      */
     public function testProcess_ProcessingOfServiceResponse_OrderSaved()
     {
-        $oOrder = $this->_getOrder( array( 'save' ) );
-        $oOrder->expects( $this->atLeastOnce() )->method( 'save' )->will( $this->returnValue( null ) );
+        $oOrder = $this->_getOrder(array('save'));
+        $oOrder->expects($this->atLeastOnce())->method('save')->will($this->returnValue(null));
 
         $oAction = $this->_getAction();
-        $oAction->setOrder( $oOrder );
+        $oAction->setOrder($oOrder);
 
         $oAction->process();
     }
@@ -172,20 +172,20 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
     {
         $sComment = 'testComment';
         $oComment = new oePayPalOrderPaymentComment();
-        $oComment->setComment( $sComment );
+        $oComment->setComment($sComment);
 
         $oPayment = $this->_getPayment();
-        $oPayment->expects( $this->once() )->method( 'addComment' )->with( $this->equalTo( $oComment ) );
+        $oPayment->expects($this->once())->method('addComment')->with($this->equalTo($oComment));
 
-        $oPaymentList = $this->_getPaymentList( array( 'addPayment' ) );
-        $oPaymentList->expects( $this->any() )->method( 'addPayment' )->will( $this->returnValue( $oPayment ) );
+        $oPaymentList = $this->_getPaymentList(array('addPayment'));
+        $oPaymentList->expects($this->any())->method('addPayment')->will($this->returnValue($oPayment));
 
-        $oOrder = $this->_getOrder( array( 'getPaymentList' ) );
-        $oOrder->expects( $this->any() )->method( 'getPaymentList' )->will( $this->returnValue( $oPaymentList ) );
+        $oOrder = $this->_getOrder(array('getPaymentList'));
+        $oOrder->expects($this->any())->method('getPaymentList')->will($this->returnValue($oPaymentList));
 
         $oAction = $this->_getAction();
-        $oAction->setOrder( $oOrder );
-        $oAction->setComment( $sComment );
+        $oAction->setOrder($oOrder);
+        $oAction->setComment($sComment);
 
         $oAction->process();
     }
@@ -198,7 +198,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      */
     protected function _getPayment()
     {
-        $oPayment = $this->getMock( 'oePayPalOrderPayment', array( 'addComment' ));
+        $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
         return $oPayment;
     }
 
@@ -208,10 +208,10 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * @param array $aTestMethods
      * @return oePayPalOrderPaymentList
      */
-    protected function _getPaymentList( $aTestMethods = array() )
+    protected function _getPaymentList($aTestMethods = array())
     {
-        $aMethods = array( 'addPayment' => $this->_getPayment() );
-        $oPaymentList = $this->_createStub( 'oePayPalOrderPaymentList', $aMethods, $aTestMethods );
+        $aMethods = array('addPayment' => $this->_getPayment());
+        $oPaymentList = $this->_createStub('oePayPalOrderPaymentList', $aMethods, $aTestMethods);
 
         return $oPaymentList;
     }
@@ -222,10 +222,10 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * @param array $aTestMethods
      * @return oePayPalPayPalOrder
      */
-    protected function _getOrder( $aTestMethods = array() )
+    protected function _getOrder($aTestMethods = array())
     {
-        $aMethods = array( 'getPaymentList' => $this->_getPaymentList() );
-        $oOrder = $this->_createStub( 'oePayPalPayPalOrder', $aMethods, $aTestMethods );
+        $aMethods = array('getPaymentList' => $this->_getPaymentList());
+        $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
         return $oOrder;
     }
 
@@ -235,12 +235,12 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * @param array $aTestMethods
      * @return oePayPalResponseDoCapture
      */
-    protected function _getPayPalResponse( $aTestMethods = array() )
+    protected function _getPayPalResponse($aTestMethods = array())
     {
-        $aMethods = array( 'getAuthorizationId', 'getPaymentStatus'  );
-        $aMockedMethods = array_unique( array_merge( $aMethods, $aTestMethods ) );
+        $aMethods = array('getAuthorizationId', 'getPaymentStatus');
+        $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
-        $oOrder = $this->getMock( 'oePayPalResponseDoRefund', $aMockedMethods );
+        $oOrder = $this->getMock('oePayPalResponseDoRefund', $aMockedMethods);
         return $oOrder;
     }
 
@@ -251,11 +251,11 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      */
     protected function _getAction()
     {
-        $oAction = $this->_createStub( 'oePayPalOrderReauthorizeAction', array( 'getDate' => 'date' ) );
-        $oAction->setComment( '' );
-        $oAction->setAuthorizationId( "authId" );
-        $oAction->setPayPalResponse( $this->_getPayPalResponse() );
-        $oAction->setOrderStatus( 'Completed' );
+        $oAction = $this->_createStub('oePayPalOrderReauthorizeAction', array('getDate' => 'date'));
+        $oAction->setComment('');
+        $oAction->setAuthorizationId("authId");
+        $oAction->setPayPalResponse($this->_getPayPalResponse());
+        $oAction->setOrderStatus('Completed');
 
         return $oAction;
     }

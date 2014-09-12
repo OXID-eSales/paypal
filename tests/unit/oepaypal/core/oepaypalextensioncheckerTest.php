@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
 
 /**
  * Testing oePayPalExtensionChecker class.
@@ -32,8 +32,8 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
     public function testSetGetShopId_withGivenShopId()
     {
         $oChecker = new oePayPalExtensionChecker();
-        $oChecker->setShopId( 'testShopId' );
-        $this->assertEquals( 'testShopId' , $oChecker->getShopId());
+        $oChecker->setShopId('testShopId');
+        $this->assertEquals('testShopId', $oChecker->getShopId());
     }
 
     /**
@@ -42,7 +42,7 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
     public function testSetGetShopId_useActiveShopId()
     {
         $oChecker = new oePayPalExtensionChecker();
-        $this->assertEquals( $this->getConfig()->getShopId() , $oChecker->getShopId());
+        $this->assertEquals($this->getConfig()->getShopId(), $oChecker->getShopId());
     }
 
 
@@ -52,8 +52,8 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
     public function testSetGeExtensionId_withGivenExtensionId()
     {
         $oChecker = new oePayPalExtensionChecker();
-        $oChecker->setExtensionId( 'testExtensionId' );
-        $this->assertEquals( 'testExtensionId' , $oChecker->getExtensionId() );
+        $oChecker->setExtensionId('testExtensionId');
+        $this->assertEquals('testExtensionId', $oChecker->getExtensionId());
     }
 
     /**
@@ -62,7 +62,7 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
     public function testIsActive_extensionNotSet()
     {
         $oChecker = new oePayPalExtensionChecker();
-        $this->assertFalse( $oChecker->isActive() );
+        $this->assertFalse($oChecker->isActive());
     }
 
     /**
@@ -72,37 +72,37 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
      */
     public function getExtendedClassDataProvider()
     {
-        $aExtendedClasses = array (
+        $aExtendedClasses = array(
             'order_list' => 'oe/oepaypal/controllers/admin/oepaypalorder_list',
             'order' => 'oe/oepaypal/controllers/oepaypalorder'
         );
-        $aExtendedClassesWith = array (
+        $aExtendedClassesWith = array(
             'order_list' => 'oe/testExtension/controllers/admin/oepaypalorder_list',
             'order' => 'oe/testExtension/controllers/oepaypalorder'
         );
 
-        $aDisabledModules = array (
+        $aDisabledModules = array(
             0 => 'invoicepdf',
             1 => 'oepaypal'
         );
 
-        $aDisabledModulesWith = array (
+        $aDisabledModulesWith = array(
             0 => 'invoicepdf',
             1 => 'testExtension'
         );
 
-        return array (
-            array( false, array() , array() ),
-            array( false, array() , $aDisabledModules ),
-            array( false, array() , $aDisabledModulesWith ),
+        return array(
+            array(false, array(), array()),
+            array(false, array(), $aDisabledModules),
+            array(false, array(), $aDisabledModulesWith),
 
-            array( false, $aExtendedClasses , array() ),
-            array( false, $aExtendedClasses , $aDisabledModules ),
-            array( false, $aExtendedClasses , $aDisabledModulesWith ),
+            array(false, $aExtendedClasses, array()),
+            array(false, $aExtendedClasses, $aDisabledModules),
+            array(false, $aExtendedClasses, $aDisabledModulesWith),
 
-            array( true, $aExtendedClassesWith , array() ),
-            array( true, $aExtendedClassesWith , $aDisabledModules ),
-            array( false, $aExtendedClassesWith , $aDisabledModulesWith ),
+            array(true, $aExtendedClassesWith, array()),
+            array(true, $aExtendedClassesWith, $aDisabledModules),
+            array(false, $aExtendedClassesWith, $aDisabledModulesWith),
         );
     }
 
@@ -111,14 +111,14 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
      *
      * @dataProvider getExtendedClassDataProvider
      */
-    public function testIsActive_extensionIsSet( $blIsActive, $aExtendedClasses, $aDisabledModules )
+    public function testIsActive_extensionIsSet($blIsActive, $aExtendedClasses, $aDisabledModules)
     {
-        $oChecker = $this->getMock( "oePayPalExtensionChecker", array( "_getExtendedClasses", '_getDisabledModules' ) );
-        $oChecker->expects( $this->any() )->method( "_getExtendedClasses" )->will( $this->returnValue( $aExtendedClasses ) );
-        $oChecker->expects( $this->any() )->method( "_getDisabledModules" )->will( $this->returnValue( $aDisabledModules ) );
+        $oChecker = $this->getMock("oePayPalExtensionChecker", array("_getExtendedClasses", '_getDisabledModules'));
+        $oChecker->expects($this->any())->method("_getExtendedClasses")->will($this->returnValue($aExtendedClasses));
+        $oChecker->expects($this->any())->method("_getDisabledModules")->will($this->returnValue($aDisabledModules));
 
-        $oChecker->setExtensionId( 'testExtension' );
+        $oChecker->setExtensionId('testExtension');
 
-        $this->assertEquals( $blIsActive, $oChecker->isActive() );
+        $this->assertEquals($blIsActive, $oChecker->isActive());
     }
 }

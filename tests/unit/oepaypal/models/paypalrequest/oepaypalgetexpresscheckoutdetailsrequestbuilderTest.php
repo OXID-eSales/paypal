@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalGetExpressCheckoutDetailsRequestBuilder class.
@@ -37,13 +37,13 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalGetExpressCheckoutDetailsReques
             'TOKEN' => '111',
         );
         $oSession = new oxSession();
-        $oSession->setVariable( "oepaypal-token", "111" );
+        $oSession->setVariable("oepaypal-token", "111");
 
         $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setSession( $oSession );
+        $oBuilder->setSession($oSession);
         $oBuilder->buildRequest();
 
-        $this->_assertArraysEqual( $aExpectedParams, $oBuilder->getPayPalRequest()->getData() );
+        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
 
     }
 
@@ -65,10 +65,10 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalGetExpressCheckoutDetailsReques
      * @param $aExpected
      * @param $aResult
      */
-    protected function _assertArraysEqual( $aExpected, $aResult )
+    protected function _assertArraysEqual($aExpected, $aResult)
     {
-        $this->_assertArraysContains( $aExpected, $aResult );
-        $this->assertEquals( count( $aExpected ), count( $aResult ) );
+        $this->_assertArraysContains($aExpected, $aResult);
+        $this->assertEquals(count($aExpected), count($aResult));
     }
 
     /**
@@ -77,11 +77,11 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalGetExpressCheckoutDetailsReques
      * @param $aExpected
      * @param $aResult
      */
-    protected function _assertArraysContains( $aExpected, $aResult )
+    protected function _assertArraysContains($aExpected, $aResult)
     {
-        foreach ( $aExpected as $sKey => $sValue) {
-            $this->assertArrayHasKey( $sKey, $aResult, "Key not found: $sKey" );
-            $this->assertEquals( $sValue, $aResult[ $sKey ], "Key '$sKey' value is not equal to '$sValue'" );
+        foreach ($aExpected as $sKey => $sValue) {
+            $this->assertArrayHasKey($sKey, $aResult, "Key not found: $sKey");
+            $this->assertEquals($sValue, $aResult[$sKey], "Key '$sKey' value is not equal to '$sValue'");
         }
     }
 }

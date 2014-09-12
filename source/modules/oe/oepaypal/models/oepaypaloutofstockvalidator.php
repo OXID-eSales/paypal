@@ -22,7 +22,8 @@
 /**
  * PayPal out of stock validator class
  */
-class oePayPalOutOfStockValidator {
+class oePayPalOutOfStockValidator
+{
 
     /**
      * Basket object
@@ -41,7 +42,7 @@ class oePayPalOutOfStockValidator {
     /**
      * @param mixed $iEmptyStockLevel
      */
-    public function setEmptyStockLevel( $iEmptyStockLevel )
+    public function setEmptyStockLevel($iEmptyStockLevel)
     {
         $this->_iEmptyStockLevel = $iEmptyStockLevel;
     }
@@ -57,7 +58,7 @@ class oePayPalOutOfStockValidator {
     /**
      * @param mixed $oBasket
      */
-    public function setBasket( $oBasket )
+    public function setBasket($oBasket)
     {
         $this->_oBasket = $oBasket;
     }
@@ -79,12 +80,12 @@ class oePayPalOutOfStockValidator {
 
         $aBasketContents = $this->getBasket()->getContents();
 
-        foreach ( $aBasketContents as $oBasketItem ) {
-                $oArticle = $oBasketItem->getArticle();
-                if ( ( $oArticle->getStockAmount() - $oBasketItem->getAmount() ) < $this->getEmptyStockLevel() ) {
-                    $blResult = true;
-                    break;
-                }
+        foreach ($aBasketContents as $oBasketItem) {
+            $oArticle = $oBasketItem->getArticle();
+            if (($oArticle->getStockAmount() - $oBasketItem->getAmount()) < $this->getEmptyStockLevel()) {
+                $blResult = true;
+                break;
+            }
         }
 
         return $blResult;

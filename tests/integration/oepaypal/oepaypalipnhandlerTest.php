@@ -19,9 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
-require_once realpath( "." ).'/integration/lib/oepaypalcommunicationhelper.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
+require_once realpath(".") . '/integration/lib/oepaypalcommunicationhelper.php';
 
 class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
 {
@@ -30,9 +30,9 @@ class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
      */
     public function setUp()
     {
-        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_order`' );
-        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`' );
+        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
+        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
+        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
 
         oePayPalEvents::addOrderPaymentsTable();
         oePayPalEvents::addOrderTable();
@@ -47,73 +47,72 @@ class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
         $sNotRealShopOwner = 'some12a1sd5@oxid-esales.com';
         return array(
             // Correct values. Payment status changes to given from PayPal. Order status is calculated from payment.
-            array( $sRealShopOwner, array( 'VERIFIED' => true ), true, 'completed', false
+            array($sRealShopOwner, array('VERIFIED' => true), true, 'completed', false
             , '__handleRequest_transaction', 124.45, 'EUR', 'completed'
-            , '__handleRequest_transaction', 124.45, 'EUR', 'completed'  ),
+            , '__handleRequest_transaction', 124.45, 'EUR', 'completed'),
             // PayPal do not verifies request. Nothing changes.
-            array( $sRealShopOwner, array( 'Not-VERIFIED' => true ), false, 'pending', false
+            array($sRealShopOwner, array('Not-VERIFIED' => true), false, 'pending', false
             , '__handleRequest_transaction', 1.45, 'USD', 'completed'
-            , '__handleRequest_transaction', 124.45, 'EUR', 'pending'  ),
+            , '__handleRequest_transaction', 124.45, 'EUR', 'pending'),
             // Wrong Shop owner from PayPal. Data do not change.
-            array( $sNotRealShopOwner, array( 'VERIFIED' => true ), false, 'pending', false
+            array($sNotRealShopOwner, array('VERIFIED' => true), false, 'pending', false
             , '__handleRequest_transaction', 121.45, 'EUR', 'completed'
-            , '__handleRequest_transaction', 124.45, 'EUR', 'pending'  ),
+            , '__handleRequest_transaction', 124.45, 'EUR', 'pending'),
             // Wrong amount. Payment status get updated. Payment amount do not change. Order becomes failed.
-            array( $sRealShopOwner, array( 'VERIFIED' => true ), true, 'failed', true
+            array($sRealShopOwner, array('VERIFIED' => true), true, 'failed', true
             , '__handleRequest_transaction', 121.45, 'EUR', 'completed'
-            , '__handleRequest_transaction', 124.45, 'EUR', 'completed'  ),
+            , '__handleRequest_transaction', 124.45, 'EUR', 'completed'),
             // Wrong currency. Payment status get updated. Payment currency do not change. Order becomes failed.
-            array( $sRealShopOwner, array( 'VERIFIED' => true ), true, 'failed', true
+            array($sRealShopOwner, array('VERIFIED' => true), true, 'failed', true
             , '__handleRequest_transaction', 124.45, 'USD', 'completed'
-            , '__handleRequest_transaction', 124.45, 'EUR', 'completed'  ),
+            , '__handleRequest_transaction', 124.45, 'EUR', 'completed'),
         );
     }
 
     /**
      * @dataProvider providerHandleRequest
      */
-    public function testHandleRequest( $sShopOwnerPayPal, $aResponseFromPayPal, $blRequestHandledExpected, $OrderStatusAfterRequest, $blFailureMessageExist
-                                      , $sTransactionIdPayPal, $dPaymentAmountPayPal, $sPaymentCurrencyPayPal, $sPaymentStatusPayPal
-                                      , $sTransactionIdShop, $dPaymentAmountShop, $sPaymentCurrencyShop, $PaymentStatusAfterRequest )
+    public function testHandleRequest($sShopOwnerPayPal, $aResponseFromPayPal, $blRequestHandledExpected, $OrderStatusAfterRequest, $blFailureMessageExist
+        , $sTransactionIdPayPal, $dPaymentAmountPayPal, $sPaymentCurrencyPayPal, $sPaymentStatusPayPal
+        , $sTransactionIdShop, $dPaymentAmountShop, $sPaymentCurrencyShop, $PaymentStatusAfterRequest)
     {
         $sOrderId = '__handleRequest_order';
 
-        $aRequestFromPayPal = $this->_preparePayPalRequest( $sShopOwnerPayPal, $sPaymentStatusPayPal, $sTransactionIdPayPal, $dPaymentAmountPayPal, $sPaymentCurrencyPayPal );
+        $aRequestFromPayPal = $this->_preparePayPalRequest($sShopOwnerPayPal, $sPaymentStatusPayPal, $sTransactionIdPayPal, $dPaymentAmountPayPal, $sPaymentCurrencyPayPal);
 
-        $oOrder = $this->_createOrder( $sOrderId );
-        $this->_createOrderPayment( $sOrderId, $sTransactionIdShop, $dPaymentAmountShop, $sPaymentCurrencyShop );
+        $oOrder = $this->_createOrder($sOrderId);
+        $this->_createOrderPayment($sOrderId, $sTransactionIdShop, $dPaymentAmountShop, $sPaymentCurrencyShop);
 
         // Mock curl so we do not call PayPal to check if request originally from PayPal.
-        $oIPNRequestVerifier = $this->_preparePayPalResponseMock( $aResponseFromPayPal );
+        $oIPNRequestVerifier = $this->_preparePayPalResponseMock($aResponseFromPayPal);
 
         // Post imitates call from PayPal.
         $_POST = $aRequestFromPayPal;
         $oPayPalIPNHandler = new oePayPalIPNHandler();
-        $oPayPalIPNHandler->setIPNRequestVerifier( $oIPNRequestVerifier );
+        $oPayPalIPNHandler->setIPNRequestVerifier($oIPNRequestVerifier);
         $blRequestHandled = $oPayPalIPNHandler->handleRequest();
 
         $oOrder->load();
         $oPayment = new oePayPalOrderPayment();
-        $oPayment->loadByTransactionId( $sTransactionIdShop );
-        $this->assertEquals( $blRequestHandledExpected, $blRequestHandled, 'Request is not handled as expected.' );
-        $this->assertEquals( $PaymentStatusAfterRequest, $oPayment->getStatus(), 'Status did not change to one returned from PayPal.' );
-        $this->assertEquals( $OrderStatusAfterRequest, $oOrder->getPaymentStatus(), 'Status did not change to one returned from PayPal.' );
-        $this->assertEquals( $dPaymentAmountShop, $oPayment->getAmount(), 'Payment amount should not change to get from PayPal.' );
-        $this->assertEquals( $sPaymentCurrencyShop, $oPayment->getCurrency(), 'Payment currency should not change to get from PayPal.' );
-        if ( !$blFailureMessageExist ) {
-            $this->assertEquals( 0, count( $oPayment->getCommentList() ), 'There should be no failure comment.' );
+        $oPayment->loadByTransactionId($sTransactionIdShop);
+        $this->assertEquals($blRequestHandledExpected, $blRequestHandled, 'Request is not handled as expected.');
+        $this->assertEquals($PaymentStatusAfterRequest, $oPayment->getStatus(), 'Status did not change to one returned from PayPal.');
+        $this->assertEquals($OrderStatusAfterRequest, $oOrder->getPaymentStatus(), 'Status did not change to one returned from PayPal.');
+        $this->assertEquals($dPaymentAmountShop, $oPayment->getAmount(), 'Payment amount should not change to get from PayPal.');
+        $this->assertEquals($sPaymentCurrencyShop, $oPayment->getCurrency(), 'Payment currency should not change to get from PayPal.');
+        if (!$blFailureMessageExist) {
+            $this->assertEquals(0, count($oPayment->getCommentList()), 'There should be no failure comment.');
         } else {
             $aComments = $oPayment->getCommentList();
             $aComments = $aComments->getArray();
-            $sComment = $aComments[ 0 ]->getComment();
+            $sComment = $aComments[0]->getComment();
             // Failure comment should have all information about request and original payment.
-            $blCommentHasAllInformation = strpos( $sComment, (string) $dPaymentAmountPayPal ) !== false
-                                            && strpos( $sComment, (string) $sPaymentCurrencyPayPal ) !== false
-                                            && strpos( $sComment, (string) $dPaymentAmountShop ) !== false
-                                            && strpos( $sComment, (string) $sPaymentCurrencyShop ) !== false
-            ;
-            $this->assertEquals( 1, count( $aComments ), 'There should failure comment.' );
-            $this->assertTrue( $blCommentHasAllInformation, 'Failure comment should have all information about request and original payment: '. $sComment );
+            $blCommentHasAllInformation = strpos($sComment, (string)$dPaymentAmountPayPal) !== false
+                && strpos($sComment, (string)$sPaymentCurrencyPayPal) !== false
+                && strpos($sComment, (string)$dPaymentAmountShop) !== false
+                && strpos($sComment, (string)$sPaymentCurrencyShop) !== false;
+            $this->assertEquals(1, count($aComments), 'There should failure comment.');
+            $this->assertTrue($blCommentHasAllInformation, 'Failure comment should have all information about request and original payment: ' . $sComment);
         }
     }
 
@@ -124,11 +123,11 @@ class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
      *
      * @return oePayPalPayPalOrder
      */
-    protected function _createOrder( $sOrderId )
+    protected function _createOrder($sOrderId)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( $sOrderId );
-        $oOrder->setPaymentStatus( 'pending' );
+        $oOrder->setOrderId($sOrderId);
+        $oOrder->setPaymentStatus('pending');
         $oOrder->save();
         return $oOrder;
     }
@@ -143,14 +142,14 @@ class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
      *
      * @return oePayPalOrderPayment
      */
-    protected function _createOrderPayment( $sOrderId, $sTransactionId, $dPaymentAmount, $sPaymentCurrency )
+    protected function _createOrderPayment($sOrderId, $sTransactionId, $dPaymentAmount, $sPaymentCurrency)
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderid( $sOrderId );
-        $oOrderPayment->setTransactionId( $sTransactionId );
-        $oOrderPayment->setAmount( $dPaymentAmount );
-        $oOrderPayment->setCurrency( $sPaymentCurrency );
-        $oOrderPayment->setStatus( 'pending' );
+        $oOrderPayment->setOrderid($sOrderId);
+        $oOrderPayment->setTransactionId($sTransactionId);
+        $oOrderPayment->setAmount($dPaymentAmount);
+        $oOrderPayment->setCurrency($sPaymentCurrency);
+        $oOrderPayment->setStatus('pending');
         $oOrderPayment->save();
         return $oOrderPayment;
     }
@@ -162,18 +161,18 @@ class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
      *
      * @return oePayPalIPNRequestVerifier
      */
-    protected function _preparePayPalResponseMock( $aResponseFromPayPal )
+    protected function _preparePayPalResponseMock($aResponseFromPayPal)
     {
-        $oCurl = $this->_getPayPalCommunicationHelper()->getCurl( $aResponseFromPayPal );
+        $oCurl = $this->_getPayPalCommunicationHelper()->getCurl($aResponseFromPayPal);
 
         $oCaller = new oePayPalCaller();
-        $oCaller->setCurl( $oCurl );
+        $oCaller->setCurl($oCurl);
 
         $oCommunicationService = new oePayPalService();
-        $oCommunicationService->setCaller( $oCaller );
+        $oCommunicationService->setCaller($oCaller);
 
         $oIPNRequestVerifier = new oePayPalIPNRequestVerifier();
-        $oIPNRequestVerifier->setCommunicationService( $oCommunicationService );
+        $oIPNRequestVerifier->setCommunicationService($oCommunicationService);
 
         return $oIPNRequestVerifier;
     }
@@ -186,7 +185,7 @@ class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
      * @param $sPaymentCurrencyPayPal
      * @return array
      */
-    public function _preparePayPalRequest( $sShopOwnerPayPal, $sPaymentStatusPayPal, $sTransactionId, $dPaymentAmountPayPal, $sPaymentCurrencyPayPal )
+    public function _preparePayPalRequest($sShopOwnerPayPal, $sPaymentStatusPayPal, $sTransactionId, $dPaymentAmountPayPal, $sPaymentCurrencyPayPal)
     {
         $aRequestFromPayPal = array();
         $aRequestFromPayPal['receiver_email'] = $sShopOwnerPayPal;

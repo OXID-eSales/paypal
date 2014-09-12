@@ -62,7 +62,7 @@ class oePayPalList implements Iterator, Countable
      */
     public function arrayKeys()
     {
-        return array_keys( $this->_aArray );
+        return array_keys($this->_aArray);
     }
 
     /**
@@ -73,7 +73,7 @@ class oePayPalList implements Iterator, Countable
     public function rewind()
     {
         $this->_blRemovedActive = false;
-        $this->_blValid = ( false !== reset( $this->_aArray ) );
+        $this->_blValid = (false !== reset($this->_aArray));
     }
 
     /**
@@ -83,7 +83,7 @@ class oePayPalList implements Iterator, Countable
      */
     public function current()
     {
-        return current( $this->_aArray );
+        return current($this->_aArray);
     }
 
     /**
@@ -93,7 +93,7 @@ class oePayPalList implements Iterator, Countable
      */
     public function key()
     {
-        return key( $this->_aArray );
+        return key($this->_aArray);
     }
 
     /**
@@ -125,7 +125,7 @@ class oePayPalList implements Iterator, Countable
             $oVar = next($this->_aArray);
         }
 
-        $this->_blValid = ( false !== $oVar );
+        $this->_blValid = (false !== $oVar);
     }
 
     /**
@@ -145,7 +145,7 @@ class oePayPalList implements Iterator, Countable
      */
     public function count()
     {
-        return count( $this->_aArray );
+        return count($this->_aArray);
     }
 
     /**
@@ -165,7 +165,7 @@ class oePayPalList implements Iterator, Countable
      *
      * @return null
      */
-    public function setArray( $aArray )
+    public function setArray($aArray)
     {
         $this->_aArray = $aArray;
     }
@@ -177,7 +177,7 @@ class oePayPalList implements Iterator, Countable
      */
     public function reverse()
     {
-        return array_reverse( $this->_aArray );
+        return array_reverse($this->_aArray);
     }
 
     /**
@@ -193,7 +193,7 @@ class oePayPalList implements Iterator, Countable
      *
      * @return mixed
      */
-    public function __get( $sName )
+    public function __get($sName)
     {
         return $this->_aArray;
     }

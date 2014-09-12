@@ -137,9 +137,11 @@
     text-align: right;
     margin-top: 10px;
 }
+
 .oePayPalPopupNav a {
     font-weight: bold;
 }
+
 .oePayPalPopupNav button {
     margin-left: 15px;
 }

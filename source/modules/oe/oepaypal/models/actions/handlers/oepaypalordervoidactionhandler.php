@@ -40,7 +40,7 @@ class oePayPalOrderVoidActionHandler extends oePayPalOrderActionHandler
     {
         $oService = $this->getPayPalService();
         $oRequest = $this->getPayPalRequest();
-        return $oService->doVoid( $oRequest );
+        return $oService->doVoid($oRequest);
     }
 
     /**
@@ -50,14 +50,14 @@ class oePayPalOrderVoidActionHandler extends oePayPalOrderActionHandler
      */
     public function getPayPalRequest()
     {
-        if ( is_null( $this->_oPayPalRequest ) ) {
+        if (is_null($this->_oPayPalRequest)) {
             $oRequestBuilder = $this->getPayPalRequestBuilder();
 
             $oData = $this->getData();
 
-            $oRequestBuilder->setAuthorizationId( $oData->getAuthorizationId() );
-            $oRequestBuilder->setAmount( $oData->getAmount(), $oData->getCurrency() );
-            $oRequestBuilder->setComment( $oData->getComment() );
+            $oRequestBuilder->setAuthorizationId($oData->getAuthorizationId());
+            $oRequestBuilder->setAmount($oData->getAmount(), $oData->getCurrency());
+            $oRequestBuilder->setComment($oData->getComment());
 
             $this->_oPayPalRequest = $oRequestBuilder->getRequest();
         }
@@ -70,7 +70,7 @@ class oePayPalOrderVoidActionHandler extends oePayPalOrderActionHandler
      *
      * @param $oPayPalRequest
      */
-    public function setPayPalRequest( $oPayPalRequest )
+    public function setPayPalRequest($oPayPalRequest)
     {
         $this->_oPayPalRequest = $oPayPalRequest;
     }

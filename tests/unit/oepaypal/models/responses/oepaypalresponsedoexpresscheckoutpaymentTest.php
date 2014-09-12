@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalResponseDoExpressCheckoutPayment class.
@@ -51,8 +51,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTes
     public function testGetTransactionId()
     {
         $oResponse = new oePayPalResponseDoExpressCheckoutPayment();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'transactionID', $oResponse->getTransactionId() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('transactionID', $oResponse->getTransactionId());
     }
 
     /**
@@ -61,8 +61,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTes
     public function testGetCorrelationId()
     {
         $oResponse = new oePayPalResponseDoExpressCheckoutPayment();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'correlationID', $oResponse->getCorrelationId() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('correlationID', $oResponse->getCorrelationId());
     }
 
     /**
@@ -71,8 +71,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTes
     public function testGetPaymentStatus()
     {
         $oResponse = new oePayPalResponseDoExpressCheckoutPayment();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'confirmed', $oResponse->getPaymentStatus() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('confirmed', $oResponse->getPaymentStatus());
     }
 
     /**
@@ -81,8 +81,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTes
     public function testGetAmount()
     {
         $oResponse = new oePayPalResponseDoExpressCheckoutPayment();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 1200, $oResponse->getAmount() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals(1200, $oResponse->getAmount());
     }
 
     /**
@@ -91,7 +91,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTes
     public function testGetCurrencyCode()
     {
         $oResponse = new oePayPalResponseDoExpressCheckoutPayment();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'LTL', $oResponse->getCurrencyCode() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('LTL', $oResponse->getCurrencyCode());
     }
 }

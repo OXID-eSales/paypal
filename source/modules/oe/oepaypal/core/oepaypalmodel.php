@@ -50,9 +50,9 @@ abstract class oePayPalModel
      *
      * @param array $aData model data
      */
-    public function setData( $aData )
+    public function setData($aData)
     {
-        $aData = array_change_key_case( $aData, CASE_LOWER );
+        $aData = array_change_key_case($aData, CASE_LOWER);
         $this->_aData = $aData;
     }
 
@@ -73,7 +73,7 @@ abstract class oePayPalModel
      *
      * @return string
      */
-    protected function _getValue( $sKey )
+    protected function _getValue($sKey)
     {
         $aData = $this->getData();
         return $aData[$sKey];
@@ -87,9 +87,9 @@ abstract class oePayPalModel
      *
      * @return string
      */
-    protected function _setValue( $sKey, $sValue )
+    protected function _setValue($sKey, $sValue)
     {
-        $this->_aData[ $sKey ] = $sValue;
+        $this->_aData[$sKey] = $sValue;
     }
 
     /**
@@ -104,7 +104,7 @@ abstract class oePayPalModel
      *
      * @var object
      */
-    protected function _setDbGateway( $oDbGateway )
+    protected function _setDbGateway($oDbGateway)
     {
         $this->_oDbGateway = $oDbGateway;
     }
@@ -116,8 +116,8 @@ abstract class oePayPalModel
      */
     public function save()
     {
-        $mId = $this->_getDbGateway()->save( $this->getData() );
-        $this->setId( $mId );
+        $mId = $this->_getDbGateway()->save($this->getData());
+        $this->setId($mId);
         return $mId;
     }
 
@@ -128,13 +128,13 @@ abstract class oePayPalModel
      *
      * @return bool
      */
-    public function delete( $sId = null )
+    public function delete($sId = null)
     {
-        if ( !is_null( $sId ) ) {
-            $this->setId( $sId );
+        if (!is_null($sId)) {
+            $this->setId($sId);
         }
 
-        return $this->_getDbGateway()->delete( $this->getId() );
+        return $this->_getDbGateway()->delete($this->getId());
     }
 
     /**
@@ -144,16 +144,16 @@ abstract class oePayPalModel
      *
      * @return bool
      */
-    public function load( $sId = null )
+    public function load($sId = null)
     {
-        if ( !is_null( $sId ) ) {
-            $this->setId( $sId );
+        if (!is_null($sId)) {
+            $this->setId($sId);
         }
 
         $this->_blIsLoaded = false;
-        $aData = $this->_getDbGateway()->load( $this->getId() );
-        if ( $aData ) {
-            $this->setData( $aData );
+        $aData = $this->_getDbGateway()->load($this->getId());
+        if ($aData) {
+            $this->setData($aData);
             $this->_blIsLoaded = true;
         }
 
@@ -173,7 +173,7 @@ abstract class oePayPalModel
      *
      * @param string $sId model id
      */
-    abstract public function setId( $sId );
+    abstract public function setId($sId);
 
     /**
      * Abstract method for getting id

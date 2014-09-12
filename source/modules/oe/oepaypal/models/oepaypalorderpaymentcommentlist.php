@@ -34,7 +34,7 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
 
     protected $_sPaymentId = null;
 
-    public function setPaymentId( $sPaymentId )
+    public function setPaymentId($sPaymentId)
     {
         $this->_sPaymentId = $sPaymentId;
     }
@@ -44,9 +44,10 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
         return $this->_sPaymentId;
     }
 
-    protected function _getDbGateway() {
-        if ( is_null( $this->_oDbGateway ) ) {
-            $this->_setDbGateway( oxNew( 'oePayPalOrderPaymentCommentDbGateway' ) );
+    protected function _getDbGateway()
+    {
+        if (is_null($this->_oDbGateway)) {
+            $this->_setDbGateway(oxNew('oePayPalOrderPaymentCommentDbGateway'));
         }
         return $this->_oDbGateway;
     }
@@ -56,7 +57,7 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
      *
      * @var object
      */
-    protected function _setDbGateway( $oDbGateway )
+    protected function _setDbGateway($oDbGateway)
     {
         $this->_oDbGateway = $oDbGateway;
     }
@@ -67,33 +68,33 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
      * @param string $sPaymentId order id
      *
      */
-    public function load( $sPaymentId )
+    public function load($sPaymentId)
     {
-        $this->setPaymentId( $sPaymentId );
+        $this->setPaymentId($sPaymentId);
 
         $aComments = array();
-        $aCommentsData = $this->_getDbGateway()->getList( $this->getPaymentId() ) ;
-        if( is_array( $aCommentsData ) && count( $aCommentsData ) ){
+        $aCommentsData = $this->_getDbGateway()->getList($this->getPaymentId());
+        if (is_array($aCommentsData) && count($aCommentsData)) {
             $aComments = array();
-            foreach ($aCommentsData as $aData ){
-                $oComment = oxNew( 'oePayPalOrderPaymentComment' );
-                $oComment->setData( $aData );
+            foreach ($aCommentsData as $aData) {
+                $oComment = oxNew('oePayPalOrderPaymentComment');
+                $oComment->setData($aData);
                 $aComments[] = $oComment;
             }
         }
 
-        $this->setArray( $aComments );
+        $this->setArray($aComments);
     }
 
     /**
      * Add comment
      */
-    public function addComment( $oComment )
+    public function addComment($oComment)
     {
-        $oComment->setPaymentId( $this->getPaymentId() );
+        $oComment->setPaymentId($this->getPaymentId());
         $oComment->save();
 
-        $this->load( $this->getPaymentId() );
+        $this->load($this->getPaymentId());
 
         return $oComment;
     }

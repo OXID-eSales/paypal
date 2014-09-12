@@ -32,10 +32,10 @@ class oePayPalArrayAsserts extends PHPUnit_Framework_TestCase
      * @param $aExpected
      * @param $aResult
      */
-    public function assertArraysEqual( $aExpected, $aResult )
+    public function assertArraysEqual($aExpected, $aResult)
     {
-        $this->assertArraysContains( $aExpected, $aResult );
-        $this->assertEquals( count( $aExpected ), count( $aResult ), 'Failed asserting that expected array has equal amount of elements with result array' );
+        $this->assertArraysContains($aExpected, $aResult);
+        $this->assertEquals(count($aExpected), count($aResult), 'Failed asserting that expected array has equal amount of elements with result array');
     }
 
     /**
@@ -44,20 +44,20 @@ class oePayPalArrayAsserts extends PHPUnit_Framework_TestCase
      * @param $aExpected
      * @param $aResult
      */
-    public function assertArraysContains( $aExpected, $aResult )
+    public function assertArraysContains($aExpected, $aResult)
     {
         $aExpectedNotMatched = array();
         $aResultNotMatched = array();
 
-        foreach ( $aExpected as $sKey => $sValue) {
+        foreach ($aExpected as $sKey => $sValue) {
             try {
-                $this->assertArrayHasKey( $sKey, $aResult );
-                $this->assertEquals( $sValue, $aResult[ $sKey ]);
-            } catch ( Exception $oException) {
+                $this->assertArrayHasKey($sKey, $aResult);
+                $this->assertEquals($sValue, $aResult[$sKey]);
+            } catch (Exception $oException) {
                 $aExpectedNotMatched[$sKey] = $sValue;
-                $aResultNotMatched[$sKey] = $aResult[ $sKey ];
+                $aResultNotMatched[$sKey] = $aResult[$sKey];
             }
         }
-        $this->assertEquals( $aExpectedNotMatched, $aResultNotMatched, 'Values not matched in given arrays' );
+        $this->assertEquals($aExpectedNotMatched, $aResultNotMatched, 'Values not matched in given arrays');
     }
 }

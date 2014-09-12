@@ -59,7 +59,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     /**
      * @param oePayPalPaymentValidator $oPaymentValidator
      */
-    public function setPaymentValidator( $oPaymentValidator )
+    public function setPaymentValidator($oPaymentValidator)
     {
         $this->_oPaymentValidator = $oPaymentValidator;
     }
@@ -69,8 +69,8 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
      */
     public function getPaymentValidator()
     {
-        if ( is_null( $this->_oPaymentValidator ) ) {
-            $this->setPaymentValidator( oxNew( 'oePayPalPaymentValidator' ) );
+        if (is_null($this->_oPaymentValidator)) {
+            $this->setPaymentValidator(oxNew('oePayPalPaymentValidator'));
         }
         return $this->_oPaymentValidator;
     }
@@ -83,14 +83,14 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
      */
     public function isExpressCheckoutEnabled()
     {
-        if ( $this->_blExpressCheckoutEnabled === null ) {
+        if ($this->_blExpressCheckoutEnabled === null) {
             $this->_blExpressCheckoutEnabled = false;
-            if ( $this->_getPayPalConfig()->isExpressCheckoutEnabled() ) {
+            if ($this->_getPayPalConfig()->isExpressCheckoutEnabled()) {
                 $oUser = $this->getUser();
                 $oValidator = $this->getPaymentValidator();
-                $oValidator->setUser( $oUser );
-                $oValidator->setConfig( $this->getConfig() );
-                $oValidator->setCheckCountry( false );
+                $oValidator->setUser($oUser);
+                $oValidator->setConfig($this->getConfig());
+                $oValidator->setCheckCountry(false);
 
                 $this->_blExpressCheckoutEnabled = $oValidator->isPaymentValid();
             }
@@ -107,7 +107,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     public function isExpressCheckoutEnabledInMiniBasket()
     {
         $blExpressCheckoutEnabledInMiniBasket = false;
-        if ( $this->isExpressCheckoutEnabled() && $this->_getPayPalConfig()->isExpressCheckoutInMiniBasketEnabled() ) {
+        if ($this->isExpressCheckoutEnabled() && $this->_getPayPalConfig()->isExpressCheckoutInMiniBasketEnabled()) {
             $blExpressCheckoutEnabledInMiniBasket = true;
         }
 
@@ -123,7 +123,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     public function isExpressCheckoutEnabledInDetails()
     {
         $blExpressCheckoutEnabledInDetails = false;
-        if ( $this->isExpressCheckoutEnabled() && $this->_getPayPalConfig()->isExpressCheckoutInDetailsPage() ) {
+        if ($this->isExpressCheckoutEnabled() && $this->_getPayPalConfig()->isExpressCheckoutInDetailsPage()) {
             $blExpressCheckoutEnabledInDetails = true;
         }
 
@@ -138,13 +138,13 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
      */
     public function isStandardCheckoutEnabled()
     {
-        if ( $this->_blStandardCheckoutEnabled === null ) {
+        if ($this->_blStandardCheckoutEnabled === null) {
             $this->_blStandardCheckoutEnabled = false;
-            if ( $this->_getPayPalConfig()->isStandardCheckoutEnabled() ) {
+            if ($this->_getPayPalConfig()->isStandardCheckoutEnabled()) {
                 $oUser = $this->getUser();
                 $oValidator = $this->getPaymentValidator();
-                $oValidator->setUser( $oUser );
-                $oValidator->setConfig( $this->getConfig() );
+                $oValidator->setUser($oUser);
+                $oValidator->setConfig($this->getConfig());
 
                 $this->_blStandardCheckoutEnabled = $oValidator->isPaymentValid();
             }
@@ -171,7 +171,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     public function getPayPalPaymentDescription()
     {
         $sDesc = "";
-        if ( ( $oPayPalPayment = $this->getPayPalPayment() ) ) {
+        if (($oPayPalPayment = $this->getPayPalPayment())) {
             $sDesc = $oPayPalPayment->oxpayments__oxlongdesc->getRawValue();
         }
         return $sDesc;
@@ -184,12 +184,12 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
      */
     public function getPayPalPayment()
     {
-        if ( $this->_oPayPalPayment === null ) {
+        if ($this->_oPayPalPayment === null) {
             $this->_oPayPalPayment = false;
-            $oPayPalPayment = oxNew( "oxpayment" );
+            $oPayPalPayment = oxNew("oxpayment");
 
             // payment is not available/active?
-            if ( $oPayPalPayment->load( "oxidpaypal" ) && $oPayPalPayment->oxpayments__oxactive->value ) {
+            if ($oPayPalPayment->load("oxidpaypal") && $oPayPalPayment->oxpayments__oxactive->value) {
                 $this->_oPayPalPayment = $oPayPalPayment;
             }
         }
@@ -224,8 +224,8 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
      */
     protected function _getPayPalConfig()
     {
-        if ( is_null( $this->_oPayPalConfig ) ) {
-            $this->_oPayPalConfig = oxNew( "oePayPalConfig" );
+        if (is_null($this->_oPayPalConfig)) {
+            $this->_oPayPalConfig = oxNew("oePayPalConfig");
         }
 
         return $this->_oPayPalConfig;

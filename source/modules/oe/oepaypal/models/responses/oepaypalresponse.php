@@ -36,7 +36,7 @@ abstract class oePayPalResponse
      *
      * @param array $aResponseData Response data from PayPal
      */
-    public function setData( $aResponseData )
+    public function setData($aResponseData)
     {
         $this->_aData = $aResponseData;
     }
@@ -58,7 +58,7 @@ abstract class oePayPalResponse
      *
      * @return string
      */
-    protected function _getValue( $sKey )
+    protected function _getValue($sKey)
     {
         $aData = $this->getData();
 

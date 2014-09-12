@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalEscape class.
@@ -34,17 +34,17 @@ class Unit_oePayPal_core_oePayPalEscapeTest extends OxidTestCase
     {
         $oVar = new stdClass();
         $oVar->xxx = 'yyy';
-        $aVar = array( '&\\o<x>i"\'d'.chr(0) );
-        $sVar = '&\\o<x>i"\'d'.chr(0);
+        $aVar = array('&\\o<x>i"\'d' . chr(0));
+        $sVar = '&\\o<x>i"\'d' . chr(0);
         $oPayPalRequest = new oePayPalRequest();
         // object must came back the same
-        $this->assertEquals( $oVar, $oPayPalRequest->escapeSpecialChars( $oVar ) );
+        $this->assertEquals($oVar, $oPayPalRequest->escapeSpecialChars($oVar));
 
         // array items comes fixed
-        $this->assertEquals( array( '&amp;&#092;o&lt;x&gt;i&quot;&#039;d' ), $oPayPalRequest->escapeSpecialChars( $aVar ) );
+        $this->assertEquals(array('&amp;&#092;o&lt;x&gt;i&quot;&#039;d'), $oPayPalRequest->escapeSpecialChars($aVar));
 
         // string comes fixed
-        $this->assertEquals( '&amp;&#092;o&lt;x&gt;i&quot;&#039;d', $oPayPalRequest->escapeSpecialChars( $sVar ) );
+        $this->assertEquals('&amp;&#092;o&lt;x&gt;i&quot;&#039;d', $oPayPalRequest->escapeSpecialChars($sVar));
     }
 
     /**
@@ -54,12 +54,12 @@ class Unit_oePayPal_core_oePayPalEscapeTest extends OxidTestCase
      */
     public function providerCheckParamSpecialCharsAlsoFixesArrayKeys()
     {
-        return array (
-            array (
-                array( 'asd&' => 'a%&' ),
-                array( 'asd&amp;' => 'a%&amp;' ),
+        return array(
+            array(
+                array('asd&' => 'a%&'),
+                array('asd&amp;' => 'a%&amp;'),
             ),
-            array (
+            array(
                 'asd&',
                 'asd&amp;',
             )
@@ -71,9 +71,9 @@ class Unit_oePayPal_core_oePayPalEscapeTest extends OxidTestCase
      *
      * @dataProvider providerCheckParamSpecialCharsAlsoFixesArrayKeys
      */
-    public function testCheckParamSpecialCharsAlsoFixesArrayKeys( $checkData, $checkExpectedResult  )
+    public function testCheckParamSpecialCharsAlsoFixesArrayKeys($checkData, $checkExpectedResult)
     {
         $oPayPalRequest = new oePayPalRequest();
-        $this->assertEquals( $checkExpectedResult, $oPayPalRequest->escapeSpecialChars( $checkData ) );
+        $this->assertEquals($checkExpectedResult, $oPayPalRequest->escapeSpecialChars($checkData));
     }
 }

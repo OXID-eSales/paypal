@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oxAccessRightException class.
@@ -33,8 +33,8 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
      */
     protected function setUp()
     {
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
@@ -46,29 +46,29 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
     public function testLoadOrderPayments()
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setPaymentId( 1 );
-        $oOrderPayment->setOrderId( "123" );
-        $oOrderPayment->setAmount( 50 );
-        $oOrderPayment->setAction( "OEPAYPAL_STATUS_COMPLETED" );
-        $oOrderPayment->setDate( "2012-04-13 12:13:15" );
+        $oOrderPayment->setPaymentId(1);
+        $oOrderPayment->setOrderId("123");
+        $oOrderPayment->setAmount(50);
+        $oOrderPayment->setAction("OEPAYPAL_STATUS_COMPLETED");
+        $oOrderPayment->setDate("2012-04-13 12:13:15");
         $oOrderPayment->save();
 
-        $oOrderPayment->setPaymentId( 2 );
-        $oOrderPayment->setDate( "2012-02-01" );
+        $oOrderPayment->setPaymentId(2);
+        $oOrderPayment->setDate("2012-02-01");
         $oOrderPayment->save();
 
-        $oOrderPayment->setPaymentId( 3 );
-        $oOrderPayment->setDate( "2012-01-15" );
+        $oOrderPayment->setPaymentId(3);
+        $oOrderPayment->setDate("2012-01-15");
         $oOrderPayment->save();
 
         $oOrderPaymentList = new oePayPalOrderPaymentList();
-        $oOrderPaymentList->load( "123" );
+        $oOrderPaymentList->load("123");
 
-        $this->assertEquals( 3, count( $oOrderPaymentList ) );
+        $this->assertEquals(3, count($oOrderPaymentList));
 
         $i = 1;
-        foreach ($oOrderPaymentList as $oOrderPayment ){
-            $this->assertEquals( $i++, $oOrderPayment->getPaymentId() );
+        foreach ($oOrderPaymentList as $oOrderPayment) {
+            $this->assertEquals($i++, $oOrderPayment->getPaymentId());
         }
 
     }
@@ -83,25 +83,25 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
     {
         $oOrderPaymentList = new oePayPalOrderPaymentList();
 
-        $oOrderPaymentList->load( "order" );
-        $this->assertFalse( $oOrderPaymentList->hasFailedPayment() );
+        $oOrderPaymentList->load("order");
+        $this->assertFalse($oOrderPaymentList->hasFailedPayment());
 
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( "order" );
-        $oOrderPayment->setStatus( "Completed" );
+        $oOrderPayment->setOrderId("order");
+        $oOrderPayment->setStatus("Completed");
         $oOrderPayment->save();
 
-        $oOrderPaymentList->load( "order" );
-        $this->assertFalse( $oOrderPaymentList->hasFailedPayment() );
+        $oOrderPaymentList->load("order");
+        $this->assertFalse($oOrderPaymentList->hasFailedPayment());
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( "order" );
-        $oOrderPayment->setStatus( "Failed" );
+        $oOrderPayment->setOrderId("order");
+        $oOrderPayment->setStatus("Failed");
         $oOrderPayment->save();
 
-        $oOrderPaymentList->load( "order" );
-        $this->assertTrue( $oOrderPaymentList->hasFailedPayment() );
+        $oOrderPaymentList->load("order");
+        $this->assertTrue($oOrderPaymentList->hasFailedPayment());
     }
 
     /**
@@ -114,25 +114,25 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
     {
         $oOrderPaymentList = new oePayPalOrderPaymentList();
 
-        $oOrderPaymentList->load( "order" );
-        $this->assertFalse( $oOrderPaymentList->hasPendingPayment() );
+        $oOrderPaymentList->load("order");
+        $this->assertFalse($oOrderPaymentList->hasPendingPayment());
 
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( "order" );
-        $oOrderPayment->setStatus( "Completed" );
+        $oOrderPayment->setOrderId("order");
+        $oOrderPayment->setStatus("Completed");
         $oOrderPayment->save();
 
-        $oOrderPaymentList->load( "order" );
-        $this->assertFalse( $oOrderPaymentList->hasPendingPayment() );
+        $oOrderPaymentList->load("order");
+        $this->assertFalse($oOrderPaymentList->hasPendingPayment());
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( "order" );
-        $oOrderPayment->setStatus( "Pending" );
+        $oOrderPayment->setOrderId("order");
+        $oOrderPayment->setStatus("Pending");
         $oOrderPayment->save();
 
-        $oOrderPaymentList->load( "order" );
-        $this->assertTrue( $oOrderPaymentList->hasPendingPayment() );
+        $oOrderPaymentList->load("order");
+        $this->assertTrue($oOrderPaymentList->hasPendingPayment());
     }
 
     /**
@@ -146,27 +146,27 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
         $oOrderPaymentList = new oePayPalOrderPaymentList();
         $oOrderPaymentList->load("order");
 
-        $this->assertEquals(0, count($oOrderPaymentList) );
+        $this->assertEquals(0, count($oOrderPaymentList));
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( "order" );
+        $oOrderPayment->setOrderId("order");
         $oOrderPayment->save();
 
         $oOrderPaymentList = new oePayPalOrderPaymentList();
         $oOrderPaymentList->load("order");
 
-        $this->assertEquals(1, count($oOrderPaymentList) );
+        $this->assertEquals(1, count($oOrderPaymentList));
 
         $oOrderPayment = new oePayPalOrderPayment();
         $oOrderPayment->setDate('2013-01-12');
-        $oOrderPayment->setAction( 'Pending' );
+        $oOrderPayment->setAction('Pending');
 
-        $oOrderPaymentList->addPayment( $oOrderPayment );
+        $oOrderPaymentList->addPayment($oOrderPayment);
 
         $oOrderPaymentList = new oePayPalOrderPaymentList();
         $oOrderPaymentList->load("order");
 
-        $this->assertEquals(2, count($oOrderPaymentList) );
+        $this->assertEquals(2, count($oOrderPaymentList));
 
     }
 

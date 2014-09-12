@@ -19,46 +19,46 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-error_reporting( (E_ALL ^ E_NOTICE) | E_STRICT );
+error_reporting((E_ALL ^ E_NOTICE) | E_STRICT);
 ini_set('display_errors', true);
 
-chdir( dirname(__FILE__) );
+chdir(dirname(__FILE__));
 
 include_once "test_config.php";
 
 define ('OXID_PHP_UNIT', true);
 
-define( 'shopURL', getenv('SELENIUM_TARGET')? getenv('SELENIUM_TARGET') : $sShopUrl );
-define( 'oxPATH', getenv('oxPATH')? getenv('oxPATH') : $sShopPath );
+define('shopURL', getenv('SELENIUM_TARGET') ? getenv('SELENIUM_TARGET') : $sShopUrl);
+define('oxPATH', getenv('oxPATH') ? getenv('oxPATH') : $sShopPath);
 
-define( 'hostUrl', getenv('SELENIUM_SERVER')? getenv('SELENIUM_SERVER') : $sSeleniumServerIp );
-define('browserName', getenv('BROWSER_NAME')? getenv('BROWSER_NAME') : $sBrowserName );
+define('hostUrl', getenv('SELENIUM_SERVER') ? getenv('SELENIUM_SERVER') : $sSeleniumServerIp);
+define('browserName', getenv('BROWSER_NAME') ? getenv('BROWSER_NAME') : $sBrowserName);
 
 if (file_exists(oxPATH . "/_version_define.php")) {
     include_once oxPATH . "/_version_define.php";
 } else {
-    switch ( getenv('OXID_VERSION')? getenv('OXID_VERSION') : $sShopEdition ) {
+    switch (getenv('OXID_VERSION') ? getenv('OXID_VERSION') : $sShopEdition) {
         case 'EE':
-            define('OXID_VERSION_EE', true );
+            define('OXID_VERSION_EE', true);
             define('OXID_VERSION_PE', false);
-            define('OXID_VERSION_PE_PE', false );
-            define('OXID_VERSION_PE_CE', false );
+            define('OXID_VERSION_PE_PE', false);
+            define('OXID_VERSION_PE_CE', false);
             break;
         case 'PE':
-            define('OXID_VERSION_EE',    false);
-            define('OXID_VERSION_PE',    true );
-            define('OXID_VERSION_PE_PE', true );
-            define('OXID_VERSION_PE_CE', false );
+            define('OXID_VERSION_EE', false);
+            define('OXID_VERSION_PE', true);
+            define('OXID_VERSION_PE_PE', true);
+            define('OXID_VERSION_PE_CE', false);
             break;
         case 'CE':
-            define('OXID_VERSION_EE',    false);
-            define('OXID_VERSION_PE',    true );
-            define('OXID_VERSION_PE_PE', false );
-            define('OXID_VERSION_PE_CE', true );
+            define('OXID_VERSION_EE', false);
+            define('OXID_VERSION_PE', true);
+            define('OXID_VERSION_PE_PE', false);
+            define('OXID_VERSION_PE_CE', true);
             break;
 
         default:
-            die('bad version--- : '."'".getenv('OXID_VERSION')."'");
+            die('bad version--- : ' . "'" . getenv('OXID_VERSION') . "'");
             break;
     }
 }
@@ -71,13 +71,13 @@ endif;
 if (OXID_VERSION_PE) :
     $sShopId = "oxbaseshop";
 endif;
-define ('oxSHOPID', $sShopId );
+define ('oxSHOPID', $sShopId);
 
-define ('oxCCTempDir', oxPATH.'/oxCCTempDir/');
+define ('oxCCTempDir', oxPATH . '/oxCCTempDir/');
 if (!is_dir(oxCCTempDir)) {
     mkdir(oxCCTempDir, 0777, 1);
 } else {
-    array_map('unlink', glob(oxCCTempDir."/*"));
+    array_map('unlink', glob(oxCCTempDir . "/*"));
 }
 
 define('shopPrefix', '');
@@ -90,7 +90,8 @@ if (getenv('SHOP_REMOTE')) {
     define ('SHOP_REMOTE', getenv('SHOP_REMOTE'));
 }
 
-function getShopBasePath() {
+function getShopBasePath()
+{
     return oxPATH;
 }
 
@@ -100,16 +101,16 @@ require_once 'unit/test_utils.php';
 require_once getShopBasePath() . 'core/oxfunctions.php';
 
 // As in new bootstrap to get db instance.
-$oConfigFile = new OxConfigFile( getShopBasePath() . "config.inc.php" );
+$oConfigFile = new OxConfigFile(getShopBasePath() . "config.inc.php");
 
 OxRegistry::set("OxConfigFile", $oConfigFile);
 oxRegistry::set("oxConfig", new oxConfig());
 
 // As in new bootstrap to get db instance.
 $oDb = new oxDb();
-$oDb->setConfig( $oConfigFile );
+$oDb->setConfig($oConfigFile);
 $oLegacyDb = $oDb->getDb();
-OxRegistry::set( 'OxDb', $oLegacyDb );
+OxRegistry::set('OxDb', $oLegacyDb);
 
 oxRegistry::getConfig();
 

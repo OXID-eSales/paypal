@@ -32,6 +32,6 @@ class oePayPalResponseSetExpressCheckout extends oePayPalResponse
      */
     public function getToken()
     {
-        return $this->_getValue( 'TOKEN' );
+        return $this->_getValue('TOKEN');
     }
 }

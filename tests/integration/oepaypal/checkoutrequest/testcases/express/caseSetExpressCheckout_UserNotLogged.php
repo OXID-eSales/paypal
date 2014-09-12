@@ -22,12 +22,12 @@
 $aData = array(
     'class' => 'oePayPalExpressCheckoutDispatcher',
     'action' => 'setExpressCheckout',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 'testUserNotLogged1',
-            'oxprice'                  => 10,
-            'oxvat'                    => 10,
-            'amount'                   => 3,
+    'articles' => array(
+        0 => array(
+            'oxid' => 'testUserNotLogged1',
+            'oxprice' => 10,
+            'oxvat' => 10,
+            'amount' => 3,
         ),
     ),
     'user' => false,
@@ -37,8 +37,8 @@ $aData = array(
     'requestToShop' => array(
         'displayCartInPayPal' => true,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => '',
             'USER' => '',

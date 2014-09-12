@@ -47,7 +47,7 @@ class oePayPalCheckValidator
         $dNewBasketAmount = $this->getNewBasketAmount();
         $dPrevBasketAmount = $this->getOldBasketAmount();
         // check only if new price is different and bigger than old price
-        if ( $dNewBasketAmount > $dPrevBasketAmount ) {
+        if ($dNewBasketAmount > $dPrevBasketAmount) {
             return false;
         }
 
@@ -59,7 +59,7 @@ class oePayPalCheckValidator
      *
      * @param double $dNewBasketAmount changed basket amount
      */
-    public function setNewBasketAmount( $dNewBasketAmount )
+    public function setNewBasketAmount($dNewBasketAmount)
     {
         $this->_dNewBasketAmount = $dNewBasketAmount;
     }
@@ -71,7 +71,7 @@ class oePayPalCheckValidator
      */
     public function getNewBasketAmount()
     {
-        return (float) $this->_dNewBasketAmount;
+        return (float)$this->_dNewBasketAmount;
     }
 
     /**
@@ -79,7 +79,7 @@ class oePayPalCheckValidator
      *
      * @param double $dOldBasketAmount old basket amount
      */
-    public function setOldBasketAmount( $dOldBasketAmount )
+    public function setOldBasketAmount($dOldBasketAmount)
     {
         $this->_dOldBasketAmount = $dOldBasketAmount;
     }
@@ -91,7 +91,7 @@ class oePayPalCheckValidator
      */
     public function getOldBasketAmount()
     {
-        return (float) $this->_dOldBasketAmount;
+        return (float)$this->_dOldBasketAmount;
     }
 
 }

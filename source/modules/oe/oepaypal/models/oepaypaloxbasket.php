@@ -35,8 +35,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
         $blVirtual = true;
 
         $aProducts = $this->getBasketArticles();
-        foreach ( $aProducts as $oProduct ) {
-            if ( !$oProduct->isVirtualPayPalArticle() ) {
+        foreach ($aProducts as $oProduct) {
+            if (!$oProduct->isVirtualPayPalArticle()) {
                 $blVirtual = false;
                 break;
             }
@@ -54,8 +54,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $dWrappingPrice = 0;
 
-        $oWrappingCost = $this->getCosts( 'oxwrapping' );
-        if ( $oWrappingCost ) {
+        $oWrappingCost = $this->getCosts('oxwrapping');
+        if ($oWrappingCost) {
             $dWrappingPrice = $this->isCalculationModeNetto() ? $oWrappingCost->getNettoPrice() : $oWrappingCost->getBruttoPrice();
         }
 
@@ -71,8 +71,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $dGiftCardPrice = 0;
 
-        $oGiftCardCost = $this->getCosts( 'oxgiftcard' );
-        if ( $oGiftCardCost ) {
+        $oGiftCardCost = $this->getCosts('oxgiftcard');
+        if ($oGiftCardCost) {
             $dGiftCardPrice = $this->isCalculationModeNetto() ? $oGiftCardCost->getNettoPrice() : $oGiftCardCost->getBruttoPrice();
         }
 
@@ -87,8 +87,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $dPaymentCost = 0;
 
-        $oPaymentCost = $this->getCosts( 'oxpayment' );
-        if ( $oPaymentCost ) {
+        $oPaymentCost = $this->getCosts('oxpayment');
+        if ($oPaymentCost) {
             $dPaymentCost = $this->isCalculationModeNetto() ? $oPaymentCost->getNettoPrice() : $oPaymentCost->getBruttoPrice();
         }
 
@@ -103,8 +103,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $dTsPaymentCost = 0;
 
-        $oTsPaymentCost = $this->getCosts( 'oxtsprotection' );
-        if ( $oTsPaymentCost ) {
+        $oTsPaymentCost = $this->getCosts('oxtsprotection');
+        if ($oTsPaymentCost) {
             $dTsPaymentCost = $this->isCalculationModeNetto() ? $oTsPaymentCost->getNettoPrice() : $oTsPaymentCost->getBruttoPrice();
         }
 
@@ -124,19 +124,19 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
 
         $oTotalDiscount = $this->getTotalDiscount();
 
-        if ( $oTotalDiscount )  {
+        if ($oTotalDiscount) {
             $dDiscount += $oTotalDiscount->getBruttoPrice();
         }
 
         //if payment costs are negative, adding them to discount
-        if ( ( $dCosts = $this->getPaymentCosts() ) < 0 ) {
-            $dDiscount += ( $dCosts * -1);
+        if (($dCosts = $this->getPaymentCosts()) < 0) {
+            $dDiscount += ($dCosts * -1);
         }
 
         // vouchers..
-        $aVouchers = (array) $this->getVouchers();
-        foreach ( $aVouchers as $oVoucher ) {
-            $dDiscount += round( $oVoucher->dVoucherdiscount, 2 );
+        $aVouchers = (array)$this->getVouchers();
+        foreach ($aVouchers as $oVoucher) {
+            $dDiscount += round($oVoucher->dVoucherdiscount, 2);
         }
 
         return $dDiscount;
@@ -151,10 +151,10 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     public function getSumOfCostOfAllItemsPayPalBasket()
     {
         // basket items sum
-        $dAllCosts = $this->getProductsPrice()->getSum( $this->isCalculationModeNetto() );
+        $dAllCosts = $this->getProductsPrice()->getSum($this->isCalculationModeNetto());
 
         //adding to additional costs only if payment is > 0
-        if ( ( $dCosts = $this->getPayPalPaymentCosts() ) > 0) {
+        if (($dCosts = $this->getPayPalPaymentCosts()) > 0) {
             $dAllCosts += $dCosts;
         }
 
@@ -192,8 +192,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
      */
     public function getPayPalProductVat()
     {
-        $aProductVatValue  = $this->getProductVats( false );
-        $dProductVatValue = array_sum( $aProductVatValue );
+        $aProductVatValue = $this->getProductVats(false);
+        $dProductVatValue = array_sum($aProductVatValue);
         return $dProductVatValue;
     }
 
@@ -205,8 +205,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $dWrappingVat = 0;
 
-        $oWrapping = $this->getCosts( 'oxwrapping' );
-        if ( $oWrapping && $oWrapping->getVatValue() ) {
+        $oWrapping = $this->getCosts('oxwrapping');
+        if ($oWrapping && $oWrapping->getVatValue()) {
             $dWrappingVat = $oWrapping->getVatValue();
         }
 
@@ -221,8 +221,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $dGiftCardVat = 0;
 
-        $oGiftCard = $this->getCosts( 'oxgiftcard' );
-        if ( $oGiftCard && $oGiftCard->getVatValue() ) {
+        $oGiftCard = $this->getCosts('oxgiftcard');
+        if ($oGiftCard && $oGiftCard->getVatValue()) {
             $dGiftCardVat = $oGiftCard->getVatValue();
         }
 
@@ -237,8 +237,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $dPayVAT = 0;
 
-        $oPaymentCost = $this->getCosts( 'oxpayment' );
-        if ( $oPaymentCost && $oPaymentCost->getVatValue()) {
+        $oPaymentCost = $this->getCosts('oxpayment');
+        if ($oPaymentCost && $oPaymentCost->getVatValue()) {
             $dPayVAT = $oPaymentCost->getVatValue();
         }
         return $dPayVAT;
@@ -251,8 +251,8 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     public function getPayPalTsProtectionCostVat()
     {
         $dVAT = 0;
-        $oCost = $this->getCosts( 'oxtsprotection' );
-        if ( $oCost && $oCost->getVatValue()) {
+        $oCost = $this->getCosts('oxtsprotection');
+        if ($oCost && $oCost->getVatValue()) {
             $dVAT = $oCost->getVatValue();
         }
         return $dVAT;

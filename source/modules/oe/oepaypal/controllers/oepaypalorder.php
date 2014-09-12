@@ -31,7 +31,7 @@ class oePayPalOrder extends oePayPalOrder_parent
      */
     public function isPayPal()
     {
-        return ( $this->getSession()->getVariable( "paymentid" ) == "oxidpaypal" );
+        return ($this->getSession()->getVariable("paymentid") == "oxidpaypal");
     }
 
     /**
@@ -43,10 +43,10 @@ class oePayPalOrder extends oePayPalOrder_parent
     {
         $oUser = parent::getUser();
 
-        $sUserId = $this->getSession()->getVariable( "oepaypal-userId" );
-        if ( $this->isPayPal() && $sUserId ) {
-            $oPayPalUser = oxNew( "oxUser" );
-            if ( $oPayPalUser->load( $sUserId ) ) {
+        $sUserId = $this->getSession()->getVariable("oepaypal-userId");
+        if ($this->isPayPal() && $sUserId) {
+            $oPayPalUser = oxNew("oxUser");
+            if ($oPayPalUser->load($sUserId)) {
                 $oUser = $oPayPalUser;
             }
         }
@@ -61,18 +61,18 @@ class oePayPalOrder extends oePayPalOrder_parent
      */
     public function getPayment()
     {
-        if ( !$this->isPayPal() ) {
+        if (!$this->isPayPal()) {
             // removing PayPal payment type from session
-            $this->getSession()->deleteVariable( 'oepaypal' );
-            $this->getSession()->deleteVariable( 'oepaypal-basketAmount' );
+            $this->getSession()->deleteVariable('oepaypal');
+            $this->getSession()->deleteVariable('oepaypal-basketAmount');
 
             return parent::getPayment();
         }
 
-        if ( $this->_oPayment === null ) {
+        if ($this->_oPayment === null) {
             // payment is set ?
-            $oPayment = oxNew( 'oxPayment' );
-            if ( $oPayment->load( 'oxidpaypal' ) ) {
+            $oPayment = oxNew('oxPayment');
+            if ($oPayment->load('oxidpaypal')) {
                 $this->_oPayment = $oPayment;
             }
         }
@@ -87,8 +87,8 @@ class oePayPalOrder extends oePayPalOrder_parent
      */
     protected function _getOrder()
     {
-        $oOrder = oxNew( "oxOrder" );
-        $oOrder->load( $this->getSession()->getVariable( 'sess_challenge' ) );
+        $oOrder = oxNew("oxOrder");
+        $oOrder->load($this->getSession()->getVariable('sess_challenge'));
 
         return $oOrder;
     }
@@ -100,17 +100,16 @@ class oePayPalOrder extends oePayPalOrder_parent
      *
      * @return string
      */
-    protected function _getNextStep( $iSuccess )
+    protected function _getNextStep($iSuccess)
     {
-        $sNextStep = parent::_getNextStep( $iSuccess );
+        $sNextStep = parent::_getNextStep($iSuccess);
 
         // Detecting PayPal & loading order & execute payment only if go wrong
-        if ( $this->isPayPal() && ( $iSuccess == oxOrder::ORDER_STATE_PAYMENTERROR ) ) {
+        if ($this->isPayPal() && ($iSuccess == oxOrder::ORDER_STATE_PAYMENTERROR)) {
 
 
-
-            $iPayPalType = (int) $this->getSession()->getVariable( "oepaypal" );
-            $sNextStep  = ( $iPayPalType == 2 ) ? "basket" : "order";
+            $iPayPalType = (int)$this->getSession()->getVariable("oepaypal");
+            $sNextStep = ($iPayPalType == 2) ? "basket" : "order";
         }
 
         return $sNextStep;

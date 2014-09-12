@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderActionFactory class.
@@ -42,15 +42,15 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderRefundActionDataTest extend
             'refund_amount' => $sAmount,
             'refund_type' => $sType,
         );
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getPost' => $aParams ) );
+        $oRequest = $this->_createStub('oePayPalRequest', array('getPost' => $aParams));
 
         $oOrder = $this->_getOrder();
 
-        $oActionData = new oePayPalOrderRefundActionData( $oRequest, $oOrder );
+        $oActionData = new oePayPalOrderRefundActionData($oRequest, $oOrder);
 
-        $this->assertEquals( $sTransactionId, $oActionData->getTransactionId() );
-        $this->assertEquals( $sAmount, $oActionData->getAmount() );
-        $this->assertEquals( $sType, $oActionData->getType() );
+        $this->assertEquals($sTransactionId, $oActionData->getTransactionId());
+        $this->assertEquals($sAmount, $oActionData->getAmount());
+        $this->assertEquals($sType, $oActionData->getType());
     }
 
     /**
@@ -60,15 +60,15 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderRefundActionDataTest extend
     {
         $sRemainingRefundSum = 59.67;
 
-        $oPayment = $this->_createStub( 'oePayPalPayPalOrderPayment', array( 'getRemainingRefundAmount' => $sRemainingRefundSum ) );
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getPost' => array() ) );
+        $oPayment = $this->_createStub('oePayPalPayPalOrderPayment', array('getRemainingRefundAmount' => $sRemainingRefundSum));
+        $oRequest = $this->_createStub('oePayPalRequest', array('getPost' => array()));
 
         $oOrder = $this->_getOrder();
 
-        $oActionData = $this->getMock( 'oePayPalOrderRefundActionData', array( 'getPaymentBeingRefunded' ), array( $oRequest, $oOrder ) );
-        $oActionData->expects($this->any())->method('getPaymentBeingRefunded')->will($this->returnValue( $oPayment ));
+        $oActionData = $this->getMock('oePayPalOrderRefundActionData', array('getPaymentBeingRefunded'), array($oRequest, $oOrder));
+        $oActionData->expects($this->any())->method('getPaymentBeingRefunded')->will($this->returnValue($oPayment));
 
-        $this->assertEquals( $sRemainingRefundSum, $oActionData->getAmount() );
+        $this->assertEquals($sRemainingRefundSum, $oActionData->getAmount());
     }
 
     /**
@@ -83,16 +83,16 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderRefundActionDataTest extend
         $oPayment->setOrderId('_testOrderId');
         $oPayment->save();
 
-        $aParams = array( 'transaction_id' => $sTransactionId );
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getPost' => $aParams ) );
+        $aParams = array('transaction_id' => $sTransactionId);
+        $oRequest = $this->_createStub('oePayPalRequest', array('getPost' => $aParams));
 
         $oOrder = $this->_getOrder();
 
-        $oActionData = new oePayPalOrderRefundActionData( $oRequest, $oOrder );
+        $oActionData = new oePayPalOrderRefundActionData($oRequest, $oOrder);
 
         $oPayment = $oActionData->getPaymentBeingRefunded();
 
-        $this->assertEquals( $sTransactionId, $oPayment->getTransactionId() );
+        $this->assertEquals($sTransactionId, $oPayment->getTransactionId());
     }
 
     /**
@@ -101,9 +101,9 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderRefundActionDataTest extend
      * @param $aParams
      * @return mixed
      */
-    protected function _getRequest( $aParams )
+    protected function _getRequest($aParams)
     {
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getGet' => $aParams ) );
+        $oRequest = $this->_createStub('oePayPalRequest', array('getGet' => $aParams));
 
         return $oRequest;
     }

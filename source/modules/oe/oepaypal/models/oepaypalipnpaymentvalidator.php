@@ -46,7 +46,7 @@ class oePayPalIPNPaymentValidator
      * Sets language object to get translations from.
      * @param object $oLang get translations from.
      */
-    public function setLang( $oLang )
+    public function setLang($oLang)
     {
         $this->_oLang = $oLang;
     }
@@ -63,7 +63,7 @@ class oePayPalIPNPaymentValidator
     /**
      * @param oePayPalOrderPayment $oRequestPayment
      */
-    public function setRequestOrderPayment( $oRequestPayment )
+    public function setRequestOrderPayment($oRequestPayment)
     {
         $this->_oRequestPayment = $oRequestPayment;
     }
@@ -79,7 +79,7 @@ class oePayPalIPNPaymentValidator
     /**
      * @param oePayPalOrderPayment $oPayment
      */
-    public function setOrderPayment( $oPayment )
+    public function setOrderPayment($oPayment)
     {
         $this->_oOrderPayment = $oPayment;
     }
@@ -100,14 +100,14 @@ class oePayPalIPNPaymentValidator
         $oRequestPayment = $this->getRequestOrderPayment();
         $oOrderPayment = $this->getOrderPayment();
 
-        $sCurrencyPayPal      = $oRequestPayment->getCurrency();
-        $dPricePayPal         = $oRequestPayment->getAmount();
+        $sCurrencyPayPal = $oRequestPayment->getCurrency();
+        $dPricePayPal = $oRequestPayment->getAmount();
 
-        $sCurrencyPayment   = $oOrderPayment->getCurrency();
-        $dAmountPayment     = $oOrderPayment->getAmount();
+        $sCurrencyPayment = $oOrderPayment->getCurrency();
+        $dAmountPayment = $oOrderPayment->getAmount();
 
         $oLang = $this->getLang();
-        $sValidationMessage = $oLang->translateString( 'OEPAYPAL_PAYMENT_INFORMATION' ) .': '. $dAmountPayment .' '. $sCurrencyPayment .'. '. $oLang->translateString( 'OEPAYPAL_INFORMATION' ). ': '. $dPricePayPal .' '. $sCurrencyPayPal .'.';
+        $sValidationMessage = $oLang->translateString('OEPAYPAL_PAYMENT_INFORMATION') . ': ' . $dAmountPayment . ' ' . $sCurrencyPayment . '. ' . $oLang->translateString('OEPAYPAL_INFORMATION') . ': ' . $dPricePayPal . ' ' . $sCurrencyPayPal . '.';
 
         return $sValidationMessage;
     }
@@ -122,12 +122,12 @@ class oePayPalIPNPaymentValidator
         $oRequestPayment = $this->getRequestOrderPayment();
         $oOrderPayment = $this->getOrderPayment();
 
-        $sCurrencyPayPal      = $oRequestPayment->getCurrency();
-        $dPricePayPal         = $oRequestPayment->getAmount();
+        $sCurrencyPayPal = $oRequestPayment->getCurrency();
+        $dPricePayPal = $oRequestPayment->getAmount();
 
-        $sCurrencyPayment   = $oOrderPayment->getCurrency();
-        $dAmountPayment     = $oOrderPayment->getAmount();
+        $sCurrencyPayment = $oOrderPayment->getCurrency();
+        $dAmountPayment = $oOrderPayment->getAmount();
 
-        return ( $sCurrencyPayPal == $sCurrencyPayment && $dPricePayPal == $dAmountPayment );
+        return ($sCurrencyPayPal == $sCurrencyPayment && $dPricePayPal == $dAmountPayment);
     }
 }

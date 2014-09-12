@@ -34,10 +34,11 @@ class oePayPalOxArticle extends oePayPalOxArticle_parent
         $blVirtual = true;
 
         // non material products
-        if ( !$this->oxarticles__oxnonmaterial->value ) {
+        if (!$this->oxarticles__oxnonmaterial->value) {
             $blVirtual = false;
-        } elseif ( isset( $this->oxarticles__oxisdownloadable ) &&
-                   !$this->oxarticles__oxisdownloadable->value ) {
+        } elseif (isset($this->oxarticles__oxisdownloadable) &&
+            !$this->oxarticles__oxisdownloadable->value
+        ) {
             $blVirtual = false;
         }
 

@@ -19,16 +19,16 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
-if ( ! class_exists('oePayPalOxUser_parent')) {
+if (!class_exists('oePayPalOxUser_parent')) {
     class oePayPalOxUser_parent extends oxUser
     {
     }
 }
 
-if ( ! class_exists('oePayPalOxAddress_parent')) {
+if (!class_exists('oePayPalOxAddress_parent')) {
     class oePayPalOxAddress_parent extends oxAddress
     {
     }
@@ -41,7 +41,7 @@ if ( ! class_exists('oePayPalOxAddress_parent')) {
 class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 {
 
-     /**
+    /**
      * Tear down the fixture.
      *
      * @return null
@@ -49,7 +49,7 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     protected function tearDown()
     {
         $sDelete = 'TRUNCATE TABLE `oxuser`';
-        oxDb::getDb()->execute( $sDelete );
+        oxDb::getDb()->execute($sDelete);
     }
 
     /**
@@ -58,9 +58,9 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     protected function setUp()
     {
         // fix for state ID compatability between editions
-        $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) ".
-                                     "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
-        oxDb::getDb()->execute( $sSqlState );
+        $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
+            "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
+        oxDb::getDb()->execute($sSqlState);
     }
 
     /**
@@ -99,31 +99,31 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
-        $oDetails->setData( $aPayPalData );
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
+        $oDetails->setData($aPayPalData);
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
-        $oPayPalUser = $this->getMock( 'oePayPalOxUser', array( '_setAutoGroups' ) );
-        $oPayPalUser->expects( $this->once() )->method( '_setAutoGroups' )->with( $this->equalTo( "8f241f11096877ac0.98748826" ) );
-        $oPayPalUser->createPayPalUser( $oDetails );
+        $oPayPalUser = $this->getMock('oePayPalOxUser', array('_setAutoGroups'));
+        $oPayPalUser->expects($this->once())->method('_setAutoGroups')->with($this->equalTo("8f241f11096877ac0.98748826"));
+        $oPayPalUser->createPayPalUser($oDetails);
         $sUserId = $oPayPalUser->getId();
 
         $oUser = new oxUser();
-        $oUser->load( $sUserId );
+        $oUser->load($sUserId);
 
-        $this->assertEquals( 1, $oUser->oxuser__oxactive->value);
-        $this->assertEquals( 'test@test.mail', $oUser->oxuser__oxusername->value);
-        $this->assertEquals( 'testFirstName', $oUser->oxuser__oxfname->value);
-        $this->assertEquals( 'testLastName', $oUser->oxuser__oxlname->value);
-        $this->assertEquals( 'testPhoneNum', $oUser->oxuser__oxfon->value);
-        $this->assertEquals( 'testSalutation', $oUser->oxuser__oxsal->value);
-        $this->assertEquals( 'testBusiness', $oUser->oxuser__oxcompany->value);
-        $this->assertEquals( 'testStreetName str.', $oUser->oxuser__oxstreet->value);
-        $this->assertEquals( '12', $oUser->oxuser__oxstreetnr->value);
-        $this->assertEquals( 'testCity', $oUser->oxuser__oxcity->value);
-        $this->assertEquals( 'testZip', $oUser->oxuser__oxzip->value);
-        $this->assertEquals( '8f241f11096877ac0.98748826', $oUser->oxuser__oxcountryid->value);
-        $this->assertEquals( '333', $oUser->oxuser__oxstateid->value);
-        $this->assertEquals( 'testCompany', $oUser->oxuser__oxaddinfo->value);
+        $this->assertEquals(1, $oUser->oxuser__oxactive->value);
+        $this->assertEquals('test@test.mail', $oUser->oxuser__oxusername->value);
+        $this->assertEquals('testFirstName', $oUser->oxuser__oxfname->value);
+        $this->assertEquals('testLastName', $oUser->oxuser__oxlname->value);
+        $this->assertEquals('testPhoneNum', $oUser->oxuser__oxfon->value);
+        $this->assertEquals('testSalutation', $oUser->oxuser__oxsal->value);
+        $this->assertEquals('testBusiness', $oUser->oxuser__oxcompany->value);
+        $this->assertEquals('testStreetName str.', $oUser->oxuser__oxstreet->value);
+        $this->assertEquals('12', $oUser->oxuser__oxstreetnr->value);
+        $this->assertEquals('testCity', $oUser->oxuser__oxcity->value);
+        $this->assertEquals('testZip', $oUser->oxuser__oxzip->value);
+        $this->assertEquals('8f241f11096877ac0.98748826', $oUser->oxuser__oxcountryid->value);
+        $this->assertEquals('333', $oUser->oxuser__oxstateid->value);
+        $this->assertEquals('testCompany', $oUser->oxuser__oxaddinfo->value);
     }
 
     /**
@@ -138,18 +138,17 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $aPayPalData = $this->_getPayPalData();
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '12 testStreetName str.';
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
-        $oDetails->setData( $aPayPalData );
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
-
+        $oDetails->setData($aPayPalData);
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
 
         $oPayPalUser = new oePayPalOxUser();
-        $oPayPalUser->createPayPalUser( $oDetails );
+        $oPayPalUser->createPayPalUser($oDetails);
         $oUser = new oxUser();
-        $oUser->load( $oPayPalUser->getId() );
+        $oUser->load($oPayPalUser->getId());
 
-        $this->assertEquals( 'testStreetName str.', $oUser->oxuser__oxstreet->value);
-        $this->assertEquals( '12', $oUser->oxuser__oxstreetnr->value);
+        $this->assertEquals('testStreetName str.', $oUser->oxuser__oxstreet->value);
+        $this->assertEquals('12', $oUser->oxuser__oxstreetnr->value);
     }
 
 
@@ -164,20 +163,20 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         //creating existing user
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
-        $oDetails->setData( $aPayPalData );
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
+        $oDetails->setData($aPayPalData);
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
         $oPayPalOxUser = new oePayPalOxUser();
-        $oPayPalOxUser->createPayPalUser( $oDetails );
+        $oPayPalOxUser->createPayPalUser($oDetails);
 
         $sQ = "SELECT COUNT(*) FROM `oxuser`";
-        $iAddressCount = oxDb::getDb()->getOne( $sQ );
+        $iAddressCount = oxDb::getDb()->getOne($sQ);
 
         // prepareing data fo new address - the same
         $oPayPalOxUser = new oePayPalOxUser();
-        $oPayPalOxUser->createPayPalUser( $oDetails );
+        $oPayPalOxUser->createPayPalUser($oDetails);
 
-        $iAddressCountAfter = oxDb::getDb()->getOne( $sQ );
+        $iAddressCountAfter = oxDb::getDb()->getOne($sQ);
 
         // skips the same address
         $this->assertEquals($iAddressCount, $iAddressCountAfter);
@@ -193,32 +192,32 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
-        $oDetails->setData( $aPayPalData );
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
+        $oDetails->setData($aPayPalData);
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
-        $oUser->createPayPalUser( $oDetails );
-        $this->assertTrue( $oUser->isSamePayPalUser( $oDetails ) );
+        $oUser->createPayPalUser($oDetails);
+        $this->assertTrue($oUser->isSamePayPalUser($oDetails));
 
         $aPayPalData = $this->_getPayPalData();
         $aPayPalData['FIRSTNAME'] = 'testFirstNameBla';
-        $oDetails->setData( $aPayPalData );
-        $this->assertFalse( $oUser->isSamePayPalUser( $oDetails ) );
+        $oDetails->setData($aPayPalData);
+        $this->assertFalse($oUser->isSamePayPalUser($oDetails));
 
         $aPayPalData = $this->_getPayPalData();
         $aPayPalData['LASTNAME'] = 'testFirstNameBla';
-        $oDetails->setData( $aPayPalData );
-        $this->assertFalse( $oUser->isSamePayPalUser( $oDetails ) );
+        $oDetails->setData($aPayPalData);
+        $this->assertFalse($oUser->isSamePayPalUser($oDetails));
 
         $aPayPalData = $this->_getPayPalData();
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = 'testStreetNameBla str. 12';
-        $oDetails->setData( $aPayPalData );
-        $this->assertFalse( $oUser->isSamePayPalUser( $oDetails ) );
+        $oDetails->setData($aPayPalData);
+        $this->assertFalse($oUser->isSamePayPalUser($oDetails));
 
         $aPayPalData = $this->_getPayPalData();
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOCITY'] = 'testCitybla';
-        $oDetails->setData( $aPayPalData );
-        $this->assertFalse( $oUser->isSamePayPalUser( $oDetails ) );
+        $oDetails->setData($aPayPalData);
+        $this->assertFalse($oUser->isSamePayPalUser($oDetails));
 
     }
 
@@ -231,20 +230,20 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
-        $oDetails->setData( $aPayPalData );
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
+        $oDetails->setData($aPayPalData);
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
-        $oUser->createPayPalUser( $oDetails );
+        $oUser->createPayPalUser($oDetails);
 
         // by default single quote ' will be convrted to &#039;
-        $oUser->oxuser__oxfname = new oxField("test'FName" );
+        $oUser->oxuser__oxfname = new oxField("test'FName");
         $oUser->oxuser__oxlname = new oxField("test'LName");
 
         $aPayPalData["FIRSTNAME"] = "test'FName";
         $aPayPalData["LASTNAME"] = "test'LName";
-        $oDetails->setData( $aPayPalData );
-        $this->assertTrue( $oUser->isSamePayPalUser( $oDetails ) );
+        $oDetails->setData($aPayPalData);
+        $this->assertTrue($oUser->isSamePayPalUser($oDetails));
     }
 
     /**
@@ -256,23 +255,23 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
-        $oDetails->setData( $aPayPalData );
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
+        $oDetails->setData($aPayPalData);
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
-        $oUser->createPayPalUser( $oDetails );
-        $this->assertTrue( $oUser->isSamePayPalUser( $oDetails ) );
+        $oUser->createPayPalUser($oDetails);
+        $this->assertTrue($oUser->isSamePayPalUser($oDetails));
 
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = 'testStreetNameBla str. 12';
-        $oDetails->setData( $aPayPalData );
-        $this->assertFalse( $oUser->isSamePayPalUser( $oDetails ) );
+        $oDetails->setData($aPayPalData);
+        $this->assertFalse($oUser->isSamePayPalUser($oDetails));
 
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOCITY'] = 'testCitybla';
-        $oDetails->setData( $aPayPalData );
-        $this->assertFalse( $oUser->isSamePayPalUser( $oDetails ) );
+        $oDetails->setData($aPayPalData);
+        $this->assertFalse($oUser->isSamePayPalUser($oDetails));
 
     }
-    
+
     /**
      * Test case for oePayPalOxUser::isSamePayPalUser()
      *
@@ -282,22 +281,22 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
-        $oDetails->setData( $aPayPalData );
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
+        $oDetails->setData($aPayPalData);
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
-        $oUser->createPayPalUser( $oDetails );
-        
+        $oUser->createPayPalUser($oDetails);
+
         // by default single quote ' will be convrted to &#039;
-        $oUser->oxuser__oxstreet   = new oxField( "test'StreetName" );;
-        $oUser->oxuser__oxstreetnr = new oxField( "5" );
-        $oUser->oxuser__oxcity     = new oxField( "test'City" );
-        
+        $oUser->oxuser__oxstreet = new oxField("test'StreetName");;
+        $oUser->oxuser__oxstreetnr = new oxField("5");
+        $oUser->oxuser__oxcity = new oxField("test'City");
+
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = "test'StreetName 5";
-        $aPayPalData["PAYMENTREQUEST_0_SHIPTOCITY"]   = "test'City";
-        $oDetails->setData( $aPayPalData );
-        
-        $this->assertTrue( $oUser->isSamePayPalUser( $oDetails ) );
+        $aPayPalData["PAYMENTREQUEST_0_SHIPTOCITY"] = "test'City";
+        $oDetails->setData($aPayPalData);
+
+        $this->assertTrue($oUser->isSamePayPalUser($oDetails));
     }
 
     /**
@@ -310,12 +309,12 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         $oConfig = $this->getMock('oxConfig', array('getConfigParam', 'getShopId'));
         $oConfig->expects($this->never())->method('getShopId');
-        $oConfig->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue( true ));
+        $oConfig->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(true));
 
         $oUser = new oxUser();
         $oUser->oxuser__oxusername = new oxField('test@test.test');
         $oUser->oxuser__oxpassword = new oxField('paswd');
-        $oUser->setId( '_testId' );
+        $oUser->setId('_testId');
         $oUser->setShopId('_testShop2');
         $oUser->save();
 
@@ -325,8 +324,8 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $oUser->setShopId('_testShop1');
         $oUser->save();
 
-        $oUser = $this->getMock('oePayPalOxUser', array('getConfig'), array(), '', false );
-        $oUser->expects($this->any())->method('getConfig')->will($this->returnValue( $oConfig ));
+        $oUser = $this->getMock('oePayPalOxUser', array('getConfig'), array(), '', false);
+        $oUser->expects($this->any())->method('getConfig')->will($this->returnValue($oConfig));
 
         $this->assertEquals('_testId', $oUser->isRealPayPalUser('test@test.test'));
         $this->assertFalse($oUser->isRealPayPalUser('test1@test.test'));
@@ -344,19 +343,19 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         $oConfig = $this->getMock('oxConfig', array('getConfigParam', 'getShopId'));
         $oConfig->expects($this->any())->method('getShopId')->will($this->returnValue('_testShop1'));
-        $oConfig->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue( false ));
+        $oConfig->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(false));
 
         $oUser = new oxUser();
         $oUser->oxuser__oxusername = new oxField('test@test.test');
         $oUser->oxuser__oxpassword = new oxField('paswd');
-        $oUser->oxuser__oxshopid   = new oxField('_testShop1');
-        $oUser->setId( '_testId' );
+        $oUser->oxuser__oxshopid = new oxField('_testShop1');
+        $oUser->setId('_testId');
         $oUser->save();
 
         $oUser = new oxUser();
         $oUser->oxuser__oxusername = new oxField('test3@test.test');
         $oUser->oxuser__oxpassword = new oxField('paswd');
-        $oUser->setId( '_testId2' );
+        $oUser->setId('_testId2');
         $oUser->setShopId('_testShop2');
         $oUser->save();
 
@@ -368,13 +367,13 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 
         $oUser = new oePayPalOxUser();
 
-        $oUser = $this->getMock('oePayPalOxUser', array('getConfig'), array(), '', false );
-        $oUser->expects($this->any())->method('getConfig')->will($this->returnValue( $oConfig ));
+        $oUser = $this->getMock('oePayPalOxUser', array('getConfig'), array(), '', false);
+        $oUser->expects($this->any())->method('getConfig')->will($this->returnValue($oConfig));
 
-        $this->assertEquals( '_testId', $oUser->isRealPayPalUser('test@test.test') );
-        $this->assertFalse( $oUser->isRealPayPalUser('test1@test.test') );
-        $this->assertFalse( $oUser->isRealPayPalUser('test3@test.test') );
-        $this->assertFalse( $oUser->isRealPayPalUser('blabla@bla.bla') );
+        $this->assertEquals('_testId', $oUser->isRealPayPalUser('test@test.test'));
+        $this->assertFalse($oUser->isRealPayPalUser('test1@test.test'));
+        $this->assertFalse($oUser->isRealPayPalUser('test3@test.test'));
+        $this->assertFalse($oUser->isRealPayPalUser('blabla@bla.bla'));
 
     }
 
@@ -387,20 +386,20 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         //session empty
         $oUser = new oePayPalOxUser();
-        $this->assertNull( $oUser->loadUserPayPalUser() );
+        $this->assertNull($oUser->loadUserPayPalUser());
 
         $oUser = new oxUser();
         $oUser->oxuser__oxusername = new oxField('test@test.test');
         $oUser->oxuser__oxpassword = new oxField('paswd');
-        $oUser->setId( '_testId' );
+        $oUser->setId('_testId');
         $oUser->save();
 
         // user id in session
-        $this->getSession()->setVariable('oepaypal-userId', '_testId' );
+        $this->getSession()->setVariable('oepaypal-userId', '_testId');
 
         $oUser = new oePayPalOxUser();
-        $this->assertTrue( $oUser->loadUserPayPalUser() );
-        $this->assertEquals( '_testId', $oUser->oxuser__oxid->value );
+        $this->assertTrue($oUser->loadUserPayPalUser());
+        $this->assertEquals('_testId', $oUser->oxuser__oxid->value);
     }
 
     /**
@@ -411,7 +410,7 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
      */
     public function testInitializeUserForCallBackPayPalUser()
     {
-        oxTestModules::addModuleObject( 'oxAddress', new oePayPalOxAddress() );
+        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
         $aPayPalData["SHIPTOSTREET"] = "testStreetName str. 12a";
         $aPayPalData["SHIPTOCITY"] = "testCity";
@@ -420,16 +419,16 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $aPayPalData["SHIPTOZIP"] = "testZip";
 
         $oPayPalUser = new oePayPalOxUser();
-        $oPayPalUser->initializeUserForCallBackPayPalUser( $aPayPalData );
+        $oPayPalUser->initializeUserForCallBackPayPalUser($aPayPalData);
 
-        $this->assertTrue( is_string($oPayPalUser->getId()) );
+        $this->assertTrue(is_string($oPayPalUser->getId()));
 
-        $this->assertEquals( 'testStreetName str.', $oPayPalUser->oxuser__oxstreet->value);
-        $this->assertEquals( '12a', $oPayPalUser->oxuser__oxstreetnr->value);
-        $this->assertEquals( 'testCity', $oPayPalUser->oxuser__oxcity->value);
-        $this->assertEquals( 'testZip', $oPayPalUser->oxuser__oxzip->value);
-        $this->assertEquals( '8f241f11096877ac0.98748826', $oPayPalUser->oxuser__oxcountryid->value);
-        $this->assertEquals( '333', $oPayPalUser->oxuser__oxstateid->value);
+        $this->assertEquals('testStreetName str.', $oPayPalUser->oxuser__oxstreet->value);
+        $this->assertEquals('12a', $oPayPalUser->oxuser__oxstreetnr->value);
+        $this->assertEquals('testCity', $oPayPalUser->oxuser__oxcity->value);
+        $this->assertEquals('testZip', $oPayPalUser->oxuser__oxzip->value);
+        $this->assertEquals('8f241f11096877ac0.98748826', $oPayPalUser->oxuser__oxcountryid->value);
+        $this->assertEquals('333', $oPayPalUser->oxuser__oxstateid->value);
     }
 
 }

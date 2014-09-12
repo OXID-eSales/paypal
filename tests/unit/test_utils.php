@@ -22,7 +22,7 @@
 define ('MAX_LOOP_AMOUNT', 4);
 function getRandLTAmnt()
 {
-    return rand(1, MAX_LOOP_AMOUNT-1);
+    return rand(1, MAX_LOOP_AMOUNT - 1);
 }
 
 //returns the base path, no the unit path
@@ -64,8 +64,8 @@ function oxClassCacheKey($reset = false, $sProvide = null)
             $key = $sProvide;
         else {
             $myConfig = modConfig::getInstance();
-            if (is_array($myConfig->getConfigParam( 'aModules' )))
-                $key = md5('cc|'.implode('|', $myConfig->getConfigParam( 'aModules' )));
+            if (is_array($myConfig->getConfigParam('aModules')))
+                $key = md5('cc|' . implode('|', $myConfig->getConfigParam('aModules')));
             else
                 $key = md5('cc|');
         }
@@ -84,7 +84,7 @@ function oxAddClassModule($sModuleClass, $sClass)
     oxRegistry::set($sClass, null);
 
     if ($aModules[strtolower($sClass)])
-        $sModuleClass = $aModules[strtolower($sClass)].'&'.$sModuleClass;
+        $sModuleClass = $aModules[strtolower($sClass)] . '&' . $sModuleClass;
     $aModules[strtolower($sClass)] = $sModuleClass;
 
     //$myConfig->setConfigParam( 'aModules', $aModules );
@@ -111,7 +111,7 @@ function oxRemClassModule($sModuleClass, $sClass = '')
 // force for now        if ($aModules[$sClass] == $sModuleClass)
         unset($aModules[$sClass]);
     } else {
-        while (($sKey = array_search($sModuleClass, $aModules))!==false) {
+        while (($sKey = array_search($sModuleClass, $aModules)) !== false) {
             unset($aModules[$sKey]);
         }
     }
@@ -129,19 +129,22 @@ function oxRemClassModule($sModuleClass, $sClass = '')
 class oxTestModules
 {
     private static $_addedmods = array();
+
     private static function _getNextName($sOrig)
     {
-        $base = $sOrig.'__oxTestModule_'; $cnt = 0;
-        while (class_exists($base.$cnt, false)) ++$cnt;
-        return $base.$cnt;
+        $base = $sOrig . '__oxTestModule_';
+        $cnt = 0;
+        while (class_exists($base . $cnt, false)) ++$cnt;
+        return $base . $cnt;
     }
+
     /**
      * addVar adds module and creates function in it
      *
-     * @param string $class    target class
-     * @param string $varName  target variabe
-     * @param string $access   public | private | public static, whatever
-     * @param string $default   default value
+     * @param string $class target class
+     * @param string $varName target variabe
+     * @param string $access public | private | public static, whatever
+     * @param string $default default value
      * @static
      * @access public
      * @return void
@@ -151,7 +154,7 @@ class oxTestModules
         $class = strtolower($class);
         $name = self::_getNextName($class);
         if ($cnt = count(self::$_addedmods[$class])) {
-            $last = self::$_addedmods[$class][$cnt-1];
+            $last = self::$_addedmods[$class][$cnt - 1];
         } else {
             $last = $class;
         }
@@ -159,12 +162,13 @@ class oxTestModules
         oxAddClassModule($name, $class);
         self::$_addedmods[$class][] = $name;
     }
+
     /**
      * addFunction adds module and creates function in it
      *
-     * @param mixed $class    target class
-     * @param mixed $fncName  target function
-     * @param mixed $func     function - if it is '{...}' then it is function code ($aA is arguments array), else it is taken as param to call_user_func_array
+     * @param mixed $class target class
+     * @param mixed $fncName target function
+     * @param mixed $func function - if it is '{...}' then it is function code ($aA is arguments array), else it is taken as param to call_user_func_array
      * @static
      * @access public
      * @return string
@@ -175,13 +179,13 @@ class oxTestModules
         $name = self::_getNextName($class);
 
         if ($cnt = count(self::$_addedmods[$class])) {
-            $last = self::$_addedmods[$class][$cnt-1];
+            $last = self::$_addedmods[$class][$cnt - 1];
         } else {
             $last = $class;
         }
         $sCode = '';
         if (preg_match('/^{.*}$/ms', $func)) {
-            $sCode = "\$aA = func_get_args(); ".trim($func, '{}');
+            $sCode = "\$aA = func_get_args(); " . trim($func, '{}');
         } else {
             if (preg_match('/^[a-z0-9_-]*$/i', trim($func))) {
                 $func = "'$func'";
@@ -189,66 +193,66 @@ class oxTestModules
             $sCode = " \$arg = func_get_args(); return call_user_func_array($func, \$arg);";
         }
 
-        $iErrorReportinc = error_reporting( E_ALL ^ E_NOTICE );
+        $iErrorReportinc = error_reporting(E_ALL ^ E_NOTICE);
 
         $aFncParams = array();
         if (strpos($fncName, '(') !== false) {
             $aMatches = null;
             preg_match("@(.*?)\((.*?)\)@", $fncName, $aMatches);
 
-            $fncName = trim( $aMatches[1] );
-            if ( trim($aMatches[2]) ) {
-                $aFncParams = explode( ',', $aMatches[2] );
+            $fncName = trim($aMatches[1]);
+            if (trim($aMatches[2])) {
+                $aFncParams = explode(',', $aMatches[2]);
             } else {
                 $aFncParams = array();
             }
         }
 
         if (method_exists($last, $fncName)) {
-            $oReflection   = new ReflectionClass($last);
+            $oReflection = new ReflectionClass($last);
             $aMethodParams = $oReflection->getMethod($fncName)->getParameters();
 
-            $fncName.='(';
+            $fncName .= '(';
             $blFirst = true;
             foreach ($aMethodParams AS $iKey => $oParam) {
 
-                if(!$blFirst) {
-                    $fncName.=', ';
-                }else{
+                if (!$blFirst) {
+                    $fncName .= ', ';
+                } else {
                     $blFirst = false;
                 }
 
-                if ( isset( $aFncParams[$iKey] ) ) {
+                if (isset($aFncParams[$iKey])) {
                     $fncName .= $aFncParams[$iKey];
 
-                    if(strpos( $aFncParams[$iKey], '=' ) === false && $oParam->isDefaultValueAvailable() ) {
-                        $fncName .= ' = '.var_export($oParam->getDefaultValue(),true);
+                    if (strpos($aFncParams[$iKey], '=') === false && $oParam->isDefaultValueAvailable()) {
+                        $fncName .= ' = ' . var_export($oParam->getDefaultValue(), true);
                     }
 
                     continue;
                 }
 
-                if($oParam->getClass()){
-                    $fncName.= $oParam->getClass()->getName().' ';
+                if ($oParam->getClass()) {
+                    $fncName .= $oParam->getClass()->getName() . ' ';
                 }
-                $fncName.= '$'.$oParam->getName();
-                if($oParam->isDefaultValueAvailable() ) {
-                    $fncName .= ' = '.var_export($oParam->getDefaultValue(),true);
+                $fncName .= '$' . $oParam->getName();
+                if ($oParam->isDefaultValueAvailable()) {
+                    $fncName .= ' = ' . var_export($oParam->getDefaultValue(), true);
                 }
             }
-            $fncName.=')';
+            $fncName .= ')';
         } else {
-            if ( empty( $aFncParams ) ) {
-                $fncName.='($p1=null, $p2=null, $p3=null, $p4=null, $p5=null, $p6=null, $p7=null, $p8=null, $p9=null, $p10=null)';
+            if (empty($aFncParams)) {
+                $fncName .= '($p1=null, $p2=null, $p3=null, $p4=null, $p5=null, $p6=null, $p7=null, $p8=null, $p9=null, $p10=null)';
             } else {
-                $fncName .= '('. implode( ', ', $aFncParams ) .')';
+                $fncName .= '(' . implode(', ', $aFncParams) . ')';
             }
         }
 
         eval ("class $name extends $last { function $fncName { $sCode }}");
         oxAddClassModule($name, $class);
 
-        error_reporting( $iErrorReportinc );
+        error_reporting($iErrorReportinc);
 
         self::$_addedmods[$class][] = $name;
         return $name;
@@ -272,8 +276,8 @@ class oxTestModules
      */
     public static function addModuleObject($sClassName, $oObject)
     {
-        oxRegistry::set( $sClassName, null);
-        oxUtilsObject::setClassInstance( $sClassName, $oObject );
+        oxRegistry::set($sClassName, null);
+        oxUtilsObject::setClassInstance($sClassName, $oObject);
         /*
         $sClassName = strtolower($sClassName);
         if (!self::$_oOrigOxUtilsObj) {
@@ -341,7 +345,7 @@ class oxTestModules
      */
     public static function cleanAllModules()
     {
-        modConfig::getInstance()->setConfigParam( 'aModules', array() );
+        modConfig::getInstance()->setConfigParam('aModules', array());
         oxClassCacheKey(true, "empty");
     }
 }
@@ -360,7 +364,7 @@ class oxTestsStaticCleaner
      */
     protected static function _getChildClass($sClass)
     {
-        return __CLASS__.'_'.$sClass;
+        return __CLASS__ . '_' . $sClass;
     }
 
     /**
@@ -411,8 +415,6 @@ class oxTestsStaticCleaner
  * NOTE: after cleanup, all oxConfig variable changes while modConfig was active are LOST.
  *
  */
-
-
 abstract class modOXID
 {
     protected $_takeover = array();
@@ -444,13 +446,13 @@ abstract class modOXID
     {
         // cleaning up core info
         $oConfig = new oxsupercfg();
-        $oConfig->setConfig( null );
-        $oConfig->setSession( null );
-        $oConfig->setUser( null );
-        $oConfig->setAdminMode( null );
+        $oConfig->setConfig(null);
+        $oConfig->setSession(null);
+        $oConfig->setUser(null);
+        $oConfig->setAdminMode(null);
 
-        if ( defined('OXID_VERSION_EE') && OXID_VERSION_EE ) :
-            $oConfig->setRights( null );
+        if (defined('OXID_VERSION_EE') && OXID_VERSION_EE) :
+            $oConfig->setRights(null);
         endif;
         oxTestModules::cleanAllModules();
     }
@@ -475,7 +477,7 @@ abstract class modOXID
 
     public function addClassVar($name, $value = null)
     {
-        $this->_vars[$name] = (isset($value))?$value:$this->_oRealInstance->$name;
+        $this->_vars[$name] = (isset($value)) ? $value : $this->_oRealInstance->$name;
     }
 
     public function remClassVar($name)
@@ -486,7 +488,7 @@ abstract class modOXID
 
     public function __call($func, $var)
     {
-        $funca =  strtolower($func);
+        $funca = strtolower($func);
         if (isset($this->_takeover[$funca])) {
             return call_user_func_array($this->_takeover[$funca], $var);
         } else {
@@ -503,7 +505,7 @@ abstract class modOXID
         // if it would help to clone object properties...
         if (array_key_exists($nm, $this->_vars))
             return $this->_vars[$nm];
-        return $this->_oRealInstance->getConfigParam( $nm );
+        return $this->_oRealInstance->getConfigParam($nm);
     }
 
     public function __set($nm, $val)
@@ -576,7 +578,7 @@ class modConfig extends modOXID
 
     public function cleanup()
     {
-        self::$unitMOD     = null;
+        self::$unitMOD = null;
         self::$unitCustMOD = null;
 
         // cleaning config parameters
@@ -589,35 +591,35 @@ class modConfig extends modOXID
         }
     }
 
-    public function getModConfigParam( $paramName )
+    public function getModConfigParam($paramName)
     {
         $oInst = self::getInstance();
-        if ( array_key_exists($paramName, $oInst->_aConfigparams) ) {
+        if (array_key_exists($paramName, $oInst->_aConfigparams)) {
             return $oInst->_aConfigparams[$paramName];
         }
     }
 
-    public function getConfigParam( $paramName )
+    public function getConfigParam($paramName)
     {
         $oInst = self::getInstance();
-        if ( ( $sValue = $this->getModConfigParam( $paramName ) ) !== null ) {
+        if (($sValue = $this->getModConfigParam($paramName)) !== null) {
             return $sValue;
         } else {
             if (!$oInst->_oRealInstance) {
                 $_i = oxRegistry::getConfig();
-                if ( $_i instanceof oxConfig ) {
-                    return $_i->getConfigParam( $paramName );
+                if ($_i instanceof oxConfig) {
+                    return $_i->getConfigParam($paramName);
                 }
                 throw new Exception("real instance is empty!");
             }
-            return $oInst->_oRealInstance->getConfigParam( $paramName );
+            return $oInst->_oRealInstance->getConfigParam($paramName);
         }
     }
 
     public function isDemoShop()
     {
         $oInst = self::getInstance();
-        if ( isset( $oInst->_aConfigparams['blDemoShop'] ))
+        if (isset($oInst->_aConfigparams['blDemoShop']))
             return $oInst->_aConfigparams['blDemoShop'];
         else
             return $oInst->_oRealInstance->isDemoShop();
@@ -626,13 +628,13 @@ class modConfig extends modOXID
     public function isUtf()
     {
         $oInst = self::getInstance();
-        if ( isset( $oInst->_aConfigparams['iUtfMode'] ))
+        if (isset($oInst->_aConfigparams['iUtfMode']))
             return $oInst->_aConfigparams['iUtfMode'];
         else
             return $oInst->_oRealInstance->isUtf();
     }
 
-    public function setConfigParam( $paramName, $paramValue )
+    public function setConfigParam($paramName, $paramValue)
     {
         self::getInstance()->_aConfigparams[$paramName] = $paramValue;
     }
@@ -645,7 +647,7 @@ class modConfig extends modOXID
      *
      * @return string
      */
-    static function getParameter(  $paramName, $blRaw = false)
+    static function getParameter($paramName, $blRaw = false)
     {
         return self::getRequestParameter($paramName, $blRaw);
     }
@@ -656,7 +658,7 @@ class modConfig extends modOXID
      *
      * @deprecated since v5.2.0 (2014-07-02); Use static setRequestParameter()
      */
-    static function setParameter( $paramName, $paramValue )
+    static function setParameter($paramName, $paramValue)
     {
         self::setRequestParameter($paramName, $paramValue);
     }
@@ -669,13 +671,13 @@ class modConfig extends modOXID
      *
      * @return string
      */
-    public static function getRequestParameter(  $paramName, $blRaw = false)
+    public static function getRequestParameter($paramName, $blRaw = false)
     {
         // should throw exception if original functionality is needed.
-        if ( array_key_exists( $paramName, self::getInstance()->_params ) ) {
+        if (array_key_exists($paramName, self::getInstance()->_params)) {
             return self::getInstance()->_params[$paramName];
         } else {
-            return modSession::getInstance()->getVar( $paramName );
+            return modSession::getInstance()->getVar($paramName);
         }
     }
 
@@ -685,7 +687,7 @@ class modConfig extends modOXID
      * @param $paramName
      * @param $paramValue
      */
-    public static function setRequestParameter( $paramName, $paramValue )
+    public static function setRequestParameter($paramName, $paramValue)
     {
         // should throw exception if original functionality is needed.
         self::getInstance()->_params[$paramName] = $paramValue;
@@ -719,7 +721,7 @@ class modSession extends modOXID
      *
      * @var array
      */
-    protected  $_aSessionVars = array();
+    protected $_aSessionVars = array();
 
     function modAttach($oObj = null)
     {
@@ -841,6 +843,7 @@ class modResource
     public $recordCount = 0;
     public $eof = true;
     public $fields = array();
+
     function RecordCount()
     {
         if ($this->recordCount)
@@ -849,9 +852,10 @@ class modResource
             $this->EOF = true;
         return $this->recordCount;
     }
+
     function MoveNext()
     {
-        if ((--$this->recordCount)==0)
+        if ((--$this->recordCount) == 0)
             $this->EOF = true;
     }
 }
@@ -867,15 +871,15 @@ class modInstances
 {
     protected static $_aInst = array();
 
-    public static function addMod( $sModId, $oObject )
+    public static function addMod($sModId, $oObject)
     {
-        self::$_aInst[strtolower($sModId).oxClassCacheKey()] = $oObject;
+        self::$_aInst[strtolower($sModId) . oxClassCacheKey()] = $oObject;
     }
 
-    public static function getMod( $sModId )
+    public static function getMod($sModId)
     {
         //print_r(array_keys(self::$_aInst));
-        return self::$_aInst[strtolower($sModId).oxClassCacheKey()];
+        return self::$_aInst[strtolower($sModId) . oxClassCacheKey()];
     }
 
     public static function cleanup()
@@ -883,7 +887,6 @@ class modInstances
         self::$_aInst = array();
     }
 }
-
 
 
 // ########################################################################
@@ -944,7 +947,7 @@ if (!function_exists('getFileArr')) {
         $arr = findphp($sBasePath, $aDirBlackList, $aFileBlackList, $aFileWhiteList);
 
         if ($_ENV['PHP_FILE']) {
-            $sTestOnlyFile =  basename($_ENV['PHP_FILE']);
+            $sTestOnlyFile = basename($_ENV['PHP_FILE']);
             $sTestOnlyFile = preg_replace('/Test.php$/i', '', $sTestOnlyFile);
             $sTestOnlyFile = preg_replace('/.php$/i', '', $sTestOnlyFile);
             foreach ($arr as &$sSerchFile) {
@@ -958,11 +961,11 @@ if (!function_exists('getFileArr')) {
 
         $ret = array();
         foreach ($arr as $file) {
-            try{
+            try {
                 $ret[$file] = stripCodeLines($file, $sCCarrayDir);
-            }catch (Exception $e){
+            } catch (Exception $e) {
                 // do not add file here;
-                echo '',  $e->getMessage(), "\n";
+                echo '', $e->getMessage(), "\n";
             }
         }
         return $ret;
@@ -983,7 +986,7 @@ if (!function_exists('preparePathArray')) {
     function preparePathArray(&$aPaths, $sBasePath)
     {
         foreach (array_keys($aPaths) as $key) {
-            $aPaths[$key] = $sBasePath.$aPaths[$key];
+            $aPaths[$key] = $sBasePath . $aPaths[$key];
         }
         $aPaths = array_map('replaceDirSeperator', $aPaths);
     }
@@ -995,7 +998,7 @@ if (!function_exists('findphp')) {
         $baseDir = preg_replace('#/$#', '', $baseDir);
         $baseDir = replaceDirSeperator($baseDir);
 
-        $dirs = array ( $baseDir );
+        $dirs = array($baseDir);
 
         preparePathArray($aDirBlackList, $baseDir);
         preparePathArray($aFileBlackList, $baseDir);
@@ -1004,7 +1007,7 @@ if (!function_exists('findphp')) {
 
         //get directories (do not go to blacklist)
         while (list (, $dir) = each($dirs)) {
-            foreach (glob($dir.DIRECTORY_SEPARATOR.'*', GLOB_ONLYDIR) as $sdir) {
+            foreach (glob($dir . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR) as $sdir) {
                 if (array_search($sdir, $aDirBlackList) === false) {
                     $dirs[] = $sdir;
                 }
@@ -1014,7 +1017,7 @@ if (!function_exists('findphp')) {
         // get PHP files form directories
         $aFiles = array();
         foreach ($dirs as $dir) {
-            $aFiles = array_merge($aFiles, glob($dir.DIRECTORY_SEPARATOR."*.php", GLOB_NOSORT));
+            $aFiles = array_merge($aFiles, glob($dir . DIRECTORY_SEPARATOR . "*.php", GLOB_NOSORT));
         }
 
         //remove files existing in file blacklist
@@ -1043,14 +1046,14 @@ if (!function_exists('stripCodeLines')) {
     function stripCodeLines($sFile, $sCCarrayDir)
     {
         if (!file_exists($sFile)) {
-            throw new Exception("\n".'File "'.$sFile.'" does not exists, skipping');
+            throw new Exception("\n" . 'File "' . $sFile . '" does not exists, skipping');
         }
 
 
         $sFileContentMD5 = md5_file($sFile);
-        $sCCFileName = $sCCarrayDir.md5($sFile).".".$sFileContentMD5;
+        $sCCFileName = $sCCarrayDir . md5($sFile) . "." . $sFileContentMD5;
         // delete unneeded files
-        $aArray = glob($sCCarrayDir.md5($sFile).".*");
+        $aArray = glob($sCCarrayDir . md5($sFile) . ".*");
         $blFound = false;
         if (count($aArray)) {
             while ($aArray) {
@@ -1095,7 +1098,7 @@ if (!function_exists('stripCodeLines')) {
             $aCC = array();
             for ($i = 0; $i < strlen($aFile); $i++) {
                 if ($aFile[$i] === '1')
-                    $aCC[$i+1] = -1;
+                    $aCC[$i + 1] = -1;
             }
             file_put_contents($sCCFileName, serialize($aCC));
             return $aCC;

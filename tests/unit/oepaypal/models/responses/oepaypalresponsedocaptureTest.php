@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oxAccessRightException class.
@@ -51,8 +51,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoCaptureTest extends OxidT
     public function testGetTransactionId()
     {
         $oResponse = new oePayPalResponseDoCapture();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'transactionId', $oResponse->getTransactionId() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('transactionId', $oResponse->getTransactionId());
     }
 
     /**
@@ -61,8 +61,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoCaptureTest extends OxidT
     public function testGetCorrelationId()
     {
         $oResponse = new oePayPalResponseDoCapture();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'correlationId', $oResponse->getCorrelationId() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('correlationId', $oResponse->getCorrelationId());
     }
 
     /**
@@ -71,8 +71,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoCaptureTest extends OxidT
     public function testGetPaymentStatus()
     {
         $oResponse = new oePayPalResponseDoCapture();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'completed', $oResponse->getPaymentStatus() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('completed', $oResponse->getPaymentStatus());
     }
 
     /**
@@ -81,8 +81,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoCaptureTest extends OxidT
     public function testGetCaptureAmount()
     {
         $oResponse = new oePayPalResponseDoCapture();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 12.45, $oResponse->getCapturedAmount() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals(12.45, $oResponse->getCapturedAmount());
     }
 
     /**
@@ -91,7 +91,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoCaptureTest extends OxidT
     public function testGetCurrency()
     {
         $oResponse = new oePayPalResponseDoCapture();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'LTL', $oResponse->getCurrency() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('LTL', $oResponse->getCurrency());
     }
 }

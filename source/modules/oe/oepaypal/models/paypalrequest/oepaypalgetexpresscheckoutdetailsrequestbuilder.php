@@ -43,7 +43,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
      *
      * @param oePayPalPayPalRequest $oRequest
      */
-    public function setPayPalRequest( $oRequest )
+    public function setPayPalRequest($oRequest)
     {
         $this->_oPayPalRequest = $oRequest;
     }
@@ -53,17 +53,18 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
      */
     public function getPayPalRequest()
     {
-        if ( $this->_oPayPalRequest === null ) {
-            $this->_oPayPalRequest = oxNew( 'oePayPalPayPalRequest' );
+        if ($this->_oPayPalRequest === null) {
+            $this->_oPayPalRequest = oxNew('oePayPalPayPalRequest');
         }
         return $this->_oPayPalRequest;
     }
+
     /**
      * Sets Session
      *
      * @param oxSession $oSession
      */
-    public function setSession( $oSession )
+    public function setSession($oSession)
     {
         $this->_oSession = $oSession;
     }
@@ -77,11 +78,11 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
      */
     public function getSession()
     {
-        if ( !$this->_oSession ) {
+        if (!$this->_oSession) {
             /**
              * @var oePayPalMissingParameterException $oException
              */
-            $oException = oxNew( 'oePayPalMissingParameterException' );
+            $oException = oxNew('oePayPalMissingParameterException');
             throw $oException;
         }
         return $this->_oSession;
@@ -95,7 +96,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     public function buildRequest()
     {
         $oRequest = $this->getPayPalRequest();
-        $oRequest->setParameter( 'TOKEN', $this->getSession()->getVariable( 'oepaypal-token' ) );
+        $oRequest->setParameter('TOKEN', $this->getSession()->getVariable('oepaypal-token'));
 
         return $oRequest;
     }

@@ -62,7 +62,7 @@ class oePayPalIPNRequestVerifier
      *
      * @param oePayPalRequest $oRequest object to set.
      */
-    public function setRequest( $oRequest )
+    public function setRequest($oRequest)
     {
         $this->_oRequest = $oRequest;
     }
@@ -80,7 +80,7 @@ class oePayPalIPNRequestVerifier
     /**
      * @param string $sShopOwner
      */
-    public function setShopOwner( $sShopOwner )
+    public function setShopOwner($sShopOwner)
     {
         $this->_sShopOwner = $sShopOwner;
     }
@@ -98,7 +98,7 @@ class oePayPalIPNRequestVerifier
      *
      * @param oePayPalService $oCallerService object to set..
      */
-    public function setCommunicationService( $oCallerService )
+    public function setCommunicationService($oCallerService)
     {
         $this->_oCommunicationService = $oCallerService;
     }
@@ -110,8 +110,8 @@ class oePayPalIPNRequestVerifier
      */
     public function getCommunicationService()
     {
-        if ( $this->_oCommunicationService === null ) {
-            $this->_oCommunicationService = oxNew( 'oePayPalService' );
+        if ($this->_oCommunicationService === null) {
+            $this->_oCommunicationService = oxNew('oePayPalService');
         }
         return $this->_oCommunicationService;
     }
@@ -119,7 +119,7 @@ class oePayPalIPNRequestVerifier
     /**
      * @param oePayPalIPNRequestValidator $oIPNRequestValidator
      */
-    public function setIPNRequestValidator( $oIPNRequestValidator )
+    public function setIPNRequestValidator($oIPNRequestValidator)
     {
         $this->_oIPNRequestValidator = $oIPNRequestValidator;
     }
@@ -129,8 +129,8 @@ class oePayPalIPNRequestVerifier
      */
     public function getIPNRequestValidator()
     {
-        if ( $this->_oIPNRequestValidator === null ) {
-            $this->_oIPNRequestValidator = oxNew( 'oePayPalIPNRequestValidator' );
+        if ($this->_oIPNRequestValidator === null) {
+            $this->_oIPNRequestValidator = oxNew('oePayPalIPNRequestValidator');
         }
         return $this->_oIPNRequestValidator;
     }
@@ -138,7 +138,7 @@ class oePayPalIPNRequestVerifier
     /**
      * @param oePayPalPayPalRequest $oPayPalRequest
      */
-    public function setPayPalRequest( $oPayPalRequest )
+    public function setPayPalRequest($oPayPalRequest)
     {
         $this->_oPayPalRequest = $oPayPalRequest;
     }
@@ -150,8 +150,8 @@ class oePayPalIPNRequestVerifier
      */
     public function getPayPalRequest()
     {
-        if ( is_null( $this->_oPayPalRequest ) ) {
-            $this->_oPayPalRequest = oxNew( 'oePayPalPayPalRequest' );
+        if (is_null($this->_oPayPalRequest)) {
+            $this->_oPayPalRequest = oxNew('oePayPalPayPalRequest');
         }
         return $this->_oPayPalRequest;
     }
@@ -159,7 +159,7 @@ class oePayPalIPNRequestVerifier
     /**
      * @param string $sFailureMessage
      */
-    public function setFailureMessage( $sFailureMessage )
+    public function setFailureMessage($sFailureMessage)
     {
         $this->_sFailureMessage = $sFailureMessage;
     }
@@ -180,20 +180,20 @@ class oePayPalIPNRequestVerifier
      */
     public function requestCorrect()
     {
-        $oRequest        = $this->getRequest();
+        $oRequest = $this->getRequest();
         $aRawRequestData = $oRequest->getPost();
 
-        $oResponseDoVerifyWithPayPal  = $this->_doVerifyWithPayPal( $aRawRequestData );
+        $oResponseDoVerifyWithPayPal = $this->_doVerifyWithPayPal($aRawRequestData);
 
         $oIPNRequestValidator = $this->getIPNRequestValidator();
-        $oIPNRequestValidator->setPayPalRequest( $aRawRequestData );
-        $oIPNRequestValidator->setPayPalResponse( $oResponseDoVerifyWithPayPal );
-        $oIPNRequestValidator->setShopOwnerUserName( $this->getShopOwner() );
+        $oIPNRequestValidator->setPayPalRequest($aRawRequestData);
+        $oIPNRequestValidator->setPayPalResponse($oResponseDoVerifyWithPayPal);
+        $oIPNRequestValidator->setShopOwnerUserName($this->getShopOwner());
 
         $blRequestCorrect = $oIPNRequestValidator->isValid();
-        if ( !$blRequestCorrect ) {
+        if (!$blRequestCorrect) {
             $sFailureMessage = $oIPNRequestValidator->getValidationFailureMessage();
-            $this->setFailureMessage( $sFailureMessage );
+            $this->setFailureMessage($sFailureMessage);
         }
 
         return $blRequestCorrect;
@@ -206,14 +206,14 @@ class oePayPalIPNRequestVerifier
      *
      * @return oePayPalResponseDoVerifyWithPayPal
      */
-    protected function _doVerifyWithPayPal( $aRequestData )
+    protected function _doVerifyWithPayPal($aRequestData)
     {
         $oCallerService = $this->getCommunicationService();
         $oPayPalPayPalRequest = $this->getPayPalRequest();
-        foreach ( $aRequestData as $sRequestParameterName => $sRequestParameterValue ) {
-            $oPayPalPayPalRequest->setParameter( $sRequestParameterName, $sRequestParameterValue );
+        foreach ($aRequestData as $sRequestParameterName => $sRequestParameterValue) {
+            $oPayPalPayPalRequest->setParameter($sRequestParameterName, $sRequestParameterValue);
         }
-        $oResponseDoVerifyWithPayPal = $oCallerService->doVerifyWithPayPal( $oPayPalPayPalRequest, $aRequestData['charset'] );
+        $oResponseDoVerifyWithPayPal = $oCallerService->doVerifyWithPayPal($oPayPalPayPalRequest, $aRequestData['charset']);
 
         return $oResponseDoVerifyWithPayPal;
     }

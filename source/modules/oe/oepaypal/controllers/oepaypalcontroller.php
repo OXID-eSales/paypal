@@ -46,8 +46,8 @@ class oePayPalController extends oxUBase
      */
     public function getRequest()
     {
-        if( is_null($this->_oRequest) ){
-            $this->_oRequest = oxNew( 'oePayPalRequest' );
+        if (is_null($this->_oRequest)) {
+            $this->_oRequest = oxNew('oePayPalRequest');
         }
         return $this->_oRequest;
     }
@@ -59,9 +59,9 @@ class oePayPalController extends oxUBase
      */
     public function getLogger()
     {
-        if( is_null($this->_oLogger) ){
-            $this->_oLogger = oxNew( 'oePayPalLogger' );
-            $this->_oLogger->setLoggerSessionId( $this->getSession()->getId() );
+        if (is_null($this->_oLogger)) {
+            $this->_oLogger = oxNew('oePayPalLogger');
+            $this->_oLogger->setLoggerSessionId($this->getSession()->getId());
         }
         return $this->_oLogger;
     }
@@ -73,8 +73,8 @@ class oePayPalController extends oxUBase
      */
     public function getPayPalConfig()
     {
-        if( is_null( $this->_oPayPalConfig ) ){
-            $this->setPayPalConfig( oxNew( 'oePayPalConfig' ) );
+        if (is_null($this->_oPayPalConfig)) {
+            $this->setPayPalConfig(oxNew('oePayPalConfig'));
         }
         return $this->_oPayPalConfig;
     }
@@ -84,7 +84,7 @@ class oePayPalController extends oxUBase
      *
      * @param oePayPalConfig $oPayPalConfig config
      */
-    public function setPayPalConfig( $oPayPalConfig )
+    public function setPayPalConfig($oPayPalConfig)
     {
         $this->_oPayPalConfig = $oPayPalConfig;
     }
@@ -93,10 +93,10 @@ class oePayPalController extends oxUBase
     /**
      * Logs passed value
      */
-    public function log( $mValue )
+    public function log($mValue)
     {
-        if ( $this->getPayPalConfig()->isLoggingEnabled() ) {
-            $this->getLogger()->log( $mValue );
+        if ($this->getPayPalConfig()->isLoggingEnabled()) {
+            $this->getLogger()->log($mValue);
         }
     }
 }

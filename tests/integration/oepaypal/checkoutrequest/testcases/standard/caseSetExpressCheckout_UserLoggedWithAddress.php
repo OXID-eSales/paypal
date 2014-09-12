@@ -4,44 +4,44 @@
 $aData = array(
     'class' => 'oePayPalStandardDispatcher',
     'action' => 'setExpressCheckout',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 'testUserLogged1',
-            'oxprice'                  => 10,
-            'oxvat'                    => 10,
-            'amount'                   => 3,
+    'articles' => array(
+        0 => array(
+            'oxid' => 'testUserLogged1',
+            'oxprice' => 10,
+            'oxvat' => 10,
+            'amount' => 3,
         ),
     ),
     'groups' => array(
-        0 => array (
+        0 => array(
             'oxid' => 'UserLoggedTestGroup',
             'oxactive' => 1,
             'oxtitle' => 'checkoutTestGroup',
-            'oxobject2group' => array ('TestLoggedUser', 'oxidpaypal' ),
+            'oxobject2group' => array('TestLoggedUser', 'oxidpaypal'),
         ),
     ),
     'user' => array(
-        'oxid'        => 'TestLoggedUser',
-        'oxactive'    => 1,
-        'oxusername'  => 'testuser@email.com',
-        'oxfname'     => 'Name',
-        'oxlname'     => 'LName',
-        'oxstreet'    => 'Street',
-        'oxstreetnr'  => 'StreetNr',
-        'oxcity'      => 'City',
-        'oxzip'       => 'ZipCode',
-        'oxfon'       => 'PhoneNr',
+        'oxid' => 'TestLoggedUser',
+        'oxactive' => 1,
+        'oxusername' => 'testuser@email.com',
+        'oxfname' => 'Name',
+        'oxlname' => 'LName',
+        'oxstreet' => 'Street',
+        'oxstreetnr' => 'StreetNr',
+        'oxcity' => 'City',
+        'oxzip' => 'ZipCode',
+        'oxfon' => 'PhoneNr',
         'oxcountryid' => '8f241f11096877ac0.98748826', // United States
-        'oxstateid'   => 'IL', // Illinois
+        'oxstateid' => 'IL', // Illinois
         'address' => array(
-            'oxid'        => 'TestUserAddressId',
-            'oxfname'     => 'AddressName',
-            'oxlname'     => 'AddressLName',
-            'oxstreet'    => 'AddressStreet',
-            'oxstreetnr'  => 'AddressStreetNr',
-            'oxcity'      => 'AddressCity',
-            'oxzip'       => 'AddressZipCode',
-            'oxfon'       => 'AddressPhoneNr',
+            'oxid' => 'TestUserAddressId',
+            'oxfname' => 'AddressName',
+            'oxlname' => 'AddressLName',
+            'oxstreet' => 'AddressStreet',
+            'oxstreetnr' => 'AddressStreetNr',
+            'oxcity' => 'AddressCity',
+            'oxzip' => 'AddressZipCode',
+            'oxfon' => 'AddressPhoneNr',
             'oxcountryid' => 'a7c40f6323c4bfb36.59919433', // Italy
         ),
     ),
@@ -54,8 +54,8 @@ $aData = array(
     'requestToShop' => array(
         'displayCartInPayPal' => true,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => '',
             'USER' => '',

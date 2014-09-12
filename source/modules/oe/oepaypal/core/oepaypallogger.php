@@ -42,7 +42,7 @@ class oePayPalLogger
      *
      * @return null
      */
-    public function setLoggerSessionId( $sId )
+    public function setLoggerSessionId($sId)
     {
         $this->_sLoggerSessionId = $sId;
     }
@@ -64,7 +64,7 @@ class oePayPalLogger
      */
     protected function _getLogFilePath()
     {
-        return getShopBasePath().'modules/oe/oepaypal/logs/log.txt';
+        return getShopBasePath() . 'modules/oe/oepaypal/logs/log.txt';
     }
 
     /**
@@ -74,7 +74,7 @@ class oePayPalLogger
      *
      * @return bool
      */
-    public function setTitle( $sTitle )
+    public function setTitle($sTitle)
     {
         $this->_sLogTitle = $sTitle;
     }
@@ -96,29 +96,29 @@ class oePayPalLogger
      *
      * @return null
      */
-    public function log( $mLogData )
+    public function log($mLogData)
     {
-        $oH = @fopen( $this->_getLogFilePath(), "a+" );
-        if ( $oH !== false ) {
-            if (is_string( $mLogData ) ) {
-                parse_str( $mLogData, $aResult );
+        $oH = @fopen($this->_getLogFilePath(), "a+");
+        if ($oH !== false) {
+            if (is_string($mLogData)) {
+                parse_str($mLogData, $aResult);
             } else {
                 $aResult = $mLogData;
             }
 
-            if ( is_array( $aResult ) ) {
-                foreach ( $aResult as $sKey => $sValue ) {
-                    $aResult[$sKey] = urldecode( $sValue );
+            if (is_array($aResult)) {
+                foreach ($aResult as $sKey => $sValue) {
+                    $aResult[$sKey] = urldecode($sValue);
                 }
             }
 
-            fwrite( $oH, "======================= " . $this->getTitle() . " [" . date("Y-m-d H:i:s") . "] ======================= #\n\n" );
-            fwrite( $oH, "SESS ID: " . $this->getLoggerSessionId() . "\n" );
-            fwrite( $oH, trim( var_export( $aResult, true ) ) . "\n\n" );
-            @fclose( $oH );
+            fwrite($oH, "======================= " . $this->getTitle() . " [" . date("Y-m-d H:i:s") . "] ======================= #\n\n");
+            fwrite($oH, "SESS ID: " . $this->getLoggerSessionId() . "\n");
+            fwrite($oH, trim(var_export($aResult, true)) . "\n\n");
+            @fclose($oH);
         }
 
         //resetting log title
-        $this->setTitle( '' );
+        $this->setTitle('');
     }
 }

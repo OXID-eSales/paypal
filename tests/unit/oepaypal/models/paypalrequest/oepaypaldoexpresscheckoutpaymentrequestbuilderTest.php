@@ -19,15 +19,19 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
-if ( !class_exists( 'oePayPalOxBasket_parent' ) ) {
-    class oePayPalOxBasket_parent extends oxBasket {}
+if (!class_exists('oePayPalOxBasket_parent')) {
+    class oePayPalOxBasket_parent extends oxBasket
+    {
+    }
 }
 
-if ( !class_exists( 'oePayPalOxUser_parent' ) ) {
-    class oePayPalOxUser_parent extends oxUser {}
+if (!class_exists('oePayPalOxUser_parent')) {
+    class oePayPalOxUser_parent extends oxUser
+    {
+    }
 }
 
 /**
@@ -46,35 +50,35 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $aResult["PAYMENTINFO_0_TRANSACTIONID"] = "321";
 
         // preparing price
-        $oPrice = $this->getMock( "oxPrice", array( "getBruttoPrice" ) );
-        $oPrice->expects( $this->once() )->method( "getBruttoPrice" )->will( $this->returnValue( 123 ) );
+        $oPrice = $this->getMock("oxPrice", array("getBruttoPrice"));
+        $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(123));
 
         // preparing basket
-        $oBasket = $this->getMock( "oePayPalOxBasket", array( "getPrice" ) );
-        $oBasket->expects( $this->once() )->method( "getPrice" )->will( $this->returnValue( $oPrice ) );
+        $oBasket = $this->getMock("oePayPalOxBasket", array("getPrice"));
+        $oBasket->expects($this->once())->method("getPrice")->will($this->returnValue($oPrice));
 
         // preparing session
-        $oSession = $this->getMock( "oxSession", array( "getBasket" ) );
-        $oSession->expects( $this->any() )->method( "getBasket" )->will( $this->returnValue( $oBasket ) );
-        $oSession->setVariable( "oepaypal-token", "111" );
-        $oSession->setVariable( "oepaypal-payerId", "222" );
+        $oSession = $this->getMock("oxSession", array("getBasket"));
+        $oSession->expects($this->any())->method("getBasket")->will($this->returnValue($oBasket));
+        $oSession->setVariable("oepaypal-token", "111");
+        $oSession->setVariable("oepaypal-payerId", "222");
 
         // preparing config
         $oPayPalConfig = new oePayPalConfig();
 
         // preparing order
         $oPayPalOrder = new oxOrder();
-        $oPayPalOrder->oxorder__oxordernr = new oxField( "123" );
+        $oPayPalOrder->oxorder__oxordernr = new oxField("123");
 
         $oUser = new oePayPalOxUser();
-        $oUser->oxuser__oxfname = new oxField( 'firstname' );
-        $oUser->oxuser__oxlname = new oxField( 'lastname' );
-        $oUser->oxuser__oxstreet = new oxField( 'some street' );
-        $oUser->oxuser__oxstreetnr = new oxField( '47' );
-        $oUser->oxuser__oxcity = new oxField( 'some city' );
-        $oUser->oxuser__oxzip = new oxField( 'zip' );
+        $oUser->oxuser__oxfname = new oxField('firstname');
+        $oUser->oxuser__oxlname = new oxField('lastname');
+        $oUser->oxuser__oxstreet = new oxField('some street');
+        $oUser->oxuser__oxstreetnr = new oxField('47');
+        $oUser->oxuser__oxcity = new oxField('some city');
+        $oUser->oxuser__oxzip = new oxField('zip');
 
-        $sSubj = sprintf( oxRegistry::getLang()->translateString( "OEPAYPAL_ORDER_CONF_SUBJECT" ), $oPayPalOrder->oxorder__oxordernr->value );
+        $sSubj = sprintf(oxRegistry::getLang()->translateString("OEPAYPAL_ORDER_CONF_SUBJECT"), $oPayPalOrder->oxorder__oxordernr->value);
 
         $oConfig = $this->getConfig();
 
@@ -84,7 +88,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
             'PAYMENTREQUEST_0_AMT' => 123,
             'PAYMENTREQUEST_0_CURRENCYCODE' => "EUR",
-            'PAYMENTREQUEST_0_NOTIFYURL' =>  $this->getConfig()->getCurrentShopUrl() . "index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp=".$oConfig->getShopId(),
+            'PAYMENTREQUEST_0_NOTIFYURL' => $this->getConfig()->getCurrentShopUrl() . "index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp=" . $oConfig->getShopId(),
             'PAYMENTREQUEST_0_DESC' => $sSubj,
             'PAYMENTREQUEST_0_CUSTOM' => $sSubj,
             'PAYMENTREQUEST_0_SHIPTONAME' => 'firstname lastname',
@@ -94,25 +98,25 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
             'PAYMENTREQUEST_0_SHIPTOPHONENUM' => '',
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => '',
         );
-        if ( $oConfig->getEdition() == 'EE' ) {
+        if ($oConfig->getEdition() == 'EE') {
             $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_EnterpriseECS';
-        } else if ( $oConfig->getEdition() == 'PE' ) {
+        } else if ($oConfig->getEdition() == 'PE') {
             $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_ProfessionalECS';
-        } else if ( $oConfig->getEdition() == 'CE' ) {
+        } else if ($oConfig->getEdition() == 'CE') {
             $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_CommunityECS';
         }
 
         // testing
         $oBuilder = new oePayPalDoExpressCheckoutPaymentRequestBuilder();
-        $oBuilder->setPayPalConfig( $oPayPalConfig );
-        $oBuilder->setSession( $oSession );
-        $oBuilder->setBasket( $oBasket );
-        $oBuilder->setOrder( $oPayPalOrder );
-        $oBuilder->setTransactionMode( 'Sale' );
-        $oBuilder->setUser( $oUser );
+        $oBuilder->setPayPalConfig($oPayPalConfig);
+        $oBuilder->setSession($oSession);
+        $oBuilder->setBasket($oBasket);
+        $oBuilder->setOrder($oPayPalOrder);
+        $oBuilder->setTransactionMode('Sale');
+        $oBuilder->setUser($oUser);
 
         $oRequest = $oBuilder->buildRequest();
-        $this->assertEquals( $aExpectedResult, $oRequest->getData() );
+        $this->assertEquals($aExpectedResult, $oRequest->getData());
     }
 
     public function testAddAddressParams_SelectedAddressIdNotSet_TakeInfoFromUser()
@@ -129,22 +133,22 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $aUserMethodValues = array(
             'getSelectedAddressId' => null,
         );
-        $oUser = $this->_createStub( 'oxUser', $aUserMethodValues );
+        $oUser = $this->_createStub('oxUser', $aUserMethodValues);
         $oUser->oxuser__oxusername = new oxField('test@test.com');
-        $oUser->oxuser__oxfname = new oxField( 'FirstName' );
-        $oUser->oxuser__oxlname = new oxField( 'LastName' );
-        $oUser->oxuser__oxstreet = new oxField( 'Street' );
-        $oUser->oxuser__oxstreetnr = new oxField( 'StreetNr' );
-        $oUser->oxuser__oxcity = new oxField( 'City' );
-        $oUser->oxuser__oxzip = new oxField( 'Zip' );
-        $oUser->oxuser__oxfon = new oxField( 'PhoneNum' );
-        $oUser->oxuser__oxcity = new oxField( 'City' );
+        $oUser->oxuser__oxfname = new oxField('FirstName');
+        $oUser->oxuser__oxlname = new oxField('LastName');
+        $oUser->oxuser__oxstreet = new oxField('Street');
+        $oUser->oxuser__oxstreetnr = new oxField('StreetNr');
+        $oUser->oxuser__oxcity = new oxField('City');
+        $oUser->oxuser__oxzip = new oxField('Zip');
+        $oUser->oxuser__oxfon = new oxField('PhoneNum');
+        $oUser->oxuser__oxcity = new oxField('City');
 
         $oBuilder = new oePayPalDoExpressCheckoutPaymentRequestBuilder();
-        $oBuilder->setUser( $oUser );
+        $oBuilder->setUser($oUser);
         $oBuilder->addAddressParams();
 
-        $this->_assertArraysEqual( $aExpectedParams, $oBuilder->getRequest()->getData() );
+        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getRequest()->getData());
     }
 
     /**
@@ -153,10 +157,10 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
      * @param $aExpected
      * @param $aResult
      */
-    protected function _assertArraysEqual( $aExpected, $aResult )
+    protected function _assertArraysEqual($aExpected, $aResult)
     {
-        $this->_assertArraysContains( $aExpected, $aResult );
-        $this->assertEquals( count( $aExpected ), count( $aResult ) );
+        $this->_assertArraysContains($aExpected, $aResult);
+        $this->assertEquals(count($aExpected), count($aResult));
     }
 
     /**
@@ -165,11 +169,11 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
      * @param $aExpected
      * @param $aResult
      */
-    protected function _assertArraysContains( $aExpected, $aResult )
+    protected function _assertArraysContains($aExpected, $aResult)
     {
-        foreach ( $aExpected as $sKey => $sValue) {
-            $this->assertArrayHasKey( $sKey, $aResult, "Key not found: $sKey" );
-            $this->assertEquals( $sValue, $aResult[ $sKey ], "Key '$sKey' value is not equal to '$sValue'" );
+        foreach ($aExpected as $sKey => $sValue) {
+            $this->assertArrayHasKey($sKey, $aResult, "Key not found: $sKey");
+            $this->assertEquals($sValue, $aResult[$sKey], "Key '$sKey' value is not equal to '$sValue'");
         }
     }
 }

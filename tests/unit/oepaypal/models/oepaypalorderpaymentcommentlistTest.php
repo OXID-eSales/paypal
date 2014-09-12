@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oxAccessRightException class.
@@ -33,9 +33,9 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentListTest extends OxidTestC
      */
     protected function setUp()
     {
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpaymentcomments`' );
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
@@ -47,28 +47,27 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentListTest extends OxidTestC
     public function testLoadOrderPayments()
     {
         $oComment = new oePayPalOrderPaymentComment();
-        $oComment->setDate('2013-02-03 12:12:12' );
-        $oComment->setComment( 'comment1' );
-        $oComment->setPaymentId( 2 );
+        $oComment->setDate('2013-02-03 12:12:12');
+        $oComment->setComment('comment1');
+        $oComment->setPaymentId(2);
         $oComment->save();
 
         $oComment = new oePayPalOrderPaymentComment();
-        $oComment->setDate('2013-02-03 12:12:12' );
-        $oComment->setComment( 'comment2' );
-        $oComment->setPaymentId( 2 );
+        $oComment->setDate('2013-02-03 12:12:12');
+        $oComment->setComment('comment2');
+        $oComment->setPaymentId(2);
         $oComment->save();
 
         $aComments = new oePayPalOrderPaymentCommentList();
-        $aComments->load( 2 );
+        $aComments->load(2);
 
-        $this->assertEquals( 2, count( $aComments ) );
+        $this->assertEquals(2, count($aComments));
 
-        $i=1;
-        foreach ($aComments as $oComment){
-            $this->assertEquals('comment'.$i++, $oComment->getComment() );
+        $i = 1;
+        foreach ($aComments as $oComment) {
+            $this->assertEquals('comment' . $i++, $oComment->getComment());
         }
     }
-
 
 
     /**
@@ -80,29 +79,29 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentListTest extends OxidTestC
     public function testAddComment()
     {
         $oList = new oePayPalOrderPaymentCommentList();
-        $oList->load( 'payment' );
+        $oList->load('payment');
 
-        $this->assertEquals(0, count($oList) );
+        $this->assertEquals(0, count($oList));
 
         $oComment = new oePayPalOrderPaymentComment();
-        $oComment->setPaymentId( 'payment' );
+        $oComment->setPaymentId('payment');
         $oComment->save();
 
 
         $oList = new oePayPalOrderPaymentCommentList();
-        $oList->load( 'payment' );
+        $oList->load('payment');
 
-        $this->assertEquals(1, count( $oList ) );
+        $this->assertEquals(1, count($oList));
 
 
         $oComment = new oePayPalOrderPaymentComment();
         $oComment->setComment('Comment');
-        $oList->addComment( $oComment );
+        $oList->addComment($oComment);
 
         $oList = new oePayPalOrderPaymentCommentList();
-        $oList->load( 'payment' );
+        $oList->load('payment');
 
-        $this->assertEquals(2, count( $oList ) );
+        $this->assertEquals(2, count($oList));
 
     }
 

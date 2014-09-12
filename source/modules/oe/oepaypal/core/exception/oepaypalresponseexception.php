@@ -26,13 +26,13 @@ class oePayPalResponseException extends oePayPalException
 {
     /**
      * Exception constructor. Adds additional prefix string to error message.
-     * @param string  $sMessage exception message
-     * @param integer $iCode    exception code
+     * @param string $sMessage exception message
+     * @param integer $iCode exception code
      */
-    public function __construct( $sMessage = "", $iCode = 0 )
+    public function __construct($sMessage = "", $iCode = 0)
     {
-        $sPrefix = oxRegistry::getLang()->translateString( "OEPAYPAL_RESPONSE_FROM_PAYPAL" );
+        $sPrefix = oxRegistry::getLang()->translateString("OEPAYPAL_RESPONSE_FROM_PAYPAL");
 
-        parent::__construct(  $sPrefix . $sMessage, $iCode );
+        parent::__construct($sPrefix . $sMessage, $iCode);
     }
 }

@@ -97,7 +97,7 @@ class oePayPalConfig
      * Sets PayPal host.
      * @param string $sPayPalHost
      */
-    public function setPayPalHost( $sPayPalHost )
+    public function setPayPalHost($sPayPalHost)
     {
         $this->_sPayPalHost = $sPayPalHost;
     }
@@ -109,9 +109,9 @@ class oePayPalConfig
      */
     public function getPayPalHost()
     {
-        $sHost = $this->_getConfig()->getConfigParam( 'sPayPalHost' );
-        if ( $sHost ) {
-            $this->setPayPalHost( $sHost );
+        $sHost = $this->_getConfig()->getConfigParam('sPayPalHost');
+        if ($sHost) {
+            $this->setPayPalHost($sHost);
         }
         return $this->_sPayPalHost;
     }
@@ -121,7 +121,7 @@ class oePayPalConfig
      *
      * @param string $sPayPalSandboxHost
      */
-    public function setPayPalSandboxHost( $sPayPalSandboxHost )
+    public function setPayPalSandboxHost($sPayPalSandboxHost)
     {
         $this->_sPayPalSandboxHost = $sPayPalSandboxHost;
     }
@@ -133,9 +133,9 @@ class oePayPalConfig
      */
     public function getPayPalSandboxHost()
     {
-        $sHost = $this->_getConfig()->getConfigParam( 'sPayPalSandboxHost' );
-        if ( $sHost ) {
-            $this->setPayPalSandboxHost( $sHost );
+        $sHost = $this->_getConfig()->getConfigParam('sPayPalSandboxHost');
+        if ($sHost) {
+            $this->setPayPalSandboxHost($sHost);
         }
         return $this->_sPayPalSandboxHost;
     }
@@ -147,7 +147,7 @@ class oePayPalConfig
      */
     public function getHost()
     {
-        if ( $this->isSandboxEnabled() ) {
+        if ($this->isSandboxEnabled()) {
             $sUrl = $this->getPayPalSandboxHost();
         } else {
             $sUrl = $this->getPayPalHost();
@@ -161,7 +161,7 @@ class oePayPalConfig
      *
      * @param string $sPayPalApiUrl
      */
-    public function setPayPalApiUrl( $sPayPalApiUrl )
+    public function setPayPalApiUrl($sPayPalApiUrl)
     {
         $this->_sPayPalApiUrl = $sPayPalApiUrl;
     }
@@ -173,9 +173,9 @@ class oePayPalConfig
      */
     public function getPayPalApiUrl()
     {
-        $sUrl = $this->_getConfig()->getConfigParam( 'sPayPalApiUrl' );
-        if ( $sUrl ) {
-            $this->setPayPalApiUrl( $sUrl );
+        $sUrl = $this->_getConfig()->getConfigParam('sPayPalApiUrl');
+        if ($sUrl) {
+            $this->setPayPalApiUrl($sUrl);
         }
         return $this->_sPayPalApiUrl;
     }
@@ -197,9 +197,9 @@ class oePayPalConfig
      */
     public function getPayPalSandboxApiUrl()
     {
-        $sUrl = $this->_getConfig()->getConfigParam( 'sPayPalSandboxApiUrl' );
-        if ( $sUrl ) {
-            $this->setPayPalSandboxApiUrl( $sUrl );
+        $sUrl = $this->_getConfig()->getConfigParam('sPayPalSandboxApiUrl');
+        if ($sUrl) {
+            $this->setPayPalSandboxApiUrl($sUrl);
         }
         return $this->_sPayPalSandboxApiUrl;
     }
@@ -211,7 +211,7 @@ class oePayPalConfig
      */
     public function getApiUrl()
     {
-        if ( $this->isSandboxEnabled() ) {
+        if ($this->isSandboxEnabled()) {
             $sUrl = $this->getPayPalSandboxApiUrl();
         } else {
             $sUrl = $this->getPayPalApiUrl();
@@ -247,9 +247,9 @@ class oePayPalConfig
      */
     public function getPayPalUrl()
     {
-        $sUrl = $this->_getConfig()->getConfigParam( 'sPayPalUrl' );
-        if ( $sUrl ) {
-            $this->setPayPalUrl( $sUrl );
+        $sUrl = $this->_getConfig()->getConfigParam('sPayPalUrl');
+        if ($sUrl) {
+            $this->setPayPalUrl($sUrl);
         }
 
         return $this->_sPayPalUrl;
@@ -262,9 +262,9 @@ class oePayPalConfig
      */
     public function getPayPalSandboxUrl()
     {
-        $sUrl = $this->_getConfig()->getConfigParam( 'sPayPalSandboxUrl' );
-        if ( $sUrl ) {
-            $this->setPayPalSandboxUrl( $sUrl );
+        $sUrl = $this->_getConfig()->getConfigParam('sPayPalSandboxUrl');
+        if ($sUrl) {
+            $this->setPayPalSandboxUrl($sUrl);
         }
         return $this->_sPayPalSandboxUrl;
     }
@@ -275,7 +275,7 @@ class oePayPalConfig
      */
     public function getUrl()
     {
-        if ( $this->isSandboxEnabled() ) {
+        if ($this->isSandboxEnabled()) {
             $sUrl = $this->getPayPalSandboxUrl();
         } else {
             $sUrl = $this->getPayPalUrl();
@@ -291,9 +291,9 @@ class oePayPalConfig
      *
      * @return mixed
      */
-    public function getParameter( $sParamName )
+    public function getParameter($sParamName)
     {
-        return $this->_getConfig()->getConfigParam( $sParamName );
+        return $this->_getConfig()->getConfigParam($sParamName);
     }
 
     /**
@@ -303,7 +303,7 @@ class oePayPalConfig
      */
     public function isExpressCheckoutEnabled()
     {
-        return $this->getParameter( 'blOEPayPalExpressCheckout' );
+        return $this->getParameter('blOEPayPalExpressCheckout');
     }
 
     /**
@@ -313,7 +313,7 @@ class oePayPalConfig
      */
     public function isExpressCheckoutInMiniBasketEnabled()
     {
-        return $this->getParameter( 'blOEPayPalECheckoutInMiniBasket' );
+        return $this->getParameter('blOEPayPalECheckoutInMiniBasket');
     }
 
     /**
@@ -323,7 +323,7 @@ class oePayPalConfig
      */
     public function isStandardCheckoutEnabled()
     {
-        return $this->getParameter( 'blOEPayPalStandardCheckout' );
+        return $this->getParameter('blOEPayPalStandardCheckout');
     }
 
     /**
@@ -333,7 +333,7 @@ class oePayPalConfig
      */
     public function isLoggingEnabled()
     {
-        return $this->getParameter( 'blPayPalLoggerEnabled' );
+        return $this->getParameter('blPayPalLoggerEnabled');
     }
 
     /**
@@ -343,9 +343,9 @@ class oePayPalConfig
      */
     public function getBrandName()
     {
-        $sShopName = $this->getParameter( 'sOEPayPalBrandName' );
+        $sShopName = $this->getParameter('sOEPayPalBrandName');
 
-        if ( empty( $sShopName ) ) {
+        if (empty($sShopName)) {
             $oShop = $this->_getConfig()->getActiveShop();
             $sShopName = $oShop->oxshops__oxname->value;
         }
@@ -360,7 +360,7 @@ class oePayPalConfig
      */
     public function getBorderColor()
     {
-        return $this->getParameter( 'sOEPayPalBorderColor' );
+        return $this->getParameter('sOEPayPalBorderColor');
     }
 
     /**
@@ -370,7 +370,7 @@ class oePayPalConfig
      */
     public function finalizeOrderOnPayPalSide()
     {
-        $blFinalize = $this->getParameter( 'blOEPayPalFinalizeOrderOnPayPal' );
+        $blFinalize = $this->getParameter('blOEPayPalFinalizeOrderOnPayPal');
         return $blFinalize !== null ? $blFinalize : false;
     }
 
@@ -381,7 +381,7 @@ class oePayPalConfig
      */
     public function sendOrderInfoToPayPal()
     {
-        return $this->getParameter( 'blOEPayPalSendToPayPal' );
+        return $this->getParameter('blOEPayPalSendToPayPal');
     }
 
     /**
@@ -391,7 +391,7 @@ class oePayPalConfig
      */
     public function sendOrderInfoToPayPalDefault()
     {
-        return $this->getParameter( 'blOEPayPalDefaultUserChoice' );
+        return $this->getParameter('blOEPayPalDefaultUserChoice');
     }
 
     /**
@@ -401,7 +401,7 @@ class oePayPalConfig
      */
     public function isGuestBuyEnabled()
     {
-        return $this->getParameter( 'blOEPayPalGuestBuyRole' );
+        return $this->getParameter('blOEPayPalGuestBuyRole');
     }
 
     /**
@@ -421,7 +421,7 @@ class oePayPalConfig
      */
     public function isSandboxEnabled()
     {
-        return $this->getParameter( 'blOEPayPalSandboxMode' );
+        return $this->getParameter('blOEPayPalSandboxMode');
     }
 
     /**
@@ -431,7 +431,7 @@ class oePayPalConfig
      */
     public function getEmptyStockLevel()
     {
-        return $this->getParameter( 'sOEPayPalEmptyStockLevel' );
+        return $this->getParameter('sOEPayPalEmptyStockLevel');
     }
 
     /**
@@ -441,13 +441,13 @@ class oePayPalConfig
      */
     public function getPassword()
     {
-        if ( $this->isSandboxEnabled() ) {
+        if ($this->isSandboxEnabled()) {
             // sandbox password
-            return $this->getParameter( 'sOEPayPalSandboxPassword' );
+            return $this->getParameter('sOEPayPalSandboxPassword');
         }
 
         // password
-        return $this->getParameter( 'sOEPayPalPassword' );
+        return $this->getParameter('sOEPayPalPassword');
     }
 
     /**
@@ -457,13 +457,13 @@ class oePayPalConfig
      */
     public function getUserName()
     {
-        if ( $this->isSandboxEnabled() ) {
+        if ($this->isSandboxEnabled()) {
             // sandbox login
-            return $this->getParameter( 'sOEPayPalSandboxUsername' );
+            return $this->getParameter('sOEPayPalSandboxUsername');
         }
 
         // login
-        return $this->getParameter( 'sOEPayPalUsername' );
+        return $this->getParameter('sOEPayPalUsername');
     }
 
     /**
@@ -473,13 +473,13 @@ class oePayPalConfig
      */
     public function getUserEmail()
     {
-        if ( $this->isSandboxEnabled() ) {
+        if ($this->isSandboxEnabled()) {
             // sandbox login
-            return $this->getParameter( 'sOEPayPalSandboxUserEmail' );
+            return $this->getParameter('sOEPayPalSandboxUserEmail');
         }
 
         // login
-        return $this->getParameter( 'sOEPayPalUserEmail' );
+        return $this->getParameter('sOEPayPalUserEmail');
     }
 
     /**
@@ -489,13 +489,13 @@ class oePayPalConfig
      */
     public function getSignature()
     {
-        if ( $this->isSandboxEnabled() ) {
+        if ($this->isSandboxEnabled()) {
             // sandbox signature
-            return  $this->getParameter( 'sOEPayPalSandboxSignature' );
+            return $this->getParameter('sOEPayPalSandboxSignature');
         }
 
         // test sandbox signature
-        return  $this->getParameter( 'sOEPayPalSignature' );
+        return $this->getParameter('sOEPayPalSignature');
     }
 
     /**
@@ -505,9 +505,8 @@ class oePayPalConfig
      */
     public function getTransactionMode()
     {
-        return $this->getParameter( 'sOEPayPalTransactionMode' );
+        return $this->getParameter('sOEPayPalTransactionMode');
     }
-
 
 
     /**
@@ -518,9 +517,9 @@ class oePayPalConfig
      *
      * @return string
      */
-    public function getPayPalCommunicationUrl( $sToken = null, $sUserAction = 'continue' )
+    public function getPayPalCommunicationUrl($sToken = null, $sUserAction = 'continue')
     {
-        return $this->getUrl() . '&cmd=_express-checkout&token=' . (string) $sToken . '&useraction=' . (string) $sUserAction;
+        return $this->getUrl() . '&cmd=_express-checkout&token=' . (string)$sToken . '&useraction=' . (string)$sUserAction;
     }
 
 
@@ -536,12 +535,12 @@ class oePayPalConfig
 
         $sLogoName = $this->_getLogoImageName();
 
-        if ( !empty( $sLogoName ) ) {
-            $oLogo = oxNew( 'oePayPalShopLogo' );
-            $oLogo->setImageDir( $this->_getConfig()->getImageDir() );
-            $oLogo->setImageDirUrl( $this->_getConfig()->getImageUrl() );
-            $oLogo->setImageName( $sLogoName );
-            $oLogo->setImageHandler( oxRegistry::get( 'oxUtilsPic' ) );
+        if (!empty($sLogoName)) {
+            $oLogo = oxNew('oePayPalShopLogo');
+            $oLogo->setImageDir($this->_getConfig()->getImageDir());
+            $oLogo->setImageDirUrl($this->_getConfig()->getImageUrl());
+            $oLogo->setImageName($sLogoName);
+            $oLogo->setImageHandler(oxRegistry::get('oxUtilsPic'));
 
             $sLogoUrl = $oLogo->getShopLogoUrl();
         }
@@ -556,19 +555,19 @@ class oePayPalConfig
      */
     public function getIPNCallbackUrl()
     {
-        return $this->getShopUrl() . 'index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp='.$this->_getShopId();
+        return $this->getShopUrl() . 'index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp=' . $this->_getShopId();
     }
 
     /**
      * Returns config sShopURL or sMallShopURL if secondary shop
      *
-     * @param int  $iLang   language
+     * @param int $iLang language
      *
      * @return string
      */
-    public function getShopUrl( $iLang = null )
+    public function getShopUrl($iLang = null)
     {
-        return $this->_getConfig()->getCurrentShopUrl( $iLang, false );
+        return $this->_getConfig()->getCurrentShopUrl($iLang, false);
     }
 
     /**
@@ -608,8 +607,8 @@ class oePayPalConfig
     public function getCharset()
     {
         $sCharset = 'UTF-8';
-        if ( !$this->isUtf() ) {
-            $sCharset = $this->getLang()->translateString( 'charset' );
+        if (!$this->isUtf()) {
+            $sCharset = $this->getLang()->translateString('charset');
         }
         return $sCharset;
     }
@@ -641,7 +640,7 @@ class oePayPalConfig
      */
     public function getCurrentUrl()
     {
-        return oxRegistry::get( 'oxUtilsUrl' )->getCurrentUrl();
+        return oxRegistry::get('oxUtilsUrl')->getCurrentUrl();
     }
 
     /**
@@ -651,8 +650,8 @@ class oePayPalConfig
      */
     public function getMaxPayPalDeliveryAmount()
     {
-        $dMaxDeliveryAmount = $this->_getConfig()->getConfigParam( 'dMaxPayPalDeliveryAmount' );
-        if ( !$dMaxDeliveryAmount ) {
+        $dMaxDeliveryAmount = $this->_getConfig()->getConfigParam('dMaxPayPalDeliveryAmount');
+        if (!$dMaxDeliveryAmount) {
             $dMaxDeliveryAmount = $this->_dMaxDeliveryAmount;
         }
 
@@ -668,7 +667,7 @@ class oePayPalConfig
      */
     public function getPartnerCode()
     {
-        return $this->_aPartnerCodes[ $this->_getConfig()->getEdition() ];
+        return $this->_aPartnerCodes[$this->_getConfig()->getEdition()];
     }
 
     /**
@@ -678,8 +677,8 @@ class oePayPalConfig
      */
     public function isDeviceMobile()
     {
-        $oUserAgent = oxNew( 'oePayPalUserAgent' );
-        return ( $oUserAgent->getDeviceType() == 'mobile' );
+        $oUserAgent = oxNew('oePayPalUserAgent');
+        return ($oUserAgent->getDeviceType() == 'mobile');
     }
 
     /**
@@ -689,7 +688,7 @@ class oePayPalConfig
      */
     public function getMobileECDefaultShippingId()
     {
-        return $this->_getConfig()->getConfigParam( 'sOEPayPalMECDefaultShippingId' );
+        return $this->_getConfig()->getConfigParam('sOEPayPalMECDefaultShippingId');
     }
 
     /**
@@ -699,13 +698,13 @@ class oePayPalConfig
      */
     protected function _getLogoImageName()
     {
-        $sOption = $this->getParameter( 'sOEPayPalLogoImageOption' );
-        switch ( $sOption ) {
+        $sOption = $this->getParameter('sOEPayPalLogoImageOption');
+        switch ($sOption) {
             case 'shopLogo':
-                $sLogo = $this->getParameter( 'sShopLogo' );
+                $sLogo = $this->getParameter('sShopLogo');
                 break;
             case 'customLogo':
-                $sLogo = $this->getParameter( 'sOEPayPalCustomShopLogoImage' );
+                $sLogo = $this->getParameter('sOEPayPalCustomShopLogoImage');
                 break;
             case 'noLogo':
             default:

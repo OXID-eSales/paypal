@@ -37,9 +37,9 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
      * @param oePayPalPayPalOrder $oOrder
      * @param oePayPalOrderReauthorizeActionHandler $oReauthorizeHandler
      */
-    public function __construct( $oHandler, $oOrder, $oReauthorizeHandler )
+    public function __construct($oHandler, $oOrder, $oReauthorizeHandler)
     {
-        parent::__construct( $oHandler, $oOrder );
+        parent::__construct($oHandler, $oOrder);
 
         $this->_oReauthorizeHandler = $oReauthorizeHandler;
     }
@@ -66,13 +66,13 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
         $oResponse = $oHandler->getPayPalResponse();
         $oData = $oHandler->getData();
 
-        $this->_updateOrder( $oResponse, $oData );
+        $this->_updateOrder($oResponse, $oData);
 
-        $oPayment = $this->_createPayment( $oResponse );
+        $oPayment = $this->_createPayment($oResponse);
         $oPaymentList = $this->getOrder()->getPaymentList();
-        $oPayment = $oPaymentList->addPayment( $oPayment );
+        $oPayment = $oPaymentList->addPayment($oPayment);
 
-        $this->_addComment( $oPayment, $oData->getComment() );
+        $this->_addComment($oPayment, $oData->getComment());
     }
 
     /**
@@ -82,19 +82,19 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
     {
         $oOrder = $this->getOrder();
 
-        if ( $oOrder->getCapturedAmount() > 0 ) {
+        if ($oOrder->getCapturedAmount() > 0) {
             $oHandler = $this->getReauthorizeHandler();
             try {
                 $oResponse = $oHandler->getPayPalResponse();
 
-                $oPayment = oxNew( 'oePayPalOrderPayment' );
+                $oPayment = oxNew('oePayPalOrderPayment');
                 $oPayment->setDate($this->getDate());
-                $oPayment->setTransactionId( $oResponse->getAuthorizationId() );
-                $oPayment->setCorrelationId( $oResponse->getCorrelationId() );
+                $oPayment->setTransactionId($oResponse->getAuthorizationId());
+                $oPayment->setCorrelationId($oResponse->getCorrelationId());
                 $oPayment->setAction('re-authorization');
-                $oPayment->setStatus( $oResponse->getPaymentStatus() );
+                $oPayment->setStatus($oResponse->getPaymentStatus());
 
-                $oOrder->getPaymentList()->addPayment( $oPayment );
+                $oOrder->getPaymentList()->addPayment($oPayment);
             } catch (oePayPalResponseException $e) {
                 // Ignore PayPal response exceptions
             }
@@ -108,11 +108,11 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
      * @param $oData
      * @return oePayPalPayPalOrder
      */
-    protected function _updateOrder( $oResponse, $oData )
+    protected function _updateOrder($oResponse, $oData)
     {
         $oOrder = $this->getOrder();
-        $oOrder->addCapturedAmount( $oResponse->getCapturedAmount() );
-        $oOrder->setPaymentStatus( $oData->getOrderStatus() );
+        $oOrder->addCapturedAmount($oResponse->getCapturedAmount());
+        $oOrder->setPaymentStatus($oData->getOrderStatus());
         $oOrder->save();
     }
 
@@ -121,16 +121,16 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
      *
      * @param $oResponse
      */
-    protected function _createPayment( $oResponse )
+    protected function _createPayment($oResponse)
     {
-        $oPayment = oxNew( 'oePayPalOrderPayment' );
-        $oPayment->setDate( $this->getDate() );
-        $oPayment->setTransactionId( $oResponse->getTransactionId() );
-        $oPayment->setCorrelationId( $oResponse->getCorrelationId() );
-        $oPayment->setAction( 'capture' );
-        $oPayment->setStatus( $oResponse->getPaymentStatus() );
-        $oPayment->setAmount( $oResponse->getCapturedAmount() );
-        $oPayment->setCurrency( $oResponse->getCurrency() );
+        $oPayment = oxNew('oePayPalOrderPayment');
+        $oPayment->setDate($this->getDate());
+        $oPayment->setTransactionId($oResponse->getTransactionId());
+        $oPayment->setCorrelationId($oResponse->getCorrelationId());
+        $oPayment->setAction('capture');
+        $oPayment->setStatus($oResponse->getPaymentStatus());
+        $oPayment->setAmount($oResponse->getCapturedAmount());
+        $oPayment->setCurrency($oResponse->getCurrency());
 
         return $oPayment;
     }
@@ -141,12 +141,12 @@ class oePayPalOrderCaptureAction extends oePayPalOrderAction
      * @param $oPayment
      * @param $sComment
      */
-    protected function _addComment( $oPayment, $sComment )
+    protected function _addComment($oPayment, $sComment)
     {
-        if ( $sComment ) {
-            $oComment = oxNew( 'oePayPalOrderPaymentComment' );
-            $oComment->setComment( $sComment );
-            $oPayment->addComment( $oComment );
+        if ($sComment) {
+            $oComment = oxNew('oePayPalOrderPaymentComment');
+            $oComment->setComment($sComment);
+            $oPayment->addComment($oComment);
         }
     }
 }

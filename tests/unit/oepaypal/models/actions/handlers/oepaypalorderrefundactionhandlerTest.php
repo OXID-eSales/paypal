@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 
 /**
@@ -34,9 +34,9 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
      */
     public function setUp()
     {
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpaymentcomments`' );
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
@@ -50,23 +50,23 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
         $sType = 'Full';
         $sComment = 'Comment';
 
-        $oBuilder = $this->getMock( 'oePayPalPayPalRequestBuilder', array('setTransactionId', 'setAmount', 'setRefundType', 'getRequest', 'setComment') );
-        $oBuilder->expects( $this->atLeastOnce() )->method( 'setTransactionId' )->with( $this->equalTo( $sTransId ) );
-        $oBuilder->expects( $this->atLeastOnce() )->method( 'setAmount' )->with( $this->equalTo( $dAmount ), $this->equalTo( $sCurrency ) );
-        $oBuilder->expects( $this->atLeastOnce() )->method( 'setRefundType' )->with( $this->equalTo( $sType ) );
-        $oBuilder->expects( $this->atLeastOnce() )->method( 'setComment' )->with( $this->equalTo( $sComment ) );
-        $oBuilder->expects( $this->any() )->method( 'getRequest' )->will( $this->returnValue( new oePayPalPayPalRequest() ) );
+        $oBuilder = $this->getMock('oePayPalPayPalRequestBuilder', array('setTransactionId', 'setAmount', 'setRefundType', 'getRequest', 'setComment'));
+        $oBuilder->expects($this->atLeastOnce())->method('setTransactionId')->with($this->equalTo($sTransId));
+        $oBuilder->expects($this->atLeastOnce())->method('setAmount')->with($this->equalTo($dAmount), $this->equalTo($sCurrency));
+        $oBuilder->expects($this->atLeastOnce())->method('setRefundType')->with($this->equalTo($sType));
+        $oBuilder->expects($this->atLeastOnce())->method('setComment')->with($this->equalTo($sComment));
+        $oBuilder->expects($this->any())->method('getRequest')->will($this->returnValue(new oePayPalPayPalRequest()));
 
-        $oData = $this->_createStub( 'Data', array(
+        $oData = $this->_createStub('Data', array(
             'getTransactionId' => $sTransId,
             'getAmount' => $dAmount,
             'getType' => $sType,
             'getComment' => $sComment,
             'getCurrency' => $sCurrency,
-        ) );
+        ));
 
-        $oActionHandler = $this->_getActionHandler( $oData );
-        $oActionHandler->setPayPalRequestBuilder( $oBuilder );
+        $oActionHandler = $this->_getActionHandler($oData);
+        $oActionHandler->setPayPalRequestBuilder($oBuilder);
 
         $oActionHandler->getPayPalResponse();
     }
@@ -76,17 +76,17 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
      */
     public function testGetPayPalResponse_SetsCorrectRequestToService()
     {
-        $oPayPalRequest = $this->getMock( 'oePayPalPayPalRequest' );
+        $oPayPalRequest = $this->getMock('oePayPalPayPalRequest');
 
-        $oCheckoutService = $this->getMock( 'oePayPalService', array( 'refundTransaction' ) );
-        $oCheckoutService->expects( $this->once() )
-            ->method( 'refundTransaction' )
-            ->with( $this->equalTo( $oPayPalRequest ) )
-            ->will( $this->returnValue( null ) );
+        $oCheckoutService = $this->getMock('oePayPalService', array('refundTransaction'));
+        $oCheckoutService->expects($this->once())
+            ->method('refundTransaction')
+            ->with($this->equalTo($oPayPalRequest))
+            ->will($this->returnValue(null));
 
         $oAction = $this->_getActionHandler();
-        $oAction->setPayPalService( $oCheckoutService );
-        $oAction->setPayPalRequest( $oPayPalRequest );
+        $oAction->setPayPalService($oCheckoutService);
+        $oAction->setPayPalRequest($oPayPalRequest);
 
         $oAction->getPayPalResponse();
     }
@@ -99,16 +99,16 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
         $oPayPalRequest = new oePayPalPayPalRequest();
         $oPayPalResponse = new oePayPalResponseDoRefund();
 
-        $oCheckoutService = $this->getMock( 'oePayPalService', array( 'refundTransaction' ) );
-        $oCheckoutService->expects( $this->once() )
-            ->method( 'refundTransaction' )
-            ->will( $this->returnValue( $oPayPalResponse ) );
+        $oCheckoutService = $this->getMock('oePayPalService', array('refundTransaction'));
+        $oCheckoutService->expects($this->once())
+            ->method('refundTransaction')
+            ->will($this->returnValue($oPayPalResponse));
 
         $oAction = $this->_getActionHandler();
-        $oAction->setPayPalService( $oCheckoutService );
-        $oAction->setPayPalRequest( $oPayPalRequest );
+        $oAction->setPayPalService($oCheckoutService);
+        $oAction->setPayPalRequest($oPayPalRequest);
 
-        $this->assertEquals( $oPayPalResponse, $oAction->getPayPalResponse() );
+        $this->assertEquals($oPayPalResponse, $oAction->getPayPalResponse());
     }
 
     /**
@@ -116,7 +116,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
      */
     protected function _getService()
     {
-        return $this->getMock( 'oePayPalService');
+        return $this->getMock('oePayPalService');
     }
 
     /**
@@ -125,11 +125,11 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
      * @param $oData
      * @return oePayPalOrderCaptureActionHandler
      */
-    protected function _getActionHandler( $oData = null)
+    protected function _getActionHandler($oData = null)
     {
-        $oAction = new oePayPalOrderRefundActionHandler( $oData );
+        $oAction = new oePayPalOrderRefundActionHandler($oData);
 
-        $oAction->setPayPalService( $this->_getService() );
+        $oAction->setPayPalService($this->_getService());
 
         return $oAction;
     }

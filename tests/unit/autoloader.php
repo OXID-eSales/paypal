@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -18,7 +19,6 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
-
 class Autoloader
 {
 
@@ -30,14 +30,14 @@ class Autoloader
     /*
      * Auto load given class
      */
-    public function autoload( $sClass )
+    public function autoload($sClass)
     {
-        if ( !class_exists( $sClass ) ) {
-            $sFileName = strtolower( $sClass ) . '.php';
-            $sFile = $this->_findFile( $this->getBasePath(), $sFileName );
+        if (!class_exists($sClass)) {
+            $sFileName = strtolower($sClass) . '.php';
+            $sFile = $this->_findFile($this->getBasePath(), $sFileName);
 
-            if ( $sFile ) {
-                require_once ( $sFile );
+            if ($sFile) {
+                require_once($sFile);
             }
         }
     }
@@ -45,7 +45,7 @@ class Autoloader
     /**
      * @param $sBasePath
      */
-    public function setBasePath( $sBasePath )
+    public function setBasePath($sBasePath)
     {
         $this->_sBasePath = $sBasePath;
     }
@@ -65,18 +65,18 @@ class Autoloader
      * @param $sFileName
      * @return string
      */
-    protected function _findFile( $sPath, $sFileName )
+    protected function _findFile($sPath, $sFileName)
     {
-        $oFile = new DirectoryIterator( $sPath );
+        $oFile = new DirectoryIterator($sPath);
         $sFile = null;
-        while( $oFile->valid() ) {
-            if ( !$oFile->isDot() ) {
-                if ( $oFile->isDir() ) {
-                    $sFile = $this->_findFile( $oFile->getPathname(), $sFileName );
-                } else if ( $oFile->getFilename() === $sFileName ) {
+        while ($oFile->valid()) {
+            if (!$oFile->isDot()) {
+                if ($oFile->isDir()) {
+                    $sFile = $this->_findFile($oFile->getPathname(), $sFileName);
+                } else if ($oFile->getFilename() === $sFileName) {
                     $sFile = $oFile->getPathname();
                 }
-                if ( $sFile ) {
+                if ($sFile) {
                     break;
                 }
             }

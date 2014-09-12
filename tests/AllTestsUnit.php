@@ -21,7 +21,7 @@
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 
-echo "=========\nrunning php version ".phpversion()."\n\n============\n";
+echo "=========\nrunning php version " . phpversion() . "\n\n============\n";
 
 /**
  * PHPUnit_Framework_TestCase implementation for adding and testing all unit tests from unit dir
@@ -30,38 +30,38 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
 {
     static function suite()
     {
-        $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
+        $oSuite = new PHPUnit_Framework_TestSuite('PHPUnit');
         $sFilter = getenv("PREG_FILTER");
 
         $aTestGroups = array(
-            'unit/oepaypal' => array( '', 'components', 'core', 'models', 'models/actions', 'models/responses', 'models/paypalrequest', 'controllers', 'controllers/admin' ),
-            'integration/oepaypal' => array( '', 'checkoutrequest' )
+            'unit/oepaypal' => array('', 'components', 'core', 'models', 'models/actions', 'models/responses', 'models/paypalrequest', 'controllers', 'controllers/admin'),
+            'integration/oepaypal' => array('', 'checkoutrequest')
         );
         if (getenv('TEST_DIRS')) {
             $sTestDir['unit/oepaypal'] = explode('%', getenv('TEST_DIRS'));
         }
-        foreach ( $aTestGroups as $sGroupDir => $aTestDirs ) {
-            foreach ($aTestDirs as $sTestDir ) {
+        foreach ($aTestGroups as $sGroupDir => $aTestDirs) {
+            foreach ($aTestDirs as $sTestDir) {
                 if ($sTestDir == '_root_') {
                     $sTestDir = '';
                 }
-                $sTestDir = rtrim($sGroupDir.'/'.$sTestDir, '/');
-                echo $sTestDir. "\n";
+                $sTestDir = rtrim($sGroupDir . '/' . $sTestDir, '/');
+                echo $sTestDir . "\n";
 
-                if ( !is_dir( $sTestDir ) ) {
+                if (!is_dir($sTestDir)) {
                     continue;
                 }
 
                 //adding UNIT Tests
                 echo "Adding tests from $sTestDir/*Test.php\n";
-                foreach ( glob( "$sTestDir/*Test.php" ) as $sFilename) {
+                foreach (glob("$sTestDir/*Test.php") as $sFilename) {
                     if (!$sFilter || preg_match("&$sFilter&i", $sFilename)) {
                         include_once $sFilename;
 
-                        $sClassName = str_replace( array( "/", ".php" ), array( "_", "" ), $sFilename );
+                        $sClassName = str_replace(array("/", ".php"), array("_", ""), $sFilename);
 
-                        if ( class_exists( $sClassName ) ) {
-                            $oSuite->addTestSuite( $sClassName );
+                        if (class_exists($sClassName)) {
+                            $oSuite->addTestSuite($sClassName);
                         } else {
                             echo "\n\nWarning: class not found: $sClassName in $sFilename\n\n\n ";
                         }

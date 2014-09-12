@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ) . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
 
 /**
  * Testing oePayPalCheckValidator class.
@@ -35,11 +35,11 @@ class Unit_oePayPal_core_oePayPalCheckValidatorTest extends OxidTestCase
     public function isIsPayPalCheckValid_dataProvider()
     {
         return array(
-            array( 200, 220, true ),   //if new value is less
-            array( 50, 50, true ),     //if new and old values are the same
-            array( 620, 600, false ),   //if new value is bigger
-            array( 26.55, '26.55', true ),   //if old value is string
-            array( 600, 620, true ),   //if new value is smaller
+            array(200, 220, true),   //if new value is less
+            array(50, 50, true),     //if new and old values are the same
+            array(620, 600, false),   //if new value is bigger
+            array(26.55, '26.55', true),   //if old value is string
+            array(600, 620, true),   //if new value is smaller
         );
     }
 
@@ -48,12 +48,12 @@ class Unit_oePayPal_core_oePayPalCheckValidatorTest extends OxidTestCase
      *
      * @dataProvider isIsPayPalCheckValid_dataProvider
      */
-    public function testIsPayPalCheckValid( $dNewAmount, $dOldAmount, $blResult )
+    public function testIsPayPalCheckValid($dNewAmount, $dOldAmount, $blResult)
     {
         $oCheckValidator = new oePayPalCheckValidator();
-        $oCheckValidator->setNewBasketAmount( $dNewAmount );
-        $oCheckValidator->setOldBasketAmount( $dOldAmount );
-        $this->assertEquals( $blResult, $oCheckValidator->isPayPalCheckValid() );
+        $oCheckValidator->setNewBasketAmount($dNewAmount);
+        $oCheckValidator->setOldBasketAmount($dOldAmount);
+        $this->assertEquals($blResult, $oCheckValidator->isPayPalCheckValid());
     }
 
     /**
@@ -62,9 +62,9 @@ class Unit_oePayPal_core_oePayPalCheckValidatorTest extends OxidTestCase
     public function testSetGetOldBasketAmount()
     {
         $oValidator = new oePayPalCheckValidator();
-        $oValidator->setOldBasketAmount( '3.5' );
+        $oValidator->setOldBasketAmount('3.5');
 
-        $this->assertEquals( 3.5, $oValidator->getOldBasketAmount() );
+        $this->assertEquals(3.5, $oValidator->getOldBasketAmount());
     }
 
     /**
@@ -73,9 +73,9 @@ class Unit_oePayPal_core_oePayPalCheckValidatorTest extends OxidTestCase
     public function testSetGetNewBasketAmount()
     {
         $oValidator = new oePayPalCheckValidator();
-        $oValidator->setNewBasketAmount( '3.5' );
+        $oValidator->setNewBasketAmount('3.5');
 
-        $this->assertEquals( 3.5, $oValidator->getNewBasketAmount() );
+        $this->assertEquals(3.5, $oValidator->getNewBasketAmount());
     }
 
 }

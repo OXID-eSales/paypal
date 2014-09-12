@@ -35,13 +35,13 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
     {
         $sTemplate = parent::render();
 
-        $sPaymentStatus  = oxRegistry::getConfig()->getRequestParameter( "paypalpaymentstatus" );
-        $sPayment  = oxRegistry::getConfig()->getRequestParameter( "paypalpayment" );
+        $sPaymentStatus = oxRegistry::getConfig()->getRequestParameter("paypalpaymentstatus");
+        $sPayment = oxRegistry::getConfig()->getRequestParameter("paypalpayment");
 
-        $this->_aViewData["spaypalpaymentstatus"]   = $sPaymentStatus ? $sPaymentStatus : -1;
+        $this->_aViewData["spaypalpaymentstatus"] = $sPaymentStatus ? $sPaymentStatus : -1;
         $this->_aViewData["opaypalpaymentstatuslist"] = new oePayPalOrderPaymentStatusList();
 
-        $this->_aViewData["paypalpayment"]   = $sPayment ? $sPayment : -1;
+        $this->_aViewData["paypalpayment"] = $sPayment ? $sPayment : -1;
 
         $oPaymentList = oxNew('oxList');
         $oPaymentList->init('oxPayment');
@@ -58,17 +58,17 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
      *
      * @return string
      */
-    protected function _buildSelectString( $oListObject = null )
+    protected function _buildSelectString($oListObject = null)
     {
-        $sSql = parent::_buildSelectString( $oListObject );
+        $sSql = parent::_buildSelectString($oListObject);
 
-        $sPaymentTable = getViewName( "oxpayments" );
+        $sPaymentTable = getViewName("oxpayments");
 
         $sQ = ", `oepaypal_order`.`oepaypal_paymentstatus`, `payments`.`oxdesc` as `paymentname` from `oxorder`
         LEFT JOIN `oepaypal_order` ON `oepaypal_order`.`oepaypal_orderid` = `oxorder`.`oxid`
         LEFT JOIN `" . $sPaymentTable . "` AS `payments` on `payments`.oxid=oxorder.oxpaymenttype ";
 
-        $sSql = str_replace( 'from oxorder', $sQ, $sSql);
+        $sSql = str_replace('from oxorder', $sQ, $sSql);
 
         return $sSql;
     }
@@ -76,27 +76,27 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
     /**
      * Adding folder check
      *
-     * @param array  $aWhere  SQL condition array
+     * @param array $aWhere SQL condition array
      * @param string $sqlFull SQL query string
      *
      * @return string
      */
-    protected function _prepareWhereQuery( $aWhere, $sqlFull )
+    protected function _prepareWhereQuery($aWhere, $sqlFull)
     {
         $oDb = oxDb::getDb();
-        $sQ = parent::_prepareWhereQuery( $aWhere, $sqlFull );
+        $sQ = parent::_prepareWhereQuery($aWhere, $sqlFull);
 
-        $sPaymentStatus  = oxRegistry::getConfig()->getRequestParameter( "paypalpaymentstatus" );
+        $sPaymentStatus = oxRegistry::getConfig()->getRequestParameter("paypalpaymentstatus");
         $oPaymentStatusList = new oePayPalOrderPaymentStatusList();
 
-        if ( $sPaymentStatus && $sPaymentStatus != '-1' && in_array( $sPaymentStatus, $oPaymentStatusList->getArray() ) ) {
-            $sQ .= " AND ( `oepaypal_order`.`oepaypal_paymentstatus` = " . $oDb->quote( $sPaymentStatus ) . " )";
+        if ($sPaymentStatus && $sPaymentStatus != '-1' && in_array($sPaymentStatus, $oPaymentStatusList->getArray())) {
+            $sQ .= " AND ( `oepaypal_order`.`oepaypal_paymentstatus` = " . $oDb->quote($sPaymentStatus) . " )";
             $sQ .= " AND ( `oepaypal_order`.`oepaypal_orderid` IS NOT NULL ) ";
         }
 
-        $sPayment  = oxRegistry::getConfig()->getRequestParameter( "paypalpayment" );
-        if ( $sPayment && $sPayment != '-1' ) {
-            $sQ .= " and ( oxorder.oxpaymenttype = ".$oDb->quote( $sPayment )." )";
+        $sPayment = oxRegistry::getConfig()->getRequestParameter("paypalpayment");
+        if ($sPayment && $sPayment != '-1') {
+            $sQ .= " and ( oxorder.oxpaymenttype = " . $oDb->quote($sPayment) . " )";
         }
 
         return $sQ;

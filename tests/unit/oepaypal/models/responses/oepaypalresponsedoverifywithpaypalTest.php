@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalResponseDoVerifyWithPayPal class.
@@ -81,60 +81,60 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest exte
     /**
      * @dataProvider providerResponseData
      */
-    public function testIsPayPalAck( $aDataResponse, $aDataExpect )
+    public function testIsPayPalAck($aDataResponse, $aDataExpect)
     {
         $oResponse = new oePayPalResponseDoVerifyWithPayPal();
-        $oResponse->setData( $aDataResponse );
-        $this->assertEquals( $aDataExpect[ 'ack' ], $oResponse->isPayPalAck() );
+        $oResponse->setData($aDataResponse);
+        $this->assertEquals($aDataExpect['ack'], $oResponse->isPayPalAck());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetReceiverEmail( $aDataResponse, $aDataExpect )
+    public function testGetReceiverEmail($aDataResponse, $aDataExpect)
     {
         $oResponse = new oePayPalResponseDoVerifyWithPayPal();
-        $oResponse->setData( $aDataResponse );
-        $this->assertEquals( $aDataExpect[ 'receiver_email' ], $oResponse->getReceiverEmail() );
+        $oResponse->setData($aDataResponse);
+        $this->assertEquals($aDataExpect['receiver_email'], $oResponse->getReceiverEmail());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetPaymentStatus( $aDataResponse, $aDataExpect )
+    public function testGetPaymentStatus($aDataResponse, $aDataExpect)
     {
         $oResponse = new oePayPalResponseDoVerifyWithPayPal();
-        $oResponse->setData( $aDataResponse );
-        $this->assertEquals( $aDataExpect[ 'payment_status' ], $oResponse->getPaymentStatus() );
+        $oResponse->setData($aDataResponse);
+        $this->assertEquals($aDataExpect['payment_status'], $oResponse->getPaymentStatus());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetTransactionId( $aDataResponse, $aDataExpect )
+    public function testGetTransactionId($aDataResponse, $aDataExpect)
     {
         $oResponse = new oePayPalResponseDoVerifyWithPayPal();
-        $oResponse->setData( $aDataResponse );
-        $this->assertEquals( $aDataExpect[ 'transaction_id' ], $oResponse->getTransactionId() );
+        $oResponse->setData($aDataResponse);
+        $this->assertEquals($aDataExpect['transaction_id'], $oResponse->getTransactionId());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetCurrency( $aDataResponse, $aDataExpect )
+    public function testGetCurrency($aDataResponse, $aDataExpect)
     {
         $oResponse = new oePayPalResponseDoVerifyWithPayPal();
-        $oResponse->setData( $aDataResponse );
-        $this->assertEquals( $aDataExpect[ 'currency' ], $oResponse->getCurrency() );
+        $oResponse->setData($aDataResponse);
+        $this->assertEquals($aDataExpect['currency'], $oResponse->getCurrency());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetAmount( $aDataResponse, $aDataExpect )
+    public function testGetAmount($aDataResponse, $aDataExpect)
     {
         $oResponse = new oePayPalResponseDoVerifyWithPayPal();
-        $oResponse->setData( $aDataResponse );
-        $this->assertEquals( $aDataExpect[ 'amount' ], $oResponse->getAmount() );
+        $oResponse->setData($aDataResponse);
+        $this->assertEquals($aDataExpect['amount'], $oResponse->getAmount());
     }
 }

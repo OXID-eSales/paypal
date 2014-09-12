@@ -38,17 +38,17 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      */
     public function loadPayPalOrder()
     {
-        $sOrderId = oxRegistry::getSession()->getVariable( "sess_challenge" );
+        $sOrderId = oxRegistry::getSession()->getVariable("sess_challenge");
 
         // if order is not created yet - generating it
-        if ( $sOrderId === null ) {
+        if ($sOrderId === null) {
             $sOrderId = oxUtilsObject::getInstance()->generateUID();
-            $this->setId( $sOrderId );
+            $this->setId($sOrderId);
             $this->save();
-            oxRegistry::getSession()->setVariable( "sess_challenge", $sOrderId );
+            oxRegistry::getSession()->setVariable("sess_challenge", $sOrderId);
         }
 
-        return $this->load( $sOrderId );
+        return $this->load($sOrderId);
     }
 
     /**
@@ -58,8 +58,8 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      */
     public function oePayPalUpdateOrderNumber()
     {
-        if ( $this->oxorder__oxordernr->value ) {
-            $blUpdated = oxNew( 'oxCounter' )->update( $this->_getCounterIdent(), $this->oxorder__oxordernr->value );
+        if ($this->oxorder__oxordernr->value) {
+            $blUpdated = oxNew('oxCounter')->update($this->_getCounterIdent(), $this->oxorder__oxordernr->value);
         } else {
             $blUpdated = $this->_setNumber();
         }
@@ -74,7 +74,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      */
     public function deletePayPalOrder()
     {
-        if ( $this->loadPayPalOrder() ) {
+        if ($this->loadPayPalOrder()) {
             $this->getPayPalOrder()->delete();
             return $this->delete();
         }
@@ -86,9 +86,9 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      * @param null $sOxId
      * @return bool|void
      */
-    public function delete( $sOxId = null )
+    public function delete($sOxId = null)
     {
-        $this->getPayPalOrder( $sOxId )->delete();
+        $this->getPayPalOrder($sOxId)->delete();
         parent::delete($sOxId);
     }
 
@@ -96,81 +96,81 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      * Updates order transaction status, ID and date.
      *
      * @param string $sTransactionId order transaction ID
-     * @param string $sDate         order transaction date
+     * @param string $sDate order transaction date
      *
      */
-    protected function _setPaymentInfoPayPalOrder( $sTransactionId, $sDate )
+    protected function _setPaymentInfoPayPalOrder($sTransactionId, $sDate)
     {
         // set transaction ID and payment date to order
         $oDb = oxDb::getDb();
 
-        $sQ = 'update oxorder set oxtransid='.$oDb->quote( $sTransactionId ).', oxpaid='.$oDb->quote( $sDate ).'  where oxid='.$oDb->quote( $this->getId() );
-        $oDb->execute( $sQ );
+        $sQ = 'update oxorder set oxtransid=' . $oDb->quote($sTransactionId) . ', oxpaid=' . $oDb->quote($sDate) . '  where oxid=' . $oDb->quote($this->getId());
+        $oDb->execute($sQ);
 
         //updating order object
-        $this->oxorder__oxtransid = new oxField( $sTransactionId );
-        $this->oxorder__oxpaid    = new oxField( $sDate );
+        $this->oxorder__oxtransid = new oxField($sTransactionId);
+        $this->oxorder__oxpaid = new oxField($sDate);
     }
 
     /**
      * Finalizes PayPal order
      *
-     * @param  oePayPalResponseDoExpressCheckoutPayment $oResult       PayPal results array
-     * @param oxUser    $oUser         User object
-     * @param oxBasket  $oBasket	   Basket object
-     * @param oxPayment $oPayment      Payment object
-     * @param string    $sTransactionMode transaction mode Sale|Authorization
+     * @param  oePayPalResponseDoExpressCheckoutPayment $oResult PayPal results array
+     * @param oxUser $oUser User object
+     * @param oxBasket $oBasket Basket object
+     * @param oxPayment $oPayment Payment object
+     * @param string $sTransactionMode transaction mode Sale|Authorization
      *
      * @return null
      */
-    public function finalizePayPalOrder( $oResult, $oBasket, $sTransactionMode )
+    public function finalizePayPalOrder($oResult, $oBasket, $sTransactionMode)
     {
-        $sDate   = date( 'Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime() );
+        $sDate = date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime());
 
         // set order status, transaction ID and payment date to order
-        $this->_setPaymentInfoPayPalOrder( $oResult->getTransactionId(), $sDate );
+        $this->_setPaymentInfoPayPalOrder($oResult->getTransactionId(), $sDate);
 
         $sCurrency = $oResult->getCurrencyCode();
-        if ( !$sCurrency ) {
+        if (!$sCurrency) {
             $sCurrency = $this->getOrderCurrency()->name;
         }
 
         //PayPal order info
         $oPayPalOrder = $this->getPayPalOrder();
         $oPayPalOrder->setOrderId($this->getId());
-        $oPayPalOrder->setPaymentStatus( 'pending' );
-        $oPayPalOrder->setTransactionMode( $sTransactionMode );
-        $oPayPalOrder->setCurrency( $sCurrency );
-        $oPayPalOrder->setTotalOrderSum( $oBasket->getPrice()->getBruttoPrice() );
-        if ( $sTransactionMode == 'Sale' ) {
-            $oPayPalOrder->setCapturedAmount( $oBasket->getPrice()->getBruttoPrice() );
+        $oPayPalOrder->setPaymentStatus('pending');
+        $oPayPalOrder->setTransactionMode($sTransactionMode);
+        $oPayPalOrder->setCurrency($sCurrency);
+        $oPayPalOrder->setTotalOrderSum($oBasket->getPrice()->getBruttoPrice());
+        if ($sTransactionMode == 'Sale') {
+            $oPayPalOrder->setCapturedAmount($oBasket->getPrice()->getBruttoPrice());
         }
         $oPayPalOrder->save();
 
-        $oOrderPayment = oxNew( 'oePayPalOrderPayment' );
-        $oOrderPayment->setTransactionId( $oResult->getTransactionId() );
-        $oOrderPayment->setCorrelationId( $oResult->getCorrelationId() );
-        $oOrderPayment->setDate( $sDate );
-        $oOrderPayment->setAction( ($sTransactionMode == 'Sale') ? 'capture' : 'authorization' );
-        $oOrderPayment->setStatus( $oResult->getPaymentStatus() );
-        $oOrderPayment->setAmount( $oResult->getAmount() );
-        $oOrderPayment->setCurrency( $oResult->getCurrencyCode() );
+        $oOrderPayment = oxNew('oePayPalOrderPayment');
+        $oOrderPayment->setTransactionId($oResult->getTransactionId());
+        $oOrderPayment->setCorrelationId($oResult->getCorrelationId());
+        $oOrderPayment->setDate($sDate);
+        $oOrderPayment->setAction(($sTransactionMode == 'Sale') ? 'capture' : 'authorization');
+        $oOrderPayment->setStatus($oResult->getPaymentStatus());
+        $oOrderPayment->setAmount($oResult->getAmount());
+        $oOrderPayment->setCurrency($oResult->getCurrencyCode());
 
         //Adding payment information
         $oPaymentList = $this->getPayPalOrder()->getPaymentList();
-        $oPaymentList->addPayment( $oOrderPayment );
+        $oPaymentList->addPayment($oOrderPayment);
 
         //setting order payment status after
         $oPaymentStatusCalculator = oxNew('oePayPalOrderPaymentStatusCalculator');
-        $oPaymentStatusCalculator->setOrder( $this->getPayPalOrder() );
-        $this->getPayPalOrder()->setPaymentStatus( $oPaymentStatusCalculator->getStatus() );
+        $oPaymentStatusCalculator->setOrder($this->getPayPalOrder());
+        $this->getPayPalOrder()->setPaymentStatus($oPaymentStatusCalculator->getStatus());
         $this->getPayPalOrder()->save();
 
         //clear PayPal identification
-        $this->getSession()->deleteVariable( 'oepaypal' );
-        $this->getSession()->deleteVariable( "oepaypal-payerId" );
-        $this->getSession()->deleteVariable( "oepaypal-userId" );
-        $this->getSession()->deleteVariable( 'oepaypal-basketAmount' );
+        $this->getSession()->deleteVariable('oepaypal');
+        $this->getSession()->deleteVariable("oepaypal-payerId");
+        $this->getSession()->deleteVariable("oepaypal-userId");
+        $this->getSession()->deleteVariable('oepaypal-basketAmount');
 
     }
 
@@ -182,20 +182,20 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      *
      * @return null
      */
-    public function validateDelivery( $oBasket )
+    public function validateDelivery($oBasket)
     {
-        if ( $oBasket->getPaymentId() == 'oxidpaypal' ) {
+        if ($oBasket->getPaymentId() == 'oxidpaypal') {
             $sShippingId = $oBasket->getShippingId();
             $dBasketPrice = $oBasket->getPrice()->getBruttoPrice();
-            $oUser = oxNew( 'oxUser' );
-            if (! $oUser->loadUserPayPalUser() ) {
+            $oUser = oxNew('oxUser');
+            if (!$oUser->loadUserPayPalUser()) {
                 $oUser = $this->getUser();
             }
-            if ( !$this->_isPayPalPaymentValid( $oUser, $dBasketPrice, $sShippingId ) ) {
+            if (!$this->_isPayPalPaymentValid($oUser, $dBasketPrice, $sShippingId)) {
                 $iValidState = self::ORDER_STATE_INVALIDDELIVERY;
             }
         } else {
-            $iValidState = parent::validateDelivery( $oBasket );
+            $iValidState = parent::validateDelivery($oBasket);
         }
 
         return $iValidState;
@@ -208,12 +208,12 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      *
      * @return oePayPalPayPalOrder|null
      */
-    public function getPayPalOrder( $sOxId = null )
+    public function getPayPalOrder($sOxId = null)
     {
-        if ( is_null( $this->_oPayPalOrder ) ) {
+        if (is_null($this->_oPayPalOrder)) {
             $sOrderId = is_null($sOxId) ? $this->getId() : $sOxId;
-            $oOrder = oxNew( 'oePayPalPayPalOrder' );
-            $oOrder->load( $sOrderId );
+            $oOrder = oxNew('oePayPalPayPalOrder');
+            $oOrder->load($sOrderId);
             $this->_oPayPalOrder = $oOrder;
         }
         return $this->_oPayPalOrder;
@@ -226,7 +226,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      */
     public function getPayPalPaymentStatus()
     {
-        return $this->getPayPalOrder()->getPaymentStatus() ;
+        return $this->getPayPalOrder()->getPaymentStatus();
     }
 
     /**
@@ -245,14 +245,14 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      *
      * @return bool
      */
-    protected function _isPayPalPaymentValid( $oUser, $dBasketPrice, $sShippingId )
+    protected function _isPayPalPaymentValid($oUser, $dBasketPrice, $sShippingId)
     {
         $blValid = true;
 
-        $oPayPalPayment = oxNew( 'oxPayment');
-        $oPayPalPayment->load( 'oxidpaypal' );
-        if ( !$oPayPalPayment->isValidPayment( null, null, $oUser, $dBasketPrice, $sShippingId ) ) {
-            $blValid = $this->_isEmptyPaymentValid( $oUser, $dBasketPrice, $sShippingId );
+        $oPayPalPayment = oxNew('oxPayment');
+        $oPayPalPayment->load('oxidpaypal');
+        if (!$oPayPalPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
+            $blValid = $this->_isEmptyPaymentValid($oUser, $dBasketPrice, $sShippingId);
         }
 
         return $blValid;
@@ -266,13 +266,13 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      *
      * @return bool
      */
-    protected function _isEmptyPaymentValid( $oUser, $dBasketPrice, $sShippingId )
+    protected function _isEmptyPaymentValid($oUser, $dBasketPrice, $sShippingId)
     {
         $blValid = true;
 
-        $oEmptyPayment = oxNew( 'oxPayment' );
-        $oEmptyPayment->load( 'oxempty' );
-        if ( !$oEmptyPayment->isValidPayment( null, null, $oUser, $dBasketPrice, $sShippingId ) ) {
+        $oEmptyPayment = oxNew('oxPayment');
+        $oEmptyPayment->load('oxempty');
+        if (!$oEmptyPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
             $blValid = false;
         }
 

@@ -32,7 +32,7 @@ class oePayPalResponseDoExpressCheckoutPayment extends oePayPalResponse
      */
     public function getTransactionId()
     {
-        return $this->_getValue( 'PAYMENTINFO_0_TRANSACTIONID' );
+        return $this->_getValue('PAYMENTINFO_0_TRANSACTIONID');
     }
 
     /**
@@ -42,7 +42,7 @@ class oePayPalResponseDoExpressCheckoutPayment extends oePayPalResponse
      */
     public function getCorrelationId()
     {
-        return $this->_getValue( 'CORRELATIONID' );
+        return $this->_getValue('CORRELATIONID');
     }
 
     /**
@@ -52,7 +52,7 @@ class oePayPalResponseDoExpressCheckoutPayment extends oePayPalResponse
      */
     public function getPaymentStatus()
     {
-        return $this->_getValue( 'PAYMENTINFO_0_PAYMENTSTATUS' );
+        return $this->_getValue('PAYMENTINFO_0_PAYMENTSTATUS');
     }
 
     /**
@@ -62,7 +62,7 @@ class oePayPalResponseDoExpressCheckoutPayment extends oePayPalResponse
      */
     public function getAmount()
     {
-        return ( float )$this->_getValue( 'PAYMENTINFO_0_AMT' );
+        return ( float )$this->_getValue('PAYMENTINFO_0_AMT');
     }
 
     /**
@@ -72,7 +72,7 @@ class oePayPalResponseDoExpressCheckoutPayment extends oePayPalResponse
      */
     public function getCurrencyCode()
     {
-        return $this->_getValue( 'PAYMENTINFO_0_CURRENCYCODE' );
+        return $this->_getValue('PAYMENTINFO_0_CURRENCYCODE');
     }
 
 }

@@ -20,14 +20,14 @@
  */
 
 /**
- * Price enter mode: bruto 
+ * Price enter mode: bruto
  * Price view mode:  brutto
  * Product count: count of used products
  * VAT info: 19%
- * Currency rate: 0.68 
+ * Currency rate: 0.68
  * Discounts: count
  *  1. bascet 5 abs
- *  2. shop 5 abs for 9001 
+ *  2. shop 5 abs for 9001
  *  3. bascet 1 abs for 9001
  *  4. shop 5% for 9002
  *  5. bascet 6% for 9002
@@ -35,10 +35,10 @@
  *  1. 6 abs
  * Wrapping: +;
  * Gift cart:  -;
- * Costs VAT caclulation rule: max 
+ * Costs VAT caclulation rule: max
  * Costs:
- *  1. Payment + 
- *  2. Delivery + 
+ *  1. Payment +
+ *  2. Delivery +
  *  3. TS -
  * Actions with basket or order:
  *  1. update / delete / change config
@@ -49,39 +49,39 @@
 $aData = array(
     'class' => 'oePayPalOxPaymentGateway',
     'action' => 'doExpressCheckoutPayment',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 'testUserLogged1',
-            'oxprice'                  => 10,
-            'oxvat'                    => 10,
-            'amount'                   => 3,
+    'articles' => array(
+        0 => array(
+            'oxid' => 'testUserLogged1',
+            'oxprice' => 10,
+            'oxvat' => 10,
+            'amount' => 3,
         ),
     ),
     'user' => array(
-        'oxactive'    => 1,
-        'oxusername'  => 'testuser@email.com',
-        'oxfname'     => 'Name',
-        'oxlname'     => 'LName',
-        'oxstreet'    => 'Street',
-        'oxstreetnr'  => 'StreetNr',
-        'oxcity'      => 'City',
-        'oxzip'       => 'ZipCode',
-        'oxfon'       => 'PhoneNr',
+        'oxactive' => 1,
+        'oxusername' => 'testuser@email.com',
+        'oxfname' => 'Name',
+        'oxlname' => 'LName',
+        'oxstreet' => 'Street',
+        'oxstreetnr' => 'StreetNr',
+        'oxcity' => 'City',
+        'oxzip' => 'ZipCode',
+        'oxfon' => 'PhoneNr',
         'oxcountryid' => '8f241f11096877ac0.98748826', // United States
-        'oxstateid'   => 'IL', // Illinois
+        'oxstateid' => 'IL', // Illinois
         'address' => array(
-            'oxid'        => 'TestUserAddressId',
-            'oxfname'     => 'AddressName',
-            'oxlname'     => 'AddressLName',
-            'oxstreet'    => 'AddressStreet',
-            'oxstreetnr'  => 'AddressStreetNr',
-            'oxcity'      => 'AddressCity',
-            'oxzip'       => 'AddressZipCode',
-            'oxfon'       => 'AddressPhoneNr',
+            'oxid' => 'TestUserAddressId',
+            'oxfname' => 'AddressName',
+            'oxlname' => 'AddressLName',
+            'oxstreet' => 'AddressStreet',
+            'oxstreetnr' => 'AddressStreetNr',
+            'oxcity' => 'AddressCity',
+            'oxzip' => 'AddressZipCode',
+            'oxfon' => 'AddressPhoneNr',
             'oxcountryid' => 'a7c40f6323c4bfb36.59919433', // Italy
         ),
     ),
-    'discounts' => array (),
+    'discounts' => array(),
     'costs' => array(),
     'config' => array(
         'sOEPayPalSandboxUsername' => 'testUser',
@@ -93,8 +93,8 @@ $aData = array(
     'session' => array(
         'deladrid' => 'TestUserAddressId',
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => 'testPassword',
             'USER' => 'testUser',

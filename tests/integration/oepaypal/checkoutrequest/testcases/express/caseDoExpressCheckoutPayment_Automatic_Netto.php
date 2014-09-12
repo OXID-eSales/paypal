@@ -24,10 +24,10 @@
  * Price view mode:  netto
  * Product count: count of used products
  * VAT info: 19%
- * Currency rate: 0.68 
+ * Currency rate: 0.68
  * Discounts: count
  *  1. bascet 5 abs
- *  2. shop 5 abs for 9001 
+ *  2. shop 5 abs for 9001
  *  3. bascet 1 abs for 9001
  *  4. shop 5% for 9002
  *  5. bascet 6% for 9002
@@ -35,10 +35,10 @@
  *  1. 6 abs
  * Wrapping: +;
  * Gift cart:  -;
- * Costs VAT caclulation rule: max 
+ * Costs VAT caclulation rule: max
  * Costs:
- *  1. Payment + 
- *  2. Delivery + 
+ *  1. Payment +
+ *  2. Delivery +
  *  3. TS -
  * Actions with basket or order:
  *  1. update / delete / change config
@@ -49,31 +49,31 @@
 $aData = array(
     'class' => 'oePayPalOxPaymentGateway',
     'action' => 'doExpressCheckoutPayment',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 9001,
-            'oxprice'                  => 100,
-            'oxvat'                    => 19,
-            'amount'                   => 33,
-            'oxstock'                  => 50,
+    'articles' => array(
+        0 => array(
+            'oxid' => 9001,
+            'oxprice' => 100,
+            'oxvat' => 19,
+            'amount' => 33,
+            'oxstock' => 50,
         ),
-        1 => array (
-            'oxid'                     => 9002,
-            'oxprice'                  => 66,
-            'oxvat'                    => 19,
-            'amount'                   => 16,
-            'oxstock'                  => 20,
+        1 => array(
+            'oxid' => 9002,
+            'oxprice' => 66,
+            'oxvat' => 19,
+            'amount' => 16,
+            'oxstock' => 20,
         ),
     ),
-    'discounts' => array (
-        0 => array (
-            'oxid'         => 'shopdiscount5for9001',
-            'oxaddsum'     => 5,
+    'discounts' => array(
+        0 => array(
+            'oxid' => 'shopdiscount5for9001',
+            'oxaddsum' => 5,
             'oxaddsumtype' => 'abs',
             'oxamount' => 0,
             'oxamountto' => 99999,
             'oxactive' => 1,
-            'oxarticles' => array ( 9001 ),
+            'oxarticles' => array(9001),
         ),
     ),
     'costs' => array(
@@ -83,7 +83,7 @@ $aData = array(
                 'oxname' => 'testWrap9001',
                 'oxprice' => 9,
                 'oxactive' => 1,
-                'oxarticles' => array( 9001 )
+                'oxarticles' => array(9001)
             ),
         ),
         'delivery' => array(
@@ -105,11 +105,11 @@ $aData = array(
                 'oxfromamount' => 0,
                 'oxtoamount' => 1000000,
                 'oxchecked' => 1,
-                'oxarticles' => array( 9001, 9002 ),
+                'oxarticles' => array(9001, 9002),
             ),
         ),
-        'voucherserie' => array (
-            0 => array (
+        'voucherserie' => array(
+            0 => array(
                 'oxserienr' => 'abs_4_voucher_serie',
                 'oxdiscount' => 6.00,
                 'oxdiscounttype' => 'absolute',
@@ -128,8 +128,8 @@ $aData = array(
         'sOEPayPalTransactionMode' => 'Automatic',
         'blShowNetPrice' => true,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => 'testPassword2',
             'USER' => 'testUser1',

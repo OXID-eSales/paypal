@@ -54,7 +54,7 @@ abstract class oePayPalDispatcher extends oePayPalController
     /**
      * @param oePayPalService $oPayPalCheckoutService
      */
-    public function setPayPalCheckoutService( $oPayPalCheckoutService )
+    public function setPayPalCheckoutService($oPayPalCheckoutService)
     {
         $this->_oPayPalCheckoutService = $oPayPalCheckoutService;
     }
@@ -66,8 +66,8 @@ abstract class oePayPalDispatcher extends oePayPalController
      */
     public function getPayPalCheckoutService()
     {
-        if ( $this->_oPayPalCheckoutService === null ) {
-            $this->_oPayPalCheckoutService = oxNew( "oePayPalService" );
+        if ($this->_oPayPalCheckoutService === null) {
+            $this->_oPayPalCheckoutService = oxNew("oePayPalService");
         }
         return $this->_oPayPalCheckoutService;
     }
@@ -89,9 +89,9 @@ abstract class oePayPalDispatcher extends oePayPalController
      *
      * @return string
      */
-    protected function _formatFloat( $fIn )
+    protected function _formatFloat($fIn)
     {
-        return sprintf( "%.2f", $fIn );
+        return sprintf("%.2f", $fIn);
     }
 
     /**
@@ -112,7 +112,7 @@ abstract class oePayPalDispatcher extends oePayPalController
     protected function _getBaseUrl()
     {
         $oSession = $this->getSession();
-        $sUrl = $this->getConfig()->getSslShopUrl() . "index.php?lang=" . oxRegistry::getLang()->getBaseLanguage() . "&sid=" . $oSession->getId() . "&rtoken=". $oSession->getRemoteAccessToken();
+        $sUrl = $this->getConfig()->getSslShopUrl() . "index.php?lang=" . oxRegistry::getLang()->getBaseLanguage() . "&sid=" . $oSession->getId() . "&rtoken=" . $oSession->getRemoteAccessToken();
         $sUrl .= "&shp=" . $this->getConfig()->getShopId();
 
         return $sUrl;
@@ -125,8 +125,8 @@ abstract class oePayPalDispatcher extends oePayPalController
      */
     protected function _getPayPalOrder()
     {
-        $oOrder = oxNew( "oxOrder" );
-        if ( $oOrder->loadPayPalOrder() ) {
+        $oOrder = oxNew("oxOrder");
+        if ($oOrder->loadPayPalOrder()) {
             return $oOrder;
         }
     }
@@ -138,9 +138,9 @@ abstract class oePayPalDispatcher extends oePayPalController
      */
     protected function _getPayPalPayment()
     {
-        if ( ( $oOrder = $this->_getPayPalOrder() ) ) {
-            $oUserPayment = oxNew( 'oxUserPayment' );
-            $oUserPayment->load( $oOrder->oxorder__oxpaymentid->value );
+        if (($oOrder = $this->_getPayPalOrder())) {
+            $oUserPayment = oxNew('oxUserPayment');
+            $oUserPayment->load($oOrder->oxorder__oxpaymentid->value);
             return $oUserPayment;
         }
     }

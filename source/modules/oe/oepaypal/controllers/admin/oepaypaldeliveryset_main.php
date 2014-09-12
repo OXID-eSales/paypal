@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -18,7 +19,6 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
-
 class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
 {
     /**
@@ -28,15 +28,15 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
      */
     public function render()
     {
-        $sTemplate =  parent::render();
+        $sTemplate = parent::render();
 
         $sDeliverySetId = $this->getEditObjectId();
-        if ( $sDeliverySetId != "-1" && isset( $sDeliverySetId ) ) {
-            $oConfig = oxNew( 'oePayPalConfig' );
+        if ($sDeliverySetId != "-1" && isset($sDeliverySetId)) {
+            $oConfig = oxNew('oePayPalConfig');
 
-            $blIsPayPalDefaultMobilePayment = ( $sDeliverySetId == $oConfig->getMobileECDefaultShippingId() );
+            $blIsPayPalDefaultMobilePayment = ($sDeliverySetId == $oConfig->getMobileECDefaultShippingId());
 
-            $this->_aViewData[ 'blIsPayPalDefaultMobilePayment' ] = $blIsPayPalDefaultMobilePayment;
+            $this->_aViewData['blIsPayPalDefaultMobilePayment'] = $blIsPayPalDefaultMobilePayment;
         }
 
         return $sTemplate;
@@ -52,16 +52,16 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
         parent::save();
 
         $oConfig = $this->getConfig();
-        $oPayPalConfig = oxNew( 'oePayPalConfig' );
+        $oPayPalConfig = oxNew('oePayPalConfig');
 
         $sDeliverySetId = $this->getEditObjectId();
-        $blDeliverySetMarked = (bool) $oConfig->getRequestParameter( 'isPayPalDefaultMobilePayment' );
+        $blDeliverySetMarked = (bool)$oConfig->getRequestParameter('isPayPalDefaultMobilePayment');
         $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
 
-        if( $blDeliverySetMarked && $sDeliverySetId != $sMobileECDefaultShippingId ) {
-            $this->_saveECDefaultShippingId( $oConfig, $sDeliverySetId, $oPayPalConfig );
-        } elseif ( !$blDeliverySetMarked  && $sDeliverySetId == $sMobileECDefaultShippingId) {
-            $this->_saveECDefaultShippingId( $oConfig, '', $oPayPalConfig );
+        if ($blDeliverySetMarked && $sDeliverySetId != $sMobileECDefaultShippingId) {
+            $this->_saveECDefaultShippingId($oConfig, $sDeliverySetId, $oPayPalConfig);
+        } elseif (!$blDeliverySetMarked && $sDeliverySetId == $sMobileECDefaultShippingId) {
+            $this->_saveECDefaultShippingId($oConfig, '', $oPayPalConfig);
         }
     }
 
@@ -72,9 +72,9 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
      * @param string $sShippingId shipping id.
      * @param oePayPalConfig $oPayPalConfig PayPal config.
      */
-    protected function _saveECDefaultShippingId( $oConfig, $sShippingId, $oPayPalConfig )
+    protected function _saveECDefaultShippingId($oConfig, $sShippingId, $oPayPalConfig)
     {
         $sPayPalModuleId = 'module:' . $oPayPalConfig->getModuleId();
-        $oConfig->saveShopConfVar( 'string', 'sOEPayPalMECDefaultShippingId', $sShippingId, null, $sPayPalModuleId );
+        $oConfig->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $sShippingId, null, $sPayPalModuleId);
     }
 }

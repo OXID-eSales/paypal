@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalResponseGetExpressCheckoutDetails class.
@@ -62,8 +62,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShippingOptionName()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'Air', $oResponse->getShippingOptionName() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('Air', $oResponse->getShippingOptionName());
     }
 
     /**
@@ -72,8 +72,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetAmount()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 1200, $oResponse->getAmount() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals(1200, $oResponse->getAmount());
     }
 
     /**
@@ -82,8 +82,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetPayerId()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'payer', $oResponse->getPayerId() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('payer', $oResponse->getPayerId());
     }
 
     /**
@@ -92,8 +92,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetEmail()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'oxid@oxid.com', $oResponse->getEmail() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('oxid@oxid.com', $oResponse->getEmail());
     }
 
     /**
@@ -102,8 +102,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetFirstName()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'Name', $oResponse->getFirstName() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('Name', $oResponse->getFirstName());
     }
 
     /**
@@ -112,8 +112,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetLastName()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'Surname', $oResponse->getLastName() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('Surname', $oResponse->getLastName());
     }
 
     /**
@@ -122,8 +122,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToStreet()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'Street', $oResponse->getShipToStreet() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('Street', $oResponse->getShipToStreet());
     }
 
     /**
@@ -132,8 +132,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToCity()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'City', $oResponse->getShipToCity() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('City', $oResponse->getShipToCity());
     }
 
     /**
@@ -142,8 +142,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToName()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'First Last', $oResponse->getShipToName() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('First Last', $oResponse->getShipToName());
     }
 
     /**
@@ -152,8 +152,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToCountryCode()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'CountryCode', $oResponse->getShipToCountryCode() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('CountryCode', $oResponse->getShipToCountryCode());
     }
 
     /**
@@ -162,8 +162,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToState()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'State', $oResponse->getShipToState() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('State', $oResponse->getShipToState());
     }
 
     /**
@@ -172,8 +172,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToZip()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( '1121', $oResponse->getShipToZip() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('1121', $oResponse->getShipToZip());
     }
 
     /**
@@ -182,8 +182,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToPhoneNumber()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( '+37000000000', $oResponse->getShipToPhoneNumber() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('+37000000000', $oResponse->getShipToPhoneNumber());
     }
 
     /**
@@ -192,8 +192,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetShipToStreet2()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'Street2', $oResponse->getShipToStreet2() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('Street2', $oResponse->getShipToStreet2());
     }
 
     /**
@@ -202,8 +202,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetSalutation()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'this is salutation', $oResponse->getSalutation() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('this is salutation', $oResponse->getSalutation());
     }
 
     /**
@@ -212,7 +212,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     public function testGetBusiness()
     {
         $oResponse = new oePayPalResponseGetExpressCheckoutDetails();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'company', $oResponse->getBusiness() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('company', $oResponse->getBusiness());
     }
 }

@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderActionFactory class.
@@ -46,13 +46,13 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderActionFactoryTest extends OxidTe
      *
      * @dataProvider providerCreateAction
      */
-    public function testCreateAction( $sAction, $sClass )
+    public function testCreateAction($sAction, $sClass)
     {
         $oOrder = new oePayPalOxOrder();
         $oRequest = new oePayPalRequest();
-        $oActionFactory = new oePayPalOrderActionFactory( $oRequest, $oOrder );
+        $oActionFactory = new oePayPalOrderActionFactory($oRequest, $oOrder);
 
-        $this->assertTrue($oActionFactory->createAction( $sAction ) instanceof $sClass );
+        $this->assertTrue($oActionFactory->createAction($sAction) instanceof $sClass);
     }
 
     /**
@@ -65,8 +65,8 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderActionFactoryTest extends OxidTe
     {
         $oOrder = new oePayPalOxOrder();
         $oRequest = new oePayPalRequest();
-        $oActionFactory = new oePayPalOrderActionFactory( $oRequest, $oOrder );
+        $oActionFactory = new oePayPalOrderActionFactory($oRequest, $oOrder);
 
-        $oActionFactory->createAction( 'some_non_existing_action' );
+        $oActionFactory->createAction('some_non_existing_action');
     }
 }

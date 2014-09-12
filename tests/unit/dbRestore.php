@@ -387,8 +387,8 @@ class DbRestore
         $aExcessColumns = array_diff($aColumns, $aOriginalColumns);
 
         if (!empty($aExcessColumns)) {
-            $sSQL = "ALTER TABLE $sTable DROP COLUMN (".implode(', ', $aExcessColumns).");";
-            $this->_executeSQL($sSQL, $sTable, "has created columns (".implode(', ', $aExcessColumns).")");
+            $sSQL = "ALTER TABLE $sTable DROP COLUMN (" . implode(', ', $aExcessColumns) . ");";
+            $this->_executeSQL($sSQL, $sTable, "has created columns (" . implode(', ', $aExcessColumns) . ")");
         }
     }
 
@@ -432,7 +432,7 @@ class DbRestore
                     $sValue = $oDb->quote($aUpdatedValues[$sColumn]);
                     $aUpdates[] = " `$sColumn` = $sValue ";
                 }
-                $sSQL = $sSQL . implode(', ', $aUpdates) . " WHERE `oxid` = ".$oDb->quote($sId);
+                $sSQL = $sSQL . implode(', ', $aUpdates) . " WHERE `oxid` = " . $oDb->quote($sId);
 
                 $this->_executeSQL($sSQL, $sTable, "record '$sId' columns '" . implode("', '", $aColumns) . "' was changed");
             } else if ($this->getResetMode() == self::MAINTENANCE_WHOLETABLES) {
@@ -617,7 +617,7 @@ class DbRestore
             if (is_null($sEntry)) {
                 $sValues .= 'null,';
             } else {
-                $sEntry = oxDb::getDb(oxDb::FETCH_MODE_ASSOC)->quote( $sEntry );
+                $sEntry = oxDb::getDb(oxDb::FETCH_MODE_ASSOC)->quote($sEntry);
                 $sValues .= $sEntry . ',';
             }
         }
@@ -639,7 +639,7 @@ class DbRestore
      */
     protected function _getTableChecksum($aTables)
     {
-        $aTables = is_array($aTables)? $aTables : array($aTables);
+        $aTables = is_array($aTables) ? $aTables : array($aTables);
         $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
         $sSelect = 'CHECKSUM TABLE ' . implode(", ", $aTables);
         $aResults = $oDb->getArray($sSelect);
@@ -647,7 +647,7 @@ class DbRestore
         $sDbName = oxRegistry::getConfig()->getConfigParam('dbName');
         $aChecksum = array();
         foreach ($aResults as $aResult) {
-            $sTable = str_replace($sDbName.'.', '', $aResult['Table']);
+            $sTable = str_replace($sDbName . '.', '', $aResult['Table']);
             $aChecksum[$sTable] = $aResult['Checksum'];
         }
 

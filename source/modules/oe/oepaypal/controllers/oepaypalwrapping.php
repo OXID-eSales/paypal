@@ -31,7 +31,7 @@ class oePayPalWrapping extends oePayPalWrapping_parent
      */
     public function isPayPal()
     {
-        return ( $this->getSession()->getVariable( "paymentid" ) == "oxidpaypal" ) ? true : false;
+        return ($this->getSession()->getVariable("paymentid") == "oxidpaypal") ? true : false;
     }
 
     /**
@@ -45,16 +45,16 @@ class oePayPalWrapping extends oePayPalWrapping_parent
         $sReturn = parent::changeWrapping();
 
         // in case user adds wrapping, basket info must be resubmitted..
-        if ( $this->isPayPal() ) {
-            $iPayPalType = (int) $this->getSession()->getVariable( "oepaypal" );
+        if ($this->isPayPal()) {
+            $iPayPalType = (int)$this->getSession()->getVariable("oepaypal");
 
-            if ( $iPayPalType == 1 ) {
+            if ($iPayPalType == 1) {
                 $sReturn = "payment";
             } else {
                 $sReturn = "basket";
             }
         }
 
-        return  $sReturn;
+        return $sReturn;
     }
 }

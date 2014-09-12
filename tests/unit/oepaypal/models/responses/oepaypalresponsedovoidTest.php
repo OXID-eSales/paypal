@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oxAccessRightException class.
@@ -49,8 +49,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVoidTest extends OxidTest
     public function testGetAuthorizationId()
     {
         $oResponse = new oePayPalResponseDoVoid();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'authorizationId', $oResponse->getAuthorizationId() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('authorizationId', $oResponse->getAuthorizationId());
     }
 
     /**
@@ -59,8 +59,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVoidTest extends OxidTest
     public function testGetCorrelationId()
     {
         $oResponse = new oePayPalResponseDoCapture();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'correlationId', $oResponse->getCorrelationId() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('correlationId', $oResponse->getCorrelationId());
     }
 
 }

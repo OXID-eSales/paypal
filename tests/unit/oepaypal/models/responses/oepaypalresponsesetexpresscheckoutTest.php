@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalResponseSetExpressCheckout class.
@@ -47,7 +47,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseSetExpressCheckoutTest exte
     public function testGetToken()
     {
         $oResponse = new oePayPalResponseSetExpressCheckout();
-        $oResponse->setData( $this->_getResponseData() );
-        $this->assertEquals( 'thisIsToken', $oResponse->getToken() );
+        $oResponse->setData($this->_getResponseData());
+        $this->assertEquals('thisIsToken', $oResponse->getToken());
     }
 }

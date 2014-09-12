@@ -19,11 +19,13 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
-if ( !class_exists( 'oePayPalPayment_parent' ) ) {
-    class oePayPalPayment_parent extends payment {}
+if (!class_exists('oePayPalPayment_parent')) {
+    class oePayPalPayment_parent extends payment
+    {
+    }
 }
 
 /**
@@ -40,18 +42,18 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     public function testValidatePayment()
     {
         // forcing payment id
-        $this->setRequestParam( "paymentid", null );
+        $this->setRequestParam("paymentid", null);
 
         $oView = new oePayPalPayment();
-        $this->assertNull( $oView->validatePayment() );
+        $this->assertNull($oView->validatePayment());
 
         // forcing payment id
-        $this->setRequestParam( "paymentid", "oxidpaypal" );
-        $this->setRequestParam( "displayCartInPayPal", 1 );
+        $this->setRequestParam("paymentid", "oxidpaypal");
+        $this->setRequestParam("displayCartInPayPal", 1);
 
         $oView = new oePayPalPayment();
-        $this->assertEquals( "oePayPalStandardDispatcher?fnc=setExpressCheckout&displayCartInPayPal=1", $oView->validatePayment() );
-        $this->assertEquals( "oxidpaypal", $this->getSession()->getVariable( "paymentid") );
+        $this->assertEquals("oePayPalStandardDispatcher?fnc=setExpressCheckout&displayCartInPayPal=1", $oView->validatePayment());
+        $this->assertEquals("oxidpaypal", $this->getSession()->getVariable("paymentid"));
     }
 
     /**
@@ -63,14 +65,14 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     public function testValidatePaymentIfCheckedByPayPal()
     {
         // forcing payment id
-        $this->setRequestParam( "paymentid", "oxidpaypal" );
-        $this->setRequestParam( "displayCartInPayPal", 1 );
+        $this->setRequestParam("paymentid", "oxidpaypal");
+        $this->setRequestParam("displayCartInPayPal", 1);
 
-        $oView = $this->getMock( "oePayPalPayment", array( "isConfirmedByPayPal" ) );
-        $oView->expects( $this->once() )->method( "isConfirmedByPayPal" )->will( $this->returnValue( true ) );
+        $oView = $this->getMock("oePayPalPayment", array("isConfirmedByPayPal"));
+        $oView->expects($this->once())->method("isConfirmedByPayPal")->will($this->returnValue(true));
 
-        $this->assertNull( $oView->validatePayment() );
-        $this->assertNull( $this->getSession()->getVariable( "paymentid" ) );
+        $this->assertNull($oView->validatePayment());
+        $this->assertNull($this->getSession()->getVariable("paymentid"));
     }
 
     /**
@@ -82,17 +84,17 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     public function testIsConfirmedByPayPal()
     {
         // forcing payment id
-        $this->setRequestParam( "paymentid", "oxidpaypal" );
-        $this->getSession()->setVariable( "oepaypal-basketAmount", 129.00 );
+        $this->setRequestParam("paymentid", "oxidpaypal");
+        $this->getSession()->setVariable("oepaypal-basketAmount", 129.00);
 
-        $oPrice = $this->getMock( "oxPrice", array( "getBruttoPrice" ) );
-        $oPrice->expects( $this->once() )->method( "getBruttoPrice" )->will( $this->returnValue( 129.00 ) );
+        $oPrice = $this->getMock("oxPrice", array("getBruttoPrice"));
+        $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(129.00));
 
-        $oBasket = $this->getMock( "oxBasket", array( "getPrice" ) );
-        $oBasket->expects( $this->once() )->method( "getPrice" )->will( $this->returnValue( $oPrice ) );
+        $oBasket = $this->getMock("oxBasket", array("getPrice"));
+        $oBasket->expects($this->once())->method("getPrice")->will($this->returnValue($oPrice));
 
         $oView = new oePayPalPayment();
 
-        $this->assertTrue( $oView->isConfirmedByPayPal( $oBasket ) );
+        $this->assertTrue($oView->isConfirmedByPayPal($oBasket));
     }
 }

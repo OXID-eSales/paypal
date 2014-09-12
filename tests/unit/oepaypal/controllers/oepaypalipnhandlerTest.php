@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ) .'/unit/OxidTestCase.php';
-require_once realpath( "." ) .'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalIPNHandler class.
@@ -31,7 +31,7 @@ class Unit_oePayPal_Controllers_oePayPalIPNHandlerTest extends OxidTestCase
     {
         $oPayPalHandler = new oePayPalIPNHandler();
         $oPayPalRequest = $oPayPalHandler->getPayPalRequest();
-        $this->assertTrue( is_a( $oPayPalRequest, 'oePayPalRequest' ) );
+        $this->assertTrue(is_a($oPayPalRequest, 'oePayPalRequest'));
     }
 
     /**
@@ -43,7 +43,7 @@ class Unit_oePayPal_Controllers_oePayPalIPNHandlerTest extends OxidTestCase
         $oPayPalIPNHandler = new oePayPalIPNHandler();
         $blResult = $oPayPalIPNHandler->handleRequest();
 
-        $this->assertEquals( false, $blResult );
+        $this->assertEquals(false, $blResult);
     }
 
 }

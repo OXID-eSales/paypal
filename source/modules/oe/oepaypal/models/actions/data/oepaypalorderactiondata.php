@@ -45,7 +45,7 @@ class oePayPalOrderActionData
      * @param oePayPalRequest $oRequest
      * @param oePayPalPayPalOrder $oOrder
      */
-    public function __construct( $oRequest, $oOrder )
+    public function __construct($oRequest, $oOrder)
     {
         $this->_oRequest = $oRequest;
         $this->_oOrder = $oOrder;
@@ -88,7 +88,7 @@ class oePayPalOrderActionData
      */
     public function getComment()
     {
-        return $this->getRequest()->getRequestParameter( 'action_comment' );
+        return $this->getRequest()->getRequestParameter('action_comment');
     }
 
     /**
@@ -98,7 +98,7 @@ class oePayPalOrderActionData
      */
     public function getOrderStatus()
     {
-        return $this->getRequest()->getRequestParameter( 'order_status' );
+        return $this->getRequest()->getRequestParameter('order_status');
     }
 
 }

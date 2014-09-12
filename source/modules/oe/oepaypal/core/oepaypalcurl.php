@@ -66,7 +66,7 @@ class oePayPalCurl
      * Parameter to be added to call url
      *
      * @var array | null
-    */
+     */
     protected $_aParameters = null;
 
 
@@ -93,7 +93,7 @@ class oePayPalCurl
      * Sets host.
      * @param string $sHost
      */
-    public function setHost( $sHost )
+    public function setHost($sHost)
     {
         $this->_sHost = $sHost;
     }
@@ -112,7 +112,7 @@ class oePayPalCurl
      * Set header.
      * @param array $aHeader
      */
-    public function setHeader( $aHeader )
+    public function setHeader($aHeader)
     {
         $this->_aHeader = $aHeader;
     }
@@ -124,18 +124,18 @@ class oePayPalCurl
      */
     public function getHeader()
     {
-        if ( is_null( $this->_aHeader ) ) {
+        if (is_null($this->_aHeader)) {
             $sHost = $this->getHost();
 
             $aHeader = array();
             $aHeader[] = 'POST /cgi-bin/webscr HTTP/1.1';
             $aHeader[] = 'Content-Type: application/x-www-form-urlencoded';
-            if ( isset( $sHost ) ) {
-                $aHeader[] = 'Host: '. $sHost;
+            if (isset($sHost)) {
+                $aHeader[] = 'Host: ' . $sHost;
             }
             $aHeader[] = 'Connection: close';
 
-            $this->setHeader( $aHeader );
+            $this->setHeader($aHeader);
         }
 
         return $this->_aHeader;
@@ -146,7 +146,7 @@ class oePayPalCurl
      *
      * @param string $sCharset charset
      */
-    public function setConnectionCharset( $sCharset )
+    public function setConnectionCharset($sCharset)
     {
         $this->_sConnectionCharset = $sCharset;
     }
@@ -164,7 +164,7 @@ class oePayPalCurl
     /**
      * Set data charset
      */
-    public function setDataCharset( $sDataCharset )
+    public function setDataCharset($sDataCharset)
     {
         $this->_sDataCharset = $sDataCharset;
     }
@@ -195,7 +195,7 @@ class oePayPalCurl
      * @param string $sName Curl parameter name.
      * @param mixed $mValue Curl parameter value
      */
-    public function setEnvironmentParameter( $sName, $mValue )
+    public function setEnvironmentParameter($sName, $mValue)
     {
         $this->_aEnvironmentParameters[$sName] = $mValue;
     }
@@ -205,7 +205,7 @@ class oePayPalCurl
      *
      * @param array $aParameters parameters
      */
-    public function setParameters( $aParameters )
+    public function setParameters($aParameters)
     {
         $this->_aParameters = $aParameters;
     }
@@ -223,7 +223,7 @@ class oePayPalCurl
     /**
      * Set query like "param1=value1&param2=values2.."
      */
-    public function setQuery( $sQuery )
+    public function setQuery($sQuery)
     {
         $this->_sQuery = $sQuery;
     }
@@ -235,12 +235,12 @@ class oePayPalCurl
      */
     public function getQuery()
     {
-        if ( is_null( $this->_sQuery ) ) {
+        if (is_null($this->_sQuery)) {
             $aParams = $this->getParameters();
             $aParams = array_map(array($this, '_htmlDecode'), $aParams);
             $aParams = array_map(array($this, '_encode'), $aParams);
 
-            $this->setQuery( http_build_query( $aParams, "", "&" ) );
+            $this->setQuery(http_build_query($aParams, "", "&"));
         }
 
         return $this->_sQuery;
@@ -251,13 +251,13 @@ class oePayPalCurl
      *
      * @throws oePayPalException if url is not valid
      */
-    public function setUrlToCall( $sUrlToCall )
+    public function setUrlToCall($sUrlToCall)
     {
-        if ( false === filter_var( $sUrlToCall, FILTER_VALIDATE_URL ) ) {
+        if (false === filter_var($sUrlToCall, FILTER_VALIDATE_URL)) {
             /**
              * @var oePayPalException $oException
              */
-            $oException = oxNew( 'oePayPalException',  'URL to call is not valid.' ) ;
+            $oException = oxNew('oePayPalException', 'URL to call is not valid.');
             throw $oException;
         }
         $this->_sUrlToCall = $sUrlToCall;
@@ -278,7 +278,7 @@ class oePayPalCurl
      *
      * @param resource $rCurl curl.
      */
-    protected function _setResource( $rCurl )
+    protected function _setResource($rCurl)
     {
         $this->_rCurl = $rCurl;
     }
@@ -290,8 +290,8 @@ class oePayPalCurl
      */
     protected function _getResource()
     {
-        if ( is_null( $this->_rCurl ) ) {
-            $this->_setResource( curl_init() );
+        if (is_null($this->_rCurl)) {
+            $this->_setResource(curl_init());
         }
 
         return $this->_rCurl;
@@ -306,7 +306,7 @@ class oePayPalCurl
     {
         $this->_setOptions();
 
-        $aResponse = $this->_parseResponse( $this->_execute() );
+        $aResponse = $this->_parseResponse($this->_execute());
 
         $this->_close();
 
@@ -318,13 +318,13 @@ class oePayPalCurl
      */
     protected function _setOptions()
     {
-        foreach( $this->getEnvironmentParameters() as $sName => $mValue  ) {
-            $this->_setOption( constant( $sName ), $mValue );
+        foreach ($this->getEnvironmentParameters() as $sName => $mValue) {
+            $this->_setOption(constant($sName), $mValue);
         }
 
-        $this->_setOption( CURLOPT_HTTPHEADER, $this->getHeader() );
-        $this->_setOption( CURLOPT_URL, $this->getUrlToCall() );
-        $this->_setOption( CURLOPT_POSTFIELDS, $this->getQuery() );
+        $this->_setOption(CURLOPT_HTTPHEADER, $this->getHeader());
+        $this->_setOption(CURLOPT_URL, $this->getUrlToCall());
+        $this->_setOption(CURLOPT_POSTFIELDS, $this->getQuery());
     }
 
     /**
@@ -333,9 +333,9 @@ class oePayPalCurl
      * @param string $sName curl field name to set value to.
      * @param string $sValue curl field value to set.
      */
-    protected function _setOption( $sName, $sValue )
+    protected function _setOption($sName, $sValue)
     {
-        curl_setopt( $this->_getResource(), $sName, $sValue );
+        curl_setopt($this->_getResource(), $sName, $sValue);
     }
 
     /**
@@ -347,14 +347,14 @@ class oePayPalCurl
      */
     protected function _execute()
     {
-        $sResponse = curl_exec( $this->_getResource() );
+        $sResponse = curl_exec($this->_getResource());
 
         $iCurlErrorNumber = $this->_getErrorNumber();
-        if ( $iCurlErrorNumber ) {
+        if ($iCurlErrorNumber) {
             /**
              * @var oePayPalException $oException
              */
-            $oException = oxNew( "oePayPalException",  'Curl error: '. $iCurlErrorNumber ) ;
+            $oException = oxNew("oePayPalException", 'Curl error: ' . $iCurlErrorNumber);
             throw $oException;
         }
 
@@ -366,7 +366,7 @@ class oePayPalCurl
      */
     protected function _close()
     {
-        curl_close( $this->_getResource() );
+        curl_close($this->_getResource());
     }
 
     /**
@@ -376,14 +376,14 @@ class oePayPalCurl
      *
      * @return array
      */
-    protected function _parseResponse( $sResponse )
+    protected function _parseResponse($sResponse)
     {
         // processing results
         $aResponse = array();
-        parse_str( $sResponse, $aResponse );
+        parse_str($sResponse, $aResponse);
 
         // stripping slashes
-        $aResponse = array_map( array( $this, '_decode' ), $aResponse );
+        $aResponse = array_map(array($this, '_decode'), $aResponse);
 
         return $aResponse;
     }
@@ -395,7 +395,7 @@ class oePayPalCurl
      */
     protected function _getErrorNumber()
     {
-        return curl_errno( $this->_getResource() );
+        return curl_errno($this->_getResource());
     }
 
     /**
@@ -405,9 +405,9 @@ class oePayPalCurl
      *
      * @return string
      */
-    protected function _htmlDecode( $sString )
+    protected function _htmlDecode($sString)
     {
-        $sString = html_entity_decode( $sString, ENT_QUOTES, $this->getConnectionCharset() );
+        $sString = html_entity_decode($sString, ENT_QUOTES, $this->getConnectionCharset());
 
         return $sString;
     }
@@ -419,14 +419,14 @@ class oePayPalCurl
      *
      * @return string
      */
-    protected function _decode( $sString )
+    protected function _decode($sString)
     {
         $sCharset = $this->getDataCharset();
-        if ( $sCharset !== $this->getConnectionCharset() ) {
-            $sString = iconv( $this->getConnectionCharset(), $sCharset, $sString );
+        if ($sCharset !== $this->getConnectionCharset()) {
+            $sString = iconv($this->getConnectionCharset(), $sCharset, $sString);
         }
-        if ( get_magic_quotes_gpc() ) {
-            $sString = stripslashes( $sString );
+        if (get_magic_quotes_gpc()) {
+            $sString = stripslashes($sString);
         }
         return $sString;
     }
@@ -438,11 +438,11 @@ class oePayPalCurl
      *
      * @return string
      */
-    protected function _encode( $sString )
+    protected function _encode($sString)
     {
         $sCharset = $this->getDataCharset();
-        if ( $sCharset !== $this->getConnectionCharset() ) {
-            $sString = iconv( $sCharset, $this->getConnectionCharset(), $sString );
+        if ($sCharset !== $this->getConnectionCharset()) {
+            $sString = iconv($sCharset, $this->getConnectionCharset(), $sString);
 
         }
 

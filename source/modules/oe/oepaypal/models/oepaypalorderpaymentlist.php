@@ -34,7 +34,7 @@ class oePayPalOrderPaymentList extends oePayPalList
 
     protected $_sOrderId = null;
 
-    public function setOrderId( $sOrderId )
+    public function setOrderId($sOrderId)
     {
         $this->_sOrderId = $sOrderId;
     }
@@ -44,9 +44,10 @@ class oePayPalOrderPaymentList extends oePayPalList
         return $this->_sOrderId;
     }
 
-    protected function _getDbGateway() {
-        if ( is_null( $this->_oDbGateway ) ) {
-            $this->_setDbGateway( oxNew( 'oePayPalOrderPaymentDbGateway' ) );
+    protected function _getDbGateway()
+    {
+        if (is_null($this->_oDbGateway)) {
+            $this->_setDbGateway(oxNew('oePayPalOrderPaymentDbGateway'));
         }
         return $this->_oDbGateway;
     }
@@ -56,7 +57,7 @@ class oePayPalOrderPaymentList extends oePayPalList
      *
      * @var object
      */
-    protected function _setDbGateway( $oDbGateway )
+    protected function _setDbGateway($oDbGateway)
     {
         $this->_oDbGateway = $oDbGateway;
     }
@@ -67,22 +68,22 @@ class oePayPalOrderPaymentList extends oePayPalList
      * @param string $sOrderId order id
      *
      */
-    public function load( $sOrderId )
+    public function load($sOrderId)
     {
-        $this->setOrderId( $sOrderId );
+        $this->setOrderId($sOrderId);
 
         $aPayments = array();
-        $aPaymentsData = $this->_getDbGateway()->getList( $this->getOrderId() ) ;
-        if( is_array( $aPaymentsData ) && count( $aPaymentsData ) ){
+        $aPaymentsData = $this->_getDbGateway()->getList($this->getOrderId());
+        if (is_array($aPaymentsData) && count($aPaymentsData)) {
             $aPayments = array();
-            foreach ($aPaymentsData as $aData ){
-                $oPayment = oxNew( 'oePayPalOrderPayment' );
-                $oPayment->setData( $aData );
+            foreach ($aPaymentsData as $aData) {
+                $oPayment = oxNew('oePayPalOrderPayment');
+                $oPayment->setData($aData);
                 $aPayments[] = $oPayment;
             }
         }
 
-        $this->setArray( $aPayments );
+        $this->setArray($aPayments);
     }
 
     /**
@@ -92,13 +93,13 @@ class oePayPalOrderPaymentList extends oePayPalList
      *
      * @return bool
      */
-    protected function _hasPaymentWithStatus( $sStatus )
+    protected function _hasPaymentWithStatus($sStatus)
     {
         $blHasStatus = false;
         $aPayments = $this->getArray();
 
-        foreach ( $aPayments as $oPayment ){
-            if( $sStatus == $oPayment->getStatus() ){
+        foreach ($aPayments as $oPayment) {
+            if ($sStatus == $oPayment->getStatus()) {
                 $blHasStatus = true;
                 break;
             }
@@ -114,7 +115,7 @@ class oePayPalOrderPaymentList extends oePayPalList
      */
     public function hasPendingPayment()
     {
-        return $this->_hasPaymentWithStatus( 'Pending' );
+        return $this->_hasPaymentWithStatus('Pending');
     }
 
     /**
@@ -124,7 +125,7 @@ class oePayPalOrderPaymentList extends oePayPalList
      */
     public function hasFailedPayment()
     {
-        return $this->_hasPaymentWithStatus( 'Failed' );
+        return $this->_hasPaymentWithStatus('Failed');
     }
 
     /**
@@ -134,15 +135,15 @@ class oePayPalOrderPaymentList extends oePayPalList
      *
      * @return oePayPalOrderPayment
      */
-    public function addPayment( oePayPalOrderPayment $oPayment )
+    public function addPayment(oePayPalOrderPayment $oPayment)
     {
         //order payment info
-        if ( $this->getOrderId() ) {
-            $oPayment->setOrderId( $this->getOrderId() );
+        if ($this->getOrderId()) {
+            $oPayment->setOrderId($this->getOrderId());
             $oPayment->save();
         }
 
-        $this->load( $this->getOrderId() );
+        $this->load($this->getOrderId());
 
         return $oPayment;
     }

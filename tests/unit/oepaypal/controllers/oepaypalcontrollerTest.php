@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 
 /**
@@ -34,7 +34,7 @@ class Unit_oePayPal_Controllers_oePayPalControllerTest extends OxidTestCase
     public function testGetRequest()
     {
         $oController = new oePayPalController();
-        $this->assertTrue( $oController->getRequest() instanceof oePayPalRequest );
+        $this->assertTrue($oController->getRequest() instanceof oePayPalRequest);
     }
 
     /**
@@ -43,7 +43,7 @@ class Unit_oePayPal_Controllers_oePayPalControllerTest extends OxidTestCase
     public function testGetLogger()
     {
         $oController = new oePayPalController();
-        $this->assertTrue( $oController->getLogger() instanceof oePayPalLogger );
+        $this->assertTrue($oController->getLogger() instanceof oePayPalLogger);
     }
 
     /**
@@ -52,7 +52,7 @@ class Unit_oePayPal_Controllers_oePayPalControllerTest extends OxidTestCase
     public function testGetPayPalConfig()
     {
         $oController = new oePayPalController();
-        $this->assertTrue( $oController->getPayPalConfig() instanceof oePayPalConfig );
+        $this->assertTrue($oController->getPayPalConfig() instanceof oePayPalConfig);
     }
 
     /**
@@ -60,15 +60,15 @@ class Unit_oePayPal_Controllers_oePayPalControllerTest extends OxidTestCase
      */
     public function testLog_LoggingEnabled()
     {
-        $this->getConfig()->setConfigParam( 'blPayPalLoggerEnabled', true );
+        $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', true);
 
-        $oPayPalLogger = $this->getMock( 'oePayPalLogger', array( 'log' ) );
-        $oPayPalLogger->expects( $this->once() )->method( 'log' );
+        $oPayPalLogger = $this->getMock('oePayPalLogger', array('log'));
+        $oPayPalLogger->expects($this->once())->method('log');
 
-        $oController = $this->getMock( 'oePayPalController', array( 'getLogger' ) );
-        $oController->expects( $this->once() )->method( 'getLogger' )->will( $this->returnValue( $oPayPalLogger ) );
+        $oController = $this->getMock('oePayPalController', array('getLogger'));
+        $oController->expects($this->once())->method('getLogger')->will($this->returnValue($oPayPalLogger));
 
-        $oController->log( 'logMessage' );
+        $oController->log('logMessage');
 
     }
 
@@ -77,14 +77,14 @@ class Unit_oePayPal_Controllers_oePayPalControllerTest extends OxidTestCase
      */
     public function testLog_LoggingDisabled()
     {
-        $this->getConfig()->setConfigParam( 'blPayPalLoggerEnabled', false );
+        $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', false);
 
-        $oPayPalLogger = $this->getMock( 'oePayPalLogger', array( 'log' ) );
-        $oPayPalLogger->expects( $this->never() )->method( 'log' );
+        $oPayPalLogger = $this->getMock('oePayPalLogger', array('log'));
+        $oPayPalLogger->expects($this->never())->method('log');
 
-        $oController = $this->getMock( 'oePayPalController', array( 'getLogger' ) );
-        $oController->expects( $this->never() )->method( 'getLogger' )->will( $this->returnValue( $oPayPalLogger ) );
+        $oController = $this->getMock('oePayPalController', array('getLogger'));
+        $oController->expects($this->never())->method('getLogger')->will($this->returnValue($oPayPalLogger));
 
-        $oController->log( 'logMessage' );
+        $oController->log('logMessage');
     }
 }

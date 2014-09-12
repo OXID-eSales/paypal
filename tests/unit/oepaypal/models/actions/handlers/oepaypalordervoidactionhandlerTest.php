@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderVoidAction class.
@@ -38,21 +38,21 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionHandlerTest e
         $dAmount = 59.67;
         $sComment = "Comment";
 
-        $oData = $this->_createStub( 'Data', array(
+        $oData = $this->_createStub('Data', array(
             'getAuthorizationId' => $sAuthId,
             'getAmount' => $dAmount,
             'getComment' => $sComment,
             'getCurrency' => $sCurrency,
-        ) );
-        $oActionHandler = $this->_getActionHandler( $oData );
+        ));
+        $oActionHandler = $this->_getActionHandler($oData);
 
-        $oBuilder = $this->getMock( 'oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType', 'getRequest', 'setComment') );
-        $oBuilder->expects( $this->once() )->method( 'setAuthorizationId' )->with( $this->equalTo( $sAuthId ) );
-        $oBuilder->expects( $this->once() )->method( 'setAmount' )->with( $this->equalTo( $dAmount ), $this->equalTo( $sCurrency ) );
-        $oBuilder->expects( $this->once() )->method( 'setComment' )->with( $this->equalTo( $sComment ) );
-        $oBuilder->expects( $this->once() )->method( 'getRequest' )->will( $this->returnValue( new oePayPalPayPalRequest() ) );
+        $oBuilder = $this->getMock('oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType', 'getRequest', 'setComment'));
+        $oBuilder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($sAuthId));
+        $oBuilder->expects($this->once())->method('setAmount')->with($this->equalTo($dAmount), $this->equalTo($sCurrency));
+        $oBuilder->expects($this->once())->method('setComment')->with($this->equalTo($sComment));
+        $oBuilder->expects($this->once())->method('getRequest')->will($this->returnValue(new oePayPalPayPalRequest()));
 
-        $oActionHandler->setPayPalRequestBuilder( $oBuilder );
+        $oActionHandler->setPayPalRequestBuilder($oBuilder);
 
         $oActionHandler->getPayPalRequest();
     }
@@ -62,18 +62,18 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionHandlerTest e
      */
     public function testGetPayPalResponse_SetsCorrectRequestToService()
     {
-        $oPayPalRequest = $this->getMock( 'oePayPalPayPalRequest' );
+        $oPayPalRequest = $this->getMock('oePayPalPayPalRequest');
 
         $oActionHandler = $this->_getActionHandler();
-        $oActionHandler->setPayPalRequest( $oPayPalRequest );
+        $oActionHandler->setPayPalRequest($oPayPalRequest);
 
-        $oCheckoutService = $this->getMock( 'oePayPalService', array( 'doVoid' ) );
-        $oCheckoutService->expects( $this->once() )
-            ->method( 'doVoid' )
-            ->with( $this->equalTo( $oPayPalRequest ) )
-            ->will( $this->returnValue( null ) );
+        $oCheckoutService = $this->getMock('oePayPalService', array('doVoid'));
+        $oCheckoutService->expects($this->once())
+            ->method('doVoid')
+            ->with($this->equalTo($oPayPalRequest))
+            ->will($this->returnValue(null));
 
-        $oActionHandler->setPayPalService( $oCheckoutService );
+        $oActionHandler->setPayPalService($oCheckoutService);
 
         $oActionHandler->getPayPalResponse();
     }
@@ -83,7 +83,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionHandlerTest e
      */
     protected function _getService()
     {
-        return $this->getMock( 'oePayPalService');
+        return $this->getMock('oePayPalService');
     }
 
     /**
@@ -92,10 +92,10 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionHandlerTest e
      * @param $oData
      * @return oePayPalOrderCaptureAction
      */
-    protected function _getActionHandler( $oData = null)
+    protected function _getActionHandler($oData = null)
     {
-        $oAction = new oePayPalOrderVoidActionHandler( $oData );
-        $oAction->setPayPalService( $this->_getService() );
+        $oAction = new oePayPalOrderVoidActionHandler($oData);
+        $oAction->setPayPalService($this->_getService());
 
         return $oAction;
     }

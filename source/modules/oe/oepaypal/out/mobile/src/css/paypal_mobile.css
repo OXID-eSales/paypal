@@ -42,6 +42,7 @@
 .payment .paypalPaymentDesc {
     margin: 12px 0 5px;
 }
+
 .paypalHelpIcon {
     display: inline-block;
     width: 18px;
@@ -73,6 +74,7 @@
     white-space: normal;
     color: #333;
 }
+
 .paypalCheckoutBtn {
     height: 35px;
 }

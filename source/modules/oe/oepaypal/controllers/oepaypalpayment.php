@@ -32,28 +32,29 @@ class oePayPalPayment extends oePayPalPayment_parent
      */
     public function validatePayment()
     {
-        $sPaymentId = oxRegistry::getConfig()->getRequestParameter( 'paymentid' );
+        $sPaymentId = oxRegistry::getConfig()->getRequestParameter('paymentid');
         $oSession = $this->getSession();
-        $oBasket  = $oSession->getBasket();
-        if ( $sPaymentId === 'oxidpaypal' && !$this->isConfirmedByPayPal($oBasket)  ) {
+        $oBasket = $oSession->getBasket();
+        if ($sPaymentId === 'oxidpaypal' && !$this->isConfirmedByPayPal($oBasket)) {
 
-            $oSession->setVariable( 'paymentid', 'oxidpaypal' );
+            $oSession->setVariable('paymentid', 'oxidpaypal');
 
-            if (oxRegistry::getConfig()->getRequestParameter( 'bltsprotection' ) ) {
-                $sTsProductId = oxRegistry::getConfig()->getRequestParameter( 'stsprotection' );
+            if (oxRegistry::getConfig()->getRequestParameter('bltsprotection')) {
+                $sTsProductId = oxRegistry::getConfig()->getRequestParameter('stsprotection');
                 $oBasket->setTsProductId($sTsProductId);
-                $oSession->setVariable( 'stsprotection', $sTsProductId );
+                $oSession->setVariable('stsprotection', $sTsProductId);
             } else {
-                $oSession->deleteVariable( 'stsprotection' );
+                $oSession->deleteVariable('stsprotection');
                 $oBasket->setTsProductId(null);
             }
 
             return 'oePayPalStandardDispatcher?fnc=setExpressCheckout'
-                . '&displayCartInPayPal='.( (int) oxRegistry::getConfig()->getRequestParameter( 'displayCartInPayPal' ) );
+            . '&displayCartInPayPal=' . ((int)oxRegistry::getConfig()->getRequestParameter('displayCartInPayPal'));
         }
 
         return parent::validatePayment();
     }
+
     /**
      * Detects if current payment was already successfully processed by PayPal
      *
@@ -61,16 +62,16 @@ class oePayPalPayment extends oePayPalPayment_parent
      *
      * @return bool
      */
-    public function isConfirmedByPayPal( $oBasket )
+    public function isConfirmedByPayPal($oBasket)
     {
-        $dOldBasketAmount = $this->getSession()->getVariable( "oepaypal-basketAmount" );
-        if ( !$dOldBasketAmount ) {
+        $dOldBasketAmount = $this->getSession()->getVariable("oepaypal-basketAmount");
+        if (!$dOldBasketAmount) {
             return false;
         }
 
         $oPayPalCheckValidator = oxNew("oePayPalCheckValidator");
-        $oPayPalCheckValidator->setNewBasketAmount( $oBasket->getPrice()->getBruttoPrice() );
-        $oPayPalCheckValidator->setOldBasketAmount( $dOldBasketAmount );
+        $oPayPalCheckValidator->setNewBasketAmount($oBasket->getPrice()->getBruttoPrice());
+        $oPayPalCheckValidator->setOldBasketAmount($dOldBasketAmount);
         return $oPayPalCheckValidator->isPayPalCheckValid();
     }
 }

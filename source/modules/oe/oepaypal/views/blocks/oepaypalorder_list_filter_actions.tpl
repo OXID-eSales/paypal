@@ -4,7 +4,7 @@
             <select name="paypalpayment" onChange="document.search.submit();">
                 <option value="-1" style="color: #000000;">[{oxmultilang ident="OEPAYPAL_LIST_STATUS_ALL" }]</option>
                 [{foreach from=$oPayments item=oPayment}]
-                    <option value="[{ $oPayment->getId() }]" [{if $paypalpayment == $oPayment->getId() }]SELECTED[{/if}] >[{ $oPayment->oxpayments__oxdesc->value }]</option>
+            <option value="[{ $oPayment->getId() }]" [{if $paypalpayment == $oPayment->getId() }]SELECTED[{/if}] >[{ $oPayment->oxpayments__oxdesc->value }]</option>
                 [{/foreach}]
             </select>
         </div>
@@ -16,7 +16,7 @@
             <select name="paypalpaymentstatus" onChange="document.search.submit();">
                 <option value="-1" style="color: #000000;">[{oxmultilang ident="OEPAYPAL_LIST_STATUS_ALL" }]</option>
                 [{foreach from=$opaypalpaymentstatuslist item=field}]
-                    <option value="[{ $field }]" [{if $spaypalpaymentstatus == $field }]SELECTED[{/if}] >[{oxmultilang ident='OEPAYPAL_STATUS_'|cat:$field }]</option>
+            <option value="[{ $field }]" [{if $spaypalpaymentstatus == $field }]SELECTED[{/if}] >[{oxmultilang ident='OEPAYPAL_STATUS_'|cat:$field }]</option>
                 [{/foreach}]
             </select>
         </div>

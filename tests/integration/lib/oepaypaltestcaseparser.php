@@ -48,7 +48,7 @@ class oePayPalTestCaseParser
      * Sets directory to search for test cases
      * @param string $sDirectory
      */
-    public function setDirectory( $sDirectory )
+    public function setDirectory($sDirectory)
     {
         $this->_sDirectory = $sDirectory;
     }
@@ -67,7 +67,7 @@ class oePayPalTestCaseParser
      * Sets test cases to be run
      * @param array $aTestCases
      */
-    public function setTestCases( $aTestCases )
+    public function setTestCases($aTestCases)
     {
         $this->_aTestCases = $aTestCases;
     }
@@ -85,7 +85,7 @@ class oePayPalTestCaseParser
      * Sets Replacement
      * @param array $aReplacements
      */
-    public function setReplacements( $aReplacements )
+    public function setReplacements($aReplacements)
     {
         $this->_aReplacements = $aReplacements;
     }
@@ -111,12 +111,12 @@ class oePayPalTestCaseParser
         $sDirectory = $this->getDirectory();
         $aTestCases = $this->getTestCases();
 
-        $aFiles = $this->_getDirectoryTestCasesFiles( $sDirectory, $aTestCases );
-        print( count( $aFiles) . " test files found\r\n" );
-        foreach ( $aFiles as $sFilename ) {
-            $aData = $this->_getDataFromFile( $sFilename );
-            $aData = $this->_parseTestData( $aData );
-            $aTestCasesData[$sFilename] = array( $aData );
+        $aFiles = $this->_getDirectoryTestCasesFiles($sDirectory, $aTestCases);
+        print(count($aFiles) . " test files found\r\n");
+        foreach ($aFiles as $sFilename) {
+            $aData = $this->_getDataFromFile($sFilename);
+            $aData = $this->_parseTestData($aData);
+            $aTestCasesData[$sFilename] = array($aData);
         }
         return $aTestCasesData;
     }
@@ -128,14 +128,14 @@ class oePayPalTestCaseParser
      * @param $aTestCases
      * @return array
      */
-    protected function _getDirectoryTestCasesFiles( $sDir, $aTestCases )
+    protected function _getDirectoryTestCasesFiles($sDir, $aTestCases)
     {
-        $sPath =  realpath( "." ) . $this->_sTestCasesPath . $sDir . "/";
-        print( "Scanning dir {$sPath}\r\n" );
-        if ( empty( $aTestCases ) ) {
-            $aFiles = $this->_getFilesInDirectory( $sPath );
+        $sPath = realpath(".") . $this->_sTestCasesPath . $sDir . "/";
+        print("Scanning dir {$sPath}\r\n");
+        if (empty($aTestCases)) {
+            $aFiles = $this->_getFilesInDirectory($sPath);
         } else {
-            foreach ( $aTestCases as $sTestCase ) {
+            foreach ($aTestCases as $sTestCase) {
                 $aFiles[] = $sPath . $sTestCase;
             }
         }
@@ -149,14 +149,14 @@ class oePayPalTestCaseParser
      * @param string $sPath
      * @return array
      */
-    private function _getFilesInDirectory( $sPath )
+    private function _getFilesInDirectory($sPath)
     {
         $aFiles = array();
-        foreach ( new DirectoryIterator( $sPath ) as $oFile ) {
-            if( $oFile->isDir() && !$oFile->isDot() ) {
-                $aFiles = array_merge( $aFiles, $this->_getFilesInDirectory( $oFile->getPathname() ) );
+        foreach (new DirectoryIterator($sPath) as $oFile) {
+            if ($oFile->isDir() && !$oFile->isDot()) {
+                $aFiles = array_merge($aFiles, $this->_getFilesInDirectory($oFile->getPathname()));
             }
-            if ( $oFile->isFile() && preg_match( '/\.php$/', $oFile->getFilename() ) ) {
+            if ($oFile->isFile() && preg_match('/\.php$/', $oFile->getFilename())) {
                 $aFiles[] = $oFile->getPathname();
             }
         }
@@ -170,10 +170,10 @@ class oePayPalTestCaseParser
      *
      * @return array
      */
-    protected function _getDataFromFile( $sFilename )
+    protected function _getDataFromFile($sFilename)
     {
         $aData = array();
-        include( $sFilename );
+        include($sFilename);
 
         return $aData;
     }
@@ -184,10 +184,10 @@ class oePayPalTestCaseParser
      * @param array $aData
      * @return array
      */
-    protected function _parseTestData( $aData )
+    protected function _parseTestData($aData)
     {
-        foreach( $aData as &$mValue ) {
-            $mValue = $this->_parseTestValue( $mValue );
+        foreach ($aData as &$mValue) {
+            $mValue = $this->_parseTestValue($mValue);
         }
         return $aData;
     }
@@ -198,14 +198,14 @@ class oePayPalTestCaseParser
      *
      * @return array
      */
-    protected function _parseTestValue( $mValue )
+    protected function _parseTestValue($mValue)
     {
-        if ( is_array( $mValue ) ) {
-            return $this->_parseTestData( $mValue );
+        if (is_array($mValue)) {
+            return $this->_parseTestData($mValue);
         }
-        if ( is_string( $mValue ) ) {
+        if (is_string($mValue)) {
             $aReplacements = $this->getReplacements();
-            $mValue = str_replace( array_keys( $aReplacements ), $aReplacements, $mValue );
+            $mValue = str_replace(array_keys($aReplacements), $aReplacements, $mValue);
         }
         return $mValue;
     }

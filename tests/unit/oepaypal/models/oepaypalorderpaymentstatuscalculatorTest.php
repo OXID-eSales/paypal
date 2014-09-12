@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ) . '/unit/OxidTestCase.php';
-require_once realpath( "." ) . '/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOxState class.
@@ -35,8 +35,8 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     {
         oePayPalEvents::addOrderPaymentsTable();
         oePayPalEvents::addOrderTable();
-        oxDb::getDb()->execute( 'TRUNCATE TABLE `oepaypal_order`' );
-        oxDb::getDb()->execute( 'TRUNCATE TABLE `oepaypal_orderpayments`' );
+        oxDb::getDb()->execute('TRUNCATE TABLE `oepaypal_order`');
+        oxDb::getDb()->execute('TRUNCATE TABLE `oepaypal_orderpayments`');
     }
 
     /**
@@ -48,9 +48,9 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
         $oOrderPaymentNotValid = $this->getNotValidOrderPayment();
 
         return array(
-            array( null ),
-            array( $oOrderPaymentValid ),
-            array( $oOrderPaymentNotValid ),
+            array(null),
+            array($oOrderPaymentValid),
+            array($oOrderPaymentNotValid),
         );
     }
 
@@ -64,11 +64,11 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
 
         return array(
             // Order state calculation do not change if there is no virtual payment.
-            array( null, 'pending' ),
+            array(null, 'pending'),
             // Valid virtual payment do not affect order state.
-            array( $oOrderPaymentValid, 'pending' ),
+            array($oOrderPaymentValid, 'pending'),
             // Order failed if virtual payment failed.
-            array( $oOrderPaymentNotValid, 'failed' ),
+            array($oOrderPaymentNotValid, 'failed'),
         );
     }
 
@@ -82,11 +82,11 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
 
         return array(
             // Order state calculation do not change if there is no virtual payment.
-            array( null, 'completed' ),
+            array(null, 'completed'),
             // Valid virtual payment do not affect order state.
-            array( $oOrderPaymentValid, 'completed' ),
+            array($oOrderPaymentValid, 'completed'),
             // Order failed if virtual payment failed.
-            array( $oOrderPaymentNotValid, 'failed' ),
+            array($oOrderPaymentNotValid, 'failed'),
         );
     }
 
@@ -101,11 +101,11 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
 
         return array(
             // Order state calculation do not change if there is no virtual payment.
-            array( null, 'canceled' ),
+            array(null, 'canceled'),
             // Valid virtual payment do not affect order state.
-            array( $oOrderPaymentValid, 'canceled' ),
+            array($oOrderPaymentValid, 'canceled'),
             // Order failed if virtual payment failed.
-            array( $oOrderPaymentNotValid, 'failed' ),
+            array($oOrderPaymentNotValid, 'failed'),
         );
     }
 
@@ -119,11 +119,11 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
 
         return array(
             // Order state calculation do not change if there is no virtual payment.
-            array( null, 'refund_partial' ),
+            array(null, 'refund_partial'),
             // Valid virtual payment do not affect order state.
-            array( $oOrderPaymentValid, 'refund_partial' ),
+            array($oOrderPaymentValid, 'refund_partial'),
             // Order failed if virtual payment failed.
-            array( $oOrderPaymentNotValid, 'failed' ),
+            array($oOrderPaymentNotValid, 'failed'),
         );
     }
 
@@ -133,8 +133,8 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     public function testSetGetOrder()
     {
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( 'order' );
-        $this->assertEquals( 'order', $oManager->getOrder() );
+        $oManager->setOrder('order');
+        $this->assertEquals('order', $oManager->getOrder());
     }
 
     /**
@@ -144,12 +144,12 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     public function testSetGetOrderPayment()
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setTransactionId( 'asdadsd45a4sd5a4sd54a5' );
+        $oOrderPayment->setTransactionId('asdadsd45a4sd5a4sd54a5');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrderPayment( $oOrderPayment );
+        $oManager->setOrderPayment($oOrderPayment);
 
-        $this->assertEquals( $oOrderPayment, $oManager->getOrderPayment(), 'Order Payment is not same as set.' );
+        $this->assertEquals($oOrderPayment, $oManager->getOrderPayment(), 'Order Payment is not same as set.');
     }
 
     /**
@@ -157,11 +157,11 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentRefund
      */
-    public function testGetSuggestStatus_orderNotSet( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetSuggestStatus_orderNotSet($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertNull( $oManager->getSuggestStatus( $sOrderStatus ) );
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertNull($oManager->getSuggestStatus($sOrderStatus));
     }
 
     /**
@@ -169,11 +169,11 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment
      */
-    public function testGetStatus_orderNotSet_orderStatusNull( $oOrderPayment )
+    public function testGetStatus_orderNotSet_orderStatusNull($oOrderPayment)
     {
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrderPayment( $oOrderPayment );
-        $this->assertNull( $oManager->getStatus() );
+        $oManager->setOrderPayment($oOrderPayment);
+        $this->assertNull($oManager->getStatus());
     }
 
     /**
@@ -181,21 +181,21 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment
      */
-    public function testGetStatus_OrderStateFailed( $oOrderPaymentVirtual )
+    public function testGetStatus_OrderStateFailed($oOrderPaymentVirtual)
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( 'order' );
-        $oOrderPayment->setStatus( 'Pending' );
+        $oOrderPayment->setOrderId('order');
+        $oOrderPayment->setStatus('Pending');
         $oOrderPayment->save();
 
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
-        $oOrder->setPaymentStatus( 'failed' );
+        $oOrder->setOrderId('order');
+        $oOrder->setPaymentStatus('failed');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( 'failed', $oManager->getStatus() );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals('failed', $oManager->getStatus());
     }
 
     /**
@@ -203,21 +203,21 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment
      */
-    public function testGetStatus_OrderStateCanceled( $oOrderPaymentVirtual )
+    public function testGetStatus_OrderStateCanceled($oOrderPaymentVirtual)
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( 'order' );
-        $oOrderPayment->setStatus( 'Failed' );
+        $oOrderPayment->setOrderId('order');
+        $oOrderPayment->setStatus('Failed');
         $oOrderPayment->save();
 
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
-        $oOrder->setPaymentStatus( 'canceled' );
+        $oOrder->setOrderId('order');
+        $oOrder->setPaymentStatus('canceled');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( 'canceled', $oManager->getStatus() );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals('canceled', $oManager->getStatus());
     }
 
     /**
@@ -225,20 +225,20 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment
      */
-    public function testGetStatus_paymentFailed_orderFailed( $oOrderPaymentVirtual )
+    public function testGetStatus_paymentFailed_orderFailed($oOrderPaymentVirtual)
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( 'order' );
-        $oOrderPayment->setStatus( 'Failed' );
+        $oOrderPayment->setOrderId('order');
+        $oOrderPayment->setStatus('Failed');
         $oOrderPayment->save();
 
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
+        $oOrder->setOrderId('order');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( 'failed', $oManager->getStatus() );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals('failed', $oManager->getStatus());
     }
 
     /**
@@ -246,20 +246,20 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentPending
      */
-    public function testGetStatus_paymentPending( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetStatus_paymentPending($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( 'order' );
-        $oOrderPayment->setStatus( 'Pending' );
+        $oOrderPayment->setOrderId('order');
+        $oOrderPayment->setStatus('Pending');
         $oOrderPayment->save();
 
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
+        $oOrder->setOrderId('order');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getStatus() );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getStatus());
     }
 
     /**
@@ -267,30 +267,30 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentCompleted
      */
-    public function testGetStatus_paymentCompleted( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetStatus_paymentCompleted($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( 'order' );
-        $oOrderPayment->setStatus( 'Completed' );
+        $oOrderPayment->setOrderId('order');
+        $oOrderPayment->setStatus('Completed');
         $oOrderPayment->save();
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( 'order' );
-        $oOrderPayment->setStatus( 'Refunded' );
+        $oOrderPayment->setOrderId('order');
+        $oOrderPayment->setStatus('Refunded');
         $oOrderPayment->save();
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setOrderId( 'order' );
-        $oOrderPayment->setStatus( 'Voided' );
+        $oOrderPayment->setOrderId('order');
+        $oOrderPayment->setStatus('Voided');
         $oOrderPayment->save();
 
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
+        $oOrder->setOrderId('order');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getStatus() );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getStatus());
     }
 
     /**
@@ -298,17 +298,17 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentCanceled
      */
-    public function testGetSuggestStatus_onVoidNoCapture( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetSuggestStatus_onVoidNoCapture($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
-        $oOrder->setCapturedAmount( 0 );
+        $oOrder->setOrderId('order');
+        $oOrder->setCapturedAmount(0);
 
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getSuggestStatus( 'void' ) );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getSuggestStatus('void'));
     }
 
     /**
@@ -316,16 +316,16 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentCompleted
      */
-    public function testGetSuggestStatus_onVoidSomeCapture( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetSuggestStatus_onVoidSomeCapture($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
-        $oOrder->setCapturedAmount( 10 );
+        $oOrder->setOrderId('order');
+        $oOrder->setCapturedAmount(10);
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getSuggestStatus( 'void' ) );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getSuggestStatus('void'));
     }
 
     /**
@@ -333,16 +333,16 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentPending
      */
-    public function testGetSuggestStatus_onRefundPartial( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetSuggestStatus_onRefundPartial($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
-        $oOrder->setPaymentStatus( 'pending' );
+        $oOrder->setOrderId('order');
+        $oOrder->setPaymentStatus('pending');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getSuggestStatus( 'refund_partial' ) );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getSuggestStatus('refund_partial'));
     }
 
     /**
@@ -350,15 +350,15 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentCompleted
      */
-    public function testGetSuggestStatus_onRefund( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetSuggestStatus_onRefund($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
+        $oOrder->setOrderId('order');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getSuggestStatus( 'refund' ) );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getSuggestStatus('refund'));
     }
 
     /**
@@ -366,15 +366,15 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentCompleted
      */
-    public function testGetSuggestStatus_onCapture( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetSuggestStatus_onCapture($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
+        $oOrder->setOrderId('order');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getSuggestStatus( 'capture' ) );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getSuggestStatus('capture'));
     }
 
     /**
@@ -382,15 +382,15 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
      *
      * @dataProvider providerPayment_paymentCompleted
      */
-    public function testGetSuggestStatus_onCapturePartial( $oOrderPaymentVirtual, $sOrderStatus )
+    public function testGetSuggestStatus_onCapturePartial($oOrderPaymentVirtual, $sOrderStatus)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
+        $oOrder->setOrderId('order');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $oManager->setOrderPayment( $oOrderPaymentVirtual );
-        $this->assertEquals( $sOrderStatus, $oManager->getSuggestStatus( 'capture_partial' ) );
+        $oManager->setOrder($oOrder);
+        $oManager->setOrderPayment($oOrderPaymentVirtual);
+        $this->assertEquals($sOrderStatus, $oManager->getSuggestStatus('capture_partial'));
     }
 
     /**
@@ -399,12 +399,12 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     public function testGetSuggestStatus_onReauthorize()
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( 'order' );
-        $oOrder->setPaymentStatus( 'pending' );
+        $oOrder->setOrderId('order');
+        $oOrder->setPaymentStatus('pending');
 
         $oManager = new oePayPalOrderPaymentStatusCalculator();
-        $oManager->setOrder( $oOrder );
-        $this->assertEquals( 'pending', $oManager->getSuggestStatus( 'reauthorize' ) );
+        $oManager->setOrder($oOrder);
+        $this->assertEquals('pending', $oManager->getSuggestStatus('reauthorize'));
     }
 
     /**
@@ -417,8 +417,8 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
         oePayPalEvents::addOrderTable();
 
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setTransactionId( 'asdadsd45a4sd5a4sd54a5' );
-        $oOrderPayment->setOrderId( 'order' );
+        $oOrderPayment->setTransactionId('asdadsd45a4sd5a4sd54a5');
+        $oOrderPayment->setOrderId('order');
         return $oOrderPayment;
     }
 
@@ -439,7 +439,7 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     protected function getNotValidOrderPayment()
     {
         $oOrderPayment = $this->getOrderPayment();
-        $oOrderPayment->setIsValid( false );
+        $oOrderPayment->setIsValid(false);
         return $oOrderPayment;
     }
 }

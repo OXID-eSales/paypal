@@ -22,35 +22,35 @@
 $aData = array(
     'class' => 'oePayPalStandardDispatcher',
     'action' => 'setExpressCheckout',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 'testUserLogged1',
-            'oxprice'                  => 10,
-            'oxvat'                    => 10,
-            'amount'                   => 3,
+    'articles' => array(
+        0 => array(
+            'oxid' => 'testUserLogged1',
+            'oxprice' => 10,
+            'oxvat' => 10,
+            'amount' => 3,
         ),
     ),
     'groups' => array(
-        0 => array (
+        0 => array(
             'oxid' => 'UserLoggedTestGroup',
             'oxactive' => 1,
             'oxtitle' => 'checkoutTestGroup',
-            'oxobject2group' => array ('TestLoggedUser', 'oxidpaypal' ),
+            'oxobject2group' => array('TestLoggedUser', 'oxidpaypal'),
         ),
     ),
     'user' => array(
-        'oxid'        => 'TestLoggedUser',
-        'oxactive'    => 1,
-        'oxusername'  => 'testuser@email.com',
-        'oxfname'     => 'Name',
-        'oxlname'     => 'LName',
-        'oxstreet'    => 'Street',
-        'oxstreetnr'  => 'StreetNr',
-        'oxcity'      => 'City',
-        'oxzip'       => 'ZipCode',
-        'oxfon'       => 'PhoneNr',
+        'oxid' => 'TestLoggedUser',
+        'oxactive' => 1,
+        'oxusername' => 'testuser@email.com',
+        'oxfname' => 'Name',
+        'oxlname' => 'LName',
+        'oxstreet' => 'Street',
+        'oxstreetnr' => 'StreetNr',
+        'oxcity' => 'City',
+        'oxzip' => 'ZipCode',
+        'oxfon' => 'PhoneNr',
         'oxcountryid' => '8f241f11096877ac0.98748826', // United States
-        'oxstateid'   => '30', // Illinois
+        'oxstateid' => '30', // Illinois
     ),
     'config' => array(
         'blSeoMode' => false
@@ -58,8 +58,8 @@ $aData = array(
     'requestToShop' => array(
         'displayCartInPayPal' => true,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => '',
             'USER' => '',

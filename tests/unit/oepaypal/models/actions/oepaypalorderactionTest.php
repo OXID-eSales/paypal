@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 
 /**
@@ -36,10 +36,10 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderActionTest extends OxidTestCase
     {
         $oOrder = new stdClass();
         $oHandler = new stdClass();
-        $oAction = $this->getMock( 'oePayPalOrderAction', array('process'), array( $oHandler, $oOrder ) );
+        $oAction = $this->getMock('oePayPalOrderAction', array('process'), array($oHandler, $oOrder));
 
-        $this->assertSame( $oOrder, $oAction->getOrder() );
-        $this->assertSame( $oHandler, $oAction->getHandler() );
+        $this->assertSame($oOrder, $oAction->getOrder());
+        $this->assertSame($oHandler, $oAction->getHandler());
     }
 
 }

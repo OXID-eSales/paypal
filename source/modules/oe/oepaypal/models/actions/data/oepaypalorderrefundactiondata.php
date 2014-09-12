@@ -37,7 +37,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
      */
     public function getType()
     {
-        return $this->getRequest()->getRequestParameter( 'refund_type' );
+        return $this->getRequest()->getRequestParameter('refund_type');
     }
 
     /**
@@ -47,7 +47,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
      */
     public function getTransactionId()
     {
-        return $this->getRequest()->getRequestParameter( 'transaction_id' );
+        return $this->getRequest()->getRequestParameter('transaction_id');
     }
 
     /**
@@ -57,8 +57,8 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
      */
     public function getAmount()
     {
-        $dAmount = $this->getRequest()->getRequestParameter( 'refund_amount' );
-        return $dAmount? $dAmount : $this->getPaymentBeingRefunded()->getRemainingRefundAmount();
+        $dAmount = $this->getRequest()->getRequestParameter('refund_amount');
+        return $dAmount ? $dAmount : $this->getPaymentBeingRefunded()->getRemainingRefundAmount();
     }
 
     /**
@@ -78,9 +78,9 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
      */
     public function getPaymentBeingRefunded()
     {
-        if ( is_null( $this->_oPaymentBeingRefunded ) ) {
+        if (is_null($this->_oPaymentBeingRefunded)) {
             $this->_oPaymentBeingRefunded = oxNew("oePayPalOrderPayment");
-            $this->_oPaymentBeingRefunded->loadByTransactionId( $this->getTransactionId() );
+            $this->_oPaymentBeingRefunded->loadByTransactionId($this->getTransactionId());
         }
         return $this->_oPaymentBeingRefunded;
     }

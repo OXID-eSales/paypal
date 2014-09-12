@@ -32,7 +32,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShippingOptionName()
     {
-        return $this->_getValue( 'SHIPPINGOPTIONNAME' );
+        return $this->_getValue('SHIPPINGOPTIONNAME');
     }
 
     /**
@@ -42,7 +42,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getAmount()
     {
-        return ( float )$this->_getValue( 'PAYMENTREQUEST_0_AMT' );
+        return ( float )$this->_getValue('PAYMENTREQUEST_0_AMT');
     }
 
     /**
@@ -52,7 +52,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getPayerId()
     {
-        return $this->_getValue( 'PAYERID' );
+        return $this->_getValue('PAYERID');
     }
 
     /**
@@ -62,7 +62,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getEmail()
     {
-        return $this->_getValue( 'EMAIL' );
+        return $this->_getValue('EMAIL');
     }
 
     /**
@@ -72,7 +72,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getFirstName()
     {
-        return $this->_getValue( 'FIRSTNAME' );
+        return $this->_getValue('FIRSTNAME');
     }
 
     /**
@@ -82,7 +82,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getLastName()
     {
-        return $this->_getValue( 'LASTNAME' );
+        return $this->_getValue('LASTNAME');
     }
 
     /**
@@ -92,7 +92,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToStreet()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTOSTREET' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOSTREET');
     }
 
     /**
@@ -102,7 +102,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToCity()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTOCITY' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOCITY');
     }
 
     /**
@@ -112,7 +112,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToName()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTONAME' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTONAME');
     }
 
     /**
@@ -122,7 +122,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToCountryCode()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE');
     }
 
     /**
@@ -132,7 +132,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToState()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTOSTATE' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOSTATE');
     }
 
     /**
@@ -142,7 +142,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToZip()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTOZIP' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOZIP');
     }
 
     /**
@@ -152,7 +152,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToPhoneNumber()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTOPHONENUM' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOPHONENUM');
     }
 
     /**
@@ -162,7 +162,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getShipToStreet2()
     {
-        return $this->_getValue( 'PAYMENTREQUEST_0_SHIPTOSTREET2' );
+        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOSTREET2');
     }
 
     /**
@@ -172,7 +172,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getSalutation()
     {
-        return $this->_getValue( 'SALUTATION' );
+        return $this->_getValue('SALUTATION');
     }
 
     /**
@@ -182,7 +182,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getBusiness()
     {
-        return $this->_getValue( 'BUSINESS' );
+        return $this->_getValue('BUSINESS');
     }
 
 }

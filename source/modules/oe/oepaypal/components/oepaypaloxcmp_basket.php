@@ -41,15 +41,15 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
     {
         $oValidator = $this->_getValidator();
         $oCurrentArticle = $this->_getCurrentArticle();
-        $oValidator->setItemToValidate( $oCurrentArticle );
-        $oValidator->setBasket( $this->getSession()->getBasket() );
-        if( $oValidator->isArticleValid() ) {
+        $oValidator->setItemToValidate($oCurrentArticle);
+        $oValidator->setBasket($this->getSession()->getBasket());
+        if ($oValidator->isArticleValid()) {
             //Make express checkout
             $sRes = $this->actionAddToBasketAndGoToCheckout();
         } else {
             $sRes = $this->_getRedirectUrl();
             //if amount is more than 0, do not redirect, show ESC popup instead
-            if ( $oCurrentArticle->getArticleAmount() > 0 ) {
+            if ($oCurrentArticle->getArticleAmount() > 0) {
                 $this->_blShopPopUp = true;
                 $sRes = null;
             }
@@ -96,7 +96,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      */
     protected function _getExpressCheckoutUrl()
     {
-        return 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=' . ( int )$this->_getRequest()->getPostParameter( 'displayCartInPayPal' ) . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
+        return 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=' . ( int )$this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
     }
 
     /**
@@ -107,9 +107,9 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
     public function getCurrentArticleInfo()
     {
         $aProducts = $this->_getItems();
-        $sCurrentArticleId = $this->getConfig()->getRequestParameter( 'aid' );
+        $sCurrentArticleId = $this->getConfig()->getRequestParameter('aid');
         $aParams = null;
-        if ( !is_null( $aProducts[$sCurrentArticleId] ) ) {
+        if (!is_null($aProducts[$sCurrentArticleId])) {
             $aParams = $aProducts[$sCurrentArticleId];
         }
 
@@ -121,16 +121,16 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      *
      * @return oePayPalArticleToExpressCheckoutCurrentItem
      */
-    protected  function _getCurrentArticle()
+    protected function _getCurrentArticle()
     {
-        $oCurrentItem = oxNew( 'oePayPalArticleToExpressCheckoutCurrentItem' );
-        $sCurrentArticleId = $this->_getRequest()->getPostParameter( 'aid' );
+        $oCurrentItem = oxNew('oePayPalArticleToExpressCheckoutCurrentItem');
+        $sCurrentArticleId = $this->_getRequest()->getPostParameter('aid');
         $aProducts = $this->_getItems();
         $aProductInfo = $aProducts[$sCurrentArticleId];
-        $oCurrentItem->setArticleId( $sCurrentArticleId );
-        $oCurrentItem->setSelectList( $aProductInfo['sel'] );
-        $oCurrentItem->setPersistParam( $aProductInfo['persparam'] );
-        $oCurrentItem->setArticleAmount( $aProductInfo['am'] );
+        $oCurrentItem->setArticleId($sCurrentArticleId);
+        $oCurrentItem->setSelectList($aProductInfo['sel']);
+        $oCurrentItem->setPersistParam($aProductInfo['persparam']);
+        $oCurrentItem->setArticleAmount($aProductInfo['am']);
 
         return $oCurrentItem;
     }
@@ -142,7 +142,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      */
     protected function _getRequest()
     {
-        return oxNew( 'oePayPalRequest' );
+        return oxNew('oePayPalRequest');
     }
 
     /**
@@ -152,7 +152,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      */
     protected function _getValidator()
     {
-        $oValidator = oxNew( 'oePayPalArticleToExpressCheckoutValidator' );
+        $oValidator = oxNew('oePayPalArticleToExpressCheckoutValidator');
 
         return $oValidator;
     }
@@ -164,10 +164,10 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      */
     public function getPayPalCancelURL()
     {
-        $sUrl = $this->_formatUrl( $this->_getRedirectUrl() );
-        $sReplacedURL = str_replace( 'showECSPopup=1', 'showECSPopup=0', $sUrl );
+        $sUrl = $this->_formatUrl($this->_getRedirectUrl());
+        $sReplacedURL = str_replace('showECSPopup=1', 'showECSPopup=0', $sUrl);
 
-        return urlencode( $sReplacedURL );
+        return urlencode($sReplacedURL);
     }
 
     /**
@@ -176,16 +176,16 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      * @param string $sUnformedUrl
      * @return string
      */
-    protected function _formatUrl( $sUnformedUrl )
+    protected function _formatUrl($sUnformedUrl)
     {
-        $myConfig  = $this->getConfig();
-        $aParams = explode( '?', $sUnformedUrl );
-        $sPageParams = isset( $aParams[1] )?$aParams[1]:null;
-        $aParams    = explode( '/', $aParams[0] );
+        $myConfig = $this->getConfig();
+        $aParams = explode('?', $sUnformedUrl);
+        $sPageParams = isset($aParams[1]) ? $aParams[1] : null;
+        $aParams = explode('/', $aParams[0]);
         $sClassName = $aParams[0];
 
-        $sHeader  = ( $sClassName )?"cl=$sClassName&":'';  // adding view name
-        $sHeader .= ( $sPageParams )?"$sPageParams&":'';   // adding page params
+        $sHeader = ($sClassName) ? "cl=$sClassName&" : '';  // adding view name
+        $sHeader .= ($sPageParams) ? "$sPageParams&" : '';   // adding page params
         $sHeader .= $this->getSession()->sid();            // adding session Id
 
         $sUrl = $myConfig->getCurrentShopUrl($this->isAdmin());
@@ -194,7 +194,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
 
         $sUrl = oxRegistry::get("oxUtilsUrl")->processUrl($sUrl);
 
-        if ( oxRegistry::getUtils()->seoIsActive() && $sSeoUrl = oxRegistry::get( "oxSeoEncoder" )->getStaticUrl( $sUrl ) ) {
+        if (oxRegistry::getUtils()->seoIsActive() && $sSeoUrl = oxRegistry::get("oxSeoEncoder")->getStaticUrl($sUrl)) {
             $sUrl = $sSeoUrl;
         }
 

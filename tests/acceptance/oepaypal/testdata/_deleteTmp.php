@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -18,9 +19,10 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
-
-class _config {
-    function __construct(){
+class _config
+{
+    function __construct()
+    {
         if (file_exists('_version_define.php')) {
             include "_version_define.php";
         }
@@ -28,22 +30,25 @@ class _config {
         include "core/oxconfk.php";
     }
 }
+
 $_cfg = new _config();
 echo "clearing tmp files...";
 
 # recursively remove a directory
-function rrmdir($dir) {
-    foreach(glob($dir . '/*') as $file) {
-        if(is_dir($file))
+function rrmdir($dir)
+{
+    foreach (glob($dir . '/*') as $file) {
+        if (is_dir($file))
             rrmdir($file);
         else
             unlink($file);
     }
     rmdir($dir);
 }
+
 if ($_cfg->sCompileDir) {
-    foreach(glob($_cfg->sCompileDir . '/*') as $file) {
-        if(is_dir($file))
+    foreach (glob($_cfg->sCompileDir . '/*') as $file) {
+        if (is_dir($file))
             rrmdir($file);
         else
             unlink($file);

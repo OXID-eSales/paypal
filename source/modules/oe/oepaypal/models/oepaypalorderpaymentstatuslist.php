@@ -30,11 +30,11 @@ class oePayPalOrderPaymentStatusList extends oePayPalList
      * @return array
      */
     protected $_aArray = array(
-            'completed',
-            'pending',
-            'canceled',
-            'failed'
-        );
+        'completed',
+        'pending',
+        'canceled',
+        'failed'
+    );
 
     /**
      * Available statuses depending on action
@@ -42,11 +42,11 @@ class oePayPalOrderPaymentStatusList extends oePayPalList
      * @var array
      */
     protected $_aAvailableStatuses = array(
-        'capture' => array( 'completed' ),
-        'capture_partial' => array( 'completed', 'pending' ),
-        'refund' => array( 'completed', 'pending', 'canceled' ),
-        'refund_partial' => array( 'completed', 'pending', 'canceled' ),
-        'void' => array( 'completed', 'pending', 'canceled' ),
+        'capture' => array('completed'),
+        'capture_partial' => array('completed', 'pending'),
+        'refund' => array('completed', 'pending', 'canceled'),
+        'refund_partial' => array('completed', 'pending', 'canceled'),
+        'void' => array('completed', 'pending', 'canceled'),
     );
 
     /**
@@ -56,10 +56,10 @@ class oePayPalOrderPaymentStatusList extends oePayPalList
      *
      * @return array
      */
-    public function getAvailableStatuses( $sAction )
+    public function getAvailableStatuses($sAction)
     {
         $aList = $this->_aAvailableStatuses[$sAction];
 
-        return $aList? $aList : array();
+        return $aList ? $aList : array();
     }
 }

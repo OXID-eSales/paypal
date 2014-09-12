@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
 {
@@ -30,7 +30,7 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetWidthDefault()
     {
         $oLogo = new oePayPalShopLogo();
-        $this->assertEquals( 190, $oLogo->getWidth() );
+        $this->assertEquals(190, $oLogo->getWidth());
     }
 
     /**
@@ -39,8 +39,8 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetWidthIsSet()
     {
         $oLogo = new oePayPalShopLogo();
-        $oLogo->setWidth( 200 );
-        $this->assertEquals( 200, $oLogo->getWidth() );
+        $oLogo->setWidth(200);
+        $this->assertEquals(200, $oLogo->getWidth());
     }
 
     /**
@@ -49,7 +49,7 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetHeightDefault()
     {
         $oLogo = new oePayPalShopLogo();
-        $this->assertEquals( 160, $oLogo->getHeight() );
+        $this->assertEquals(160, $oLogo->getHeight());
     }
 
     /**
@@ -58,8 +58,8 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetHeightIsSet()
     {
         $oLogo = new oePayPalShopLogo();
-        $oLogo->setHeight( 200 );
-        $this->assertEquals( 200, $oLogo->getHeight() );
+        $oLogo->setHeight(200);
+        $this->assertEquals(200, $oLogo->getHeight());
     }
 
     /**
@@ -68,7 +68,7 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetImageNameNotSet()
     {
         $oLogo = new oePayPalShopLogo();
-        $this->assertNull( $oLogo->getImageName() );
+        $this->assertNull($oLogo->getImageName());
     }
 
     /**
@@ -77,8 +77,8 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetImageNameIsSet()
     {
         $oLogo = new oePayPalShopLogo();
-        $oLogo->setImageName( "name.png" );
-        $this->assertEquals( "name.png", $oLogo->getImageName() );
+        $oLogo->setImageName("name.png");
+        $this->assertEquals("name.png", $oLogo->getImageName());
     }
 
     /**
@@ -87,7 +87,7 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetImageDirNotSet()
     {
         $oLogo = new oePayPalShopLogo();
-        $this->assertNull( $oLogo->getImageDir() );
+        $this->assertNull($oLogo->getImageDir());
     }
 
     /**
@@ -96,8 +96,8 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
     public function testGetImageDirIsSet()
     {
         $oLogo = new oePayPalShopLogo();
-        $oLogo->setImageDir( "/var/www" );
-        $this->assertEquals( "/var/www", $oLogo->getImageDir() );
+        $oLogo->setImageDir("/var/www");
+        $this->assertEquals("/var/www", $oLogo->getImageDir());
     }
 
     /**
@@ -111,21 +111,21 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
         $sDefaultImageName = "logo.png";
         $iDefaultWidth = 40;
         $iDefaultHeight = 30;
-        $oDefaultImageHandler = oxRegistry::get( "oxUtilsPic" );
+        $oDefaultImageHandler = oxRegistry::get("oxUtilsPic");
         $sExpectedResized = $sDefaultImageDirUrl . "resized_logo.png";
         $sExpectedOriginal = $sDefaultImageDirUrl . $sDefaultImageName;
 
         return array(
-            array( $sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 30, 30, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, $sExpectedOriginal ),
-            array( $sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 50, 50, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, $sExpectedResized ),
-            array( null,              $sDefaultImageDirUrl, $sDefaultImageName, 40, 40, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false ),
-            array( $sDefaultImageDir, $sDefaultImageDirUrl, null,               50, 50, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false ),
-            array( $sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, $iDefaultWidth, $iDefaultHeight, null, $sExpectedOriginal ),
+            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 30, 30, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, $sExpectedOriginal),
+            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 50, 50, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, $sExpectedResized),
+            array(null, $sDefaultImageDirUrl, $sDefaultImageName, 40, 40, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
+            array($sDefaultImageDir, $sDefaultImageDirUrl, null, 50, 50, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
+            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, $iDefaultWidth, $iDefaultHeight, null, $sExpectedOriginal),
 
-            array( $sDefaultImageDir . "donotexist", $sDefaultImageDirUrl, $sDefaultImageName, 60, 60,$iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false ),
-            array( $sDefaultImageDir, $sDefaultImageDirUrl, "donotexist.png",   60, 60, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false ),
-            array( $sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, 2000, 1000, $oDefaultImageHandler, $sExpectedOriginal ),
-            array( $sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 2000, 1000, 60, 60, $oDefaultImageHandler, $sExpectedResized ),
+            array($sDefaultImageDir . "donotexist", $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
+            array($sDefaultImageDir, $sDefaultImageDirUrl, "donotexist.png", 60, 60, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
+            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, 2000, 1000, $oDefaultImageHandler, $sExpectedOriginal),
+            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 2000, 1000, 60, 60, $oDefaultImageHandler, $sExpectedResized),
 
         );
     }
@@ -135,36 +135,36 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
      *
      * @dataProvider getShopLogoUrlProvider
      */
-    public function testGetShopLogoUrl( $sImageDir, $sImageDirUrl, $sImageName, $iImgWidth, $iImgHeight, $iWidth, $iHeight, $oImageHandler, $sResult )
+    public function testGetShopLogoUrl($sImageDir, $sImageDirUrl, $sImageName, $iImgWidth, $iImgHeight, $iWidth, $iHeight, $oImageHandler, $sResult)
     {
-        $oLogo = $this->getMock( 'oePayPalShopLogo', array( '_resizeImage', '_getImageSize' ) );
-        $oLogo->expects( $this->any() )->method( '_resizeImage' )->will( $this->returnValue( !empty( $oImageHandler ) ) );
-        $oLogo->expects( $this->any() )->method( '_getImageSize' )->will( $this->returnValue( array( 'width' => $iImgWidth, 'height' => $iImgHeight ) ) );
+        $oLogo = $this->getMock('oePayPalShopLogo', array('_resizeImage', '_getImageSize'));
+        $oLogo->expects($this->any())->method('_resizeImage')->will($this->returnValue(!empty($oImageHandler)));
+        $oLogo->expects($this->any())->method('_getImageSize')->will($this->returnValue(array('width' => $iImgWidth, 'height' => $iImgHeight)));
 
-        $oLogo->setImageDir( $sImageDir );
-        $oLogo->setImageDirUrl( $sImageDirUrl );
-        $oLogo->setImageName( $sImageName );
-        $oLogo->setWidth( $iWidth );
-        $oLogo->setHeight( $iHeight );
-        $oLogo->setImageHandler( $oImageHandler );
+        $oLogo->setImageDir($sImageDir);
+        $oLogo->setImageDirUrl($sImageDirUrl);
+        $oLogo->setImageName($sImageName);
+        $oLogo->setWidth($iWidth);
+        $oLogo->setHeight($iHeight);
+        $oLogo->setImageHandler($oImageHandler);
 
-        $this->assertEquals( $sResult, $oLogo->getShopLogoUrl() );
+        $this->assertEquals($sResult, $oLogo->getShopLogoUrl());
 
-        $this->_cleanUp( $sImageName );
+        $this->_cleanUp($sImageName);
     }
 
     /**
      * Cleans out the images that are created before image tests
      */
-    protected function _cleanUp( $sImageName )
+    protected function _cleanUp($sImageName)
     {
         $sImgDir = $this->getConfig()->getImageDir();
 
         $sLogoDir = $sImgDir . "resized_$sImageName";
-        if ( !file_exists( $sLogoDir ) ) {
+        if (!file_exists($sLogoDir)) {
             return;
         }
 
-        unlink( $sLogoDir );
+        unlink($sLogoDir);
     }
 }

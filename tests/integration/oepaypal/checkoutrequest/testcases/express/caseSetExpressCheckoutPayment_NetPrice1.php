@@ -28,18 +28,18 @@
 $aData = array(
     'class' => 'oePayPalExpressCheckoutDispatcher',
     'action' => 'setExpressCheckout',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => '_testId1',
-            'oxprice'                  => 119,
-            'oxvat'                    => 19,
-            'amount'                   => 10,
+    'articles' => array(
+        0 => array(
+            'oxid' => '_testId1',
+            'oxprice' => 119,
+            'oxvat' => 19,
+            'amount' => 10,
         ),
-        1 => array (
-            'oxid'                     => '_testId2',
-            'oxprice'                  => 11.9,
-            'oxvat'                    => 19,
-            'amount'                   => 100,
+        1 => array(
+            'oxid' => '_testId2',
+            'oxprice' => 11.9,
+            'oxvat' => 19,
+            'amount' => 100,
         ),
     ),
     'costs' => array(
@@ -49,7 +49,7 @@ $aData = array(
                 'oxname' => 'testWrap9001',
                 'oxprice' => 11.9,
                 'oxactive' => 1,
-                'oxarticles' => array( '_testId1' )
+                'oxarticles' => array('_testId1')
             ),
         ),
     ),
@@ -64,8 +64,8 @@ $aData = array(
     'requestToShop' => array(
         'displayCartInPayPal' => true,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => 'testPassword',
             'USER' => 'testUser',

@@ -36,9 +36,9 @@ class oePayPalPayPalRequestBuilder
      *
      * @param string $sAuthorizationId
      */
-    public function setAuthorizationId( $sAuthorizationId )
+    public function setAuthorizationId($sAuthorizationId)
     {
-        $this->getRequest()->setParameter( 'AUTHORIZATIONID', $sAuthorizationId );
+        $this->getRequest()->setParameter('AUTHORIZATIONID', $sAuthorizationId);
     }
 
     /**
@@ -46,9 +46,9 @@ class oePayPalPayPalRequestBuilder
      *
      * @param string $sTransactionId
      */
-    public function setTransactionId( $sTransactionId )
+    public function setTransactionId($sTransactionId)
     {
-        $this->getRequest()->setParameter( 'TRANSACTIONID', $sTransactionId );
+        $this->getRequest()->setParameter('TRANSACTIONID', $sTransactionId);
     }
 
     /**
@@ -57,13 +57,13 @@ class oePayPalPayPalRequestBuilder
      * @param double $dAmount
      * @param string $sCurrencyCode
      */
-    public function setAmount( $dAmount, $sCurrencyCode = null )
+    public function setAmount($dAmount, $sCurrencyCode = null)
     {
-        $this->getRequest()->setParameter( 'AMT', $dAmount );
-        if ( !$sCurrencyCode ) {
+        $this->getRequest()->setParameter('AMT', $dAmount);
+        if (!$sCurrencyCode) {
             $sCurrencyCode = oxRegistry::getConfig()->getActShopCurrencyObject()->name;
         }
-        $this->getRequest()->setParameter( 'CURRENCYCODE', $sCurrencyCode );
+        $this->getRequest()->setParameter('CURRENCYCODE', $sCurrencyCode);
     }
 
     /**
@@ -71,9 +71,9 @@ class oePayPalPayPalRequestBuilder
      *
      * @param string $sType
      */
-    public function setCompleteType( $sType )
+    public function setCompleteType($sType)
     {
-        $this->getRequest()->setParameter( 'COMPLETETYPE', $sType );
+        $this->getRequest()->setParameter('COMPLETETYPE', $sType);
     }
 
     /**
@@ -81,9 +81,9 @@ class oePayPalPayPalRequestBuilder
      *
      * @param string $sType
      */
-    public function setRefundType( $sType )
+    public function setRefundType($sType)
     {
-        $this->getRequest()->setParameter( 'REFUNDTYPE', $sType );
+        $this->getRequest()->setParameter('REFUNDTYPE', $sType);
     }
 
     /**
@@ -91,9 +91,9 @@ class oePayPalPayPalRequestBuilder
      *
      * @param string $sComment
      */
-    public function setComment( $sComment )
+    public function setComment($sComment)
     {
-        $this->getRequest()->setParameter( 'NOTE', $sComment );
+        $this->getRequest()->setParameter('NOTE', $sComment);
     }
 
 
@@ -104,8 +104,8 @@ class oePayPalPayPalRequestBuilder
      */
     public function getRequest()
     {
-        if ( $this->_oRequest === null ) {
-            $this->_oRequest = oxNew( 'oePayPalPayPalRequest' );
+        if ($this->_oRequest === null) {
+            $this->_oRequest = oxNew('oePayPalPayPalRequest');
         }
         return $this->_oRequest;
     }
@@ -115,7 +115,7 @@ class oePayPalPayPalRequestBuilder
      *
      * @param oePayPalPayPalRequest $oRequest
      */
-    public function setRequest( $oRequest )
+    public function setRequest($oRequest)
     {
         $this->_oRequest = $oRequest;
     }

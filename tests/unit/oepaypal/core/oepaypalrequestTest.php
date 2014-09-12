@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalRequest class.
@@ -34,12 +34,12 @@ class Unit_oePayPal_core_oePayPalRequestTest extends OxidTestCase
      */
     public function providerGetPost()
     {
-        return array (
-            array (
-                array( 'asd&' => 'a%&' ),
-                array( 'asd&' => 'a%&' ),
+        return array(
+            array(
+                array('asd&' => 'a%&'),
+                array('asd&' => 'a%&'),
             ),
-            array (
+            array(
                 null,
                 array(),
             )
@@ -54,13 +54,14 @@ class Unit_oePayPal_core_oePayPalRequestTest extends OxidTestCase
      *
      * @dataProvider providerGetPost
      */
-    public function testGetPost( $aPost, $aPostExpected )
+    public function testGetPost($aPost, $aPostExpected)
     {
         $_POST = $aPost;
-        $_GET = array( 'zzz' => 'yyyy' );
+        $_GET = array('zzz' => 'yyyy');
         $oPayPalRequest = new oePayPalRequest();
-        $this->assertEquals( $aPostExpected, $oPayPalRequest->getPost() );
+        $this->assertEquals($aPostExpected, $oPayPalRequest->getPost());
     }
+
     /**
      * Data provider for testGetGet()
      *
@@ -68,12 +69,12 @@ class Unit_oePayPal_core_oePayPalRequestTest extends OxidTestCase
      */
     public function providerGetGet()
     {
-        return array (
-            array (
-                array( 'asd&' => 'a%&' ),
-                array( 'asd&' => 'a%&' ),
+        return array(
+            array(
+                array('asd&' => 'a%&'),
+                array('asd&' => 'a%&'),
             ),
-            array (
+            array(
                 null,
                 array(),
             )
@@ -88,12 +89,12 @@ class Unit_oePayPal_core_oePayPalRequestTest extends OxidTestCase
      *
      * @dataProvider providerGetGet
      */
-    public function testGetGet( $aGet, $aGetExpected )
+    public function testGetGet($aGet, $aGetExpected)
     {
         $_GET = $aGet;
-        $_POST = array( 'zzz' => 'yyyy' );
+        $_POST = array('zzz' => 'yyyy');
         $oPayPalRequest = new oePayPalRequest();
-        $this->assertEquals( $aGetExpected, $oPayPalRequest->getGet() );
+        $this->assertEquals($aGetExpected, $oPayPalRequest->getGet());
     }
 
     /**
@@ -104,13 +105,13 @@ class Unit_oePayPal_core_oePayPalRequestTest extends OxidTestCase
     public function providerGetRequestParameter()
     {
         return array(
-            array( array( 'zzz' => 'yyy' ), array( 'zzz' => 'iii' ), 'zzz', false, 'yyy' ),
-            array( array( 'zzz' => 'yyy' ), array( 'zzz' => 'yyy' ), 'zzz', false, 'yyy' ),
-            array( array( 'zzz' => 'iii' ), array( 'zzz' => 'yyy' ), 'zzz', false, 'iii' ),
-            array( array( 'zzz' => 'yyy&' ), null, 'zzz', true, 'yyy&' ),
-            array( null, array( 'zzz' => 'yyy&' ), 'zzz', true, 'yyy&' ),
-            array( array( 'zzz' => 'yyy&' ), null, 'zzz', false, 'yyy&amp;' ),
-            array( null, array( 'zzz' => 'yyy&' ), 'zzz', false, 'yyy&amp;' ),
+            array(array('zzz' => 'yyy'), array('zzz' => 'iii'), 'zzz', false, 'yyy'),
+            array(array('zzz' => 'yyy'), array('zzz' => 'yyy'), 'zzz', false, 'yyy'),
+            array(array('zzz' => 'iii'), array('zzz' => 'yyy'), 'zzz', false, 'iii'),
+            array(array('zzz' => 'yyy&'), null, 'zzz', true, 'yyy&'),
+            array(null, array('zzz' => 'yyy&'), 'zzz', true, 'yyy&'),
+            array(array('zzz' => 'yyy&'), null, 'zzz', false, 'yyy&amp;'),
+            array(null, array('zzz' => 'yyy&'), 'zzz', false, 'yyy&amp;'),
         );
     }
 
@@ -121,11 +122,11 @@ class Unit_oePayPal_core_oePayPalRequestTest extends OxidTestCase
      *
      * @dataProvider providerGetRequestParameter
      */
-    public function testGetRequestParameter( $aPost, $aGet, $sParameterName, $blRaw, $mExpectedRequestParameter )
+    public function testGetRequestParameter($aPost, $aGet, $sParameterName, $blRaw, $mExpectedRequestParameter)
     {
         $_POST = $aPost;
         $_GET = $aGet;
         $oPayPalRequest = new oePayPalRequest();
-        $this->assertEquals( $mExpectedRequestParameter, $oPayPalRequest->getRequestParameter( $sParameterName, $blRaw ) );
+        $this->assertEquals($mExpectedRequestParameter, $oPayPalRequest->getRequestParameter($sParameterName, $blRaw));
     }
 }

@@ -17,7 +17,7 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
-( function( $ ) {
+(function ($) {
     /**
      * Changes form function name and submits.
      */
@@ -27,16 +27,16 @@
             sForm: '#detailsMain form.js-oxProductForm'
         },
 
-        _create: function() {
+        _create: function () {
             var self = this;
 
-            $( self.element ).click( function() {
-                $( self.options.sForm + ' input[name="fnc"]' ).val( self.options.sAction );
-                $( self.options.sForm ).submit();
-            } );
+            $(self.element).click(function () {
+                $(self.options.sForm + ' input[name="fnc"]').val(self.options.sAction);
+                $(self.options.sForm).submit();
+            });
         }
     };
 
-    $.widget("ui.oePayPalOnClickProceedAction", oePayPalOnClickProceedAction );
+    $.widget("ui.oePayPalOnClickProceedAction", oePayPalOnClickProceedAction);
 
-} )( jQuery );
+})(jQuery);

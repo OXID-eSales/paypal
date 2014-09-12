@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oxAccessRightException class.
@@ -37,12 +37,12 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusListTest extends OxidTestCa
     public function testAvailableStatuses_dataProvider()
     {
         return array(
-            array( 'capture', array( 'completed' ) ),
-            array( 'capture_partial', array( 'completed', 'pending' ) ),
-            array( 'refund', array( 'completed', 'pending', 'canceled' ) ),
-            array( 'refund_partial', array( 'completed', 'pending', 'canceled' ) ),
-            array( 'void', array( 'completed', 'pending', 'canceled' ) ),
-            array( 'test', array() ),
+            array('capture', array('completed')),
+            array('capture_partial', array('completed', 'pending')),
+            array('refund', array('completed', 'pending', 'canceled')),
+            array('refund_partial', array('completed', 'pending', 'canceled')),
+            array('void', array('completed', 'pending', 'canceled')),
+            array('test', array()),
         );
     }
 
@@ -51,10 +51,10 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusListTest extends OxidTestCa
      *
      * @dataProvider testAvailableStatuses_dataProvider
      */
-    public function testGetAvailableStatuses( $sAction, $aStatusList )
+    public function testGetAvailableStatuses($sAction, $aStatusList)
     {
         $oStatusList = new oePayPalOrderPaymentStatusList();
 
-        $this->assertEquals( $aStatusList, $oStatusList->getAvailableStatuses( $sAction ) );
+        $this->assertEquals($aStatusList, $oStatusList->getAvailableStatuses($sAction));
     }
 }

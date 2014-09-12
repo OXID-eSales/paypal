@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalCurl class.
@@ -33,7 +33,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetHost_notSet_null()
     {
         $oCurl = new oePayPalCurl();
-        $this->assertNull( $oCurl->getHost(), 'Default value must be null.' );
+        $this->assertNull($oCurl->getHost(), 'Default value must be null.');
     }
 
     /**
@@ -44,9 +44,9 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
         $sHost = 'someHost';
 
         $oCurl = new oePayPalCurl();
-        $oCurl->setHost( $sHost );
+        $oCurl->setHost($sHost);
 
-        $this->assertEquals( $sHost, $oCurl->getHost(), 'Check if getter returns what is set in setter.' );
+        $this->assertEquals($sHost, $oCurl->getHost(), 'Check if getter returns what is set in setter.');
     }
 
     /**
@@ -56,15 +56,15 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     {
         $sHost = 'someHost';
         $aExpectedHeader = array(
-                    'POST /cgi-bin/webscr HTTP/1.1',
-                    'Content-Type: application/x-www-form-urlencoded',
-                    'Host: '. $sHost,
-                    'Connection: close'
-                );
+            'POST /cgi-bin/webscr HTTP/1.1',
+            'Content-Type: application/x-www-form-urlencoded',
+            'Host: ' . $sHost,
+            'Connection: close'
+        );
         $oCurl = new oePayPalCurl();
-        $oCurl->setHost( $sHost );
+        $oCurl->setHost($sHost);
 
-        $this->assertEquals( $aExpectedHeader, $oCurl->getHeader(), 'Header must be formed from set host.' );
+        $this->assertEquals($aExpectedHeader, $oCurl->getHeader(), 'Header must be formed from set host.');
     }
 
     /**
@@ -79,7 +79,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
         );
         $oCurl = new oePayPalCurl();
 
-        $this->assertEquals( $aExpectedHeader, $oCurl->getHeader(), 'Header must be without host as host not set.' );
+        $this->assertEquals($aExpectedHeader, $oCurl->getHeader(), 'Header must be without host as host not set.');
     }
 
     /**
@@ -88,12 +88,12 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetHeader_headerSetAndHostSet_headerFromSet()
     {
         $sHost = 'someHost';
-        $aHeader = array( 'Test header' );
+        $aHeader = array('Test header');
         $oCurl = new oePayPalCurl();
-        $oCurl->setHost( $sHost );
-        $oCurl->setHeader( $aHeader );
+        $oCurl->setHost($sHost);
+        $oCurl->setHeader($aHeader);
 
-        $this->assertEquals( $aHeader, $oCurl->getHeader(), 'Header must be same as set header.' );
+        $this->assertEquals($aHeader, $oCurl->getHeader(), 'Header must be same as set header.');
     }
 
     /**
@@ -101,11 +101,11 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
      */
     public function testGetHeader_headerSetAndHostNotSet_headerWithoutHost()
     {
-        $aHeader = array( 'Test header' );
+        $aHeader = array('Test header');
         $oCurl = new oePayPalCurl();
-        $oCurl->setHeader( $aHeader );
+        $oCurl->setHeader($aHeader);
 
-        $this->assertEquals( $aHeader, $oCurl->getHeader(), 'Header must be same as set header.' );
+        $this->assertEquals($aHeader, $oCurl->getHeader(), 'Header must be same as set header.');
     }
 
     /**
@@ -114,9 +114,9 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testSetConnectionCharset_set_get()
     {
         $oCurl = new oePayPalCurl();
-        $oCurl->setConnectionCharset( 'ISO-8859-1' );
+        $oCurl->setConnectionCharset('ISO-8859-1');
 
-        $this->assertEquals( 'ISO-8859-1', $oCurl->getConnectionCharset() );
+        $this->assertEquals('ISO-8859-1', $oCurl->getConnectionCharset());
     }
 
     /**
@@ -125,7 +125,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetConnectionCharset_notSet_UTF()
     {
         $oCurl = new oePayPalCurl();
-        $this->assertEquals( 'UTF-8', $oCurl->getConnectionCharset() );
+        $this->assertEquals('UTF-8', $oCurl->getConnectionCharset());
     }
 
     /**
@@ -134,9 +134,9 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testSetDataCharset_set_get()
     {
         $oCurl = new oePayPalCurl();
-        $oCurl->setDataCharset( 'ISO-8859-1' );
+        $oCurl->setDataCharset('ISO-8859-1');
 
-        $this->assertEquals( 'ISO-8859-1', $oCurl->getDataCharset() );
+        $this->assertEquals('ISO-8859-1', $oCurl->getDataCharset());
     }
 
     /**
@@ -145,7 +145,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetDataCharset_notSet_UTF()
     {
         $oCurl = new oePayPalCurl();
-        $this->assertEquals( 'UTF-8', $oCurl->getDataCharset() );
+        $this->assertEquals('UTF-8', $oCurl->getDataCharset());
     }
 
     /**
@@ -167,7 +167,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
             'param' => 'value'
         );
 
-        $this->assertEquals( $aExpectedParameters, $oCurl->getEnvironmentParameters() );
+        $this->assertEquals($aExpectedParameters, $oCurl->getEnvironmentParameters());
     }
 
     /**
@@ -187,7 +187,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
             'CURLOPT_HTTP_VERSION' => 2,
         );
 
-        $this->assertEquals( $aExpectedParameters, $oCurl->getEnvironmentParameters() );
+        $this->assertEquals($aExpectedParameters, $oCurl->getEnvironmentParameters());
     }
 
     /**
@@ -196,7 +196,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetParameters_default_null()
     {
         $oCurl = new oePayPalCurl();
-        $this->assertNull( $oCurl->getParameters() );
+        $this->assertNull($oCurl->getParameters());
     }
 
     /**
@@ -207,8 +207,8 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
         $aParameters = array('parameter' => 'value');
 
         $oCurl = new oePayPalCurl();
-        $oCurl->setParameters( $aParameters );
-        $this->assertEquals( $aParameters, $oCurl->getParameters() );
+        $oCurl->setParameters($aParameters);
+        $this->assertEquals($aParameters, $oCurl->getParameters());
     }
 
     /**
@@ -220,10 +220,10 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
         $sEndpointUrl = 'http://www.oxid-esales.com/index.php?anid=article';
 
         $oPayPalCurl = new oePayPalCurl();
-        $oPayPalCurl->setUrlToCall( $sEndpointUrl );
+        $oPayPalCurl->setUrlToCall($sEndpointUrl);
         $sUrlToCall = $oPayPalCurl->getUrlToCall();
 
-        $this->assertEquals( $sEndpointUrl, $sUrlToCall, 'Url should be same as provided from config.' );
+        $this->assertEquals($sEndpointUrl, $sUrlToCall, 'Url should be same as provided from config.');
     }
 
     /**
@@ -232,7 +232,7 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetUrlToCall_notSet_null()
     {
         $oPayPalCurl = new oePayPalCurl();
-        $this->assertNull( $oPayPalCurl->getUrlToCall() );
+        $this->assertNull($oPayPalCurl->getUrlToCall());
     }
 
     /**
@@ -241,13 +241,13 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
      */
     public function testGetUrlToCall_badUrlSet_Exception()
     {
-        $this->setExpectedException( 'oePayPalException' );
+        $this->setExpectedException('oePayPalException');
 
         $sEndpointUrl = 'url';
         $oPayPalCurl = new oePayPalCurl();
-        $oPayPalCurl->setUrlToCall( $sEndpointUrl );
+        $oPayPalCurl->setUrlToCall($sEndpointUrl);
 
-        $this->assertEquals( $sEndpointUrl, $oPayPalCurl->getUrlToCall() );
+        $this->assertEquals($sEndpointUrl, $oPayPalCurl->getUrlToCall());
     }
 
     /**
@@ -256,9 +256,9 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testSetQuery_set_get()
     {
         $oPayPalCurl = new oePayPalCurl();
-        $oPayPalCurl->setQuery( 'param1=value1&param2=values2' );
+        $oPayPalCurl->setQuery('param1=value1&param2=values2');
 
-        $this->assertEquals( 'param1=value1&param2=values2', $oPayPalCurl->getQuery() );
+        $this->assertEquals('param1=value1&param2=values2', $oPayPalCurl->getQuery());
     }
 
     /**
@@ -267,9 +267,9 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetQuery_setParameter_getQueryFromParameters()
     {
         $oPayPalCurl = new oePayPalCurl();
-        $oPayPalCurl->setParameters( array( 'param1'=>'value1', 'param2' => 'values2' ) );
+        $oPayPalCurl->setParameters(array('param1' => 'value1', 'param2' => 'values2'));
 
-        $this->assertEquals( 'param1=value1&param2=values2', $oPayPalCurl->getQuery() );
+        $this->assertEquals('param1=value1&param2=values2', $oPayPalCurl->getQuery());
     }
 
     /**
@@ -278,12 +278,12 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     public function testGetQuery_setParameterNotUtf_getQueryFromParameters()
     {
         $oPayPalCurl = new oePayPalCurl();
-        $oPayPalCurl->setDataCharset( 'ISO-8859-1' );
-        $oPayPalCurl->setParameters( array( 'param1' => 'Jäger', 'param2' => 'values2' ) );
+        $oPayPalCurl->setDataCharset('ISO-8859-1');
+        $oPayPalCurl->setParameters(array('param1' => 'Jäger', 'param2' => 'values2'));
 
-        $aPramsUtf = array( 'param1' => utf8_encode('Jäger'), 'param2' => 'values2' );
+        $aPramsUtf = array('param1' => utf8_encode('Jäger'), 'param2' => 'values2');
 
-        $this->assertEquals( http_build_query($aPramsUtf), $oPayPalCurl->getQuery() );
+        $this->assertEquals(http_build_query($aPramsUtf), $oPayPalCurl->getQuery());
     }
 
     /**
@@ -291,20 +291,20 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
      */
     public function testExecute_setParameters_getResponseArray()
     {
-        $oPayPalCurl = $this->getMock( 'oePayPalCurl', array( "_execute", '_setOption', '_parseResponse', '_close' ) );
+        $oPayPalCurl = $this->getMock('oePayPalCurl', array("_execute", '_setOption', '_parseResponse', '_close'));
 
-        $oPayPalCurl->expects( $this->any() )->method( '_setOption' );
-        $oPayPalCurl->expects( $this->once() )->method( '_execute' )->will( $this->returnValue( 'rParam1=rValue1') );
-        $oPayPalCurl->expects( $this->once() )->method( '_parseResponse' )
-            ->with( $this->equalTo( 'rParam1=rValue1' ) )
-            ->will( $this->returnValue( array( 'rParam1' => 'rValue1' ) ) );
-        $oPayPalCurl->expects( $this->once() )->method( '_close' );
+        $oPayPalCurl->expects($this->any())->method('_setOption');
+        $oPayPalCurl->expects($this->once())->method('_execute')->will($this->returnValue('rParam1=rValue1'));
+        $oPayPalCurl->expects($this->once())->method('_parseResponse')
+            ->with($this->equalTo('rParam1=rValue1'))
+            ->will($this->returnValue(array('rParam1' => 'rValue1')));
+        $oPayPalCurl->expects($this->once())->method('_close');
 
 
-        $oPayPalCurl->setParameters( array( 'param1' => 'value1', 'param2' => 'values2' ) );
+        $oPayPalCurl->setParameters(array('param1' => 'value1', 'param2' => 'values2'));
         $oPayPalCurl->setUrlToCall('http://url');
 
-        $this->assertEquals( array( 'rParam1' => 'rValue1' ), $oPayPalCurl->execute() );
+        $this->assertEquals(array('rParam1' => 'rValue1'), $oPayPalCurl->execute());
     }
 
 //    public function testExecute_getParameters

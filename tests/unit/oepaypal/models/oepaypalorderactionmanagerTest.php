@@ -19,10 +19,10 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
-if ( ! class_exists('oePayPalOxOrder_parent')) {
+if (!class_exists('oePayPalOxOrder_parent')) {
     class oePayPalOxOrder_parent extends oxOrder
     {
     }
@@ -42,27 +42,27 @@ class Unit_oePayPal_models_oePayPalOrderActionManagerTest extends OxidTestCase
     public function testIsActionAvailable_dataProvider()
     {
         return array(
-            array( 'Sale', 'capture', 1000, 0, 0, 0, false ),
-            array( 'Sale', 'reauthorize', 1000, 0, 0, 0, false ),
-            array( 'Sale', 'void', 1000, 0, 0, 0, false ),
-            array( 'Sale', 'refund', 1000, 0, 0, 0, false ),
-            array( 'Authorization', 'capture', 1000, 999.99, 0, 0, true ),
-            array( 'Authorization', 'capture', 1000, 900, 1200, 0, true ),
-            array( 'Authorization', 'capture', 1000, 1000, 0, 0, false ),
-            array( 'Authorization', 'capture', 1000, 1100, 0, 0, false ),
-            array( 'Authorization', 'capture', 1000, 0, 0, 1000, false ),
-            array( 'Authorization', 'reauthorize', 1000, 999.99, 0, 0, true ),
-            array( 'Authorization', 'reauthorize', 1000, 900, 1200, 0, true ),
-            array( 'Authorization', 'reauthorize', 1000, 1000, 0, 0, false ),
-            array( 'Authorization', 'reauthorize', 1000, 1100, 0, 0, false ),
-            array( 'Authorization', 'reauthorize', 1000, 0, 0, 1000, false ),
-            array( 'Authorization', 'void', 1000, 999.99, 0, 0, true ),
-            array( 'Authorization', 'void', 1000, 900, 1200, 0, true ),
-            array( 'Authorization', 'void', 1000, 1000, 0, 0, false ),
-            array( 'Authorization', 'void', 1000, 1100, 0, 0, false ),
-            array( 'Authorization', 'void', 1000, 0, 0, 1000, false ),
-            array( 'Authorization', 'refund', 1000, 0, 0, 0, false ),
-            array( 'TestMode',      'testAction', -50, -5, 9999, 9999, false ),
+            array('Sale', 'capture', 1000, 0, 0, 0, false),
+            array('Sale', 'reauthorize', 1000, 0, 0, 0, false),
+            array('Sale', 'void', 1000, 0, 0, 0, false),
+            array('Sale', 'refund', 1000, 0, 0, 0, false),
+            array('Authorization', 'capture', 1000, 999.99, 0, 0, true),
+            array('Authorization', 'capture', 1000, 900, 1200, 0, true),
+            array('Authorization', 'capture', 1000, 1000, 0, 0, false),
+            array('Authorization', 'capture', 1000, 1100, 0, 0, false),
+            array('Authorization', 'capture', 1000, 0, 0, 1000, false),
+            array('Authorization', 'reauthorize', 1000, 999.99, 0, 0, true),
+            array('Authorization', 'reauthorize', 1000, 900, 1200, 0, true),
+            array('Authorization', 'reauthorize', 1000, 1000, 0, 0, false),
+            array('Authorization', 'reauthorize', 1000, 1100, 0, 0, false),
+            array('Authorization', 'reauthorize', 1000, 0, 0, 1000, false),
+            array('Authorization', 'void', 1000, 999.99, 0, 0, true),
+            array('Authorization', 'void', 1000, 900, 1200, 0, true),
+            array('Authorization', 'void', 1000, 1000, 0, 0, false),
+            array('Authorization', 'void', 1000, 1100, 0, 0, false),
+            array('Authorization', 'void', 1000, 0, 0, 1000, false),
+            array('Authorization', 'refund', 1000, 0, 0, 0, false),
+            array('TestMode', 'testAction', -50, -5, 9999, 9999, false),
         );
     }
 
@@ -71,20 +71,20 @@ class Unit_oePayPal_models_oePayPalOrderActionManagerTest extends OxidTestCase
      *
      * @dataProvider testIsActionAvailable_dataProvider
      */
-    public function testIsActionAvailable( $sTransactionMode, $sAction, $dTotal, $dCaptured, $dRefunded, $dVoided, $dIsValid )
+    public function testIsActionAvailable($sTransactionMode, $sAction, $dTotal, $dCaptured, $dRefunded, $dVoided, $dIsValid)
     {
         $oOrder = new oePayPalPayPalOrder();
 
-        $oOrder->setTotalOrderSum( $dTotal );
-        $oOrder->setCapturedAmount( $dCaptured );
-        $oOrder->setRefundedAmount( $dRefunded );
-        $oOrder->setVoidedAmount( $dVoided );
-        $oOrder->setTransactionMode( $sTransactionMode );
+        $oOrder->setTotalOrderSum($dTotal);
+        $oOrder->setCapturedAmount($dCaptured);
+        $oOrder->setRefundedAmount($dRefunded);
+        $oOrder->setVoidedAmount($dVoided);
+        $oOrder->setTransactionMode($sTransactionMode);
 
         $oActionManager = new oePayPalOrderActionManager();
-        $oActionManager->setOrder( $oOrder );
+        $oActionManager->setOrder($oOrder);
 
-        $this->assertEquals( $dIsValid, $oActionManager->isActionAvailable( $sAction ) );
+        $this->assertEquals($dIsValid, $oActionManager->isActionAvailable($sAction));
     }
 
 }

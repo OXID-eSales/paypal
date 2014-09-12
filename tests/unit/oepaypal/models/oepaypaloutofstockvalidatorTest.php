@@ -19,10 +19,10 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
-if ( ! class_exists('oePayPalOxBasket_parent')) {
+if (!class_exists('oePayPalOxBasket_parent')) {
     class oePayPalOxBasket_parent extends oxBasket
     {
     }
@@ -39,8 +39,8 @@ class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
         $oOxBasket = new oePayPalOxBasket();
 
         return array(
-            array( $oOxBasket ),
-            array( null )
+            array($oOxBasket),
+            array(null)
         );
     }
 
@@ -48,22 +48,22 @@ class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
      * @param $oBasket
      * @dataProvider providerSetGetBasket
      */
-    public function testSetGetBasket( $oBasket )
+    public function testSetGetBasket($oBasket)
     {
         $oBasketValidator = new oePayPalOutOfStockValidator();
-        $oBasketValidator->setBasket( $oBasket );
+        $oBasketValidator->setBasket($oBasket);
 
-        $this->assertEquals( $oBasket, $oBasketValidator->getBasket() );
+        $this->assertEquals($oBasket, $oBasketValidator->getBasket());
     }
 
     /**
      */
-    public function testSetGetEmptyStockLevel( )
+    public function testSetGetEmptyStockLevel()
     {
         $oBasketValidator = new oePayPalOutOfStockValidator();
-        $oBasketValidator->setEmptyStockLevel( 10 );
+        $oBasketValidator->setEmptyStockLevel(10);
 
-        $this->assertEquals( 10, $oBasketValidator->getEmptyStockLevel() );
+        $this->assertEquals(10, $oBasketValidator->getEmptyStockLevel());
     }
 
 
@@ -74,28 +74,28 @@ class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
     {
         return array(
             // Basket Article ID, Basket item amount, Stock Amount, Stock empty level, expected result
-            array( 'ProductId5', 5, 5, 0, false ),
-            array( 'ProductId5', 5, 5, 1, true ),
-            array( 'ProductId5', 6, 5, 0, true ),
-            array( 'ProductId3', 2, 3, 2, true ),
-            array( 'ProductId2', 2, 2, 1, true ),
-            array( 'ProductId1', 2, 2, 0, false ),
+            array('ProductId5', 5, 5, 0, false),
+            array('ProductId5', 5, 5, 1, true),
+            array('ProductId5', 6, 5, 0, true),
+            array('ProductId3', 2, 3, 2, true),
+            array('ProductId2', 2, 2, 1, true),
+            array('ProductId1', 2, 2, 0, false),
         );
     }
 
     /**
      * @dataProvider providerHasOutOfStockItems
      */
-    public function testHasOutOfStockArticles( $sProductId, $iBasketItemAmount, $iStockAmount, $iStockEmptyLevel, $blExpectedResult )
+    public function testHasOutOfStockArticles($sProductId, $iBasketItemAmount, $iStockAmount, $iStockEmptyLevel, $blExpectedResult)
     {
-        $oBasket = $this->_createBasket( $sProductId, $iBasketItemAmount, $iStockAmount );
+        $oBasket = $this->_createBasket($sProductId, $iBasketItemAmount, $iStockAmount);
 
         $oBasketValidator = new oePayPalOutOfStockValidator();
 
-        $oBasketValidator->setBasket( $oBasket );
-        $oBasketValidator->setEmptyStockLevel( $iStockEmptyLevel );
+        $oBasketValidator->setBasket($oBasket);
+        $oBasketValidator->setEmptyStockLevel($iStockEmptyLevel);
 
-        $this->assertEquals( $blExpectedResult, $oBasketValidator->hasOutOfStockArticles() );
+        $this->assertEquals($blExpectedResult, $oBasketValidator->hasOutOfStockArticles());
     }
 
 
@@ -107,22 +107,22 @@ class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
      * @param $iStockAmount
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _createBasket( $sProductId, $iBasketAmount, $iStockAmount )
+    protected function _createBasket($sProductId, $iBasketAmount, $iStockAmount)
     {
-        $oArticle = $this->getMock( 'oxArticle', array('getStockAmount') );
-        $oArticle->expects( $this->any() )->method( 'getStockAmount' )->will( $this->returnValue( $iStockAmount ) );
+        $oArticle = $this->getMock('oxArticle', array('getStockAmount'));
+        $oArticle->expects($this->any())->method('getStockAmount')->will($this->returnValue($iStockAmount));
 
-        $oBasketItem = $this->getMock( 'oxBasketItem', array( 'getProductId', 'getAmount', 'getArticle' ) );
-        $oBasketItem->expects( $this->any() )->method( 'getProductId' )->will( $this->returnValue( $sProductId ) );
-        $oBasketItem->expects( $this->any() )->method( 'getAmount' )->will( $this->returnValue( $iBasketAmount ) );
-        $oBasketItem->expects( $this->any() )->method( 'getArticle' )->will( $this->returnValue( $oArticle ) );
+        $oBasketItem = $this->getMock('oxBasketItem', array('getProductId', 'getAmount', 'getArticle'));
+        $oBasketItem->expects($this->any())->method('getProductId')->will($this->returnValue($sProductId));
+        $oBasketItem->expects($this->any())->method('getAmount')->will($this->returnValue($iBasketAmount));
+        $oBasketItem->expects($this->any())->method('getArticle')->will($this->returnValue($oArticle));
 
         $aBasketItemsList = array(
             $sProductId => $oBasketItem
         );
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array( 'getContents' ) );
-        $oBasket->expects( $this->any() )->method( 'getContents' )->will( $this->returnValue( $aBasketItemsList ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
+        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue($aBasketItemsList));
 
         return $oBasket;
     }

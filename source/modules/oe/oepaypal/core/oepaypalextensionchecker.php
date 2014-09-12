@@ -41,7 +41,7 @@ class oePayPalExtensionChecker
      *
      * @param string $sShopId shop id
      */
-    public function setShopId( $sShopId )
+    public function setShopId($sShopId)
     {
         $this->_sShopId = $sShopId;
     }
@@ -53,8 +53,8 @@ class oePayPalExtensionChecker
      */
     public function getShopId()
     {
-        if ( is_null( $this->_sShopId ) ) {
-            $this->setShopId( oxRegistry::getConfig()->getShopId() );
+        if (is_null($this->_sShopId)) {
+            $this->setShopId(oxRegistry::getConfig()->getShopId());
         }
         return $this->_sShopId;
     }
@@ -64,7 +64,7 @@ class oePayPalExtensionChecker
      *
      * @param string $sExtensionId extension id
      */
-    public function setExtensionId( $sExtensionId )
+    public function setExtensionId($sExtensionId)
     {
         $this->_sExtensionId = $sExtensionId;
     }
@@ -78,6 +78,7 @@ class oePayPalExtensionChecker
     {
         return $this->_sExtensionId;
     }
+
     /**
      * Return return extended classes array
      *
@@ -85,7 +86,7 @@ class oePayPalExtensionChecker
      */
     protected function _getExtendedClasses()
     {
-        return $this->_getConfigValue( 'aModules' );
+        return $this->_getConfigValue('aModules');
     }
 
     /**
@@ -95,7 +96,7 @@ class oePayPalExtensionChecker
      */
     protected function _getDisabledModules()
     {
-        return $this->_getConfigValue( 'aDisabledModules' );
+        return $this->_getConfigValue('aDisabledModules');
     }
 
     /**
@@ -105,16 +106,16 @@ class oePayPalExtensionChecker
      *
      * @return array
      */
-    protected function _getConfigValue( $sConfigName )
+    protected function _getConfigValue($sConfigName)
     {
-        $oDb        = oxDb::getDb();
-        $oConfig    = oxRegistry::getConfig();
-        $sConfigKey = $oConfig->getConfigParam( 'sConfigKey' );
+        $oDb = oxDb::getDb();
+        $oConfig = oxRegistry::getConfig();
+        $sConfigKey = $oConfig->getConfigParam('sConfigKey');
 
-        $sSelect = "SELECT DECODE( `oxvarvalue` , ". $oDb->quote( $sConfigKey ) . " ) AS `oxvarvalue` " .
-            "FROM `oxconfig` WHERE `oxvarname` = " . $oDb->quote( $sConfigName ) . " AND `oxshopid` = " . $oDb->quote( $this->getShopId() );
+        $sSelect = "SELECT DECODE( `oxvarvalue` , " . $oDb->quote($sConfigKey) . " ) AS `oxvarvalue` " .
+            "FROM `oxconfig` WHERE `oxvarname` = " . $oDb->quote($sConfigName) . " AND `oxshopid` = " . $oDb->quote($this->getShopId());
 
-        return unserialize( $oDb->getOne($sSelect) );
+        return unserialize($oDb->getOne($sSelect));
     }
 
     /**
@@ -129,11 +130,11 @@ class oePayPalExtensionChecker
 
         $aModules = $this->_getExtendedClasses();
 
-        if ( is_array( $aModules ) ) {
+        if (is_array($aModules)) {
             // Check if module was ever installed.
             $blModuleExists = false;
-            foreach ( $aModules as $sExtendPath ) {
-                if ( false !== strpos( $sExtendPath, '/'. $sModuleId .'/' ) ) {
+            foreach ($aModules as $sExtendPath) {
+                if (false !== strpos($sExtendPath, '/' . $sModuleId . '/')) {
 
                     $blModuleExists = true;
                     break;
@@ -141,9 +142,9 @@ class oePayPalExtensionChecker
             }
 
             // If module exists, check if it is not disabled.
-            if ( $blModuleExists ) {
+            if ($blModuleExists) {
                 $aDisabledModules = $this->_getDisabledModules();
-                if ( ! ( is_array( $aDisabledModules ) && in_array( $sModuleId, $aDisabledModules ) ) ) {
+                if (!(is_array($aDisabledModules) && in_array($sModuleId, $aDisabledModules))) {
                     $blModuleIsActive = true;
                 }
             }

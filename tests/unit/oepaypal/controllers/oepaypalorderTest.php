@@ -19,10 +19,10 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
-if ( !class_exists( 'oePayPalOrder_parent' ) ) {
+if (!class_exists('oePayPalOrder_parent')) {
     class oePayPalOrder_parent extends order
     {
     }
@@ -40,7 +40,7 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
      */
     protected function tearDown()
     {
-        oxDb::getDB()->execute( "delete from oxpayments where OXID = 'oxidpaypal' ");
+        oxDb::getDB()->execute("delete from oxpayments where OXID = 'oxidpaypal' ");
 
         $this->cleanUpTable('oxuser', 'oxid');
 
@@ -56,11 +56,11 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
     {
         $oView = new oePayPalOrder();
 
-        $this->getSession()->setVariable( "paymentid", "oxidpaypal" );
-        $this->assertTrue( $oView->isPayPal() );
+        $this->getSession()->setVariable("paymentid", "oxidpaypal");
+        $this->assertTrue($oView->isPayPal());
 
-        $this->getSession()->setVariable( "paymentid", "testPayment" );
-        $this->assertFalse( $oView->isPayPal() );
+        $this->getSession()->setVariable("paymentid", "testPayment");
+        $this->assertFalse($oView->isPayPal());
     }
 
 
@@ -72,9 +72,9 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
     public function providerGetUser()
     {
         return array(
-            array( 'oxidpaypal', '_testPayPalUser', 'oxdefaultadmin', '_testPayPalUser' ),
-            array( 'oxidpaypal', null, 'oxdefaultadmin', 'oxdefaultadmin' ),
-            array( 'nonpaypalpayment', '_testPayPalUser', 'oxdefaultadmin', 'oxdefaultadmin' ),
+            array('oxidpaypal', '_testPayPalUser', 'oxdefaultadmin', '_testPayPalUser'),
+            array('oxidpaypal', null, 'oxdefaultadmin', 'oxdefaultadmin'),
+            array('nonpaypalpayment', '_testPayPalUser', 'oxdefaultadmin', 'oxdefaultadmin'),
         );
     }
 
@@ -83,20 +83,20 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
      *
      * @dataProvider providerGetUser
      */
-    public function testGetUser( $sPaymentId, $sPayPalUserId, $sDefaultUserId, $sExpectedUserId )
+    public function testGetUser($sPaymentId, $sPayPalUserId, $sDefaultUserId, $sExpectedUserId)
     {
         $oUser = new oxUser();
         $oUser->setId($sPayPalUserId);
         $oUser->save();
 
-        $this->getSession()->setVariable( "paymentid", $sPaymentId );
-        $this->getSession()->setVariable( "oepaypal-userId", $sPayPalUserId );
-        $this->getSession()->setVariable( 'usr', $sDefaultUserId );
+        $this->getSession()->setVariable("paymentid", $sPaymentId);
+        $this->getSession()->setVariable("oepaypal-userId", $sPayPalUserId);
+        $this->getSession()->setVariable('usr', $sDefaultUserId);
 
         $oOrder = new oePayPalOrder();
         $oUser = $oOrder->getUser();
 
-        $this->assertEquals( $sExpectedUserId, $oUser->oxuser__oxid->value );
+        $this->assertEquals($sExpectedUserId, $oUser->oxuser__oxid->value);
     }
 
     /**
@@ -106,14 +106,14 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
      */
     public function testGetUser_NonExistingPayPalUser_DefaultUserReturned()
     {
-        $this->getSession()->setVariable( "paymentid", 'oxidpaypal' );
-        $this->getSession()->setVariable( "oepaypal-userId", 'nonExistingUser' );
-        $this->getSession()->setVariable( 'usr', 'oxdefaultadmin' );
+        $this->getSession()->setVariable("paymentid", 'oxidpaypal');
+        $this->getSession()->setVariable("oepaypal-userId", 'nonExistingUser');
+        $this->getSession()->setVariable('usr', 'oxdefaultadmin');
 
         $oOrder = new oePayPalOrder();
         $oUser = $oOrder->getUser();
 
-        $this->assertEquals( 'oxdefaultadmin', $oUser->oxuser__oxid->value );
+        $this->assertEquals('oxdefaultadmin', $oUser->oxuser__oxid->value);
     }
 
     /**
@@ -123,21 +123,21 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
      */
     public function testGetPayment()
     {
-        $this->getSession()->setVariable( "oepaypal", "0" );
+        $this->getSession()->setVariable("oepaypal", "0");
 
         $oView = new oePayPalOrder();
         $oPayment = $oView->getPayment();
-        $this->assertFalse( $oPayment );
+        $this->assertFalse($oPayment);
 
-        $this->getSession()->setVariable( "paymentid", "oxidpaypal" );
+        $this->getSession()->setVariable("paymentid", "oxidpaypal");
 
         $sSql = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`) VALUES ('oxidpaypal', 1, 'PayPal')";
-        oxDb::getDb()->execute( $sSql );
+        oxDb::getDb()->execute($sSql);
 
         $oView = new oePayPalOrder();
         $oPayment = $oView->getPayment();
 
-        $this->assertNotNull( $oPayment );
-        $this->assertEquals( "oxidpaypal", $oPayment->getId() );
+        $this->assertNotNull($oPayment);
+        $this->assertEquals("oxidpaypal", $oPayment->getId());
     }
 }

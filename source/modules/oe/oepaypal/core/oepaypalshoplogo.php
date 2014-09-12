@@ -84,7 +84,7 @@ class oePayPalShopLogo
      *
      * @param $oImageHandler
      */
-    public function setImageHandler( $oImageHandler )
+    public function setImageHandler($oImageHandler)
     {
         $this->_oImageHandler = $oImageHandler;
     }
@@ -104,7 +104,7 @@ class oePayPalShopLogo
      *
      * @param $iWidth
      */
-    public function setWidth( $iWidth )
+    public function setWidth($iWidth)
     {
         $this->_iWidth = $iWidth;
     }
@@ -124,7 +124,7 @@ class oePayPalShopLogo
      *
      * @param $iHeight
      */
-    public function setHeight( $iHeight )
+    public function setHeight($iHeight)
     {
         $this->_iHeight = $iHeight;
     }
@@ -148,12 +148,12 @@ class oePayPalShopLogo
     {
         $blResize = false;
         $sImagePath = $this->_getImagePath();
-        if ( $sImagePath )
-        {
-            $aImageSize = $this->_getImageSize( $sImagePath );
+        if ($sImagePath) {
+            $aImageSize = $this->_getImageSize($sImagePath);
 
-            if ( $aImageSize['width'] > $this->getWidth() ||
-                $aImageSize['height'] > $this->getHeight() ){
+            if ($aImageSize['width'] > $this->getWidth() ||
+                $aImageSize['height'] > $this->getHeight()
+            ) {
 
                 $blResize = true;
             }
@@ -167,7 +167,7 @@ class oePayPalShopLogo
      *
      * @param $sImagePath string
      */
-    public function setImageDir( $sImagePath )
+    public function setImageDir($sImagePath)
     {
         $this->_sImageDir = $sImagePath;
     }
@@ -185,7 +185,7 @@ class oePayPalShopLogo
     /**
      * @param string $sImageDirUrl
      */
-    public function setImageDirUrl( $sImageDirUrl )
+    public function setImageDirUrl($sImageDirUrl)
     {
         $this->_sImageDirUrl = $sImageDirUrl;
     }
@@ -203,7 +203,7 @@ class oePayPalShopLogo
      *
      * @param $sImageName string
      */
-    public function setImageName( $sImageName )
+    public function setImageName($sImageName)
     {
         $this->_sImageName = $sImageName;
     }
@@ -226,7 +226,7 @@ class oePayPalShopLogo
     protected function _getResizedImageName()
     {
         $sResizedImageName = "";
-        if ( $this->getImageName() ) {
+        if ($this->getImageName()) {
             $sResizedImageName = $this->_suffix . $this->getImageName();
         }
 
@@ -240,12 +240,12 @@ class oePayPalShopLogo
      */
     protected function _getImagePath()
     {
-        if ( null == $this->_sImagePath ) {
+        if (null == $this->_sImagePath) {
 
             $sDir = $this->getImageDir();
             $sName = $this->getImageName();
 
-            if ( $sDir && $sName  && $this->_fileExists( $sDir . $sName ) ) {
+            if ($sDir && $sName && $this->_fileExists($sDir . $sName)) {
                 $this->_sImagePath = $sDir . $sName;
             }
         }
@@ -261,7 +261,7 @@ class oePayPalShopLogo
     {
         $sImageUrl = "";
 
-        if ( $this->_getImagePath() ) {
+        if ($this->_getImagePath()) {
             $sImageUrl = $this->getImageDirUrl() . $this->getImageName();
         }
 
@@ -279,7 +279,7 @@ class oePayPalShopLogo
         $sDir = $this->getImageDir();
         $sName = $this->_getResizedImageName();
 
-        if ( $sDir && $sName  ) {
+        if ($sDir && $sName) {
             $sResizedImagePath = $sDir . $sName;
         }
         return $sResizedImagePath;
@@ -294,7 +294,7 @@ class oePayPalShopLogo
     {
         $sImageUrl = "";
 
-        if ( $this->_getResizedImagePath() ) {
+        if ($this->_getResizedImagePath()) {
             $sImageUrl = $this->getImageDirUrl() . $this->_getResizedImageName();
         }
 
@@ -311,11 +311,11 @@ class oePayPalShopLogo
         $sImagePath = $this->_getImageUrl();
         $sResizedImagePath = $this->_getResizedImageUrl();
 
-        if ( $this->_getResize() ) {
+        if ($this->_getResize()) {
             $sShopLogoPath = $sResizedImagePath;
 
-            if ( !$this->_fileExists( $sResizedImagePath ) ) {
-                if ( !$this->_resizeImage( $sImagePath, $sResizedImagePath ) ) {
+            if (!$this->_fileExists($sResizedImagePath)) {
+                if (!$this->_resizeImage($sImagePath, $sResizedImagePath)) {
                     // fallback to original image if can not be resized
                     $sShopLogoPath = $sImagePath;
                 }
@@ -332,22 +332,23 @@ class oePayPalShopLogo
      * @param $sPath
      * @return bool
      */
-    protected function _fileExists( $sPath )
+    protected function _fileExists($sPath)
     {
-        return file_exists( $sPath );
+        return file_exists($sPath);
     }
+
     /**
      * Returns array with width and height of given image
      *
      * @param $sImagePath
      * @return array
      */
-    protected function _getImageSize( $sImagePath )
+    protected function _getImageSize($sImagePath)
     {
-        $aImageSize = getimagesize( $sImagePath );
+        $aImageSize = getimagesize($sImagePath);
 
-        return array (
-            'width' => $aImageSize[0] ,
+        return array(
+            'width' => $aImageSize[0],
             'height' => $aImageSize[1]
         );
     }
@@ -364,9 +365,9 @@ class oePayPalShopLogo
     {
         $blResized = false;
 
-        if ( $oUtilsPic = $this->getImageHandler() ) {
+        if ($oUtilsPic = $this->getImageHandler()) {
             // checks if image can be resized, and resizes the image
-            if ( $oUtilsPic->resizeImage( $this->_getImagePath(), $this->_getResizedImagePath(), $this->getWidth(), $this->getHeight() ) ) {
+            if ($oUtilsPic->resizeImage($this->_getImagePath(), $this->_getResizedImagePath(), $this->getWidth(), $this->getHeight())) {
                 $blResized = true;
             }
         }

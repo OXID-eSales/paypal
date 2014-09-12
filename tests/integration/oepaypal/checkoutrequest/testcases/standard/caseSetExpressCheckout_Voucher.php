@@ -22,23 +22,23 @@
 $aData = array(
     'class' => 'oePayPalStandardDispatcher',
     'action' => 'setExpressCheckout',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 'testVouchers1',
-            'oxprice'                  => 10,
-            'oxvat'                    => 10,
-            'amount'                   => 3,
+    'articles' => array(
+        0 => array(
+            'oxid' => 'testVouchers1',
+            'oxprice' => 10,
+            'oxvat' => 10,
+            'amount' => 3,
         ),
-        1 => array (
-            'oxid'                     => 'testVouchers2',
-            'oxprice'                  => 10,
-            'oxvat'                    => 10,
-            'amount'                   => 4,
+        1 => array(
+            'oxid' => 'testVouchers2',
+            'oxprice' => 10,
+            'oxvat' => 10,
+            'amount' => 4,
         ),
     ),
     'costs' => array(
-        'voucherserie' => array (
-            0 => array (
+        'voucherserie' => array(
+            0 => array(
                 'oxserienr' => 'voucherForShop',
                 'oxdiscount' => 90.00,
                 'oxdiscounttype' => 'absolute',
@@ -56,8 +56,8 @@ $aData = array(
     'requestToShop' => array(
         'displayCartInPayPal' => true,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => '',
             'USER' => '',

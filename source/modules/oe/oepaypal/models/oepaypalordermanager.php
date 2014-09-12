@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -18,7 +19,6 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
-
 class oePayPalOrderManager
 {
     /**
@@ -39,7 +39,7 @@ class oePayPalOrderManager
     /**
      * @param oePayPalOrderPayment $oOrderPayment
      */
-    public function setOrderPayment( $oOrderPayment )
+    public function setOrderPayment($oOrderPayment)
     {
         $this->_oOrderPayment = $oOrderPayment;
     }
@@ -55,7 +55,7 @@ class oePayPalOrderManager
     /**
      * @param oePayPalPayPalOrder $oOrder
      */
-    public function setOrder( $oOrder )
+    public function setOrder($oOrder)
     {
         $this->_oOrder = $oOrder;
     }
@@ -67,10 +67,10 @@ class oePayPalOrderManager
      */
     public function getOrder()
     {
-        if ( $this->_oOrder === null ) {
+        if ($this->_oOrder === null) {
             $oOrderPayment = $this->getOrderPayment();
-            $oOrder = $this->_getOrderFromPayment( $oOrderPayment );
-            $this->setOrder( $oOrder );
+            $oOrder = $this->_getOrderFromPayment($oOrderPayment);
+            $this->setOrder($oOrder);
         }
         return $this->_oOrder;
     }
@@ -78,7 +78,7 @@ class oePayPalOrderManager
     /**
      * @param oePayPalOrderPaymentStatusCalculator $oOrderPaymentStatusCalculator
      */
-    public function setOrderPaymentStatusCalculator( $oOrderPaymentStatusCalculator )
+    public function setOrderPaymentStatusCalculator($oOrderPaymentStatusCalculator)
     {
         $this->_oOrderPaymentStatusCalculator = $oOrderPaymentStatusCalculator;
     }
@@ -88,9 +88,9 @@ class oePayPalOrderManager
      */
     public function getOrderPaymentStatusCalculator()
     {
-        if ( is_null( $this->_oOrderPaymentStatusCalculator ) ) {
-            $oOrderPaymentStatusCalculator = oxNew( 'oePayPalOrderPaymentStatusCalculator' );
-            $this->setOrderPaymentStatusCalculator( $oOrderPaymentStatusCalculator );
+        if (is_null($this->_oOrderPaymentStatusCalculator)) {
+            $oOrderPaymentStatusCalculator = oxNew('oePayPalOrderPaymentStatusCalculator');
+            $this->setOrderPaymentStatusCalculator($oOrderPaymentStatusCalculator);
         }
         return $this->_oOrderPaymentStatusCalculator;
     }
@@ -104,10 +104,10 @@ class oePayPalOrderManager
     {
         $blOrderUpdated = false;
         $oOrder = $this->getOrder();
-        if ( !is_null( $oOrder ) ) {
+        if (!is_null($oOrder)) {
             $oOrderPayment = $this->getOrderPayment();
-            $sNewOrderStatus = $this->_calculateOrderStatus( $oOrderPayment, $oOrder );
-            $this->_updateOrderStatus( $oOrder, $sNewOrderStatus );
+            $sNewOrderStatus = $this->_calculateOrderStatus($oOrderPayment, $oOrder);
+            $this->_updateOrderStatus($oOrder, $sNewOrderStatus);
             $blOrderUpdated = true;
         }
         return $blOrderUpdated;
@@ -121,11 +121,11 @@ class oePayPalOrderManager
      *
      * @return null|string
      */
-    protected function _calculateOrderStatus( $oOrderPayment, $oOrder )
+    protected function _calculateOrderStatus($oOrderPayment, $oOrder)
     {
         $oOrderPaymentStatusCalculator = $this->getOrderPaymentStatusCalculator();
-        $oOrderPaymentStatusCalculator->setOrderPayment( $oOrderPayment );
-        $oOrderPaymentStatusCalculator->setOrder( $oOrder );
+        $oOrderPaymentStatusCalculator->setOrderPayment($oOrderPayment);
+        $oOrderPaymentStatusCalculator->setOrder($oOrder);
 
         $sNewOrderStatus = $oOrderPaymentStatusCalculator->getStatus();
         return $sNewOrderStatus;
@@ -137,9 +137,9 @@ class oePayPalOrderManager
      * @param oePayPalPayPalOrder $oOrder order to be updated.
      * @param string $sNewOrderStatus new order status.
      */
-    protected function _updateOrderStatus( $oOrder, $sNewOrderStatus )
+    protected function _updateOrderStatus($oOrder, $sNewOrderStatus)
     {
-        $oOrder->setPaymentStatus( $sNewOrderStatus );
+        $oOrder->setPaymentStatus($sNewOrderStatus);
         $oOrder->save();
     }
 
@@ -150,16 +150,16 @@ class oePayPalOrderManager
      *
      * @return oePayPalPayPalOrder|null
      */
-    protected function _getOrderFromPayment( $oOrderPayment )
+    protected function _getOrderFromPayment($oOrderPayment)
     {
         $sOrderId = null;
         $oOrder = null;
-        if ( !is_null( $oOrderPayment ) ) {
+        if (!is_null($oOrderPayment)) {
             $sOrderId = $oOrderPayment->getOrderId();
         }
-        if ( !is_null( $sOrderId ) ) {
-            $oOrder = oxNew( 'oePayPalPayPalOrder' );
-            $oOrder->setOrderId( $sOrderId );
+        if (!is_null($sOrderId)) {
+            $oOrder = oxNew('oePayPalPayPalOrder');
+            $oOrder->setOrderId($sOrderId);
             $oOrder->load();
         }
         return $oOrder;

@@ -42,7 +42,7 @@ class oePayPalOrderPaymentStatusCalculator
      *
      * @param oePayPalPayPalOrder $oOrder PayPal order
      */
-    public function setOrder( $oOrder )
+    public function setOrder($oOrder)
     {
         $this->_oOrder = $oOrder;
     }
@@ -62,7 +62,7 @@ class oePayPalOrderPaymentStatusCalculator
      *
      * @param oePayPalOrderPayment $oOrderPayment
      */
-    public function setOrderPayment( $oOrderPayment )
+    public function setOrderPayment($oOrderPayment)
     {
         $this->_oOrderPayment = $oOrderPayment;
     }
@@ -86,7 +86,7 @@ class oePayPalOrderPaymentStatusCalculator
     {
         $sStatus = 'canceled';
 
-        if ( $this->getOrder()->getCapturedAmount() > 0 ) {
+        if ($this->getOrder()->getCapturedAmount() > 0) {
             $sStatus = 'completed';
         }
 
@@ -111,16 +111,16 @@ class oePayPalOrderPaymentStatusCalculator
      */
     public function getStatus()
     {
-        if ( is_null( $this->getOrder() ) ) {
+        if (is_null($this->getOrder())) {
             return;
         }
 
         $sStatus = $this->_getOrderPaymentStatusFinal();
 
-        if ( is_null( $sStatus ) ) {
+        if (is_null($sStatus)) {
             $sStatus = $this->_getOrderPaymentStatusPaymentValid();
         }
-        if ( is_null( $sStatus ) ) {
+        if (is_null($sStatus)) {
             $sStatus = $this->_getOrderPaymentStatusPayments();
         }
 
@@ -134,15 +134,15 @@ class oePayPalOrderPaymentStatusCalculator
      *
      * @return string|null
      */
-    public function getSuggestStatus( $sAction )
+    public function getSuggestStatus($sAction)
     {
-        if ( is_null( $this->getOrder() ) ) {
+        if (is_null($this->getOrder())) {
             return;
         }
 
         $sStatus = $this->_getOrderPaymentStatusPaymentValid();
-        if ( is_null( $sStatus ) ) {
-            $sStatus = $this->_getStatusByAction( $sAction );
+        if (is_null($sStatus)) {
+            $sStatus = $this->_getStatusByAction($sAction);
         }
 
         return $sStatus;
@@ -156,7 +156,7 @@ class oePayPalOrderPaymentStatusCalculator
     protected function _getOrderPaymentStatusFinal()
     {
         $sStatus = null;
-        if ( $this->_isOrderPaymentStatusFinal() ) {
+        if ($this->_isOrderPaymentStatusFinal()) {
             $sStatus = $this->getOrder()->getPaymentStatus();
         }
         return $sStatus;
@@ -171,7 +171,7 @@ class oePayPalOrderPaymentStatusCalculator
     {
         $sStatus = null;
         $oOrderPayment = $this->getOrderPayment();
-        if ( isset( $oOrderPayment ) && !$oOrderPayment->getIsValid() ) {
+        if (isset($oOrderPayment) && !$oOrderPayment->getIsValid()) {
             $sStatus = 'failed';
         }
         return $sStatus;
@@ -187,9 +187,9 @@ class oePayPalOrderPaymentStatusCalculator
         $sStatus = 'completed';
         $oPaymentList = $this->getOrder()->getPaymentList();
 
-        if ( $oPaymentList->hasPendingPayment() ) {
+        if ($oPaymentList->hasPendingPayment()) {
             $sStatus = 'pending';
-        } elseif ( $oPaymentList->hasFailedPayment() ) {
+        } elseif ($oPaymentList->hasFailedPayment()) {
             $sStatus = 'failed';
         }
 
@@ -203,10 +203,10 @@ class oePayPalOrderPaymentStatusCalculator
      *
      * @return string
      */
-    protected function _getStatusByAction( $sAction )
+    protected function _getStatusByAction($sAction)
     {
         $sStatus = null;
-        switch ( $sAction ) {
+        switch ($sAction) {
             case 'void':
                 $sStatus = $this->_getSuggestStatusOnVoid();
                 break;

@@ -34,77 +34,77 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
     public function setExpressCheckout()
     {
         $oSession = $this->getSession();
-        $oSession->setVariable( "oepaypal", "1" );
+        $oSession->setVariable("oepaypal", "1");
         try {
-            $oBuilder = oxNew( 'oePayPalSetExpressCheckoutRequestBuilder' );
+            $oBuilder = oxNew('oePayPalSetExpressCheckoutRequestBuilder');
 
             $oBasket = $oSession->getBasket();
             $oUser = $this->getUser();
 
-            $oBasket->setPayment( "oxidpaypal" );
+            $oBasket->setPayment("oxidpaypal");
             $oBasket->onUpdate();
-            $oBasket->calculateBasket( true );
+            $oBasket->calculateBasket(true);
 
-            $oValidator = oxNew( 'oePayPalPaymentValidator' );
-            $oValidator->setUser( $oUser );
-            $oValidator->setConfig( $this->getConfig() );
-            $oValidator->setPrice( $oBasket->getPrice()->getPrice() );
+            $oValidator = oxNew('oePayPalPaymentValidator');
+            $oValidator->setUser($oUser);
+            $oValidator->setConfig($this->getConfig());
+            $oValidator->setPrice($oBasket->getPrice()->getPrice());
 
-            if ( !$oValidator->isPaymentValid() ) {
+            if (!$oValidator->isPaymentValid()) {
                 /**
                  * @var oePayPalException $oEx
                  */
-                $oEx = oxNew( "oePayPalException" );
-                $oEx->setMessage( oxRegistry::getLang()->translateString( "OEPAYPAL_PAYMENT_NOT_VALID" ) );
+                $oEx = oxNew("oePayPalException");
+                $oEx->setMessage(oxRegistry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
                 throw $oEx;
             }
 
-            $oBuilder->setPayPalConfig( $this->getPayPalConfig() );
-            $oBuilder->setBasket( $oBasket );
-            $oBuilder->setUser( $this->getUser() );
-            $oBuilder->setReturnUrl( $this->_getReturnUrl() );
-            $oBuilder->setCancelUrl( $this->_getCancelUrl() );
-            $oBuilder->setShowCartInPayPal( $this->getRequest()->getRequestParameter( "displayCartInPayPal" ) );
-            $oBuilder->setTransactionMode( $this->_getTransactionMode( $oBasket ) );
+            $oBuilder->setPayPalConfig($this->getPayPalConfig());
+            $oBuilder->setBasket($oBasket);
+            $oBuilder->setUser($this->getUser());
+            $oBuilder->setReturnUrl($this->_getReturnUrl());
+            $oBuilder->setCancelUrl($this->_getCancelUrl());
+            $oBuilder->setShowCartInPayPal($this->getRequest()->getRequestParameter("displayCartInPayPal"));
+            $oBuilder->setTransactionMode($this->_getTransactionMode($oBasket));
 
             $oRequest = $oBuilder->buildStandardCheckoutRequest();
 
             $oPayPalService = $this->getPayPalCheckoutService();
-            $oResult = $oPayPalService->setExpressCheckout( $oRequest );
+            $oResult = $oPayPalService->setExpressCheckout($oRequest);
 
-        } catch ( oxException $oExcp ) {
+        } catch (oxException $oExcp) {
             // error - unable to set order info - display error message
-            $this->_getUtilsView()->addErrorToDisplay( $oExcp );
+            $this->_getUtilsView()->addErrorToDisplay($oExcp);
 
             // return to basket view
             return "basket";
         }
 
         // saving PayPal token into session
-        $this->getSession()->setVariable( "oepaypal-token", $oResult->getToken() );
+        $this->getSession()->setVariable("oepaypal-token", $oResult->getToken());
 
         // extracting token and building redirect url
-        $sUrl = $this->getPayPalConfig()->getPayPalCommunicationUrl( $oResult->getToken(), $this->_sUserAction );
+        $sUrl = $this->getPayPalConfig()->getPayPalCommunicationUrl($oResult->getToken(), $this->_sUserAction);
 
         // redirecting to PayPal's login/registration page
-        $this->_getUtils()->redirect( $sUrl, false );
+        $this->_getUtils()->redirect($sUrl, false);
     }
 
     /**
      * @param $oBasket
      * @return string
      */
-    protected function _getTransactionMode( $oBasket )
+    protected function _getTransactionMode($oBasket)
     {
         $sTransactionMode = $this->getPayPalConfig()->getTransactionMode();
 
-        if ( $sTransactionMode == "Automatic" ) {
+        if ($sTransactionMode == "Automatic") {
 
             $oOutOfStockValidator = new oePayPalOutOfStockValidator();
-            $oOutOfStockValidator->setBasket( $oBasket );
-            $oOutOfStockValidator->setEmptyStockLevel( $this->getPayPalConfig()->getEmptyStockLevel() );
+            $oOutOfStockValidator->setBasket($oBasket);
+            $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
-            $sTransactionMode = ( $oOutOfStockValidator->hasOutOfStockArticles() ) ? "Authorization" : "Sale";
+            $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
             return $sTransactionMode;
         }
         return $sTransactionMode;
@@ -121,28 +121,28 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
     {
         try {
             $oPayPalService = $this->getPayPalCheckoutService();
-            $oBuilder = oxNew( 'oePayPalGetExpressCheckoutDetailsRequestBuilder' );
-            $oBuilder->setSession( $this->getSession() );
+            $oBuilder = oxNew('oePayPalGetExpressCheckoutDetailsRequestBuilder');
+            $oBuilder->setSession($this->getSession());
 
             $oRequest = $oBuilder->buildRequest();
 
-            $oDetails = $oPayPalService->getExpressCheckoutDetails( $oRequest );
-        } catch ( oxException $oExcp ) {
+            $oDetails = $oPayPalService->getExpressCheckoutDetails($oRequest);
+        } catch (oxException $oExcp) {
             // display error message
-            $this->_getUtilsView()->addErrorToDisplay( $oExcp );
+            $this->_getUtilsView()->addErrorToDisplay($oExcp);
 
             // problems fetching user info - redirect to payment selection
             return "payment";
         }
 
-        $this->getSession()->setVariable( "oepaypal-payerId", $oDetails->getPayerId() );
-        $this->getSession()->setVariable( "oepaypal-basketAmount", $oDetails->getAmount() );
+        $this->getSession()->setVariable("oepaypal-payerId", $oDetails->getPayerId());
+        $this->getSession()->setVariable("oepaypal-basketAmount", $oDetails->getAmount());
 
         // next step - order page
         $sNext = "order";
 
         // finalize order on paypal side?
-        if ( $this->getPayPalConfig()->finalizeOrderOnPayPalSide() ) {
+        if ($this->getPayPalConfig()->finalizeOrderOnPayPalSide()) {
             $sNext .= "?fnc=execute";
         }
 
@@ -157,7 +157,7 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
      */
     protected function _getReturnUrl()
     {
-        return $this->getSession()->processUrl( $this->_getBaseUrl() . "&cl=" . get_class() . "&fnc=getExpressCheckoutDetails" );
+        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=" . get_class() . "&fnc=getExpressCheckoutDetails");
     }
 
     /**
@@ -167,6 +167,6 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
      */
     protected function _getCancelUrl()
     {
-        return $this->getSession()->processUrl( $this->_getBaseUrl() . "&cl=payment" );
+        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=payment");
     }
 }

@@ -19,24 +19,26 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
-if ( ! class_exists('oePayPalOxwArticleDetails_parent')) {
-    class oePayPalOxwArticleDetails_parent extends Details {}
+if (!class_exists('oePayPalOxwArticleDetails_parent')) {
+    class oePayPalOxwArticleDetails_parent extends Details
+    {
+    }
 }
 
 class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends OxidTestCase
 {
 
-    protected function _createDetailsMock( $oArticleInfo, $blShowECSPopUp = 0 )
+    protected function _createDetailsMock($oArticleInfo, $blShowECSPopUp = 0)
     {
-        $oBasketComponent = $this->getMock( 'BasketComponent', array( 'getCurrentArticleInfo', 'shopECSPopUp' ) );
-        $oBasketComponent->expects( $this->any() )->method( 'getCurrentArticleInfo')->will(  $this->returnValue( $oArticleInfo )  );
-        $oBasketComponent->expects( $this->any() )->method( 'shopECSPopUp')->will(  $this->returnValue( $blShowECSPopUp )  );
+        $oBasketComponent = $this->getMock('BasketComponent', array('getCurrentArticleInfo', 'shopECSPopUp'));
+        $oBasketComponent->expects($this->any())->method('getCurrentArticleInfo')->will($this->returnValue($oArticleInfo));
+        $oBasketComponent->expects($this->any())->method('shopECSPopUp')->will($this->returnValue($blShowECSPopUp));
 
-        $oDetails = $this->getMock( 'oePayPalOxwArticleDetails', array( '_oePayPalGetRequest', 'getComponent' ) );
-        $oDetails->expects( $this->any() )->method( 'getComponent')->will(  $this->returnValue( $oBasketComponent )  );
+        $oDetails = $this->getMock('oePayPalOxwArticleDetails', array('_oePayPalGetRequest', 'getComponent'));
+        $oDetails->expects($this->any())->method('getComponent')->will($this->returnValue($oBasketComponent));
 
         return $oDetails;
     }
@@ -45,9 +47,9 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
     {
         return array(
             // Given amount 5
-            array( array('am' => 5), 5 ),
+            array(array('am' => 5), 5),
             // Not given any amount
-            array( '', 1 )
+            array('', 1)
         );
     }
 
@@ -57,19 +59,19 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
      * @param $blExpectedResult
      * @dataProvider providerOePayPalGetArticleAmount
      */
-    public function testOePayPalGetArticleAmount( $oArticleInfo, $blExpectedResult )
+    public function testOePayPalGetArticleAmount($oArticleInfo, $blExpectedResult)
     {
-        $oDetails = $this->_createDetailsMock( $oArticleInfo );
+        $oDetails = $this->_createDetailsMock($oArticleInfo);
 
-        $this->assertEquals( $blExpectedResult, $oDetails->oePayPalGetArticleAmount() );
+        $this->assertEquals($blExpectedResult, $oDetails->oePayPalGetArticleAmount());
     }
 
     public function providerOePayPalShowECSPopup()
     {
         return array(
-            array( true, true ),
-            array( false, false ),
-            array( '', false ),
+            array(true, true),
+            array(false, false),
+            array('', false),
         );
     }
 
@@ -79,18 +81,18 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
      * @param $blExpectedResult
      * @dataProvider providerOePayPalShowECSPopup
      */
-    public function testOePayPalShowECSPopup( $blShowPopUp, $blExpectedResult )
+    public function testOePayPalShowECSPopup($blShowPopUp, $blExpectedResult)
     {
-        $oDetails = $this->_createDetailsMock( array(), $blShowPopUp );
+        $oDetails = $this->_createDetailsMock(array(), $blShowPopUp);
 
-        $this->assertEquals( $blExpectedResult, $oDetails->oePayPalShowECSPopup() );
+        $this->assertEquals($blExpectedResult, $oDetails->oePayPalShowECSPopup());
     }
 
     public function providerOePayPalGetPersistentParam()
     {
         return array(
-            array( array( 'persparam' => array( 'details' => 'aa' ) ), 'aa' ),
-            array( array( 'persparam' => null ), null ),
+            array(array('persparam' => array('details' => 'aa')), 'aa'),
+            array(array('persparam' => null), null),
         );
     }
 
@@ -100,18 +102,18 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
      * @param $blExpectedResult
      * @dataProvider providerOePayPalGetPersistentParam
      */
-    public function testOePayPalGetPersistentParam( $oArticleInfo, $blExpectedResult )
+    public function testOePayPalGetPersistentParam($oArticleInfo, $blExpectedResult)
     {
-        $oDetails = $this->_createDetailsMock( $oArticleInfo );
+        $oDetails = $this->_createDetailsMock($oArticleInfo);
 
-        $this->assertEquals( $blExpectedResult, $oDetails->oePayPalGetPersistentParam() );
+        $this->assertEquals($blExpectedResult, $oDetails->oePayPalGetPersistentParam());
     }
 
     public function providerOePayPalGetSelection()
     {
         return array(
-            array( array( 'sel' => array( 1, 0 ) ), array( 1, 0 ) ),
-            array( array( 'sel' => null ), null ),
+            array(array('sel' => array(1, 0)), array(1, 0)),
+            array(array('sel' => null), null),
         );
     }
 
@@ -121,11 +123,11 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
      * @param $blExpectedResult
      * @dataProvider providerOePayPalGetSelection
      */
-    public function testOePayPalGetSelection( $oArticleInfo, $blExpectedResult )
+    public function testOePayPalGetSelection($oArticleInfo, $blExpectedResult)
     {
-        $oDetails = $this->_createDetailsMock( $oArticleInfo );
+        $oDetails = $this->_createDetailsMock($oArticleInfo);
 
-        $this->assertEquals( $blExpectedResult, $oDetails->oePayPalGetSelection() );
+        $this->assertEquals($blExpectedResult, $oDetails->oePayPalGetSelection());
     }
 
 }

@@ -44,7 +44,7 @@ abstract class oePayPalOrderAction
      * @param $oHandler
      * @param $oOrder
      */
-    public function __construct( $oHandler, $oOrder )
+    public function __construct($oHandler, $oOrder)
     {
         $this->_oHandler = $oHandler;
         $this->_oOrder = $oOrder;
@@ -73,7 +73,7 @@ abstract class oePayPalOrderAction
      */
     public function getDate()
     {
-        return date( 'Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime() );
+        return date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime());
     }
 
     /**

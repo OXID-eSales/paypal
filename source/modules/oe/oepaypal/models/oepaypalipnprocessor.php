@@ -45,7 +45,7 @@ class oePayPalIPNProcessor
      *
      * @param oePayPalRequest $oRequest object to set.
      */
-    public function setRequest( $oRequest )
+    public function setRequest($oRequest)
     {
         $this->_oRequest = $oRequest;
     }
@@ -63,7 +63,7 @@ class oePayPalIPNProcessor
     /**
      * @param oxLang $oLang
      */
-    public function setLang( $oLang )
+    public function setLang($oLang)
     {
         $this->_oLang = $oLang;
     }
@@ -79,7 +79,7 @@ class oePayPalIPNProcessor
     /**
      * @param oePayPalIPNPaymentBuilder $oPaymentBuilder
      */
-    public function setPaymentBuilder( $oPaymentBuilder )
+    public function setPaymentBuilder($oPaymentBuilder)
     {
         $this->_oPaymentBuilder = $oPaymentBuilder;
     }
@@ -89,8 +89,8 @@ class oePayPalIPNProcessor
      */
     public function getPaymentBuilder()
     {
-        if ( is_null( $this->_oPaymentBuilder ) ) {
-            $this->_oPaymentBuilder = oxNew( 'oePayPalIPNPaymentBuilder' );
+        if (is_null($this->_oPaymentBuilder)) {
+            $this->_oPaymentBuilder = oxNew('oePayPalIPNPaymentBuilder');
         }
         return $this->_oPaymentBuilder;
     }
@@ -98,7 +98,7 @@ class oePayPalIPNProcessor
     /**
      * @param oePayPalOrderManager $oPayPalOrderManager
      */
-    public function setOrderManager( $oPayPalOrderManager )
+    public function setOrderManager($oPayPalOrderManager)
     {
         $this->_oOrderManager = $oPayPalOrderManager;
     }
@@ -108,8 +108,8 @@ class oePayPalIPNProcessor
      */
     public function getOrderManager()
     {
-        if ( is_null( $this->_oOrderManager ) ) {
-            $this->_oOrderManager = oxNew( 'oePayPalOrderManager' );
+        if (is_null($this->_oOrderManager)) {
+            $this->_oOrderManager = oxNew('oePayPalOrderManager');
         }
         return $this->_oOrderManager;
     }
@@ -127,11 +127,11 @@ class oePayPalIPNProcessor
         $oPayPalOrderManager = $this->getOrderManager();
 
         // Create Payment from Request.
-        $oPaymentBuilder->setLang( $oLang );
-        $oPaymentBuilder->setRequest( $oRequest );
+        $oPaymentBuilder->setLang($oLang);
+        $oPaymentBuilder->setRequest($oRequest);
         $oOrderPayment = $oPaymentBuilder->buildPayment();
 
-        $oPayPalOrderManager->setOrderPayment( $oOrderPayment );
+        $oPayPalOrderManager->setOrderPayment($oOrderPayment);
         $blProcessSuccess = $oPayPalOrderManager->updateOrderStatus();
 
         return $blProcessSuccess;

@@ -19,12 +19,12 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
-require_once realpath( "." ).'/integration/lib/oepaypalshopconstruct.php';
-require_once realpath( "." ).'/integration/lib/oepaypalcommunicationhelper.php';
-require_once realpath( "." ).'/integration/lib/oepaypaltestcaseparser.php';
-require_once realpath( "." ).'/integration/lib/oepaypalarrayasserts.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
+require_once realpath(".") . '/integration/lib/oepaypalshopconstruct.php';
+require_once realpath(".") . '/integration/lib/oepaypalcommunicationhelper.php';
+require_once realpath(".") . '/integration/lib/oepaypaltestcaseparser.php';
+require_once realpath(".") . '/integration/lib/oepaypalarrayasserts.php';
 
 class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends OxidTestCase
 {
@@ -48,7 +48,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
         parent::setUp();
         $this->_reset();
 
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', true );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
     }
 
     /**
@@ -57,11 +57,11 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     public function providerDoExpressCheckoutPayment()
     {
         $oParser = new oePayPalTestCaseParser();
-        $oParser->setDirectory( $this->_sTestCasesPath );
-        if ( isset( $this->_aTestCases ) ) {
-            $oParser->setTestCases( $this->_aTestCases );
+        $oParser->setDirectory($this->_sTestCasesPath);
+        if (isset($this->_aTestCases)) {
+            $oParser->setTestCases($this->_aTestCases);
         }
-        $oParser->setReplacements( $this->_getReplacements() );
+        $oParser->setReplacements($this->_getReplacements());
 
         return $oParser->getData();
     }
@@ -69,17 +69,17 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     /**
      * @dataProvider providerDoExpressCheckoutPayment
      */
-    public function testExpressCheckoutPaymentRequest( $aTestCase )
+    public function testExpressCheckoutPaymentRequest($aTestCase)
     {
-        if ( $aTestCase[ 'skipped' ] ) {
+        if ($aTestCase['skipped']) {
             return;
         }
 
         $oCommunicationHelper = new oePayPalCommunicationHelper();
-        $oCurl = $oCommunicationHelper->getCurl( array() );
+        $oCurl = $oCommunicationHelper->getCurl(array());
 
-        $oDispatcher = $this->_getDispatcher( $aTestCase );
-        $this->_setCurlToDispatcher( $oDispatcher, $oCurl );
+        $oDispatcher = $this->_getDispatcher($aTestCase);
+        $this->_setCurlToDispatcher($oDispatcher, $oCurl);
 
         $oDispatcher->$aTestCase['action']();
 
@@ -89,11 +89,11 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
 
         $aAsserts = new oePayPalArrayAsserts();
 
-        $aAsserts->assertArraysEqual( $aExpected['requestToPayPal'], $aCurlParameters );
+        $aAsserts->assertArraysEqual($aExpected['requestToPayPal'], $aCurlParameters);
 
-        if ( isset( $aExpected['header'] ) ) {
+        if (isset($aExpected['header'])) {
             $aCurlHeader = $oCurl->getHeader();
-            $aAsserts->assertArraysEqual( $aExpected['header'], $aCurlHeader );
+            $aAsserts->assertArraysEqual($aExpected['header'], $aCurlHeader);
         }
     }
 
@@ -104,22 +104,22 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      *
      * @return oePayPalExpressCheckoutDispatcher
      */
-    protected function _getDispatcher( $aTestCase )
+    protected function _getDispatcher($aTestCase)
     {
         $oBasketConstruct = new oePayPalShopConstruct();
-        $oBasketConstruct->setParams( $aTestCase );
+        $oBasketConstruct->setParams($aTestCase);
 
         $oBasket = $oBasketConstruct->getBasket();
         $oSession = $this->_getSession();
-        $oSession->setBasket( $oBasket );
+        $oSession->setBasket($oBasket);
 
         $this->_setMockedUtils();
 
-        $oDispatcher = $this->getMock( $aTestCase['class'], array( '_getPayPalOrder' ) );
-        $oDispatcher->expects( $this->any() )->method( '_getPayPalOrder' )->will( $this->returnValue( $this->_getOrder() ) );
+        $oDispatcher = $this->getMock($aTestCase['class'], array('_getPayPalOrder'));
+        $oDispatcher->expects($this->any())->method('_getPayPalOrder')->will($this->returnValue($this->_getOrder()));
 
-        $oDispatcher->setSession( $oSession );
-        $oDispatcher->setUser( $oBasketConstruct->getUser() );
+        $oDispatcher->setSession($oSession);
+        $oDispatcher->setUser($oBasketConstruct->getUser());
 
         return $oDispatcher;
     }
@@ -129,8 +129,8 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      */
     protected function _getSession()
     {
-        $oSession = $this->getMock( 'oxSession', array( 'getRemoteAccessToken' ) );
-        $oSession->expects( $this->any() )->method( 'getRemoteAccessToken' )->will( $this->returnValue( 'token' ) );
+        $oSession = $this->getMock('oxSession', array('getRemoteAccessToken'));
+        $oSession->expects($this->any())->method('getRemoteAccessToken')->will($this->returnValue('token'));
 
         return $oSession;
     }
@@ -140,17 +140,17 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      * @param $oDispatcher
      * @param $oCurl
      */
-    protected function _setCurlToDispatcher( $oDispatcher, $oCurl )
+    protected function _setCurlToDispatcher($oDispatcher, $oCurl)
     {
         $oCommunicationService = $oDispatcher->getPayPalCheckoutService();
         $oCaller = $oCommunicationService->getCaller();
         $oOldCurl = $oCaller->getCurl();
 
-        $oCurl->setHost( $oOldCurl->getHost() );
-        $oCurl->setDataCharset( $oOldCurl->getDataCharset() );
-        $oCurl->setUrlToCall( $oOldCurl->getUrlToCall() );
+        $oCurl->setHost($oOldCurl->getHost());
+        $oCurl->setDataCharset($oOldCurl->getDataCharset());
+        $oCurl->setUrlToCall($oOldCurl->getUrlToCall());
 
-        $oCaller->setCurl( $oCurl );
+        $oCaller->setCurl($oCurl);
     }
 
     /**
@@ -160,8 +160,8 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      */
     protected function _getOrder()
     {
-        $oOrder = $this->getMock( 'oePayPalOxOrder', array( 'finalizePayPalOrder' ) );
-        $oOrder->expects( $this->any() )->method( 'finalizePayPalOrder' )->will( $this->returnValue( null ) );
+        $oOrder = $this->getMock('oePayPalOxOrder', array('finalizePayPalOrder'));
+        $oOrder->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
 
         return $oOrder;
     }
@@ -171,9 +171,9 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      */
     protected function _setMockedUtils()
     {
-        $oUtils = $this->getMock( 'oxUtils', array( 'redirect' ) );
-        $oUtils->expects( $this->any() )->method( 'redirect' )->will( $this->returnValue( null ) );
-        oxRegistry::set( 'oxUtils', $oUtils);
+        $oUtils = $this->getMock('oxUtils', array('redirect'));
+        $oUtils->expects($this->any())->method('redirect')->will($this->returnValue(null));
+        oxRegistry::set('oxUtils', $oUtils);
     }
 
     /**
@@ -184,11 +184,11 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     protected function _getReplacements()
     {
         $oConfig = $this->getConfig();
-        if ( $oConfig->getEdition() == 'EE' ) {
+        if ($oConfig->getEdition() == 'EE') {
             $sResult = 'OXID_Cart_EnterpriseECS';
-        } else if ( $oConfig->getEdition() == 'PE' ) {
+        } else if ($oConfig->getEdition() == 'PE') {
             $sResult = 'OXID_Cart_ProfessionalECS';
-        } else if ( $oConfig->getEdition() == 'CE' ) {
+        } else if ($oConfig->getEdition() == 'CE') {
             $sResult = 'OXID_Cart_CommunityECS';
         }
         $aReplacements = array(
@@ -207,25 +207,25 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     {
         $oDb = oxDb::getDb();
         $oConfig = oxRegistry::getConfig();
-        $oDb->query( "TRUNCATE oxarticles" );
-        $oDb->query( "TRUNCATE oxcategories" );
-        $oDb->query( "TRUNCATE oxcounters" );
-        $oDb->query( "TRUNCATE oxdiscount" );
-        $oDb->query( "TRUNCATE oxobject2discount" );
-        $oDb->query( "TRUNCATE oxgroups" );
-        $oDb->query( "TRUNCATE oxobject2group" );
-        $oDb->query( "TRUNCATE oxwrapping" );
-        $oDb->query( "TRUNCATE oxdelivery" );
-        $oDb->query( "TRUNCATE oxdel2delset" );
-        $oDb->query( "TRUNCATE oxobject2payment" );
-        $oDb->query( "TRUNCATE oxvouchers" );
-        $oDb->query( "TRUNCATE oxvoucherseries" );
-        $oDb->query( "TRUNCATE oxobject2delivery" );
-        $oDb->query( "TRUNCATE oxdeliveryset" );
-        $oDb->query( "TRUNCATE oxuser" );
-        $oDb->query( "TRUNCATE oxprice2article" );
-        $oConfig->setConfigParam( "blShowVATForDelivery", true );
-        $oConfig->setConfigParam( "blShowVATForPayCharge", true );
-        $oDb->query( "UPDATE oxpayments SET oxaddsum=0 WHERE oxid = 'oxidpaypal'" );
+        $oDb->query("TRUNCATE oxarticles");
+        $oDb->query("TRUNCATE oxcategories");
+        $oDb->query("TRUNCATE oxcounters");
+        $oDb->query("TRUNCATE oxdiscount");
+        $oDb->query("TRUNCATE oxobject2discount");
+        $oDb->query("TRUNCATE oxgroups");
+        $oDb->query("TRUNCATE oxobject2group");
+        $oDb->query("TRUNCATE oxwrapping");
+        $oDb->query("TRUNCATE oxdelivery");
+        $oDb->query("TRUNCATE oxdel2delset");
+        $oDb->query("TRUNCATE oxobject2payment");
+        $oDb->query("TRUNCATE oxvouchers");
+        $oDb->query("TRUNCATE oxvoucherseries");
+        $oDb->query("TRUNCATE oxobject2delivery");
+        $oDb->query("TRUNCATE oxdeliveryset");
+        $oDb->query("TRUNCATE oxuser");
+        $oDb->query("TRUNCATE oxprice2article");
+        $oConfig->setConfigParam("blShowVATForDelivery", true);
+        $oConfig->setConfigParam("blShowVATForPayCharge", true);
+        $oDb->query("UPDATE oxpayments SET oxaddsum=0 WHERE oxid = 'oxidpaypal'");
     }
 }

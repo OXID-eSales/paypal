@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
 
 class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest extends OxidTestCase
 {
@@ -30,9 +30,9 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest exten
     {
         $sArticleId = 'this is product id';
         $oArticleToExpressCheckoutValidator = new oePayPalArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setArticleId( $sArticleId );
+        $oArticleToExpressCheckoutValidator->setArticleId($sArticleId);
 
-        $this->assertEquals( $sArticleId, $oArticleToExpressCheckoutValidator->getArticleId() );
+        $this->assertEquals($sArticleId, $oArticleToExpressCheckoutValidator->getArticleId());
     }
 
     /**
@@ -40,11 +40,11 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest exten
      */
     public function testSetGeSelectList()
     {
-        $aSelectList = array( 'testable' => 'selection list' );
+        $aSelectList = array('testable' => 'selection list');
         $oArticleToExpressCheckoutValidator = new oePayPalArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setSelectList( $aSelectList );
+        $oArticleToExpressCheckoutValidator->setSelectList($aSelectList);
 
-        $this->assertEquals( $aSelectList, $oArticleToExpressCheckoutValidator->getSelectList() );
+        $this->assertEquals($aSelectList, $oArticleToExpressCheckoutValidator->getSelectList());
     }
 
     /**
@@ -52,11 +52,11 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest exten
      */
     public function testSetGetPersistParam()
     {
-        $aPersistentParam = array( 'testable' => 'persistent param' );
+        $aPersistentParam = array('testable' => 'persistent param');
         $oArticleToExpressCheckoutValidator = new oePayPalArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setPersistParam( $aPersistentParam );
+        $oArticleToExpressCheckoutValidator->setPersistParam($aPersistentParam);
 
-        $this->assertEquals( $aPersistentParam, $oArticleToExpressCheckoutValidator->getPersistParam() );
+        $this->assertEquals($aPersistentParam, $oArticleToExpressCheckoutValidator->getPersistParam());
     }
 
     /**
@@ -66,9 +66,9 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest exten
     {
         $iAmount = 5;
         $oArticleToExpressCheckoutValidator = new oePayPalArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setArticleAmount( $iAmount );
+        $oArticleToExpressCheckoutValidator->setArticleAmount($iAmount);
 
-        $this->assertEquals( $iAmount, $oArticleToExpressCheckoutValidator->getArticleAmount() );
+        $this->assertEquals($iAmount, $oArticleToExpressCheckoutValidator->getArticleAmount());
     }
 
 }

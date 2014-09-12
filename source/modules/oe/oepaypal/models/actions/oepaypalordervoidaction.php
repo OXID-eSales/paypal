@@ -35,24 +35,24 @@ class oePayPalOrderVoidAction extends oePayPalOrderAction
 
         $oOrder = $this->getOrder();
         $dAmount = $oOrder->getRemainingOrderSum();
-        $oOrder->setVoidedAmount( $dAmount );
-        $oOrder->setPaymentStatus( $oData->getOrderStatus() );
+        $oOrder->setVoidedAmount($dAmount);
+        $oOrder->setPaymentStatus($oData->getOrderStatus());
         $oOrder->save();
 
-        $oPayment = oxNew( 'oePayPalOrderPayment' );
-        $oPayment->setDate( $this->getDate() );
-        $oPayment->setTransactionId( $oResponse->getAuthorizationId() );
-        $oPayment->setCorrelationId( $oResponse->getCorrelationId() );
-        $oPayment->setAction( 'void' );
-        $oPayment->setStatus( 'Voided' );
-        $oPayment->setAmount( $dAmount );
+        $oPayment = oxNew('oePayPalOrderPayment');
+        $oPayment->setDate($this->getDate());
+        $oPayment->setTransactionId($oResponse->getAuthorizationId());
+        $oPayment->setCorrelationId($oResponse->getCorrelationId());
+        $oPayment->setAction('void');
+        $oPayment->setStatus('Voided');
+        $oPayment->setAmount($dAmount);
 
-        $oPayment = $oOrder->getPaymentList()->addPayment( $oPayment );
+        $oPayment = $oOrder->getPaymentList()->addPayment($oPayment);
 
-        if ( $oData->getComment() ) {
+        if ($oData->getComment()) {
             $oComment = oxNew('oePayPalOrderPaymentComment');
-            $oComment->setComment( $oData->getComment() );
-            $oPayment->addComment( $oComment );
+            $oComment->setComment($oData->getComment());
+            $oPayment->addComment($oComment);
         }
     }
 }

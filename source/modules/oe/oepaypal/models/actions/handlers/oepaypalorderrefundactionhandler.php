@@ -42,7 +42,7 @@ class oePayPalOrderRefundActionHandler extends oePayPalOrderActionHandler
         $oService = $this->getPayPalService();
         $oRequest = $this->getPayPalRequest();
 
-        return $oService->refundTransaction( $oRequest );
+        return $oService->refundTransaction($oRequest);
     }
 
     /**
@@ -52,15 +52,15 @@ class oePayPalOrderRefundActionHandler extends oePayPalOrderActionHandler
      */
     public function getPayPalRequest()
     {
-        if ( is_null( $this->_oPayPalRequest ) ) {
+        if (is_null($this->_oPayPalRequest)) {
             $oRequestBuilder = $this->getPayPalRequestBuilder();
 
             $oData = $this->getData();
 
-            $oRequestBuilder->setTransactionId( $oData->getTransactionId() );
-            $oRequestBuilder->setAmount( $oData->getAmount(), $oData->getCurrency() );
-            $oRequestBuilder->setRefundType( $oData->getType() );
-            $oRequestBuilder->setComment( $oData->getComment() );
+            $oRequestBuilder->setTransactionId($oData->getTransactionId());
+            $oRequestBuilder->setAmount($oData->getAmount(), $oData->getCurrency());
+            $oRequestBuilder->setRefundType($oData->getType());
+            $oRequestBuilder->setComment($oData->getComment());
 
             $this->_oPayPalRequest = $oRequestBuilder->getRequest();
         }
@@ -73,7 +73,7 @@ class oePayPalOrderRefundActionHandler extends oePayPalOrderActionHandler
      *
      * @param $oPayPalRequest
      */
-    public function setPayPalRequest( $oPayPalRequest )
+    public function setPayPalRequest($oPayPalRequest)
     {
         $this->_oPayPalRequest = $oPayPalRequest;
     }

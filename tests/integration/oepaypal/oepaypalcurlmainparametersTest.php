@@ -19,29 +19,29 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 class Integration_oePayPal_oePayPalCurlMainParametersTest extends OxidTestCase
 {
     public function testCurlMainParameterHost_modeSandbox_sandboxHost()
     {
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', true );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
 
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
-        $this->assertEquals( 'api-3t.sandbox.paypal.com', $oCurl->getHost() );
+        $this->assertEquals('api-3t.sandbox.paypal.com', $oCurl->getHost());
     }
 
     public function testCurlMainParameterHost_modeProduction_payPalHost()
     {
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', false );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
 
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
-        $this->assertEquals( 'api-3t.paypal.com', $oCurl->getHost() );
+        $this->assertEquals('api-3t.paypal.com', $oCurl->getHost());
     }
 
     public function testCurlMainParameterCharset_default_iso()
@@ -49,36 +49,36 @@ class Integration_oePayPal_oePayPalCurlMainParametersTest extends OxidTestCase
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
-        $this->assertEquals( 'ISO-8859-15', $oCurl->getDataCharset() );
+        $this->assertEquals('ISO-8859-15', $oCurl->getDataCharset());
     }
 
     public function testCurlMainParameterCharset_utfMode_utf()
     {
-        $this->getConfig()->setConfigParam( 'iUtfMode', true );
+        $this->getConfig()->setConfigParam('iUtfMode', true);
 
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
-        $this->assertEquals( 'UTF-8', $oCurl->getDataCharset() );
+        $this->assertEquals('UTF-8', $oCurl->getDataCharset());
     }
 
     public function testCurlMainParameterUrlToCall_defaultProductionMode_ApiUrl()
     {
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', false );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
 
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
-        $this->assertEquals( 'https://api-3t.paypal.com/nvp', $oCurl->getUrlToCall() );
+        $this->assertEquals('https://api-3t.paypal.com/nvp', $oCurl->getUrlToCall());
     }
 
     public function testCurlMainParameterUrlToCall_defaultSandboxMode_sandboxApiUrl()
     {
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', true );
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
 
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
-        $this->assertEquals( 'https://api-3t.sandbox.paypal.com/nvp', $oCurl->getUrlToCall() );
+        $this->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $oCurl->getUrlToCall());
     }
 }

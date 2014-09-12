@@ -31,7 +31,7 @@ abstract class oePayPalModelDbGateway
      */
     protected function _getDb()
     {
-        return oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        return oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
     }
 
     /**
@@ -39,19 +39,19 @@ abstract class oePayPalModelDbGateway
      *
      * @param array $aData model data
      */
-    abstract public function save( $aData );
+    abstract public function save($aData);
 
     /**
      * Abstract method for loading model data
      *
      * @param string $sId model id
      */
-    abstract public function load( $sId );
+    abstract public function load($sId);
 
     /**
      * Abstract method for delete model data
      *
      * @param string $sId model id
      */
-    abstract public function delete( $sId );
+    abstract public function delete($sId);
 }

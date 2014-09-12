@@ -19,9 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
 
-if ( ! class_exists('oePayPalOxBasket_parent')) {
+if (!class_exists('oePayPalOxBasket_parent')) {
     class oePayPalOxBasket_parent extends oxBasket
     {
     }
@@ -39,11 +39,11 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function isVirtualPayPalBasketDataProvider()
     {
-        $oProduct1 = $this->getMock( 'oxArticle', array('isVirtualPayPalArticle') );
-        $oProduct1->expects( $this->any() )->method( 'isVirtualPayPalArticle' )->will( $this->returnValue( true ) );
+        $oProduct1 = $this->getMock('oxArticle', array('isVirtualPayPalArticle'));
+        $oProduct1->expects($this->any())->method('isVirtualPayPalArticle')->will($this->returnValue(true));
 
-        $oProduct2 = $this->getMock( 'oxArticle', array('isVirtualPayPalArticle') );
-        $oProduct2->expects( $this->any() )->method( 'isVirtualPayPalArticle' )->will( $this->returnValue( false ) );
+        $oProduct2 = $this->getMock('oxArticle', array('isVirtualPayPalArticle'));
+        $oProduct2->expects($this->any())->method('isVirtualPayPalArticle')->will($this->returnValue(false));
 
         return array(
             array($oProduct1, $oProduct2, false),
@@ -57,14 +57,14 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      *
      * @dataProvider isVirtualPayPalBasketDataProvider
      */
-    public function testIsVirtualPayPalBasket( $oProduct1, $oProduct2, $blResult )
+    public function testIsVirtualPayPalBasket($oProduct1, $oProduct2, $blResult)
     {
-        $aProducts = array( $oProduct1, $oProduct2) ;
+        $aProducts = array($oProduct1, $oProduct2);
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getBasketArticles') );
-        $oBasket->expects( $this->once() )->method( 'getBasketArticles' )->will( $this->returnValue( $aProducts ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getBasketArticles'));
+        $oBasket->expects($this->once())->method('getBasketArticles')->will($this->returnValue($aProducts));
 
-        $this->assertEquals( $blResult, $oBasket->isVirtualPayPalBasket() );
+        $this->assertEquals($blResult, $oBasket->isVirtualPayPalBasket());
     }
 
     /**
@@ -74,10 +74,10 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
     public function getPayPalAdditionalCostsDataProvider()
     {
         return array(
-            array( true, 17.6, 15.14, 15.14 ),
-            array( false, 17.6, 15.14, 17.6 ),
-            array( true, 0, 0, 0 ),
-            array( false, 0, 0, 0 ),
+            array(true, 17.6, 15.14, 15.14),
+            array(false, 17.6, 15.14, 17.6),
+            array(true, 0, 0, 0),
+            array(false, 0, 0, 0),
         );
     }
 
@@ -86,17 +86,17 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      *
      * @dataProvider getPayPalAdditionalCostsDataProvider
      */
-    public function testGetPayPalWrappingCosts( $blCalculationModeNetto, $dWrappingPriceBrutto, $dWrappingPriceNetto, $dWrappingPriceExpect )
+    public function testGetPayPalWrappingCosts($blCalculationModeNetto, $dWrappingPriceBrutto, $dWrappingPriceNetto, $dWrappingPriceExpect)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getNettoPrice', 'getBruttoPrice') );
-        $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( $dWrappingPriceBrutto ) );
-        $oPrice->expects( $this->any() )->method( 'getNettoPrice' )->will( $this->returnValue( $dWrappingPriceNetto ) );
+        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dWrappingPriceBrutto));
+        $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dWrappingPriceNetto));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxwrapping' ) )->will( $this->returnValue( $oPrice ) );
-        $oBasket->expects( $this->once() )->method( 'isCalculationModeNetto' )->will( $this->returnValue( $blCalculationModeNetto ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxwrapping'))->will($this->returnValue($oPrice));
+        $oBasket->expects($this->once())->method('isCalculationModeNetto')->will($this->returnValue($blCalculationModeNetto));
 
-        $this->assertEquals( $dWrappingPriceExpect, $oBasket->getPayPalWrappingCosts() );
+        $this->assertEquals($dWrappingPriceExpect, $oBasket->getPayPalWrappingCosts());
     }
 
     /**
@@ -104,17 +104,17 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      *
      * @dataProvider getPayPalAdditionalCostsDataProvider
      */
-    public function testGetPayPalGiftCardCosts( $blCalculationModeNetto, $dGiftCardPriceBrutto, $dGiftCardPriceNetto, $dGiftCardPrice )
+    public function testGetPayPalGiftCardCosts($blCalculationModeNetto, $dGiftCardPriceBrutto, $dGiftCardPriceNetto, $dGiftCardPrice)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getNettoPrice', 'getBruttoPrice') );
-        $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( $dGiftCardPriceBrutto ) );
-        $oPrice->expects( $this->any() )->method( 'getNettoPrice' )->will( $this->returnValue( $dGiftCardPriceNetto ) );
+        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dGiftCardPriceBrutto));
+        $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dGiftCardPriceNetto));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxgiftcard' ) )->will( $this->returnValue( $oPrice ) );
-        $oBasket->expects( $this->once() )->method( 'isCalculationModeNetto' )->will( $this->returnValue( $blCalculationModeNetto ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxgiftcard'))->will($this->returnValue($oPrice));
+        $oBasket->expects($this->once())->method('isCalculationModeNetto')->will($this->returnValue($blCalculationModeNetto));
 
-        $this->assertEquals( $dGiftCardPrice, $oBasket->getPayPalGiftCardCosts() );
+        $this->assertEquals($dGiftCardPrice, $oBasket->getPayPalGiftCardCosts());
     }
 
     /**
@@ -122,17 +122,17 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      *
      * @dataProvider getPayPalAdditionalCostsDataProvider
      */
-    public function testGetPayPalPaymentCosts( $blCalculationModeNetto, $dPaymentCostsPriceBrutto, $dPaymentCostsPriceNetto, $dPaymentPrice )
+    public function testGetPayPalPaymentCosts($blCalculationModeNetto, $dPaymentCostsPriceBrutto, $dPaymentCostsPriceNetto, $dPaymentPrice)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getNettoPrice', 'getBruttoPrice') );
-        $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( $dPaymentCostsPriceBrutto ) );
-        $oPrice->expects( $this->any() )->method( 'getNettoPrice' )->will( $this->returnValue( $dPaymentCostsPriceNetto ) );
+        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dPaymentCostsPriceBrutto));
+        $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dPaymentCostsPriceNetto));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxpayment' ) )->will( $this->returnValue( $oPrice ) );
-        $oBasket->expects( $this->once() )->method( 'isCalculationModeNetto' )->will( $this->returnValue( $blCalculationModeNetto ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxpayment'))->will($this->returnValue($oPrice));
+        $oBasket->expects($this->once())->method('isCalculationModeNetto')->will($this->returnValue($blCalculationModeNetto));
 
-        $this->assertEquals( $dPaymentPrice, $oBasket->getPayPalPaymentCosts() );
+        $this->assertEquals($dPaymentPrice, $oBasket->getPayPalPaymentCosts());
     }
 
     /**
@@ -140,17 +140,17 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      *
      * @dataProvider getPayPalAdditionalCostsDataProvider
      */
-    public function testGetPayPalTsProtectionCosts( $blCalculationModeNetto, $dPaymentCostsPriceBrutto, $dPaymentCostsPriceNetto, $dPaymentPrice )
+    public function testGetPayPalTsProtectionCosts($blCalculationModeNetto, $dPaymentCostsPriceBrutto, $dPaymentCostsPriceNetto, $dPaymentPrice)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getNettoPrice', 'getBruttoPrice') );
-        $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( $dPaymentCostsPriceBrutto ) );
-        $oPrice->expects( $this->any() )->method( 'getNettoPrice' )->will( $this->returnValue( $dPaymentCostsPriceNetto ) );
+        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dPaymentCostsPriceBrutto));
+        $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dPaymentCostsPriceNetto));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxtsprotection' ) )->will( $this->returnValue( $oPrice ) );
-        $oBasket->expects( $this->once() )->method( 'isCalculationModeNetto' )->will( $this->returnValue( $blCalculationModeNetto ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts', 'isCalculationModeNetto'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxtsprotection'))->will($this->returnValue($oPrice));
+        $oBasket->expects($this->once())->method('isCalculationModeNetto')->will($this->returnValue($blCalculationModeNetto));
 
-        $this->assertEquals( $dPaymentPrice, $oBasket->getPayPalTsProtectionCosts() );
+        $this->assertEquals($dPaymentPrice, $oBasket->getPayPalTsProtectionCosts());
     }
 
     /**
@@ -192,14 +192,14 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      *
      * @dataProvider getDiscountSumPayPalBasketDataProvider
      */
-    public function testGetDiscountSumPayPalBasket( $oDiscount, $aVouchers, $dPaymentCost, $dResult )
+    public function testGetDiscountSumPayPalBasket($oDiscount, $aVouchers, $dPaymentCost, $dResult)
     {
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getTotalDiscount', 'getPaymentCosts', 'getVouchers') );
-        $oBasket->expects( $this->once() )->method( 'getTotalDiscount' )->will( $this->returnValue( $oDiscount ) );
-        $oBasket->expects( $this->once() )->method( 'getVouchers' )->will( $this->returnValue( $aVouchers ) );
-        $oBasket->expects( $this->once() )->method( 'getPaymentCosts' )->will( $this->returnValue( $dPaymentCost ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getTotalDiscount', 'getPaymentCosts', 'getVouchers'));
+        $oBasket->expects($this->once())->method('getTotalDiscount')->will($this->returnValue($oDiscount));
+        $oBasket->expects($this->once())->method('getVouchers')->will($this->returnValue($aVouchers));
+        $oBasket->expects($this->once())->method('getPaymentCosts')->will($this->returnValue($dPaymentCost));
 
-        $this->assertEquals( $dResult, $oBasket->getDiscountSumPayPalBasket() );
+        $this->assertEquals($dResult, $oBasket->getDiscountSumPayPalBasket());
     }
 
 
@@ -212,8 +212,8 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
     {
         // discounts
         $oProductsPrice = new oxPriceList();
-        $oProductsPrice->addToPriceList( new oxPrice(15) );
-        $dPaymentCost  = 3;
+        $oProductsPrice->addToPriceList(new oxPrice(15));
+        $dPaymentCost = 3;
         $dWrappingCost = 5;
 
         return array(
@@ -228,15 +228,15 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      *
      * @dataProvider getSumOfCostOfAllItemsPayPalBasketDataProvider
      */
-    public function testGetSumOfCostOfAllItemsPayPalBasket( $oProductsPrice, $dPaymentCost, $dWrappingCost, $dTsProtectionCost,$dResult )
+    public function testGetSumOfCostOfAllItemsPayPalBasket($oProductsPrice, $dPaymentCost, $dWrappingCost, $dTsProtectionCost, $dResult)
     {
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getProductsPrice', 'getPayPalPaymentCosts', 'getPayPalWrappingCosts', 'getPayPalTsProtectionCosts') );
-        $oBasket->expects( $this->once() )->method( 'getProductsPrice' )->will( $this->returnValue( $oProductsPrice ) );
-        $oBasket->expects( $this->once() )->method( 'getPayPalPaymentCosts' )->will( $this->returnValue( $dPaymentCost ) );
-        $oBasket->expects( $this->once() )->method( 'getPayPalWrappingCosts' )->will( $this->returnValue( $dWrappingCost ) );
-        $oBasket->expects( $this->once() )->method( 'getPayPalTsProtectionCosts' )->will( $this->returnValue( $dTsProtectionCost ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getProductsPrice', 'getPayPalPaymentCosts', 'getPayPalWrappingCosts', 'getPayPalTsProtectionCosts'));
+        $oBasket->expects($this->once())->method('getProductsPrice')->will($this->returnValue($oProductsPrice));
+        $oBasket->expects($this->once())->method('getPayPalPaymentCosts')->will($this->returnValue($dPaymentCost));
+        $oBasket->expects($this->once())->method('getPayPalWrappingCosts')->will($this->returnValue($dWrappingCost));
+        $oBasket->expects($this->once())->method('getPayPalTsProtectionCosts')->will($this->returnValue($dTsProtectionCost));
 
-        $this->assertEquals( $dResult, $oBasket->getSumOfCostOfAllItemsPayPalBasket() );
+        $this->assertEquals($dResult, $oBasket->getSumOfCostOfAllItemsPayPalBasket());
     }
 
     /**
@@ -247,13 +247,13 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
     public function getPayPalBasketVatValueDataProvider()
     {
         return array(
-            array( array( 1 => 13.32, 12 => 1.69 ), 1, 2, 3, 0.37, 21.38 ),
-            array( array( 0 => 0 ), 0, 0, 0, 0, 0 ),
-            array( array( 5 => 3.45 ), 1, 2, 3, 0.1, 9.55 ),
-            array( array( 5 => 3.45 ), 1, 0, 0, 0 , 4.45 ),
-            array( array( 5 => 3.45 ), 0, 2, 0, 1, 6.45 ),
-            array( array( 5 => 3.45 ), 0, 0, 3, 0.99, 7.44 ),
-            array( array(), 0, 0, 0, 0, 0 ),
+            array(array(1 => 13.32, 12 => 1.69), 1, 2, 3, 0.37, 21.38),
+            array(array(0 => 0), 0, 0, 0, 0, 0),
+            array(array(5 => 3.45), 1, 2, 3, 0.1, 9.55),
+            array(array(5 => 3.45), 1, 0, 0, 0, 4.45),
+            array(array(5 => 3.45), 0, 2, 0, 1, 6.45),
+            array(array(5 => 3.45), 0, 0, 3, 0.99, 7.44),
+            array(array(), 0, 0, 0, 0, 0),
         );
     }
 
@@ -261,17 +261,17 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      * Test case for oePayPalOxBasket::getPayPalBasketVatValue()
      * @dataProvider getPayPalBasketVatValueDataProvider
      */
-    public function testGetPayPalBasketVatValue( $aProductsVat, $flWrappingVat, $flGiftCardVat, $flPayCostVat, $flTsProtectionVat, $flBasketVat )
+    public function testGetPayPalBasketVatValue($aProductsVat, $flWrappingVat, $flGiftCardVat, $flPayCostVat, $flTsProtectionVat, $flBasketVat)
     {
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getProductVats', 'getPayPalWrappingVat', 'getPayPalGiftCardVat', 'getPayPalPayCostVat', 'getPayPalTsProtectionCostVat') );
-        $oBasket->expects( $this->once() )->method( 'getProductVats' )->will( $this->returnValue( $aProductsVat ) );
-        $oBasket->expects( $this->once() )->method( 'getPayPalWrappingVat' )->will( $this->returnValue( $flWrappingVat ) );
-        $oBasket->expects( $this->once() )->method( 'getPayPalGiftCardVat' )->will( $this->returnValue( $flGiftCardVat ) );
-        $oBasket->expects( $this->once() )->method( 'getPayPalPayCostVat' )->will( $this->returnValue( $flPayCostVat ) );
-        $oBasket->expects( $this->once() )->method( 'getPayPalTsProtectionCostVat' )->will( $this->returnValue( $flTsProtectionVat ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getProductVats', 'getPayPalWrappingVat', 'getPayPalGiftCardVat', 'getPayPalPayCostVat', 'getPayPalTsProtectionCostVat'));
+        $oBasket->expects($this->once())->method('getProductVats')->will($this->returnValue($aProductsVat));
+        $oBasket->expects($this->once())->method('getPayPalWrappingVat')->will($this->returnValue($flWrappingVat));
+        $oBasket->expects($this->once())->method('getPayPalGiftCardVat')->will($this->returnValue($flGiftCardVat));
+        $oBasket->expects($this->once())->method('getPayPalPayCostVat')->will($this->returnValue($flPayCostVat));
+        $oBasket->expects($this->once())->method('getPayPalTsProtectionCostVat')->will($this->returnValue($flTsProtectionVat));
 
         // Rounding because of PHPunit bug: Failed asserting that <double:21.01> matches expected <double:21.01>.
-        $this->assertEquals( $flBasketVat, round( $oBasket->getPayPalBasketVatValue(), 2), 'Basket VAT do not match SUM of products VAT.' );
+        $this->assertEquals($flBasketVat, round($oBasket->getPayPalBasketVatValue(), 2), 'Basket VAT do not match SUM of products VAT.');
     }
 
     /**
@@ -281,10 +281,10 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
     public function getPayPalProductVatDataProvider()
     {
         return array(
-            array( array( 1 => 13.32, 12 => 1.69 ), 1426 => 15.01 ),
-            array( array( 0, 0 ), 0 ),
-            array( array( 5 => 3.45 ), 3.45 ),
-            array( array(), 0 ),
+            array(array(1 => 13.32, 12 => 1.69), 1426 => 15.01),
+            array(array(0, 0), 0),
+            array(array(5 => 3.45), 3.45),
+            array(array(), 0),
         );
     }
 
@@ -292,12 +292,12 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      * Test case for oePayPalOxBasket::testGetPayPalProductVat()
      * @dataProvider getPayPalProductVatDataProvider
      */
-    public function testGetPayPalProductVat( $aProductsVat, $flBasketVat )
+    public function testGetPayPalProductVat($aProductsVat, $flBasketVat)
     {
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getProductVats') );
-        $oBasket->expects( $this->once() )->method( 'getProductVats' )->will( $this->returnValue( $aProductsVat ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getProductVats'));
+        $oBasket->expects($this->once())->method('getProductVats')->will($this->returnValue($aProductsVat));
 
-        $this->assertEquals( $flBasketVat, $oBasket->getPayPalBasketVatValue(), 'Products VAT SUM is different than expected.' );
+        $this->assertEquals($flBasketVat, $oBasket->getPayPalBasketVatValue(), 'Products VAT SUM is different than expected.');
     }
 
     /**
@@ -307,8 +307,8 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
     public function getPayPalAdditionalCostsVatDataProvider()
     {
         return array(
-            array( 10, 10 ),
-            array( 0, 0 ),
+            array(10, 10),
+            array(0, 0),
         );
     }
 
@@ -316,59 +316,59 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      * Test case for oePayPalOxBasket::GetPayPalWrappingVat()
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
-    public function testGetPayPalWrappingVat( $dCostVat, $dCostVatExpected )
+    public function testGetPayPalWrappingVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getVatValue') );
-        $oPrice->expects( $this->any() )->method( 'getVatValue' )->will( $this->returnValue( $dCostVat ) );
+        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxwrapping' ) )->will( $this->returnValue( $oPrice ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxwrapping'))->will($this->returnValue($oPrice));
 
-        $this->assertEquals( $dCostVatExpected, $oBasket->getPayPalWrappingVat(), 'Wrapping VAT SUM is different than expected.' );
+        $this->assertEquals($dCostVatExpected, $oBasket->getPayPalWrappingVat(), 'Wrapping VAT SUM is different than expected.');
     }
 
     /**
      * Test case for oePayPalOxBasket::GetPayPalGiftCardVat()
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
-    public function testGetPayPalGiftCardVat( $dCostVat, $dCostVatExpected )
+    public function testGetPayPalGiftCardVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getVatValue') );
-        $oPrice->expects( $this->any() )->method( 'getVatValue' )->will( $this->returnValue( $dCostVat ) );
+        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxgiftcard' ) )->will( $this->returnValue( $oPrice ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxgiftcard'))->will($this->returnValue($oPrice));
 
-        $this->assertEquals( $dCostVatExpected, $oBasket->getPayPalGiftCardVat(), 'GiftCard VAT SUM is different than expected.' );
+        $this->assertEquals($dCostVatExpected, $oBasket->getPayPalGiftCardVat(), 'GiftCard VAT SUM is different than expected.');
     }
 
     /**
      * Test case for oePayPalOxBasket::GetPayPalPayCostVat()
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
-    public function testGetPayPalPayCostVat( $dCostVat, $dCostVatExpected )
+    public function testGetPayPalPayCostVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getVatValue') );
-        $oPrice->expects( $this->any() )->method( 'getVatValue' )->will( $this->returnValue( $dCostVat ) );
+        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxpayment' ) )->will( $this->returnValue( $oPrice ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxpayment'))->will($this->returnValue($oPrice));
 
-        $this->assertEquals( $dCostVatExpected, $oBasket->getPayPalPayCostVat(), 'PayCost VAT SUM is different than expected.' );
+        $this->assertEquals($dCostVatExpected, $oBasket->getPayPalPayCostVat(), 'PayCost VAT SUM is different than expected.');
     }
 
     /**
      * Test case for oePayPalOxBasket::getPayPalTsProtectionCostVat()
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
-    public function testGetPayPalTsProtectionCostVat( $dCostVat, $dCostVatExpected )
+    public function testGetPayPalTsProtectionCostVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock( 'oxPrice', array('getVatValue') );
-        $oPrice->expects( $this->any() )->method( 'getVatValue' )->will( $this->returnValue( $dCostVat ) );
+        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
-        $oBasket = $this->getMock( 'oePayPalOxBasket', array('getCosts') );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->with( $this->equalTo( 'oxtsprotection' ) )->will( $this->returnValue( $oPrice ) );
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
+        $oBasket->expects($this->once())->method('getCosts')->with($this->equalTo('oxtsprotection'))->will($this->returnValue($oPrice));
 
-        $this->assertEquals( $dCostVatExpected, $oBasket->getPayPalTsProtectionCostVat(), 'Trusted shops VAT SUM is different than expected.' );
+        $this->assertEquals($dCostVatExpected, $oBasket->getPayPalTsProtectionCostVat(), 'Trusted shops VAT SUM is different than expected.');
     }
 }

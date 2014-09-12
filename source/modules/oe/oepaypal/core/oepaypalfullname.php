@@ -29,9 +29,9 @@ class oePayPalFullName
     private $_sFirstName = '';
     private $_sLastName = '';
 
-    function __construct( $sFullName )
+    function __construct($sFullName)
     {
-        $this->_split( $sFullName );
+        $this->_split($sFullName);
     }
 
     /**
@@ -50,9 +50,9 @@ class oePayPalFullName
         return $this->_sLastName;
     }
 
-    protected function _split( $sFullName )
+    protected function _split($sFullName)
     {
-        $aNames = explode(" ", trim($sFullName), 2 );
+        $aNames = explode(" ", trim($sFullName), 2);
 
         $this->_sFirstName = trim($aNames[0]);
         $this->_sLastName = trim($aNames[1]);

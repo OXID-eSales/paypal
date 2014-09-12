@@ -26,11 +26,11 @@ class oePayPalException extends oxException
 {
     /**
      * Exception constructor.
-     * @param string  $sMessage exception message
-     * @param integer $iCode    exception code
+     * @param string $sMessage exception message
+     * @param integer $iCode exception code
      */
-    public function __construct( $sMessage = "", $iCode = 0 )
+    public function __construct($sMessage = "", $iCode = 0)
     {
-        parent::__construct( $sMessage, $iCode );
+        parent::__construct($sMessage, $iCode);
     }
 }

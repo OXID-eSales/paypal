@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/integration/lib/oepaypalintegrationtesthelper.php';
+require_once realpath(".") . '/integration/lib/oepaypalintegrationtesthelper.php';
 
 class oePayPalCommunicationHelper extends oePayPalIntegrationTestHelper
 {
@@ -30,13 +30,13 @@ class oePayPalCommunicationHelper extends oePayPalIntegrationTestHelper
      *
      * @return oePayPalCaller
      */
-    public function getCaller( $aParams )
+    public function getCaller($aParams)
     {
-        $oCaller = $this->getMock( 'oePayPalCaller', array('call') );
-        $oCaller->expects( $this->any() )->method( 'call' )->will( $this->returnValue( $aParams ) );
+        $oCaller = $this->getMock('oePayPalCaller', array('call'));
+        $oCaller->expects($this->any())->method('call')->will($this->returnValue($aParams));
 
         $oService = new oePayPalService();
-        $oService->setCaller( $oCaller );
+        $oService->setCaller($oCaller);
 
         return $oService;
     }
@@ -48,10 +48,10 @@ class oePayPalCommunicationHelper extends oePayPalIntegrationTestHelper
      *
      * @return oePayPalCurl
      */
-    public function getCurl( $aResult )
+    public function getCurl($aResult)
     {
-        $oCurl = $this->getMock( 'oePayPalCurl', array( 'execute' ) );
-        $oCurl->expects( $this->any() )->method( 'execute' )->will( $this->returnValue( $aResult ) );
+        $oCurl = $this->getMock('oePayPalCurl', array('execute'));
+        $oCurl->expects($this->any())->method('execute')->will($this->returnValue($aResult));
         return $oCurl;
     }
 }

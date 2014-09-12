@@ -41,7 +41,7 @@ class oePayPalArticleToExpressCheckoutValidator
      *
      * @param object $oItemToValidate
      */
-    public function setItemToValidate( $oItemToValidate )
+    public function setItemToValidate($oItemToValidate)
     {
         $this->_oItemToValidate = $oItemToValidate;
     }
@@ -60,7 +60,7 @@ class oePayPalArticleToExpressCheckoutValidator
      * Method sets basket object
      * @param oxBasket
      */
-    public function setBasket( $oBasket )
+    public function setBasket($oBasket)
     {
         $this->_oBasket = $oBasket;
     }
@@ -83,7 +83,7 @@ class oePayPalArticleToExpressCheckoutValidator
     public function isArticleValid()
     {
         $blValid = true;
-        if ( $this->_isArticleAmountZero() || $this->_isSameItemInBasket() ) {
+        if ($this->_isArticleAmountZero() || $this->_isSameItemInBasket()) {
             $blValid = false;
         }
 
@@ -98,8 +98,8 @@ class oePayPalArticleToExpressCheckoutValidator
     protected function _isSameItemInBasket()
     {
         $aBasketContents = $this->getBasket()->getContents();
-        foreach ( $aBasketContents as $oBasketItem ) {
-            if( $this->_isArticleParamsEqual( $oBasketItem ) ) {
+        foreach ($aBasketContents as $oBasketItem) {
+            if ($this->_isArticleParamsEqual($oBasketItem)) {
                 return true;
             }
         }
@@ -112,11 +112,11 @@ class oePayPalArticleToExpressCheckoutValidator
      *
      * @return bool
      */
-    protected function _isArticleParamsEqual( $oBasketItem )
+    protected function _isArticleParamsEqual($oBasketItem)
     {
-        return ( $oBasketItem->getProductId() == $this->getItemToValidate()->getArticleId() &&
+        return ($oBasketItem->getProductId() == $this->getItemToValidate()->getArticleId() &&
             $oBasketItem->getPersParams() == $this->getItemToValidate()->getPersistParam() &&
-            $oBasketItem->getSelList() == $this->getItemToValidate()->getSelectList() );
+            $oBasketItem->getSelList() == $this->getItemToValidate()->getSelectList());
     }
 
     /**

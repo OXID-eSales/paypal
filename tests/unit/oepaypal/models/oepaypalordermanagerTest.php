@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOxState class.
@@ -30,15 +30,15 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
     public function testGetOrder_noOrderSetWithPaymentSet_orderCreatedFomPayment()
     {
         $sOrderId = '_orderId';
-        $oOrderPayment = $this->_prepareOrderPayment( $sOrderId );
+        $oOrderPayment = $this->_prepareOrderPayment($sOrderId);
 
         $oPayPalOrderManager = new oePayPalOrderManager();
-        $oPayPalOrderManager->setOrderPayment( $oOrderPayment );
+        $oPayPalOrderManager->setOrderPayment($oOrderPayment);
 
         $oOrderFromManager = $oPayPalOrderManager->getOrder();
         $sOrderIdFromManager = $oOrderFromManager->getOrderid();
 
-        $this->assertEquals( $sOrderId, $sOrderIdFromManager, 'Order id from manager is not same as in payment.' );
+        $this->assertEquals($sOrderId, $sOrderIdFromManager, 'Order id from manager is not same as in payment.');
     }
 
     public function testGetOrder_noOrderSetNoPaymentSet_noOrderCreated()
@@ -46,7 +46,7 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oPayPalOrderManager = new oePayPalOrderManager();
         $oOrderFromManager = $oPayPalOrderManager->getOrder();
 
-        $this->assertEquals( null, $oOrderFromManager, 'No order should be created as no order set and no payment set.' );
+        $this->assertEquals(null, $oOrderFromManager, 'No order should be created as no order set and no payment set.');
     }
 
     /**
@@ -56,21 +56,21 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
     public function testUpdateOrderStatus_withOrderPaymentWithOrder_orderStatusFromCalculator()
     {
         $sOrderId = '_orderId';
-        $oOrder = $this->_prepareOrder( $sOrderId );
-        $oOrderPayment = $this->_prepareOrderPayment( $sOrderId );
+        $oOrder = $this->_prepareOrder($sOrderId);
+        $oOrderPayment = $this->_prepareOrderPayment($sOrderId);
         $OrderCalculatedStatus = 'completed';
-        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oOrder, $OrderCalculatedStatus );
+        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator($oOrderPayment, $oOrder, $OrderCalculatedStatus);
 
         $oPayPalOrderManager = new oePayPalOrderManager();
-        $oPayPalOrderManager->setOrderPayment( $oOrderPayment );
-        $oPayPalOrderManager->setOrder( $oOrder );
-        $oPayPalOrderManager->setOrderPaymentStatusCalculator( $oPayPalOrderPaymentStatusCalculator );
+        $oPayPalOrderManager->setOrderPayment($oOrderPayment);
+        $oPayPalOrderManager->setOrder($oOrder);
+        $oPayPalOrderManager->setOrderPaymentStatusCalculator($oPayPalOrderPaymentStatusCalculator);
         $blOrderUpdated = $oPayPalOrderManager->updateOrderStatus();
 
         $oPayPalOrderManager->getOrder();
         $sOrderNewStatus = $oOrder->getPaymentStatus();
-        $this->assertEquals( $OrderCalculatedStatus, $sOrderNewStatus, 'Order status did not change to calculator calculated.' );
-        $this->assertTrue( $blOrderUpdated, 'Order should be updated, and return indicates this with true.' );
+        $this->assertEquals($OrderCalculatedStatus, $sOrderNewStatus, 'Order status did not change to calculator calculated.');
+        $this->assertTrue($blOrderUpdated, 'Order should be updated, and return indicates this with true.');
     }
 
     /**
@@ -80,20 +80,20 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
     public function testUpdateOrderStatus_noOrderPaymentWithOrder_orderStatusFromCalculator()
     {
         $sOrderId = '_orderId';
-        $oOrder = $this->_prepareOrder( $sOrderId );
+        $oOrder = $this->_prepareOrder($sOrderId);
         $oOrderPayment = null;
         $OrderCalculatedStatus = 'completed';
-        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oOrder, $OrderCalculatedStatus );
+        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator($oOrderPayment, $oOrder, $OrderCalculatedStatus);
 
         $oPayPalOrderManager = new oePayPalOrderManager();
-        $oPayPalOrderManager->setOrder( $oOrder );
-        $oPayPalOrderManager->setOrderPaymentStatusCalculator( $oPayPalOrderPaymentStatusCalculator );
+        $oPayPalOrderManager->setOrder($oOrder);
+        $oPayPalOrderManager->setOrderPaymentStatusCalculator($oPayPalOrderPaymentStatusCalculator);
         $blOrderUpdated = $oPayPalOrderManager->updateOrderStatus();
 
         $oPayPalOrderManager->getOrder();
         $sOrderNewStatus = $oOrder->getPaymentStatus();
-        $this->assertEquals( $OrderCalculatedStatus, $sOrderNewStatus, 'Order status did not change to calculator calculated.' );
-        $this->assertTrue( $blOrderUpdated, 'Order should be updated, and return indicates this with true.' );
+        $this->assertEquals($OrderCalculatedStatus, $sOrderNewStatus, 'Order status did not change to calculator calculated.');
+        $this->assertTrue($blOrderUpdated, 'Order should be updated, and return indicates this with true.');
     }
 
     /**
@@ -103,22 +103,22 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
     public function testUpdateOrderStatus_withOrderPaymentNoOrder_orderStatusFromCalculator()
     {
         $sOrderId = '_orderId';
-        $oOrder = $this->_prepareOrder( $sOrderId );
-        $oOrderPayment = $this->_prepareOrderPayment( $sOrderId );
+        $oOrder = $this->_prepareOrder($sOrderId);
+        $oOrderPayment = $this->_prepareOrderPayment($sOrderId);
         $OrderCalculatedStatus = 'completed';
-        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oOrder, $OrderCalculatedStatus );
+        $oPayPalOrderPaymentStatusCalculator = $this->_preparePayPalOrderPaymentStatusCalculator($oOrderPayment, $oOrder, $OrderCalculatedStatus);
 
         // Mock order manager to check if order is created from given payment. This prevents from database usage.
-        $oPayPalOrderManager = $this->getMock( 'oePayPalOrderManager', array( '_getOrderFromPayment' ) );
-        $oPayPalOrderManager->expects( $this->once() )->method( '_getOrderFromPayment' )->with( $oOrderPayment )->will( $this->returnValue( $oOrder ) );
-        $oPayPalOrderManager->setOrderPayment( $oOrderPayment );
-        $oPayPalOrderManager->setOrderPaymentStatusCalculator( $oPayPalOrderPaymentStatusCalculator );
+        $oPayPalOrderManager = $this->getMock('oePayPalOrderManager', array('_getOrderFromPayment'));
+        $oPayPalOrderManager->expects($this->once())->method('_getOrderFromPayment')->with($oOrderPayment)->will($this->returnValue($oOrder));
+        $oPayPalOrderManager->setOrderPayment($oOrderPayment);
+        $oPayPalOrderManager->setOrderPaymentStatusCalculator($oPayPalOrderPaymentStatusCalculator);
         $blOrderUpdated = $oPayPalOrderManager->updateOrderStatus();
 
         $oPayPalOrderManager->getOrder();
         $sOrderNewStatus = $oOrder->getPaymentStatus();
-        $this->assertEquals( $OrderCalculatedStatus, $sOrderNewStatus, 'Order status did not change to calculator calculated.' );
-        $this->assertTrue( $blOrderUpdated, 'Order should be updated, and return indicates this with true.' );
+        $this->assertEquals($OrderCalculatedStatus, $sOrderNewStatus, 'Order status did not change to calculator calculated.');
+        $this->assertTrue($blOrderUpdated, 'Order should be updated, and return indicates this with true.');
     }
 
     /**
@@ -130,7 +130,7 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oPayPalOrderManager = new oePayPalOrderManager();
         $blOrderUpdated = $oPayPalOrderManager->updateOrderStatus();
 
-        $this->assertFalse( $blOrderUpdated, 'Order should be updated, and return indicates this with true.' );
+        $this->assertFalse($blOrderUpdated, 'Order should be updated, and return indicates this with true.');
     }
 
     /**
@@ -138,11 +138,11 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
      * @param string $sOrderId order id.
      * @return oePayPalPayPalOrder
      */
-    protected function _prepareOrder( $sOrderId )
+    protected function _prepareOrder($sOrderId)
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setPaymentStatus( 'pending' );
-        $oOrder->setOrderId( $sOrderId );
+        $oOrder->setPaymentStatus('pending');
+        $oOrder->setOrderId($sOrderId);
         return $oOrder;
     }
 
@@ -151,11 +151,11 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
      * @param string $sOrderId order id.
      * @return oePayPalOrderPayment
      */
-    protected function _prepareOrderPayment( $sOrderId )
+    protected function _prepareOrderPayment($sOrderId)
     {
         $oOrderPayment = new oePayPalOrderPayment();
-        $oOrderPayment->setTransactionId( '_asdadsd45a4sd5a4sd54a5' );
-        $oOrderPayment->setOrderId( $sOrderId );
+        $oOrderPayment->setTransactionId('_asdadsd45a4sd5a4sd54a5');
+        $oOrderPayment->setOrderId($sOrderId);
         return $oOrderPayment;
     }
 
@@ -170,12 +170,12 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
      *
      * @return oePayPalOrderPaymentStatusCalculator_Mock
      */
-    protected function _preparePayPalOrderPaymentStatusCalculator( $oOrderPayment, $oOrder, $OrderCalculatedStatus )
+    protected function _preparePayPalOrderPaymentStatusCalculator($oOrderPayment, $oOrder, $OrderCalculatedStatus)
     {
-        $oPayPalOrderPaymentStatusCalculator = $this->getMock( 'oePayPalOrderPaymentStatusCalculator', array( 'setOrderPayment', 'setOrder', 'getStatus' ) );
-        $oPayPalOrderPaymentStatusCalculator->expects( $this->any() )->method( 'setOrderPayment' )->with( $oOrderPayment );
-        $oPayPalOrderPaymentStatusCalculator->expects( $this->once() )->method( 'setOrder' )->with( $oOrder );
-        $oPayPalOrderPaymentStatusCalculator->expects( $this->any() )->method( 'getStatus' )->will( $this->returnValue( $OrderCalculatedStatus ) );
+        $oPayPalOrderPaymentStatusCalculator = $this->getMock('oePayPalOrderPaymentStatusCalculator', array('setOrderPayment', 'setOrder', 'getStatus'));
+        $oPayPalOrderPaymentStatusCalculator->expects($this->any())->method('setOrderPayment')->with($oOrderPayment);
+        $oPayPalOrderPaymentStatusCalculator->expects($this->once())->method('setOrder')->with($oOrder);
+        $oPayPalOrderPaymentStatusCalculator->expects($this->any())->method('getStatus')->will($this->returnValue($OrderCalculatedStatus));
         return $oPayPalOrderPaymentStatusCalculator;
     }
 }

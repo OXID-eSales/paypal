@@ -19,9 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
 
-if ( ! class_exists('oePayPalOxArticle_parent')) {
+if (!class_exists('oePayPalOxArticle_parent')) {
     class oePayPalOxArticle_parent extends oxArticle
     {
     }
@@ -38,34 +38,35 @@ class Unit_oePayPal_models_oePayPalOxArticleTest extends OxidTestCase
     public function dataProvider()
     {
         return array(
-          array(false, false, false),
-          array(true, false, false),
-          array(false, true, false),
-          array(true, true, true),
+            array(false, false, false),
+            array(true, false, false),
+            array(false, true, false),
+            array(true, true, true),
         );
 
     }
+
     /**
      * @dataProvider dataProvider
      */
-    public function testIsVirtualPayPalArticle( $blIsMaterial, $blIsDownloadable, $blResult )
+    public function testIsVirtualPayPalArticle($blIsMaterial, $blIsDownloadable, $blResult)
     {
-        $oArticle = oxNew( "oePayPalOxArticle" );
+        $oArticle = oxNew("oePayPalOxArticle");
 
-        $oArticle->oxarticles__oxnonmaterial    = new oxField( $blIsMaterial );
-        $oArticle->oxarticles__oxisdownloadable = new oxField( $blIsDownloadable );
+        $oArticle->oxarticles__oxnonmaterial = new oxField($blIsMaterial);
+        $oArticle->oxarticles__oxisdownloadable = new oxField($blIsDownloadable);
 
-        $this->assertEquals( $blResult,  $oArticle->isVirtualPayPalArticle() );
+        $this->assertEquals($blResult, $oArticle->isVirtualPayPalArticle());
     }
 
     /**
      */
     public function testGetStockAmount()
     {
-        $oArticle = oxNew( "oePayPalOxArticle" );
+        $oArticle = oxNew("oePayPalOxArticle");
 
-        $oArticle->oxarticles__oxstock = new oxField( 321 );
+        $oArticle->oxarticles__oxstock = new oxField(321);
 
-        $this->assertEquals( 321,  $oArticle->getStockAmount() );
+        $this->assertEquals(321, $oArticle->getStockAmount());
     }
 }

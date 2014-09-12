@@ -49,20 +49,20 @@ class OxidMockStubFunc implements PHPUnit_Framework_MockObject_Stub
 
 class OxidTestCase extends PHPUnit_Framework_TestCase
 {
-    /** @var array Request parameters backup.  */
+    /** @var array Request parameters backup. */
     protected $_aBackup = array();
 
-    /** @var array Registry cache.  */
+    /** @var array Registry cache. */
     private static $_aRegistryCache = null;
 
-    /** @var bool Registry cache.  */
+    /** @var bool Registry cache. */
     private static $_blSetupBeforeTestSuiteDone = false;
 
     /** @var DbRestore Database restorer object */
     protected static $_oDbRestore = null;
 
     /** @var array multishop tables used in shop */
-    protected $_aMultiShopTables= array(
+    protected $_aMultiShopTables = array(
         'oxarticles', 'oxcategories', 'oxattribute', 'oxdelivery',
         'oxdeliveryset', 'oxdiscount', 'oxmanufacturers', 'oxselectlist',
         'oxvendor', 'oxvoucherseries', 'oxwrapping'
@@ -464,12 +464,12 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         } else {
             $aDate = strptime($sDate, '%Y-%m-%d');
             $ymd = sprintf(
-                '%04d-%02d-%02d 05:00:00', $aDate['tm_year'] + 1900, $aDate['tm_mon']+1, $aDate['tm_mday']
+                '%04d-%02d-%02d 05:00:00', $aDate['tm_year'] + 1900, $aDate['tm_mon'] + 1, $aDate['tm_mday']
             );
             $oDate = new DateTime($ymd);
         }
 
-        if (time() < ((int) $oDate->format('U'))) {
+        if (time() < ((int)$oDate->format('U'))) {
             $this->markTestSkipped($sMessage);
         }
     }
@@ -478,10 +478,10 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      * Executes SQL and adds table to clean up after test.
      * For EE version elements are added to map table for specified shops.
      *
-     * @param string $sSql     Sql to be executed.
-     * @param string $sTable   Table name.
-     * @param array  $aShopIds List of shop IDs.
-     * @param null   $sMapId   Map ID.
+     * @param string $sSql Sql to be executed.
+     * @param string $sTable Table name.
+     * @param array $aShopIds List of shop IDs.
+     * @param null $sMapId Map ID.
      */
     public function addToDatabase($sSql, $sTable, $aShopIds = null, $sMapId = null)
     {
@@ -577,7 +577,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
     /**
      * Cleans up table
      *
-     * @param string $sTable   Table name
+     * @param string $sTable Table name
      * @param string $sColName Column name
      */
     public function cleanUpTable($sTable, $sColName = null)
@@ -690,7 +690,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      */
     public function createFile($sFileName, $sFileContent)
     {
-        $sPathToFile = oxCCTempDir .'/'. $sFileName;
+        $sPathToFile = oxCCTempDir . '/' . $sFileName;
 
         file_put_contents($sPathToFile, $sFileContent);
 
@@ -736,7 +736,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
                     try {
                         $oNewInstance = oxNew($sKey);
                         self::$_aRegistryCache[$sKey] = $oNewInstance;
-                    } catch(oxSystemComponentException $oException) {
+                    } catch (oxSystemComponentException $oException) {
                         oxRegistry::set($sKey, null);
                         continue;
                     }
@@ -780,17 +780,17 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      *
      * @return mixed
      */
-    protected function _createStub( $sClass, $aMethods, $aTestMethods = array() )
+    protected function _createStub($sClass, $aMethods, $aTestMethods = array())
     {
-        $aMockedMethods = array_unique( array_merge( array_keys( $aMethods ), $aTestMethods ) );
+        $aMockedMethods = array_unique(array_merge(array_keys($aMethods), $aTestMethods));
 
-        $oObject = $this->getMock( $sClass, $aMockedMethods, array(), '', false );
+        $oObject = $this->getMock($sClass, $aMockedMethods, array(), '', false);
 
-        foreach ( $aMethods as $sMethod => $sValue ) {
-            if ( !in_array( $sMethod, $aTestMethods ) ) {
+        foreach ($aMethods as $sMethod => $sValue) {
+            if (!in_array($sMethod, $aTestMethods)) {
                 $oObject->expects($this->any())
-                    ->method( $sMethod )
-                    ->will($this->returnValue( $sValue ));
+                    ->method($sMethod)
+                    ->will($this->returnValue($sValue));
             }
         }
 

@@ -22,18 +22,18 @@
 $aData = array(
     'class' => 'oePayPalStandardDispatcher',
     'action' => 'setExpressCheckout',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 'testAddItems1',
-            'oxprice'                  => 10,
-            'oxvat'                    => 0,
-            'amount'                   => 1,
+    'articles' => array(
+        0 => array(
+            'oxid' => 'testAddItems1',
+            'oxprice' => 10,
+            'oxvat' => 0,
+            'amount' => 1,
         ),
-        1 => array (
-            'oxid'                     => 'testAddItems2',
-            'oxprice'                  => 10,
-            'oxvat'                    => 0,
-            'amount'                   => 1,
+        1 => array(
+            'oxid' => 'testAddItems2',
+            'oxprice' => 10,
+            'oxvat' => 0,
+            'amount' => 1,
         ),
     ),
     'costs' => array(
@@ -43,7 +43,7 @@ $aData = array(
                 'oxname' => 'testWrap9001',
                 'oxprice' => 0.50,
                 'oxactive' => 1,
-                'oxarticles' => array( 'testAddItems1', 'testAddItems2' )
+                'oxarticles' => array('testAddItems1', 'testAddItems2')
             ),
             1 => array(
                 'oxtype' => 'CARD',
@@ -59,8 +59,8 @@ $aData = array(
     'requestToShop' => array(
         'displayCartInPayPal' => true,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => '',
             'USER' => '',

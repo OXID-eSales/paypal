@@ -19,9 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
-
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 
 /**
@@ -35,8 +34,8 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
      */
     public function setUp()
     {
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_orderpayments`' );
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
@@ -48,8 +47,8 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     public function testSetGet()
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( '123' );
-        $this->assertEquals( '123', $oOrder->getOrderId() );
+        $oOrder->setOrderId('123');
+        $this->assertEquals('123', $oOrder->getOrderId());
     }
 
 
@@ -62,28 +61,28 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     public function testSavePayPalPayPalOrder_insert()
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( '123' );
-        $oOrder->setPaymentStatus( 'pending' );
-        $oOrder->setCapturedAmount( 24.13 );
-        $oOrder->setRefundedAmount( 12.13 );
-        $oOrder->setVoidedAmount( 15.13 );
-        $oOrder->setTotalOrderSum( 299.99 );
-        $oOrder->setCurrency( 'LTU' );
-        $oOrder->setTransactionMode( 'Sale' );
+        $oOrder->setOrderId('123');
+        $oOrder->setPaymentStatus('pending');
+        $oOrder->setCapturedAmount(24.13);
+        $oOrder->setRefundedAmount(12.13);
+        $oOrder->setVoidedAmount(15.13);
+        $oOrder->setTotalOrderSum(299.99);
+        $oOrder->setCurrency('LTU');
+        $oOrder->setTransactionMode('Sale');
 
         $oOrder->save();
 
         $oOrderLoaded = new oePayPalPayPalOrder();
-        $oOrderLoaded->load( $oOrder->getOrderId() );
+        $oOrderLoaded->load($oOrder->getOrderId());
 
-        $this->assertEquals( '123', $oOrderLoaded->getOrderId() );
-        $this->assertEquals( 'pending', $oOrderLoaded->getPaymentStatus() );
-        $this->assertEquals( 24.13, $oOrderLoaded->getCapturedAmount() );
-        $this->assertEquals( 12.13, $oOrderLoaded->getRefundedAmount() );
-        $this->assertEquals( 15.13, $oOrderLoaded->getVoidedAmount() );
-        $this->assertEquals( 299.99, $oOrderLoaded->getTotalOrderSum() );
-        $this->assertEquals( 'LTU', $oOrderLoaded->getCurrency() );
-        $this->assertEquals( 'Sale', $oOrderLoaded->getTransactionMode() );
+        $this->assertEquals('123', $oOrderLoaded->getOrderId());
+        $this->assertEquals('pending', $oOrderLoaded->getPaymentStatus());
+        $this->assertEquals(24.13, $oOrderLoaded->getCapturedAmount());
+        $this->assertEquals(12.13, $oOrderLoaded->getRefundedAmount());
+        $this->assertEquals(15.13, $oOrderLoaded->getVoidedAmount());
+        $this->assertEquals(299.99, $oOrderLoaded->getTotalOrderSum());
+        $this->assertEquals('LTU', $oOrderLoaded->getCurrency());
+        $this->assertEquals('Sale', $oOrderLoaded->getTransactionMode());
     }
 
     /**
@@ -95,30 +94,30 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     public function testSavePayPalPayPalOrder_update()
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->setOrderId( '123' );
-        $oOrder->setPaymentStatus( 'pending' );
-        $oOrder->setCapturedAmount( 24.13 );
-        $oOrder->setRefundedAmount( 12.13 );
-        $oOrder->setVoidedAmount( 15.13 );
-        $oOrder->setTotalOrderSum( 299.99 );
-        $oOrder->setCurrency( 'LTU' );
-        $oOrder->setTransactionMode( 'Sale' );
+        $oOrder->setOrderId('123');
+        $oOrder->setPaymentStatus('pending');
+        $oOrder->setCapturedAmount(24.13);
+        $oOrder->setRefundedAmount(12.13);
+        $oOrder->setVoidedAmount(15.13);
+        $oOrder->setTotalOrderSum(299.99);
+        $oOrder->setCurrency('LTU');
+        $oOrder->setTransactionMode('Sale');
         $oOrder->save();
 
         $oOrderLoaded = new oePayPalPayPalOrder();
-        $oOrderLoaded->load( '123' );
-        $oOrderLoaded->setPaymentStatus( 'completed' );
+        $oOrderLoaded->load('123');
+        $oOrderLoaded->setPaymentStatus('completed');
         $oOrderLoaded->save();
 
         $oOrderLoaded = new oePayPalPayPalOrder();
-        $oOrderLoaded->load( '123' );
-        $this->assertEquals( 'completed', $oOrderLoaded->getPaymentStatus() );
-        $this->assertEquals( 24.13, $oOrderLoaded->getCapturedAmount() );
-        $this->assertEquals( 12.13, $oOrderLoaded->getRefundedAmount() );
-        $this->assertEquals( 15.13, $oOrderLoaded->getVoidedAmount() );
-        $this->assertEquals( 299.99, $oOrderLoaded->getTotalOrderSum() );
-        $this->assertEquals( 'LTU', $oOrderLoaded->getCurrency() );
-        $this->assertEquals( 'Sale', $oOrderLoaded->getTransactionMode() );
+        $oOrderLoaded->load('123');
+        $this->assertEquals('completed', $oOrderLoaded->getPaymentStatus());
+        $this->assertEquals(24.13, $oOrderLoaded->getCapturedAmount());
+        $this->assertEquals(12.13, $oOrderLoaded->getRefundedAmount());
+        $this->assertEquals(15.13, $oOrderLoaded->getVoidedAmount());
+        $this->assertEquals(299.99, $oOrderLoaded->getTotalOrderSum());
+        $this->assertEquals('LTU', $oOrderLoaded->getCurrency());
+        $this->assertEquals('Sale', $oOrderLoaded->getTransactionMode());
     }
 
 
@@ -131,10 +130,10 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     public function testAddRefundedAmountWhenEmpty()
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->addRefundedAmount( 100.29 );
-        $oOrder->addRefundedAmount( 899.70 );
+        $oOrder->addRefundedAmount(100.29);
+        $oOrder->addRefundedAmount(899.70);
 
-        $this->assertEquals( 999.99, $oOrder->getRefundedAmount() );
+        $this->assertEquals(999.99, $oOrder->getRefundedAmount());
     }
 
     /**
@@ -146,10 +145,10 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     public function testAddCapturedAmountWhenEmpty()
     {
         $oOrder = new oePayPalPayPalOrder();
-        $oOrder->addCapturedAmount( 100.29 );
-        $oOrder->addCapturedAmount( 899.70 );
+        $oOrder->addCapturedAmount(100.29);
+        $oOrder->addCapturedAmount(899.70);
 
-        $this->assertEquals( 999.99, $oOrder->getCapturedAmount() );
+        $this->assertEquals(999.99, $oOrder->getCapturedAmount());
     }
 
     /**
@@ -161,6 +160,6 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     public function testGetPayPalPaymentStatusWhenStatusEmpty()
     {
         $oOrder = new oePayPalPayPalOrder();
-        $this->assertEquals( "completed", $oOrder->getPaymentStatus() );
+        $this->assertEquals("completed", $oOrder->getPaymentStatus());
     }
 }

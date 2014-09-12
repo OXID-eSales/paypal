@@ -31,24 +31,24 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
      *
      * return bool
      */
-    public function save( $aData )
+    public function save($aData)
     {
         $oDb = $this->_getDb();
 
-        foreach ( $aData as $sField => $sData ) {
-            $aSql[] =  '`' . $sField . '` = ' . $oDb->quote( $sData );
+        foreach ($aData as $sField => $sData) {
+            $aSql[] = '`' . $sField . '` = ' . $oDb->quote($sData);
         }
 
         $sSql = 'INSERT INTO `oepaypal_orderpaymentcomments` SET ';
-        $sSql .= implode( ', ', $aSql );
+        $sSql .= implode(', ', $aSql);
         $sSql .= ' ON DUPLICATE KEY UPDATE ';
         $sSql .= ' `oepaypal_commentid`=LAST_INSERT_ID(`oepaypal_commentid`), ';
-        $sSql .= implode( ', ', $aSql );
-        $oDb->execute( $sSql );
+        $sSql .= implode(', ', $aSql);
+        $oDb->execute($sSql);
 
         $iCommentId = $aData['oepaypal_commentid'];
-        if ( empty( $iCommentId ) ){
-            $iCommentId = $oDb->getOne( 'SELECT LAST_INSERT_ID()' );
+        if (empty($iCommentId)) {
+            $iCommentId = $oDb->getOne('SELECT LAST_INSERT_ID()');
         }
 
         return $iCommentId;
@@ -61,10 +61,10 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
      *
      * return array
      */
-    public function getList( $sPaymentId )
+    public function getList($sPaymentId)
     {
         $oDb = $this->_getDb();
-        $aData = $oDb->getAll( 'SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $oDb->quote( $sPaymentId ) . ' ORDER BY `oepaypal_date` DESC' );
+        $aData = $oDb->getAll('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId) . ' ORDER BY `oepaypal_date` DESC');
         return $aData;
     }
 
@@ -75,10 +75,10 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
      *
      * return array
      */
-    public function load( $sCommentId )
+    public function load($sCommentId)
     {
         $oDb = $this->_getDb();
-        $aData = $oDb->getRow( 'SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $oDb->quote( $sCommentId ) );
+        $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $oDb->quote($sCommentId));
         return $aData;
     }
 
@@ -89,16 +89,16 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
      *
      * @return bool
      */
-    public function delete( $sCommentId )
+    public function delete($sCommentId)
     {
         $oDb = $this->_getDb();
         $oDb->startTransaction();
 
-        $blDeleteResult = $oDb->execute( 'DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $oDb->quote( $sCommentId ) );
+        $blDeleteResult = $oDb->execute('DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $oDb->quote($sCommentId));
 
-        $blResult = ( $blDeleteResult !== false );
+        $blResult = ($blDeleteResult !== false);
 
-        if ( $blResult ) {
+        if ($blResult) {
             $oDb->commitTransaction();
         } else {
             $oDb->rollbackTransaction();

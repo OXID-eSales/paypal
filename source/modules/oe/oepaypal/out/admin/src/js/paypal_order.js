@@ -17,66 +17,66 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2013
  */
-var PayPalPopUp = (function($) {
+var PayPalPopUp = (function ($) {
     var popUpBlock, popUpOverlay, popUpClose;
 
     var obj = {
-        init: function() {
+        init: function () {
             popUpOverlay = $('#paypalOverlay');
-            popUpOverlay.click( PayPalPopUp.hidePopUp );
+            popUpOverlay.click(PayPalPopUp.hidePopUp);
 
-            $('.popUpLink').click( PayPalPopUp.actionHandler );
+            $('.popUpLink').click(PayPalPopUp.actionHandler);
         },
 
         /**
          * action handler
          * @param e event
          */
-        actionHandler: function( e ) {
-            var oBlock = $( '#'+$(this).data('block') );
+        actionHandler: function (e) {
+            var oBlock = $('#' + $(this).data('block'));
 
-            PayPalPopUp.showPopUp( oBlock );
+            PayPalPopUp.showPopUp(oBlock);
             e.stopPropagation();
         },
 
-        showPopUp: function( oBlock ) {
+        showPopUp: function (oBlock) {
             popUpBlock = oBlock;
 
             popUpOverlay.show();
             popUpBlock.show();
 
             popUpClose = $('<a class="paypalPopUpClose" href="#">x</a>');
-            popUpClose.click( PayPalPopUp.hidePopUp );
-            popUpBlock.prepend( popUpClose );
+            popUpClose.click(PayPalPopUp.hidePopUp);
+            popUpBlock.prepend(popUpClose);
 
-            fixBlockPosition( popUpBlock );
+            fixBlockPosition(popUpBlock);
         },
 
         /**
          * hides popUp
          */
-        hidePopUp: function ( e ) {
+        hidePopUp: function (e) {
             popUpClose.remove();
             popUpOverlay.hide();
             popUpBlock.hide();
         }
     }
 
-    function fixBlockPosition( oBlock ) {
+    function fixBlockPosition(oBlock) {
         var blockHeight = oBlock.outerHeight();
         var blockWidth = oBlock.outerWidth();
         var domHeight = $(document).height();
         var domWidth = $(document).width();
-        var topMargin = Math.max( (domHeight - blockHeight) / 3, 0);
-        var leftMargin = Math.max( (domWidth - blockWidth) / 2, 0);
+        var topMargin = Math.max((domHeight - blockHeight) / 3, 0);
+        var leftMargin = Math.max((domWidth - blockWidth) / 2, 0);
 
-        oBlock.css( { top: topMargin, left: leftMargin } );
+        oBlock.css({top: topMargin, left: leftMargin});
     }
 
     return obj;
 })(jQuery);
 
-var PayPalActions = (function($) {
+var PayPalActions = (function ($) {
 
     var popUpBlock, popUpBlockContent, popUpBlocks, popUpOverlay, statusList;
 
@@ -98,24 +98,24 @@ var PayPalActions = (function($) {
         /**
          * initiates PayPal actions
          */
-        init: function() {
+        init: function () {
             popUpBlock = $('#paypalActions');
             popUpBlockContent = $('#paypalActionsContent', popUpBlock);
             popUpBlocks = $('#paypalActionsBlocks');
-            statusList = $( '#paypalStatusList');
+            statusList = $('#paypalStatusList');
 
-            popUpBlockContent.delegate( 'select.amountSelect', 'change', PayPalActions.amountSelectActionHandler );
-            $('.actionLink').click( PayPalActions.actionHandler );
+            popUpBlockContent.delegate('select.amountSelect', 'change', PayPalActions.amountSelectActionHandler);
+            $('.actionLink').click(PayPalActions.actionHandler);
         },
 
         /**
          * action handler
          * @param e event
          */
-        actionHandler: function( e ) {
+        actionHandler: function (e) {
             var sAction = $(this).data('action');
 
-            PayPalActions.showPopUp( sAction,  $(this).data() );
+            PayPalActions.showPopUp(sAction, $(this).data());
             e.stopPropagation();
         },
 
@@ -124,17 +124,17 @@ var PayPalActions = (function($) {
          * @param sAction
          * @param oOptions
          */
-        showPopUp: function ( sAction, oOptions ) {
+        showPopUp: function (sAction, oOptions) {
             popUpBlockContent.empty();
-            var sBlock = $('#'+sAction+'Block', popUpBlocks);
-            popUpBlockContent.html( sBlock.html() );
+            var sBlock = $('#' + sAction + 'Block', popUpBlocks);
+            popUpBlockContent.html(sBlock.html());
 
-            var oFormOptions = getFormOptions( sAction, oOptions );
-            setFormOptions( popUpBlock, oFormOptions );
+            var oFormOptions = getFormOptions(sAction, oOptions);
+            setFormOptions(popUpBlock, oFormOptions);
 
-            showOrderStatusList( oOptions['statuslist'],  oOptions['activestatus'] );
+            showOrderStatusList(oOptions['statuslist'], oOptions['activestatus']);
 
-            PayPalPopUp.showPopUp( popUpBlock );
+            PayPalPopUp.showPopUp(popUpBlock);
         },
 
         /**
@@ -142,8 +142,8 @@ var PayPalActions = (function($) {
          */
         amountSelectActionHandler: function () {
             var selected = $(this).find(":selected");
-            setAmountInputState( $(this) );
-            showOrderStatusList( selected.data('statuslist'), selected.data('activestatus') );
+            setAmountInputState($(this));
+            showOrderStatusList(selected.data('statuslist'), selected.data('activestatus'));
         }
     }
 
@@ -151,30 +151,30 @@ var PayPalActions = (function($) {
      *
      * @private
      */
-    function setAmountInputState( oEl ) {
-        var oInput = $( '#'+oEl.data('input') );
+    function setAmountInputState(oEl) {
+        var oInput = $('#' + oEl.data('input'));
         var dAmount = $('input[name=full_amount]', popUpBlock).val();
         var disabled = ( oEl.find(':selected').data('disabled') == 1 );
-        oInput.attr('disabled', disabled).val( dAmount );
+        oInput.attr('disabled', disabled).val(dAmount);
     }
 
     /**
      *
      * @private
      */
-    function showOrderStatusList( oStatusList, sActiveStatus ) {
+    function showOrderStatusList(oStatusList, sActiveStatus) {
         var oPlaceholder = $('.paypalStatusListPlaceholder', popUpBlockContent).empty();
-        if ( oStatusList.length <= 1 || $.type(oStatusList) == 'string' ) {
-            var sStatus = ($.type(oStatusList) == 'string')? oStatusList : oStatusList[0];
-            appendStatusHiddenInput( sStatus, oPlaceholder )
+        if (oStatusList.length <= 1 || $.type(oStatusList) == 'string') {
+            var sStatus = ($.type(oStatusList) == 'string') ? oStatusList : oStatusList[0];
+            appendStatusHiddenInput(sStatus, oPlaceholder)
             return;
         }
-        oPlaceholder.html( statusList.html() );
+        oPlaceholder.html(statusList.html());
 
         $('span', oPlaceholder).hide();
-        $.each( oStatusList, function(key, value) {
-            var activeStatusBlock = $('#'+value+'Status', oPlaceholder).show();
-            $('input[type=radio]', activeStatusBlock).attr('checked', value == sActiveStatus );
+        $.each(oStatusList, function (key, value) {
+            var activeStatusBlock = $('#' + value + 'Status', oPlaceholder).show();
+            $('input[type=radio]', activeStatusBlock).attr('checked', value == sActiveStatus);
         });
     }
 
@@ -184,12 +184,11 @@ var PayPalActions = (function($) {
      * @param sStatus
      * @param oPlaceholder
      */
-    function appendStatusHiddenInput( sStatus, oPlaceholder )
-    {
-        var checkbox = $('#'+sStatus+'StatusCheckbox', statusList);
+    function appendStatusHiddenInput(sStatus, oPlaceholder) {
+        var checkbox = $('#' + sStatus + 'StatusCheckbox', statusList);
         var input = $('<input type="hidden" />');
-        input.attr({ name: checkbox.attr('name'), value: checkbox.attr('value') });
-        oPlaceholder.append( input );
+        input.attr({name: checkbox.attr('name'), value: checkbox.attr('value')});
+        oPlaceholder.append(input);
     }
 
     /**
@@ -199,11 +198,11 @@ var PayPalActions = (function($) {
      * @param oFormOptions
      * @private
      */
-    function setFormOptions( oForm, oFormOptions ) {
-        $('input, select', oForm).each(function(i) {
+    function setFormOptions(oForm, oFormOptions) {
+        $('input, select', oForm).each(function (i) {
             var inputName = $(this).attr('name');
-            if ( inputName in oFormOptions ) {
-                $(this).val( oFormOptions[inputName] ).change();
+            if (inputName in oFormOptions) {
+                $(this).val(oFormOptions[inputName]).change();
             }
         });
     }
@@ -214,10 +213,10 @@ var PayPalActions = (function($) {
      * @param oAllOptions
      * @returns object
      */
-    function getFormOptions( sAction, oAllOptions ) {
+    function getFormOptions(sAction, oAllOptions) {
         var oOptions = {action: sAction};
-        if ( sAction in PayPalActions.actionOptions ) {
-            $.each( PayPalActions.actionOptions[sAction], function(key, value) {
+        if (sAction in PayPalActions.actionOptions) {
+            $.each(PayPalActions.actionOptions[sAction], function (key, value) {
                 oOptions[key] = oAllOptions[value];
             });
         }
@@ -227,7 +226,7 @@ var PayPalActions = (function($) {
     return obj;
 })(jQuery);
 
-$(document).ready( function() {
+$(document).ready(function () {
     PayPalPopUp.init();
     PayPalActions.init();
 });

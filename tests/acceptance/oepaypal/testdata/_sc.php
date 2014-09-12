@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-print("start"."\r\n");
+print("start" . "\r\n");
 
 require_once dirname(__FILE__) . "/bootstrap.php";
 
@@ -28,10 +28,10 @@ ini_set('display_errors', '1');
 
 $oxConfig = oxRegistry::getConfig();
 
-$sClassName    = $oxConfig->getParameter("cl");
+$sClassName = $oxConfig->getParameter("cl");
 $sFunctionName = $oxConfig->getParameter('fnc');
-$sOxid         = $oxConfig->getParameter("oxid");
-$sClassParams  = $oxConfig->getParameter("classparams");
+$sOxid = $oxConfig->getParameter("oxid");
+$sClassParams = $oxConfig->getParameter("classparams");
 
 // Class and function name is must have for every action: create object, save object, delete object.
 if (!$sClassName || !$sFunctionName) {
@@ -87,8 +87,8 @@ function callFunctionOnConfig($sClassName, $sFunctionName, $sClassParams = null)
                     }
                     call_user_func(array($oConfig, $sFunctionName), $sType, $sParamKey, $sValue, null, $sModule);
                     //flush cache if needed
-                    $oCache = oxRegistry::get( 'oxReverseProxyBackend' );
-                    if ( $oCache->isActive() ) {
+                    $oCache = oxRegistry::get('oxReverseProxyBackend');
+                    if ($oCache->isActive()) {
                         $oCache->execute();
                     }
                 }
@@ -117,14 +117,14 @@ function callFunctionOnObject($sClassName, $sFunctionName, $sOxid = null, $sClas
     $sTableName = getTableNameFromClassName($sClassName);
     if ($sClassParams) {
         foreach ($sClassParams as $sParamKey => $sParamValue) {
-            $sDBFieldName = $sTableName .'__'. $sParamKey;
+            $sDBFieldName = $sTableName . '__' . $sParamKey;
             $oObject->$sDBFieldName = new oxField($sParamValue);
         }
     }
     call_user_func(array($oObject, $sFunctionName));
     //flush cache if needed
-    $oCache = oxRegistry::get( 'oxReverseProxyBackend' );
-    if ( $oCache->isActive() ) {
+    $oCache = oxRegistry::get('oxReverseProxyBackend');
+    if ($oCache->isActive()) {
         $oCache->execute();
     }
 }
@@ -141,16 +141,16 @@ function callFunctionOnObject($sClassName, $sFunctionName, $sOxid = null, $sClas
 
 function getTableNameFromClassName($sClassName)
 {
-    $aClassNameWithoutS   = array("oxarticle", "oxrole");
+    $aClassNameWithoutS = array("oxarticle", "oxrole");
     $aClassNameWithoutIes = array("oxcategory");
 
     $sTableName = strtolower($sClassName);
     if (in_array(strtolower($sClassName), $aClassNameWithoutS)) {
-        $sTableName = strtolower($sClassName) ."s";
+        $sTableName = strtolower($sClassName) . "s";
     } elseif (in_array(strtolower($sClassName), $aClassNameWithoutIes)) {
-        $sTableName = substr(strtolower($sClassName), 0, -1) ."ies";
+        $sTableName = substr(strtolower($sClassName), 0, -1) . "ies";
     }
     return $sTableName;
 }
 
-print("end"."\r\n");
+print("end" . "\r\n");

@@ -20,14 +20,14 @@
  */
 
 /**
- * Price enter mode: bruto 
+ * Price enter mode: bruto
  * Price view mode:  brutto
  * Product count: count of used products
  * VAT info: 19%
- * Currency rate: 0.68 
+ * Currency rate: 0.68
  * Discounts: count
  *  1. bascet 5 abs
- *  2. shop 5 abs for 9001 
+ *  2. shop 5 abs for 9001
  *  3. bascet 1 abs for 9001
  *  4. shop 5% for 9002
  *  5. bascet 6% for 9002
@@ -35,10 +35,10 @@
  *  1. 6 abs
  * Wrapping: +;
  * Gift cart:  -;
- * Costs VAT caclulation rule: max 
+ * Costs VAT caclulation rule: max
  * Costs:
- *  1. Payment + 
- *  2. Delivery + 
+ *  1. Payment +
+ *  2. Delivery +
  *  3. TS -
  * Actions with basket or order:
  *  1. update / delete / change config
@@ -49,23 +49,23 @@
 $aData = array(
     'class' => 'oePayPalOxPaymentGateway',
     'action' => 'doExpressCheckoutPayment',
-    'articles' => array (
-        0 => array (
-            'oxid'                     => 9001,
-            'oxprice'                  => 100,
-            'oxvat'                    => 19,
-            'amount'                   => 33,
-            'oxstock'                  => 33,
+    'articles' => array(
+        0 => array(
+            'oxid' => 9001,
+            'oxprice' => 100,
+            'oxvat' => 19,
+            'amount' => 33,
+            'oxstock' => 33,
         ),
-        1 => array (
-            'oxid'                     => 9002,
-            'oxprice'                  => 66,
-            'oxvat'                    => 19,
-            'amount'                   => 16,
-            'oxstock'                  => 50,
+        1 => array(
+            'oxid' => 9002,
+            'oxprice' => 66,
+            'oxvat' => 19,
+            'amount' => 16,
+            'oxstock' => 50,
         ),
     ),
-    'discounts' => array (),
+    'discounts' => array(),
     'costs' => array(),
     'config' => array(
         'sOEPayPalSandboxUsername' => 'testUser',
@@ -74,8 +74,8 @@ $aData = array(
         'sOEPayPalTransactionMode' => 'Sale',
         'sOEPayPalEmptyStockLevel' => 10,
     ),
-    'expected' => array (
-        'requestToPayPal' => array (
+    'expected' => array(
+        'requestToPayPal' => array(
             'VERSION' => '84.0',
             'PWD' => 'testPassword',
             'USER' => 'testUser',

@@ -32,16 +32,16 @@ class oePayPalEscape
      *
      * @return mixed
      */
-    public function escapeSpecialChars( $sValue )
+    public function escapeSpecialChars($sValue)
     {
-        if ( is_object( $sValue ) ) {
+        if (is_object($sValue)) {
             return $sValue;
         }
 
-        if ( is_array( $sValue ) ) {
-            $sValue = $this->_escapeArraySpecialChars( $sValue );
-        } elseif ( is_string( $sValue ) ) {
-            $sValue = $this->_escapeStringSpecialChars( $sValue );
+        if (is_array($sValue)) {
+            $sValue = $this->_escapeArraySpecialChars($sValue);
+        } elseif (is_string($sValue)) {
+            $sValue = $this->_escapeStringSpecialChars($sValue);
         }
         return $sValue;
     }
@@ -54,13 +54,13 @@ class oePayPalEscape
      *
      * @return array
      */
-    private function _escapeArraySpecialChars( $sValue )
+    private function _escapeArraySpecialChars($sValue)
     {
         $newValue = array();
-        foreach ( $sValue as $sKey => $sVal ) {
+        foreach ($sValue as $sKey => $sVal) {
             $sValidKey = $sKey;
-            $sValidKey = $this->escapeSpecialChars( $sValidKey );
-            $sVal = $this->escapeSpecialChars( $sVal );
+            $sValidKey = $this->escapeSpecialChars($sValidKey);
+            $sVal = $this->escapeSpecialChars($sVal);
             if ($sValidKey != $sKey) {
                 unset ($sValue[$sKey]);
             }
@@ -77,11 +77,11 @@ class oePayPalEscape
      *
      * @return string
      */
-    private function _escapeStringSpecialChars( $sValue )
+    private function _escapeStringSpecialChars($sValue)
     {
-        $sValue = str_replace( array( '&',     '<',    '>',    '"',      "'",      chr(0), '\\' ),
-            array( '&amp;', '&lt;', '&gt;', '&quot;', '&#039;', '',     '&#092;' ),
-            $sValue );
+        $sValue = str_replace(array('&', '<', '>', '"', "'", chr(0), '\\'),
+            array('&amp;', '&lt;', '&gt;', '&quot;', '&#039;', '', '&#092;'),
+            $sValue);
 
         return $sValue;
     }

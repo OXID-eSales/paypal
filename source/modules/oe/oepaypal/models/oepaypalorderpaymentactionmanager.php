@@ -50,7 +50,7 @@ class oePayPalOrderPaymentActionManager
      *
      * @param oePayPalOxOrder $oPayment
      */
-    public function setPayment( $oPayment )
+    public function setPayment($oPayment)
     {
         $this->_oPayment = $oPayment;
     }
@@ -73,10 +73,10 @@ class oePayPalOrderPaymentActionManager
      *
      * @return array
      */
-    protected function _getAvailableActions( $sPaymentAction, $sPaymentStatus )
+    protected function _getAvailableActions($sPaymentAction, $sPaymentStatus)
     {
-        $aActions = $this->_availableActions[ $sPaymentAction ][ $sPaymentStatus ];
-        return $aActions? $aActions : array();
+        $aActions = $this->_availableActions[$sPaymentAction][$sPaymentStatus];
+        return $aActions ? $aActions : array();
     }
 
 
@@ -88,25 +88,25 @@ class oePayPalOrderPaymentActionManager
      *
      * @return bool
      */
-    public function isActionAvailable( $sAction, $oPayment = null )
+    public function isActionAvailable($sAction, $oPayment = null)
     {
-        if ( $oPayment ) {
-            $this->setPayment( $oPayment );
+        if ($oPayment) {
+            $this->setPayment($oPayment);
         }
 
         $oPayment = $this->getPayment();
 
-        $blIsAvailable = in_array($sAction, $this->_getAvailableActions( $oPayment->getAction(), $oPayment->getStatus() ) );
+        $blIsAvailable = in_array($sAction, $this->_getAvailableActions($oPayment->getAction(), $oPayment->getStatus()));
 
-         if ( $blIsAvailable ) {
-             $blIsAvailable = false;
+        if ($blIsAvailable) {
+            $blIsAvailable = false;
 
-             switch ( $sAction ) {
-                 case 'refund':
-                     $blIsAvailable = ( $oPayment->getAmount() > $oPayment->getRefundedAmount() );
-                     break;
-             }
-         }
+            switch ($sAction) {
+                case 'refund':
+                    $blIsAvailable = ($oPayment->getAmount() > $oPayment->getRefundedAmount());
+                    break;
+            }
+        }
 
         return $blIsAvailable;
     }

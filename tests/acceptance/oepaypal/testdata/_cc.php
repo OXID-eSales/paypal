@@ -41,8 +41,9 @@ function rrmdir($dir)
     }
     rmdir($dir);
 }
-if ( $sCompileDir = oxRegistry::get('oxConfigFile')->getVar('sCompileDir') ) {
-    foreach (glob($sCompileDir."/*") as $file) {
+
+if ($sCompileDir = oxRegistry::get('oxConfigFile')->getVar('sCompileDir')) {
+    foreach (glob($sCompileDir . "/*") as $file) {
         if (is_dir($file)) {
             rrmdir($file);
         } else {
@@ -51,11 +52,11 @@ if ( $sCompileDir = oxRegistry::get('oxConfigFile')->getVar('sCompileDir') ) {
     }
 }
 
-if ( OXID_VERSION_EE ) :
+if (OXID_VERSION_EE) :
     if (class_exists('oxReverseProxyBackEnd')) {
         // Clean cache
-        if ( $sCacheDir = oxRegistry::get('oxConfigFile')->getVar('sCacheDir') ) {
-            foreach (glob($sCacheDir."/*") as $filename) {
+        if ($sCacheDir = oxRegistry::get('oxConfigFile')->getVar('sCacheDir')) {
+            foreach (glob($sCacheDir . "/*") as $filename) {
                 if (is_file($filename)) {
                     unlink($filename);
                 }
@@ -81,12 +82,12 @@ if (isset($_SERVER['HTTP_COOKIE'])) {
     $aCookies = explode(';', $_SERVER['HTTP_COOKIE']);
     foreach ($aCookies as $sCookie) {
         $sRawCookie = explode('=', $sCookie);
-        setcookie(trim( $sRawCookie[0] ), '', time() - 10000, '/');
+        setcookie(trim($sRawCookie[0]), '', time() - 10000, '/');
     }
     // removing sid that created by clearing cache
-    setcookie( 'sid', '', time() - 10000, '/' );
+    setcookie('sid', '', time() - 10000, '/');
 }
 
-if ( !isset( $_GET['no_redirect'])) {
-    header("Location: ". dirname($_SERVER['REQUEST_URI']));
+if (!isset($_GET['no_redirect'])) {
+    header("Location: " . dirname($_SERVER['REQUEST_URI']));
 }

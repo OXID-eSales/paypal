@@ -35,29 +35,29 @@ class oePayPalOrderRefundAction extends oePayPalOrderAction
         $oData = $oHandler->getData();
 
         $oOrder = $this->getOrder();
-        $oOrder->addRefundedAmount( $oResponse->getRefundAmount() );
-        $oOrder->setPaymentStatus( $oData->getOrderStatus() );
+        $oOrder->addRefundedAmount($oResponse->getRefundAmount());
+        $oOrder->setPaymentStatus($oData->getOrderStatus());
         $oOrder->save();
 
-        $oPayment = oxNew( 'oePayPalOrderPayment' );
+        $oPayment = oxNew('oePayPalOrderPayment');
         $oPayment->setDate($this->getDate());
-        $oPayment->setTransactionId( $oResponse->getTransactionId() );
-        $oPayment->setCorrelationId( $oResponse->getCorrelationId() );
+        $oPayment->setTransactionId($oResponse->getTransactionId());
+        $oPayment->setCorrelationId($oResponse->getCorrelationId());
         $oPayment->setAction('refund');
-        $oPayment->setStatus( $oResponse->getPaymentStatus() );
-        $oPayment->setAmount( $oResponse->getRefundAmount() );
-        $oPayment->setCurrency( $oResponse->getCurrency() );
+        $oPayment->setStatus($oResponse->getPaymentStatus());
+        $oPayment->setAmount($oResponse->getRefundAmount());
+        $oPayment->setCurrency($oResponse->getCurrency());
 
         $oRefundedPayment = $oData->getPaymentBeingRefunded();
-        $oRefundedPayment->addRefundedAmount( $oResponse->getRefundAmount() );
+        $oRefundedPayment->addRefundedAmount($oResponse->getRefundAmount());
         $oRefundedPayment->save();
 
-        $oPayment = $oOrder->getPaymentList()->addPayment( $oPayment );
+        $oPayment = $oOrder->getPaymentList()->addPayment($oPayment);
 
-        if ( $oData->getComment() ) {
+        if ($oData->getComment()) {
             $oComment = oxNew('oePayPalOrderPaymentComment');
-            $oComment->setComment( $oData->getComment() );
-            $oPayment->addComment( $oComment );
+            $oComment->setComment($oData->getComment());
+            $oPayment->addComment($oComment);
         }
     }
 

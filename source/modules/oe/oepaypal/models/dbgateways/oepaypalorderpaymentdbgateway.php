@@ -31,24 +31,24 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
      *
      * return int
      */
-    public function save( $aData )
+    public function save($aData)
     {
         $oDb = $this->_getDb();
 
-        foreach ( $aData as $sField => $sData ) {
-            $aSql[] =  '`' . $sField . '` = ' . $oDb->quote( $sData );
+        foreach ($aData as $sField => $sData) {
+            $aSql[] = '`' . $sField . '` = ' . $oDb->quote($sData);
         }
 
         $sSql = 'INSERT INTO `oepaypal_orderpayments` SET ';
-        $sSql .= implode( ', ', $aSql );
+        $sSql .= implode(', ', $aSql);
         $sSql .= ' ON DUPLICATE KEY UPDATE ';
         $sSql .= ' `oepaypal_paymentid`=LAST_INSERT_ID(`oepaypal_paymentid`), ';
-        $sSql .= implode( ', ', $aSql );
-        $oDb->execute( $sSql );
+        $sSql .= implode(', ', $aSql);
+        $oDb->execute($sSql);
 
         $iId = $aData['oepaypal_paymentid'];
-        if ( empty( $iId ) ){
-            $iId = $oDb->getOne( 'SELECT LAST_INSERT_ID()' );
+        if (empty($iId)) {
+            $iId = $oDb->getOne('SELECT LAST_INSERT_ID()');
         }
 
         return $iId;
@@ -61,10 +61,10 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
      *
      * return array
      */
-    public function load( $sPaymentId )
+    public function load($sPaymentId)
     {
         $oDb = $this->_getDb();
-        $aData = $oDb->getRow( 'SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $oDb->quote( $sPaymentId ) );
+        $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId));
 
         return $aData;
     }
@@ -76,10 +76,10 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
      *
      * return array
      */
-    public function loadByTransactionId( $sTransactionId )
+    public function loadByTransactionId($sTransactionId)
     {
         $oDb = $this->_getDb();
-        $aData = $oDb->getRow( 'SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_transactionid` = ' . $oDb->quote( $sTransactionId ) );
+        $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_transactionid` = ' . $oDb->quote($sTransactionId));
         return $aData;
     }
 
@@ -90,17 +90,17 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
      *
      * @return bool
      */
-    public function delete( $sPaymentId )
+    public function delete($sPaymentId)
     {
         $oDb = $this->_getDb();
         $oDb->startTransaction();
 
-        $blDeleteResult = $oDb->execute( 'DELETE FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $oDb->quote( $sPaymentId ) );
-        $blDeleteCommentResult = $oDb->execute( 'DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $oDb->quote( $sPaymentId ) );
+        $blDeleteResult = $oDb->execute('DELETE FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId));
+        $blDeleteCommentResult = $oDb->execute('DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId));
 
-        $blResult = ( $blDeleteResult !== false ) || ( $blDeleteCommentResult !== false );
+        $blResult = ($blDeleteResult !== false) || ($blDeleteCommentResult !== false);
 
-        if ( $blResult ) {
+        if ($blResult) {
             $oDb->commitTransaction();
         } else {
             $oDb->rollbackTransaction();
@@ -117,10 +117,10 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
      *
      * return array
      */
-    public function getList( $sOrderId )
+    public function getList($sOrderId)
     {
         $oDb = $this->_getDb();
-        $aData = $oDb->getAll( 'SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_orderid` = ' . $oDb->quote( $sOrderId ) . ' ORDER BY `oepaypal_date` DESC'  );
+        $aData = $oDb->getAll('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_orderid` = ' . $oDb->quote($sOrderId) . ' ORDER BY `oepaypal_date` DESC');
         return $aData;
     }
 }

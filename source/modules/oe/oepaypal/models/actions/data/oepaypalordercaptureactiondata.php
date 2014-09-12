@@ -32,7 +32,7 @@ class oePayPalOrderCaptureActionData extends oePayPalOrderActionData
      */
     public function getType()
     {
-        return $this->getRequest()->getRequestParameter( 'capture_type' );
+        return $this->getRequest()->getRequestParameter('capture_type');
     }
 
     /**
@@ -42,8 +42,8 @@ class oePayPalOrderCaptureActionData extends oePayPalOrderActionData
      */
     public function getAmount()
     {
-        $dAmount = $this->getRequest()->getRequestParameter( 'capture_amount' );
-        return $dAmount? $dAmount : $this->getOrder()->getPayPalOrder()->getRemainingOrderSum();
+        $dAmount = $this->getRequest()->getRequestParameter('capture_amount');
+        return $dAmount ? $dAmount : $this->getOrder()->getPayPalOrder()->getRemainingOrderSum();
     }
 
     /**

@@ -51,7 +51,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      *
      * @param oxOrder $oOrder
      */
-    public function setPayPalOxOrder( $oOrder )
+    public function setPayPalOxOrder($oOrder)
     {
         $this->_oPayPalOxOrder = $oOrder;
     }
@@ -63,10 +63,10 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      */
     public function getPayPalOxOrder()
     {
-        if ( is_null( $this->_oPayPalOxOrder ) ) {
-            $oOrder = oxNew( 'oxOrder' );
+        if (is_null($this->_oPayPalOxOrder)) {
+            $oOrder = oxNew('oxOrder');
             $oOrder->loadPayPalOrder();
-            $this->setPayPalOxOrder( $oOrder );
+            $this->setPayPalOxOrder($oOrder);
         }
 
         return $this->_oPayPalOxOrder;
@@ -80,12 +80,12 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      *
      * @return bool
      */
-    public function executePayment( $dAmount, & $oOrder )
+    public function executePayment($dAmount, & $oOrder)
     {
-        $blSuccess = parent::executePayment( $dAmount, $oOrder );
+        $blSuccess = parent::executePayment($dAmount, $oOrder);
 
-        if ( $this->getSession()->getVariable( 'paymentid' ) == 'oxidpaypal' ) {
-            $this->setPayPalOxOrder( $oOrder );
+        if ($this->getSession()->getVariable('paymentid') == 'oxidpaypal') {
+            $this->setPayPalOxOrder($oOrder);
             $blSuccess = $this->doExpressCheckoutPayment();
         }
 
@@ -104,26 +104,26 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
 
         try {
             // updating order state
-            if ( $oOrder ) {
+            if ($oOrder) {
 
                 $oOrder->oePayPalUpdateOrderNumber();
                 $oSession = $this->getSession();
-                $oBasket  = $oSession->getBasket();
+                $oBasket = $oSession->getBasket();
 
-                $sTransactionMode = $this->_getTransactionMode( $oBasket );
+                $sTransactionMode = $this->_getTransactionMode($oBasket);
 
-                $oBuilder = oxNew( 'oePayPalDoExpressCheckoutPaymentRequestBuilder' );
-                $oBuilder->setPayPalConfig( $this->getPayPalConfig() );
-                $oBuilder->setSession( $oSession );
-                $oBuilder->setBasket( $oBasket );
-                $oBuilder->setTransactionMode( $sTransactionMode );
-                $oBuilder->setUser( $this->_getPayPalUser() );
-                $oBuilder->setOrder( $oOrder );
+                $oBuilder = oxNew('oePayPalDoExpressCheckoutPaymentRequestBuilder');
+                $oBuilder->setPayPalConfig($this->getPayPalConfig());
+                $oBuilder->setSession($oSession);
+                $oBuilder->setBasket($oBasket);
+                $oBuilder->setTransactionMode($sTransactionMode);
+                $oBuilder->setUser($this->_getPayPalUser());
+                $oBuilder->setOrder($oOrder);
 
                 $oRequest = $oBuilder->buildRequest();
 
                 $oPayPalService = $this->getPayPalCheckoutService();
-                $oResult = $oPayPalService->doExpressCheckoutPayment( $oRequest );
+                $oResult = $oPayPalService->doExpressCheckoutPayment($oRequest);
 
                 $oOrder->finalizePayPalOrder(
                     $oResult,
@@ -136,20 +136,20 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
                 /**
                  * @var $oEx oxException
                  */
-                $oEx = oxNew( 'oxException' );
-                $oEx->setMessage( 'OEPAYPAL_ORDER_ERROR' );
+                $oEx = oxNew('oxException');
+                $oEx->setMessage('OEPAYPAL_ORDER_ERROR');
                 throw $oEx;
             }
 
-        } catch ( oxException $oException ) {
+        } catch (oxException $oException) {
 
             // deleting order on error
-            if ( $oOrder ) {
+            if ($oOrder) {
                 $oOrder->deletePayPalOrder();
             }
 
             $this->_iLastErrorNo = oxOrder::ORDER_STATE_PAYMENTERROR;
-            oxRegistry::get('oxUtilsView')->addErrorToDisplay( $oException );
+            oxRegistry::get('oxUtilsView')->addErrorToDisplay($oException);
         }
 
         return $blSuccess;
@@ -159,17 +159,17 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      * @param $oBasket
      * @return string
      */
-    protected function _getTransactionMode( $oBasket )
+    protected function _getTransactionMode($oBasket)
     {
         $sTransactionMode = $this->getPayPalConfig()->getTransactionMode();
 
-        if ( $sTransactionMode == "Automatic" ) {
+        if ($sTransactionMode == "Automatic") {
 
             $oOutOfStockValidator = new oePayPalOutOfStockValidator();
-            $oOutOfStockValidator->setBasket( $oBasket );
-            $oOutOfStockValidator->setEmptyStockLevel( $this->getPayPalConfig()->getEmptyStockLevel() );
+            $oOutOfStockValidator->setBasket($oBasket);
+            $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
-            $sTransactionMode = ( $oOutOfStockValidator->hasOutOfStockArticles() ) ? "Authorization" : "Sale";
+            $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
             return $sTransactionMode;
         }
         return $sTransactionMode;
@@ -182,8 +182,8 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      */
     public function getPayPalConfig()
     {
-        if( is_null( $this->_oPayPalConfig ) ){
-            $this->setPayPalConfig( oxNew( 'oePayPalConfig' ) );
+        if (is_null($this->_oPayPalConfig)) {
+            $this->setPayPalConfig(oxNew('oePayPalConfig'));
         }
         return $this->_oPayPalConfig;
     }
@@ -193,7 +193,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      *
      * @param oePayPalConfig $oPayPalConfig config
      */
-    public function setPayPalConfig( $oPayPalConfig )
+    public function setPayPalConfig($oPayPalConfig)
     {
         $this->_oPayPalConfig = $oPayPalConfig;
     }
@@ -203,7 +203,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      *
      * @param oePayPalService $oCheckoutService
      */
-    public function setPayPalCheckoutService( $oCheckoutService )
+    public function setPayPalCheckoutService($oCheckoutService)
     {
         $this->_oCheckoutService = $oCheckoutService;
     }
@@ -215,8 +215,8 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      */
     public function getPayPalCheckoutService()
     {
-        if ( is_null( $this->_oCheckoutService ) ) {
-            $this->setPayPalCheckoutService( oxNew( "oePayPalService" ) );
+        if (is_null($this->_oCheckoutService)) {
+            $this->setPayPalCheckoutService(oxNew("oePayPalService"));
         }
         return $this->_oCheckoutService;
     }
@@ -238,8 +238,8 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      */
     protected function _getPayPalUser()
     {
-        $oUser = oxNew( 'oxUser' );
-        if (! $oUser->loadUserPayPalUser() ){
+        $oUser = oxNew('oxUser');
+        if (!$oUser->loadUserPayPalUser()) {
             $oUser = $this->getUser();
         }
         return $oUser;

@@ -57,7 +57,7 @@ class oePayPalIPNHandler extends oePayPalController
      *
      * @param oePayPalRequest $oPayPalRequest object to set.
      */
-    public function setPayPalRequest( $oPayPalRequest )
+    public function setPayPalRequest($oPayPalRequest)
     {
         $this->_oPayPalRequest = $oPayPalRequest;
     }
@@ -69,8 +69,8 @@ class oePayPalIPNHandler extends oePayPalController
      */
     public function getPayPalRequest()
     {
-        if ( $this->_oPayPalRequest === null ) {
-            $this->_oPayPalRequest = oxNew( 'oePayPalRequest' );
+        if ($this->_oPayPalRequest === null) {
+            $this->_oPayPalRequest = oxNew('oePayPalRequest');
         }
         return $this->_oPayPalRequest;
     }
@@ -78,7 +78,7 @@ class oePayPalIPNHandler extends oePayPalController
     /**
      * @param oePayPalIPNRequestVerifier $oIPNRequestVerifier
      */
-    public function setIPNRequestVerifier( $oIPNRequestVerifier )
+    public function setIPNRequestVerifier($oIPNRequestVerifier)
     {
         $this->_oIPNRequestVerifier = $oIPNRequestVerifier;
     }
@@ -88,9 +88,9 @@ class oePayPalIPNHandler extends oePayPalController
      */
     public function getIPNRequestVerifier()
     {
-        if ( is_null( $this->_oIPNRequestVerifier ) ) {
-            $oIPNRequestVerifier = oxNew( 'oePayPalIPNRequestVerifier' );
-            $this->setIPNRequestVerifier( $oIPNRequestVerifier );
+        if (is_null($this->_oIPNRequestVerifier)) {
+            $oIPNRequestVerifier = oxNew('oePayPalIPNRequestVerifier');
+            $this->setIPNRequestVerifier($oIPNRequestVerifier);
         }
         return $this->_oIPNRequestVerifier;
     }
@@ -98,7 +98,7 @@ class oePayPalIPNHandler extends oePayPalController
     /**
      * @param oePayPalIPNProcessor $oProcessor
      */
-    public function setProcessor( $oProcessor )
+    public function setProcessor($oProcessor)
     {
         $this->_oProcessor = $oProcessor;
     }
@@ -108,9 +108,9 @@ class oePayPalIPNHandler extends oePayPalController
      */
     public function getProcessor()
     {
-        if ( is_null( $this->_oProcessor ) ) {
-            $oProcessor = oxNew( 'oePayPalIPNProcessor' );
-            $this->setProcessor( $oProcessor );
+        if (is_null($this->_oProcessor)) {
+            $oProcessor = oxNew('oePayPalIPNProcessor');
+            $this->setProcessor($oProcessor);
         }
         return $this->_oProcessor;
     }
@@ -127,13 +127,13 @@ class oePayPalIPNHandler extends oePayPalController
         $blRequestHandled = false;
         $blRequestValid = $this->requestValid();
 
-        if ( $blRequestValid ) {
+        if ($blRequestValid) {
             $oRequest = $this->getPayPalRequest();
             $oLang = $this->getPayPalConfig()->getLang();
 
             $oProcessor = $this->getProcessor();
-            $oProcessor->setRequest( $oRequest );
-            $oProcessor->setLang( $oLang );
+            $oProcessor->setRequest($oRequest);
+            $oProcessor->setLang($oLang);
 
             $blRequestHandled = $oProcessor->process();
         }
@@ -153,16 +153,16 @@ class oePayPalIPNHandler extends oePayPalController
         $oRequest = $this->getRequest();
 
         $oIPNRequestVerifier = $this->getIPNRequestVerifier();
-        $oIPNRequestVerifier->setRequest( $oRequest );
-        $oIPNRequestVerifier->setShopOwner( $this->getPayPalConfig()->getUserEmail() );
+        $oIPNRequestVerifier->setRequest($oRequest);
+        $oIPNRequestVerifier->setShopOwner($this->getPayPalConfig()->getUserEmail());
         $blRequestCorrect = $oIPNRequestVerifier->requestCorrect();
 
-        if ( !$blRequestCorrect ) {
+        if (!$blRequestCorrect) {
             $blRequestValid = false;
 
             $oLogger = $this->getLogger();
-            $oLogger->setTitle( "IPN VERIFICATION FAILURE BY PAYPAL" );
-            $oLogger->log( $oIPNRequestVerifier->getFailureMessage() );
+            $oLogger->setTitle("IPN VERIFICATION FAILURE BY PAYPAL");
+            $oLogger->log($oIPNRequestVerifier->getFailureMessage());
         }
 
         return $blRequestValid;

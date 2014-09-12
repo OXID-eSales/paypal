@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Tests for oeThemeSwitcherUserAgent class
@@ -32,9 +32,9 @@ class Unit_oePayPal_Core_oePayPalFullNameTest extends OxidTestCase
     /**
      * @dataProvider providerSplitNames
      */
-    public function testSplitName( $sFullName, $sFirstName, $sLastName )
+    public function testSplitName($sFullName, $sFirstName, $sLastName)
     {
-        $oPayPalFullName = new oePayPalFullName( $sFullName );
+        $oPayPalFullName = new oePayPalFullName($sFullName);
 
         $this->assertEquals($sFirstName, $oPayPalFullName->getFirstName());
         $this->assertEquals($sLastName, $oPayPalFullName->getLastName());
@@ -43,12 +43,12 @@ class Unit_oePayPal_Core_oePayPalFullNameTest extends OxidTestCase
     public function providerSplitNames()
     {
         return array(
-            array( 'Jonas Petraitis', 'Jonas', 'Petraitis' ),
-            array( '', '', ''),
-            array( 'Ona Egle Petraitis', 'Ona', 'Egle Petraitis'),
-            array( 'Ona', 'Ona', ''),
-            array( ' Antanas,    smoriginas ', 'Antanas,', 'smoriginas' ),
-            array( null, '', '' ),
+            array('Jonas Petraitis', 'Jonas', 'Petraitis'),
+            array('', '', ''),
+            array('Ona Egle Petraitis', 'Ona', 'Egle Petraitis'),
+            array('Ona', 'Ona', ''),
+            array(' Antanas,    smoriginas ', 'Antanas,', 'smoriginas'),
+            array(null, '', ''),
         );
     }
 }

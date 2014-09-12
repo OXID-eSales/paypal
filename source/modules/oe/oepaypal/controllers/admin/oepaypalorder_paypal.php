@@ -35,12 +35,12 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     {
         parent::render();
 
-        $this->_aViewData["sOxid"] =  $this->getEditObjectId();
-        if ( $this->isNewPayPalOrder() ) {
+        $this->_aViewData["sOxid"] = $this->getEditObjectId();
+        if ($this->isNewPayPalOrder()) {
             $this->_aViewData['oOrder'] = $this->getEditObject();
         } else {
-            $this->_aViewData['sMessage'] = $this->isPayPalOrder() ? oxRegistry::getLang()->translateString( "OEPAYPAL_ONLY_FOR_NEW_PAYPAL_PAYMENT" ) :
-                oxRegistry::getLang()->translateString( "OEPAYPAL_ONLY_FOR_PAYPAL_PAYMENT" );
+            $this->_aViewData['sMessage'] = $this->isPayPalOrder() ? oxRegistry::getLang()->translateString("OEPAYPAL_ONLY_FOR_NEW_PAYPAL_PAYMENT") :
+                oxRegistry::getLang()->translateString("OEPAYPAL_ONLY_FOR_PAYPAL_PAYMENT");
         }
 
         return "order_paypal.tpl";
@@ -53,17 +53,17 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     public function processAction()
     {
         try {
-            $oRequest = oxNew( 'oePayPalRequest' );
+            $oRequest = oxNew('oePayPalRequest');
             $sAction = $oRequest->getRequestParameter('action');
 
             $oOrder = $this->getEditObject();
 
-            $oActionFactory = oxNew( 'oePayPalOrderActionFactory', $oRequest, $oOrder );
-            $oAction = $oActionFactory->createAction( $sAction );
+            $oActionFactory = oxNew('oePayPalOrderActionFactory', $oRequest, $oOrder);
+            $oAction = $oActionFactory->createAction($sAction);
 
             $oAction->process();
 
-        } catch ( oxException $oException ) {
+        } catch (oxException $oException) {
             $this->_aViewData["error"] = $oException->getMessage();
         }
     }
@@ -75,8 +75,8 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      */
     public function getOrderActionManager()
     {
-        $oManager = oxNew( 'oePayPalOrderActionManager' );
-        $oManager->setOrder( $this->getEditObject()->getPayPalOrder() );
+        $oManager = oxNew('oePayPalOrderActionManager');
+        $oManager->setOrder($this->getEditObject()->getPayPalOrder());
 
         return $oManager;
     }
@@ -88,7 +88,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      */
     public function getOrderPaymentActionManager()
     {
-        $oManager = oxNew( 'oePayPalOrderPaymentActionManager' );
+        $oManager = oxNew('oePayPalOrderPaymentActionManager');
 
         return $oManager;
     }
@@ -100,8 +100,8 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      */
     public function getOrderPaymentStatusCalculator()
     {
-        $oStatusCalculator = oxNew( 'oePayPalOrderPaymentStatusCalculator' );
-        $oStatusCalculator->setOrder( $this->getEditObject()->getPayPalOrder() );
+        $oStatusCalculator = oxNew('oePayPalOrderPaymentStatusCalculator');
+        $oStatusCalculator->setOrder($this->getEditObject()->getPayPalOrder());
 
         return $oStatusCalculator;
     }
@@ -113,7 +113,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      */
     public function getOrderPaymentStatusList()
     {
-        $oList = oxNew( 'oePayPalOrderPaymentStatusList' );
+        $oList = oxNew('oePayPalOrderPaymentStatusList');
 
         return $oList;
     }
@@ -126,9 +126,9 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     public function getEditObject()
     {
         $soxId = $this->getEditObjectId();
-        if ( $this->_oEditObject === null && isset( $soxId ) && $soxId != '-1' ) {
-            $this->_oEditObject = oxNew( 'oxOrder' );
-            $this->_oEditObject->load( $soxId );
+        if ($this->_oEditObject === null && isset($soxId) && $soxId != '-1') {
+            $this->_oEditObject = oxNew('oxOrder');
+            $this->_oEditObject->load($soxId);
         }
         return $this->_oEditObject;
     }
@@ -144,7 +144,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
 
         $oOrder = $this->getEditObject();
         $oOrderPayPal = $oOrder->getPayPalOrder();
-        if ( $this->isPayPalOrder() && $oOrderPayPal->isLoaded() ) {
+        if ($this->isPayPalOrder() && $oOrderPayPal->isLoaded()) {
             $blActive = true;
         }
 
@@ -161,7 +161,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
         $blActive = false;
 
         $oOrder = $this->getEditObject();
-        if ( $oOrder && $oOrder->getFieldData( 'oxpaymenttype' ) == 'oxidpaypal' ) {
+        if ($oOrder && $oOrder->getFieldData('oxpaymenttype') == 'oxidpaypal') {
             $blActive = true;
         }
 
@@ -175,9 +175,9 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      *
      * @return string
      */
-    public function formatPrice( $dPrice )
+    public function formatPrice($dPrice)
     {
-        return oxRegistry::getLang()->formatCurrency( $dPrice );
+        return oxRegistry::getLang()->formatCurrency($dPrice);
     }
 
 }

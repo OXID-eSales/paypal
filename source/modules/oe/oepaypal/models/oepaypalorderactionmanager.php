@@ -31,7 +31,7 @@ class oePayPalOrderActionManager
      */
     protected $_aAvailableActions = array(
         'Sale' => array(),
-        'Authorization' => array( 'capture', 'reauthorize', 'void' ),
+        'Authorization' => array('capture', 'reauthorize', 'void'),
     );
 
     /**
@@ -46,7 +46,7 @@ class oePayPalOrderActionManager
      *
      * @param oePayPalPayPalOrder $oOrder
      */
-    public function setOrder( $oOrder )
+    public function setOrder($oOrder)
     {
         $this->_oOrder = $oOrder;
     }
@@ -68,11 +68,11 @@ class oePayPalOrderActionManager
      *
      * @return array
      */
-    protected function _getAvailableAction( $sMode )
+    protected function _getAvailableAction($sMode)
     {
-        $aActions = $this->_aAvailableActions[ $sMode ];
+        $aActions = $this->_aAvailableActions[$sMode];
 
-        return $aActions? $aActions : array();
+        return $aActions ? $aActions : array();
     }
 
     /**
@@ -81,22 +81,22 @@ class oePayPalOrderActionManager
      * @param $sAction
      * @return bool
      */
-    public function isActionAvailable( $sAction )
+    public function isActionAvailable($sAction)
     {
         $oOrder = $this->getOrder();
 
-        $aAvailableActions = $this->_getAvailableAction( $oOrder->getTransactionMode() );
+        $aAvailableActions = $this->_getAvailableAction($oOrder->getTransactionMode());
 
-        $blIsAvailable = in_array( $sAction, $aAvailableActions );
+        $blIsAvailable = in_array($sAction, $aAvailableActions);
 
-        if ( $blIsAvailable ) {
+        if ($blIsAvailable) {
             $blIsAvailable = false;
 
             switch ($sAction) {
                 case 'capture':
                 case 'reauthorize':
                 case 'void':
-                    if ( $oOrder->getRemainingOrderSum() > 0 && $oOrder->getVoidedAmount() < $oOrder->getRemainingOrderSum() ) {
+                    if ($oOrder->getRemainingOrderSum() > 0 && $oOrder->getVoidedAmount() < $oOrder->getRemainingOrderSum()) {
                         $blIsAvailable = true;
                     }
                     break;

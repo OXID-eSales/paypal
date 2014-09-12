@@ -41,7 +41,7 @@ class oePayPalOrderActionFactory
      * @param oePayPalRequest $oRequest
      * @param oePayPalOxOrder $oOrder
      */
-    public function __construct( $oRequest, $oOrder )
+    public function __construct($oRequest, $oOrder)
     {
         $this->_oRequest = $oRequest;
         $this->_oOrder = $oOrder;
@@ -70,12 +70,12 @@ class oePayPalOrderActionFactory
     /**
      * Creates action object by given action name
      */
-    public function createAction( $sAction )
+    public function createAction($sAction)
     {
-        $sMethod = "get".ucfirst( $sAction )."Action";
+        $sMethod = "get" . ucfirst($sAction) . "Action";
 
-        if ( !method_exists( $this, $sMethod ) ) {
-            throw oxNew( 'oePayPalInvalidActionException' );
+        if (!method_exists($this, $sMethod)) {
+            throw oxNew('oePayPalInvalidActionException');
         }
 
         return $this->$sMethod();
@@ -91,13 +91,13 @@ class oePayPalOrderActionFactory
         $oOrder = $this->getOrder();
         $oRequest = $this->getRequest();
 
-        $oData = oxNew( 'oePayPalOrderCaptureActionData', $oRequest, $oOrder );
-        $oHandler = oxNew( 'oePayPalOrderCaptureActionHandler', $oData );
+        $oData = oxNew('oePayPalOrderCaptureActionData', $oRequest, $oOrder);
+        $oHandler = oxNew('oePayPalOrderCaptureActionHandler', $oData);
 
-        $oReauthorizeData = oxNew( 'oePayPalOrderReauthorizeActionData', $oRequest, $oOrder );
-        $oReauthorizeHandler = oxNew( 'oePayPalOrderReauthorizeActionHandler', $oReauthorizeData );
+        $oReauthorizeData = oxNew('oePayPalOrderReauthorizeActionData', $oRequest, $oOrder);
+        $oReauthorizeHandler = oxNew('oePayPalOrderReauthorizeActionHandler', $oReauthorizeData);
 
-        $oAction = oxNew( 'oePayPalOrderCaptureAction', $oHandler, $oOrder->getPayPalOrder(), $oReauthorizeHandler );
+        $oAction = oxNew('oePayPalOrderCaptureAction', $oHandler, $oOrder->getPayPalOrder(), $oReauthorizeHandler);
 
         return $oAction;
     }
@@ -110,10 +110,10 @@ class oePayPalOrderActionFactory
     public function getRefundAction()
     {
         $oOrder = $this->getOrder();
-        $oData = oxNew( 'oePayPalOrderRefundActionData', $this->getRequest(), $oOrder );
-        $oHandler = oxNew( 'oePayPalOrderRefundActionHandler', $oData );
+        $oData = oxNew('oePayPalOrderRefundActionData', $this->getRequest(), $oOrder);
+        $oHandler = oxNew('oePayPalOrderRefundActionHandler', $oData);
 
-        $oAction = oxNew( 'oePayPalOrderRefundAction', $oHandler, $oOrder->getPayPalOrder() );
+        $oAction = oxNew('oePayPalOrderRefundAction', $oHandler, $oOrder->getPayPalOrder());
 
         return $oAction;
     }
@@ -126,10 +126,10 @@ class oePayPalOrderActionFactory
     public function getVoidAction()
     {
         $oOrder = $this->getOrder();
-        $oData = oxNew( 'oePayPalOrderVoidActionData', $this->getRequest(), $oOrder );
-        $oHandler = oxNew( 'oePayPalOrderVoidActionHandler', $oData );
+        $oData = oxNew('oePayPalOrderVoidActionData', $this->getRequest(), $oOrder);
+        $oHandler = oxNew('oePayPalOrderVoidActionHandler', $oData);
 
-        $oAction = oxNew( 'oePayPalOrderVoidAction', $oHandler, $oOrder->getPayPalOrder() );
+        $oAction = oxNew('oePayPalOrderVoidAction', $oHandler, $oOrder->getPayPalOrder());
 
         return $oAction;
     }

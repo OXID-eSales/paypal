@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalPayPalRequest class.
@@ -35,22 +35,22 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalPayPalRequestTest extends OxidT
         );
 
         $oRequest = new oePayPalPayPalRequest();
-        $oRequest->setData( $aData );
-        $this->assertEquals( $aData, $oRequest->getData() );
+        $oRequest->setData($aData);
+        $this->assertEquals($aData, $oRequest->getData());
     }
 
     public function testGetData_NoDataSet()
     {
         $oRequest = new oePayPalPayPalRequest();
-        $this->assertEquals( array(), $oRequest->getData() );
+        $this->assertEquals(array(), $oRequest->getData());
     }
 
     public function testSetGetParameter()
     {
         $oRequest = new oePayPalPayPalRequest();
-        $oRequest->setParameter( 'AUTHORIZATIONID', 'AuthorizationId' );
+        $oRequest->setParameter('AUTHORIZATIONID', 'AuthorizationId');
 
-        $this->assertEquals( 'AuthorizationId', $oRequest->getParameter( 'AUTHORIZATIONID' ) );
+        $this->assertEquals('AuthorizationId', $oRequest->getParameter('AUTHORIZATIONID'));
     }
 
     public function testSetGetParameter_OverwritingOfSetData()
@@ -62,10 +62,10 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalPayPalRequestTest extends OxidT
         $sNewId = 'NewAuthorizationId';
 
         $oRequest = new oePayPalPayPalRequest();
-        $oRequest->setData( $aData );
-        $oRequest->setParameter( 'AUTHORIZATIONID', $sNewId );
+        $oRequest->setData($aData);
+        $oRequest->setParameter('AUTHORIZATIONID', $sNewId);
 
-        $aData[ 'AUTHORIZATIONID' ] = $sNewId;
-        $this->assertEquals( $aData, $oRequest->getData() );
+        $aData['AUTHORIZATIONID'] = $sNewId;
+        $this->assertEquals($aData, $oRequest->getData());
     }
 }

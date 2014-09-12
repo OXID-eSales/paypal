@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderActionFactory class.
@@ -32,25 +32,25 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderActionDataTest extends Oxid
      */
     public function testGetAuthorizationId()
     {
-        $oRequest = $this->_getRequest( array() );
+        $oRequest = $this->_getRequest(array());
         $oOrder = $this->_getOrder();
-        $oOrder->oxorder__oxtransid = new oxField( 'authorizationId' );
+        $oOrder->oxorder__oxtransid = new oxField('authorizationId');
 
-        $oActionData = new oePayPalOrderActionData( $oRequest, $oOrder );
+        $oActionData = new oePayPalOrderActionData($oRequest, $oOrder);
 
-        $this->assertEquals( 'authorizationId', $oActionData->getAuthorizationId() );
+        $this->assertEquals('authorizationId', $oActionData->getAuthorizationId());
     }
 
     /**
      */
     public function testGetAmount()
     {
-        $oRequest = $this->_getRequest( array( 'action_comment' => 'comment' ) );
+        $oRequest = $this->_getRequest(array('action_comment' => 'comment'));
         $oOrder = $this->_getOrder();
 
-        $oActionData = new oePayPalOrderActionData( $oRequest, $oOrder );
+        $oActionData = new oePayPalOrderActionData($oRequest, $oOrder);
 
-        $this->assertEquals( 'comment', $oActionData->getComment() );
+        $this->assertEquals('comment', $oActionData->getComment());
     }
 
     /**
@@ -59,9 +59,9 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderActionDataTest extends Oxid
      * @param $aParams
      * @return mixed
      */
-    protected function _getRequest( $aParams )
+    protected function _getRequest($aParams)
     {
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getGet' => $aParams ) );
+        $oRequest = $this->_createStub('oePayPalRequest', array('getGet' => $aParams));
 
         return $oRequest;
     }

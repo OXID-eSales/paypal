@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ) . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
 
 /**
  * Testing oePayPalModel class.
@@ -33,14 +33,14 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
     public function testLoad_LoadByGetId_DataLoaded()
     {
         $sId = 'RecordIdToLoad';
-        $aData = array( 'testkey' => 'testValue' );
-        $oGateway = $this->getMock( 'TestGateway', array( 'load' ) );
-        $oGateway->expects( $this->any() )->method('load')->with( $sId )->will( $this->returnValue( $aData ) );
+        $aData = array('testkey' => 'testValue');
+        $oGateway = $this->getMock('TestGateway', array('load'));
+        $oGateway->expects($this->any())->method('load')->with($sId)->will($this->returnValue($aData));
 
-        $oModel = $this->_getPayPalModel( $oGateway, $sId );
+        $oModel = $this->_getPayPalModel($oGateway, $sId);
 
-        $this->assertTrue( $oModel->load() );
-        $this->assertEquals( $aData, $oModel->getData() );
+        $this->assertTrue($oModel->load());
+        $this->assertEquals($aData, $oModel->getData());
     }
 
     /**
@@ -49,14 +49,14 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
     public function testLoad_LoadByPassedId_DataLoaded()
     {
         $sId = 'RecordIdToLoad';
-        $aData = array( 'testkey' => 'testValue' );
-        $oGateway = $this->getMock( 'TestGateway', array( 'load' ) );
-        $oGateway->expects( $this->any() )->method('load')->with( $sId )->will( $this->returnValue( $aData ) );
+        $aData = array('testkey' => 'testValue');
+        $oGateway = $this->getMock('TestGateway', array('load'));
+        $oGateway->expects($this->any())->method('load')->with($sId)->will($this->returnValue($aData));
 
-        $oModel = $this->_getPayPalModel( $oGateway, $sId, $sId );
+        $oModel = $this->_getPayPalModel($oGateway, $sId, $sId);
 
-        $this->assertTrue( $oModel->load( $sId ) );
-        $this->assertEquals( $aData, $oModel->getData() );
+        $this->assertTrue($oModel->load($sId));
+        $this->assertEquals($aData, $oModel->getData());
     }
 
     /**
@@ -64,12 +64,12 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
      */
     public function testIsLoaded_DatabaseRecordNotFound()
     {
-        $oGateway = $this->_createStub( 'TestGateway', array( 'load' => null ) );
+        $oGateway = $this->_createStub('TestGateway', array('load' => null));
 
-        $oModel = $this->_getPayPalModel( $oGateway );
+        $oModel = $this->_getPayPalModel($oGateway);
         $oModel->load();
 
-        $this->assertFalse( $oModel->isLoaded() );
+        $this->assertFalse($oModel->isLoaded());
     }
 
     /**
@@ -77,12 +77,12 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
      */
     public function testIsLoaded_DatabaseRecordFound()
     {
-        $oGateway = $this->_createStub( 'TestGateway', array( 'load' => array('oePayPalId' => 'testId') ) );
+        $oGateway = $this->_createStub('TestGateway', array('load' => array('oePayPalId' => 'testId')));
 
-        $oModel = $this->_getPayPalModel( $oGateway );
+        $oModel = $this->_getPayPalModel($oGateway);
         $oModel->load();
 
-        $this->assertTrue( $oModel->isLoaded() );
+        $this->assertTrue($oModel->isLoaded());
     }
 
     /**
@@ -94,11 +94,11 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
      *
      * @return oePayPalModel
      */
-    protected function _getPayPalModel( $oGateway, $sGetId = null, $sSetId = null )
+    protected function _getPayPalModel($oGateway, $sGetId = null, $sSetId = null)
     {
-        $oModel = $this->_createStub( 'oePayPalModel', array( '_getDbGateway' => $oGateway, 'getId' => $sGetId ), array( 'setId' ) );
-        if ( $sSetId ) {
-            $oModel->expects( $this->any() )->method( 'setId' )->with( $sSetId );
+        $oModel = $this->_createStub('oePayPalModel', array('_getDbGateway' => $oGateway, 'getId' => $sGetId), array('setId'));
+        if ($sSetId) {
+            $oModel->expects($this->any())->method('setId')->with($sSetId);
         }
 
         return $oModel;

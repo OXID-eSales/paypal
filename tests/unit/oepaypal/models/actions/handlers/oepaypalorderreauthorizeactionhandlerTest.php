@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderReauthorizeAction class.
@@ -37,20 +37,20 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
         $sCurrency = 'LTU';
         $dAmount = 59.67;
 
-        $oData = $this->_createStub( 'Data', array(
+        $oData = $this->_createStub('Data', array(
             'getAuthorizationId' => $sAuthId,
             'getAmount' => $dAmount,
             'getCurrency' => $sCurrency,
-        ) );
-        $oActionHandler = $this->_getActionHandler( $oData );
+        ));
+        $oActionHandler = $this->_getActionHandler($oData);
 
-        $oBuilder = $this->getMock( 'oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType') );
-        $oBuilder->expects( $this->once() )->method( 'setAuthorizationId' )->with( $this->equalTo( $sAuthId ) );
-        $oBuilder->expects( $this->once() )->method( 'setAmount' )->with( $this->equalTo( $dAmount ), $this->equalTo( $sCurrency ) );
+        $oBuilder = $this->getMock('oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType'));
+        $oBuilder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($sAuthId));
+        $oBuilder->expects($this->once())->method('setAmount')->with($this->equalTo($dAmount), $this->equalTo($sCurrency));
 
-        $oActionHandler->setPayPalRequestBuilder( $oBuilder );
+        $oActionHandler->setPayPalRequestBuilder($oBuilder);
 
-        $this->assertTrue( $oActionHandler->getPayPalRequest() instanceof oePayPalPayPalRequest );
+        $this->assertTrue($oActionHandler->getPayPalRequest() instanceof oePayPalPayPalRequest);
     }
 
     /**
@@ -60,12 +60,12 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
     {
         $oActionHandler = $this->_getActionHandler();
 
-        $oPayPalRequest = $this->getMock( 'oePayPalPayPalRequest' );
-        $oActionHandler->setPayPalRequest( $oPayPalRequest );
+        $oPayPalRequest = $this->getMock('oePayPalPayPalRequest');
+        $oActionHandler->setPayPalRequest($oPayPalRequest);
 
-        $oCheckoutService = $this->getMock( 'oePayPalService', array( 'doReAuthorization' ) );
-        $oCheckoutService->expects( $this->once() )->method( 'doReAuthorization' )->with( $this->equalTo( $oPayPalRequest ) );
-        $oActionHandler->setPayPalService( $oCheckoutService );
+        $oCheckoutService = $this->getMock('oePayPalService', array('doReAuthorization'));
+        $oCheckoutService->expects($this->once())->method('doReAuthorization')->with($this->equalTo($oPayPalRequest));
+        $oActionHandler->setPayPalService($oCheckoutService);
 
         $oActionHandler->getPayPalResponse();
     }
@@ -75,7 +75,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      */
     protected function _getService()
     {
-        return $this->getMock( 'oePayPalService');
+        return $this->getMock('oePayPalService');
     }
 
     /**
@@ -84,11 +84,11 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * @param $oData
      * @return oePayPalOrderReauthorizeAction
      */
-    protected function _getActionHandler( $oData = null)
+    protected function _getActionHandler($oData = null)
     {
-        $oAction = new oePayPalOrderReauthorizeActionHandler( $oData );
+        $oAction = new oePayPalOrderReauthorizeActionHandler($oData);
 
-        $oAction->setPayPalService( $this->_getService() );
+        $oAction->setPayPalService($this->_getService());
 
         return $oAction;
     }

@@ -19,11 +19,13 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
-if ( ! class_exists( 'oePayPalOxOrder_parent' ) ) {
-    class oePayPalOxOrder_parent extends oxOrder {}
+if (!class_exists('oePayPalOxOrder_parent')) {
+    class oePayPalOxOrder_parent extends oxOrder
+    {
+    }
 }
 
 class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCase
@@ -34,7 +36,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
      */
     public function setUp()
     {
-        oxDb::getDb()->execute( 'TRUNCATE `oepaypal_order`' );
+        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
@@ -46,19 +48,19 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
         $soxId = '_testOrderId';
 
         $oPayPalOrderModel = new oePayPalPayPalOrder();
-        $oPayPalOrderModel->setOrderId( $soxId );
+        $oPayPalOrderModel->setOrderId($soxId);
         $oPayPalOrderModel->save();
 
         $oPayPalOrderModel->load();
 
-        $oPayPalOxOrder = $this->getMock( 'oePayPalOxOrder', array( 'getPayPalOrder' ) );
-        $oPayPalOxOrder->expects( $this->any() )->method( 'getPayPalOrder' )->will( $this->returnValue( $oPayPalOrderModel ) );
+        $oPayPalOxOrder = $this->getMock('oePayPalOxOrder', array('getPayPalOrder'));
+        $oPayPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($oPayPalOrderModel));
 
-        $oPayPalOrder = $this->getMock( 'oePayPalOrder_PayPal', array( 'getEditObject', 'isPayPalOrder' ) );
-        $oPayPalOrder->expects( $this->any() )->method( 'getEditObject' )->will( $this->returnValue( $oPayPalOxOrder ) );
-        $oPayPalOrder->expects( $this->once() )->method( 'isPayPalOrder' )->will( $this->returnValue( true ) );
+        $oPayPalOrder = $this->getMock('oePayPalOrder_PayPal', array('getEditObject', 'isPayPalOrder'));
+        $oPayPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($oPayPalOxOrder));
+        $oPayPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(true));
 
-        $this->assertTrue( $oPayPalOrder->isNewPayPalOrder() );
+        $this->assertTrue($oPayPalOrder->isNewPayPalOrder());
     }
 
     /**
@@ -70,17 +72,17 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
         $soxId = '_testOrderId';
 
         $oPayPalOrderModel = new oePayPalPayPalOrder();
-        $oPayPalOrderModel->setOrderId( $soxId );
+        $oPayPalOrderModel->setOrderId($soxId);
         $oPayPalOrderModel->save();
 
-        $oPayPalOxOrder = $this->getMock( 'oePayPalOxOrder', array( 'getPayPalOrder' ) );
-        $oPayPalOxOrder->expects( $this->any() )->method( 'getPayPalOrder' )->will( $this->returnValue( $oPayPalOrderModel ) );
+        $oPayPalOxOrder = $this->getMock('oePayPalOxOrder', array('getPayPalOrder'));
+        $oPayPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($oPayPalOrderModel));
 
-        $oPayPalOrder = $this->getMock( 'oePayPalOrder_PayPal', array( 'getEditObject', 'isPayPalOrder' ) );
-        $oPayPalOrder->expects( $this->any() )->method( 'getEditObject' )->will( $this->returnValue( $oPayPalOxOrder ) );
-        $oPayPalOrder->expects( $this->once() )->method( 'isPayPalOrder' )->will( $this->returnValue( false ) );
+        $oPayPalOrder = $this->getMock('oePayPalOrder_PayPal', array('getEditObject', 'isPayPalOrder'));
+        $oPayPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($oPayPalOxOrder));
+        $oPayPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(false));
 
-        $this->assertFalse( $oPayPalOrder->isNewPayPalOrder() );
+        $this->assertFalse($oPayPalOrder->isNewPayPalOrder());
     }
 
     /**
@@ -93,14 +95,14 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
         $soxId = '_testOrderId';
 
         $oSession = new oxSession();
-        $oSession->setVariable( 'saved_oxid', $soxId );
+        $oSession->setVariable('saved_oxid', $soxId);
 
         $oOrder = new oxorder;
-        $oOrder->setId( $soxId );
-        $oOrder->oxorder__oxpaymenttype = new oxField( 'oxidpaypal' );
+        $oOrder->setId($soxId);
+        $oOrder->oxorder__oxpaymenttype = new oxField('oxidpaypal');
         $oOrder->save();
 
-        $this->assertTrue( $oPayPalOrder->isPayPalOrder() );
+        $this->assertTrue($oPayPalOrder->isPayPalOrder());
     }
 
     /**
@@ -113,14 +115,14 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
         $soxId = '_testOrderId';
 
         $oSession = new oxSession();
-        $oSession->setVariable( 'saved_oxid', $soxId );
+        $oSession->setVariable('saved_oxid', $soxId);
 
         $oOrder = new oxOrder();
-        $oOrder->setId( $soxId );
-        $oOrder->oxorder__oxpaymenttype = new oxField( 'other' );
+        $oOrder->setId($soxId);
+        $oOrder->oxorder__oxpaymenttype = new oxField('other');
         $oOrder->save();
 
-        $this->assertFalse( $oPayPalOrder->isPayPalOrder() );
+        $this->assertFalse($oPayPalOrder->isPayPalOrder());
     }
 
 }

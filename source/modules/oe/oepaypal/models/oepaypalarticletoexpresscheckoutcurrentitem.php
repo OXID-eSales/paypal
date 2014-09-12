@@ -52,7 +52,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
      * Method sets persistent param
      * @param array $aPersistParam
      */
-    public function setPersistParam( $aPersistParam )
+    public function setPersistParam($aPersistParam)
     {
         $this->_aPersistParam = $aPersistParam;
     }
@@ -71,7 +71,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
      * Method sets select list
      * @param array $aSelectList
      */
-    public function setSelectList( $aSelectList )
+    public function setSelectList($aSelectList)
     {
         $this->_aSelectList = $aSelectList;
     }
@@ -90,7 +90,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
      * Method sets article id
      * @param string $sArticleId
      */
-    public function setArticleId( $sArticleId )
+    public function setArticleId($sArticleId)
     {
         $this->_sArticleId = $sArticleId;
     }
@@ -110,7 +110,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
      *
      * @param int $iArticleAmount
      */
-    public function setArticleAmount( $iArticleAmount )
+    public function setArticleAmount($iArticleAmount)
     {
         $this->_iArticleAmount = $iArticleAmount;
     }
@@ -122,7 +122,7 @@ class oePayPalArticleToExpressCheckoutCurrentItem
      */
     public function getArticleAmount()
     {
-        return ( int ) $this->_iArticleAmount;
+        return ( int )$this->_iArticleAmount;
     }
 
 }

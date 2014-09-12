@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( '.' ).'/unit/OxidTestCase.php';
-require_once realpath( '.' ).'/unit/test_config.inc.php';
+require_once realpath('.') . '/unit/OxidTestCase.php';
+require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderActionFactory class.
@@ -35,13 +35,13 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderReauthorizeActionDataTest e
     {
         $sRemainingOrderSum = 59.67;
 
-        $oPayPalOrder = $this->_createStub( 'oePayPalPayPalOrder', array( 'getRemainingOrderSum' => $sRemainingOrderSum ) );
-        $oOrder = $this->_createStub( 'oePayPalOxOrder', array( 'getPayPalOrder' => $oPayPalOrder ) );
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getPost' => array() ) );
+        $oPayPalOrder = $this->_createStub('oePayPalPayPalOrder', array('getRemainingOrderSum' => $sRemainingOrderSum));
+        $oOrder = $this->_createStub('oePayPalOxOrder', array('getPayPalOrder' => $oPayPalOrder));
+        $oRequest = $this->_createStub('oePayPalRequest', array('getPost' => array()));
 
-        $oActionData = new oePayPalOrderReauthorizeActionData( $oRequest, $oOrder );
+        $oActionData = new oePayPalOrderReauthorizeActionData($oRequest, $oOrder);
 
-        $this->assertEquals( $sRemainingOrderSum, $oActionData->getAmount() );
+        $this->assertEquals($sRemainingOrderSum, $oActionData->getAmount());
     }
 
     /**
@@ -50,9 +50,9 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderReauthorizeActionDataTest e
      * @param $aParams
      * @return mixed
      */
-    protected function _getRequest( $aParams )
+    protected function _getRequest($aParams)
     {
-        $oRequest = $this->_createStub( 'oePayPalRequest', array( 'getGet' => $aParams ) );
+        $oRequest = $this->_createStub('oePayPalRequest', array('getGet' => $aParams));
 
         return $oRequest;
     }

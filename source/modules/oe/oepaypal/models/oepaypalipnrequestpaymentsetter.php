@@ -68,7 +68,7 @@ class oePayPalIPNRequestPaymentSetter
      * Sets request object to get params for IPN request.
      * @param oePayPalRequest $oRequest
      */
-    public function setRequest( $oRequest )
+    public function setRequest($oRequest)
     {
         $this->_oRequest = $oRequest;
     }
@@ -85,7 +85,7 @@ class oePayPalIPNRequestPaymentSetter
     /**
      * @param oePayPalOrderPayment $oOrderPayment
      */
-    public function setRequestOrderPayment( $oOrderPayment )
+    public function setRequestOrderPayment($oOrderPayment)
     {
         $this->_oRequestOrderPayment = $oOrderPayment;
     }
@@ -95,7 +95,7 @@ class oePayPalIPNRequestPaymentSetter
      */
     public function getRequestOrderPayment()
     {
-        $this->_prepareOrderPayment( $this->_oRequestOrderPayment );
+        $this->_prepareOrderPayment($this->_oRequestOrderPayment);
         return $this->_oRequestOrderPayment;
     }
 
@@ -104,13 +104,13 @@ class oePayPalIPNRequestPaymentSetter
      *
      * @param oePayPalOrderPayment $oRequestOrderPayment order to set params.
      */
-    protected function _prepareOrderPayment( $oRequestOrderPayment )
+    protected function _prepareOrderPayment($oRequestOrderPayment)
     {
         $oRequest = $this->getRequest();
 
-        $oRequestOrderPayment->setStatus( $oRequest->getRequestParameter( self::PAYPAL_PAYMENT_STATUS ) );
-        $oRequestOrderPayment->setTransactionId( $oRequest->getRequestParameter( self::PAYPAL_TRANSACTION_ID ) );
-        $oRequestOrderPayment->setCurrency( $oRequest->getRequestParameter( self::MC_CURRENCY ) );
-        $oRequestOrderPayment->setAmount( $oRequest->getRequestParameter( self::MC_GROSS ) );
+        $oRequestOrderPayment->setStatus($oRequest->getRequestParameter(self::PAYPAL_PAYMENT_STATUS));
+        $oRequestOrderPayment->setTransactionId($oRequest->getRequestParameter(self::PAYPAL_TRANSACTION_ID));
+        $oRequestOrderPayment->setCurrency($oRequest->getRequestParameter(self::MC_CURRENCY));
+        $oRequestOrderPayment->setAmount($oRequest->getRequestParameter(self::MC_GROSS));
     }
 }

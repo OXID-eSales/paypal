@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ) . '/unit/OxidTestCase.php';
+require_once realpath(".") . '/unit/OxidTestCase.php';
 
 /**
  * Testing oePayPalService class.
@@ -32,9 +32,9 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testGetConfig_configSet_config()
     {
         $oService = new oePayPalService();
-        $oService->setPayPalConfig( new oePayPalConfig() );
+        $oService->setPayPalConfig(new oePayPalConfig());
 
-        $this->assertTrue(  $oService->getPayPalConfig() instanceof oePayPalConfig );
+        $this->assertTrue($oService->getPayPalConfig() instanceof oePayPalConfig);
     }
 
     /**
@@ -43,7 +43,7 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testGetConfig_notSet_config()
     {
         $oService = new oePayPalService();
-        $this->assertTrue(  $oService->getPayPalConfig() instanceof oePayPalConfig );
+        $this->assertTrue($oService->getPayPalConfig() instanceof oePayPalConfig);
     }
 
     /**
@@ -55,12 +55,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
         $oCaller->setParameter('parameter', 'value');
 
         $oService = new oePayPalService();
-        $oService->setCaller( $oCaller );
+        $oService->setCaller($oCaller);
 
-        $this->assertTrue( $oService->getCaller() instanceof oePayPalCaller );
+        $this->assertTrue($oService->getCaller() instanceof oePayPalCaller);
         $aParameters = $oService->getCaller()->getParameters();
-        $this->assertEquals( 'value', $aParameters['parameter'] );
-        $this->assertNull( $aParameters['notDefinedParameter'] );
+        $this->assertEquals('value', $aParameters['parameter']);
+        $this->assertNull($aParameters['notDefinedParameter']);
     }
 
     /**
@@ -68,26 +68,26 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
      */
     public function testGetCaller_defaultCaller_callerWithPreparedData()
     {
-        $this->getConfig()->setConfigParam( 'blOEPayPalSandboxMode', false );
-        $this->getConfig()->setConfigParam( 'sOEPayPalPassword', 'pwd' );
-        $this->getConfig()->setConfigParam( 'sOEPayPalUsername', 'usr');
-        $this->getConfig()->setConfigParam( 'sOEPayPalSignature', 'signature');
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
+        $this->getConfig()->setConfigParam('sOEPayPalPassword', 'pwd');
+        $this->getConfig()->setConfigParam('sOEPayPalUsername', 'usr');
+        $this->getConfig()->setConfigParam('sOEPayPalSignature', 'signature');
 
         $oService = new oePayPalService();
 
-        $this->assertTrue( $oService->getCaller() instanceof oePayPalCaller );
+        $this->assertTrue($oService->getCaller() instanceof oePayPalCaller);
 
         $aParameters = $oService->getCaller()->getParameters();
-        $this->assertEquals( '84.0', $aParameters['VERSION'] );
-        $this->assertEquals( 'pwd', $aParameters['PWD'] );
-        $this->assertEquals( 'usr', $aParameters['USER'] );
-        $this->assertEquals( 'signature', $aParameters['SIGNATURE'] );
-        $this->assertNull( $aParameters['notDefinedParameter'] );
+        $this->assertEquals('84.0', $aParameters['VERSION']);
+        $this->assertEquals('pwd', $aParameters['PWD']);
+        $this->assertEquals('usr', $aParameters['USER']);
+        $this->assertEquals('signature', $aParameters['SIGNATURE']);
+        $this->assertNull($aParameters['notDefinedParameter']);
 
         $oCurl = $oService->getCaller()->getCurl();
-        $this->assertTrue( $oCurl instanceof oePayPalCurl );
-        $this->assertEquals( 'api-3t.paypal.com', $oCurl->getHost() );
-        $this->assertEquals( 'https://api-3t.paypal.com/nvp', $oCurl->getUrlToCall() );
+        $this->assertTrue($oCurl instanceof oePayPalCurl);
+        $this->assertEquals('api-3t.paypal.com', $oCurl->getHost());
+        $this->assertEquals('https://api-3t.paypal.com/nvp', $oCurl->getUrlToCall());
     }
 
     /**
@@ -95,11 +95,11 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
      */
     public function testGetCallerWithLogger_LoggingOff_loggerNotSet()
     {
-        $this->getConfig()->setConfigParam( 'blPayPalLoggerEnabled', false );
+        $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', false);
 
         $oService = new oePayPalService();
-        $this->assertTrue( $oService->getCaller() instanceof oePayPalCaller );
-        $this->assertNull( $oService->getCaller()->getLogger() );
+        $this->assertTrue($oService->getCaller() instanceof oePayPalCaller);
+        $this->assertNull($oService->getCaller()->getLogger());
     }
 
     /**
@@ -107,11 +107,11 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
      */
     public function testGetCallerWithLogger_LoggingOn_loggerIsSet()
     {
-        $this->getConfig()->setConfigParam( 'blPayPalLoggerEnabled', true );
+        $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', true);
 
         $oService = new oePayPalService();
-        $this->assertTrue( $oService->getCaller() instanceof oePayPalCaller );
-        $this->assertTrue( $oService->getCaller()->getLogger() instanceof oePayPalLogger );
+        $this->assertTrue($oService->getCaller() instanceof oePayPalCaller);
+        $this->assertTrue($oService->getCaller()->getLogger() instanceof oePayPalLogger);
     }
 
     /**
@@ -120,12 +120,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testSetExpressCheckout_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), 'SetExpressCheckout' ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), 'SetExpressCheckout'));
 
-        $oResponse = $oService->setExpressCheckout( $this->_prepareRequest() );
+        $oResponse = $oService->setExpressCheckout($this->_prepareRequest());
 
-        $this->assertTrue( $oResponse instanceof oePayPalResponseSetExpressCheckout );
-        $this->assertEquals( array('parameter' => 'value'), $oResponse->getData() );
+        $this->assertTrue($oResponse instanceof oePayPalResponseSetExpressCheckout);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
     }
 
     /**
@@ -134,12 +134,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testGetExpressCheckoutDetails_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), 'GetExpressCheckoutDetails' ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), 'GetExpressCheckoutDetails'));
 
-        $oResponse = $oService->getExpressCheckoutDetails( $this->_prepareRequest() );
+        $oResponse = $oService->getExpressCheckoutDetails($this->_prepareRequest());
 
-        $this->assertTrue( $oResponse instanceof oePayPalResponseGetExpressCheckoutDetails );
-        $this->assertEquals( array('parameter' => 'value'), $oResponse->getData() );
+        $this->assertTrue($oResponse instanceof oePayPalResponseGetExpressCheckoutDetails);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
     }
 
     /**
@@ -148,12 +148,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testDoExpressCheckoutPayment_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), 'DoExpressCheckoutPayment' ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), 'DoExpressCheckoutPayment'));
 
-        $oResponse = $oService->doExpressCheckoutPayment( $this->_prepareRequest() );
+        $oResponse = $oService->doExpressCheckoutPayment($this->_prepareRequest());
 
-        $this->assertTrue( $oResponse instanceof oePayPalResponseDoExpressCheckoutPayment );
-        $this->assertEquals( array('parameter' => 'value'), $oResponse->getData() );
+        $this->assertTrue($oResponse instanceof oePayPalResponseDoExpressCheckoutPayment);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
     }
 
     /**
@@ -162,12 +162,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testDoVoid_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), 'DoVoid' ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), 'DoVoid'));
 
-        $oResponse = $oService->doVoid( $this->_prepareRequest() );
+        $oResponse = $oService->doVoid($this->_prepareRequest());
 
-        $this->assertTrue( $oResponse instanceof oePayPalResponseDoVoid );
-        $this->assertEquals( array('parameter' => 'value'), $oResponse->getData() );
+        $this->assertTrue($oResponse instanceof oePayPalResponseDoVoid);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
     }
 
     /**
@@ -176,12 +176,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testRefundTransaction_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), 'RefundTransaction' ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), 'RefundTransaction'));
 
-        $oResponse = $oService->refundTransaction( $this->_prepareRequest() );
+        $oResponse = $oService->refundTransaction($this->_prepareRequest());
 
-        $this->assertTrue( $oResponse instanceof oePayPalResponseDoRefund );
-        $this->assertEquals( array('parameter' => 'value'), $oResponse->getData() );
+        $this->assertTrue($oResponse instanceof oePayPalResponseDoRefund);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
     }
 
     /**
@@ -190,12 +190,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testDoReAuthorization_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), 'DoReauthorization' ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), 'DoReauthorization'));
 
-        $oResponse = $oService->doReAuthorization( $this->_prepareRequest() );
+        $oResponse = $oService->doReAuthorization($this->_prepareRequest());
 
-        $this->assertTrue( $oResponse instanceof oePayPalResponseDoReAuthorize );
-        $this->assertEquals( array('parameter' => 'value'), $oResponse->getData() );
+        $this->assertTrue($oResponse instanceof oePayPalResponseDoReAuthorize);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
 
     }
 
@@ -205,12 +205,12 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testDoCapture_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), 'DoCapture' ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), 'DoCapture'));
 
-        $oResponse = $oService->doCapture( $this->_prepareRequest() );
+        $oResponse = $oService->doCapture($this->_prepareRequest());
 
-        $this->assertTrue( $oResponse instanceof oePayPalResponseDoCapture );
-        $this->assertEquals( array('parameter' => 'value'), $oResponse->getData() );
+        $this->assertTrue($oResponse instanceof oePayPalResponseDoCapture);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
 
     }
 
@@ -220,11 +220,11 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     public function testDoVerifyWithPayPal_setRequest_getResponse()
     {
         $oService = new oePayPalService();
-        $oService->setCaller( $this->_prepareCallerMock( $this->_prepareRequest(), null ) );
+        $oService->setCaller($this->_prepareCallerMock($this->_prepareRequest(), null));
 
-        $oResponse = $oService->doVerifyWithPayPal( $this->_prepareRequest(), 'UTF-8' );
-        $this->assertTrue( $oResponse instanceof oePayPalResponseDoVerifyWithPayPal );
-        $this->assertEquals( array( 'parameter' => 'value' ), $oResponse->getData() );
+        $oResponse = $oService->doVerifyWithPayPal($this->_prepareRequest(), 'UTF-8');
+        $this->assertTrue($oResponse instanceof oePayPalResponseDoVerifyWithPayPal);
+        $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
 
     }
 
@@ -236,17 +236,17 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
      *
      * @return oePayPalCaller
      */
-    protected function _prepareCallerMock( $oRequest, $sMethodName = null )
+    protected function _prepareCallerMock($oRequest, $sMethodName = null)
     {
-        $oCaller = $this->getMock( "oePayPalCaller", array( "setRequest", 'call' ) );
-        $oCaller->expects( $this->once() )->method( "setRequest" )->with( $this->equalTo( $oRequest ) );
-        if ( !is_null( $sMethodName ) ) {
-            $oCaller->expects( $this->once() )->method( "call" )
-                ->with( $this->equalTo( $sMethodName ) )
-                ->will( $this->returnValue( array( 'parameter' => 'value' ) ) );
+        $oCaller = $this->getMock("oePayPalCaller", array("setRequest", 'call'));
+        $oCaller->expects($this->once())->method("setRequest")->with($this->equalTo($oRequest));
+        if (!is_null($sMethodName)) {
+            $oCaller->expects($this->once())->method("call")
+                ->with($this->equalTo($sMethodName))
+                ->will($this->returnValue(array('parameter' => 'value')));
         } else {
-            $oCaller->expects( $this->once() )->method( "call" )
-                ->will( $this->returnValue( array( 'parameter' => 'value' ) ) );
+            $oCaller->expects($this->once())->method("call")
+                ->will($this->returnValue(array('parameter' => 'value')));
         }
 
         return $oCaller;
@@ -260,7 +260,7 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     protected function _prepareRequest()
     {
         $oRequest = new oePayPalPayPalRequest();
-        $oRequest->setData( array( 'rParameter' => 'rValue' ) );
+        $oRequest->setData(array('rParameter' => 'rValue'));
 
         return $oRequest;
     }

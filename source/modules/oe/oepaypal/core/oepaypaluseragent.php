@@ -57,8 +57,8 @@ class oePayPalUserAgent
      */
     public function getDeviceType()
     {
-        if ( $this->_sDeviceType === null ) {
-            $this->setDeviceType( $this->_detectDeviceType() );
+        if ($this->_sDeviceType === null) {
+            $this->setDeviceType($this->_detectDeviceType());
         }
 
         return $this->_sDeviceType;
@@ -67,7 +67,7 @@ class oePayPalUserAgent
     /**
      * Set device type
      */
-    public function setDeviceType( $sDeviceType )
+    public function setDeviceType($sDeviceType)
     {
         $this->_sDeviceType = $sDeviceType;
     }
@@ -75,7 +75,7 @@ class oePayPalUserAgent
     /**
      * Set mobile device types
      */
-    public function setMobileDeviceTypes( $sMobileDeviceTypes )
+    public function setMobileDeviceTypes($sMobileDeviceTypes)
     {
         $this->_sMobileDevicesTypes = $sMobileDeviceTypes;
     }
@@ -88,7 +88,7 @@ class oePayPalUserAgent
     protected function _detectDeviceType()
     {
         $sDeviceType = 'desktop';
-        if ( preg_match( '/('. $this->getMobileDeviceTypes() .')/is', $_SERVER['HTTP_USER_AGENT'] ) ){
+        if (preg_match('/(' . $this->getMobileDeviceTypes() . ')/is', $_SERVER['HTTP_USER_AGENT'])) {
             $sDeviceType = 'mobile';
         }
         return $sDeviceType;

@@ -39,7 +39,7 @@ class oePayPalService
     /**
      * PayPal config setter
      */
-    public function setPayPalConfig( $oPayPalConfig )
+    public function setPayPalConfig($oPayPalConfig)
     {
         $this->_oPayPalConfig = $oPayPalConfig;
     }
@@ -51,8 +51,8 @@ class oePayPalService
      */
     public function getPayPalConfig()
     {
-        if ( is_null( $this->_oPayPalConfig ) ){
-            $this->setPayPalConfig( oxNew( 'oePayPalConfig' ) );
+        if (is_null($this->_oPayPalConfig)) {
+            $this->setPayPalConfig(oxNew('oePayPalConfig'));
         }
         return $this->_oPayPalConfig;
     }
@@ -60,7 +60,7 @@ class oePayPalService
     /**
      * PayPal caller setter
      */
-    public function setCaller( $oCaller )
+    public function setCaller($oCaller)
     {
         $this->_oCaller = $oCaller;
     }
@@ -72,34 +72,34 @@ class oePayPalService
      */
     public function getCaller()
     {
-        if ( is_null( $this->_oCaller ) ) {
+        if (is_null($this->_oCaller)) {
 
             /**
              * @var oePayPalCaller $oCaller
              */
-            $oCaller = oxNew( 'oePayPalCaller' );
+            $oCaller = oxNew('oePayPalCaller');
 
             $oConfig = $this->getPayPalConfig();
 
-            $oCaller->setParameter( 'VERSION', '84.0' );
-            $oCaller->setParameter( 'PWD', $oConfig->getPassword() );
-            $oCaller->setParameter( 'USER', $oConfig->getUserName() );
-            $oCaller->setParameter( 'SIGNATURE', $oConfig->getSignature() );
+            $oCaller->setParameter('VERSION', '84.0');
+            $oCaller->setParameter('PWD', $oConfig->getPassword());
+            $oCaller->setParameter('USER', $oConfig->getUserName());
+            $oCaller->setParameter('SIGNATURE', $oConfig->getSignature());
 
-            $oCurl = oxNew( 'oePayPalCurl' );
-            $oCurl->setDataCharset( $oConfig->getCharset() );
-            $oCurl->setHost( $oConfig->getHost() );
-            $oCurl->setUrlToCall( $oConfig->getApiUrl() );
+            $oCurl = oxNew('oePayPalCurl');
+            $oCurl->setDataCharset($oConfig->getCharset());
+            $oCurl->setHost($oConfig->getHost());
+            $oCurl->setUrlToCall($oConfig->getApiUrl());
 
-            $oCaller->setCurl( $oCurl );
+            $oCaller->setCurl($oCurl);
 
-            if( $oConfig->isLoggingEnabled() ){
-                $oLogger = oxNew( 'oePayPalLogger' );
-                $oLogger->setLoggerSessionId( oxRegistry::getSession()->getId() );
-                $oCaller->setLogger( $oLogger );
+            if ($oConfig->isLoggingEnabled()) {
+                $oLogger = oxNew('oePayPalLogger');
+                $oLogger->setLoggerSessionId(oxRegistry::getSession()->getId());
+                $oCaller->setLogger($oLogger);
             }
 
-            $this->setCaller( $oCaller );
+            $this->setCaller($oCaller);
         }
         return $this->_oCaller;
     }
@@ -110,13 +110,13 @@ class oePayPalService
      *
      * @return oePayPalResponseSetExpressCheckout
      */
-    public function setExpressCheckout( $oRequest )
+    public function setExpressCheckout($oRequest)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
-        $oResponse = oxNew( 'oePayPalResponseSetExpressCheckout' );
-        $oResponse->setData( $oCaller->call( 'SetExpressCheckout' ) );
+        $oResponse = oxNew('oePayPalResponseSetExpressCheckout');
+        $oResponse->setData($oCaller->call('SetExpressCheckout'));
 
         return $oResponse;
     }
@@ -127,13 +127,13 @@ class oePayPalService
      *
      * @return oePayPalResponseGetExpressCheckoutDetails
      */
-    public function getExpressCheckoutDetails( $oRequest )
+    public function getExpressCheckoutDetails($oRequest)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
-        $oResponse = oxNew( 'oePayPalResponseGetExpressCheckoutDetails' );
-        $oResponse->setData( $oCaller->call( 'GetExpressCheckoutDetails' ) );
+        $oResponse = oxNew('oePayPalResponseGetExpressCheckoutDetails');
+        $oResponse->setData($oCaller->call('GetExpressCheckoutDetails'));
 
         return $oResponse;
     }
@@ -144,13 +144,13 @@ class oePayPalService
      *
      * @return oePayPalResponseDoExpressCheckoutPayment
      */
-    public function doExpressCheckoutPayment( $oRequest )
+    public function doExpressCheckoutPayment($oRequest)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
-        $oResponse = oxNew( 'oePayPalResponseDoExpressCheckoutPayment' );
-        $oResponse->setData( $oCaller->call( 'DoExpressCheckoutPayment' ) );
+        $oResponse = oxNew('oePayPalResponseDoExpressCheckoutPayment');
+        $oResponse->setData($oCaller->call('DoExpressCheckoutPayment'));
 
         return $oResponse;
     }
@@ -163,12 +163,12 @@ class oePayPalService
     public function callbackResponse()
     {
         // cleanup
-        $this->getCaller()->setParameter( "VERSION", null );
-        $this->getCaller()->setParameter( "PWD", null );
-        $this->getCaller()->setParameter( "USER", null );
-        $this->getCaller()->setParameter( "SIGNATURE", null );
+        $this->getCaller()->setParameter("VERSION", null);
+        $this->getCaller()->setParameter("PWD", null);
+        $this->getCaller()->setParameter("USER", null);
+        $this->getCaller()->setParameter("SIGNATURE", null);
 
-        return $this->getCaller()->getCallBackResponse( "CallbackResponse" );
+        return $this->getCaller()->getCallBackResponse("CallbackResponse");
     }
 
     /**
@@ -178,13 +178,13 @@ class oePayPalService
      *
      * @return oePayPalResponse
      */
-    public function doVoid( $oRequest )
+    public function doVoid($oRequest)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
-        $oResponse = oxNew( 'oePayPalResponseDoVoid' );
-        $oResponse->setData( $oCaller->call( 'DoVoid' ) );
+        $oResponse = oxNew('oePayPalResponseDoVoid');
+        $oResponse->setData($oCaller->call('DoVoid'));
 
         return $oResponse;
     }
@@ -196,13 +196,13 @@ class oePayPalService
      *
      * @return oePayPalResponse
      */
-    public function refundTransaction( $oRequest )
+    public function refundTransaction($oRequest)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
         $oResponse = oxNew('oePayPalResponseDoRefund');
-        $oResponse->setData( $oCaller->call( 'RefundTransaction' ) );
+        $oResponse->setData($oCaller->call('RefundTransaction'));
 
         return $oResponse;
     }
@@ -214,13 +214,13 @@ class oePayPalService
      *
      * @return oePayPalResponse
      */
-    public function doCapture( $oRequest )
+    public function doCapture($oRequest)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
         $oResponse = oxNew('oePayPalResponseDoCapture');
-        $oResponse->setData( $oCaller->call( 'DoCapture' ) );
+        $oResponse->setData($oCaller->call('DoCapture'));
         return $oResponse;
     }
 
@@ -231,13 +231,13 @@ class oePayPalService
      *
      * @return oePayPalResponse
      */
-    public function doReAuthorization( $oRequest )
+    public function doReAuthorization($oRequest)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
-        $oResponse = oxNew( 'oePayPalResponseDoReAuthorize' );
-        $oResponse->setData( $oCaller->call( 'DoReauthorization' ) );
+        $oResponse = oxNew('oePayPalResponseDoReAuthorize');
+        $oResponse->setData($oCaller->call('DoReauthorization'));
 
         return $oResponse;
     }
@@ -249,18 +249,18 @@ class oePayPalService
      *
      * @return oePayPalResponse
      */
-    public function doVerifyWithPayPal( $oRequest, $sCharset )
+    public function doVerifyWithPayPal($oRequest, $sCharset)
     {
         $oCaller = $this->getCaller();
-        $oCaller->setRequest( $oRequest );
+        $oCaller->setRequest($oRequest);
 
         $oCaller = $this->getCaller();
         $oCurl = $oCaller->getCurl();
-        $oCurl->setConnectionCharset( $sCharset );
-        $oCurl->setUrlToCall( $this->getPayPalConfig()->getIPNResponseUrl() );
+        $oCurl->setConnectionCharset($sCharset);
+        $oCurl->setUrlToCall($this->getPayPalConfig()->getIPNResponseUrl());
 
-        $oResponse = oxNew( 'oePayPalResponseDoVerifyWithPayPal' );
-        $oResponse->setData( $oCaller->call() );
+        $oResponse = oxNew('oePayPalResponseDoVerifyWithPayPal');
+        $oResponse->setData($oCaller->call());
 
         return $oResponse;
     }
@@ -268,9 +268,9 @@ class oePayPalService
     /**
      * @deprecated still use in callback.
      */
-    public function setParameter( $sKey, $sValue  )
+    public function setParameter($sKey, $sValue)
     {
-        return $this->getCaller()->setParameter( $sKey, $sValue  );
+        return $this->getCaller()->setParameter($sKey, $sValue);
     }
 
 }

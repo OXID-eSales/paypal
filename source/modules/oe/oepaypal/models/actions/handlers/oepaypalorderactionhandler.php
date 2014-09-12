@@ -44,7 +44,7 @@ abstract class oePayPalOrderActionHandler
     /**
      * @param object $oData
      */
-    function __construct( $oData )
+    function __construct($oData)
     {
         $this->_oData = $oData;
     }
@@ -64,7 +64,7 @@ abstract class oePayPalOrderActionHandler
      *
      * @param oePayPalPayPalRequestBuilder $oBuilder
      */
-    public function setPayPalRequestBuilder( $oBuilder )
+    public function setPayPalRequestBuilder($oBuilder)
     {
         $this->_oPayPalRequestBuilder = $oBuilder;
     }
@@ -76,8 +76,8 @@ abstract class oePayPalOrderActionHandler
      */
     public function getPayPalRequestBuilder()
     {
-        if ( $this->_oPayPalRequestBuilder === null ) {
-            $this->_oPayPalRequestBuilder = oxNew( 'oePayPalPayPalRequestBuilder' );
+        if ($this->_oPayPalRequestBuilder === null) {
+            $this->_oPayPalRequestBuilder = oxNew('oePayPalPayPalRequestBuilder');
         }
         return $this->_oPayPalRequestBuilder;
     }
@@ -87,7 +87,7 @@ abstract class oePayPalOrderActionHandler
      *
      * @param oePayPalService $oService
      */
-    public function setPayPalService( $oService )
+    public function setPayPalService($oService)
     {
         $this->_oPayPalService = $oService;
     }
@@ -99,8 +99,8 @@ abstract class oePayPalOrderActionHandler
      */
     public function getPayPalService()
     {
-        if ( $this->_oPayPalService === null ) {
-            $this->_oPayPalService = oxNew( 'oePayPalService' );
+        if ($this->_oPayPalService === null) {
+            $this->_oPayPalService = oxNew('oePayPalService');
         }
         return $this->_oPayPalService;
     }

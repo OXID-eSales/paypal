@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-require_once realpath( "." ).'/integration/lib/oepaypalintegrationtesthelper.php';
+require_once realpath(".") . '/integration/lib/oepaypalintegrationtesthelper.php';
 
 class oePayPalRequestHelper extends oePayPalIntegrationTestHelper
 {
@@ -31,11 +31,11 @@ class oePayPalRequestHelper extends oePayPalIntegrationTestHelper
      *
      * @return oePayPalRequest
      */
-    public function getRequest( $aPostParams = null, $aGetParams = null )
+    public function getRequest($aPostParams = null, $aGetParams = null)
     {
-        $oRequest = $this->getMock( 'oePayPalRequest', array( 'getPost', 'getGet' ) );
-        $oRequest->expects( $this->any() )->method( 'getPost' )->will( $this->returnValue( $aPostParams ) );
-        $oRequest->expects( $this->any() )->method( 'getGet' )->will( $this->returnValue( $aGetParams ) );
+        $oRequest = $this->getMock('oePayPalRequest', array('getPost', 'getGet'));
+        $oRequest->expects($this->any())->method('getPost')->will($this->returnValue($aPostParams));
+        $oRequest->expects($this->any())->method('getGet')->will($this->returnValue($aGetParams));
 
         return $oRequest;
     }

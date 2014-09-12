@@ -33,7 +33,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
     {
         $aArticle = $this->_oePayPalGetECSArticle();
 
-        return isset( $aArticle['am'] ) ? ( int ) $aArticle['am'] : 1;
+        return isset($aArticle['am']) ? ( int )$aArticle['am'] : 1;
     }
 
     /**
@@ -67,7 +67,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     public function oePayPalShowECSPopup()
     {
-        return $this->getComponent( 'oxcmp_basket' )->shopECSPopUp();
+        return $this->getComponent('oxcmp_basket')->shopECSPopUp();
     }
 
     /**
@@ -77,7 +77,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     public function oePayPalGetCancelUrl()
     {
-        return $this->getComponent( 'oxcmp_basket' )->getPayPalCancelURL();
+        return $this->getComponent('oxcmp_basket')->getPayPalCancelURL();
     }
 
     /**
@@ -88,7 +88,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
     public function oePayPalDisplayCartInPayPal()
     {
         $blDisplayCartInPayPal = false;
-        if ( $this->_oePayPalGetRequest()->getPostParameter( 'displayCartInPayPal' ) ) {
+        if ($this->_oePayPalGetRequest()->getPostParameter('displayCartInPayPal')) {
             $blDisplayCartInPayPal = true;
         }
 
@@ -102,7 +102,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     protected function _oePayPalGetRequest()
     {
-        return oxNew( 'oePayPalRequest' );
+        return oxNew('oePayPalRequest');
     }
 
     /**
@@ -112,7 +112,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     protected function _oePayPalGetECSArticle()
     {
-        $aProducts = $this->getComponent( 'oxcmp_basket' )->getCurrentArticleInfo();
+        $aProducts = $this->getComponent('oxcmp_basket')->getCurrentArticleInfo();
         return $aProducts;
     }
 

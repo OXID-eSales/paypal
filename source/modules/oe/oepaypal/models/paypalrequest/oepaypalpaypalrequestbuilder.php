@@ -98,9 +98,9 @@ class oePayPalPayPalRequestBuilder
 
 
     /**
-     * Return request object
+     * Return request object.
      *
-     * Returns request object
+     * @return oePayPalPayPalRequest
      */
     public function getRequest()
     {
@@ -111,7 +111,7 @@ class oePayPalPayPalRequestBuilder
     }
 
     /**
-     * Sets Request object
+     * Sets Request object.
      *
      * @param oePayPalPayPalRequest $oRequest
      */
@@ -119,5 +119,4 @@ class oePayPalPayPalRequestBuilder
     {
         $this->_oRequest = $oRequest;
     }
-
 }

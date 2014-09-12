@@ -64,5 +64,4 @@ abstract class oePayPalResponse
 
         return $aData[$sKey];
     }
-
 }

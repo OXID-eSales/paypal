@@ -8,8 +8,7 @@
         <input type="hidden" name="oePayPalCancelURL" value="[{$oView->oePayPalGetCancelUrl()}]"/>
         <input type="image" name="paypalExpressCheckoutButton" id="paypalExpressCheckoutDetailsButton"
                class="paypalExpressCheckoutDetailsButton" [{if !$blCanBuy}]disabled="disabled"[{/if}]
-        src="[{$oViewConf->getModuleUrl('oepaypal','out/img/')}][{$oViewConf->getActLanguageAbbr()}
-        ]-btn-expresscheckout.png" title="[{$oViewConf->getPayPalPaymentDescription()|strip_tags:false|trim|oxescape}]">
+        src="[{$oViewConf->getModuleUrl('oepaypal','out/img/')}][{$oViewConf->getActLanguageAbbr()}]-btn-expresscheckout.png" title="[{$oViewConf->getPayPalPaymentDescription()|strip_tags:false|trim|oxescape}]">
 
         <div class="paypalExpressCheckoutMsg">
             [{if $oViewConf->sendOrderInfoToPayPal()}]

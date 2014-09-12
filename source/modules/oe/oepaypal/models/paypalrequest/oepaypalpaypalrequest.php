@@ -32,10 +32,10 @@ class oePayPalPayPalRequest
     protected $_aData = array();
 
     /**
-     * Sets value to data by given key
+     * Sets value to data by given key.
      *
-     * @param string $sKey key of data value
-     * @param string $sValue data value
+     * @param string $sKey   Key of data value.
+     * @param string $sValue Data value.
      */
     public function setParameter($sKey, $sValue)
     {
@@ -43,9 +43,9 @@ class oePayPalPayPalRequest
     }
 
     /**
-     * Returns value by given key
+     * Returns value by given key.
      *
-     * @param string $sKey key of data value
+     * @param string $sKey Key of data value.
      *
      * @return string
      */
@@ -55,9 +55,9 @@ class oePayPalPayPalRequest
     }
 
     /**
-     * Set request data
+     * Set request data.
      *
-     * @param array $aResponseData Response data from PayPal
+     * @param array $aResponseData Response data from PayPal.
      */
     public function setData($aResponseData)
     {
@@ -65,7 +65,7 @@ class oePayPalPayPalRequest
     }
 
     /**
-     * Return request data
+     * Return request data.
      *
      * @return array
      */
@@ -75,10 +75,10 @@ class oePayPalPayPalRequest
     }
 
     /**
-     * Return value from data by given key
+     * Return value from data by given key.
      *
-     * @param string $sKey key of data value
-     * @param string $sValue data value
+     * @param string $sKey   Key of data value.
+     * @param string $sValue Data value.
      */
     protected function _setValue($sKey, $sValue)
     {

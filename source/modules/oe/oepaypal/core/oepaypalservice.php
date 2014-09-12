@@ -26,18 +26,22 @@ class oePayPalService
 {
     /**
      * PayPal Caller
+     *
      * @var oePayPalCaller
      */
     protected $_oCaller = null;
 
     /**
-     * PayPal Caller
+     * PayPal Caller.
+     *
      * @var oePayPalConfig
      */
     protected $_oPayPalConfig = null;
 
     /**
-     * PayPal config setter
+     * PayPal config setter.
+     *
+     * @param oePayPalConfig $oPayPalConfig
      */
     public function setPayPalConfig($oPayPalConfig)
     {
@@ -45,7 +49,7 @@ class oePayPalService
     }
 
     /**
-     * PayPal config getter
+     * PayPal config getter.
      *
      * @return oePayPalConfig
      */
@@ -58,7 +62,9 @@ class oePayPalService
     }
 
     /**
-     * PayPal caller setter
+     * PayPal caller setter.
+     *
+     * @param oePayPalCaller $oCaller
      */
     public function setCaller($oCaller)
     {
@@ -66,7 +72,7 @@ class oePayPalService
     }
 
     /**
-     * PayPal caller getter
+     * PayPal caller getter.
      *
      * @return oePayPalCaller
      */
@@ -105,8 +111,9 @@ class oePayPalService
     }
 
     /**
-     * Executes "SetExpressCheckout". Returns response object from PayPal
-     * @var $oRequest
+     * Executes "SetExpressCheckout". Returns response object from PayPal.
+     *
+     * @param oePayPalPayPalRequest $oRequest
      *
      * @return oePayPalResponseSetExpressCheckout
      */
@@ -122,8 +129,9 @@ class oePayPalService
     }
 
     /**
-     * Executes "GetExpressCheckoutDetails". Returns response object from PayPal
-     * @var $oRequest
+     * Executes "GetExpressCheckoutDetails". Returns response object from PayPal.
+     *
+     * @param oePayPalPayPalRequest $oRequest
      *
      * @return oePayPalResponseGetExpressCheckoutDetails
      */
@@ -139,8 +147,9 @@ class oePayPalService
     }
 
     /**
-     * Executes "DoExpressCheckoutPayment". Returns response object from PayPal
-     * @var $oRequest
+     * Executes "DoExpressCheckoutPayment". Returns response object from PayPal.
+     *
+     * @param oePayPalPayPalRequest $oRequest
      *
      * @return oePayPalResponseDoExpressCheckoutPayment
      */
@@ -225,7 +234,7 @@ class oePayPalService
     }
 
     /**
-     * Executes "DoReauthorization". Returns response array from PayPal
+     * Executes "DoReauthorization". Returns response array from PayPal.
      *
      * @param oePayPalPayPalRequest $oRequest
      *
@@ -243,9 +252,10 @@ class oePayPalService
     }
 
     /**
-     * Executes call to PayPal IPN
+     * Executes call to PayPal IPN.
      *
      * @param oePayPalPayPalRequest $oRequest
+     * @param string                $sCharset
      *
      * @return oePayPalResponse
      */
@@ -266,11 +276,17 @@ class oePayPalService
     }
 
     /**
+     * Set parameter to caller by it's key.
+     *
+     * @param string $sKey
+     * @param string $sValue
+     *
+     * @return null
+     *
      * @deprecated still use in callback.
      */
     public function setParameter($sKey, $sValue)
     {
         return $this->getCaller()->setParameter($sKey, $sValue);
     }
-
 }

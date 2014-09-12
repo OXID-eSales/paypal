@@ -25,28 +25,28 @@
 abstract class oePayPalModel
 {
     /**
-     * Data base gateway
+     * Data base gateway.
      *
      * @var oePayPalPayPalDbGateway
      */
     protected $_oDbGateway = null;
 
     /**
-     * Model data
+     * Model data.
      *
      * @var array
      */
     protected $_aData = null;
 
     /**
-     * Was object information found in database
+     * Was object information found in database.
      *
      * @var bool
      */
     protected $_blIsLoaded = false;
 
     /**
-     * Set response data
+     * Set response data.
      *
      * @param array $aData model data
      */
@@ -57,7 +57,7 @@ abstract class oePayPalModel
     }
 
     /**
-     * Return response data
+     * Return response data.
      *
      * @return array
      */
@@ -67,7 +67,7 @@ abstract class oePayPalModel
     }
 
     /**
-     * Return value from data by given key
+     * Return value from data by given key.
      *
      * @param string $sKey key of data value
      *
@@ -80,12 +80,10 @@ abstract class oePayPalModel
     }
 
     /**
-     * Return value from data by given key
+     * Return value from data by given key.
      *
-     * @param string $sKey key of data value
+     * @param string $sKey   key of data value
      * @param string $sValue data value
-     *
-     * @return string
      */
     protected function _setValue($sKey, $sValue)
     {
@@ -93,16 +91,16 @@ abstract class oePayPalModel
     }
 
     /**
-     * Returns model database gateway
+     * Returns model database gateway.
      *
-     * @var object
+     * @var $oDbGateway
      */
     abstract protected function _getDbGateway();
 
     /**
-     * Set model database gateway
+     * Set model database gateway.
      *
-     * @var object
+     * @param oePayPalPayPalDbGateway $oDbGateway
      */
     protected function _setDbGateway($oDbGateway)
     {
@@ -110,7 +108,7 @@ abstract class oePayPalModel
     }
 
     /**
-     * Method for model saving (insert and update data)
+     * Method for model saving (insert and update data).
      *
      * @return int|false
      */
@@ -122,7 +120,7 @@ abstract class oePayPalModel
     }
 
     /**
-     * Delete model data from db
+     * Delete model data from db.
      *
      * @param string $sId model id
      *
@@ -138,7 +136,7 @@ abstract class oePayPalModel
     }
 
     /**
-     * Method for loading model, if loaded returns true
+     * Method for loading model, if loaded returns true.
      *
      * @param string $sId model id
      *
@@ -161,7 +159,9 @@ abstract class oePayPalModel
     }
 
     /**
-     * Returns whether object information found in database
+     * Returns whether object information found in database.
+     *
+     * @return bool
      */
     public function isLoaded()
     {
@@ -169,14 +169,14 @@ abstract class oePayPalModel
     }
 
     /**
-     * Abstract method for delete model
+     * Abstract method for delete model.
      *
      * @param string $sId model id
      */
     abstract public function setId($sId);
 
     /**
-     * Abstract method for getting id
+     * Abstract method for getting id.
      */
     abstract public function getId();
 }

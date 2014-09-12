@@ -26,6 +26,7 @@ class oePayPalRequest
 {
     /**
      * Get post.
+     *
      * @return array
      */
     public function getPost()
@@ -41,6 +42,7 @@ class oePayPalRequest
 
     /**
      * Get get.
+     *
      * @return array
      */
     public function getGet()
@@ -58,7 +60,7 @@ class oePayPalRequest
      * Returns value of parameter stored in POST,GET.
      *
      * @param string $sName Name of parameter
-     * @param bool $blRaw mark to return not escaped parameter
+     * @param bool   $blRaw mark to return not escaped parameter
      *
      * @return mixed
      */
@@ -78,7 +80,7 @@ class oePayPalRequest
      * Returns value of parameter stored in POST.
      *
      * @param string $sName Name of parameter
-     * @param bool $blRaw mark to return not escaped parameter
+     * @param bool   $blRaw mark to return not escaped parameter
      *
      * @return mixed
      */
@@ -102,7 +104,7 @@ class oePayPalRequest
      * Returns value of parameter stored in GET.
      *
      * @param string $sName Name of parameter
-     * @param bool $blRaw mark to return not escaped parameter
+     * @param bool   $blRaw mark to return not escaped parameter
      *
      * @return mixed
      */

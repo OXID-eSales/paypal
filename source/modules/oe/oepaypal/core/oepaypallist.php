@@ -20,7 +20,7 @@
  */
 
 /**
- * List manager class
+ * List manager class.
  */
 class oePayPalList implements Iterator, Countable
 {
@@ -33,14 +33,14 @@ class oePayPalList implements Iterator, Countable
 
     /**
      * Save the state, that active element was unset
-     * needed for proper foreach iterator functionality
+     * needed for proper foreach iterator functionality.
      *
      * @var bool $_blRemovedActive
      */
     protected $_blRemovedActive = false;
 
     /**
-     * Flag if array is ok or not
+     * Flag if array is ok or not.
      *
      * @var boolean $_blValid
      */
@@ -56,7 +56,7 @@ class oePayPalList implements Iterator, Countable
 
 
     /**
-     * Returns SPL array keys
+     * Returns SPL array keys.
      *
      * @return array
      */
@@ -66,9 +66,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * rewind for SPL
-     *
-     * @return null;
+     * Rewind for SPL.
      */
     public function rewind()
     {
@@ -77,9 +75,9 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * current for SPL
+     * Current for SPL.
      *
-     * @return null;
+     * @return mixed
      */
     public function current()
     {
@@ -87,7 +85,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * key for SPL
+     * Key for SPL.
      *
      * @return mixed
      */
@@ -97,7 +95,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * previous / first array element
+     * Previous / first array element.
      *
      * @return mixed
      */
@@ -113,9 +111,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * next for SPL
-     *
-     * @return null;
+     * Next for SPL.
      */
     public function next()
     {
@@ -129,7 +125,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * valid for SPL
+     * Valid for SPL.
      *
      * @return boolean
      */
@@ -139,7 +135,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * count for SPL
+     * Count for SPL.
      *
      * @return integer
      */
@@ -149,9 +145,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * clears/destroys list contents
-     *
-     * @return null;
+     * Clears/destroys list contents.
      */
     public function clear()
     {
@@ -159,11 +153,9 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * copies a given array over the objects internal array (something like old $myList->aList = $aArray)
+     * copies a given array over the objects internal array (something like old $myList->aList = $aArray).
      *
      * @param array $aArray array of list items
-     *
-     * @return null
      */
     public function setArray($aArray)
     {
@@ -171,7 +163,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * returns the array reversed, the internal array remains untouched
+     * Returns the array reversed, the internal array remains untouched.
      *
      * @return array
      */
@@ -187,7 +179,7 @@ class oePayPalList implements Iterator, Countable
      */
 
     /**
-     * Backward compatibility method
+     * Backward compatibility method.
      *
      * @param string $sName Variable name
      *
@@ -199,7 +191,7 @@ class oePayPalList implements Iterator, Countable
     }
 
     /**
-     * Returns list items array
+     * Returns list items array.
      *
      * @return array
      */

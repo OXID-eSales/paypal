@@ -20,12 +20,12 @@
  */
 
 /**
- * Abstract model db gateway class
+ * Abstract model db gateway class.
  */
 abstract class oePayPalModelDbGateway
 {
     /**
-     * Returns data base resource
+     * Returns data base resource.
      *
      * @return oxDb
      */
@@ -35,21 +35,21 @@ abstract class oePayPalModelDbGateway
     }
 
     /**
-     * Abstract method for data saving (insert and update)
+     * Abstract method for data saving (insert and update).
      *
      * @param array $aData model data
      */
     abstract public function save($aData);
 
     /**
-     * Abstract method for loading model data
+     * Abstract method for loading model data.
      *
      * @param string $sId model id
      */
     abstract public function load($sId);
 
     /**
-     * Abstract method for delete model data
+     * Abstract method for delete model data.
      *
      * @param string $sId model id
      */

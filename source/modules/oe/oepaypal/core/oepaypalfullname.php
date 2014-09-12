@@ -20,7 +20,7 @@
  */
 
 /**
- * Class for splitting name.
+ * Class for splitting user name.
  *
  * @package core
  */
@@ -29,12 +29,19 @@ class oePayPalFullName
     private $_sFirstName = '';
     private $_sLastName = '';
 
-    function __construct($sFullName)
+    /**
+     * User first name and second name.
+     *
+     * @param string $sFullName
+     */
+    public function __construct($sFullName)
     {
         $this->_split($sFullName);
     }
 
     /**
+     * Return user first name.
+     *
      * @return string
      */
     public function getFirstName()
@@ -43,6 +50,8 @@ class oePayPalFullName
     }
 
     /**
+     * Return user second name.
+     *
      * @return string
      */
     public function getLastName()
@@ -50,6 +59,11 @@ class oePayPalFullName
         return $this->_sLastName;
     }
 
+    /**
+     * Split user full name to first name and second name.
+     *
+     * @param string $sFullName
+     */
     protected function _split($sFullName)
     {
         $aNames = explode(" ", trim($sFullName), 2);

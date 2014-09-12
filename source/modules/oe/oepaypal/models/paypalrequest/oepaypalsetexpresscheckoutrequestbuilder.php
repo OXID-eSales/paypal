@@ -25,70 +25,70 @@
 class oePayPalSetExpressCheckoutRequestBuilder
 {
     /**
-     * PayPal Request
+     * PayPal Request.
      *
      * @var oePayPalPayPalRequest
      */
     protected $_oPayPalRequest = null;
 
     /**
-     * PayPal Config
+     * PayPal Config.
      *
      * @var oePayPalConfig
      */
     protected $_oPayPalConfig = null;
 
     /**
-     * Basket object
+     * Basket object.
      *
      * @var oePayPalOxBasket
      */
     protected $_oBasket = null;
 
     /**
-     * User object
+     * User object.
      *
      * @var oePayPalOxUser
      */
     protected $_oUser = null;
 
     /**
-     * Language object
+     * Language object.
      *
      * @var oxLang
      */
     protected $_oLang = null;
 
     /**
-     * Url to return to after PayPal payment is done
+     * Url to return to after PayPal payment is done.
      *
      * @var string
      */
     protected $_sReturnUrl = null;
 
     /**
-     * Url to return to if PayPal payment was canceled
+     * Url to return to if PayPal payment was canceled.
      *
      * @var string
      */
     protected $_sCancelUrl = null;
 
     /**
-     * Url for PayPal CallBack
+     * Url for PayPal CallBack.
      *
      * @var string
      */
     protected $_sCallBackUrl = null;
 
     /**
-     * Show basket items in PayPal
+     * Show basket items in PayPal.
      *
      * @var bool
      */
     protected $_blShowCartInPayPal = false;
 
     /**
-     * Transaction mode: Sale|Authorization
+     * Transaction mode: Sale|Authorization.
      *
      * @var string
      */
@@ -103,7 +103,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
 
 
     /**
-     * @param \double $dMaxDeliveryAmount
+     * Sets max delivery amount.
+     *
+     * @param double $dMaxDeliveryAmount
      */
     public function setMaxDeliveryAmount($dMaxDeliveryAmount)
     {
@@ -111,7 +113,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * @return \double
+     * Return max delivery amount.
+     *
+     * @return double
      */
     public function getMaxDeliveryAmount()
     {
@@ -119,7 +123,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets PayPal request object
+     * Sets PayPal request object.
      *
      * @param oePayPalPayPalRequest $oRequest
      */
@@ -129,9 +133,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns PayPal request object; initiates if not set
+     * Returns PayPal request object; initiates if not set.
      *
-     * Returns request object
+     * @return oePayPalPayPalRequest
      */
     public function getPayPalRequest()
     {
@@ -142,7 +146,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns config object
+     * Returns config object.
      *
      * @param oePayPalConfig $oConfig
      */
@@ -152,7 +156,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns config object
+     * Returns config object.
      *
      * @return oePayPalConfig
      *
@@ -161,13 +165,15 @@ class oePayPalSetExpressCheckoutRequestBuilder
     public function getPayPalConfig()
     {
         if (!$this->_oPayPalConfig) {
-            throw oxNew('oePayPalMissingParameterException');
+            /** @var oePayPalMissingParameterException $oException */
+            $oException = oxNew('oePayPalMissingParameterException');
+            throw $oException;
         }
         return $this->_oPayPalConfig;
     }
 
     /**
-     * Sets Basket object
+     * Sets Basket object.
      *
      * @param oxBasket $oBasket
      */
@@ -177,7 +183,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns basket object
+     * Returns basket object.
      *
      * @return oxBasket
      *
@@ -186,7 +192,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
     public function getBasket()
     {
         if (is_null($this->_oBasket)) {
-            throw oxNew('oePayPalMissingParameterException');
+            /** @var oePayPalMissingParameterException $oException */
+            $oException = oxNew('oePayPalMissingParameterException');
+            throw $oException;
         }
         return $this->_oBasket;
     }
@@ -222,7 +230,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns Language object
+     * Returns Language object.
+     *
+     * @return oxLang
      */
     public function getLang()
     {
@@ -233,7 +243,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets CallBack url
+     * Sets CallBack url.
      *
      * @param string $sCallBackUrl
      */
@@ -243,7 +253,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns CallBack url
+     * Returns CallBack url.
      *
      * @return string
      */
@@ -253,7 +263,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets Cancel Url
+     * Sets Cancel Url.
      *
      * @param string $sCancelUrl
      */
@@ -263,7 +273,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns Cancel Url
+     * Returns Cancel Url.
      *
      * @return string
      */
@@ -273,7 +283,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets Return Url
+     * Sets Return Url.
      *
      * @param string $sReturnUrl
      */
@@ -283,7 +293,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns Return Url
+     * Returns Return Url.
      *
      * @return string
      */
@@ -293,7 +303,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets whether to show basket in PayPal
+     * Sets whether to show basket in PayPal.
      *
      * @param string $blShowCartInPayPal
      */
@@ -303,7 +313,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns whether to show basket in PayPal
+     * Returns whether to show basket in PayPal.
      *
      * @return string
      */
@@ -313,7 +323,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets Transaction mode
+     * Sets Transaction mode.
      *
      * @param string $sTransactionMode
      */
@@ -323,7 +333,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Returns Transaction mode
+     * Returns Transaction mode.
      *
      * @return string $sTransactionMode
      */
@@ -333,7 +343,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Builds PayPal request for express checkout
+     * Builds PayPal request for express checkout.
+     *
+     * @return oePayPalPayPalRequest
      */
     public function buildExpressCheckoutRequest()
     {
@@ -355,7 +367,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Builds PayPal request for standard checkout
+     * Builds PayPal request for standard checkout.
+     *
+     * @return oePayPalPayPalRequest
      */
     public function buildStandardCheckoutRequest()
     {
@@ -376,7 +390,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets base parameters to request
+     * Sets base parameters to request.
      */
     public function addBaseParams()
     {
@@ -401,7 +415,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Adds callback parameters to request
+     * Adds callback parameters to request.
      */
     public function addCallBackUrl()
     {
@@ -412,7 +426,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Turn off shipping address collection
+     * Turn off shipping address collection.
      */
     public function turnOffShippingAddressCollection()
     {
@@ -420,7 +434,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Disables selecting different address in PayPal side
+     * Disables selecting different address in PayPal side.
      */
     public function disableSelectingDifferentAddressInPayPal()
     {
@@ -430,7 +444,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     /**
      * Calculating maximum order amount
      * and adding all used discounts (needed because of bug in PayPal - somehow it substract discount from MAXAMT)
-     * additionally +1 as PayPal recommends this value a little bit greater than original
+     * additionally +1 as PayPal recommends this value a little bit greater than original.
      */
     public function setMaximumOrderAmount()
     {
@@ -441,7 +455,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets basket parameters to request
+     * Sets basket parameters to request.
      */
     public function addBasketParams()
     {
@@ -477,7 +491,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets transaction description parameters
+     * Sets transaction description parameters.
      */
     public function addDescriptionParams()
     {
@@ -498,7 +512,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets basket items parameters to request
+     * Sets basket items parameters to request.
      */
     public function addBasketItemParams()
     {
@@ -556,7 +570,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets basket Grand Total params to request
+     * Sets basket Grand Total params to request.
      */
     public function addBasketGrandTotalParams()
     {
@@ -569,7 +583,9 @@ class oePayPalSetExpressCheckoutRequestBuilder
     }
 
     /**
-     * Sets Address parameters to request
+     * Sets Address parameters to request.
+     *
+     * @return null
      */
     public function addAddressParams()
     {

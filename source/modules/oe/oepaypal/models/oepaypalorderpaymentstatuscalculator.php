@@ -224,5 +224,4 @@ class oePayPalOrderPaymentStatusCalculator
         }
         return $sStatus;
     }
-
 }

@@ -20,13 +20,13 @@
  */
 
 /**
- * PayPal order action factory class
+ * PayPal order action factory class.
  */
 class oePayPalOrderReauthorizeActionData extends oePayPalOrderActionData
 {
 
     /**
-     * returns action amount
+     * Returns action amount.
      *
      * @return string
      */
@@ -36,7 +36,7 @@ class oePayPalOrderReauthorizeActionData extends oePayPalOrderActionData
     }
 
     /**
-     * returns currency
+     * Returns currency.
      *
      * @return string
      */

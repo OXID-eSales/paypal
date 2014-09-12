@@ -26,14 +26,14 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
 {
 
     /**
-     * PayPal Request
+     * PayPal Request.
      *
      * @var oePayPalRequest
      */
     protected $_oPayPalRequest = null;
 
     /**
-     * Returns PayPal response; initiates if not set
+     * Returns PayPal response; initiates if not set.
      *
      * @return oePayPalResponseDoRefund
      */
@@ -45,7 +45,7 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
     }
 
     /**
-     * Returns PayPal request; initiates if not set
+     * Returns PayPal request; initiates if not set.
      *
      * @return oePayPalPayPalRequest
      */
@@ -66,7 +66,7 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
     }
 
     /**
-     * Sets PayPal request
+     * Sets PayPal request.
      *
      * @param oePayPalPayPalRequest $oPayPalRequest
      */
@@ -74,5 +74,4 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
     {
         $this->_oPayPalRequest = $oPayPalRequest;
     }
-
 }

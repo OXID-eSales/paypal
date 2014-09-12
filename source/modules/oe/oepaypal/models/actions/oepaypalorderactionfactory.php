@@ -68,14 +68,22 @@ class oePayPalOrderActionFactory
     }
 
     /**
-     * Creates action object by given action name
+     * Creates action object by given action name.
+     *
+     * @param string $sAction
+     *
+     * @return object
+     *
+     * @throws oePayPalInvalidActionException
      */
     public function createAction($sAction)
     {
         $sMethod = "get" . ucfirst($sAction) . "Action";
 
         if (!method_exists($this, $sMethod)) {
-            throw oxNew('oePayPalInvalidActionException');
+            /** @var oePayPalInvalidActionException $oException */
+            $oException = oxNew('oePayPalInvalidActionException');
+            throw $oException;
         }
 
         return $this->$sMethod();
@@ -133,5 +141,4 @@ class oePayPalOrderActionFactory
 
         return $oAction;
     }
-
 }

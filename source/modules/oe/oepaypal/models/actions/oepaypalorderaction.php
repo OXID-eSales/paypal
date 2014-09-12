@@ -41,8 +41,10 @@ abstract class oePayPalOrderAction
     protected $_oHandler = null;
 
     /**
-     * @param $oHandler
-     * @param $oOrder
+     * Sets handler and order.
+     *
+     * @param oePayPalOrderCaptureActionHandler $oHandler
+     * @param oePayPalRequest                   $oOrder
      */
     public function __construct($oHandler, $oOrder)
     {
@@ -51,6 +53,8 @@ abstract class oePayPalOrderAction
     }
 
     /**
+     * Returns oePayPalOrderCaptureActionHandler object.
+     *
      * @return oePayPalOrderCaptureActionHandler
      */
     public function getHandler()
@@ -59,6 +63,8 @@ abstract class oePayPalOrderAction
     }
 
     /**
+     * Returns oePayPalPayPalOrder object.
+     *
      * @return oePayPalPayPalOrder
      */
     public function getOrder()

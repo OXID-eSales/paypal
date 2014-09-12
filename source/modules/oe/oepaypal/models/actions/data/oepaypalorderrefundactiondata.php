@@ -31,7 +31,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
     public $_oPaymentBeingRefunded = null;
 
     /**
-     * returns action type
+     * Returns action type.
      *
      * @return string
      */
@@ -41,7 +41,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
     }
 
     /**
-     * returns action amount
+     * Returns action amount.
      *
      * @return string
      */
@@ -51,7 +51,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
     }
 
     /**
-     * Returns amount to refund
+     * Returns amount to refund.
      *
      * @return float
      */
@@ -62,7 +62,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
     }
 
     /**
-     * returns currency
+     * Returns currency.
      *
      * @return string
      */
@@ -72,7 +72,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
     }
 
     /**
-     * Returns payment to refund
+     * Returns payment to refund.
      *
      * @return float
      */

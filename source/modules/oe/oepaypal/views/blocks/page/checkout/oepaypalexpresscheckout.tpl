@@ -28,7 +28,7 @@
         </form>
     </div>
     [{oxscript add='$(".paypalHelpIcon").hover(function (){$(this).parent(".paypalExpressCheckoutMsg").children(".paypalHelpBox").toggle();});'}]
-    [{oxscript add='$(".paypalHelpIcon").clicks(function (){return false;});'}]
+    [{oxscript add='$(".paypalHelpIcon").click(function (){return false;});'}]
 [{else}]
     [{$smarty.block.parent}]
 [{/if}]

@@ -721,8 +721,8 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click("name=paypalExpressCheckoutButton");
         $this->waitForItemAppear("id=submitLogin");
         $this->assertTrue($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
-        $this->assertTrue($this->isTextPresent("Item number: 1001"), "Product number not displayed in paypal ");
-        $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
+        $this->assertTrue($this->isTextPresent("Artikelnummer: 1001"), "Product number not displayed in paypal ");
+        $this->assertFalse($this->isTextPresent("Warenwert €0,99"), "Grand total should not be displayed");
 
         $this->_loginToSandbox();
 

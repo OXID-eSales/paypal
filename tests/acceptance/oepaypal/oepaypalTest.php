@@ -843,7 +843,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click("name=paypalExpressCheckoutButton");
         $this->waitForItemAppear("id=submitLogin");
         $this->assertTrue($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
-        $this->assertTrue($this->isTextPresent("Item number: 1001"), "Product number not displayed in the 1st order step ");
+        $this->assertTrue($this->isTextPresent("Artikelnummer: 1001"), "Product number not displayed in the 1st order step ");
 
         $this->_loginToSandbox();
 
@@ -896,7 +896,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click("name=paypalExpressCheckoutButton");
         $this->waitForItemAppear("id=submitLogin");
         $this->assertTrue($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
-        $this->assertTrue($this->isTextPresent("Item number: 1001"), "Product number not displayed in the PayPal");
+        $this->assertTrue($this->isTextPresent("Artikelnummer: 1001"), "Product number not displayed in the PayPal");
 
         $this->_loginToSandbox();
 
@@ -1037,11 +1037,11 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         //Go to PayPal
         $this->waitForItemAppear("id=submitLogin");
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertEquals("Mit PayPal bezahlen - PayPal", $this->getTitle());
         $this->assertTrue($this->isTextPresent("€5,00"));
         $this->assertTrue($this->isTextPresent("€0,00"));
-        $this->assertEquals("Total €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTrue($this->isTextPresent("Total €5,00 EUR"));
+        $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
+        $this->assertTrue($this->isTextPresent("Gesamtbetrag €5,00 EUR"));
 
         $this->_loginToSandbox();
 
@@ -1307,10 +1307,10 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         //Go to PayPal
         $this->waitForItemAppear("id=submitLogin");
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertEquals("Mit PayPal bezahlen - PayPal", $this->getTitle());
         $this->assertTrue($this->isTextPresent("€15,00"));
         $this->assertEquals("-€10,00", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
-        $this->assertEquals("Total €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
+        $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
 
         $this->_loginToSandbox();
 
@@ -1423,12 +1423,12 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         //Go to PayPal
         $this->waitForItemAppear("id=submitLogin");
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertEquals("Mit PayPal bezahlen - PayPal", $this->getTitle());
         $this->assertTrue($this->isTextPresent("€17,85"));
         $this->assertTrue($this->isTextPresent("€12,50"));
         $this->assertTrue($this->isTextPresent("€3,51"));
         $this->assertTrue($this->isTextPresent("€3,57"));
-        $this->assertEquals("Total €52,90 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
+        $this->assertEquals("Gesamtbetrag €52,90 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
         $this->assertTrue($this->isTextPresent("Item total €37,43"));
         $this->assertTrue($this->isTextPresent("Shipping and handling:"));
         $this->assertTrue($this->isTextPresent("€15,47"));
@@ -1552,7 +1552,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear("id=submitLogin");
 
         //Go to PayPal
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertEquals("Mit PayPal bezahlen - PayPal", $this->getTitle());
 
         $this->assertTrue($this->isTextPresent("€15.00"));
         $this->assertTrue($this->isTextPresent("€10.50"));
@@ -1661,7 +1661,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->click("name=paypalExpressCheckoutButton");
         $this->waitForItemAppear("id=submitLogin");
         $this->assertTrue($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
-        $this->assertTrue($this->isTextPresent("Item number: 1001"), "Product number not displayed in PayPal ");
+        $this->assertTrue($this->isTextPresent("Artikelnummer: 1001"), "Product number not displayed in PayPal ");
         $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
 
         $this->_loginToSandbox();
@@ -1780,13 +1780,13 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         //Go to PayPal
         $this->waitForItemAppear("id=submitLogin");
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertEquals("Mit PayPal bezahlen - PayPal", $this->getTitle());
         $this->assertTrue($this->isTextPresent("€10,00"));
         $this->assertTrue($this->isTextPresent("€0,99"));
         $this->assertTrue($this->isTextPresent("€15,00"));
         $this->assertTrue($this->isTextPresent("€2,95"));
         $this->assertTrue($this->isTextPresent("€3,00"));
-        $this->assertEquals("Total €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
+        $this->assertEquals("Gesamtbetrag €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
         $this->assertTrue($this->isTextPresent("Item total €46,94"));
 
         $this->_loginToSandbox();
@@ -1911,13 +1911,13 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
         //Go to PayPal
         $this->waitForItemAppear("id=submitLogin");
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertEquals("Mit PayPal bezahlen - PayPal", $this->getTitle());
         $this->assertTrue($this->isTextPresent("€10,00"));
         $this->assertTrue($this->isTextPresent("€0,99"));
         $this->assertTrue($this->isTextPresent("€15,00"));
         $this->assertTrue($this->isTextPresent("€2,95"));
         $this->assertTrue($this->isTextPresent("€3,00"));
-        $this->assertEquals("Total €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
+        $this->assertEquals("Gesamtbetrag €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
         $this->assertTrue($this->isTextPresent("Item total €46,94"));
 
         $this->_loginToSandbox();

@@ -269,7 +269,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
         $aExpectedParams = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'BasketItemTitle',
             'L_PAYMENTREQUEST_0_AMT0' => '99.99',
-            'L_PAYMENTREQUEST_0_QTY0' => '88.88',
+            'L_PAYMENTREQUEST_0_QTY0' => '88',
             'L_PAYMENTREQUEST_0_ITEMURL0' => 'BasketItemUrl',
             'L_PAYMENTREQUEST_0_NUMBER0' => 'BasketItemArtNum',
             'L_PAYMENTREQUEST_0_NAME1' => 'BasketItemTitle',

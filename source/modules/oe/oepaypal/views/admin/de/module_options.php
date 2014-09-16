@@ -44,7 +44,7 @@ $aLang = array(
     'HELP_SHOP_MODULE_blOEPayPalGuestBuyRole'            => 'Der Kunde kann ohne PayPal-Konto bestellen. Er kann erst die Bezahlung abschließen und danach entscheiden, ob er die Informationen für zukünftige Einkäufe in einem PayPal-Konto speichern will.',
 
     'SHOP_MODULE_blOEPayPalSendToPayPal'                 => 'Warenkorb bei PayPal anzeigen',
-    'HELP_SHOP_MODULE_blOEPayPalSendToPayPal'            => 'Der Warenkorb mit Artikelinformationen, Preisen und Versandkosten wird nach Anmeldung in PayPal angezeigt. Der Kunde kann im Bestellprozess wählen, ob diese Daten übertragen werden sollen.',
+    'HELP_SHOP_MODULE_blOEPayPalSendToPayPal'            => '[TR]After logging in the content of the shopping cart appears in PayPal including product information, prices and shipping costs. During the checkout process the customer can choose if this data should be transferred. However, if item with fraction quantity is found in basket, cart items will not be shown at PayPal and user will not have possibility to choose otherwise.',
     'SHOP_MODULE_blOEPayPalDefaultUserChoice'            => 'Voreingestellte Kundenzustimmung',
     'HELP_SHOP_MODULE_blOEPayPalDefaultUserChoice'       => 'Der Kunde muss im Bestellprozess explizit bestätigen, dass der Warenkorb mit Artikelinformationen, Preisen und Versandkosten zu PayPal übertragen wird. Sie können hier die Voreinstellung aktivieren, dass der Kunde der Übermittlung der Daten standardmäßig zustimmt.',
 

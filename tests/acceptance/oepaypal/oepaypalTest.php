@@ -1429,8 +1429,8 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("€3,51"));
         $this->assertTrue($this->isTextPresent("€3,57"));
         $this->assertEquals("Gesamtbetrag €52,90 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTrue($this->isTextPresent("Item total €37,43"));
-        $this->assertTrue($this->isTextPresent("Shipping and handling:"));
+        $this->assertTrue($this->isTextPresent("Warenwert€37,43"));
+        $this->assertTrue($this->isTextPresent("Versandkosten:"));
         $this->assertTrue($this->isTextPresent("€15,47"));
 
         $this->_loginToSandbox();

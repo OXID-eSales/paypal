@@ -274,7 +274,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'L_PAYMENTREQUEST_0_NUMBER0' => 'BasketItemArtNum',
             'L_PAYMENTREQUEST_0_NAME1' => 'BasketItemTitle',
             'L_PAYMENTREQUEST_0_AMT1' => '99.99',
-            'L_PAYMENTREQUEST_0_QTY1' => '88.88',
+            'L_PAYMENTREQUEST_0_QTY1' => '88',
             'L_PAYMENTREQUEST_0_ITEMURL1' => 'BasketItemUrl',
             'L_PAYMENTREQUEST_0_NUMBER1' => 'BasketItemArtNum',
         );
@@ -290,7 +290,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
         $aBasketItemMethodValues = array(
             'getTitle' => 'BasketItemTitle',
             'getUnitPrice' => $oPrice,
-            'getAmount' => '88.88',
+            'getAmount' => '88',
             'getLink' => 'BasketItemUrl',
             'getArticle' => $oArticle,
         );

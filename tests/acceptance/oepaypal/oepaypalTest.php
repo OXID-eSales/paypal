@@ -1787,7 +1787,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("€2,95"));
         $this->assertTrue($this->isTextPresent("€3,00"));
         $this->assertEquals("Gesamtbetrag €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTrue($this->isTextPresent("Item total €46,94"));
+        $this->assertTrue($this->isTextPresent("Warenwert€46,94"));
 
         $this->_loginToSandbox();
 
@@ -1918,7 +1918,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("€2,95"));
         $this->assertTrue($this->isTextPresent("€3,00"));
         $this->assertEquals("Gesamtbetrag €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTrue($this->isTextPresent("Item total €46,94"));
+        $this->assertTrue($this->isTextPresent("Warenwert€46,94"));
 
         $this->_loginToSandbox();
 

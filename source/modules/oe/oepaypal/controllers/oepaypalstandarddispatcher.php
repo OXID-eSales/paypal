@@ -64,7 +64,9 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
             $oBuilder->setUser($this->getUser());
             $oBuilder->setReturnUrl($this->_getReturnUrl());
             $oBuilder->setCancelUrl($this->_getCancelUrl());
-            $oBuilder->setShowCartInPayPal($this->getRequest()->getRequestParameter("displayCartInPayPal"));
+            $blShowCartInPayPal = $this->getRequest()->getRequestParameter("displayCartInPayPal");
+            $blShowCartInPayPal = $blShowCartInPayPal && !$oBasket->isFractionQuantityItemsPresent();
+            $oBuilder->setShowCartInPayPal($blShowCartInPayPal);
             $oBuilder->setTransactionMode($this->_getTransactionMode($oBasket));
 
             $oRequest = $oBuilder->buildStandardCheckoutRequest();

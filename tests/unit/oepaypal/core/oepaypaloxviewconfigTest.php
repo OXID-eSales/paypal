@@ -22,18 +22,6 @@
 require_once realpath(".") . '/unit/OxidTestCase.php';
 require_once realpath(".") . '/unit/test_config.inc.php';
 
-if (!class_exists('oePayPalOxViewConfig_parent')) {
-    class oePayPalOxViewConfig_parent extends oxViewConfig
-    {
-    }
-}
-
-if (!class_exists('oePayPalPayment_parent')) {
-    class oePayPalPayment_parent extends Payment
-    {
-    }
-}
-
 /**
  * Testing oePayPalOxViewConfig class.
  */
@@ -58,7 +46,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      */
     public function testIsStandardCheckoutEnabled()
     {
-        //
         $oPayPalConfig = $this->getMock("oePayPalConfig", array("isStandardCheckoutEnabled"));
         $oPayPalConfig->expects($this->once())->method("isStandardCheckoutEnabled")->will($this->returnValue(true));
 
@@ -72,7 +59,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      *
      * @return null
      */
-    public function testIsExpressCheckoutEnabled_CheckoutIsEnabled_True()
+    public function testIsExpressCheckoutEnabledCheckoutIsEnabledTrue()
     {
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
         $oView = new oePayPalOxViewConfig();
@@ -88,7 +75,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      *
      * @return null
      */
-    public function testIsExpressCheckoutEnabled_CheckoutIsDisabled_False()
+    public function testIsExpressCheckoutEnabledWhenCheckoutIsDisabled()
     {
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', false);
         $oView = new oePayPalOxViewConfig();
@@ -104,7 +91,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      *
      * @return null
      */
-    public function testIsExpressCheckoutEnabled_PaymentNotValid_False()
+    public function testIsExpressCheckoutEnabledWhenPaymentNotValid()
     {
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
         $oView = new oePayPalOxViewConfig();
@@ -120,7 +107,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      *
      * @return null
      */
-    public function testIsExpressCheckoutEnabledInDetails_WhenExpressCheckoutIsEnabled()
+    public function testIsExpressCheckoutEnabledInDetailsWhenExpressCheckoutIsEnabled()
     {
         $oView = $this->getMock("oePayPalOxViewConfig", array("isExpressCheckoutEnabled"));
         $oView->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(true));
@@ -138,7 +125,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      *
      * @return null
      */
-    public function testIsExpressCheckoutEnabledInDetails_WhenExpressCheckoutIsDisabled()
+    public function testIsExpressCheckoutEnabledInDetailsWhenExpressCheckoutIsDisabled()
     {
         $oView = $this->getMock("oePayPalOxViewConfig", array("isExpressCheckoutEnabled"));
         $oView->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(false));
@@ -156,7 +143,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      *
      * @return null
      */
-    public function testIsExpressCheckoutEnabledInMiniBasket_WhenExpressCheckoutIsEnabled()
+    public function testIsExpressCheckoutEnabledInMiniBasketWhenExpressCheckoutIsEnabled()
     {
         $oView = $this->getMock("oePayPalOxViewConfig", array("isExpressCheckoutEnabled"));
         $oView->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(true));
@@ -174,7 +161,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
      *
      * @return null
      */
-    public function testIsExpressCheckoutEnabledInMiniBasket_WhenExpressCheckoutIsDisabled()
+    public function testIsExpressCheckoutEnabledInMiniBasketWhenExpressCheckoutIsDisabled()
     {
         $oView = $this->getMock("oePayPalOxViewConfig", array("isExpressCheckoutEnabled"));
         $oView->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(false));
@@ -234,6 +221,66 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
     }
 
     /**
+     * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
+     *
+     * @return null
+     */
+    public function testSendOrderInfoToPayPalWhenFractionQuantityArticleIsInBasket()
+    {
+        $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
+
+        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5.6));
+
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
+        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue(array($oArticle)));
+
+        $this->getSession()->setBasket($oBasket);
+
+        $oView = new oePayPalOxViewConfig();
+        $this->assertFalse($oView->sendOrderInfoToPayPal());
+    }
+
+    /**
+     * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
+     *
+     * @return null
+     */
+    public function testSendOrderInfoToPayPalWhenNoFractionQuantityArticleIsInBasket()
+    {
+        $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
+
+        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5));
+
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
+        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue(array($oArticle)));
+
+        $this->getSession()->setBasket($oBasket);
+
+        $oView = new oePayPalOxViewConfig();
+        $this->assertTrue($oView->sendOrderInfoToPayPal());
+    }
+
+    /**
+     * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
+     *
+     * @return null
+     */
+    public function testSendOrderInfoToPayPalWhenBasketIsEmpty()
+    {
+        $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
+
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
+        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue(array()));
+
+        $this->getSession()->setBasket($oBasket);
+
+        $oView = new oePayPalOxViewConfig();
+        $this->assertTrue($oView->sendOrderInfoToPayPal());
+    }
+
+    /**
      * Checks if method returns correct current URL.
      */
     public function testGetCurrentUrl()
@@ -247,5 +294,4 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
         $this->assertEquals($sCancelURL, $oViewPayPalConfig->getCurrentUrl());
     }
-
 }

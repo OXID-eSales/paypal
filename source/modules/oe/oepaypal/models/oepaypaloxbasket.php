@@ -46,6 +46,26 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     }
 
     /**
+     * Checks if fraction quantity items (with 1.3 amount) exists in basket.
+     *
+     * @return bool
+     */
+    public function isFractionQuantityItemsPresent()
+    {
+        $blFractionItemsPresent = false;
+
+        foreach ($this->getContents() as $oBasketItem) {
+            $dAmount = $oBasketItem->getAmount();
+            if ((int) $dAmount != $dAmount) {
+                $blFractionItemsPresent = true;
+                break;
+            }
+        }
+
+        return $blFractionItemsPresent;
+    }
+
+    /**
      * Returns wrapping cost value
      *
      * @return double

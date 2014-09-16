@@ -524,7 +524,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
         foreach ($oBasket->getContents() as $oBasketItem) {
             $oRequest->setParameter("L_PAYMENTREQUEST_0_NAME{$iPos}", getStr()->html_entity_decode($oBasketItem->getTitle()));
             $oRequest->setParameter("L_PAYMENTREQUEST_0_AMT{$iPos}", $this->_formatFloat($oBasketItem->getUnitPrice()->getPrice()));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY{$iPos}", $oBasketItem->getAmount());
+            $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY{$iPos}", (int) $oBasketItem->getAmount());
             $oRequest->setParameter("L_PAYMENTREQUEST_0_ITEMURL{$iPos}", $oBasketItem->getLink());
 
             $oBasketProduct = $oBasketItem->getArticle();

@@ -214,7 +214,14 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
      */
     public function sendOrderInfoToPayPal()
     {
-        return $this->_getPayPalConfig()->sendOrderInfoToPayPal();
+        $blSendInfoToPayPalEnabled = $this->_getPayPalConfig()->sendOrderInfoToPayPal();
+        if ($blSendInfoToPayPalEnabled) {
+            /** @var oePayPalOxBasket $oBasket */
+            $oBasket = $this->getSession()->getBasket();
+            $blSendInfoToPayPalEnabled = !$oBasket->isFractionQuantityItemsPresent();
+        }
+
+        return $blSendInfoToPayPalEnabled;
     }
 
     /**

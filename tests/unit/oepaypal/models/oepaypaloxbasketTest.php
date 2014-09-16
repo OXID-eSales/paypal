@@ -371,4 +371,52 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
         $this->assertEquals($dCostVatExpected, $oBasket->getPayPalTsProtectionCostVat(), 'Trusted shops VAT SUM is different than expected.');
     }
+
+    /**
+     * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
+     *
+     * @return null
+     */
+    public function testIsFractionQuantityItemsPresentWhenFractionQuantityArticlePresent()
+    {
+        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5.6));
+
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
+        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue(array($oArticle)));
+
+        /** @var oePayPalOxBasket $oBasket */
+        $this->assertTrue($oBasket->isFractionQuantityItemsPresent());
+    }
+
+    /**
+     * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
+     *
+     * @return null
+     */
+    public function testSendOrderInfoToPayPalWhenNoFractionQuantityArticlesArePresent()
+    {
+        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5));
+
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
+        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue(array($oArticle)));
+
+        /** @var oePayPalOxBasket $oBasket */
+        $this->assertFalse($oBasket->isFractionQuantityItemsPresent());
+    }
+
+    /**
+     * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
+     *
+     * @return null
+     */
+    public function testSendOrderInfoToPayPalWhenBasketIsEmpty()
+    {
+        $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
+        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue(array()));
+
+        /** @var oePayPalOxBasket $oBasket */
+        $this->assertFalse($oBasket->isFractionQuantityItemsPresent());
+    }
 }

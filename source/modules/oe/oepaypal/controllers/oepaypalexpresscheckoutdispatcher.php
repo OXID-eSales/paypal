@@ -108,8 +108,9 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
                 $oBuilder->setCallBackUrl($this->_getCallBackUrl());
                 $oBuilder->setMaxDeliveryAmount($this->getPayPalConfig()->getMaxPayPalDeliveryAmount());
             }
-
-            $oBuilder->setShowCartInPayPal($this->getRequest()->getRequestParameter("displayCartInPayPal"));
+            $blShowCartInPayPal = $this->getRequest()->getRequestParameter("displayCartInPayPal");
+            $blShowCartInPayPal = $blShowCartInPayPal && !$oBasket->isFractionQuantityItemsPresent();
+            $oBuilder->setShowCartInPayPal($blShowCartInPayPal);
             $oBuilder->setTransactionMode($this->_getTransactionMode($oBasket));
 
             $oRequest = $oBuilder->buildExpressCheckoutRequest();

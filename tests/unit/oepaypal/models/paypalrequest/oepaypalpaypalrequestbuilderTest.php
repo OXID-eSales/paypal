@@ -57,7 +57,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalPayPalRequestBuilderTest extend
         $dAmount = 99.99;
         $sCurrency = 'EUR';
         $aExpected = array(
-            'AMT' => $dAmount,
+            'AMT'          => $dAmount,
             'CURRENCYCODE' => $sCurrency
         );
 

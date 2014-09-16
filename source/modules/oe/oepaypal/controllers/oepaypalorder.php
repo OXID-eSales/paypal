@@ -107,8 +107,7 @@ class oePayPalOrder extends oePayPalOrder_parent
         // Detecting PayPal & loading order & execute payment only if go wrong
         if ($this->isPayPal() && ($iSuccess == oxOrder::ORDER_STATE_PAYMENTERROR)) {
 
-
-            $iPayPalType = (int)$this->getSession()->getVariable("oepaypal");
+            $iPayPalType = (int) $this->getSession()->getVariable("oepaypal");
             $sNextStep = ($iPayPalType == 2) ? "basket" : "order";
         }
 

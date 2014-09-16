@@ -26,24 +26,28 @@ class oePayPalIPNRequestValidator
 {
     /**
      * String PayPal receiver email. It should be same as shop owner credential for PayPal.
+     *
      * @var string
      */
     const RECEIVER_EMAIL = 'receiver_email';
 
     /**
      * Shop owner Email from configuration of PayPal module.
+     *
      * @var string
      */
     protected $_sShopOwnerUserName = null;
 
     /**
      * PayPal response if OK.
+     *
      * @var string
      */
     protected $_oPayPalResponse = null;
 
     /**
      * PayPal request to get email.
+     *
      * @var string
      */
     protected $_aPayPalRequest = null;
@@ -121,12 +125,13 @@ class oePayPalIPNRequestValidator
         $sReceiverEmailPayPal = $aPayPalRequest[self::RECEIVER_EMAIL];
 
         $aValidationMessage = array(
-            'Shop owner' => (string)$sShopOwnerUserName,
-            'PayPal ID' => (string)$sReceiverEmailPayPal,
-            'PayPal ACK' => ($oPayPalResponse->isPayPalAck() ? 'VERIFIED' : 'NOT VERIFIED'),
-            'PayPal Full Request' => print_r($aPayPalRequest, true),
+            'Shop owner'           => (string) $sShopOwnerUserName,
+            'PayPal ID'            => (string) $sReceiverEmailPayPal,
+            'PayPal ACK'           => ($oPayPalResponse->isPayPalAck() ? 'VERIFIED' : 'NOT VERIFIED'),
+            'PayPal Full Request'  => print_r($aPayPalRequest, true),
             'PayPal Full Response' => print_r($oPayPalResponse->getData(), true),
         );
+
         return $aValidationMessage;
     }
 

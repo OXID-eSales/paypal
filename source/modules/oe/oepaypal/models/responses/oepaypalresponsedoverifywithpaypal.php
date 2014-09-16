@@ -26,42 +26,49 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
 {
     /**
      * String PayPal sends if all is ok.
+     *
      * @var string
      */
     const PAYPAL_ACK = 'VERIFIED';
 
     /**
      * String PayPal receiver email. It should be same as shop owner credential for PayPal.
+     *
      * @var string
      */
     const RECEIVER_EMAIL = 'receiver_email';
 
     /**
      * Sandbox mode parameter name.
+     *
      * @var string
      */
     const PAYPAL_SANDBOX = 'test_ipn';
 
     /**
      * String PayPal payment status parameter name.
+     *
      * @var string
      */
     const PAYPAL_PAYMENT_STATUS = 'payment_status';
 
     /**
      * String PayPal transaction id.
+     *
      * @var string
      */
     const PAYPAL_TRANSACTION_ID = 'txn_id';
 
     /**
      * String PayPal whole price including payment and shipment.
+     *
      * @var string
      */
     const MC_GROSS = 'mc_gross';
 
     /**
      * String PayPal payment currency.
+     *
      * @var string
      */
     const MC_CURRENCY = 'mc_currency';
@@ -74,6 +81,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
     public function isPayPalAck()
     {
         $aResponse = $this->getData();
+
         return isset($aResponse[self::PAYPAL_ACK]);
     }
 

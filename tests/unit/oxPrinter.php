@@ -38,13 +38,12 @@ class oxPrinter extends PHPUnit_TextUI_ResultPrinter
 
     public function __construct($_blDBResetPerTest = true, $_blDBResetPerSuit = true, $iDBChangeMode = MAINTENANCE_SINGLEROWS, $_iDBChangeOutput = MAINTENANCE_MODE_ONLYRESET, $blVerbose = false)
     {
-        parent::__construct(null, (bool)$blVerbose);
+        parent::__construct(null, (bool) $blVerbose);
         $this->_iDBChangeMode = $iDBChangeMode;
         $this->_iDBChangeOutput = $_iDBChangeOutput;
         $this->_blDBResetPerTest = $_blDBResetPerTest;
         $this->_blDBResetPerSuit = $_blDBResetPerSuit;
         $this->_oDBMaintenance = new dbMaintenance ();
-
     }
 
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
@@ -115,6 +114,7 @@ class oxPrinter extends PHPUnit_TextUI_ResultPrinter
      * A test started.
      *
      * @param  PHPUnit_Framework_Test $test
+     *
      * @access public
      */
     public function startTest(PHPUnit_Framework_Test $test)

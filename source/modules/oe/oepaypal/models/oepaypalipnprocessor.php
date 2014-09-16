@@ -26,6 +26,7 @@ class oePayPalIPNProcessor
 {
     /**
      * PayPal request handler.
+     *
      * @var oePayPalRequest
      */
     protected $_oRequest = null;
@@ -100,6 +101,7 @@ class oePayPalIPNProcessor
         if (is_null($this->_oPaymentBuilder)) {
             $this->_oPaymentBuilder = oxNew('oePayPalIPNPaymentBuilder');
         }
+
         return $this->_oPaymentBuilder;
     }
 
@@ -123,6 +125,7 @@ class oePayPalIPNProcessor
         if (is_null($this->_oOrderManager)) {
             $this->_oOrderManager = oxNew('oePayPalOrderManager');
         }
+
         return $this->_oOrderManager;
     }
 

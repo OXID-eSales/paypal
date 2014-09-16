@@ -38,6 +38,7 @@ class oePayPalIPNHandler extends oePayPalController
 
     /**
      * PayPal request handler.
+     *
      * @var oePayPalRequest
      */
     protected $_oPayPalRequest = null;
@@ -72,6 +73,7 @@ class oePayPalIPNHandler extends oePayPalController
         if ($this->_oPayPalRequest === null) {
             $this->_oPayPalRequest = oxNew('oePayPalRequest');
         }
+
         return $this->_oPayPalRequest;
     }
 
@@ -96,6 +98,7 @@ class oePayPalIPNHandler extends oePayPalController
             $oIPNRequestVerifier = oxNew('oePayPalIPNRequestVerifier');
             $this->setIPNRequestVerifier($oIPNRequestVerifier);
         }
+
         return $this->_oIPNRequestVerifier;
     }
 
@@ -120,6 +123,7 @@ class oePayPalIPNHandler extends oePayPalController
             $oProcessor = oxNew('oePayPalIPNProcessor');
             $this->setProcessor($oProcessor);
         }
+
         return $this->_oProcessor;
     }
 
@@ -145,6 +149,7 @@ class oePayPalIPNHandler extends oePayPalController
 
             $blRequestHandled = $oProcessor->process();
         }
+
         return $blRequestHandled;
     }
 

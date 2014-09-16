@@ -38,20 +38,22 @@ echo "clearing tmp files...";
 function rrmdir($dir)
 {
     foreach (glob($dir . '/*') as $file) {
-        if (is_dir($file))
+        if (is_dir($file)) {
             rrmdir($file);
-        else
+        } else {
             unlink($file);
+        }
     }
     rmdir($dir);
 }
 
 if ($_cfg->sCompileDir) {
     foreach (glob($_cfg->sCompileDir . '/*') as $file) {
-        if (is_dir($file))
+        if (is_dir($file)) {
             rrmdir($file);
-        else
+        } else {
             unlink($file);
+        }
     }
 }
 

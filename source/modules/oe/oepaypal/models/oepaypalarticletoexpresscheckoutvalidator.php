@@ -26,12 +26,14 @@ class oePayPalArticleToExpressCheckoutValidator
 {
     /**
      * Item that will be validated.
+     *
      * @var object
      */
     protected $_oItemToValidate;
 
     /**
      * User basket
+     *
      * @var object
      */
     protected $_oBasket;
@@ -104,6 +106,7 @@ class oePayPalArticleToExpressCheckoutValidator
                 return true;
             }
         }
+
         return false;
     }
 
@@ -117,8 +120,8 @@ class oePayPalArticleToExpressCheckoutValidator
     protected function _isArticleParamsEqual($oBasketItem)
     {
         return ($oBasketItem->getProductId() == $this->getItemToValidate()->getArticleId() &&
-            $oBasketItem->getPersParams() == $this->getItemToValidate()->getPersistParam() &&
-            $oBasketItem->getSelList() == $this->getItemToValidate()->getSelectList());
+                $oBasketItem->getPersParams() == $this->getItemToValidate()->getPersistParam() &&
+                $oBasketItem->getSelList() == $this->getItemToValidate()->getSelectList());
     }
 
     /**
@@ -129,6 +132,7 @@ class oePayPalArticleToExpressCheckoutValidator
     protected function _isArticleAmountZero()
     {
         $iArticleAmount = $this->getItemToValidate()->getArticleAmount();
+
         return 0 == $iArticleAmount;
     }
 }

@@ -23,7 +23,6 @@
  * Full reinstall
  */
 
-
 ob_start();
 
 class _config
@@ -75,7 +74,6 @@ function restoreDB($_cfg)
     } else {
         echo "File $demo - not found!\n";
     }
-
 }
 
 /**
@@ -105,6 +103,5 @@ function dumpDB($_cfg)
     if (file_exists($demo)) {
         echo("db Dumptime: " . (microtime(true) - $time) . "\n");
     }
-
 }
 

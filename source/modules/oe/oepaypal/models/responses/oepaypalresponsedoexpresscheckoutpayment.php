@@ -62,7 +62,7 @@ class oePayPalResponseDoExpressCheckoutPayment extends oePayPalResponse
      */
     public function getAmount()
     {
-        return ( float )$this->_getValue('PAYMENTINFO_0_AMT');
+        return ( float ) $this->_getValue('PAYMENTINFO_0_AMT');
     }
 
     /**

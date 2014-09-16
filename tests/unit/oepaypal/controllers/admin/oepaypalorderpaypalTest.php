@@ -124,5 +124,4 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
 
         $this->assertFalse($oPayPalOrder->isPayPalOrder());
     }
-
 }

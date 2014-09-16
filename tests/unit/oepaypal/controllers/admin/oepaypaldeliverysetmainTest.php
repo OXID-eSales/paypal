@@ -51,6 +51,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTe
 
     /**
      * Test if checkbox value for PayPal mobile delivery set has correct value.
+     *
      * @dataProvider providerRender_DefaultShippingSet
      */
     public function testRender_DefaultShippingSet($sMobileECDefaultShippingId, $blMarkAsDefaultPaymentExpected)
@@ -174,6 +175,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTe
         $oPayPalDeliverySet_Main = new oePayPalDeliverySet_Main();
         $oPayPalDeliverySet_Main->setEditObjectId($sDeliverySetid);
         $oPayPalDeliverySet_Main->save();
+
         return $oPayPalDeliverySet_Main;
     }
 }

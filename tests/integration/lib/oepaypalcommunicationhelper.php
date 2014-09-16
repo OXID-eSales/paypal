@@ -52,6 +52,7 @@ class oePayPalCommunicationHelper extends oePayPalIntegrationTestHelper
     {
         $oCurl = $this->getMock('oePayPalCurl', array('execute'));
         $oCurl->expects($this->any())->method('execute')->will($this->returnValue($aResult));
+
         return $oCurl;
     }
 }

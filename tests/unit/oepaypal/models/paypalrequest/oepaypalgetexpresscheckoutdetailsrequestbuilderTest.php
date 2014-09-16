@@ -44,7 +44,6 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalGetExpressCheckoutDetailsReques
         $oBuilder->buildRequest();
 
         $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
-
     }
 
     /**

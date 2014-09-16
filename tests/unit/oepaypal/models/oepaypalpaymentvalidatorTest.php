@@ -119,31 +119,31 @@ class Unit_oePayPal_Models_oePayPalPaymentValidatorTest extends OxidTestCase
 
         return array(
             // price outside range, user has account, payment has no set countries, and no user groups set - expects false
-            array (1, 10, 100, 5,   array(), null, "someCountry", true, $oListEmpty, array(), false),
+            array(1, 10, 100, 5, array(), null, "someCountry", true, $oListEmpty, array(), false),
             // price outside range, user has account, payment has no set countries, but has user group set, user belongs to the same group - expects false
-            array (1, 10, 100, 110, array(), null, "someCountry", true, $oList1, array('someGroup1'=>"data"), false),
+            array(1, 10, 100, 110, array(), null, "someCountry", true, $oList1, array('someGroup1' => "data"), false),
             // price inside range, user has account, payment has no set countries, but has user group set, user belongs to the same group - expects true
-            array (1, 10, 100, 10,  array(), null, "someCountry", true, $oList1, array('someGroup1'=>"data"), true),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList1, array('someGroup1' => "data"), true),
             // paypal payment is not active - expects false
-            array (0, 10, 100, 10,  array(), null, "someCountry", true, $oListEmpty, array(), false),
+            array(0, 10, 100, 10, array(), null, "someCountry", true, $oListEmpty, array(), false),
             // Shipping country not equal to given countries
             // price inside range, user has account, payment has countries and groups set, but user is from other country, but belongs to the same group - expects false
-            array (1, 10, 100, 10,  array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $oList1, array('someGroup1'=>"data"), false),
+            array(1, 10, 100, 10, array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $oList1, array('someGroup1' => "data"), false),
             // price inside range, user has account, payment has countries and groups set, but user is from the same country and belongs to the same group - expects true
-            array (1, 10, 100, 100, array("someOtherCountry", "someCountry", "andAnotherCountry"), null, "someCountry", true, $oList1, array('someGroup1'=>"data"), true),
+            array(1, 10, 100, 100, array("someOtherCountry", "someCountry", "andAnotherCountry"), null, "someCountry", true, $oList1, array('someGroup1' => "data"), true),
             // price inside range, user has account, payment does not have countries set, but has user groups set, user does not belong to any user group - expects false
-            array (1, 10, 100, 10,  array(), null, "someCountry", true, $oList2, array(), false),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList2, array(), false),
             // price inside range, user has account, payment does not have countries set, but has user groups set, user belongs to one user group - expects true
-            array (1, 10, 100, 10,  array(), null, "someCountry", true, $oList2, array('someGroup1'=>"data"), true),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList2, array('someGroup1' => "data"), true),
             // price inside range, user has account, payment does not have countries set, but has user groups set, user belongs to different user group - expects false
-            array (1, 10, 100, 10,  array(), null, "someCountry", true, $oList2, array('someGroup3'=>"data"), false),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList2, array('someGroup3' => "data"), false),
             // price inside range, user does not have account (anonymous), payment has groups set - expects true
-            array (1, 10, 100, 10,  array(), null, "someCountry", false, $oList2, array(), true),
+            array(1, 10, 100, 10, array(), null, "someCountry", false, $oList2, array(), true),
             // Shipping country not given, but user address is given
-            array (1, 10, 100, 10,  array(), "someCountry", null, false, $oList2, array(), true),
-            array (1, 10, 100, 10,  array("someOtherCountry", "someCountry", "andAnotherCountry"), "someCountry", null, false, $oList2, array(), true),
+            array(1, 10, 100, 10, array(), "someCountry", null, false, $oList2, array(), true),
+            array(1, 10, 100, 10, array("someOtherCountry", "someCountry", "andAnotherCountry"), "someCountry", null, false, $oList2, array(), true),
             // Shipping country not given and user address is not same as given countries
-            array (1, 10, 100, 10,  array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $oList2, array(), false),
+            array(1, 10, 100, 10, array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $oList2, array(), false),
         );
     }
 
@@ -274,8 +274,10 @@ class Unit_oePayPal_Models_oePayPalPaymentValidatorTest extends OxidTestCase
         $oUser = $this->getMock('oxUser', array('hasAccount'));
         $oUser->expects($this->any())->method('hasAccount')->will($this->returnValue(true));
 
-        $oPaymentValidator = $this->getMock('oePayPalPaymentValidator', array('isPaymentActive', 'getPrice',
-            '_checkPriceRange', '_checkMinOrderPrice', 'getUser', '_checkUserGroup', '_checkUserCountry'));
+        $oPaymentValidator = $this->getMock(
+            'oePayPalPaymentValidator', array('isPaymentActive', 'getPrice',
+                                              '_checkPriceRange', '_checkMinOrderPrice', 'getUser', '_checkUserGroup', '_checkUserCountry')
+        );
         $oPaymentValidator->expects($this->any())->method('isPaymentActive')->will($this->returnValue(true));
         $oPaymentValidator->expects($this->any())->method('getPrice')->will($this->returnValue(true));
         $oPaymentValidator->expects($this->any())->method('_checkPriceRange')->will($this->returnValue(true));

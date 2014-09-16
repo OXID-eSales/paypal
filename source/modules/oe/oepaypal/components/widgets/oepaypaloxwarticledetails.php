@@ -33,7 +33,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
     {
         $aArticle = $this->_oePayPalGetECSArticle();
 
-        return isset($aArticle['am']) ? ( int )$aArticle['am'] : 1;
+        return isset($aArticle['am']) ? (int) $aArticle['am'] : 1;
     }
 
     /**

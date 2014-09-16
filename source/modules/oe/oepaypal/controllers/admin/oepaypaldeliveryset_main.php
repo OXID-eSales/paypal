@@ -59,7 +59,7 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
         $oPayPalConfig = oxNew('oePayPalConfig');
 
         $sDeliverySetId = $this->getEditObjectId();
-        $blDeliverySetMarked = (bool)$oConfig->getRequestParameter('isPayPalDefaultMobilePayment');
+        $blDeliverySetMarked = (bool) $oConfig->getRequestParameter('isPayPalDefaultMobilePayment');
         $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
 
         if ($blDeliverySetMarked && $sDeliverySetId != $sMobileECDefaultShippingId) {

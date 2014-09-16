@@ -107,6 +107,7 @@ class oePayPalPayPalRequestBuilder
         if ($this->_oRequest === null) {
             $this->_oRequest = oxNew('oePayPalPayPalRequest');
         }
+
         return $this->_oRequest;
     }
 

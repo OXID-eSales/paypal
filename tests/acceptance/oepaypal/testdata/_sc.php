@@ -36,6 +36,7 @@ $sClassParams = $oxConfig->getParameter("classparams");
 // Class and function name is must have for every action: create object, save object, delete object.
 if (!$sClassName || !$sFunctionName) {
     echo "No \$sClassName or no \$sFunctionName";
+
     return;
 }
 
@@ -53,7 +54,7 @@ switch (strtolower($sClassName)) {
  * Calls oxconfig method with passed parameters.
  * For now it is prepared for 'saveShopConfVar' method only.
  *
- * @param string $sClassName Name of class
+ * @param string $sClassName    Name of class
  * @param string $sFunctionName Name of method
  * @param string $sClassParams
  *
@@ -100,9 +101,9 @@ function callFunctionOnConfig($sClassName, $sFunctionName, $sClassParams = null)
 /**
  * Calls object method with passed parameters.
  *
- * @param string $sClassName Name of class
+ * @param string $sClassName    Name of class
  * @param string $sFunctionName Name of method
- * @param string $sOxid Oxid value
+ * @param string $sOxid         Oxid value
  * @param string $sClassParams
  *
  * @return null
@@ -131,6 +132,7 @@ function callFunctionOnObject($sClassName, $sFunctionName, $sOxid = null, $sClas
 
 /**
  * Return table name from class name.
+ *
  * @example $sClassName = oxArticle; return oxarticles;
  * @example $sClassName = oxRole; return oxroles;
  *
@@ -150,6 +152,7 @@ function getTableNameFromClassName($sClassName)
     } elseif (in_array(strtolower($sClassName), $aClassNameWithoutIes)) {
         $sTableName = substr(strtolower($sClassName), 0, -1) . "ies";
     }
+
     return $sTableName;
 }
 

@@ -43,6 +43,7 @@ class oePayPalEscape
         } elseif (is_string($sValue)) {
             $sValue = $this->_escapeStringSpecialChars($sValue);
         }
+
         return $sValue;
     }
 
@@ -66,6 +67,7 @@ class oePayPalEscape
             }
             $newValue[$sValidKey] = $sVal;
         }
+
         return $newValue;
     }
 

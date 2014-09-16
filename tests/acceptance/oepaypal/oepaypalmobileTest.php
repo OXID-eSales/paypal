@@ -19,7 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-
 require_once 'acceptance/oepaypal/oxidAdditionalSeleniumFunctions.php';
 
 class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunctions
@@ -39,7 +38,6 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         if (OXID_VERSION_PE_CE) :
             $this->_sVersion = "CE";
         endif;
-
     }
 
     /**
@@ -55,7 +53,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
     /**
      * Call script file
      *
-     * @param $sShopUrl
+     * @param        $sShopUrl
      * @param string $sParams
      */
     public function callUrl($sShopUrl, $sParams = "")
@@ -77,6 +75,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
      * Returns PayPal login data by variable name
      *
      * @param $sVarName
+     *
      * @return mixed|null|string
      * @throws Exception
      */
@@ -98,6 +97,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
 
     /**
      * test for activating mobile theme as main theme
+     *
      * @group paypal_standalone_mobile
      */
     public function testActivateMobilePayPal()
@@ -151,6 +151,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
 
     /**
      * testing PayPal ECS in detail page
+     *
      * @group paypal_standalone_mobile
      */
     public function testMobileECS()
@@ -216,8 +217,8 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
     /**
      * login customer by using login fly out form.
      *
-     * @param string $userName user name (email).
-     * @param string $userPass user password.
+     * @param string  $userName     user name (email).
+     * @param string  $userPass     user password.
      * @param boolean $waitForLogin if needed to wait until user get logged in.
      */
     public function loginInFrontendMobile($userName, $userPass, $waitForLogin = true)
@@ -346,7 +347,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
     /**
      * Login to PayPal sandbox.
      *
-     * @param string $sLoginEmail email to login.
+     * @param string $sLoginEmail    email to login.
      * @param string $sLoginPassword password to login.
      */
 

@@ -66,6 +66,7 @@ class oePayPalOrderPaymentCommentList extends oePayPalList
         if (is_null($this->_oDbGateway)) {
             $this->_setDbGateway(oxNew('oePayPalOrderPaymentCommentDbGateway'));
         }
+
         return $this->_oDbGateway;
     }
 

@@ -40,6 +40,7 @@ class oePayPalOrderVoidActionHandler extends oePayPalOrderActionHandler
     {
         $oService = $this->getPayPalService();
         $oRequest = $this->getPayPalRequest();
+
         return $oService->doVoid($oRequest);
     }
 

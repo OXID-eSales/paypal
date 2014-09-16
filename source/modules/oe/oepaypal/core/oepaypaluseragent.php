@@ -95,6 +95,7 @@ class oePayPalUserAgent
         if (preg_match('/(' . $this->getMobileDeviceTypes() . ')/is', $_SERVER['HTTP_USER_AGENT'])) {
             $sDeviceType = 'mobile';
         }
+
         return $sDeviceType;
     }
 }

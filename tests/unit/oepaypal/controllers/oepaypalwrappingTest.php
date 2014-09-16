@@ -89,5 +89,4 @@ class Unit_oePayPal_Controllers_oePayPalWrappingTest extends OxidTestCase
 
         $this->assertEquals("order", $oView->changeWrapping());
     }
-
 }

@@ -30,6 +30,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
 {
     /**
      * Test cases directory
+     *
      * @var string
      */
     protected $_sTestCasesPath = '/integration/oepaypal/checkoutrequest/testcases/';
@@ -100,6 +101,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
 
     /**
      * Return dispatcher object
+     *
      * @param array $aTestCase
      *
      * @return oePayPalExpressCheckoutDispatcher
@@ -137,6 +139,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
 
     /**
      * Sets Curl to dispatcher
+     *
      * @param $oDispatcher
      * @param $oCurl
      */
@@ -186,15 +189,19 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
         $oConfig = $this->getConfig();
         if ($oConfig->getEdition() == 'EE') {
             $sResult = 'OXID_Cart_EnterpriseECS';
-        } else if ($oConfig->getEdition() == 'PE') {
-            $sResult = 'OXID_Cart_ProfessionalECS';
-        } else if ($oConfig->getEdition() == 'CE') {
-            $sResult = 'OXID_Cart_CommunityECS';
+        } else {
+            if ($oConfig->getEdition() == 'PE') {
+                $sResult = 'OXID_Cart_ProfessionalECS';
+            } else {
+                if ($oConfig->getEdition() == 'CE') {
+                    $sResult = 'OXID_Cart_CommunityECS';
+                }
+            }
         }
         $aReplacements = array(
             '{SHOP_URL}' => $this->getConfig()->getShopUrl(),
-            '{SHOP_ID}' => $this->getConfig()->getShopId(),
-            '{BN_ID}' => $sResult,
+            '{SHOP_ID}'  => $this->getConfig()->getShopId(),
+            '{BN_ID}'    => $sResult,
         );
 
         return $aReplacements;

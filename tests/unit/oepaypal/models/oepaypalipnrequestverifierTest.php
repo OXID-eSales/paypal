@@ -159,6 +159,7 @@ class Unit_oePayPal_Models_oePayPalIPNRequestVerifierTest extends OxidTestCase
     {
         $oRequest = $this->getMock('oePayPalRequest', array('getPost'));
         $oRequest->expects($this->atLeastOnce())->method('getPost')->will($this->returnValue($aPayPalRequest));
+
         return $oRequest;
     }
 
@@ -166,6 +167,7 @@ class Unit_oePayPal_Models_oePayPalIPNRequestVerifierTest extends OxidTestCase
     {
         $oCommunicationService = $this->getMock('oePayPalService', array('doVerifyWithPayPal'));
         $oCommunicationService->expects($this->atLeastOnce())->method('doVerifyWithPayPal')->will($this->returnValue($aPayPalResponse));
+
         return $oCommunicationService;
     }
 
@@ -177,6 +179,7 @@ class Unit_oePayPal_Models_oePayPalIPNRequestVerifierTest extends OxidTestCase
         $oRequestValidator->expects($this->atLeastOnce())->method('setShopOwnerUserName')->with($sShopOwner);
         $oRequestValidator->expects($this->atLeastOnce())->method('isValid')->will($this->returnValue($blValidatorSayIsValid));
         $oRequestValidator->expects($this->any())->method('getValidationFailureMessage')->will($this->returnValue($sValidatorFailureMessage));
+
         return $oRequestValidator;
     }
 }

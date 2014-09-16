@@ -45,5 +45,4 @@ class Unit_oePayPal_Controllers_oePayPalIPNHandlerTest extends OxidTestCase
 
         $this->assertEquals(false, $blResult);
     }
-
 }

@@ -31,7 +31,7 @@ class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends OxidTestC
     {
         return array(
             array(array('payment_status' => 'Completed', 'txn_id' => 'a2s12as1d2', 'receiver_email' => 'test@oxid-esaltes.com'
-            , 'mc_gross' => 15.66, 'mc_currency' => 'EUR')),
+                        , 'mc_gross'     => 15.66, 'mc_currency' => 'EUR')),
             array(null),
         );
     }

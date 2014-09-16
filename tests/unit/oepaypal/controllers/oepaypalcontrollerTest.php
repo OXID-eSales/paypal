@@ -69,7 +69,6 @@ class Unit_oePayPal_Controllers_oePayPalControllerTest extends OxidTestCase
         $oController->expects($this->once())->method('getLogger')->will($this->returnValue($oPayPalLogger));
 
         $oController->log('logMessage');
-
     }
 
     /**

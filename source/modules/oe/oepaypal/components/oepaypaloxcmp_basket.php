@@ -24,7 +24,6 @@
  */
 class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
 {
-
     /**
      * Show ECS PopUp
      *
@@ -76,6 +75,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
     public function actionAddToBasketAndGoToCheckout()
     {
         parent::tobasket();
+
         return $this->_getExpressCheckoutUrl();
     }
 
@@ -96,7 +96,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      */
     protected function _getExpressCheckoutUrl()
     {
-        return 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=' . ( int )$this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
+        return 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=' . (int) $this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
     }
 
     /**

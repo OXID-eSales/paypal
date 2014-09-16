@@ -37,7 +37,7 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
     {
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
-            "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
+                     "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
         oxDb::getDb()->execute($sSqlState);
     }
 
@@ -146,8 +146,10 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
         $oPayPalService->expects($this->once())->method("setExpressCheckout")->will($this->returnValue($oResult));
 
         // preparing
-        $oDispatcher = $this->getMock("oepaypalstandarddispatcher", array("getPayPalCheckoutService"
-        , '_getUtils', 'getPayPalConfig'));
+        $oDispatcher = $this->getMock(
+            "oepaypalstandarddispatcher", array("getPayPalCheckoutService"
+                                                , '_getUtils', 'getPayPalConfig')
+        );
 
         $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
         $oDispatcher->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($oPayPalConfig));
@@ -155,7 +157,6 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
 
         // testing
         $oDispatcher->setExpressCheckout();
-
     }
 
     /**

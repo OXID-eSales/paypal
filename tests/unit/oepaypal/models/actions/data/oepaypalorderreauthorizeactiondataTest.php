@@ -48,6 +48,7 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderReauthorizeActionDataTest e
      *  Returns Request object with given parameters
      *
      * @param $aParams
+     *
      * @return mixed
      */
     protected function _getRequest($aParams)

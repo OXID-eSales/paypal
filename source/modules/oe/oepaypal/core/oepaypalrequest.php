@@ -134,6 +134,7 @@ class oePayPalRequest
     public function escapeSpecialChars($sValue)
     {
         $oPayPalEscape = oxNew('oePayPalEscape');
+
         return $oPayPalEscape->escapeSpecialChars($sValue);
     }
 }

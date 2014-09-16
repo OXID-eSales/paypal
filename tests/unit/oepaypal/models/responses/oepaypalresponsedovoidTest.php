@@ -36,8 +36,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVoidTest extends OxidTest
     {
         $aData = array(
             'AUTHORIZATIONID' => 'authorizationId',
-            'CORRELATIONID' => 'correlationId',
-            'PAYMENTSTATUS' => 'completed'
+            'CORRELATIONID'   => 'correlationId',
+            'PAYMENTSTATUS'   => 'completed'
         );
 
         return $aData;
@@ -62,5 +62,4 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVoidTest extends OxidTest
         $oResponse->setData($this->_getResponseData());
         $this->assertEquals('correlationId', $oResponse->getCorrelationId());
     }
-
 }

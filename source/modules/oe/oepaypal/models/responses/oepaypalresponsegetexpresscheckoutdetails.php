@@ -42,7 +42,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getAmount()
     {
-        return ( float )$this->_getValue('PAYMENTREQUEST_0_AMT');
+        return ( float ) $this->_getValue('PAYMENTREQUEST_0_AMT');
     }
 
     /**

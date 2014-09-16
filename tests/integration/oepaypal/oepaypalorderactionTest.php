@@ -48,13 +48,13 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
     {
         $aRequestParams = array(
             'capture_amount' => '200.99',
-            'capture_type' => 'Complete'
+            'capture_type'   => 'Complete'
         );
         $aResponseParams = array(
             'TRANSACTIONID' => 'TransactionId',
             'PAYMENTSTATUS' => 'Pending',
-            'AMT' => '99.87',
-            'CURRENCYCODE' => 'EUR',
+            'AMT'           => '99.87',
+            'CURRENCYCODE'  => 'EUR',
         );
 
         $oAction = $this->_createAction('capture', 'testOrderId', $aRequestParams, $aResponseParams);
@@ -88,15 +88,15 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
     public function testActionRefund()
     {
         $aRequestParams = array(
-            'refund_amount' => '10',
-            'refund_type' => 'Complete',
+            'refund_amount'  => '10',
+            'refund_type'    => 'Complete',
             'transaction_id' => 'capturedTransaction'
         );
         $aResponseParams = array(
             'REFUNDTRANSACTIONID' => 'TransactionId',
-            'REFUNDSTATUS' => 'Pending',
-            'GROSSREFUNDAMT' => '9.01',
-            'CURRENCYCODE' => 'EUR',
+            'REFUNDSTATUS'        => 'Pending',
+            'GROSSREFUNDAMT'      => '9.01',
+            'CURRENCYCODE'        => 'EUR',
         );
 
         $oCapturedPayment = new oePayPalOrderPayment();
@@ -138,7 +138,7 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
     {
         $aResponseParams = array(
             'AUTHORIZATIONID' => 'AuthorizationId',
-            'PAYMENTSTATUS' => 'Complete',
+            'PAYMENTSTATUS'   => 'Complete',
         );
 
         $oAction = $this->_createAction('reauthorize', 'testOrderId', array(), $aResponseParams);
@@ -193,8 +193,8 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
      *
      * @param string $sAction
      * @param string $sOrderId
-     * @param array $aRequestParams
-     * @param array $aResponseParams
+     * @param array  $aRequestParams
+     * @param array  $aResponseParams
      *
      * @return oePayPalOrderAction
      */

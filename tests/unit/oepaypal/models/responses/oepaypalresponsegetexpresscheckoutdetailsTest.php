@@ -35,22 +35,22 @@ class Unit_oePayPal_models_responses_oePayPalResponseGetExpressCheckoutDetailsTe
     protected function _getResponseData()
     {
         $aData = array(
-            'SHIPPINGOPTIONNAME' => 'Air',
-            'PAYMENTREQUEST_0_AMT' => 1200,
-            'PAYERID' => 'payer',
-            'EMAIL' => 'oxid@oxid.com',
-            'FIRSTNAME' => 'Name',
-            'LASTNAME' => 'Surname',
-            'PAYMENTREQUEST_0_SHIPTOSTREET' => 'Street',
-            'PAYMENTREQUEST_0_SHIPTOCITY' => 'City',
-            'PAYMENTREQUEST_0_SHIPTONAME' => 'First Last',
+            'SHIPPINGOPTIONNAME'                 => 'Air',
+            'PAYMENTREQUEST_0_AMT'               => 1200,
+            'PAYERID'                            => 'payer',
+            'EMAIL'                              => 'oxid@oxid.com',
+            'FIRSTNAME'                          => 'Name',
+            'LASTNAME'                           => 'Surname',
+            'PAYMENTREQUEST_0_SHIPTOSTREET'      => 'Street',
+            'PAYMENTREQUEST_0_SHIPTOCITY'        => 'City',
+            'PAYMENTREQUEST_0_SHIPTONAME'        => 'First Last',
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => 'CountryCode',
-            'PAYMENTREQUEST_0_SHIPTOSTATE' => 'State',
-            'PAYMENTREQUEST_0_SHIPTOZIP' => '1121',
-            'PAYMENTREQUEST_0_SHIPTOPHONENUM' => '+37000000000',
-            'PAYMENTREQUEST_0_SHIPTOSTREET2' => 'Street2',
-            'SALUTATION' => 'this is salutation',
-            'BUSINESS' => 'company'
+            'PAYMENTREQUEST_0_SHIPTOSTATE'       => 'State',
+            'PAYMENTREQUEST_0_SHIPTOZIP'         => '1121',
+            'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => '+37000000000',
+            'PAYMENTREQUEST_0_SHIPTOSTREET2'     => 'Street2',
+            'SALUTATION'                         => 'this is salutation',
+            'BUSINESS'                           => 'company'
         );
 
         return $aData;

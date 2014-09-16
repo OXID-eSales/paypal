@@ -81,6 +81,7 @@ abstract class oePayPalOrderActionHandler
         if ($this->_oPayPalRequestBuilder === null) {
             $this->_oPayPalRequestBuilder = oxNew('oePayPalPayPalRequestBuilder');
         }
+
         return $this->_oPayPalRequestBuilder;
     }
 
@@ -104,6 +105,7 @@ abstract class oePayPalOrderActionHandler
         if ($this->_oPayPalService === null) {
             $this->_oPayPalService = oxNew('oePayPalService');
         }
+
         return $this->_oPayPalService;
     }
 }

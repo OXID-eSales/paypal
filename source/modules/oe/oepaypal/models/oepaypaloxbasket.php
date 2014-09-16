@@ -156,7 +156,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
         }
 
         // vouchers..
-        $aVouchers = (array)$this->getVouchers();
+        $aVouchers = (array) $this->getVouchers();
         foreach ($aVouchers as $oVoucher) {
             $dDiscount += round($oVoucher->dVoucherdiscount, 2);
         }
@@ -218,6 +218,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
     {
         $aProductVatValue = $this->getProductVats(false);
         $dProductVatValue = array_sum($aProductVatValue);
+
         return $dProductVatValue;
     }
 
@@ -268,6 +269,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
         if ($oPaymentCost && $oPaymentCost->getVatValue()) {
             $dPayVAT = $oPaymentCost->getVatValue();
         }
+
         return $dPayVAT;
     }
 
@@ -283,6 +285,7 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
         if ($oCost && $oCost->getVatValue()) {
             $dVAT = $oCost->getVatValue();
         }
+
         return $dVAT;
     }
 }

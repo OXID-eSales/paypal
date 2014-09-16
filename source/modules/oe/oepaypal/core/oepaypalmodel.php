@@ -76,6 +76,7 @@ abstract class oePayPalModel
     protected function _getValue($sKey)
     {
         $aData = $this->getData();
+
         return $aData[$sKey];
     }
 
@@ -116,6 +117,7 @@ abstract class oePayPalModel
     {
         $mId = $this->_getDbGateway()->save($this->getData());
         $this->setId($mId);
+
         return $mId;
     }
 

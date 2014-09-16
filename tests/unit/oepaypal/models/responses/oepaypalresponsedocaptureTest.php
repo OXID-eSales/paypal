@@ -38,8 +38,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoCaptureTest extends OxidT
             'TRANSACTIONID' => 'transactionId',
             'CORRELATIONID' => 'correlationId',
             'PAYMENTSTATUS' => 'completed',
-            'AMT' => 12.45,
-            'CURRENCYCODE' => 'LTL'
+            'AMT'           => 12.45,
+            'CURRENCYCODE'  => 'LTL'
         );
 
         return $aData;

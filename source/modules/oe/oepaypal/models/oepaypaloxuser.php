@@ -26,6 +26,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
 {
     /**
      * CallBack user mode
+     *
      * @var bool
      */
     protected $_blCallBackUser = false;
@@ -47,6 +48,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
         if ($sUserId = $oDb->getOne($sQ)) {
             return $sUserId;
         }
+
         return false;
     }
 
@@ -233,6 +235,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     protected function _splitShipToStreetPayPalUser($sShipToStreet)
     {
         $oAddress = oxNew("oxAddress");
+
         return $oAddress->splitShipToStreetPayPalAddress($sShipToStreet);
     }
 
@@ -265,6 +268,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
             $this->_oGroups = oxNew('oxlist', 'oxgroups');
             $this->_oGroups->selectString($sSelect);
         }
+
         return $this->_oGroups;
     }
 

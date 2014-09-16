@@ -46,7 +46,7 @@ class oePayPalWrapping extends oePayPalWrapping_parent
 
         // in case user adds wrapping, basket info must be resubmitted..
         if ($this->isPayPal()) {
-            $iPayPalType = (int)$this->getSession()->getVariable("oepaypal");
+            $iPayPalType = (int) $this->getSession()->getVariable("oepaypal");
 
             if ($iPayPalType == 1) {
                 $sReturn = "payment";

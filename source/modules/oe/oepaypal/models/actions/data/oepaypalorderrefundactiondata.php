@@ -58,6 +58,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
     public function getAmount()
     {
         $dAmount = $this->getRequest()->getRequestParameter('refund_amount');
+
         return $dAmount ? $dAmount : $this->getPaymentBeingRefunded()->getRemainingRefundAmount();
     }
 
@@ -82,6 +83,7 @@ class oePayPalOrderRefundActionData extends oePayPalOrderActionData
             $this->_oPaymentBeingRefunded = oxNew("oePayPalOrderPayment");
             $this->_oPaymentBeingRefunded->loadByTransactionId($this->getTransactionId());
         }
+
         return $this->_oPaymentBeingRefunded;
     }
 }

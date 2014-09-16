@@ -68,7 +68,7 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $this->getSession()->setVariable('sess_challenge', null);
         $oOrder = new oePayPalOxOrder();
         $oOrder->loadPayPalOrder();
-        $this->assertTrue((bool)$oOrder->oxorder__oxid->value);
+        $this->assertTrue((bool) $oOrder->oxorder__oxid->value);
     }
 
     /**
@@ -103,7 +103,6 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
 
         $sDate = date('Y-m-d', oxRegistry::get('oxUtilsDate')->getTime());
         $this->assertEquals($sDate, substr($oOrder->oxorder__oxpaid->value, 0, 10));
-
     }
 
     /**
@@ -172,7 +171,7 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
     public function testValidateDelivery_EmptyPaymentValid_PaymentValid()
     {
         $aBasketMethods = array(
-            'getPaymentId' => 'oxidpaypal',
+            'getPaymentId'  => 'oxidpaypal',
             'getShippingId' => 'oxidstandard',
         );
         $oBasket = $this->_createStub('oePayPalOxBasket', $aBasketMethods);

@@ -101,6 +101,7 @@ class oePayPalOrderPaymentStatusCalculator
     protected function _isOrderPaymentStatusFinal()
     {
         $sOrderPaymentStatus = $this->getOrder()->getPaymentStatus();
+
         return $sOrderPaymentStatus == 'failed' || $sOrderPaymentStatus == 'canceled';
     }
 
@@ -159,6 +160,7 @@ class oePayPalOrderPaymentStatusCalculator
         if ($this->_isOrderPaymentStatusFinal()) {
             $sStatus = $this->getOrder()->getPaymentStatus();
         }
+
         return $sStatus;
     }
 
@@ -174,6 +176,7 @@ class oePayPalOrderPaymentStatusCalculator
         if (isset($oOrderPayment) && !$oOrderPayment->getIsValid()) {
             $sStatus = 'failed';
         }
+
         return $sStatus;
     }
 
@@ -222,6 +225,7 @@ class oePayPalOrderPaymentStatusCalculator
             default:
                 $sStatus = 'completed';
         }
+
         return $sStatus;
     }
 }

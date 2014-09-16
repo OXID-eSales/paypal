@@ -77,6 +77,5 @@ class Unit_oePayPal_core_oePayPalCheckValidatorTest extends OxidTestCase
 
         $this->assertEquals(3.5, $oValidator->getNewBasketAmount());
     }
-
 }
 

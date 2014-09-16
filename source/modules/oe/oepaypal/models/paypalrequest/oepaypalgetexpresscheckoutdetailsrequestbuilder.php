@@ -58,6 +58,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
         if ($this->_oPayPalRequest === null) {
             $this->_oPayPalRequest = oxNew('oePayPalPayPalRequest');
         }
+
         return $this->_oPayPalRequest;
     }
 
@@ -87,6 +88,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
             $oException = oxNew('oePayPalMissingParameterException');
             throw $oException;
         }
+
         return $this->_oSession;
     }
 

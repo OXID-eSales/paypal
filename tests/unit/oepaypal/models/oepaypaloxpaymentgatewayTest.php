@@ -39,7 +39,6 @@ class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
         $oConfig = $oPaymentGateway->getPayPalConfig();
 
         $this->assertTrue($oConfig instanceof oePayPalConfig);
-
     }
 
     public function testGetPayPalService_notSet_service()
@@ -134,5 +133,4 @@ class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
 
         $this->assertInstanceOf('oxOrder', $oPaymentGateway->getPayPalOxOrder());
     }
-
 }

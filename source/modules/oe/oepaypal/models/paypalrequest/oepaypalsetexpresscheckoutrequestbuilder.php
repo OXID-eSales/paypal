@@ -142,6 +142,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
         if ($this->_oPayPalRequest === null) {
             $this->_oPayPalRequest = oxNew('oePayPalPayPalRequest');
         }
+
         return $this->_oPayPalRequest;
     }
 
@@ -169,6 +170,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
             $oException = oxNew('oePayPalMissingParameterException');
             throw $oException;
         }
+
         return $this->_oPayPalConfig;
     }
 
@@ -196,6 +198,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
             $oException = oxNew('oePayPalMissingParameterException');
             throw $oException;
         }
+
         return $this->_oBasket;
     }
 
@@ -239,6 +242,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
         if (is_null($this->_oLang)) {
             $this->_oLang = $this->getPayPalConfig()->getLang();
         }
+
         return $this->_oLang;
     }
 

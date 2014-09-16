@@ -70,5 +70,4 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest exten
 
         $this->assertEquals($iAmount, $oArticleToExpressCheckoutValidator->getArticleAmount());
     }
-
 }

@@ -28,24 +28,28 @@ class oePayPalTestCaseParser
 
     /**
      * Directory where to search for test cases
+     *
      * @var string
      */
     protected $_sDirectory = null;
 
     /**
      * Test cases filter. Specify names of cases which should be run
+     *
      * @var array
      */
     protected $_aTestCases = array();
 
     /**
      * Array of replacements for test values.
+     *
      * @var array
      */
     protected $_aReplacements = array();
 
     /**
      * Sets directory to search for test cases
+     *
      * @param string $sDirectory
      */
     public function setDirectory($sDirectory)
@@ -65,6 +69,7 @@ class oePayPalTestCaseParser
 
     /**
      * Sets test cases to be run
+     *
      * @param array $aTestCases
      */
     public function setTestCases($aTestCases)
@@ -74,6 +79,7 @@ class oePayPalTestCaseParser
 
     /**
      * Returns test cases to be run
+     *
      * @return array
      */
     public function getTestCases()
@@ -83,6 +89,7 @@ class oePayPalTestCaseParser
 
     /**
      * Sets Replacement
+     *
      * @param array $aReplacements
      */
     public function setReplacements($aReplacements)
@@ -118,6 +125,7 @@ class oePayPalTestCaseParser
             $aData = $this->_parseTestData($aData);
             $aTestCasesData[$sFilename] = array($aData);
         }
+
         return $aTestCasesData;
     }
 
@@ -126,6 +134,7 @@ class oePayPalTestCaseParser
      *
      * @param $sDir
      * @param $aTestCases
+     *
      * @return array
      */
     protected function _getDirectoryTestCasesFiles($sDir, $aTestCases)
@@ -147,6 +156,7 @@ class oePayPalTestCaseParser
      * Returns php files list from given directory and all subdirectories
      *
      * @param string $sPath
+     *
      * @return array
      */
     private function _getFilesInDirectory($sPath)
@@ -160,6 +170,7 @@ class oePayPalTestCaseParser
                 $aFiles[] = $oFile->getPathname();
             }
         }
+
         return $aFiles;
     }
 
@@ -182,6 +193,7 @@ class oePayPalTestCaseParser
      * Parses given data
      *
      * @param array $aData
+     *
      * @return array
      */
     protected function _parseTestData($aData)
@@ -189,11 +201,13 @@ class oePayPalTestCaseParser
         foreach ($aData as &$mValue) {
             $mValue = $this->_parseTestValue($mValue);
         }
+
         return $aData;
     }
 
     /**
      * Parses given test case value
+     *
      * @param $mValue
      *
      * @return array
@@ -207,6 +221,7 @@ class oePayPalTestCaseParser
             $aReplacements = $this->getReplacements();
             $mValue = str_replace(array_keys($aReplacements), $aReplacements, $mValue);
         }
+
         return $mValue;
     }
 }

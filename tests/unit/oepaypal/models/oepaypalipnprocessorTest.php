@@ -106,6 +106,7 @@ class Unit_oePayPal_Models_oePayPalIPNProcessorTest extends OxidTestCase
         $oPaymentBuilder->expects($this->atLeastOnce())->method('setLang')->with($oLang);
         $oPaymentBuilder->expects($this->atLeastOnce())->method('setRequest')->with($oRequest);
         $oPaymentBuilder->expects($this->atLeastOnce())->method('buildPayment')->will($this->returnValue($oPayment));
+
         return $oPaymentBuilder;
     }
 
@@ -114,6 +115,7 @@ class Unit_oePayPal_Models_oePayPalIPNProcessorTest extends OxidTestCase
         $oOrderManager = $this->getMock('oePayPalOrderManager', array('setOrderPayment', 'updateOrderStatus'));
         $oOrderManager->expects($this->atLeastOnce())->method('setOrderPayment')->with($oPayment);
         $oOrderManager->expects($this->atLeastOnce())->method('updateOrderStatus')->will($this->returnValue($blOrderUpdated));
+
         return $oOrderManager;
     }
 }

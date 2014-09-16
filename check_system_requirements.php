@@ -25,10 +25,8 @@ $blError = false;
 /**
  * Prints error message
  *
- * @param string $error Error message to be printed
- * @param string $action Suggestion for to be taken action
- *
- * @return nothing
+ * @param string $sError  Error message to be printed
+ * @param string $sAction Suggestion for to be taken action
  */
 function printError($sError, $sAction)
 {
@@ -40,10 +38,8 @@ function printError($sError, $sAction)
 /**
  * Prints warning message
  *
- * @param string $error Error message to be printed
- * @param string $action Suggestion for to be taken action
- *
- * @return nothing
+ * @param string $sError  Error message to be printed
+ * @param string $sAction Suggestion for to be taken action
  *
  */
 function printWarning($sError, $sAction)
@@ -53,13 +49,10 @@ function printWarning($sError, $sAction)
     echo '&nbsp;&nbsp;&nbsp;<b>Ma&szlig;nahme:</b> ' . $sAction . '<br><br>';
 }
 
-
 /**
  * Prints OK message
  *
  * @param string $sNote additional note
- *
- * @return nothing
  *
  */
 function printOk($sNote = '')

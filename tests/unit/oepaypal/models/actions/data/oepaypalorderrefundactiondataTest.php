@@ -39,8 +39,8 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderRefundActionDataTest extend
 
         $aParams = array(
             'transaction_id' => $sTransactionId,
-            'refund_amount' => $sAmount,
-            'refund_type' => $sType,
+            'refund_amount'  => $sAmount,
+            'refund_type'    => $sType,
         );
         $oRequest = $this->_createStub('oePayPalRequest', array('getPost' => $aParams));
 
@@ -99,6 +99,7 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderRefundActionDataTest extend
      *  Returns Request object with given parameters
      *
      * @param $aParams
+     *
      * @return mixed
      */
     protected function _getRequest($aParams)

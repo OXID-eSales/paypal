@@ -80,6 +80,7 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
     {
         $oDb = $this->_getDb();
         $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_transactionid` = ' . $oDb->quote($sTransactionId));
+
         return $aData;
     }
 
@@ -121,6 +122,7 @@ class oePayPalOrderPaymentDbGateway extends oePayPalModelDbGateway
     {
         $oDb = $this->_getDb();
         $aData = $oDb->getAll('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_orderid` = ' . $oDb->quote($sOrderId) . ' ORDER BY `oepaypal_date` DESC');
+
         return $aData;
     }
 }

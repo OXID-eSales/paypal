@@ -36,10 +36,10 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTes
     {
         $aData = array(
             'PAYMENTINFO_0_TRANSACTIONID' => 'transactionID',
-            'CORRELATIONID' => 'correlationID',
+            'CORRELATIONID'               => 'correlationID',
             'PAYMENTINFO_0_PAYMENTSTATUS' => 'confirmed',
-            'PAYMENTINFO_0_AMT' => 1200,
-            'PAYMENTINFO_0_CURRENCYCODE' => 'LTL'
+            'PAYMENTINFO_0_AMT'           => 1200,
+            'PAYMENTINFO_0_CURRENCYCODE'  => 'LTL'
         );
 
         return $aData;

@@ -304,7 +304,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
         $oOrder->setOrderId('order');
         $oOrder->setCapturedAmount(0);
 
-
         $oManager = new oePayPalOrderPaymentStatusCalculator();
         $oManager->setOrder($oOrder);
         $oManager->setOrderPayment($oOrderPaymentVirtual);
@@ -409,6 +408,7 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
 
     /**
      * Prepare OrderPayment object.
+     *
      * @return oePayPalOrderPayment
      */
     protected function getOrderPayment()
@@ -419,27 +419,32 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
         $oOrderPayment = new oePayPalOrderPayment();
         $oOrderPayment->setTransactionId('asdadsd45a4sd5a4sd54a5');
         $oOrderPayment->setOrderId('order');
+
         return $oOrderPayment;
     }
 
     /**
      * Prepare valid OrderPayment object.
+     *
      * @return oePayPalOrderPayment
      */
     protected function getValidOrderPayment()
     {
         $oOrderPayment = $this->getOrderPayment();
+
         return $oOrderPayment;
     }
 
     /**
      * Prepare not valid OrderPayment object.
+     *
      * @return oePayPalOrderPayment
      */
     protected function getNotValidOrderPayment()
     {
         $oOrderPayment = $this->getOrderPayment();
         $oOrderPayment->setIsValid(false);
+
         return $oOrderPayment;
     }
 }

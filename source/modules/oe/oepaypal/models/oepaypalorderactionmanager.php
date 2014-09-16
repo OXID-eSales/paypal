@@ -30,7 +30,7 @@ class oePayPalOrderActionManager
      * @var oePayPalPayPalOrder
      */
     protected $_aAvailableActions = array(
-        'Sale' => array(),
+        'Sale'          => array(),
         'Authorization' => array('capture', 'reauthorize', 'void'),
     );
 

@@ -57,6 +57,7 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderActionDataTest extends Oxid
      *  Returns Request object with given parameters
      *
      * @param $aParams
+     *
      * @return mixed
      */
     protected function _getRequest($aParams)
@@ -75,5 +76,4 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderActionDataTest extends Oxid
 
         return $oOrder;
     }
-
 }

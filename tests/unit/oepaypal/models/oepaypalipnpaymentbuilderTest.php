@@ -96,7 +96,7 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
     {
         return array(
             array(false, 'some validation message'),
-//            array( true, '' ),
+            //            array( true, '' ),
         );
     }
 
@@ -104,7 +104,7 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
      * Check if payment is formed from request.
      * Check if payment is formed with validator results.
      *
-     * @param bool $blPaymentValid if payment is valid.
+     * @param bool   $blPaymentValid     if payment is valid.
      * @param string $sValidationMessage validation message.
      *
      * @dataProvider provideGetPayment
@@ -147,28 +147,33 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
 
     /**
      * Wrapper to create request object.
+     *
      * @return oePayPalRequest
      */
     protected function _prepareRequest()
     {
         $_POST['zzz'] = 'yyy';
         $oRequest = new oePayPalRequest();
+
         return $oRequest;
     }
 
     /**
      * Wrapper to create oxLang.
+     *
      * @return oxLang
      */
     protected function _prepareLang()
     {
         $oLang = new oxLang();
+
         return $oLang;
     }
 
     /**
-     * @param oePayPalRequest $oRequest request.
+     * @param oePayPalRequest      $oRequest      request.
      * @param oePayPalOrderPayment $oOrderPayment order payment.
+     *
      * @return oePayPalIPNRequestPaymentSetter
      */
     protected function _prepareRequestPaymentSetter($oRequest, $oOrderPayment)
@@ -176,14 +181,15 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
         $oPayPalIPNPaymentSetter = $this->getMock('oePayPalIPNRequestPaymentSetter', array('setRequest', 'getRequestOrderPayment'));
         $oPayPalIPNPaymentSetter->expects($this->atLeastOnce())->method('setRequest')->with($oRequest);
         $oPayPalIPNPaymentSetter->expects($this->atLeastOnce())->method('getRequestOrderPayment')->will($this->returnValue($oOrderPayment));
+
         return $oPayPalIPNPaymentSetter;
     }
 
     /**
      * Wrapper to create order payment.
      *
-     * @param string $sTransactionId transaction id.
-     * @param bool $blValid if payment should be marked as not valid.
+     * @param string $sTransactionId     transaction id.
+     * @param bool   $blValid            if payment should be marked as not valid.
      * @param string $sValidationMessage validation message
      *
      * @return oePayPalOrderPayment
@@ -201,6 +207,7 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
             $sDate = date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime());
             $oOrderPayment->addComment($sDate, $sValidationMessage);
         }
+
         return $oOrderPayment;
     }
 
@@ -209,23 +216,26 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
      * Check if called with correct parameters. Always return mocked validation information.
      *
      * @param oePayPalOrderPayment $oRequestOrderPayment object validator will be called with.
-     * @param oePayPalOrderPayment $oOrderPayment object validator will return.
-     * @param oxLang $oLang set to validator to translate validation failure message.
-     * @param bool $blValid set if order is valid.
-     * @param string $sValidationMessage validation message.
+     * @param oePayPalOrderPayment $oOrderPayment        object validator will return.
+     * @param oxLang               $oLang                set to validator to translate validation failure message.
+     * @param bool                 $blValid              set if order is valid.
+     * @param string               $sValidationMessage   validation message.
      *
      * @return oePayPalIPNPaymentValidator
      */
     protected function _prepareIPNPaymentValidator($oRequestOrderPayment, $oOrderPayment, $oLang, $blValid, $sValidationMessage)
     {
-        $oPayPalIPNPaymentValidator = $this->getMock('oePayPalIPNPaymentValidator'
-            , array('setRequestOrderPayment', 'setOrderPayment', 'setLang', 'isValid', 'getValidationFailureMessage'));
+        $oPayPalIPNPaymentValidator = $this->getMock(
+            'oePayPalIPNPaymentValidator'
+            , array('setRequestOrderPayment', 'setOrderPayment', 'setLang', 'isValid', 'getValidationFailureMessage')
+        );
         $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setRequestOrderPayment')->with($oRequestOrderPayment);
         $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setOrderPayment')->with($oOrderPayment);
         $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setLang')->with($oLang);
         $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('isValid')->will($this->returnValue($blValid));
         // Validation message will be checked only when validation fail.
         $oPayPalIPNPaymentValidator->expects($this->any())->method('getValidationFailureMessage')->will($this->returnValue($sValidationMessage));
+
         return $oPayPalIPNPaymentValidator;
     }
 }

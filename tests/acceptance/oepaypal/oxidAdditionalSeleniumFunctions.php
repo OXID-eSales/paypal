@@ -20,7 +20,7 @@
  */
 
 
-//require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
+require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
 
 //require_once 'test_config.inc.php';
 

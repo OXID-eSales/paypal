@@ -187,8 +187,8 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderActionRefundTest extend
             'getTransactionId' => $sTransactionId,
             'getCorrelationId' => $sCorrelationId,
             'getPaymentStatus' => $sStatus,
-            'getRefundAmount' => $dAmount,
-            'getCurrency' => $sCurrency,
+            'getRefundAmount'  => $dAmount,
+            'getCurrency'      => $sCurrency,
         );
         $oPayPalResponse = $this->_createStub('oePayPalResponseDoRefund', $aPayPalResponseMethods);
 
@@ -310,6 +310,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderActionRefundTest extend
     protected function _getPayment()
     {
         $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
+
         return $oPayment;
     }
 
@@ -317,6 +318,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderActionRefundTest extend
      * Returns payment list
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalOrderPaymentList
      */
     protected function _getPaymentList($aTestMethods = array())
@@ -331,12 +333,14 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderActionRefundTest extend
      * Returns order
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalPayPalOrder
      */
     protected function _getOrder($aTestMethods = array())
     {
         $aMethods = array('getPaymentList' => $this->_getPaymentList());
         $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
+
         return $oOrder;
     }
 
@@ -344,6 +348,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderActionRefundTest extend
      * Retruns basic PayPal response object
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalResponseDoCapture
      */
     protected function _getPayPalResponse($aTestMethods = array())
@@ -352,6 +357,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderActionRefundTest extend
         $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
         $oOrder = $this->getMock('oePayPalResponseDoRefund', $aMockedMethods);
+
         return $oOrder;
     }
 

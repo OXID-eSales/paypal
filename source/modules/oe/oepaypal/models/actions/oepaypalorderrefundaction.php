@@ -60,5 +60,4 @@ class oePayPalOrderRefundAction extends oePayPalOrderAction
             $oPayment->addComment($oComment);
         }
     }
-
 }

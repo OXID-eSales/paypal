@@ -23,7 +23,6 @@
  * Full reinstall
  */
 
-
 ob_start();
 
 class _config
@@ -43,7 +42,6 @@ class _config
 
 $_cfg = new _config();
 
-
 {
     if (isset($_SERVER['HTTP_COOKIE'])) {
         $aCookies = explode(';', $_SERVER['HTTP_COOKIE']);
@@ -60,9 +58,7 @@ echo "<ol>";
 echo "<li>" . (($aDeletedCookies) ? implode(" | ", $aDeletedCookies) : "No cookies found") . "</li>";
 echo "</ol>";
 
-
 echo "<hr>";
-
 
 echo "<h2>Cleanup tmp directory</h2>";
 echo "<ul>";
@@ -96,9 +92,7 @@ if ($_GET["version"]) {
     }
 }
 
-
 echo "<hr>";
-
 
 echo "<h2>Install and configure database</h2>";
 echo "<ol>";
@@ -160,11 +154,12 @@ echo "<ol>";
 
     echo "<li>set configuration parameters</li>";
     mysql_query("delete from oxconfig where oxvarname in ('iSetUtfMode','blLoadDynContents','sShopCountry')", $oDB);
-    mysql_query("insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values " .
+    mysql_query(
+        "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values " .
         "('config1', '{$sShopId}', 'iSetUtfMode',       'str',  ENCODE('0', '{$_key}') )," .
         "('config2', '{$sShopId}', 'blLoadDynContents', 'bool', ENCODE('1', '{$_key}') )," .
-        "('config3', '{$sShopId}', 'sShopCountry',      'str',  ENCODE('de','{$_key}') )", $oDB);
-
+        "('config3', '{$sShopId}', 'sShopCountry',      'str',  ENCODE('de','{$_key}') )", $oDB
+    );
 
     if ($sVersion != "CE" && !empty($sSerial)) {
 
@@ -178,12 +173,14 @@ echo "<ol>";
 
         mysql_query("update oxshops set oxserial = '{$sSerial}'", $oDB);
         mysql_query("delete from oxconfig where oxvarname in ('aSerials','sTagList','IMD','IMA','IMS')", $oDB);
-        mysql_query("insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values " .
+        mysql_query(
+            "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values " .
             "('serial1', '{$sShopId}', 'aSerials', 'arr', ENCODE('" . serialize(array($sSerial)) . "','{$_key}') )," .
             "('serial2', '{$sShopId}', 'sTagList', 'str', ENCODE('" . time() . "','{$_key}') )," .
             "('serial3', '{$sShopId}', 'IMD',      'str', ENCODE('" . $oSerial->getMaxDays($sSerial) . "','{$_key}') )," .
             "('serial4', '{$sShopId}', 'IMA',      'str', ENCODE('" . $oSerial->getMaxArticles($sSerial) . "','{$_key}') )," .
-            "('serial5', '{$sShopId}', 'IMS',      'str', ENCODE('" . $oSerial->getMaxShops($sSerial) . "','{$_key}') )", $oDB);
+            "('serial5', '{$sShopId}', 'IMS',      'str', ENCODE('" . $oSerial->getMaxShops($sSerial) . "','{$_key}') )", $oDB
+        );
     }
 
     if ($_cfg->iUtfMode) {
@@ -213,9 +210,7 @@ echo "<ol>";
             mysql_query("update oxconfig set oxvarvalue = ENCODE( '{$_val}','{$_key}') where oxvarname = '{$_vnm}';", $oDB);
         }
     }
-
 }
-
 
 function to_utf8($in)
 {
@@ -228,14 +223,13 @@ function to_utf8($in)
     } else {
         return $in;
     }
+
     return $out;
 }
-
 
 echo "</ol>";
 
 header("Location: " . $_cfg->sShopURL);
-
 
 ob_end_flush();
 

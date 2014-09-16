@@ -369,10 +369,12 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $oConfig = new oePayPalConfig();
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', $bSandBoxEnabled);
 
-        if (!empty($sSandBoxApiUrl))
+        if (!empty($sSandBoxApiUrl)) {
             $oConfig->setPayPalSandboxUrl($sSandBoxApiUrl);
-        if (!empty($sApiUrl))
+        }
+        if (!empty($sApiUrl)) {
             $oConfig->setPayPalUrl($sApiUrl);
+        }
 
         $this->assertEquals($sResult, $oConfig->getPayPalCommunicationUrl($sToken, $sUserAction));
     }
@@ -469,6 +471,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function providerGetShopLogoUrl()
     {
         $sShopImageLocation = $this->getConfig()->getImageUrl();
+
         return array(
             array("noLogo", "logo.png", "", false),
             array("shopLogo", "logo.png", "logo_ee.png", $sShopImageLocation . "resized_logo.png"),
@@ -619,6 +622,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
 
     /**
      * Test blOEPayPalECheckoutInDetails config
+     *
      * @dataProvider providerIsExpressCheckoutInDetailsPage
      */
     public function testIsExpressCheckoutInDetailsPage($blOEPayPalECheckoutInDetails)
@@ -703,10 +707,14 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $oConfig = $this->getConfig();
         if ($oConfig->getEdition() == 'EE') {
             $sResult = 'OXID_Cart_EnterpriseECS';
-        } else if ($oConfig->getEdition() == 'PE') {
-            $sResult = 'OXID_Cart_ProfessionalECS';
-        } else if ($oConfig->getEdition() == 'CE') {
-            $sResult = 'OXID_Cart_CommunityECS';
+        } else {
+            if ($oConfig->getEdition() == 'PE') {
+                $sResult = 'OXID_Cart_ProfessionalECS';
+            } else {
+                if ($oConfig->getEdition() == 'CE') {
+                    $sResult = 'OXID_Cart_CommunityECS';
+                }
+            }
         }
         $oPayPalConfig = new oePayPalConfig();
         $this->assertEquals($sResult, $oPayPalConfig->getPartnerCode());

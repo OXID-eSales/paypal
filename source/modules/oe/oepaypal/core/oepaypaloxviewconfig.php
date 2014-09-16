@@ -82,6 +82,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
         if (is_null($this->_oPaymentValidator)) {
             $this->setPaymentValidator(oxNew('oePayPalPaymentValidator'));
         }
+
         return $this->_oPaymentValidator;
     }
 
@@ -104,8 +105,8 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
 
                 $this->_blExpressCheckoutEnabled = $oValidator->isPaymentValid();
             }
-
         }
+
         return $this->_blExpressCheckoutEnabled;
     }
 
@@ -159,6 +160,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
                 $this->_blStandardCheckoutEnabled = $oValidator->isPaymentValid();
             }
         }
+
         return $this->_blStandardCheckoutEnabled;
     }
 
@@ -184,6 +186,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
         if (($oPayPalPayment = $this->getPayPalPayment())) {
             $sDesc = $oPayPalPayment->oxpayments__oxlongdesc->getRawValue();
         }
+
         return $sDesc;
     }
 

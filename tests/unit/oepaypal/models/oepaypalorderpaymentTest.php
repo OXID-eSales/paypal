@@ -101,7 +101,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends OxidTestCase
         $oOrderPayment->setTransactionId('transactionId');
         $oOrderPayment->save();
 
-
         $oOrderPayment = new oePayPalOrderPayment();
         $oOrderPayment->loadByTransactionId('transactionId');
 

@@ -34,7 +34,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
         $sFilter = getenv("PREG_FILTER");
 
         $aTestGroups = array(
-            'unit/oepaypal' => array('', 'components', 'core', 'models', 'models/actions', 'models/responses', 'models/paypalrequest', 'controllers', 'controllers/admin'),
+            'unit/oepaypal'        => array('', 'components', 'core', 'models', 'models/actions', 'models/responses', 'models/paypalrequest', 'controllers', 'controllers/admin'),
             'integration/oepaypal' => array('', 'checkoutrequest')
         );
         if (getenv('TEST_DIRS')) {

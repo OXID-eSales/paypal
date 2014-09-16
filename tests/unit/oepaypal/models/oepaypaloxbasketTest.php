@@ -49,7 +49,6 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
             array($oProduct1, $oProduct2, false),
             array($oProduct1, $oProduct1, true),
         );
-
     }
 
     /**
@@ -69,6 +68,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test data provider
+     *
      * @return array
      */
     public function getPayPalAdditionalCostsDataProvider()
@@ -184,7 +184,6 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
             array($oBasketDiscount1, array($VoucherDiscount1, $VoucherDiscount2), $dPaymentCost1, 16),
             array($oBasketDiscount2, array($VoucherDiscount1, $VoucherDiscount2), $dPaymentCost2, 25),
         );
-
     }
 
     /**
@@ -259,6 +258,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxBasket::getPayPalBasketVatValue()
+     *
      * @dataProvider getPayPalBasketVatValueDataProvider
      */
     public function testGetPayPalBasketVatValue($aProductsVat, $flWrappingVat, $flGiftCardVat, $flPayCostVat, $flTsProtectionVat, $flBasketVat)
@@ -276,6 +276,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test data provider
+     *
      * @return array
      */
     public function getPayPalProductVatDataProvider()
@@ -290,6 +291,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxBasket::testGetPayPalProductVat()
+     *
      * @dataProvider getPayPalProductVatDataProvider
      */
     public function testGetPayPalProductVat($aProductsVat, $flBasketVat)
@@ -302,6 +304,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test data provider
+     *
      * @return array
      */
     public function getPayPalAdditionalCostsVatDataProvider()
@@ -314,6 +317,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxBasket::GetPayPalWrappingVat()
+     *
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
     public function testGetPayPalWrappingVat($dCostVat, $dCostVatExpected)
@@ -329,6 +333,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxBasket::GetPayPalGiftCardVat()
+     *
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
     public function testGetPayPalGiftCardVat($dCostVat, $dCostVatExpected)
@@ -344,6 +349,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxBasket::GetPayPalPayCostVat()
+     *
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
     public function testGetPayPalPayCostVat($dCostVat, $dCostVatExpected)
@@ -359,6 +365,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxBasket::getPayPalTsProtectionCostVat()
+     *
      * @dataProvider getPayPalAdditionalCostsVatDataProvider
      */
     public function testGetPayPalTsProtectionCostVat($dCostVat, $dCostVatExpected)

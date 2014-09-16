@@ -27,12 +27,14 @@ class oePayPalCheckValidator
 {
     /**
      * Basket new amount
+     *
      * @var double
      */
     protected $_dNewBasketAmount = null;
 
     /**
      * Basket old amount
+     *
      * @var double
      */
     protected $_dOldBasketAmount = null;
@@ -71,7 +73,7 @@ class oePayPalCheckValidator
      */
     public function getNewBasketAmount()
     {
-        return (float)$this->_dNewBasketAmount;
+        return (float) $this->_dNewBasketAmount;
     }
 
     /**
@@ -91,6 +93,6 @@ class oePayPalCheckValidator
      */
     public function getOldBasketAmount()
     {
-        return (float)$this->_dOldBasketAmount;
+        return (float) $this->_dOldBasketAmount;
     }
 }

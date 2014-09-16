@@ -41,5 +41,4 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderActionTest extends OxidTestCase
         $this->assertSame($oOrder, $oAction->getOrder());
         $this->assertSame($oHandler, $oAction->getHandler());
     }
-
 }

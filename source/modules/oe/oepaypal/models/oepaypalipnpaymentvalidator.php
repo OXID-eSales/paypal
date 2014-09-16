@@ -26,18 +26,21 @@ class oePayPalIPNPaymentValidator
 {
     /**
      * Language object to get translations from.
+     *
      * @var object
      */
     protected $_oLang = null;
 
     /**
      * Payment created from PayPal request.
+     *
      * @var oePayPalOrderPayment
      */
     protected $_oRequestPayment = null;
 
     /**
      * Payment created by PayPal request id.
+     *
      * @var oePayPalOrderPayment
      */
     protected $_oOrderPayment = null;

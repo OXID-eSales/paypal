@@ -96,8 +96,9 @@ class modOxUtilsDate extends oxUtilsDate
 
     public function getTime()
     {
-        if (!is_null($this->_sTime))
+        if (!is_null($this->_sTime)) {
             return $this->_sTime;
+        }
 
         return parent::getTime();
     }

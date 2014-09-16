@@ -57,7 +57,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalPayPalRequestTest extends OxidT
     {
         $aData = array(
             'AUTHORIZATIONID' => 'AuthorizationId',
-            'TRANSACTIONID' => 'TransactionId',
+            'TRANSACTIONID'   => 'TransactionId',
         );
         $sNewId = 'NewAuthorizationId';
 

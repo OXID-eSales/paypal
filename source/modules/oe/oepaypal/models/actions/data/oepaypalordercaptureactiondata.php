@@ -43,6 +43,7 @@ class oePayPalOrderCaptureActionData extends oePayPalOrderActionData
     public function getAmount()
     {
         $dAmount = $this->getRequest()->getRequestParameter('capture_amount');
+
         return $dAmount ? $dAmount : $this->getOrder()->getPayPalOrder()->getRemainingOrderSum();
     }
 

@@ -73,7 +73,6 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
 
             $oPayPalService = $this->getPayPalCheckoutService();
             $oResult = $oPayPalService->setExpressCheckout($oRequest);
-
         } catch (oxException $oExcp) {
             // error - unable to set order info - display error message
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
@@ -110,8 +109,10 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
             $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
             $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
+
             return $sTransactionMode;
         }
+
         return $sTransactionMode;
     }
 

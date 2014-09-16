@@ -43,7 +43,6 @@ class Unit_oePayPal_models_oePayPalOxArticleTest extends OxidTestCase
             array(false, true, false),
             array(true, true, true),
         );
-
     }
 
     /**

@@ -70,7 +70,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
         foreach ($oOrderPaymentList as $oOrderPayment) {
             $this->assertEquals($i++, $oOrderPayment->getPaymentId());
         }
-
     }
 
     /**
@@ -85,7 +84,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
 
         $oOrderPaymentList->load("order");
         $this->assertFalse($oOrderPaymentList->hasFailedPayment());
-
 
         $oOrderPayment = new oePayPalOrderPayment();
         $oOrderPayment->setOrderId("order");
@@ -116,7 +114,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
 
         $oOrderPaymentList->load("order");
         $this->assertFalse($oOrderPaymentList->hasPendingPayment());
-
 
         $oOrderPayment = new oePayPalOrderPayment();
         $oOrderPayment->setOrderId("order");
@@ -167,7 +164,5 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
         $oOrderPaymentList->load("order");
 
         $this->assertEquals(2, count($oOrderPaymentList));
-
     }
-
 }

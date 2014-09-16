@@ -86,5 +86,4 @@ class Unit_oePayPal_models_oePayPalOrderActionManagerTest extends OxidTestCase
 
         $this->assertEquals($dIsValid, $oActionManager->isActionAvailable($sAction));
     }
-
 }

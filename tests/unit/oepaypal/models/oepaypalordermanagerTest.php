@@ -135,7 +135,9 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
 
     /**
      * Create order with status different than order status calculator returns.
+     *
      * @param string $sOrderId order id.
+     *
      * @return oePayPalPayPalOrder
      */
     protected function _prepareOrder($sOrderId)
@@ -143,12 +145,15 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oOrder = new oePayPalPayPalOrder();
         $oOrder->setPaymentStatus('pending');
         $oOrder->setOrderId($sOrderId);
+
         return $oOrder;
     }
 
     /**
      * Create order payment with some transaction id and same order id as order in _prepareOrder().
+     *
      * @param string $sOrderId order id.
+     *
      * @return oePayPalOrderPayment
      */
     protected function _prepareOrderPayment($sOrderId)
@@ -156,6 +161,7 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oOrderPayment = new oePayPalOrderPayment();
         $oOrderPayment->setTransactionId('_asdadsd45a4sd5a4sd54a5');
         $oOrderPayment->setOrderId($sOrderId);
+
         return $oOrderPayment;
     }
 
@@ -165,8 +171,8 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
      * Mock return calculated state. Order state should change according to this one.
      *
      * @param oePayPalOrderPayment $oOrderPayment
-     * @param oePayPalOrder $oOrder
-     * @param string $OrderCalculatedStatus
+     * @param oePayPalOrder        $oOrder
+     * @param string               $OrderCalculatedStatus
      *
      * @return oePayPalOrderPaymentStatusCalculator_Mock
      */
@@ -176,6 +182,7 @@ class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
         $oPayPalOrderPaymentStatusCalculator->expects($this->any())->method('setOrderPayment')->with($oOrderPayment);
         $oPayPalOrderPaymentStatusCalculator->expects($this->once())->method('setOrder')->with($oOrder);
         $oPayPalOrderPaymentStatusCalculator->expects($this->any())->method('getStatus')->will($this->returnValue($OrderCalculatedStatus));
+
         return $oPayPalOrderPaymentStatusCalculator;
     }
 }

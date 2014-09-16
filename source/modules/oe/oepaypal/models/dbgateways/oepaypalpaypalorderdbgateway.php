@@ -66,6 +66,7 @@ class oePayPalPayPalOrderDbGateway extends oePayPalModelDbGateway
     {
         $oDb = $this->_getDb();
         $aData = $oDb->getRow('SELECT * FROM `oepaypal_order` WHERE `oepaypal_orderid` = ' . $oDb->quote($sOrderId));
+
         return $aData;
     }
 

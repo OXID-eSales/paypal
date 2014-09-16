@@ -37,11 +37,13 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
         $sCurrency = 'LTU';
         $dAmount = 59.67;
 
-        $oData = $this->_createStub('Data', array(
-            'getAuthorizationId' => $sAuthId,
-            'getAmount' => $dAmount,
-            'getCurrency' => $sCurrency,
-        ));
+        $oData = $this->_createStub(
+            'Data', array(
+                'getAuthorizationId' => $sAuthId,
+                'getAmount'          => $dAmount,
+                'getCurrency'        => $sCurrency,
+            )
+        );
         $oActionHandler = $this->_getActionHandler($oData);
 
         $oBuilder = $this->getMock('oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType'));
@@ -82,6 +84,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * Returns reauthorize action object
      *
      * @param $oData
+     *
      * @return oePayPalOrderReauthorizeAction
      */
     protected function _getActionHandler($oData = null)

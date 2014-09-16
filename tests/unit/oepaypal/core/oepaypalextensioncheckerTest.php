@@ -74,11 +74,11 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
     {
         $aExtendedClasses = array(
             'order_list' => 'oe/oepaypal/controllers/admin/oepaypalorder_list',
-            'order' => 'oe/oepaypal/controllers/oepaypalorder'
+            'order'      => 'oe/oepaypal/controllers/oepaypalorder'
         );
         $aExtendedClassesWith = array(
             'order_list' => 'oe/testExtension/controllers/admin/oepaypalorder_list',
-            'order' => 'oe/testExtension/controllers/oepaypalorder'
+            'order'      => 'oe/testExtension/controllers/oepaypalorder'
         );
 
         $aDisabledModules = array(

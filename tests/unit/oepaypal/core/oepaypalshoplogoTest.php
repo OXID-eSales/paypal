@@ -102,6 +102,7 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
 
     /**
      * Data provider for testGetShopLogoUrl
+     *
      * @return array
      */
     public function getShopLogoUrlProvider()

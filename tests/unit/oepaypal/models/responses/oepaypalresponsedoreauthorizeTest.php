@@ -36,8 +36,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoReAuthorizeTest extends O
     {
         $aData = array(
             'AUTHORIZATIONID' => 'authorizationId',
-            'CORRELATIONID' => 'correlationId',
-            'PAYMENTSTATUS' => 'completed'
+            'CORRELATIONID'   => 'correlationId',
+            'PAYMENTSTATUS'   => 'completed'
         );
 
         return $aData;

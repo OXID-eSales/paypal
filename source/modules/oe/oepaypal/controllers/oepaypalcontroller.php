@@ -49,6 +49,7 @@ class oePayPalController extends oxUBase
         if (is_null($this->_oRequest)) {
             $this->_oRequest = oxNew('oePayPalRequest');
         }
+
         return $this->_oRequest;
     }
 
@@ -63,6 +64,7 @@ class oePayPalController extends oxUBase
             $this->_oLogger = oxNew('oePayPalLogger');
             $this->_oLogger->setLoggerSessionId($this->getSession()->getId());
         }
+
         return $this->_oLogger;
     }
 
@@ -76,6 +78,7 @@ class oePayPalController extends oxUBase
         if (is_null($this->_oPayPalConfig)) {
             $this->setPayPalConfig(oxNew('oePayPalConfig'));
         }
+
         return $this->_oPayPalConfig;
     }
 

@@ -19,8 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-$sLangName  = 'Deutsch';
-
+$sLangName = 'Deutsch';
 
 // -------------------------------
 // RESOURCE IDENTIFIER = STRING

@@ -46,13 +46,15 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderCaptureActionHandlerTes
         $oBuilder->expects($this->once())->method('setCompleteType')->with($this->equalTo($sType));
         $oBuilder->expects($this->once())->method('setComment')->with($this->equalTo($sComment));
 
-        $oData = $this->_createStub('Data', array(
-            'getAuthorizationId' => $sAuthId,
-            'getAmount' => $dAmount,
-            'getType' => $sType,
-            'getComment' => $sComment,
-            'getCurrency' => $sCurrency,
-        ));
+        $oData = $this->_createStub(
+            'Data', array(
+                'getAuthorizationId' => $sAuthId,
+                'getAmount'          => $dAmount,
+                'getType'            => $sType,
+                'getComment'         => $sComment,
+                'getCurrency'        => $sCurrency,
+            )
+        );
 
         $oActionHandler = $this->_getActionHandler($oData);
         $oActionHandler->setPayPalRequestBuilder($oBuilder);
@@ -90,6 +92,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderCaptureActionHandlerTes
      * Returns capture action object
      *
      * @param $oData
+     *
      * @return oePayPalOrderCaptureActionHandler
      */
     protected function _getActionHandler($oData = null)

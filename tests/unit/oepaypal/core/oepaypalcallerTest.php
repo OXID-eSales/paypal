@@ -260,10 +260,10 @@ class Unit_oePayPal_core_oePayPalCallerTest extends OxidTestCase
     /**
      * Prepare oePayPalCurl stub
      *
-     * @param array $aResponse response
-     * @param array $aParamsCurl params
-     * @param string $sUrl url
-     * @param string $sCharset charset
+     * @param array  $aResponse   response
+     * @param array  $aParamsCurl params
+     * @param string $sUrl        url
+     * @param string $sCharset    charset
      *
      * @return oePayPalCurl
      */

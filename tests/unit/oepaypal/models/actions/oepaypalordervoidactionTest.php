@@ -61,7 +61,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
 
         $aPayPalResponseMethods = array(
             'getAuthorizationId' => $sAuthentificationId,
-            'getCorrelationId' => $sCorrelationId
+            'getCorrelationId'   => $sCorrelationId
         );
         $oPayPalResponse = $this->_createStub('oePayPalResponseDoVoid', $aPayPalResponseMethods);
 
@@ -125,6 +125,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
     protected function _getPayment()
     {
         $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
+
         return $oPayment;
     }
 
@@ -132,6 +133,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * Returns payment list
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalOrderPaymentList
      */
     protected function _getPaymentList($aTestMethods = array())
@@ -146,12 +148,14 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * Returns order
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalPayPalOrder
      */
     protected function _getOrder($aTestMethods = array())
     {
         $aMethods = array('getPaymentList' => $this->_getPaymentList());
         $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
+
         return $oOrder;
     }
 
@@ -159,6 +163,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * Retruns basic PayPal response object
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalResponseDoCapture
      */
     protected function _getPayPalResponse($aTestMethods = array())
@@ -167,6 +172,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
         $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
         $oOrder = $this->getMock('oePayPalResponseDoVoid', $aMockedMethods);
+
         return $oOrder;
     }
 
@@ -174,11 +180,13 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * Returns capture action data object
      *
      * @param $aMethods
+     *
      * @return oePayPalOrderCaptureActionData
      */
     protected function _getData($aMethods = array())
     {
         $oData = $this->_createStub('oePayPalOrderVoidActionData', $aMethods);
+
         return $oData;
     }
 
@@ -188,6 +196,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      * @param $oPayPalResponse
      * @param $oOrder
      * @param $oData
+     *
      * @return oePayPalOrderCaptureAction
      */
     protected function _getAction($oPayPalResponse, $oOrder, $oData = null)

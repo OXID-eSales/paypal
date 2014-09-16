@@ -36,10 +36,10 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoRefundTest extends OxidTe
     {
         $aData = array(
             'REFUNDTRANSACTIONID' => 'transactionId',
-            'CORRELATIONID' => 'correlationId',
-            'REFUNDSTATUS' => 'completed',
-            'GROSSREFUNDAMT' => 12.45,
-            'CURRENCYCODE' => 'LTL'
+            'CORRELATIONID'       => 'correlationId',
+            'REFUNDSTATUS'        => 'completed',
+            'GROSSREFUNDAMT'      => 12.45,
+            'CURRENCYCODE'        => 'LTL'
         );
 
         return $aData;

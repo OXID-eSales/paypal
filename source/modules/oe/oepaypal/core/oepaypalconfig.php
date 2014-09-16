@@ -26,48 +26,56 @@ class oePayPalConfig
 {
     /**
      * PayPal module id.
+     *
      * @var string
      */
     protected $_sPayPalId = 'oepaypal';
 
     /**
      * PayPal host.
+     *
      * @var string
      */
     protected $_sPayPalHost = 'api-3t.paypal.com';
 
     /**
      * PayPal sandbox host.
+     *
      * @var string
      */
     protected $_sPayPalSandboxHost = 'api-3t.sandbox.paypal.com';
 
     /**
      * PayPal sandbox Url where user must be redirected after his session gets PayPal token.
+     *
      * @var string
      */
     protected $_sPayPalSandboxUrl = 'https://www.sandbox.paypal.com/webscr';
 
     /**
      * PayPal Url where user must be redirected after his session gets PayPal token.
+     *
      * @var string
      */
     protected $_sPayPalUrl = 'https://www.paypal.com/webscr';
 
     /**
      * PayPal sandbox API url.
+     *
      * @var string
      */
     protected $_sPayPalSandboxApiUrl = 'https://api-3t.sandbox.paypal.com/nvp';
 
     /**
      * PayPal API url.
+     *
      * @var string
      */
     protected $_sPayPalApiUrl = 'https://api-3t.paypal.com/nvp';
 
     /**
      * Maximum possible delivery costs value.
+     *
      * @var double
      */
     protected $_dMaxDeliveryAmount = 30;
@@ -76,6 +84,7 @@ class oePayPalConfig
      * Please do not change this place.
      * It is important to guarantee the future development of this OXID eShop extension and to keep it free of charge.
      * Thanks!
+     *
      * @var array Partner codes based on edition
      */
     protected $_aPartnerCodes = array(
@@ -115,6 +124,7 @@ class oePayPalConfig
         if ($sHost) {
             $this->setPayPalHost($sHost);
         }
+
         return $this->_sPayPalHost;
     }
 
@@ -139,6 +149,7 @@ class oePayPalConfig
         if ($sHost) {
             $this->setPayPalSandboxHost($sHost);
         }
+
         return $this->_sPayPalSandboxHost;
     }
 
@@ -179,6 +190,7 @@ class oePayPalConfig
         if ($sUrl) {
             $this->setPayPalApiUrl($sUrl);
         }
+
         return $this->_sPayPalApiUrl;
     }
 
@@ -203,6 +215,7 @@ class oePayPalConfig
         if ($sUrl) {
             $this->setPayPalSandboxApiUrl($sUrl);
         }
+
         return $this->_sPayPalSandboxApiUrl;
     }
 
@@ -268,6 +281,7 @@ class oePayPalConfig
         if ($sUrl) {
             $this->setPayPalSandboxUrl($sUrl);
         }
+
         return $this->_sPayPalSandboxUrl;
     }
 
@@ -374,6 +388,7 @@ class oePayPalConfig
     public function finalizeOrderOnPayPalSide()
     {
         $blFinalize = $this->getParameter('blOEPayPalFinalizeOrderOnPayPal');
+
         return $blFinalize !== null ? $blFinalize : false;
     }
 
@@ -522,7 +537,7 @@ class oePayPalConfig
      */
     public function getPayPalCommunicationUrl($sToken = null, $sUserAction = 'continue')
     {
-        return $this->getUrl() . '&cmd=_express-checkout&token=' . (string)$sToken . '&useraction=' . (string)$sUserAction;
+        return $this->getUrl() . '&cmd=_express-checkout&token=' . (string) $sToken . '&useraction=' . (string) $sUserAction;
     }
 
 
@@ -615,6 +630,7 @@ class oePayPalConfig
         if (!$this->isUtf()) {
             $sCharset = $this->getLang()->translateString('charset');
         }
+
         return $sCharset;
     }
 
@@ -683,6 +699,7 @@ class oePayPalConfig
     public function isDeviceMobile()
     {
         $oUserAgent = oxNew('oePayPalUserAgent');
+
         return ($oUserAgent->getDeviceType() == 'mobile');
     }
 
@@ -714,8 +731,10 @@ class oePayPalConfig
             case 'noLogo':
             default:
                 $sLogo = '';
+
                 return $sLogo;
         }
+
         return $sLogo;
     }
 

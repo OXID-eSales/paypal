@@ -54,7 +54,6 @@ class oePayPalList implements Iterator, Countable
      * -----------------------------------------------------------------------------------------------------
      */
 
-
     /**
      * Returns SPL array keys.
      *
@@ -107,6 +106,7 @@ class oePayPalList implements Iterator, Countable
             $oVar = reset($this->_aArray);
         }
         $this->_blRemovedActive = false;
+
         return $oVar;
     }
 

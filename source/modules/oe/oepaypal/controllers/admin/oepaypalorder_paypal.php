@@ -63,7 +63,6 @@ class oePayPalOrder_PayPal extends oxAdminDetails
             $oAction = $oActionFactory->createAction($sAction);
 
             $oAction->process();
-
         } catch (oxException $oException) {
             $this->_aViewData["error"] = $oException->getMessage();
         }
@@ -133,6 +132,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
             $this->_oEditObject = oxNew('oxOrder');
             $this->_oEditObject->load($soxId);
         }
+
         return $this->_oEditObject;
     }
 
@@ -182,5 +182,4 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     {
         return oxRegistry::getLang()->formatCurrency($dPrice);
     }
-
 }

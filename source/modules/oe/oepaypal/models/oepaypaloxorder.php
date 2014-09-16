@@ -76,6 +76,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     {
         if ($this->loadPayPalOrder()) {
             $this->getPayPalOrder()->delete();
+
             return $this->delete();
         }
     }
@@ -211,6 +212,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
             $oOrder->load($sOrderId);
             $this->_oPayPalOrder = $oOrder;
         }
+
         return $this->_oPayPalOrder;
     }
 

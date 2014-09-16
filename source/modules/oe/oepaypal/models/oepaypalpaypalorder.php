@@ -202,6 +202,7 @@ class oePayPalPayPalOrder extends oePayPalModel
         if (empty($sState)) {
             $sState = "completed";
         }
+
         return $sState;
     }
 

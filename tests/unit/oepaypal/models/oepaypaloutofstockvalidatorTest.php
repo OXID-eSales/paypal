@@ -46,6 +46,7 @@ class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
 
     /**
      * @param $oBasket
+     *
      * @dataProvider providerSetGetBasket
      */
     public function testSetGetBasket($oBasket)
@@ -105,6 +106,7 @@ class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
      * @param $sProductId
      * @param $iBasketAmount
      * @param $iStockAmount
+     *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
     protected function _createBasket($sProductId, $iBasketAmount, $iStockAmount)

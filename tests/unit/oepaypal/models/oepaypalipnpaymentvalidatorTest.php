@@ -41,11 +41,11 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentValidatorTest extends OxidTestCase
             array(true, '', 'USD', 125.38, 'USD', 125.38),
             array(true, '', 'EUR', 0.08, 'EUR', 0.08),
             array(false, 'Bezahlinformation: 0.09 USD. PayPal-Information: 0.08 EUR.'
-            , 'EUR', 0.08, 'USD', 0.09),
+                  , 'EUR', 0.08, 'USD', 0.09),
             array(false, 'Bezahlinformation: 0.08 USD. PayPal-Information: 0.08 EUR.'
-            , 'EUR', 0.08, 'USD', 0.08),
+                  , 'EUR', 0.08, 'USD', 0.08),
             array(false, 'Bezahlinformation: 0.09 EUR. PayPal-Information: 0.08 EUR.'
-            , 'EUR', 0.08, 'EUR', 0.09),
+                  , 'EUR', 0.08, 'EUR', 0.09),
         );
     }
 

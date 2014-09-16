@@ -140,6 +140,7 @@ class oePayPalOxAddress extends oePayPalOxAddress_parent
         if ($sAddressId = $oDb->getOne($sQ)) {
             return $sAddressId;
         }
+
         return false;
     }
 

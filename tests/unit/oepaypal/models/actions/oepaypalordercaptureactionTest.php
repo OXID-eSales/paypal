@@ -60,11 +60,11 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
         $sDate = 'date';
 
         $aPayPalResponseMethods = array(
-            'getTransactionId' => $sTransactionId,
-            'getCorrelationId' => $sCorrelationId,
-            'getPaymentStatus' => $sStatus,
+            'getTransactionId'  => $sTransactionId,
+            'getCorrelationId'  => $sCorrelationId,
+            'getPaymentStatus'  => $sStatus,
             'getCapturedAmount' => $dAmount,
-            'getCurrency' => $sCurrency,
+            'getCurrency'       => $sCurrency,
         );
         $oPayPalResponse = $this->_createStub('oePayPalResponseDoCapture', $aPayPalResponseMethods);
 
@@ -208,6 +208,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
     protected function _getPayment()
     {
         $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
+
         return $oPayment;
     }
 
@@ -215,6 +216,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
      * Returns payment list
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalOrderPaymentList
      */
     protected function _getPaymentList($aTestMethods = array())
@@ -229,12 +231,14 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
      * Returns order
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalPayPalOrder
      */
     protected function _getOrder($aTestMethods = array())
     {
         $aMethods = array('getPaymentList' => $this->_getPaymentList(), 'save' => true);
         $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
+
         return $oOrder;
     }
 
@@ -242,6 +246,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
      * Retruns basic PayPal response object
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalResponseDoCapture
      */
     protected function _getPayPalResponse($aTestMethods = array())
@@ -250,6 +255,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
         $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
         $oOrder = $this->getMock('oePayPalResponseDoCapture', $aMockedMethods);
+
         return $oOrder;
     }
 
@@ -257,11 +263,13 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
      * Returns capture action data object
      *
      * @param $aMethods
+     *
      * @return oePayPalOrderCaptureActionData
      */
     protected function _getData($aMethods = array())
     {
         $oData = $this->_createStub('oePayPalOrderCaptureActionData', $aMethods);
+
         return $oData;
     }
 
@@ -272,6 +280,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
      * @param $oOrder
      * @param $oData
      * @param $oReauthorizeHandler
+     *
      * @return oePayPalOrderCaptureAction
      */
     protected function _getAction($oPayPalResponse, $oOrder, $oData = null, $oReauthorizeHandler = null)

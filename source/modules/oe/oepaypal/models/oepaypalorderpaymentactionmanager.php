@@ -76,6 +76,7 @@ class oePayPalOrderPaymentActionManager
     protected function _getAvailableActions($sPaymentAction, $sPaymentStatus)
     {
         $aActions = $this->_availableActions[$sPaymentAction][$sPaymentStatus];
+
         return $aActions ? $aActions : array();
     }
 

@@ -26,18 +26,21 @@ abstract class oePayPalDispatcher extends oePayPalController
 {
     /**
      * Service type identifier - Standard Checkout = 1
+     *
      * @var int
      */
     protected $_iServiceType = 1;
 
     /**
      * PayPal checkout service
+     *
      * @var oePayPalCheckoutService
      */
     protected $_oPayPalCheckoutService;
 
     /**
      * Default user action for checkout process
+     *
      * @var string
      */
     protected $_sUserAction = "continue";
@@ -71,6 +74,7 @@ abstract class oePayPalDispatcher extends oePayPalController
         if ($this->_oPayPalCheckoutService === null) {
             $this->_oPayPalCheckoutService = oxNew("oePayPalService");
         }
+
         return $this->_oPayPalCheckoutService;
     }
 
@@ -143,6 +147,7 @@ abstract class oePayPalDispatcher extends oePayPalController
         if (($oOrder = $this->_getPayPalOrder())) {
             $oUserPayment = oxNew('oxUserPayment');
             $oUserPayment->load($oOrder->oxorder__oxpaymentid->value);
+
             return $oUserPayment;
         }
     }

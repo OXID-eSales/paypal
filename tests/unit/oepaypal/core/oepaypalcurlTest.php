@@ -157,14 +157,14 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
         $oCurl->setEnvironmentParameter('param', 'value');
 
         $aExpectedParameters = array(
-            'CURLOPT_VERBOSE' => 0,
+            'CURLOPT_VERBOSE'        => 0,
             'CURLOPT_SSL_VERIFYPEER' => false,
             'CURLOPT_SSL_VERIFYHOST' => false,
-            'CURLOPT_SSLVERSION' => 3,
+            'CURLOPT_SSLVERSION'     => 3,
             'CURLOPT_RETURNTRANSFER' => 1,
-            'CURLOPT_POST' => 1,
-            'CURLOPT_HTTP_VERSION' => 2,
-            'param' => 'value'
+            'CURLOPT_POST'           => 1,
+            'CURLOPT_HTTP_VERSION'   => 2,
+            'param'                  => 'value'
         );
 
         $this->assertEquals($aExpectedParameters, $oCurl->getEnvironmentParameters());
@@ -178,13 +178,13 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
         $oCurl = new oePayPalCurl();
 
         $aExpectedParameters = array(
-            'CURLOPT_VERBOSE' => 0,
+            'CURLOPT_VERBOSE'        => 0,
             'CURLOPT_SSL_VERIFYPEER' => false,
             'CURLOPT_SSL_VERIFYHOST' => false,
-            'CURLOPT_SSLVERSION' => 3,
+            'CURLOPT_SSLVERSION'     => 3,
             'CURLOPT_RETURNTRANSFER' => 1,
-            'CURLOPT_POST' => 1,
-            'CURLOPT_HTTP_VERSION' => 2,
+            'CURLOPT_POST'           => 1,
+            'CURLOPT_HTTP_VERSION'   => 2,
         );
 
         $this->assertEquals($aExpectedParameters, $oCurl->getEnvironmentParameters());
@@ -300,12 +300,10 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
             ->will($this->returnValue(array('rParam1' => 'rValue1')));
         $oPayPalCurl->expects($this->once())->method('_close');
 
-
         $oPayPalCurl->setParameters(array('param1' => 'value1', 'param2' => 'values2'));
         $oPayPalCurl->setUrlToCall('http://url');
 
         $this->assertEquals(array('rParam1' => 'rValue1'), $oPayPalCurl->execute());
     }
-
 //    public function testExecute_getParameters
 }

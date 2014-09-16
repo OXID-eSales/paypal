@@ -211,16 +211,16 @@ class oePayPalEvents
         $oDbMetaDataHandler = oxNew('oxDbMetaDataHandler');
 
         $aTableFields = array(
-            'oepaypal_order' => 'OEPAYPAL_TIMESTAMP',
-            'oepaypal_orderpayments' => 'OEPAYPAL_TIMESTAMP',
+            'oepaypal_order'                => 'OEPAYPAL_TIMESTAMP',
+            'oepaypal_orderpayments'        => 'OEPAYPAL_TIMESTAMP',
             'oepaypal_orderpaymentcomments' => 'OEPAYPAL_TIMESTAMP',
         );
 
         foreach ($aTableFields as $sTableName => $sFieldName) {
             if (!$oDbMetaDataHandler->fieldExists($sFieldName, $sTableName)) {
                 oxDb::getDb()->execute(
-                    "ALTER TABLE `". $sTableName
-                    ."` ADD `". $sFieldName ."` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;"
+                    "ALTER TABLE `" . $sTableName
+                    . "` ADD `" . $sFieldName . "` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;"
                 );
             }
         }

@@ -87,12 +87,10 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentListTest extends OxidTestC
         $oComment->setPaymentId('payment');
         $oComment->save();
 
-
         $oList = new oePayPalOrderPaymentCommentList();
         $oList->load('payment');
 
         $this->assertEquals(1, count($oList));
-
 
         $oComment = new oePayPalOrderPaymentComment();
         $oComment->setComment('Comment');
@@ -102,7 +100,5 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentListTest extends OxidTestC
         $oList->load('payment');
 
         $this->assertEquals(2, count($oList));
-
     }
-
 }

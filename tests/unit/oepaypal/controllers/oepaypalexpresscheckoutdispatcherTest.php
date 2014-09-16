@@ -28,7 +28,6 @@ if (!class_exists('oePayPalOxUser_parent')) {
     }
 }
 
-
 if (!class_exists('oePayPalOxAddress_parent')) {
     class oePayPalOxAddress_parent extends oxAddress
     {
@@ -48,7 +47,7 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
     {
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
-            "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
+                     "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
         oxDb::getDb()->execute($sSqlState);
     }
 
@@ -97,7 +96,6 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
 
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aDetails);
-
 
         // preparing useer
         $oUser = $this->getMock("oxUser", array("getId"));
@@ -447,7 +445,6 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
         $aUserDetails["EMAIL"] = "testUserEmail";
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aUserDetails);
-
 
         $oUser = $this->getMock("oxUser", array("isRealPayPalUser", "createPayPalUser"));
         $oUser->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testUserEmail"))->will($this->returnValue(false));

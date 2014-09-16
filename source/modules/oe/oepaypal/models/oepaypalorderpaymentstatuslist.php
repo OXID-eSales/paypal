@@ -42,11 +42,11 @@ class oePayPalOrderPaymentStatusList extends oePayPalList
      * @var array
      */
     protected $_aAvailableStatuses = array(
-        'capture' => array('completed'),
+        'capture'         => array('completed'),
         'capture_partial' => array('completed', 'pending'),
-        'refund' => array('completed', 'pending', 'canceled'),
-        'refund_partial' => array('completed', 'pending', 'canceled'),
-        'void' => array('completed', 'pending', 'canceled'),
+        'refund'          => array('completed', 'pending', 'canceled'),
+        'refund_partial'  => array('completed', 'pending', 'canceled'),
+        'void'            => array('completed', 'pending', 'canceled'),
     );
 
     /**

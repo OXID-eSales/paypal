@@ -41,6 +41,7 @@ class oePayPalOrderReauthorizeActionHandler extends oePayPalOrderActionHandler
     {
         $oService = $this->getPayPalService();
         $oRequest = $this->getPayPalRequest();
+
         return $oService->doReAuthorization($oRequest);
     }
 

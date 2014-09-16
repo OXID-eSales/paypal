@@ -19,7 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2013
  */
 
-
 require_once 'acceptance/oepaypal/oxidAdditionalSeleniumFunctions.php';
 
 class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
@@ -39,7 +38,6 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         if (OXID_VERSION_PE_CE) :
             $this->_sVersion = "CE";
         endif;
-
     }
 
     /**
@@ -58,6 +56,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
      * Returns PayPal login data by variable name
      *
      * @param $sVarName
+     *
      * @return mixed|null|string
      * @throws Exception
      */
@@ -77,7 +76,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
     /**
      * Call script file
      *
-     * @param $sShopUrl
+     * @param        $sShopUrl
      * @param string $sParams
      */
     public function callUrl($sShopUrl, $sParams = "")
@@ -100,6 +99,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
      *
      * @param $sCopyDir
      * @param $sShopDir
+     *
      * @throws Exception
      */
     public function copyFile($sCopyDir, $sShopDir)
@@ -119,6 +119,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test for activating PayPal
+     *
      * @group paypal_standalone
      */
     public function testActivatePayPal()
@@ -161,6 +162,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * testing PayPal payment selection
+     *
      * @group paypal_standalone
      */
     public function testPayPalPayment1()
@@ -270,6 +272,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * testing PayPal ECS in detail page and ECS in mini basket
+     *
      * @group paypal_standalone
      */
     public function testECS()
@@ -345,6 +348,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * testing paypal express button
+     *
      * @group paypal_standalone
      */
     public function testPayPalExpress2()
@@ -415,11 +419,11 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->frame("list");
         $this->openTab("link=Main", "setDelSet");
         $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"));
-
     }
 
     /**
      * testing if express button is not visible when PayPal is not active
+     *
      * @group paypal_standalone
      */
     public function testPayPalExpressWhenPayPalInactive()
@@ -460,6 +464,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * testing when payment method has unassigned country Germany, user is not login to the shop, and purchase as PayPal user from Germany
+     *
      * @group paypal_standalone
      */
     public function testPayPalPaymentForGermany()
@@ -687,12 +692,12 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->openTab("link=Main", "setDelSet");
         $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"), "Shipping method is not displayed in admin");
         $this->assertEquals("COD (Cash on Delivery)", $this->getSelectedLabel("setPayment"), "Payment method is not displayed in admin");
-
     }
 
 
     /**
      * testing different countries with shipping rules assigned to this countries
+     *
      * @group paypal_standalone
      */
     public function testPayPalPaymentForLoginUser()
@@ -937,6 +942,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * testing ability to change country in standard PayPal
+     *
      * @group paypal_standalone
      */
     public function testPayPalStandard()
@@ -967,12 +973,12 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->assertTrue($this->isTextPresent("PayPal"), "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
         $this->assertTrue($this->isTextPresent("Thank you for your order in OXID eShop"), "Order is not finished successful");
-
     }
 
 
     /**
      * test if payment method PayPal is deactivated in shop backend, the PayPal express button should also disappear.
+     *
      * @group paypal_standalone
      */
     public function testPayPalActive()
@@ -1001,6 +1007,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if discounts working correct with PayPal.
+     *
      * @group paypal_standalone
      */
     public function testPayPalDiscountsCategory()
@@ -1100,6 +1107,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if few different discounts working correct with PayPal.
+     *
      * @group paypal_standalone
      */
     public function testPayPalDiscountsFromTill()
@@ -1266,6 +1274,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if vouchers working correct with PayPal
+     *
      * @group paypal_standalone
      */
     public function testPayPalVouchers()
@@ -1369,6 +1378,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if VAT is calculated in PayPal correct with different VAT options set in admins
+     *
      * @group paypal_standalone
      */
     public function testPayPalVAT()
@@ -1509,6 +1519,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if option "Calculate default Shipping costs when User is not logged in yet" is working correct in PayPal
+     *
      * @group paypal_standalone
      */
     public function testPayPalShippingCostNotLoginUser()
@@ -1634,6 +1645,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if PayPal works correct when last product ir purchased.
+     *
      * @group paypal_standalone
      */
     public function testPayPalStockOne()
@@ -1712,6 +1724,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if PayPal works when proportional calculation is used for additional products.
+     *
      * @group paypal_standalone
      */
     public function testPayPalProportional()
@@ -2013,6 +2026,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if PayPal works in Netto mode
+     *
      * @group paypal_standalone
      */
     public function testPayPalExpressNettoMode()
@@ -2088,6 +2102,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if PayPal works in Net mode
+     *
      * @group paypal_standalone
      */
     public function testPayPalStandardNettoMode()
@@ -2196,6 +2211,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
 
     /**
      * test if PayPal is not shown in frontend after configs is set in admin
+     *
      * @group paypal_standalone
      */
     public function testPayPalShortcut()
@@ -2244,7 +2260,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
     /**
      * Login to PayPal sandbox.
      *
-     * @param string $sLoginEmail email to login.
+     * @param string $sLoginEmail    email to login.
      * @param string $sLoginPassword password to login.
      */
     protected function _loginToSandbox($sLoginEmail = null, $sLoginPassword = null)

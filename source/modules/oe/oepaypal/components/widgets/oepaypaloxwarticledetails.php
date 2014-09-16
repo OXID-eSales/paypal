@@ -113,6 +113,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
     protected function _oePayPalGetECSArticle()
     {
         $aProducts = $this->getComponent('oxcmp_basket')->getCurrentArticleInfo();
+
         return $aProducts;
     }
 }

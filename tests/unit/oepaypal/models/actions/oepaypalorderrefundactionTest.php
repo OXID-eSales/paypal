@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -78,8 +78,8 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
             'getTransactionId' => $sTransactionId,
             'getCorrelationId' => $sCorrelationId,
             'getPaymentStatus' => $sStatus,
-            'getRefundAmount' => $dAmount,
-            'getCurrency' => $sCurrency,
+            'getRefundAmount'  => $dAmount,
+            'getCurrency'      => $sCurrency,
         );
         $oPayPalResponse = $this->_createStub('oePayPalResponseDoRefund', $aPayPalResponseMethods);
 
@@ -171,6 +171,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
     protected function _getPayment()
     {
         $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
+
         return $oPayment;
     }
 
@@ -178,6 +179,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      * Returns payment list
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalOrderPaymentList
      */
     protected function _getPaymentList($aTestMethods = array())
@@ -192,12 +194,14 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      * Returns order
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalPayPalOrder
      */
     protected function _getOrder($aTestMethods = array())
     {
         $aMethods = array('getPaymentList' => $this->_getPaymentList());
         $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
+
         return $oOrder;
     }
 
@@ -205,6 +209,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      * Retruns basic PayPal response object
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalResponseDoCapture
      */
     protected function _getPayPalResponse($aTestMethods = array())
@@ -213,6 +218,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
         $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
         $oOrder = $this->getMock('oePayPalResponseDoRefund', $aMockedMethods);
+
         return $oOrder;
     }
 
@@ -220,11 +226,13 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      * Returns capture action data object
      *
      * @param $aMethods
+     *
      * @return oePayPalOrderCaptureActionData
      */
     protected function _getData($aMethods = array())
     {
         $oData = $this->_createStub('oePayPalOrderRefundActionData', $aMethods);
+
         return $oData;
     }
 
@@ -235,6 +243,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      * @param $oPayPalResponse
      * @param $oOrder
      * @param $oData
+     *
      * @return oePayPalOrderCaptureAction
      */
     protected function _getAction($oPayPalResponse, $oOrder, $oData = null)

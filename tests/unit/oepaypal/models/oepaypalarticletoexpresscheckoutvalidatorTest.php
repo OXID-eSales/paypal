@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -43,6 +43,7 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends
      * Tests setBasket and getBasket, sets basket object and checks if it get correct
      *
      * @param $oItem
+     *
      * @dataProvider providerSetGetItemToValidate
      */
     public function testSetGetItemToValidate($oItem)
@@ -67,6 +68,7 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends
      * Tests setBasket and getBasket, sets basket object and checks if it get correct
      *
      * @param $oBasket
+     *
      * @dataProvider providerSetGetBasket
      */
     public function testSetGetBasket($oBasket)
@@ -93,6 +95,7 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends
      * @param $sBasketProductId
      * @param $aBasketSelectionList
      * @param $aBasketPersistentParam
+     *
      * @dataProvider providerIsArticleValid_True
      */
     public function testIsArticleValid_True($sBasketProductId, $aBasketSelectionList, $aBasketPersistentParam)
@@ -131,6 +134,7 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends
 
     /**
      * Checks if item is same in given basket, if so, item is not valid
+     *
      * @dataProvider providerIsArticleValid_False
      */
     public function testIsArticleValid_False($sProductId, $aSelectionList, $aPersistentParam, $iAmount)
@@ -161,6 +165,7 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends
      * @param $sBasketProductId
      * @param $aBasketSelectionList
      * @param $aBasketPersistentParam
+     *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
     protected function _createBasket($sBasketProductId, $aBasketSelectionList, $aBasketPersistentParam)

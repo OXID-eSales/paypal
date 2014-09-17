@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -53,7 +53,6 @@ class oePayPalList implements Iterator, Countable
      *
      * -----------------------------------------------------------------------------------------------------
      */
-
 
     /**
      * Returns SPL array keys.
@@ -107,6 +106,7 @@ class oePayPalList implements Iterator, Countable
             $oVar = reset($this->_aArray);
         }
         $this->_blRemovedActive = false;
+
         return $oVar;
     }
 

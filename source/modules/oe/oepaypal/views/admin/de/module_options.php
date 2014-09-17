@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 // -------------------------------
@@ -52,7 +52,7 @@ $aLang = array(
     'HELP_SHOP_MODULE_sOEPayPalLogoImageOption'          => 'Auf der PayPal-Zahlungsseite kann ein Shop-Logo angezeigt werden. Es ist möglich, das Standard-Shop-Logo zu verwenden, welches in der Konfigurationsdatei des Shops definiert ist, oder ein spezielles Shop-Logo. Das Logo sollte nicht größer als 190px*60px (Breite*Höhe) sein. Größere Bilder werden an diese Breite und Höhe angepasst und deren Dateinamen mit einem Prefix "resized_" versehen. Für jedes verwendete Theme muss die Datei mit dem Logo im Verzeichnis /out/{theme}/img vorhanden sein. Wird das vorgesehene Logo nicht angezeigt, überprüfen Sie bitte, ob der Dateiname korrekt angegeben wurde und die Datei im Verzeichnis existiert. Für das Standard-Shop-Logo überprüfen Sie den Eintrag "sShopLogo" in der Datei config.inc.php. Fügen Sie diesen Eintrag hinzu, wenn dieser nicht vorhanden ist',
 
     'SHOP_MODULE_sOEPayPalCustomShopLogoImage'           => 'Spezielles Shop-Logo für die PayPal-Zahlungsseite',
-    'HELP_SHOP_MODULE_sOEPayPalCustomShopLogoImage'      => 'Auf der PayPal-Zahlungsseite kann ein eigenes Shop-Logo angezeigt werden. Speichern Sie das Logo im Bildverzeichnis des Shops (/out/{theme}/img) und tragen Sie den Dateinamen hier ein. Für jedes verwendete Theme muss die Datei mit dem Logo im jeweiligen Verzeichnis vorhanden sein.' ,
+    'HELP_SHOP_MODULE_sOEPayPalCustomShopLogoImage'      => 'Auf der PayPal-Zahlungsseite kann ein eigenes Shop-Logo angezeigt werden. Speichern Sie das Logo im Bildverzeichnis des Shops (/out/{theme}/img) und tragen Sie den Dateinamen hier ein. Für jedes verwendete Theme muss die Datei mit dem Logo im jeweiligen Verzeichnis vorhanden sein.',
 
     'SHOP_MODULE_sOEPayPalLogoImageOption_noLogo'        => 'Kein Shop-Logo senden',
     'SHOP_MODULE_sOEPayPalLogoImageOption_shopLogo'      => 'Standard-Shop-Logo senden',

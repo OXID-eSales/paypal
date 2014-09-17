@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -123,8 +123,8 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
 
         $aMethods = array(
             'getAuthorizationId' => $sAuthId,
-            'getCorrelationId' => $sCorrelationId,
-            'getPaymentStatus' => $sPaymentStatus,
+            'getCorrelationId'   => $sCorrelationId,
+            'getPaymentStatus'   => $sPaymentStatus,
         );
         $oPayPalResponse = $this->_createStub('oePayPalOrderReauthorizeAction', $aMethods);
 
@@ -134,7 +134,6 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
         $oPayment->setCorrelationId($sCorrelationId);
         $oPayment->setAction('re-authorization');
         $oPayment->setStatus($sPaymentStatus);
-
 
         $oPaymentList = $this->_getPaymentList(array('addPayment'));
         $oPaymentList->expects($this->once())->method('addPayment')
@@ -199,6 +198,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
     protected function _getPayment()
     {
         $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
+
         return $oPayment;
     }
 
@@ -206,6 +206,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * Returns payment list
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalOrderPaymentList
      */
     protected function _getPaymentList($aTestMethods = array())
@@ -220,12 +221,14 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * Returns order
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalPayPalOrder
      */
     protected function _getOrder($aTestMethods = array())
     {
         $aMethods = array('getPaymentList' => $this->_getPaymentList());
         $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
+
         return $oOrder;
     }
 
@@ -233,6 +236,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
      * Retruns basic PayPal response object
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalResponseDoCapture
      */
     protected function _getPayPalResponse($aTestMethods = array())
@@ -241,6 +245,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderReauthorizeActionTest e
         $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
         $oOrder = $this->getMock('oePayPalResponseDoRefund', $aMockedMethods);
+
         return $oOrder;
     }
 

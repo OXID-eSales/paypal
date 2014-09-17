@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -42,7 +42,7 @@ class oePayPalResponseGetExpressCheckoutDetails extends oePayPalResponse
      */
     public function getAmount()
     {
-        return ( float )$this->_getValue('PAYMENTREQUEST_0_AMT');
+        return ( float ) $this->_getValue('PAYMENTREQUEST_0_AMT');
     }
 
     /**

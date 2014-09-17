@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -42,6 +42,7 @@ class oePayPalShopConstruct
 
     /**
      * Sets constructor parameters
+     *
      * @param array $oParams
      */
     public function setParams($oParams)
@@ -61,6 +62,7 @@ class oePayPalShopConstruct
         if (!is_null($sKey)) {
             return $this->_oParams[$sKey];
         }
+
         return $this->_oParams;
     }
 
@@ -238,6 +240,7 @@ class oePayPalShopConstruct
 
     /**
      * Creates articles from array
+     *
      * @param array $aArticles
      *
      * @return array $aResult of id's and basket amounts of created articles
@@ -265,16 +268,18 @@ class oePayPalShopConstruct
                 $this->_createField2Shop($oArticle, $aArticle['field2shop']);
             }
             $aResult[$aArticle['oxid']] = array(
-                'id' => $aArticle['oxid'],
+                'id'     => $aArticle['oxid'],
                 'amount' => $aArticle['amount'],
             );
         }
+
         return $aResult;
     }
 
 
     /**
      * Create user
+     *
      * @param array $aUser user data
      *
      * @return oxUser
@@ -286,11 +291,13 @@ class oePayPalShopConstruct
             $aUser['address']['oxuserid'] = $oUser->getId();
             $this->createObj($aUser['address'], "oxaddress", "oxaddress");
         }
+
         return $oUser;
     }
 
     /**
      * Create categories with assigning articles
+     *
      * @param array $aCategories category data
      */
     protected function _createCats($aCategories)
@@ -304,7 +311,7 @@ class oePayPalShopConstruct
                 $iCnt = count($aCat['oxarticles']);
                 for ($i = 0; $i < $iCnt; $i++) {
                     $aData = array(
-                        'oxcatnid' => $oCat->getId(),
+                        'oxcatnid'   => $oCat->getId(),
                         'oxobjectid' => $aCat['oxarticles'][$i]
                     );
                     $this->createObj2Obj($aData, 'oxprice2article');
@@ -315,6 +322,7 @@ class oePayPalShopConstruct
 
     /**
      * Creates price 2 article connection needed for scale prices
+     *
      * @param array $aScalePrices of scale prices needed db fields
      */
     protected function _createScalePrices($aScalePrices)
@@ -324,6 +332,7 @@ class oePayPalShopConstruct
 
     /**
      * Creates price 2 article connection needed for scale prices
+     *
      * @param array $aScalePrices of scale prices needed db fields
      */
     protected function _createField2Shop($oArt, $aOptions)
@@ -344,6 +353,7 @@ class oePayPalShopConstruct
 
     /**
      * Creates discounts and assign them to according objects
+     *
      * @param array $aDiscounts discount data
      */
     protected function _setDiscounts($aDiscounts)
@@ -364,10 +374,10 @@ class oePayPalShopConstruct
                 if (is_array($mxValue) && !empty($mxValue)) {
                     foreach ($mxValue as $iArtId) {
                         $aData = array(
-                            'oxid' => $oDiscount->getId() . "_" . $iArtId,
+                            'oxid'         => $oDiscount->getId() . "_" . $iArtId,
                             'oxdiscountid' => $oDiscount->getId(),
-                            'oxobjectid' => $iArtId,
-                            'oxtype' => $sKey
+                            'oxobjectid'   => $iArtId,
+                            'oxtype'       => $sKey
                         );
                         $this->createObj2Obj($aData, "oxobject2discount");
                     }
@@ -378,6 +388,7 @@ class oePayPalShopConstruct
 
     /**
      * Set up trusted shop
+     *
      * @param array $aTrustedShop of trusted shops data
      *
      * @return string selected product id
@@ -396,11 +407,13 @@ class oePayPalShopConstruct
                 }
             }
         }
+
         return $aTrustedShop['product_id'];
     }
 
     /**
      * Creates wrappings
+     *
      * @param array $aWrappings
      *
      * @return array of wrapping id's
@@ -429,11 +442,13 @@ class oePayPalShopConstruct
                 $aWrap['card'] = $oCard->getId();
             }
         }
+
         return $aWrap;
     }
 
     /**
      * Creates deliveries
+     *
      * @param array $aDeliveryCosts
      *
      * @return array of delivery id's
@@ -464,16 +479,18 @@ class oePayPalShopConstruct
             }
             $oDelivery->save();
             $aData = array(
-                'oxdelid' => $oDelivery->getId(),
+                'oxdelid'    => $oDelivery->getId(),
                 'oxdelsetid' => $oDeliverySet->getId(),
             );
             $this->createObj2Obj($aData, "oxdel2delset");
         }
+
         return $oDeliverySet->getId();
     }
 
     /**
      * Creates payments
+     *
      * @param array $aPayments
      *
      * @return array of payment id's
@@ -499,11 +516,13 @@ class oePayPalShopConstruct
             $oPayment->save();
             $aPay[] = $oPayment->getId();
         }
+
         return $aPay;
     }
 
     /**
      * Creates voucherserie and it's vouchers
+     *
      * @param array $aVoucherSeries voucherserie and voucher data
      *
      * @return array of voucher id's
@@ -525,42 +544,44 @@ class oePayPalShopConstruct
             // inserting vouchers
             for ($i = 1; $i <= $aVoucherSerie['voucher_count']; $i++) {
                 $aData = array(
-                    'oxreserved' => 0,
-                    'oxvouchernr' => md5(uniqid(rand(), true)),
+                    'oxreserved'       => 0,
+                    'oxvouchernr'      => md5(uniqid(rand(), true)),
                     'oxvoucherserieid' => $oVoucherSerie->getId()
                 );
                 $oVoucher = $this->createObj($aData, 'oxvoucher', 'oxvouchers');
                 $aVoucherIDs[] = $oVoucher->getId();
             }
         }
+
         return $aVoucherIDs;
     }
 
     protected function _getDefaultUserData()
     {
         $aUser = array(
-            'oxid' => 'checkoutTestUser',
-            'oxrights' => 'malladmin',
-            'oxactive' => '1',
-            'oxusername' => 'admin',
-            'oxpassword' => 'f6fdffe48c908deb0f4c3bd36c032e72',
-            'oxpasssalt' => '61646D696E',
-            'oxcompany' => 'Your Company Name',
-            'oxfname' => 'John',
-            'oxlname' => 'Doe',
-            'oxstreet' => 'Maple Street',
-            'oxstreetnr' => '10',
-            'oxcity' => 'Any City',
-            'oxcountryid' => 'a7c40f631fc920687.20179984',
-            'oxzip' => '9041',
-            'oxfon' => '217-8918712',
-            'oxfax' => '217-8918713',
-            'oxstateid' => null,
-            'oxaddinfo' => null,
-            'oxustid' => null,
-            'oxsal' => 'MR',
+            'oxid'          => 'checkoutTestUser',
+            'oxrights'      => 'malladmin',
+            'oxactive'      => '1',
+            'oxusername'    => 'admin',
+            'oxpassword'    => 'f6fdffe48c908deb0f4c3bd36c032e72',
+            'oxpasssalt'    => '61646D696E',
+            'oxcompany'     => 'Your Company Name',
+            'oxfname'       => 'John',
+            'oxlname'       => 'Doe',
+            'oxstreet'      => 'Maple Street',
+            'oxstreetnr'    => '10',
+            'oxcity'        => 'Any City',
+            'oxcountryid'   => 'a7c40f631fc920687.20179984',
+            'oxzip'         => '9041',
+            'oxfon'         => '217-8918712',
+            'oxfax'         => '217-8918713',
+            'oxstateid'     => null,
+            'oxaddinfo'     => null,
+            'oxustid'       => null,
+            'oxsal'         => 'MR',
             'oxustidstatus' => '0',
         );
+
         return $aUser;
     }
 
@@ -568,17 +589,19 @@ class oePayPalShopConstruct
     {
         $aGroup = array(
             0 => array(
-                'oxid' => 'checkoutTestGroup',
-                'oxactive' => 1,
-                'oxtitle' => 'checkoutTestGroup',
+                'oxid'           => 'checkoutTestGroup',
+                'oxactive'       => 1,
+                'oxtitle'        => 'checkoutTestGroup',
                 'oxobject2group' => array('checkoutTestUser', 'oxidpaypal'),
             ),
         );
+
         return $aGroup;
     }
 
     /**
      * Getting articles
+     *
      * @param array $aArts of article objects
      *
      * @return created articles id's
@@ -590,6 +613,7 @@ class oePayPalShopConstruct
 
     /**
      * Apply discounts
+     *
      * @param array $aDiscounts of discount data
      */
     public function setDiscounts($aDiscounts)
@@ -599,7 +623,8 @@ class oePayPalShopConstruct
 
     /**
      * Create object 2 object connection in databse
-     * @param array $aData db fields and values
+     *
+     * @param array  $aData         db fields and values
      * @param string $sObj2ObjTable table name
      */
     public function createObj2Obj($aData, $sObj2ObjTable)
@@ -626,6 +651,7 @@ class oePayPalShopConstruct
 
     /**
      * Create group and assign
+     *
      * @param array $aData
      */
     public function createGroups($aData)
@@ -650,9 +676,10 @@ class oePayPalShopConstruct
 
     /**
      * Standard object creator
-     * @param array $aData data
+     *
+     * @param array  $aData   data
      * @param string $sObject object name
-     * @param string $sTable table name
+     * @param string $sTable  table name
      *
      * @return object $oObj
      */
@@ -672,11 +699,13 @@ class oePayPalShopConstruct
             }
         }
         $oObj->save();
+
         return $oObj;
     }
 
     /**
      * Create shop.
+     *
      * @param array $aData
      *
      * @return int
@@ -699,11 +728,13 @@ class oePayPalShopConstruct
                 $iActiveShopId = $oShop->getId();
             }
         }
+
         return $iActiveShopId;
     }
 
     /**
      * Setting active shop
+     *
      * @param int $iShopId
      */
     public function setActiveShop($iShopId)

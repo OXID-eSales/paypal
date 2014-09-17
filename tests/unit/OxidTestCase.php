@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once 'test_config.inc.php';
@@ -53,6 +53,7 @@ class OxidMockStubFunc implements PHPUnit_Framework_MockObject_Stub
         if (is_string($this->_func) && preg_match('/^\{.+\}$/', $this->_func)) {
             $args = $invocation->parameters;
             $_this = $invocation->object;
+
             return eval($this->_func);
         } else {
             return call_user_func_array($this->_func, $invocation->parameters);
@@ -170,6 +171,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         $result = parent::run($result);
 
         oxTestModules::cleanUp();
+
         return $result;
     }
 
@@ -503,7 +505,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
             $oDate = new DateTime($ymd);
         }
 
-        if (time() < ((int)$oDate->format('U'))) {
+        if (time() < ((int) $oDate->format('U'))) {
             $this->markTestSkipped($sMessage);
         }
     }
@@ -600,11 +602,12 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
             $this->_aTableForCleanups[] = $sTable;
         }
 
-        if (OXID_VERSION_EE) :
-            // also add shop relations table for cleanup
+        if (OXID_VERSION_EE) : // also add shop relations table for cleanup
+        {
             if (in_array($sTable, $this->getMultiShopTables())) {
                 $this->addTableForCleanup("{$sTable}2shop");
             }
+        }
         endif;
     }
 
@@ -669,6 +672,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
                 }";
             eval($class);
         }
+
         return $proxyClassName;
     }
 
@@ -692,6 +696,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         } else {
             $instance = new $proxyClassName();
         }
+
         return $instance;
     }
 

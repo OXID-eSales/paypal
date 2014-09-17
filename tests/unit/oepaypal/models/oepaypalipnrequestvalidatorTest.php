@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath('.') . '/unit/OxidTestCase.php';
@@ -46,10 +46,10 @@ class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends OxidTestCase
     }
 
     /**
-     * @param bool $blIsValidExpected
+     * @param bool   $blIsValidExpected
      * @param string $sShopOwnerUserName
-     * @param array $aPayPalRequest
-     * @param array $aPayPalResponse
+     * @param array  $aPayPalRequest
+     * @param array  $aPayPalResponse
      *
      * @dataProvider providerIsValid
      */
@@ -70,29 +70,29 @@ class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends OxidTestCase
     {
         $aCases = array();
         $aMessages = array(
-            'Shop owner' => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'VERIFIED',
-            'PayPal Full Request' => 'Array(    [receiver_email] => none2@oxid-esales.com)',
+            'Shop owner'           => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'VERIFIED',
+            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
             'PayPal Full Response' => 'Array(    [VERIFIED] => )',
         );
         $aCases[] = array($aMessages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('VERIFIED' => ''));
 
         $aMessages = array(
-            'Shop owner' => '', 'PayPal ID' => '', 'PayPal ACK' => 'NOT VERIFIED',
-            'PayPal Full Request' => '',
+            'Shop owner'           => '', 'PayPal ID' => '', 'PayPal ACK' => 'NOT VERIFIED',
+            'PayPal Full Request'  => '',
             'PayPal Full Response' => '',
         );
         $aCases[] = array($aMessages, null, null, null);
 
         $aMessages = array(
-            'Shop owner' => 'none2@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
-            'PayPal Full Request' => 'Array(    [receiver_email] => none2@oxid-esales.com)',
+            'Shop owner'           => 'none2@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
+            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
             'PayPal Full Response' => 'Array(    [NOT_VERIFIED] => )',
         );
         $aCases[] = array($aMessages, 'none2@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('NOT_VERIFIED' => ''));
 
         $aMessages = array(
-            'Shop owner' => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
-            'PayPal Full Request' => 'Array(    [receiver_email] => none2@oxid-esales.com)',
+            'Shop owner'           => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
+            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
             'PayPal Full Response' => 'Array(    [someString] => )',
         );
         $aCases[] = array($aMessages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('someString' => ''));
@@ -101,10 +101,10 @@ class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends OxidTestCase
     }
 
     /**
-     * @param bool $aValidationMessageExpected
+     * @param bool   $aValidationMessageExpected
      * @param string $sShopOwnerUserName
-     * @param array $aPayPalRequest
-     * @param array $aPayPalResponse
+     * @param array  $aPayPalRequest
+     * @param array  $aPayPalResponse
      *
      * @dataProvider providerGetValidationFailureMessage
      */

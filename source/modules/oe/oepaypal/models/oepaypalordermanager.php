@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -82,6 +82,7 @@ class oePayPalOrderManager
             $oOrder = $this->_getOrderFromPayment($oOrderPayment);
             $this->setOrder($oOrder);
         }
+
         return $this->_oOrder;
     }
 
@@ -106,6 +107,7 @@ class oePayPalOrderManager
             $oOrderPaymentStatusCalculator = oxNew('oePayPalOrderPaymentStatusCalculator');
             $this->setOrderPaymentStatusCalculator($oOrderPaymentStatusCalculator);
         }
+
         return $this->_oOrderPaymentStatusCalculator;
     }
 
@@ -124,6 +126,7 @@ class oePayPalOrderManager
             $this->_updateOrderStatus($oOrder, $sNewOrderStatus);
             $blOrderUpdated = true;
         }
+
         return $blOrderUpdated;
     }
 
@@ -142,6 +145,7 @@ class oePayPalOrderManager
         $oOrderPaymentStatusCalculator->setOrder($oOrder);
 
         $sNewOrderStatus = $oOrderPaymentStatusCalculator->getStatus();
+
         return $sNewOrderStatus;
     }
 
@@ -176,6 +180,7 @@ class oePayPalOrderManager
             $oOrder->setOrderId($sOrderId);
             $oOrder->load();
         }
+
         return $oOrder;
     }
 }

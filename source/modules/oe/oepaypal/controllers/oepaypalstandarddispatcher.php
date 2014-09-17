@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -73,7 +73,6 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
 
             $oPayPalService = $this->getPayPalCheckoutService();
             $oResult = $oPayPalService->setExpressCheckout($oRequest);
-
         } catch (oxException $oExcp) {
             // error - unable to set order info - display error message
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
@@ -110,8 +109,10 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
             $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
             $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
+
             return $sTransactionMode;
         }
+
         return $sTransactionMode;
     }
 

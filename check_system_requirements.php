@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 //error boolean. Set to true if error appears
@@ -25,10 +25,8 @@ $blError = false;
 /**
  * Prints error message
  *
- * @param string $error Error message to be printed
- * @param string $action Suggestion for to be taken action
- *
- * @return nothing
+ * @param string $sError  Error message to be printed
+ * @param string $sAction Suggestion for to be taken action
  */
 function printError($sError, $sAction)
 {
@@ -40,10 +38,8 @@ function printError($sError, $sAction)
 /**
  * Prints warning message
  *
- * @param string $error Error message to be printed
- * @param string $action Suggestion for to be taken action
- *
- * @return nothing
+ * @param string $sError  Error message to be printed
+ * @param string $sAction Suggestion for to be taken action
  *
  */
 function printWarning($sError, $sAction)
@@ -53,13 +49,10 @@ function printWarning($sError, $sAction)
     echo '&nbsp;&nbsp;&nbsp;<b>Ma&szlig;nahme:</b> ' . $sAction . '<br><br>';
 }
 
-
 /**
  * Prints OK message
  *
  * @param string $sNote additional note
- *
- * @return nothing
  *
  */
 function printOk($sNote = '')

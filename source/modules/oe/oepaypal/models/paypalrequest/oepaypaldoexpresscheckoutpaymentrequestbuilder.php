@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -84,6 +84,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
         if ($this->_oRequest === null) {
             $this->_oRequest = oxNew('oePayPalPayPalRequest');
         }
+
         return $this->_oRequest;
     }
 
@@ -133,6 +134,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
             $oException = oxNew('oePayPalMissingParameterException');
             throw $oException;
         }
+
         return $this->_oBasket;
     }
 
@@ -163,6 +165,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
             $oException->setMessage('OEPAYPAL_ORDER_ERROR');
             throw $oException;
         }
+
         return $this->_oOrder;
     }
 
@@ -206,6 +209,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
         if ($this->_oLang === null) {
             $this->_oLang = $this->getPayPalConfig()->getLang();
         }
+
         return $this->_oLang;
     }
 
@@ -255,6 +259,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
             $oException = oxNew('oePayPalMissingParameterException');
             throw $oException;
         }
+
         return $this->_oUser;
     }
 

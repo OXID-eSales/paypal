@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -55,8 +55,10 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
 
     /**
      * Tests if returns correct amount
+     *
      * @param $oArticleInfo
      * @param $blExpectedResult
+     *
      * @dataProvider providerOePayPalGetArticleAmount
      */
     public function testOePayPalGetArticleAmount($oArticleInfo, $blExpectedResult)
@@ -77,8 +79,10 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
 
     /**
      * Tests if function gets parameter and returns correct result
+     *
      * @param $blShowPopUp
      * @param $blExpectedResult
+     *
      * @dataProvider providerOePayPalShowECSPopup
      */
     public function testOePayPalShowECSPopup($blShowPopUp, $blExpectedResult)
@@ -98,8 +102,10 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
 
     /**
      * Tests if function returns correct persistent param
+     *
      * @param $oArticleInfo
      * @param $blExpectedResult
+     *
      * @dataProvider providerOePayPalGetPersistentParam
      */
     public function testOePayPalGetPersistentParam($oArticleInfo, $blExpectedResult)
@@ -119,8 +125,10 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
 
     /**
      * Tests if returns correct selection lists values
+     *
      * @param $oArticleInfo
      * @param $blExpectedResult
+     *
      * @dataProvider providerOePayPalGetSelection
      */
     public function testOePayPalGetSelection($oArticleInfo, $blExpectedResult)
@@ -129,5 +137,4 @@ class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends Oxi
 
         $this->assertEquals($blExpectedResult, $oDetails->oePayPalGetSelection());
     }
-
 }

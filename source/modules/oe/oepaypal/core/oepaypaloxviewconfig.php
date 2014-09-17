@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -82,6 +82,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
         if (is_null($this->_oPaymentValidator)) {
             $this->setPaymentValidator(oxNew('oePayPalPaymentValidator'));
         }
+
         return $this->_oPaymentValidator;
     }
 
@@ -104,8 +105,8 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
 
                 $this->_blExpressCheckoutEnabled = $oValidator->isPaymentValid();
             }
-
         }
+
         return $this->_blExpressCheckoutEnabled;
     }
 
@@ -159,6 +160,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
                 $this->_blStandardCheckoutEnabled = $oValidator->isPaymentValid();
             }
         }
+
         return $this->_blStandardCheckoutEnabled;
     }
 
@@ -184,6 +186,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
         if (($oPayPalPayment = $this->getPayPalPayment())) {
             $sDesc = $oPayPalPayment->oxpayments__oxlongdesc->getRawValue();
         }
+
         return $sDesc;
     }
 

@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -59,7 +59,7 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     {
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
-            "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
+                     "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
         oxDb::getDb()->execute($sSqlState);
     }
 
@@ -141,7 +141,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $oDetails->setData($aPayPalData);
         oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
 
-
         $oPayPalUser = new oePayPalOxUser();
         $oPayPalUser->createPayPalUser($oDetails);
         $oUser = new oxUser();
@@ -180,7 +179,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 
         // skips the same address
         $this->assertEquals($iAddressCount, $iAddressCountAfter);
-
     }
 
     /**
@@ -218,7 +216,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOCITY'] = 'testCitybla';
         $oDetails->setData($aPayPalData);
         $this->assertFalse($oUser->isSamePayPalUser($oDetails));
-
     }
 
     /**
@@ -269,7 +266,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOCITY'] = 'testCitybla';
         $oDetails->setData($aPayPalData);
         $this->assertFalse($oUser->isSamePayPalUser($oDetails));
-
     }
 
     /**
@@ -330,7 +326,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $this->assertEquals('_testId', $oUser->isRealPayPalUser('test@test.test'));
         $this->assertFalse($oUser->isRealPayPalUser('test1@test.test'));
         $this->assertFalse($oUser->isRealPayPalUser('blabla@bla.bla'));
-
     }
 
     /**
@@ -374,7 +369,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $this->assertFalse($oUser->isRealPayPalUser('test1@test.test'));
         $this->assertFalse($oUser->isRealPayPalUser('test3@test.test'));
         $this->assertFalse($oUser->isRealPayPalUser('blabla@bla.bla'));
-
     }
 
     /**
@@ -430,5 +424,4 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $this->assertEquals('8f241f11096877ac0.98748826', $oPayPalUser->oxuser__oxcountryid->value);
         $this->assertEquals('333', $oPayPalUser->oxuser__oxstateid->value);
     }
-
 }

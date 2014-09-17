@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -58,6 +58,7 @@ class oePayPalService
         if (is_null($this->_oPayPalConfig)) {
             $this->setPayPalConfig(oxNew('oePayPalConfig'));
         }
+
         return $this->_oPayPalConfig;
     }
 
@@ -107,6 +108,7 @@ class oePayPalService
 
             $this->setCaller($oCaller);
         }
+
         return $this->_oCaller;
     }
 
@@ -230,6 +232,7 @@ class oePayPalService
 
         $oResponse = oxNew('oePayPalResponseDoCapture');
         $oResponse->setData($oCaller->call('DoCapture'));
+
         return $oResponse;
     }
 

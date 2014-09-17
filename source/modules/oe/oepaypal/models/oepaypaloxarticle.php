@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -37,7 +37,7 @@ class oePayPalOxArticle extends oePayPalOxArticle_parent
         if (!$this->oxarticles__oxnonmaterial->value) {
             $blVirtual = false;
         } elseif (isset($this->oxarticles__oxisdownloadable) &&
-            !$this->oxarticles__oxisdownloadable->value
+                  !$this->oxarticles__oxisdownloadable->value
         ) {
             $blVirtual = false;
         }

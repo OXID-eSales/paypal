@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -107,8 +107,7 @@ class oePayPalOrder extends oePayPalOrder_parent
         // Detecting PayPal & loading order & execute payment only if go wrong
         if ($this->isPayPal() && ($iSuccess == oxOrder::ORDER_STATE_PAYMENTERROR)) {
 
-
-            $iPayPalType = (int)$this->getSession()->getVariable("oepaypal");
+            $iPayPalType = (int) $this->getSession()->getVariable("oepaypal");
             $sNextStep = ($iPayPalType == 2) ? "basket" : "order";
         }
 

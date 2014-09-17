@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -26,12 +26,14 @@ class oePayPalExtensionChecker
 {
     /**
      * Shop id
+     *
      * @var string
      */
     protected $_sShopId = null;
 
     /**
      * Extension id
+     *
      * @var string
      */
     protected $_sExtensionId = '';
@@ -56,6 +58,7 @@ class oePayPalExtensionChecker
         if (is_null($this->_sShopId)) {
             $this->setShopId(oxRegistry::getConfig()->getShopId());
         }
+
         return $this->_sShopId;
     }
 
@@ -113,7 +116,7 @@ class oePayPalExtensionChecker
         $sConfigKey = $oConfig->getConfigParam('sConfigKey');
 
         $sSelect = "SELECT DECODE( `oxvarvalue` , " . $oDb->quote($sConfigKey) . " ) AS `oxvarvalue` " .
-            "FROM `oxconfig` WHERE `oxvarname` = " . $oDb->quote($sConfigName) . " AND `oxshopid` = " . $oDb->quote($this->getShopId());
+                   "FROM `oxconfig` WHERE `oxvarname` = " . $oDb->quote($sConfigName) . " AND `oxshopid` = " . $oDb->quote($this->getShopId());
 
         return unserialize($oDb->getOne($sSelect));
     }

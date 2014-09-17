@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -26,12 +26,14 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 {
     /**
      * Service type identifier - Express Checkout = 2
+     *
      * @var int
      */
     protected $_iServiceType = 2;
 
     /**
      * Action for express checkout process
+     *
      * @var string
      */
     protected $_sUserAction = "commit";
@@ -117,7 +119,6 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
             $oPayPalService = $this->getPayPalCheckoutService();
             $oResult = $oPayPalService->setExpressCheckout($oRequest);
-
         } catch (oxException $oExcp) {
             // error - unable to set order info - display error message
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
@@ -231,8 +232,10 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
             $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
+
             return $sTransactionMode;
         }
+
         return $sTransactionMode;
     }
 
@@ -283,6 +286,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         // simulating user object
         $oUser = oxNew("oxUser");
         $oUser->initializeUserForCallBackPayPalUser($aData);
+
         return $oUser;
     }
 
@@ -310,6 +314,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
             // unknown country - no delivery
             $this->_setPayPalIsNotAvailable($oPayPalService);
+
             return;
         }
 
@@ -325,6 +330,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             $oLogger->log("Callback error: NO DELIVERY LIST SET");
 
             $this->_setPayPalIsNotAvailable($oPayPalService);
+
             return;
         }
 
@@ -336,6 +342,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
             // PayPal payment is not possible for user country
             $this->_setPayPalIsNotAvailable($oPayPalService);
+
             return;
         }
 
@@ -348,6 +355,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             $oLogger->log("Callback error: DELIVERY SET LIST HAS NO PAYPAL");
 
             $this->_setPayPalIsNotAvailable($oPayPalService);
+
             return;
         }
 
@@ -473,6 +481,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         if (!$oUser->loadUserPayPalUser()) {
             $oUser = $this->getUser();
         }
+
         return $oUser;
     }
 
@@ -564,6 +573,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     protected function _createUserAddress($oDetails, $sUserId)
     {
         $oAddress = oxNew("oxAddress");
+
         return $oAddress->createPayPalAddress($oDetails, $sUserId);
     }
 
@@ -650,6 +660,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         } else {
             $sCountryId = $oUser->oxuser__oxcountryid->value;
         }
+
         return $sCountryId;
     }
 

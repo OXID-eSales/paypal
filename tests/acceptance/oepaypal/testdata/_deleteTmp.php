@@ -17,7 +17,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 class _config
 {
@@ -38,20 +38,22 @@ echo "clearing tmp files...";
 function rrmdir($dir)
 {
     foreach (glob($dir . '/*') as $file) {
-        if (is_dir($file))
+        if (is_dir($file)) {
             rrmdir($file);
-        else
+        } else {
             unlink($file);
+        }
     }
     rmdir($dir);
 }
 
 if ($_cfg->sCompileDir) {
     foreach (glob($_cfg->sCompileDir . '/*') as $file) {
-        if (is_dir($file))
+        if (is_dir($file)) {
             rrmdir($file);
-        else
+        } else {
             unlink($file);
+        }
     }
 }
 

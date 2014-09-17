@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -26,18 +26,21 @@ class oePayPalIPNRequestVerifier
 {
     /**
      * PayPal oePayPalRequest
+     *
      * @var object
      */
     protected $_oRequest = null;
 
     /**
      * Shop owner email - PayPal ID.
+     *
      * @var string
      */
     protected $_sShopOwner = null;
 
     /**
      * PayPal oePayPalService
+     *
      * @var object
      */
     protected $_oCommunicationService = null;
@@ -117,6 +120,7 @@ class oePayPalIPNRequestVerifier
         if ($this->_oCommunicationService === null) {
             $this->_oCommunicationService = oxNew('oePayPalService');
         }
+
         return $this->_oCommunicationService;
     }
 
@@ -140,6 +144,7 @@ class oePayPalIPNRequestVerifier
         if ($this->_oIPNRequestValidator === null) {
             $this->_oIPNRequestValidator = oxNew('oePayPalIPNRequestValidator');
         }
+
         return $this->_oIPNRequestValidator;
     }
 
@@ -163,6 +168,7 @@ class oePayPalIPNRequestVerifier
         if (is_null($this->_oPayPalRequest)) {
             $this->_oPayPalRequest = oxNew('oePayPalPayPalRequest');
         }
+
         return $this->_oPayPalRequest;
     }
 

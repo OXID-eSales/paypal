@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -38,12 +38,14 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionHandlerTest e
         $dAmount = 59.67;
         $sComment = "Comment";
 
-        $oData = $this->_createStub('Data', array(
-            'getAuthorizationId' => $sAuthId,
-            'getAmount' => $dAmount,
-            'getComment' => $sComment,
-            'getCurrency' => $sCurrency,
-        ));
+        $oData = $this->_createStub(
+            'Data', array(
+                'getAuthorizationId' => $sAuthId,
+                'getAmount'          => $dAmount,
+                'getComment'         => $sComment,
+                'getCurrency'        => $sCurrency,
+            )
+        );
         $oActionHandler = $this->_getActionHandler($oData);
 
         $oBuilder = $this->getMock('oePayPalPayPalRequestBuilder', array('setAuthorizationId', 'setAmount', 'setCompleteType', 'getRequest', 'setComment'));
@@ -90,6 +92,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionHandlerTest e
      * Returns capture action object
      *
      * @param $oData
+     *
      * @return oePayPalOrderCaptureAction
      */
     protected function _getActionHandler($oData = null)

@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -27,6 +27,7 @@ class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends OxidTestCase
     public function providerActionExpressCheckoutFromDetailsPage()
     {
         $sUrl = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
+
         return array(
             // Article valid
             array(true, 1, 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . urlencode($sUrl)),
@@ -39,9 +40,11 @@ class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends OxidTestCase
 
     /**
      * Checks if action returns correct url when article is valid and is not valid
+     *
      * @param $blIsArticleValid
      * @param $sExpectedUrl
      * @param $iArticleAmount
+     *
      * @dataProvider providerActionExpressCheckoutFromDetailsPage
      */
     public function testActionExpressCheckoutFromDetailsPage($blIsArticleValid, $iArticleAmount, $sExpectedUrl)

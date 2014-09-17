@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -47,29 +47,29 @@
  * Short description: bug entry / support case other info;
  */
 $aData = array(
-    'class' => 'oePayPalStandardDispatcher',
-    'action' => 'getExpressCheckoutDetails',
-    'articles' => array(),
+    'class'     => 'oePayPalStandardDispatcher',
+    'action'    => 'getExpressCheckoutDetails',
+    'articles'  => array(),
     'discounts' => array(),
-    'session' => array(
+    'session'   => array(
         'oepaypal-token' => 'super_secure_token_f24b24a32df3a9'
     ),
-    'config' => array(
-        'sOEPayPalSandboxUsername' => 'testUser',
-        'sOEPayPalSandboxPassword' => 'testPassword',
+    'config'    => array(
+        'sOEPayPalSandboxUsername'  => 'testUser',
+        'sOEPayPalSandboxPassword'  => 'testPassword',
         'sOEPayPalSandboxSignature' => 'testSignature',
     ),
-    'costs' => array(),
-    'expected' => array(
+    'costs'     => array(),
+    'expected'  => array(
         'requestToPayPal' => array(
-            'VERSION' => '84.0',
-            'PWD' => 'testPassword',
-            'USER' => 'testUser',
+            'VERSION'   => '84.0',
+            'PWD'       => 'testPassword',
+            'USER'      => 'testUser',
             'SIGNATURE' => 'testSignature',
-            'TOKEN' => 'super_secure_token_f24b24a32df3a9',
-            'METHOD' => 'GetExpressCheckoutDetails',
+            'TOKEN'     => 'super_secure_token_f24b24a32df3a9',
+            'METHOD'    => 'GetExpressCheckoutDetails',
         ),
-        'header' => array(
+        'header'          => array(
             0 => 'POST /cgi-bin/webscr HTTP/1.1',
             1 => 'Content-Type: application/x-www-form-urlencoded',
             2 => 'Host: api-3t.sandbox.paypal.com',

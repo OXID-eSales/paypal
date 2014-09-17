@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -140,7 +140,6 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
                 $oEx->setMessage('OEPAYPAL_ORDER_ERROR');
                 throw $oEx;
             }
-
         } catch (oxException $oException) {
 
             // deleting order on error
@@ -173,8 +172,10 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
             $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
             $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
+
             return $sTransactionMode;
         }
+
         return $sTransactionMode;
     }
 
@@ -188,6 +189,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
         if (is_null($this->_oPayPalConfig)) {
             $this->setPayPalConfig(oxNew('oePayPalConfig'));
         }
+
         return $this->_oPayPalConfig;
     }
 
@@ -221,6 +223,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
         if (is_null($this->_oCheckoutService)) {
             $this->setPayPalCheckoutService(oxNew("oePayPalService"));
         }
+
         return $this->_oCheckoutService;
     }
 
@@ -245,6 +248,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
         if (!$oUser->loadUserPayPalUser()) {
             $oUser = $this->getUser();
         }
+
         return $oUser;
     }
 }

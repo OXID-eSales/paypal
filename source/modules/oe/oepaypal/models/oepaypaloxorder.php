@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -76,6 +76,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     {
         if ($this->loadPayPalOrder()) {
             $this->getPayPalOrder()->delete();
+
             return $this->delete();
         }
     }
@@ -211,6 +212,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
             $oOrder->load($sOrderId);
             $this->_oPayPalOrder = $oOrder;
         }
+
         return $this->_oPayPalOrder;
     }
 

@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath('.') . '/unit/OxidTestCase.php';
@@ -36,8 +36,8 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVoidTest extends OxidTest
     {
         $aData = array(
             'AUTHORIZATIONID' => 'authorizationId',
-            'CORRELATIONID' => 'correlationId',
-            'PAYMENTSTATUS' => 'completed'
+            'CORRELATIONID'   => 'correlationId',
+            'PAYMENTSTATUS'   => 'completed'
         );
 
         return $aData;
@@ -62,5 +62,4 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVoidTest extends OxidTest
         $oResponse->setData($this->_getResponseData());
         $this->assertEquals('correlationId', $oResponse->getCorrelationId());
     }
-
 }

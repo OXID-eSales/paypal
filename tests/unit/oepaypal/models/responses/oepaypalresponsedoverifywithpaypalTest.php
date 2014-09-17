@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath('.') . '/unit/OxidTestCase.php';
@@ -37,42 +37,42 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest exte
         return array(
             array(
                 array(
-                    'VERIFIED' => true,
+                    'VERIFIED'       => true,
                     'receiver_email' => 'some@oxid-esales.com',
-                    'test_ipn' => true,
+                    'test_ipn'       => true,
                     'payment_status' => 'refund',
-                    'txn_id' => '153d4fd1s',
-                    'mc_gross' => 20.55,
-                    'mc_currency' => 'EUR',
+                    'txn_id'         => '153d4fd1s',
+                    'mc_gross'       => 20.55,
+                    'mc_currency'    => 'EUR',
                 ),
                 array(
-                    'ack' => true,
+                    'ack'            => true,
                     'receiver_email' => 'some@oxid-esales.com',
-                    'test_ipn' => true,
+                    'test_ipn'       => true,
                     'payment_status' => 'refund',
                     'transaction_id' => '153d4fd1s',
-                    'amount' => 20.55,
-                    'currency' => 'EUR',
+                    'amount'         => 20.55,
+                    'currency'       => 'EUR',
                 )
             ),
             array(
                 array(
-                    'Not-VERIFIED' => true,
+                    'Not-VERIFIED'   => true,
                     'receiver_email' => 'someone@oxid-esales.com',
-                    'test_ipn' => false,
+                    'test_ipn'       => false,
                     'payment_status' => 'completed',
-                    'txn_id' => '454asd4as46d4',
-                    'mc_gross' => 124.55,
-                    'mc_currency' => 'USD',
+                    'txn_id'         => '454asd4as46d4',
+                    'mc_gross'       => 124.55,
+                    'mc_currency'    => 'USD',
                 ),
                 array(
-                    'ack' => false,
+                    'ack'            => false,
                     'receiver_email' => 'someone@oxid-esales.com',
-                    'test_ipn' => false,
+                    'test_ipn'       => false,
                     'payment_status' => 'completed',
                     'transaction_id' => '454asd4as46d4',
-                    'amount' => 124.55,
-                    'currency' => 'USD',
+                    'amount'         => 124.55,
+                    'currency'       => 'USD',
                 )
             ),
         );

@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath('.') . '/unit/OxidTestCase.php';
@@ -83,27 +83,31 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $oConfig = $this->getConfig();
 
         $aExpectedResult = array(
-            'TOKEN' => '111',
-            'PAYERID' => '222',
-            'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
-            'PAYMENTREQUEST_0_AMT' => 123,
-            'PAYMENTREQUEST_0_CURRENCYCODE' => "EUR",
-            'PAYMENTREQUEST_0_NOTIFYURL' => $this->getConfig()->getCurrentShopUrl() . "index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp=" . $oConfig->getShopId(),
-            'PAYMENTREQUEST_0_DESC' => $sSubj,
-            'PAYMENTREQUEST_0_CUSTOM' => $sSubj,
-            'PAYMENTREQUEST_0_SHIPTONAME' => 'firstname lastname',
-            'PAYMENTREQUEST_0_SHIPTOSTREET' => 'some street 47',
-            'PAYMENTREQUEST_0_SHIPTOCITY' => 'some city',
-            'PAYMENTREQUEST_0_SHIPTOZIP' => 'zip',
-            'PAYMENTREQUEST_0_SHIPTOPHONENUM' => '',
+            'TOKEN'                              => '111',
+            'PAYERID'                            => '222',
+            'PAYMENTREQUEST_0_PAYMENTACTION'     => 'Sale',
+            'PAYMENTREQUEST_0_AMT'               => 123,
+            'PAYMENTREQUEST_0_CURRENCYCODE'      => "EUR",
+            'PAYMENTREQUEST_0_NOTIFYURL'         => $this->getConfig()->getCurrentShopUrl() . "index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp=" . $oConfig->getShopId(),
+            'PAYMENTREQUEST_0_DESC'              => $sSubj,
+            'PAYMENTREQUEST_0_CUSTOM'            => $sSubj,
+            'PAYMENTREQUEST_0_SHIPTONAME'        => 'firstname lastname',
+            'PAYMENTREQUEST_0_SHIPTOSTREET'      => 'some street 47',
+            'PAYMENTREQUEST_0_SHIPTOCITY'        => 'some city',
+            'PAYMENTREQUEST_0_SHIPTOZIP'         => 'zip',
+            'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => '',
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => '',
         );
         if ($oConfig->getEdition() == 'EE') {
             $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_EnterpriseECS';
-        } else if ($oConfig->getEdition() == 'PE') {
-            $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_ProfessionalECS';
-        } else if ($oConfig->getEdition() == 'CE') {
-            $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_CommunityECS';
+        } else {
+            if ($oConfig->getEdition() == 'PE') {
+                $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_ProfessionalECS';
+            } else {
+                if ($oConfig->getEdition() == 'CE') {
+                    $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_CommunityECS';
+                }
+            }
         }
 
         // testing
@@ -122,11 +126,11 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
     public function testAddAddressParams_SelectedAddressIdNotSet_TakeInfoFromUser()
     {
         $aExpectedParams = array(
-            'PAYMENTREQUEST_0_SHIPTONAME' => 'FirstName LastName',
-            'PAYMENTREQUEST_0_SHIPTOSTREET' => 'Street StreetNr',
-            'PAYMENTREQUEST_0_SHIPTOCITY' => 'City',
-            'PAYMENTREQUEST_0_SHIPTOZIP' => 'Zip',
-            'PAYMENTREQUEST_0_SHIPTOPHONENUM' => 'PhoneNum',
+            'PAYMENTREQUEST_0_SHIPTONAME'        => 'FirstName LastName',
+            'PAYMENTREQUEST_0_SHIPTOSTREET'      => 'Street StreetNr',
+            'PAYMENTREQUEST_0_SHIPTOCITY'        => 'City',
+            'PAYMENTREQUEST_0_SHIPTOZIP'         => 'Zip',
+            'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => 'PhoneNum',
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => null,
         );
 

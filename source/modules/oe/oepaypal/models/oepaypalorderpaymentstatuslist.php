@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -42,11 +42,11 @@ class oePayPalOrderPaymentStatusList extends oePayPalList
      * @var array
      */
     protected $_aAvailableStatuses = array(
-        'capture' => array('completed'),
+        'capture'         => array('completed'),
         'capture_partial' => array('completed', 'pending'),
-        'refund' => array('completed', 'pending', 'canceled'),
-        'refund_partial' => array('completed', 'pending', 'canceled'),
-        'void' => array('completed', 'pending', 'canceled'),
+        'refund'          => array('completed', 'pending', 'canceled'),
+        'refund_partial'  => array('completed', 'pending', 'canceled'),
+        'void'            => array('completed', 'pending', 'canceled'),
     );
 
     /**

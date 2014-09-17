@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -196,7 +196,6 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
 
         $this->assertTrue($oResponse instanceof oePayPalResponseDoReAuthorize);
         $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
-
     }
 
     /**
@@ -211,7 +210,6 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
 
         $this->assertTrue($oResponse instanceof oePayPalResponseDoCapture);
         $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
-
     }
 
     /**
@@ -225,14 +223,13 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
         $oResponse = $oService->doVerifyWithPayPal($this->_prepareRequest(), 'UTF-8');
         $this->assertTrue($oResponse instanceof oePayPalResponseDoVerifyWithPayPal);
         $this->assertEquals(array('parameter' => 'value'), $oResponse->getData());
-
     }
 
     /**
      * Prepare oePayPalCaller stub
      *
-     * @param oePayPalPayPalRequest $oRequest request
-     * @param string $sMethodName method name
+     * @param oePayPalPayPalRequest $oRequest    request
+     * @param string                $sMethodName method name
      *
      * @return oePayPalCaller
      */
@@ -264,5 +261,4 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
 
         return $oRequest;
     }
-
 }

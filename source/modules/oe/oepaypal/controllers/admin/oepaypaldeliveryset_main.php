@@ -17,7 +17,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -59,7 +59,7 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
         $oPayPalConfig = oxNew('oePayPalConfig');
 
         $sDeliverySetId = $this->getEditObjectId();
-        $blDeliverySetMarked = (bool)$oConfig->getRequestParameter('isPayPalDefaultMobilePayment');
+        $blDeliverySetMarked = (bool) $oConfig->getRequestParameter('isPayPalDefaultMobilePayment');
         $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
 
         if ($blDeliverySetMarked && $sDeliverySetId != $sMobileECDefaultShippingId) {

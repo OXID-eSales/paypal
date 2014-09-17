@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -65,6 +65,7 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
     {
         $oDb = $this->_getDb();
         $aData = $oDb->getAll('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId) . ' ORDER BY `oepaypal_date` DESC');
+
         return $aData;
     }
 
@@ -79,6 +80,7 @@ class oePayPalOrderPaymentCommentDbGateway extends oePayPalModelDbGateway
     {
         $oDb = $this->_getDb();
         $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $oDb->quote($sCommentId));
+
         return $aData;
     }
 

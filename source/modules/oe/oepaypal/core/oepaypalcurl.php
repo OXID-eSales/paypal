@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -26,40 +26,45 @@ class oePayPalCurl
 {
     /**
      * Host for header.
+     *
      * @var string
      */
     protected $_sHost = null;
 
     /**
      * Curl instance.
+     *
      * @var resource
      */
     protected $_rCurl = null;
 
     /**
      * Connection Charset.
+     *
      * @var string
      */
     protected $_sConnectionCharset = "UTF-8";
 
     /**
      * Data Charset.
+     *
      * @var string
      */
     protected $_sDataCharset = "UTF-8";
 
     /**
      * Curl default parameters.
+     *
      * @var array
      */
     protected $_aEnvironmentParameters = array(
-        'CURLOPT_VERBOSE' => 0,
+        'CURLOPT_VERBOSE'        => 0,
         'CURLOPT_SSL_VERIFYPEER' => false,
         'CURLOPT_SSL_VERIFYHOST' => false,
-        'CURLOPT_SSLVERSION' => 3,
+        'CURLOPT_SSLVERSION'     => 3,
         'CURLOPT_RETURNTRANSFER' => 1,
-        'CURLOPT_POST' => 1,
-        'CURLOPT_HTTP_VERSION' => CURL_HTTP_VERSION_1_1,
+        'CURLOPT_POST'           => 1,
+        'CURLOPT_HTTP_VERSION'   => CURL_HTTP_VERSION_1_1,
     );
 
     /**
@@ -72,6 +77,7 @@ class oePayPalCurl
 
     /**
      * PayPal URL to call. Usually API address.
+     *
      * @var string | null
      */
     protected $_sUrlToCall = null;
@@ -85,6 +91,7 @@ class oePayPalCurl
 
     /**
      * Curl call header.
+     *
      * @var array
      */
     protected $_aHeader = null;
@@ -436,6 +443,7 @@ class oePayPalCurl
         if (get_magic_quotes_gpc()) {
             $sString = stripslashes($sString);
         }
+
         return $sString;
     }
 

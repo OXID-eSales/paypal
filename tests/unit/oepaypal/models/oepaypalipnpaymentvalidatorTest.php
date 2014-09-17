@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath('.') . '/unit/OxidTestCase.php';
@@ -41,11 +41,11 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentValidatorTest extends OxidTestCase
             array(true, '', 'USD', 125.38, 'USD', 125.38),
             array(true, '', 'EUR', 0.08, 'EUR', 0.08),
             array(false, 'Bezahlinformation: 0.09 USD. PayPal-Information: 0.08 EUR.'
-            , 'EUR', 0.08, 'USD', 0.09),
+                  , 'EUR', 0.08, 'USD', 0.09),
             array(false, 'Bezahlinformation: 0.08 USD. PayPal-Information: 0.08 EUR.'
-            , 'EUR', 0.08, 'USD', 0.08),
+                  , 'EUR', 0.08, 'USD', 0.08),
             array(false, 'Bezahlinformation: 0.09 EUR. PayPal-Information: 0.08 EUR.'
-            , 'EUR', 0.08, 'EUR', 0.09),
+                  , 'EUR', 0.08, 'EUR', 0.09),
         );
     }
 

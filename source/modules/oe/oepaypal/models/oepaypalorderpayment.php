@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -177,6 +177,7 @@ class oePayPalOrderPayment extends oePayPalModel
     public function getRemainingRefundAmount()
     {
         $dAmount = $this->getAmount() - $this->getRefundedAmount();
+
         return sprintf("%.2f", round($dAmount, 2));
     }
 
@@ -306,7 +307,7 @@ class oePayPalOrderPayment extends oePayPalModel
      */
     public function setIsValid($blIsValid)
     {
-        $this->_blIsValid = (bool)$blIsValid;
+        $this->_blIsValid = (bool) $blIsValid;
     }
 
     /**
@@ -331,6 +332,7 @@ class oePayPalOrderPayment extends oePayPalModel
             $oComments->load($this->getPaymentId());
             $this->setCommentList($oComments);
         }
+
         return $this->_oCommentList;
     }
 

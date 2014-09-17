@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -26,24 +26,28 @@ class oePayPalArticleToExpressCheckoutCurrentItem
 {
     /**
      * Article id
+     *
      * @var string
      */
     protected $_sArticleId;
 
     /**
      * Select list
+     *
      * @var array
      */
     protected $_aSelectList;
 
     /**
      * Persistent param
+     *
      * @var array
      */
     protected $_aPersistParam;
 
     /**
      * Article amount
+     *
      * @var integer
      */
     protected $_iArticleAmount;
@@ -125,6 +129,6 @@ class oePayPalArticleToExpressCheckoutCurrentItem
      */
     public function getArticleAmount()
     {
-        return ( int )$this->_iArticleAmount;
+        return ( int ) $this->_iArticleAmount;
     }
 }

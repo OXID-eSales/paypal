@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -159,7 +159,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionTest extends 
 
         $aPayPalResponseMethods = array(
             'getAuthorizationId' => $sAuthentificationId,
-            'getCorrelationId' => $sCorrelationId
+            'getCorrelationId'   => $sCorrelationId
         );
         $oPayPalResponse = $this->_createStub('oePayPalResponseDoVoid', $aPayPalResponseMethods);
 
@@ -225,6 +225,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionTest extends 
     protected function _getPayment()
     {
         $oPayment = $this->getMock('oePayPalOrderPayment', array('addComment'));
+
         return $oPayment;
     }
 
@@ -232,6 +233,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionTest extends 
      * Returns payment list
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalOrderPaymentList
      */
     protected function _getPaymentList($aTestMethods = array())
@@ -246,12 +248,14 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionTest extends 
      * Returns order
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalPayPalOrder
      */
     protected function _getOrder($aTestMethods = array())
     {
         $aMethods = array('getPaymentList' => $this->_getPaymentList());
         $oOrder = $this->_createStub('oePayPalPayPalOrder', $aMethods, $aTestMethods);
+
         return $oOrder;
     }
 
@@ -259,6 +263,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionTest extends 
      * Retruns basic PayPal response object
      *
      * @param array $aTestMethods
+     *
      * @return oePayPalResponseDoCapture
      */
     protected function _getPayPalResponse($aTestMethods = array())
@@ -267,6 +272,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderVoidActionTest extends 
         $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
 
         $oOrder = $this->getMock('oePayPalResponseDoVoid', $aMockedMethods);
+
         return $oOrder;
     }
 

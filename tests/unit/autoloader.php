@@ -17,7 +17,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 class Autoloader
 {
@@ -63,6 +63,7 @@ class Autoloader
      *
      * @param $sPath
      * @param $sFileName
+     *
      * @return string
      */
     protected function _findFile($sPath, $sFileName)
@@ -73,8 +74,10 @@ class Autoloader
             if (!$oFile->isDot()) {
                 if ($oFile->isDir()) {
                     $sFile = $this->_findFile($oFile->getPathname(), $sFileName);
-                } else if ($oFile->getFilename() === $sFileName) {
-                    $sFile = $oFile->getPathname();
+                } else {
+                    if ($oFile->getFilename() === $sFileName) {
+                        $sFile = $oFile->getPathname();
+                    }
                 }
                 if ($sFile) {
                     break;

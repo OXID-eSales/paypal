@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once 'PHPUnit/Framework/TestSuite.php';
@@ -34,7 +34,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
         $sFilter = getenv("PREG_FILTER");
 
         $aTestGroups = array(
-            'unit/oepaypal' => array('', 'components', 'core', 'models', 'models/actions', 'models/responses', 'models/paypalrequest', 'controllers', 'controllers/admin'),
+            'unit/oepaypal'        => array('', 'components', 'core', 'models', 'models/actions', 'models/responses', 'models/paypalrequest', 'controllers', 'controllers/admin'),
             'integration/oepaypal' => array('', 'checkoutrequest')
         );
         if (getenv('TEST_DIRS')) {

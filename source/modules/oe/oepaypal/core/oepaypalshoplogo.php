@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -254,6 +254,7 @@ class oePayPalShopLogo
                 $this->_sImagePath = $sDir . $sName;
             }
         }
+
         return $this->_sImagePath;
     }
 
@@ -287,6 +288,7 @@ class oePayPalShopLogo
         if ($sDir && $sName) {
             $sResizedImagePath = $sDir . $sName;
         }
+
         return $sResizedImagePath;
     }
 
@@ -356,7 +358,7 @@ class oePayPalShopLogo
         $aImageSize = getimagesize($sImagePath);
 
         return array(
-            'width' => $aImageSize[0],
+            'width'  => $aImageSize[0],
             'height' => $aImageSize[1]
         );
     }
@@ -379,6 +381,7 @@ class oePayPalShopLogo
                 $blResized = true;
             }
         }
+
         return $blResized;
     }
 }

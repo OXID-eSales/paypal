@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -57,13 +57,15 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
         $oBuilder->expects($this->atLeastOnce())->method('setComment')->with($this->equalTo($sComment));
         $oBuilder->expects($this->any())->method('getRequest')->will($this->returnValue(new oePayPalPayPalRequest()));
 
-        $oData = $this->_createStub('Data', array(
-            'getTransactionId' => $sTransId,
-            'getAmount' => $dAmount,
-            'getType' => $sType,
-            'getComment' => $sComment,
-            'getCurrency' => $sCurrency,
-        ));
+        $oData = $this->_createStub(
+            'Data', array(
+                'getTransactionId' => $sTransId,
+                'getAmount'        => $dAmount,
+                'getType'          => $sType,
+                'getComment'       => $sComment,
+                'getCurrency'      => $sCurrency,
+            )
+        );
 
         $oActionHandler = $this->_getActionHandler($oData);
         $oActionHandler->setPayPalRequestBuilder($oBuilder);
@@ -123,6 +125,7 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
      * Returns capture action object
      *
      * @param $oData
+     *
      * @return oePayPalOrderCaptureActionHandler
      */
     protected function _getActionHandler($oData = null)
@@ -133,5 +136,4 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
 
         return $oAction;
     }
-
 }

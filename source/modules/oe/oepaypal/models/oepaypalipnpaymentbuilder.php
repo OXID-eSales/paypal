@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -70,6 +70,7 @@ class oePayPalIPNPaymentBuilder
             $oPayPalIPNPaymentSetter = oxNew('oePayPalIPNRequestPaymentSetter');
             $this->setOrderPaymentSetter($oPayPalIPNPaymentSetter);
         }
+
         return $this->_oPayPalIPNPaymentSetter;
     }
 
@@ -94,6 +95,7 @@ class oePayPalIPNPaymentBuilder
             $oPayPalIPNPaymentValidator = oxNew('oePayPalIPNPaymentValidator');
             $this->setOrderPaymentValidator($oPayPalIPNPaymentValidator);
         }
+
         return $this->_oPayPalIPNPaymentValidator;
     }
 
@@ -175,6 +177,7 @@ class oePayPalIPNPaymentBuilder
     {
         $oOrderPayment = oxNew('oePayPalOrderPayment');
         $oOrderPayment->loadByTransactionId($sTransactionId);
+
         return $oOrderPayment;
     }
 
@@ -193,6 +196,7 @@ class oePayPalIPNPaymentBuilder
         $oRequestPaymentSetter->setRequestOrderPayment($oRequestOrderPayment);
 
         $oRequestOrderPayment = $oRequestPaymentSetter->getRequestOrderPayment();
+
         return $oRequestOrderPayment;
     }
 
@@ -235,6 +239,7 @@ class oePayPalIPNPaymentBuilder
     protected function _changePaymentStatusInfo($oRequestOrderPayment, $oOrderPayment)
     {
         $oOrderPayment->setStatus($oRequestOrderPayment->getStatus());
+
         return $oOrderPayment;
     }
 }

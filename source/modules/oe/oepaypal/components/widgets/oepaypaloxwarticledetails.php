@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -33,7 +33,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
     {
         $aArticle = $this->_oePayPalGetECSArticle();
 
-        return isset($aArticle['am']) ? ( int )$aArticle['am'] : 1;
+        return isset($aArticle['am']) ? (int) $aArticle['am'] : 1;
     }
 
     /**
@@ -113,6 +113,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
     protected function _oePayPalGetECSArticle()
     {
         $aProducts = $this->getComponent('oxcmp_basket')->getCurrentArticleInfo();
+
         return $aProducts;
     }
 }

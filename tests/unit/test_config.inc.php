@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 // DO NOT TOUCH THIS _ INSTEAD FIX NOTICES - DODGER
@@ -96,8 +96,9 @@ class modOxUtilsDate extends oxUtilsDate
 
     public function getTime()
     {
-        if (!is_null($this->_sTime))
+        if (!is_null($this->_sTime)) {
             return $this->_sTime;
+        }
 
         return parent::getTime();
     }

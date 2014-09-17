@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath('.') . '/unit/OxidTestCase.php';
@@ -38,7 +38,7 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderCaptureActionDataTest exten
 
         $aParams = array(
             'capture_amount' => $sAmount,
-            'capture_type' => $sType,
+            'capture_type'   => $sType,
         );
         $oRequest = $this->_createStub('oePayPalRequest', array('getPost' => $aParams));
 
@@ -70,6 +70,7 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderCaptureActionDataTest exten
      *  Returns Request object with given parameters
      *
      * @param $aParams
+     *
      * @return mixed
      */
     protected function _getRequest($aParams)

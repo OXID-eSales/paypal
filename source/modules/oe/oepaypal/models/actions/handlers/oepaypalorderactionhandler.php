@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 /**
@@ -81,6 +81,7 @@ abstract class oePayPalOrderActionHandler
         if ($this->_oPayPalRequestBuilder === null) {
             $this->_oPayPalRequestBuilder = oxNew('oePayPalPayPalRequestBuilder');
         }
+
         return $this->_oPayPalRequestBuilder;
     }
 
@@ -104,6 +105,7 @@ abstract class oePayPalOrderActionHandler
         if ($this->_oPayPalService === null) {
             $this->_oPayPalService = oxNew('oePayPalService');
         }
+
         return $this->_oPayPalService;
     }
 }

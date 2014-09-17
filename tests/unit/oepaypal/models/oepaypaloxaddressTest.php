@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath(".") . '/unit/OxidTestCase.php';
@@ -51,7 +51,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
     {
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
-            "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
+                     "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
         oxDb::getDb()->execute($sSqlState);
     }
 
@@ -71,6 +71,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTATE'] = 'SS';
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOZIP'] = 'testZip';
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOPHONENUM'] = 'testPhoneNum';
+
         /*        $oPayPalData = $this->getMock( 'oePayPalResponseGetExpressCheckoutDetails', array( 'getShipToName', 'getShipToStreet',
                     'getShipToStreet2', 'getShipToCity', 'getShipToCountryCode', 'getShipToState', 'getShipToZip', 'getShipToPhoneNumber' ) );
                 $oPayPalData->expects( $this->any() )->method( 'getShipToName' )->will( $this->returnValue( 'testName testSurname' ) );
@@ -154,7 +155,6 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
 
         $oAddress = new oxAddress();
         $oAddress->load($oPayPalAddress->getId());
-
 
         $this->assertEquals('testName', $oAddress->oxaddress__oxfname->value);
         $this->assertEquals("", $oAddress->oxaddress__oxstreet->value);

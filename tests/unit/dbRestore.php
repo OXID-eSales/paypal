@@ -16,9 +16,8 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
-
 
 define('MAINTENANCE_SINGLEROWS', 1);
 define('MAINTENANCE_WHOLETABLES', 2);
@@ -59,12 +58,14 @@ class DbRestore
 
     /**
      * Temp directory, where to store database dump
+     *
      * @var string
      */
     private $_sTmpDir = '/tmp/';
 
     /**
      * Dump file path
+     *
      * @var string
      */
     private $_sTmpFilePath = null;
@@ -207,8 +208,9 @@ class DbRestore
      * Checks which tables of the db changed and then restores these tables.
      * Uses dump file '/tmp/tmp_db_dump' for comparison and restoring.
      *
-     * @param integer $iMode Maintenance mode
+     * @param integer $iMode   Maintenance mode
      * @param integer $iOutput Outout type
+     *
      * @return array changes array
      */
     public function restoreDB($iMode = self::MAINTENANCE_SINGLEROWS, $iOutput = self::MAINTENANCE_MODE_ONLYRESET)
@@ -226,9 +228,11 @@ class DbRestore
         foreach ($aTables as $sTable) {
             if (!isset($aDump[$sTable])) {
                 $this->_dropTable($sTable);
-            } else if ($aChecksum[$sTable] !== $aDumpChecksum[$sTable]) {
-                $this->restoreTable($sTable, false);
-                $blHasChanges = true;
+            } else {
+                if ($aChecksum[$sTable] !== $aDumpChecksum[$sTable]) {
+                    $this->restoreTable($sTable, false);
+                    $blHasChanges = true;
+                }
             }
         }
 
@@ -245,8 +249,8 @@ class DbRestore
      * Restores table records
      *
      * @param string $sTable
-     * @param bool $blCheckChecksum
-     * @param bool $blRestoreColumns whether to check and restore table columns
+     * @param bool   $blCheckChecksum
+     * @param bool   $blRestoreColumns whether to check and restore table columns
      */
     public function restoreTable($sTable, $blCheckChecksum = true, $blRestoreColumns = false)
     {
@@ -274,6 +278,7 @@ class DbRestore
                     $blRestored = $this->restoreRecord($sTable, $aRow['OXID'], $aRow);
                 } else {
                     $this->resetTable($sTable);
+
                     return;
                 }
 
@@ -288,8 +293,10 @@ class DbRestore
             $aMissingRecords = array_diff($aOriginalIds, $aExistingIds);
 
             $this->_insertMissingRecords($sTable, $aMissingRecords);
-        } else if (!empty($aDump[$sTable])) {
-            $this->resetTable($sTable);
+        } else {
+            if (!empty($aDump[$sTable])) {
+                $this->resetTable($sTable);
+            }
         }
     }
 
@@ -297,8 +304,9 @@ class DbRestore
      * Restores one record in a table. If no aData parameter is passed, record is selected form the database
      *
      * @param string $sTable table name
-     * @param string $sId record id to restore
-     * @param array $aData record data. Will be selected from database if not passed
+     * @param string $sId    record id to restore
+     * @param array  $aData  record data. Will be selected from database if not passed
+     *
      * @return bool whether record was restored
      */
     public function restoreRecord($sTable, $sId, $aData = null)
@@ -329,6 +337,7 @@ class DbRestore
      * Drops all table records and adds them back from dump
      *
      * @param $sTable
+     *
      * @return bool
      */
     public function resetTable($sTable)
@@ -404,8 +413,10 @@ class DbRestore
         if ($this->getResetMode() == self::MAINTENANCE_SINGLEROWS) {
             $sSQL = "DELETE FROM " . $sTable . " WHERE OXID = '" . $sId . "'";
             $this->_executeSQL($sSQL, $sTable, "record was added with id '$sId' ");
-        } else if ($this->getResetMode() == self::MAINTENANCE_WHOLETABLES) {
-            $this->resetTable($sTable);
+        } else {
+            if ($this->getResetMode() == self::MAINTENANCE_WHOLETABLES) {
+                $this->resetTable($sTable);
+            }
         }
     }
 
@@ -414,8 +425,9 @@ class DbRestore
      *
      * @param string $sTable
      * @param string $sId
-     * @param array $aCurrentValues current record values
-     * @param array $aUpdatedValues what values should be set
+     * @param array  $aCurrentValues current record values
+     * @param array  $aUpdatedValues what values should be set
+     *
      * @return bool whether record was updated
      */
     protected function _updateRecord($sTable, $sId, $aCurrentValues, $aUpdatedValues)
@@ -435,8 +447,10 @@ class DbRestore
                 $sSQL = $sSQL . implode(', ', $aUpdates) . " WHERE `oxid` = " . $oDb->quote($sId);
 
                 $this->_executeSQL($sSQL, $sTable, "record '$sId' columns '" . implode("', '", $aColumns) . "' was changed");
-            } else if ($this->getResetMode() == self::MAINTENANCE_WHOLETABLES) {
-                $this->resetTable($sTable);
+            } else {
+                if ($this->getResetMode() == self::MAINTENANCE_WHOLETABLES) {
+                    $this->resetTable($sTable);
+                }
             }
             $blResult = true;
         }
@@ -447,8 +461,9 @@ class DbRestore
     /**
      * Returns columns whom values does not match
      *
-     * @param array $aRow row values
+     * @param array $aRow         row values
      * @param array $aExpectedRow expected row values
+     *
      * @return array
      */
     protected function _getChangedColumns($aRow, $aExpectedRow)
@@ -471,7 +486,7 @@ class DbRestore
     /**
      * Inserts missing records
      *
-     * @param string $sTable
+     * @param string       $sTable
      * @param array|string $mRecords either array of ids or one id
      */
     protected function _insertMissingRecords($sTable, $mRecords)
@@ -558,12 +573,14 @@ class DbRestore
         if (empty($aTables)) {
             $sDbName = oxRegistry::getConfig()->getConfigParam('dbName');
 
-            throw new Exception("no tables on "
+            throw new Exception(
+                "no tables on "
                 . oxRegistry::getConfig()->getConfigParam('dbHost')
                 . ":$sDbName, using "
                 . oxRegistry::getConfig()->getConfigParam('dbUser')
                 . ":"
-                . oxRegistry::getConfig()->getConfigParam('dbPwd'));
+                . oxRegistry::getConfig()->getConfigParam('dbPwd')
+            );
         }
 
         $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
@@ -602,7 +619,7 @@ class DbRestore
     /**
      * Creates a insert string to insert the given row into to given table
      *
-     * @param array $aRow a array of the current row in the db
+     * @param array  $aRow   a array of the current row in the db
      * @param string $sTable the name of the current table
      *
      * @return string a sql insert string for the given row
@@ -635,6 +652,7 @@ class DbRestore
      * Converts a string to UTF format.
      *
      * @param array|string $aTables
+     *
      * @return array
      */
     protected function _getTableChecksum($aTables)
@@ -667,6 +685,7 @@ class DbRestore
                 unset($aTables[$iKey]);
             }
         }
+
         return $aTables;
     }
 }

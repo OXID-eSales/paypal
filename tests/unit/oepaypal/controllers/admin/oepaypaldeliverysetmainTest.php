@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2014
  */
 
 require_once realpath('.') . '/unit/OxidTestCase.php';
@@ -51,6 +51,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTe
 
     /**
      * Test if checkbox value for PayPal mobile delivery set has correct value.
+     *
      * @dataProvider providerRender_DefaultShippingSet
      */
     public function testRender_DefaultShippingSet($sMobileECDefaultShippingId, $blMarkAsDefaultPaymentExpected)
@@ -174,6 +175,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTe
         $oPayPalDeliverySet_Main = new oePayPalDeliverySet_Main();
         $oPayPalDeliverySet_Main->setEditObjectId($sDeliverySetid);
         $oPayPalDeliverySet_Main->save();
+
         return $oPayPalDeliverySet_Main;
     }
 }

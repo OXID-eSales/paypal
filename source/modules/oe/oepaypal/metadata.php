@@ -52,7 +52,6 @@ $aModule = array(
         'oxuser'            => 'oe/oepaypal/models/oepaypaloxuser',
         'oxorder'           => 'oe/oepaypal/models/oepaypaloxorder',
         'oxbasket'          => 'oe/oepaypal/models/oepaypaloxbasket',
-        'oxbasketitem'      => 'oe/oepaypal/models/oepaypaloxbasketitem',
         'oxarticle'         => 'oe/oepaypal/models/oepaypaloxarticle',
         'oxpaymentgateway'  => 'oe/oepaypal/models/oepaypaloxpaymentgateway',
     ),

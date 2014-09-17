@@ -187,16 +187,16 @@ $aModule = array(
         array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalTransactionMode',        'type' => 'select', 'constrains' => 'Sale|Authorization|Automatic', 'value' => 'Sale'),
         array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalEmptyStockLevel',        'type' => 'str',    'value' => '0'),
 
-        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalUserEmail',              'type' => 'str',    'value' => ''),
-        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalUsername',               'type' => 'str',    'value' => ''),
-        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalPassword',               'type' => 'str',    'value' => ''),
-        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalSignature',              'type' => 'str',    'value' => ''),
+        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalUserEmail',              'type' => 'str',      'value' => ''),
+        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalUsername',               'type' => 'str',      'value' => ''),
+        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalPassword',               'type' => 'password', 'value' => ''),
+        array('group' => 'oepaypal_api',         'name' => 'sOEPayPalSignature',              'type' => 'str',      'value' => ''),
 
-        array('group' => 'oepaypal_development', 'name' => 'blPayPalLoggerEnabled',           'type' => 'bool',   'value' => 'false'),
-        array('group' => 'oepaypal_development', 'name' => 'blOEPayPalSandboxMode',           'type' => 'bool',   'value' => 'false'),
-        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxUserEmail',       'type' => 'str',    'value' => ''),
-        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxUsername',        'type' => 'str',    'value' => ''),
-        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxPassword',        'type' => 'str',    'value' => ''),
-        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxSignature',       'type' => 'str',    'value' => ''),
+        array('group' => 'oepaypal_development', 'name' => 'blPayPalLoggerEnabled',           'type' => 'bool',     'value' => 'false'),
+        array('group' => 'oepaypal_development', 'name' => 'blOEPayPalSandboxMode',           'type' => 'bool',     'value' => 'false'),
+        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxUserEmail',       'type' => 'str',      'value' => ''),
+        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxUsername',        'type' => 'str',      'value' => ''),
+        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxPassword',        'type' => 'password', 'value' => ''),
+        array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxSignature',       'type' => 'str',      'value' => ''),
     )
 );

@@ -119,12 +119,14 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->select("//select[@name='confselects[sOEPayPalTransactionMode]']", "value=Authorization");
 
         $this->type("//input[@name='confstrs[sOEPayPalUsername]']", $this->getLoginDataByName('sOEPayPalUsername'));
-        $this->type("//input[@name='confstrs[sOEPayPalPassword]']", $this->getLoginDataByName('sOEPayPalPassword'));
+        $this->type("//input[@class='password_input'][1]", $this->getLoginDataByName('sOEPayPalPassword'));
+        $this->type("//input[@name='confpassword[sOEPayPalPassword]']", $this->getLoginDataByName('sOEPayPalPassword'));
         $this->type("//input[@name='confstrs[sOEPayPalSignature]']", $this->getLoginDataByName('sOEPayPalSignature'));
 
         $this->click("//input[@name='confbools[blOEPayPalSandboxMode]' and @type='checkbox']");
         $this->type("//input[@name='confstrs[sOEPayPalSandboxUsername]']", $this->getLoginDataByName('sOEPayPalSandboxUsername'));
-        $this->type("//input[@name='confstrs[sOEPayPalSandboxPassword]']", $this->getLoginDataByName('sOEPayPalSandboxPassword'));
+        $this->type("css=.password_input:nth(2)", $this->getLoginDataByName('sOEPayPalSandboxPassword'));
+        $this->type("//input[@name='confpassword[sOEPayPalSandboxPassword]']", $this->getLoginDataByName('sOEPayPalSandboxPassword'));
         $this->type("//input[@name='confstrs[sOEPayPalSandboxSignature]']", $this->getLoginDataByName('sOEPayPalSandboxSignature'));
         $this->clickAndWait("//input[@name='save']");
 

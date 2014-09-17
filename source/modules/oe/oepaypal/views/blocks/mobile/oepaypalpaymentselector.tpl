@@ -3,7 +3,7 @@
         [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/mobile/src/css/paypal_mobile.css')}]
         <div id="paymentOption_[{$sPaymentID}]"
              class="payment-option [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]active-payment[{/if}]">
-            <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]"/>
+            <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}]/>
 
             <div class="paypalDescBox">
                 <a href="#"><img class="paypalPaymentImg"

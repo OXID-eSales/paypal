@@ -44,7 +44,7 @@ $aLang = array(
     'HELP_SHOP_MODULE_blOEPayPalGuestBuyRole'            => 'The customer has the option to check out without a PayPal account. He can complete the payment first, and then decides if to save his data in a PayPal account for future purchases.',
 
     'SHOP_MODULE_blOEPayPalSendToPayPal'                 => 'Show shopping cart on PayPal site',
-    'HELP_SHOP_MODULE_blOEPayPalSendToPayPal'            => '[TR]After logging in the content of the shopping cart appears in PayPal including product information, prices and shipping costs. During the checkout process the customer can choose if this data should be transferred. However, if item with fraction quantity is found in basket, cart items will not be shown at PayPal and user will not have possibility to choose otherwise.',
+    'HELP_SHOP_MODULE_blOEPayPalSendToPayPal'            => 'After logging in the content of the shopping cart appears in PayPal including product information, prices and shipping costs. During the checkout process the customer can choose if this data should be transferred. Hint: if there are products with a fraction of a quantity (e.g. 1,5) in the shopping cart, the shopping cart will not be submitted to PayPal, no matter if the purchaser activated this option during the checkout.',
     'SHOP_MODULE_blOEPayPalDefaultUserChoice'            => 'Preset customer confirmation',
     'HELP_SHOP_MODULE_blOEPayPalDefaultUserChoice'       => 'During the checkout process the customer has to confirm explicitly that all shopping cart information including products, prices and shipping costs, shall be transferred to PayPal. You can activate the presetting here that the customer confirms data transfer by default.',
 

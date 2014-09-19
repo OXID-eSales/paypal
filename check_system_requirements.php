@@ -72,9 +72,6 @@ if (version_compare('5.4', phpversion()) < 0) {
 } elseif (version_compare('5.3', phpversion()) < 0) {
     $sPhpVersion = '5.3';
     printOK();
-} elseif (version_compare('5.2', phpversion()) < 0) {
-    $sPhpVersion = '5.2';
-    printOK();
 } else {
     printError("PHP 5.2 oder 5.3 oder 5.4 wird vorausgesetzt. Installiert ist jedoch: " . phpversion(), ". Bitte PHP 5.2.x oder gr&ouml;&szlig;er verwenden.");
     $blError = true;

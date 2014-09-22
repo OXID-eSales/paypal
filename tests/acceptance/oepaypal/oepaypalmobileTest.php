@@ -174,17 +174,17 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
 
         // Select add to basket and go to checkout
         $this->clickAndWait("id=actionAddToBasketAndGoToCheckout");
-        $this->assertTrue($this->isTextPresent("Artikelpreis: €0,99"), "Item price was not displayed or was displayed incorrectly in PayPal");
-        $this->assertTrue($this->isTextPresent("exact:Anzahl: 2"), "Item quantity was not displayed or was displayed incorrectly in PayPal");
+        $this->assertTrue($this->isTextPresent("Item price: €0,99"), "Item price was not displayed or was displayed incorrectly in PayPal");
+        $this->assertTrue($this->isTextPresent("exact:Quantity: 2"), "Item quantity was not displayed or was displayed incorrectly in PayPal");
 
         // Cancel order
         $this->clickAndWait("name=cancel_return");
         // Go to checkout with PayPal  with same amount in basket
         $this->clickAndWait("id=paypalExpressCheckoutDetailsButton");
         $this->clickAndWait("id=actionNotAddToBasketAndGoToCheckout");
-        $this->assertTrue($this->isTextPresent("Artikelpreis: €0,99"), "Item price doesn't mach ot didn't displayed");
+        $this->assertTrue($this->isTextPresent("Item price: €0,99"), "Item price doesn't mach ot didn't displayed");
         $this->assertTrue($this->isTextPresent("€1,98"), "Item price doesn't mach ot didn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Anzahl: 2"), "Item quantity doesn't mach ot didn't displayed");
+        $this->assertTrue($this->isTextPresent("exact:Quantity: 2"), "Item quantity doesn't mach ot didn't displayed");
 
         // Cancel order
         $this->clickAndWait("name=cancel_return");
@@ -195,7 +195,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
 
         $this->clickAndWait("//input[@name='paypalExpressCheckoutButton']");
         $this->assertTrue($this->isTextPresent("€1,98"), "Item price doesn't mach ot didn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Anzahl: 2"), "Item quantity doesn't mach ot didn't displayed");
+        $this->assertTrue($this->isTextPresent("exact:Quantity: 2"), "Item quantity doesn't mach ot didn't displayed");
         $this->waitForItemAppear("id=submitLogin");
 
         $this->_loginToSandbox();

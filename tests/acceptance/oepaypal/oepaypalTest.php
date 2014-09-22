@@ -1567,7 +1567,7 @@ class Acceptance_oePayPal_oePayPalTest extends oxidAdditionalSeleniumFunctions
         $this->waitForItemAppear("id=submitLogin");
 
         //Go to PayPal
-        $this->assertEquals("Mit PayPal bezahlen - PayPal", $this->getTitle());
+        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
 
         $this->assertTrue($this->isTextPresent("€15.00"));
         $this->assertTrue($this->isTextPresent("€10.50"));

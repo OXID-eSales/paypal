@@ -61,7 +61,7 @@ class oePayPalCurl
         'CURLOPT_VERBOSE'        => 0,
         'CURLOPT_SSL_VERIFYPEER' => false,
         'CURLOPT_SSL_VERIFYHOST' => false,
-        'CURLOPT_SSLVERSION'     => 3,
+        'CURLOPT_SSLVERSION'     => 1,
         'CURLOPT_RETURNTRANSFER' => 1,
         'CURLOPT_POST'           => 1,
         'CURLOPT_HTTP_VERSION'   => CURL_HTTP_VERSION_1_1,

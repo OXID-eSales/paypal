@@ -287,7 +287,7 @@ class oePayPalPaymentValidator
         $oPayPalPayment = $this->getPayment();
         $oGroups = $oPayPalPayment->getGroups();
 
-        if ( $oGroups && !empty( $oGroups ) ) {
+        if ( $oGroups && $oGroups->count() > 0 ) {
             $blIsValid = $this->_isUserAssignedToGroup( $oGroups );
         }
 

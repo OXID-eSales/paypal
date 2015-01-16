@@ -19,8 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once realpath(".") . '/unit/OxidTestCase.php';
-
 if (!class_exists('oePayPalOxArticle_parent')) {
     class oePayPalOxArticle_parent extends oxArticle
     {

@@ -19,8 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once realpath(".") . '/unit/OxidTestCase.php';
-require_once realpath(".") . '/unit/test_config.inc.php';
 require_once realpath(".") . '/integration/lib/oepaypalcommunicationhelper.php';
 require_once realpath(".") . '/integration/lib/oepaypalrequesthelper.php';
 

@@ -19,8 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once realpath(".") . '/unit/OxidTestCase.php';
-require_once realpath(".") . '/unit/test_config.inc.php';
 
 if (!class_exists('oePayPalOxAddress_parent')) {
     class oePayPalOxAddress_parent extends oxAddress
@@ -81,9 +79,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
                 $oPayPalData->expects( $this->any() )->method( 'getShipToCountryCode' )->will( $this->returnValue( 'US' ) );
                 $oPayPalData->expects( $this->any() )->method( 'getShipToState' )->will( $this->returnValue( 'SS' ) );
                 $oPayPalData->expects( $this->any() )->method( 'getShipToZip' )->will( $this->returnValue( 'testZip' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToPhoneNumber' )->will( $this->returnValue( 'testPhoneNum' ) );*/
-
-        return $aPayPalData;
+                $oPayPalData->expects( $this->any() )->method( 'getShipToPhoneNumber' )->will( $this->returnValue( 'testPhoneNum' ) );*/        return $aPayPalData;
     }
 
 

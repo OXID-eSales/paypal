@@ -19,9 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once realpath(".") . '/unit/OxidTestCase.php';
-require_once realpath(".") . '/unit/test_config.inc.php';
-
 /**
  * Testing oePayPalCurl class.
  */
@@ -279,9 +276,9 @@ class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
     {
         $oPayPalCurl = new oePayPalCurl();
         $oPayPalCurl->setDataCharset('ISO-8859-1');
-        $oPayPalCurl->setParameters(array('param1' => 'Jäger', 'param2' => 'values2'));
+        $oPayPalCurl->setParameters(array('param1' => 'Jï¿½ger', 'param2' => 'values2'));
 
-        $aPramsUtf = array('param1' => utf8_encode('Jäger'), 'param2' => 'values2');
+        $aPramsUtf = array('param1' => utf8_encode('Jï¿½ger'), 'param2' => 'values2');
 
         $this->assertEquals(http_build_query($aPramsUtf), $oPayPalCurl->getQuery());
     }

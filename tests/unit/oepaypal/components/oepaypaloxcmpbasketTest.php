@@ -19,8 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once realpath(".") . '/unit/OxidTestCase.php';
-
 class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends OxidTestCase
 {
 

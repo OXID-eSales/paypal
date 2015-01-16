@@ -19,9 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once 'acceptance/oepaypal/oxidAdditionalSeleniumFunctions.php';
-
-class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunctions
+class Acceptance_oePayPal_oePayPalMobileTest extends oxTestCase
 {
     protected $_sVersion = "EE";
 
@@ -40,114 +38,77 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         endif;
     }
 
-    /**
-     * Executed after test is down
-     *
-     */
-    protected function tearDown()
+    public function addTestSql($sTestSqlPath)
     {
-        //$this->callUrl( shopURL . "/_restoreDB.php", "restoreDb=1" );
-        //parent::tearDown();
-    }
+        parent::addTestSql($sTestSqlPath);
 
-    /**
-     * Call script file
-     *
-     * @param        $sShopUrl
-     * @param string $sParams
-     */
-    public function callUrl($sShopUrl, $sParams = "")
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $sShopUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $sParams);
-        curl_setopt($ch, CURLOPT_USERAGENT, "OXID-SELENIUMS-CONNECTOR");
-        $sRes = curl_exec($ch);
-
-        curl_close($ch);
-    }
-
-    /**
-     * Returns PayPal login data by variable name
-     *
-     * @param $sVarName
-     *
-     * @return mixed|null|string
-     * @throws Exception
-     */
-    public function getLoginDataByName($sVarName)
-    {
-        if (!$sVarValue = getenv($sVarName)) {
-            $sVarValue = $this->getArrayValueFromFile($sVarName, 'acceptance/oepaypal/testdata/oepaypalData.php');
-        }
-
-        if (!$sVarValue) {
-            throw new Exception('Undefined variable: ' . $sVarName);
-        }
-
-        return $sVarValue;
-    }
-
-
-    // ------------------------ PayPal module ----------------------------------
-
-    /**
-     * test for activating mobile theme as main theme
-     *
-     * @group paypal_standalone_mobile
-     */
-    public function testActivateMobilePayPal()
-    {
-        $this->getLoginDataByName('sOEPayPalUsername');
-        $this->open(shopURL . "_prepareDB.php?version=" . $this->_sVersion);
         $this->open(shopURL . "admin");
         $this->loginAdminForModule("Extensions", "Modules");
 
-        $this->openTab("link=PayPal");
-        $this->frame("edit");
-        $this->clickAndWait("module_activate");
-        $this->frame("list");
-        $this->clickAndWait("//a[text()='Settings']");
-        $this->frame("edit");
-        $this->click("//b[text()='API signature']");
-        $this->click("//b[text()='Development settings']");
+        $this->openListItem("PayPal");
+        if ($this->isElementPresent('module_activate')) {
+            $this->clickAndWait("module_activate");
+        }
 
-        $this->select("//select[@name='confselects[sOEPayPalTransactionMode]']", "value=Authorization");
-
-        $this->type("//input[@name='confstrs[sOEPayPalUsername]']", $this->getLoginDataByName('sOEPayPalUsername'));
-        $this->type("//input[@class='password_input'][1]", $this->getLoginDataByName('sOEPayPalPassword'));
-        $this->type("//input[@name='confpassword[sOEPayPalPassword]']", $this->getLoginDataByName('sOEPayPalPassword'));
-        $this->type("//input[@name='confstrs[sOEPayPalSignature]']", $this->getLoginDataByName('sOEPayPalSignature'));
-
-        $this->click("//input[@name='confbools[blOEPayPalSandboxMode]' and @type='checkbox']");
-        $this->type("//input[@name='confstrs[sOEPayPalSandboxUsername]']", $this->getLoginDataByName('sOEPayPalSandboxUsername'));
-        $this->type("css=.password_input:nth(2)", $this->getLoginDataByName('sOEPayPalSandboxPassword'));
-        $this->type("//input[@name='confpassword[sOEPayPalSandboxPassword]']", $this->getLoginDataByName('sOEPayPalSandboxPassword'));
-        $this->type("//input[@name='confstrs[sOEPayPalSandboxSignature]']", $this->getLoginDataByName('sOEPayPalSandboxSignature'));
-        $this->clickAndWait("//input[@name='save']");
+        $this->callShopSC("oxConfig", null, null, array(
+            'sOEPayPalTransactionMode' => array(
+                'type' => 'select',
+                'value' => 'Authorization',
+                'module' => 'module:oepaypal'
+            ),
+            'sOEPayPalUsername' => array(
+                'type' => 'str',
+                'value' => $this->getLoginDataByName('sOEPayPalUsername'),
+                'module' => 'module:oepaypal'
+            ),
+            'sOEPayPalPassword' => array(
+                'type' => 'password',
+                'value' => $this->getLoginDataByName('sOEPayPalPassword'),
+                'module' => 'module:oepaypal'
+            ),
+            'sOEPayPalSignature' => array(
+                'type' => 'str',
+                'value' => $this->getLoginDataByName('sOEPayPalSignature'),
+                'module' => 'module:oepaypal'
+            ),
+            'blOEPayPalSandboxMode' => array(
+                'type' => 'bool',
+                'value' => 1,
+                'module' => 'module:oepaypal'
+            ),
+            'sOEPayPalSandboxUsername' => array(
+                'type' => 'str',
+                'value' => $this->getLoginDataByName('sOEPayPalSandboxUsername'),
+                'module' => 'module:oepaypal'
+            ),
+            'sOEPayPalSandboxPassword' => array(
+                'type' => 'password',
+                'value' => $this->getLoginDataByName('sOEPayPalSandboxPassword'),
+                'module' => 'module:oepaypal'
+            ),
+            'sOEPayPalSandboxSignature' => array(
+                'type' => 'str',
+                'value' => $this->getLoginDataByName('sOEPayPalSandboxSignature'),
+                'module' => 'module:oepaypal'
+            ),
+        ));
 
         $this->selectMenu("Extensions", "Modules");
-        $this->openTab("link=OXID eShop theme switch");
-        $this->frame("list");
-        $this->clickAndWait("//a[text()='Settings']");
-        $this->frame("edit");
+        $this->openListItem("link=OXID eShop theme switch");
+        $this->openTab("Settings");
         $this->click("//b[text()='General parameters']");
         $this->type("//input[@name='confstrs[sOEThemeSwitcherMobileTheme]']", 'some_unexisting_theme');
         $this->clickAndWait("//input[@name='save']");
-        $this->frame("list");
-        $this->clickAndWait("//a[text()='Overview']");
-        $this->frame("edit");
-        $this->clickAndWait("module_activate");
+        $this->openTab("Overview");
+        if ($this->isElementPresent('module_activate')) {
+            $this->clickAndWait("module_activate");
+        }
 
         $this->selectMenu("Extensions", "Themes");
-        $this->openTab("link=OXID eShop mobile theme", "//input[@value='Activate']");
-        $this->clickAndWaitFrame("//input[@value='Activate']", "list");
-
-        $this->callUrl(shopURL . "/_restoreDB.php", "dumpDb=1");
+        $this->openListItem("link=OXID eShop mobile theme");
+        if ($this->isElementPresent("//input[@value='Activate']")) {
+           $this->clickAndWait("//input[@value='Activate']");
+        }
     }
 
 
@@ -204,7 +165,7 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->assertTrue($this->isTextPresent("Test product 1"), "Purchased product name is not displayed");
         $this->assertTrue($this->isTextPresent("€1,98"), "Item price doesn't mach ot didn't displayed");
         $this->assertTrue($this->isTextPresent("exact:Anzahl: 2"), "Item quantity doesn't mach ot didn't displayed");
-        $this->clickAndWait("id=continue");
+        $this->_clickPayPalContinue();
 
         $this->waitForItemAppear("id=miniBasket");
 
@@ -213,27 +174,6 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->assertTrue($this->isTextPresent("PayPal"), "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
         $this->assertTrue($this->isTextPresent("Thank you for your order in OXID eShop"), "Order is not finished successful");
-    }
-
-
-    /**
-     * login customer by using login fly out form.
-     *
-     * @param string  $userName     user name (email).
-     * @param string  $userPass     user password.
-     * @param boolean $waitForLogin if needed to wait until user get logged in.
-     */
-    public function loginInFrontendMobile($userName, $userPass, $waitForLogin = true)
-    {
-        $this->selectWindow(null);
-        $this->clickAndWait("//a[text()='Log in']");
-        $this->type("//input[@id='loginUser']", $userName);
-        $this->type("//input[@id='loginPwd']", $userPass);
-        if ($waitForLogin) {
-            $this->clickAndWait("//form[@name='login']//input[@type='submit']", "//a[text()='Log out']");
-        } else {
-            $this->clickAndWait("//form[@name='login']//input[@type='submit']");
-        }
     }
 
     /**
@@ -306,22 +246,22 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
 
         //Go to sandbox to make order
         $this->_loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-        $this->click("id=continue");
+        $this->_clickPayPalContinue();
+
         $this->waitForItemAppear("id=orderPayment");
         $this->clickAndWait("//button[text()='Order now']");
         $this->assertTrue($this->isTextPresent("Thank you for your order in OXID eShop"), "Order is not finished successful");
 
         // Turn Off all PayPal shortcut in frontend
         if (OXID_VERSION_EE):
-            $this->open(shopURL . "/_updateDB.php?filename=testPayPalShortcut_ee.sql");
+            $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_ee.sql');
         endif;
         if (OXID_VERSION_PE):
-            $this->open(shopURL . "/_updateDB.php?filename=testPayPalShortcut_pe.sql");
+            $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_pe.sql');
         endif;
 
         //Add product and go to checkout
+        $this->clearCache();
         $this->openShop();
         $this->loginInFrontendMobile("testing_account@oxid-esales.com", "useruser");
         $this->searchFor("1001");
@@ -347,6 +287,47 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
     }
 
     /**
+     * Returns PayPal login data by variable name
+     *
+     * @param $sVarName
+     *
+     * @return mixed|null|string
+     * @throws Exception
+     */
+    protected function getLoginDataByName($sVarName)
+    {
+        if (!$sVarValue = getenv($sVarName)) {
+            $sVarValue = $this->getArrayValueFromFile($sVarName, 'acceptance/oepaypal/testdata/oepaypalData.php');
+        }
+
+        if (!$sVarValue) {
+            throw new Exception('Undefined variable: ' . $sVarName);
+        }
+
+        return $sVarValue;
+    }
+
+    /**
+     * login customer by using login fly out form.
+     *
+     * @param string  $userName     user name (email).
+     * @param string  $userPass     user password.
+     * @param boolean $waitForLogin if needed to wait until user get logged in.
+     */
+    public function loginInFrontendMobile($userName, $userPass, $waitForLogin = true)
+    {
+        $this->selectWindow(null);
+        $this->clickAndWait("//a[text()='Log in']");
+        $this->type("//input[@id='loginUser']", $userName);
+        $this->type("//input[@id='loginPwd']", $userPass);
+        if ($waitForLogin) {
+            $this->clickAndWait("//form[@name='login']//input[@type='submit']", "//a[text()='Log out']");
+        } else {
+            $this->clickAndWait("//form[@name='login']//input[@type='submit']");
+        }
+    }
+
+    /**
      * Login to PayPal sandbox.
      *
      * @param string $sLoginEmail    email to login.
@@ -365,5 +346,17 @@ class Acceptance_oePayPal_oePayPalMobileTest extends oxidAdditionalSeleniumFunct
         $this->type("login_email", $sLoginEmail);
         $this->type("login_password", $sLoginPassword);
         $this->click("id=submitLogin");
+    }
+
+    /**
+     * Continue button is visible before PayPal does callback.
+     * Then it becomes invisible while PayPal does callback.
+     * Button appears when PayPal gets callback result.
+     */
+    protected function _clickPayPalContinue()
+    {
+        $this->waitForItemAppear( "//input[@id='continue']", 10, true );
+        $this->waitForEditable( "id=continue" );
+        $this->clickAndWait( "id=continue" );
     }
 }

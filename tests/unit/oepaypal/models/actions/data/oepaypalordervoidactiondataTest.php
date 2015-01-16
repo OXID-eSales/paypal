@@ -19,13 +19,11 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once realpath('.') . '/unit/OxidTestCase.php';
-require_once realpath('.') . '/unit/test_config.inc.php';
 
 /**
  * Testing oePayPalOrderActionFactory class.
  */
-class Unit_oePayPal_Models_Actions_Data_oePayPalOrderRefundActionDataTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_Data_oePayPalOrderVoidActionDataTest extends OxidTestCase
 {
 
     /**

@@ -18,8 +18,6 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2014
  */
-
-require_once realpath(".") . '/unit/OxidTestCase.php';
 if (!class_exists('oePayPalOxBasket_parent')) {
     class oePayPalOxBasket_parent extends oxBasket
     {

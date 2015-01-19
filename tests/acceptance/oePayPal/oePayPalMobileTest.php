@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-class Acceptance_oePayPal_oePayPalMobileTest extends oxTestCase
+class oePayPal_oePayPalMobileTest extends oxTestCase
 {
     protected $_sVersion = "EE";
 

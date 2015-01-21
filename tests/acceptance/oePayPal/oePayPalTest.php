@@ -21,29 +21,19 @@
 
 class oePayPal_oePayPalTest extends oxTestCase
 {
-    protected $_sVersion = "EE";
-
-    /** @var int How much more time wait for these tests. */
+    /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
     protected $_iWaitTimeMultiplier = 9;
 
-    protected function setUp($skipDemoData = false)
+    /**
+     * Activates PayPal and adds configuration
+     *
+     * @param string $sTestSuitePath
+     *
+     * @throws Exception
+     */
+    public function addTestData($sTestSuitePath)
     {
-        parent::setUp(false);
-
-        if (OXID_VERSION_PE_PE) :
-            $this->_sVersion = "PE";
-        endif;
-        if (OXID_VERSION_EE) :
-            $this->_sVersion = "EE";
-        endif;
-        if (OXID_VERSION_PE_CE) :
-            $this->_sVersion = "CE";
-        endif;
-    }
-
-    public function addTestSql($sTestSqlPath)
-    {
-        parent::addTestSql($sTestSqlPath);
+        parent::addTestData($sTestSuitePath);
 
         $this->open(shopURL . "admin");
         $this->loginAdminForModule("Extensions", "Modules");
@@ -752,12 +742,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertFalse($this->isElementPresent("paypalPartnerLogo"), "PayPal logo should not be displayed fot US");
 
         //Created additional 3 shipping methods with Shipping costs rules for Austria
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/newDeliveryMethod_ee.sql');
-        endif;
-        if (!OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/newDeliveryMethod_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/newDeliveryMethod_'. SHOP_EDITION .'.sql');
 
         $this->openBasket("English");
         $this->clickAndWait("//button[text()='Continue to the next step']");
@@ -946,12 +931,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalDiscountsCategory()
     {
         // Add vouchers to shop
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/newDiscounts_ee.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/newDiscounts_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
         //Go to shop and add product
         $this->openShop();
         $this->switchLanguage("English");
@@ -1045,12 +1025,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalDiscountsFromTill()
     {
         // Add vouchers to shop
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/newDiscounts_ee.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/newDiscounts_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1210,13 +1185,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalVouchers()
     {
-        // Add vouchers to shop
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/newVouchers_ee.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/newVouchers_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/newVouchers_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1315,14 +1284,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     {
         // Change price for PayPal payment methode
         $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
-
-        // Set on all VAT options
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/testPaypaVAT.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/testPaypaVAT_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/testPaypaVAT_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1580,6 +1542,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalStockOne()
     {
         $this->importSql('acceptance/oePayPal/testSql/changeStock.sql');
+
         $this->openShop();
         $this->searchFor("1001");
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
@@ -1961,12 +1924,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalExpressNettoMode()
     {
         // Activate the necessary options Neto mode
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_ee.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2038,14 +1996,8 @@ class oePayPal_oePayPalTest extends oxTestCase
     {
         // Activate the necessary options Neto mode
         // Turn Trusted Shops functionality on
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_ee.sql');
-            $this->importSql('acceptance/oePayPal/testSql/trustedShopsOxConfig.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_pe.sql');
-            $this->importSql('acceptance/oePayPal/testSql/trustedShopsOxConfig_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
+        $this->importSql('acceptance/oePayPal/testSql/trustedShopsOxConfig_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2140,12 +2092,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalShortcut()
     {
         // Turn Off all PayPal shortcut in frontend
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_ee.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();

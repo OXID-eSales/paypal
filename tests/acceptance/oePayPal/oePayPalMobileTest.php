@@ -21,26 +21,19 @@
 
 class oePayPal_oePayPalMobileTest extends oxTestCase
 {
-    protected $_sVersion = "EE";
+    /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
+    protected $_iWaitTimeMultiplier = 9;
 
-    protected function setUp($skipDemoData = false)
+    /**
+     * Activates PayPal, adds configuration, activates mobile theme.
+     *
+     * @param string $sTestSuitePath
+     *
+     * @throws Exception
+     */
+    public function addTestData($sTestSuitePath)
     {
-        parent::setUp(false);
-
-        if (OXID_VERSION_PE_PE) :
-            $this->_sVersion = "PE";
-        endif;
-        if (OXID_VERSION_EE) :
-            $this->_sVersion = "EE";
-        endif;
-        if (OXID_VERSION_PE_CE) :
-            $this->_sVersion = "CE";
-        endif;
-    }
-
-    public function addTestSql($sTestSqlPath)
-    {
-        parent::addTestSql($sTestSqlPath);
+        parent::addTestData($sTestSuitePath);
 
         $this->open(shopURL . "admin");
         $this->loginAdminForModule("Extensions", "Modules");
@@ -111,9 +104,8 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         }
     }
 
-
     /**
-     * testing PayPal ECS in detail page
+     * Testing PayPal ECS in detail page.
      *
      * @group paypal_standalone_mobile
      */
@@ -177,7 +169,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
     }
 
     /**
-     * testing PayPal ECS in basket
+     * Testing PayPal ECS in basket.
      *
      * @group paypal_standalone_mobile
      */
@@ -213,7 +205,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
     }
 
     /**
-     * testing PayPal Standard payment method checkout, and "Used PayPal solution" options, which turn off ECS
+     * Testing PayPal Standard payment method checkout, and "Used PayPal solution" options, which turn off ECS
      *
      * @group paypal_standalone_mobile
      * @group paypal_mobile
@@ -253,12 +245,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         $this->assertTrue($this->isTextPresent("Thank you for your order in OXID eShop"), "Order is not finished successful");
 
         // Turn Off all PayPal shortcut in frontend
-        if (OXID_VERSION_EE):
-            $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_ee.sql');
-        endif;
-        if (OXID_VERSION_PE):
-            $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_pe.sql');
-        endif;
+        $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
 
         //Add product and go to checkout
         $this->clearCache();
@@ -308,7 +295,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
     }
 
     /**
-     * login customer by using login fly out form.
+     * Login customer by using login fly out form.
      *
      * @param string  $userName     user name (email).
      * @param string  $userPass     user password.

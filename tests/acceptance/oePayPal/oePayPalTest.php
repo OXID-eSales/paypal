@@ -377,7 +377,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Kosten: 3,90 €", $this->getText("shipSetCost"));
         $this->assertElementNotPresent("//input[@value='oxidpaypal']");
         $this->selectAndWait("sShipSet", "label=Test S&H set");
-        $this->assertElementPresent("//input[@value='oxidpaypal']");
+        $this->assertElementNotPresent("//input[@value='oxidpaypal']");
 
         // clearing cache as disabled module is cached
         $this->clearCache();
@@ -642,7 +642,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
 
         //Go to PayPal via PayPal Express with "Display cart in PayPal"
-        $this->click("paypalExpressCheckoutButton");
+        $this->clickAndWait("paypalExpressCheckoutButton");
         $this->waitForItemAppear("id=submitLogin");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in paypal ");
@@ -2162,7 +2162,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->type("login_email", $sLoginEmail);
         $this->type("login_password", $sLoginPassword);
-        $this->click("id=submitLogin");
+        $this->clickAndWait("id=submitLogin");
     }
 
     /**

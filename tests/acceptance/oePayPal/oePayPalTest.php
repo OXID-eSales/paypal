@@ -2135,7 +2135,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     protected function getLoginDataByName($sVarName)
     {
         if (!$sVarValue = getenv($sVarName)) {
-            $sVarValue = $this->getArrayValueFromFile($sVarName, 'acceptance/oePayPal/testData/oepaypalData.php');
+            $sVarValue = $this->getArrayValueFromFile($sVarName, __DIR__ . '/testData/oepaypalData.php');
         }
 
         if (!$sVarValue) {

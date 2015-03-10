@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once realpath(".") . '/integration/lib/oepaypalcommunicationhelper.php';
+require_once __DIR__ . '/../lib/oepaypalcommunicationhelper.php';
 
 class Integration_oePayPal_oePayPalIPNHandlerTest extends OxidTestCase
 {

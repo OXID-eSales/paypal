@@ -36,7 +36,6 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     /* Specified test cases (optional) */
     protected $_aTestCases = array(
         //'standard/caseSetExpressCheckout_AdditionalItems.php',
-        'standard/caseSetExpressCheckout_Config2.php',
     );
 
     /**

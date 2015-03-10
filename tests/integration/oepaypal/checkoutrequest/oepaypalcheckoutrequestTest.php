@@ -31,12 +31,12 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      *
      * @var string
      */
-    protected $_sTestCasesPath = '/integration/oepaypal/checkoutrequest/testcases/';
+    protected $_sTestCasesPath = '/testcases/';
 
     /* Specified test cases (optional) */
     protected $_aTestCases = array(
         //'standard/caseSetExpressCheckout_AdditionalItems.php',
-        'standard/caseSetExpressCheckout_Config2.php',
+        //'standard/caseSetExpressCheckout_Config2.php',
     );
 
     /**
@@ -56,7 +56,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     public function providerDoExpressCheckoutPayment()
     {
         $oParser = new oePayPalTestCaseParser();
-        $oParser->setDirectory($this->_sTestCasesPath);
+        $oParser->setDirectory(__DIR__ . $this->_sTestCasesPath);
         if (isset($this->_aTestCases)) {
             $oParser->setTestCases($this->_aTestCases);
         }

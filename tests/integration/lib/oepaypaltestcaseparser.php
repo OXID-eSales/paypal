@@ -40,6 +40,9 @@ class oePayPalTestCaseParser
      */
     protected $_aTestCases = array();
 
+    /** @var string  */
+    protected $_sTestCasesPath = '';
+
     /**
      * Array of replacements for test values.
      *
@@ -139,8 +142,9 @@ class oePayPalTestCaseParser
      */
     protected function _getDirectoryTestCasesFiles($sDir, $aTestCases)
     {
-        $sPath = realpath(".") . $this->_sTestCasesPath . $sDir . "/";
+        $sPath = $this->_sTestCasesPath . $sDir . "/";
         print("Scanning dir {$sPath}\r\n");
+        $aFiles = array();
         if (empty($aTestCases)) {
             $aFiles = $this->_getFilesInDirectory($sPath);
         } else {

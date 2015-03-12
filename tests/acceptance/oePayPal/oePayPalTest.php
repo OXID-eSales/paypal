@@ -447,7 +447,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("PayPal", $this->getSelectedLabel("setPayment"));
 
         //Separate Germany from PayPal payment method and assign United States
-        $this->importSql('acceptance/oePayPal/testSql/unasignCountryFromPayPal.sql');
+        $this->importSql(__DIR__ . '/testSql/unasignCountryFromPayPal.sql');
 
         ///Go to make an order but do not finish it
         $this->clearCache();
@@ -742,7 +742,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertFalse($this->isElementPresent("paypalPartnerLogo"), "PayPal logo should not be displayed fot US");
 
         //Created additional 3 shipping methods with Shipping costs rules for Austria
-        $this->importSql('acceptance/oePayPal/testSql/newDeliveryMethod_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ . '/testSql/newDeliveryMethod_'. SHOP_EDITION .'.sql');
 
         $this->openBasket("English");
         $this->clickAndWait("//button[text()='Continue to the next step']");
@@ -902,7 +902,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalActive()
     {
         // Set PayPal payment inactive.
-        $this->importSql('acceptance/oePayPal/testSql/setPayPalPaymentInactive.sql');
+        $this->importSql(__DIR__ .'/testSql/setPayPalPaymentInactive.sql');
 
         //Go to shop to check is PayPal not visible in front end
         $this->openShop();
@@ -931,7 +931,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalDiscountsCategory()
     {
         // Add vouchers to shop
-        $this->importSql('acceptance/oePayPal/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
         //Go to shop and add product
         $this->openShop();
         $this->switchLanguage("English");
@@ -1025,7 +1025,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalDiscountsFromTill()
     {
         // Add vouchers to shop
-        $this->importSql('acceptance/oePayPal/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1185,7 +1185,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalVouchers()
     {
-        $this->importSql('acceptance/oePayPal/testSql/newVouchers_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/newVouchers_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1283,8 +1283,8 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalVAT()
     {
         // Change price for PayPal payment methode
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
-        $this->importSql('acceptance/oePayPal/testSql/testPaypaVAT_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/testPaypaVAT_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1416,7 +1416,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalShippingCostNotLoginUser()
     {
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
 
         // Go to admin and set on "Calculate default Shipping costs when User is not logged in yet "
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -1541,7 +1541,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalStockOne()
     {
-        $this->importSql('acceptance/oePayPal/testSql/changeStock.sql');
+        $this->importSql(__DIR__ .'/testSql/changeStock.sql');
 
         $this->openShop();
         $this->searchFor("1001");
@@ -1621,7 +1621,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalProportional()
     {
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/newVAT.sql');
+        $this->importSql(__DIR__ .'/testSql/newVAT.sql');
 
         // Go to admin and set on all VAT options
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -1924,7 +1924,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalExpressNettoMode()
     {
         // Activate the necessary options Neto mode
-        $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -1932,7 +1932,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
 
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
 
         $this->openBasket("English");
 
@@ -1996,8 +1996,8 @@ class oePayPal_oePayPalTest extends oxTestCase
     {
         // Activate the necessary options Neto mode
         // Turn Trusted Shops functionality on
-        $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
-        $this->importSql('acceptance/oePayPal/testSql/trustedShopsOxConfig_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/trustedShopsOxConfig_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2005,7 +2005,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
 
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
 
         // Need to wait after switching language as basket layout might not appear if JavaScript is not loaded.
         $this->switchLanguage("Deutsch");
@@ -2092,7 +2092,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalShortcut()
     {
         // Turn Off all PayPal shortcut in frontend
-        $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();

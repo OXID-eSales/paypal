@@ -248,7 +248,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         $this->assertTrue($this->isTextPresent("Thank you for your order in OXID eShop"), "Order is not finished successful");
 
         // Turn Off all PayPal shortcut in frontend
-        $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
 
         //Add product and go to checkout
         $this->clearCache();

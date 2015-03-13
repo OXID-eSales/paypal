@@ -31,7 +31,7 @@ $aModule = array(
     'id'           => 'oepaypal',
     'title'        => 'PayPal',
     'description'  => array(
-        'de' => 'Modul für die Zahlung mit PayPal.',
+        'de' => 'Modul fï¿½r die Zahlung mit PayPal.',
         'en' => 'Module for PayPal payment.',
     ),
     'thumbnail'    => 'logo.jpg',
@@ -79,11 +79,11 @@ $aModule = array(
         'oePayPalFullName'                  => 'oe/oepaypal/core/oepaypalfullname.php',
 
         // Controllers
+        'oePayPalController'                => 'oe/oepaypal/controllers/oepaypalcontroller.php',
         'oePayPalDispatcher'                => 'oe/oepaypal/controllers/oepaypaldispatcher.php',
         'oePayPalExpressCheckoutDispatcher' => 'oe/oepaypal/controllers/oepaypalexpresscheckoutdispatcher.php',
         'oePayPalStandardDispatcher'        => 'oe/oepaypal/controllers/oepaypalstandarddispatcher.php',
         'oePayPalIPNHandler'                => 'oe/oepaypal/controllers/oepaypalipnhandler.php',
-        'oePayPalController'                => 'oe/oepaypal/controllers/oepaypalcontroller.php',
         // Admin
         'oePayPalOrder_PayPal' => 'oe/oepaypal/controllers/admin/oepaypalorder_paypal.php',
         // Models

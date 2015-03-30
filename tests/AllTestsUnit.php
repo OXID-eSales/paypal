@@ -28,5 +28,5 @@ class AllTestsUnit extends AllTestsRunner
 {
 
     /** @var array Default test suites */
-    protected static $_aTestSuites = array('unit/oepaypal');
+    protected static $_aTestSuites = array('unit/oepaypal', 'integration/oepaypal');
 }

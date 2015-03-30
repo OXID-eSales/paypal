@@ -66,7 +66,7 @@ $aData = array(
             'CARTBORDERCOLOR' => '2b8da4',
             'RETURNURL' => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=oePayPalExpressCheckoutDispatcher&fnc=getExpressCheckoutDetails',
             'CANCELURL' => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=basket',
-            'PAYMENTREQUEST_0_PAYMENTACTION' => 'Authorization',
+            'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
             'CALLBACK' => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=oePayPalExpressCheckoutDispatcher&fnc=processCallBack',
             'CALLBACKTIMEOUT' => '6',
             'NOSHIPPING' => '2',

@@ -755,8 +755,14 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Check all available shipping methods
         $this->assertTextPresent("PayPal");
+        $this->selectAndWait("sShipSet", "label=Test Paypal:6 hour");
+
         $this->assertTextPresent("Charges: 0,50 €");
-        $this->assertTextPresent("Test Paypal:6 hour Test Paypal:12 hour Standard Example Set1: UPS 48 hours Example Set2: UPS Express 24 hours", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Test Paypal:6 hour", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Test Paypal:12 hour", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Standard", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Example Set1: UPS 48 hours", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Example Set2: UPS Express 24 hours", "Not all available shipping methods is displayed");
 
         //Go to 1st step and make an order via PayPal express
         $this->clickAndWait("link=1. Cart");
@@ -778,8 +784,11 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
         $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
         $this->waitForText("Gesamtbetrag €1,49 EUR");
-        $this->selectAndWait("id=shipping_method", "label=Test Paypal:12 hour Price: €0,90 EUR");
+
+        $this->waitForItemAppear("id=shipping_method", "No shipping method selection appeared");
+        $this->select("id=shipping_method", "label=Test Paypal:12 hour Price: €0,90 EUR");
         $this->waitForText("Gesamtbetrag €1,89 EUR");
+
         $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Versandkosten:€0,90", "Shipping costs is not displayed in PayPal");
         $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
@@ -831,14 +840,15 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
         $this->assertTextPresent("Anzahl: 20", "Product quantity is not shown in PayPal");
         $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
-        $this->waitForText("Gesamtbetrag €19,80 EUR");
-        $this->waitForItemAppear("id=shipping_method");
-        $this->selectAndWait("id=shipping_method", "label=Test Paypal:6 hour Price: €0,40 EUR");
+        $this->waitForText("Gesamtbetrag €20,60 EUR");
+
+        $this->waitForItemAppear("id=shipping_method", "No shipping method selection appeared");
+        $this->select("id=shipping_method", "label=Test Paypal:6 hour Price: €0,40 EUR");
         $this->waitForText("Gesamtbetrag €20,20 EUR");
+
         $this->assertTextPresent("Warenwert€19,80", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Versandkosten:€0,40", "Shipping costs is not calculated in PayPal");
         $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-        $this->assertTextPresent("Gesamtbetrag €20,20 EUR", "Total price is not displayed in PayPal");
 
         //Go to shop
         $this->_clickPayPalContinue();
@@ -964,7 +974,6 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Total €5,00 EUR");
 
         $this->_loginToSandbox();
-        $this->_clickPayPalContinue();
 
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertTextPresent("Ihr Warenkorb");
@@ -977,6 +986,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("€5,00");
         $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
         $this->click("id=continue_abovefold");
+
+        $this->_clickPayPalContinue();
 
         //Go to shop to finish the order
         // $this->_clickPayPalContinue(); CHECK THIS<-
@@ -1072,7 +1083,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Artikelpreis: €0,00", "Product price not shown in PayPal");
         $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
         $this->assertTextPresent("Warenwert€15,00");
-        $this->assertTextPresent("Versandrabatt -€0,30", "//div[@id='miniCart']");
+        $this->assertTextPresent("Rabatt -€0,30", "//div[@id='miniCart']");
         $this->assertTextPresent("Gesamtbetrag €14,70 EUR", "//div[@id='miniCart']");
         $this->click("id=continue_abovefold");
 
@@ -1132,7 +1143,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
         $this->assertTextPresent("Artikelpreis: €0,00", "Product price not shown in PayPal");
         $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("Versandrabatt -€2,25");
+        $this->assertTextPresent("Rabatt -€2,25");
         $this->assertTextPresent("Gesamtbetrag €42,75 EUR");
         $this->click("id=continue_abovefold");
 
@@ -1572,13 +1583,14 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
+        $this->waitForText("Gesamtbetrag €0,99 EUR");
 
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Versandkosten:", "Shipping costs is not calculated in PayPal");
         $this->assertTextPresent("Test product 1", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Versandmethode: Test S&H set: €0,00 EUR", "Shipping method is not shown in PayPal");
-        $this->assertEquals("Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString($this->getText("//div[@class='inset confidential']")));
+
+        $this->assertTextPresent("Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland");
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
         $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");

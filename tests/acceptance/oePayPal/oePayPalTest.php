@@ -516,8 +516,8 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Go to next step and change country to Germany
         $this->click("css=.nextStep");
-        $this->waitForItemAppear("id=userChangeAddress");
-        $this->click("id=userChangeAddress");
+        $this->waitForItemAppear("//button[@id='userChangeAddress']");
+        $this->click("//button[@id='userChangeAddress']");
         $this->click("id=invCountrySelect");
         $this->select("invCountrySelect", "label=Germany");
         $this->click("id=userNextStepTop");
@@ -734,9 +734,9 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Change to new one which has not PayPal assigned as payment method inside PayPal
         $this->click("userChangeAddress");
-        $this->waitForItemAppear("invCountrySelect");
+        $this->waitForItemAppear("//select[@id='invCountrySelect']");
 
-        $this->select("invCountrySelect", "label=United States");
+        $this->select("//select[@id='invCountrySelect']", "label=United States");
         $this->clickAndWait("//button[text()='Continue to the next step']");
         $this->clickAndWait("link=1. Cart");
         $this->assertFalse($this->isElementPresent("paypalPartnerLogo"), "PayPal logo should not be displayed fot US");
@@ -1494,7 +1494,6 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[4]/li[3]"), "Product quantity is not shown in PayPal");
 
         $this->assertTextPresent("Warenwert€31,45", "Product total is not displayed in PayPal");
-        $this->assertEquals("Gesamtbetrag €31,45 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertTextPresent("Ihr Warenkorb");
         $this->waitForText("Gesamtbetrag €44,45 EUR");

@@ -128,7 +128,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         // Select add to basket and go to checkout
         $this->clickAndWait("id=actionAddToBasketAndGoToCheckout");
         $this->assertTrue($this->isTextPresent("Item price: €0,99"), "Item price was not displayed or was displayed incorrectly in PayPal");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 2"), "Item quantity was not displayed or was displayed incorrectly in PayPal");
+        $this->assertTrue($this->isTextPresent("Quantity: 2"), "Item quantity was not displayed or was displayed incorrectly in PayPal");
 
         // Cancel order
         $this->clickAndWait("name=cancel_return");
@@ -137,7 +137,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         $this->clickAndWait("id=actionNotAddToBasketAndGoToCheckout");
         $this->assertTrue($this->isTextPresent("Item price: €0,99"), "Item price doesn't mach ot didn't displayed");
         $this->assertTrue($this->isTextPresent("€1,98"), "Item price doesn't mach ot didn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 2"), "Item quantity doesn't mach ot didn't displayed");
+        $this->assertTrue($this->isTextPresent("Quantity: 2"), "Item quantity doesn't mach ot didn't displayed");
 
         // Cancel order
         $this->clickAndWait("name=cancel_return");
@@ -148,7 +148,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
 
         $this->clickAndWait("//input[@name='paypalExpressCheckoutButton']");
         $this->assertTrue($this->isTextPresent("€1,98"), "Item price doesn't mach ot didn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 2"), "Item quantity doesn't mach ot didn't displayed");
+        $this->assertTrue($this->isTextPresent("Quantity: 2"), "Item quantity doesn't mach ot didn't displayed");
         $this->waitForItemAppear("id=submitLogin");
 
         $this->_loginToSandbox();
@@ -156,7 +156,10 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         $this->waitForItemAppear("id=continue");
         $this->assertTrue($this->isTextPresent("Test product 1"), "Purchased product name is not displayed");
         $this->assertTrue($this->isTextPresent("€1,98"), "Item price doesn't mach ot didn't displayed");
-        $this->assertTrue($this->isTextPresent("exact:Anzahl: 2"), "Item quantity doesn't mach ot didn't displayed");
+        $this->assertTrue($this->isTextPresent("Anzahl: 2"), "Item quantity doesn't mach ot didn't displayed");
+
+        $this->waitForItemAppear("//select[@id='shipping_method']", "No shipping method selection appeared");
+
         $this->_clickPayPalContinue();
 
         $this->waitForItemAppear("id=miniBasket");
@@ -190,13 +193,13 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
 
         //Cancel order in PayPal and return to the basket
         $this->assertTrue($this->isTextPresent("€159.00"), "Item price doesn't mach or doesn't displayed 2");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"), "Item quantity doesn't mach or doesn't displayed 2");
+        $this->assertTrue($this->isTextPresent("Quantity: 1"), "Item quantity doesn't mach or doesn't displayed 2");
         $this->clickAndWait("name=cancel_return");
 
         //Press bottom ECS button
         $this->clickAndWait("//div[@id='btnNextStepBottom']//form//input[@name='paypalExpressCheckoutButton']");
         $this->assertTrue($this->isTextPresent("€159.00"), "Item price doesn't mach or doesn't displayed 3");
-        $this->assertTrue($this->isTextPresent("exact:Quantity: 1"), "Item quantity doesn't mach or doesn't displayed 3");
+        $this->assertTrue($this->isTextPresent("Quantity: 1"), "Item quantity doesn't mach or doesn't displayed 3");
         $this->clickAndWait("name=cancel_return");
 
         //Checking whether user was redirected back to the basket
@@ -229,9 +232,9 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         $this->click("//div[@id='shippingMethods']/div");
         $this->clickAndWait("//a[contains(text(),'Test S&H set')]");
         $this->click("//div[@id='paymentMethods']/div");
-        $this->click("link=PayPal");
+        $this->click("//div[@id='paymentMethods']//a[text()='PayPal']");
         $this->assertTrue($this->isElementPresent("css=img.paypalPaymentImg"), "No PayPal logo in 3rd payment step");
-        $this->assertTrue($this->isElementPresent("link=exact:?"), "No sign '?' near PayPal logo");
+        $this->assertTrue($this->isElementPresent("//a[text()='?']"), "No sign '?' near PayPal logo");
         $this->assertTrue($this->isElementPresent("id=displayCartInPayPal"), "No Display Cart In PayBal checkbox in payment step");
         $this->assertTrue($this->isChecked("id=displayCartInPayPal"), "Display Cart In PayPal checkbox is not checked in payment step");
         $this->clickAndWait("id=paymentNextStepBottom");
@@ -308,7 +311,8 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         $this->type("//input[@id='loginUser']", $userName);
         $this->type("//input[@id='loginPwd']", $userPass);
         if ($waitForLogin) {
-            $this->clickAndWait("//form[@name='login']//input[@type='submit']", "//a[text()='Log out']");
+            $this->clickAndWait("//form[@name='login']//input[@type='submit']");
+            $this->waitForElement("//a[text()='Log out']");
         } else {
             $this->clickAndWait("//form[@name='login']//input[@type='submit']");
         }

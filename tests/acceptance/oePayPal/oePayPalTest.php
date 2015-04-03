@@ -515,8 +515,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
         //Go to next step and change country to Germany
-        $this->click("css=.nextStep");
-        $this->waitForItemAppear("//button[@id='userChangeAddress']");
+        $this->clickAndWait("css=.nextStep");
         $this->click("//button[@id='userChangeAddress']");
         $this->click("id=invCountrySelect");
         $this->select("invCountrySelect", "label=Germany");
@@ -734,7 +733,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Change to new one which has not PayPal assigned as payment method inside PayPal
         $this->click("userChangeAddress");
-        $this->waitForItemAppear("//select[@id='invCountrySelect']");
+        $this->waitForItemAppear("//select[@id='invCountrySelect']/option[text()='United States']");
 
         $this->select("//select[@id='invCountrySelect']", "label=United States");
         $this->clickAndWait("//button[text()='Continue to the next step']");

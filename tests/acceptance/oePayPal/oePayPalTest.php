@@ -733,7 +733,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Change to new one which has not PayPal assigned as payment method inside PayPal
         $this->click("userChangeAddress");
-        $this->waitForItemAppear("//select[@id='invCountrySelect']/option[text()='United States']");
+        $this->waitForElement("//select[@id='invCountrySelect']/option[text()='United States']");
 
         $this->select("//select[@id='invCountrySelect']", "label=United States");
         $this->clickAndWait("//button[text()='Continue to the next step']");

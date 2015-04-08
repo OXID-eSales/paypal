@@ -523,7 +523,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->waitForPageToLoad("30000");
 
         //Check if PayPal is not displayed for Germany
-        $this->assertEquals("Test S&H set Standard Example Set1: UPS 48 hours Example Set2: UPS Express 24 hours", $this->getText("sShipSet"), "Not all shipping methods are available in drop down");
+        $this->assertElementNotPresent("//select[@name='sShipSet']/option[text()='Paypal']", "Paypal is displayed for Germany, but must be not shown");
+
         $this->assertEquals("COD (Cash on Delivery) (7,50 €)", $this->getText("//form[@id='payment']/dl[5]/dt/label/b"), "Wrong payment method is shown");
         $this->assertTextPresent("COD (Cash on Delivery) (7,50 €)", "Wrong payment method is shown");
         $this->assertFalse($this->isTextPresent("PayPal (0,00 €)"), "PayPal should not be displayed as payment method");
@@ -733,7 +734,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Change to new one which has not PayPal assigned as payment method inside PayPal
         $this->click("userChangeAddress");
-        $this->waitForItemAppear("//select[@id='invCountrySelect']/option[text()='United States']");
+        $this->waitForElement("//select[@id='invCountrySelect']/option[text()='United States']");
 
         $this->select("//select[@id='invCountrySelect']", "label=United States");
         $this->clickAndWait("//button[text()='Continue to the next step']");

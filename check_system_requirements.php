@@ -86,12 +86,12 @@ echo 'Teste ob OpenSSL installiert ist.';
 if (extension_loaded('openssl')) {
     printOk();
 } else {
-    printError('OpenSSL ist nicht verfï¿½gbar.', 'Bitte Installieren Sie OpenSSL f&uuml;r PHP. Weitere Hinweise in der <a href="http://de3.php.net/manual/de/book.openssl.php" target="_blank">PHP Dokumentation</a>.');
+    printError('OpenSSL ist nicht verfügbar.', 'Bitte Installieren Sie OpenSSL f&uuml;r PHP. Weitere Hinweise in der <a href="http://de3.php.net/manual/de/book.openssl.php" target="_blank">PHP Dokumentation</a>.');
     $blError = true;
 }
 
 if ($blError) {
     echo '<b><font color="red">Die Systemvoraussetzungen sind nicht erf&uuml;llt.</font></b>';
 } else {
-    echo '<b><font color="green">Gl&uuml;ckwunsch. Die Systemvoraussetzungen sind erf&uuml;llt. Sie kï¿½nnen das PayPal Modul installieren.</font></b>';
+    echo '<b><font color="green">Gl&uuml;ckwunsch. Die Systemvoraussetzungen sind erf&uuml;llt. Sie können das PayPal Modul installieren.</font></b>';
 }

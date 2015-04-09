@@ -65,15 +65,10 @@ function printOk($sNote = '')
 
 // check php version and zend decoder
 echo 'Teste PHP-Version. ';
-$sPhpVersion = '';
-if (version_compare('5.4', phpversion()) < 0) {
-    $sPhpVersion = '5.4';
-    printOK();
-} elseif (version_compare('5.3', phpversion()) < 0) {
-    $sPhpVersion = '5.3';
+if (version_compare('5.3', phpversion()) < 0) {
     printOK();
 } else {
-    printError("PHP 5.3 oder 5.4 wird vorausgesetzt. Installiert ist jedoch: " . phpversion(), ". Bitte PHP 5.3.x oder gr&ouml;&szlig;er verwenden.");
+    printError("PHP 5.3 oder gr&ouml;&szlig;er wird vorausgesetzt. Installiert ist jedoch: " . phpversion() . ".", "Bitte PHP 5.3.x oder gr&ouml;&szlig;er verwenden.");
     $blError = true;
 }
 
@@ -91,12 +86,12 @@ echo 'Teste ob OpenSSL installiert ist.';
 if (extension_loaded('openssl')) {
     printOk();
 } else {
-    printError('OpenSSL ist nicht verfügbar.', 'Bitte Installieren Sie OpenSSL f&uuml;r PHP. Weitere Hinweise in der <a href="http://de3.php.net/manual/de/book.openssl.php" target="_blank">PHP Dokumentation</a>.');
+    printError('OpenSSL ist nicht verfï¿½gbar.', 'Bitte Installieren Sie OpenSSL f&uuml;r PHP. Weitere Hinweise in der <a href="http://de3.php.net/manual/de/book.openssl.php" target="_blank">PHP Dokumentation</a>.');
     $blError = true;
 }
 
 if ($blError) {
     echo '<b><font color="red">Die Systemvoraussetzungen sind nicht erf&uuml;llt.</font></b>';
 } else {
-    echo '<b><font color="green">Gl&uuml;ckwunsch. Die Systemvoraussetzungen sind erf&uuml;llt. Sie können das PayPal Modul installieren.</font></b>';
+    echo '<b><font color="green">Gl&uuml;ckwunsch. Die Systemvoraussetzungen sind erf&uuml;llt. Sie kï¿½nnen das PayPal Modul installieren.</font></b>';
 }

@@ -113,8 +113,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
         $this->waitForElement("login.x");
 
-        $this->_loginToSandbox();
-        $this->_clickPayPalContinue();
+        $this->loginToSandbox();
+        $this->clickPayPalContinue();
 
         $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
         // Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!
@@ -254,14 +254,14 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Quantity: 2", "Item quantity doesn't mach ot didn't displayed");
         $this->waitForItemAppear("id=submitLogin");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=shipping_method");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
         $this->assertTextPresent("€1,98", "Item price doesn't mach ot didn't displayed");
         $this->assertTextPresent("Anzahl: 2", "Item quantity doesn't mach ot didn't displayed");
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
         $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
         // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
@@ -294,8 +294,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->click("paypalExpressCheckoutButton");
         $this->waitForItemAppear("id=submitLogin");
 
-        $this->_loginToSandbox();
-        $this->_clickPayPalContinue();
+        $this->loginToSandbox();
+        $this->clickPayPalContinue();
 
         $this->assertEquals("0,99 €", $this->getText("name=basketGrandTotal"), "Grand total price changed or didn't displayed");
         $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: testing_account@oxid-esales.com SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland", $this->clearString($this->getText("orderAddress")));
@@ -315,14 +315,14 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->click("paypalExpressCheckoutButton");
         $this->waitForItemAppear("id=submitLogin");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=shipping_method");
 
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
         $this->assertTextPresent("€0,99");
 
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
 
         //User is on the 4th page
         $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
@@ -409,8 +409,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
         $this->waitForElement("login.x");
 
-        $this->_loginToSandbox();
-        $this->_clickPayPalContinue();
+        $this->loginToSandbox();
+        $this->clickPayPalContinue();
 
         $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
@@ -447,7 +447,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("PayPal", $this->getSelectedLabel("setPayment"));
 
         //Separate Germany from PayPal payment method and assign United States
-        $this->importSql('acceptance/oePayPal/testSql/unasignCountryFromPayPal.sql');
+        $this->importSql(__DIR__ .'/testSql/unasignCountryFromPayPal.sql');
 
         ///Go to make an order but do not finish it
         $this->clearCache();
@@ -480,7 +480,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
 
         //Login to PayPal as US user
-        $this->_loginToSandbox($this->getLoginDataByName('sBuyerUSLogin'));
+        $this->loginToSandbox($this->getLoginDataByName('sBuyerUSLogin'));
 
         //After login to PayPal check does all necessary element displayed correctly
         $this->waitForItemAppear("id=continue");
@@ -496,7 +496,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Go to shop
         $this->waitForText("Total €7.89 EUR");
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
         $this->waitForItemAppear("id=breadCrumb");
 
         //Now user is on the 1st "cart" step with an error message:
@@ -648,7 +648,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in paypal ");
         $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
@@ -678,7 +678,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertfalse($this->isTextPresent("Item number: 1001"), "Item number should not be displayed in PayPal");
         $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed in PayPal");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
@@ -742,7 +742,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertFalse($this->isElementPresent("paypalPartnerLogo"), "PayPal logo should not be displayed fot US");
 
         //Created additional 3 shipping methods with Shipping costs rules for Austria
-        $this->importSql('acceptance/oePayPal/testSql/newDeliveryMethod_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/newDeliveryMethod_'. SHOP_EDITION .'.sql');
 
         $this->openBasket("English");
         $this->clickAndWait("//button[text()='Continue to the next step']");
@@ -771,7 +771,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in the 1st order step ");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
@@ -784,9 +784,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
         $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
         $this->waitForText("Gesamtbetrag €1,49 EUR");
-
-        $this->waitForItemAppear("id=shipping_method", "No shipping method selection appeared");
-        $this->select("id=shipping_method", "label=Test Paypal:12 hour Price: €0,90 EUR");
+        $this->selectPayPalShippingMethod('Test Paypal:12 hour Price: €0,90 EUR');
         $this->waitForText("Gesamtbetrag €1,89 EUR");
 
         $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
@@ -795,8 +793,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Gesamtbetrag €1,89 EUR", "Total price is not displayed in PayPal");
 
         //Go to shop
-        $this->_clickPayPalContinue();
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
+        $this->clickPayPalContinue();
         $this->waitForItemAppear("id=breadCrumb");
 
         //Check are all info in the last order step correct
@@ -828,7 +826,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in the PayPal");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
@@ -840,10 +838,9 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
         $this->assertTextPresent("Anzahl: 20", "Product quantity is not shown in PayPal");
         $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
-        $this->waitForText("Gesamtbetrag €20,60 EUR");
+        $this->waitForText("Gesamtbetrag €19,80 EUR");
+        $this->selectPayPalShippingMethod('Test Paypal:6 hour Price: €0,40 EUR');
 
-        $this->waitForItemAppear("id=shipping_method", "No shipping method selection appeared");
-        $this->select("id=shipping_method", "label=Test Paypal:6 hour Price: €0,40 EUR");
         $this->waitForText("Gesamtbetrag €20,20 EUR");
 
         $this->assertTextPresent("Warenwert€19,80", "Product price is not displayed in PayPal");
@@ -851,8 +848,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
 
         //Go to shop
-        $this->_clickPayPalContinue();
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
+        $this->clickPayPalContinue();
         $this->waitForItemAppear("id=breadCrumb");
 
         //Check are all info in the last order step correct
@@ -891,12 +888,12 @@ class oePayPal_oePayPalTest extends oxTestCase
         //Login to standard PayPal and check ability to change country
         $this->waitForElement("login.x");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->assertFalse($this->isElementPresent("id=changeAddressButton"), "In standard PayPal there should be not possibility to change address");
         $this->assertEquals("Ihre Zahlungsinformationen auf einen Blick - PayPal", $this->getTitle());
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
 
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
@@ -912,7 +909,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalActive()
     {
         // Set PayPal payment inactive.
-        $this->importSql('acceptance/oePayPal/testSql/setPayPalPaymentInactive.sql');
+        $this->importSql(__DIR__ .'/testSql/setPayPalPaymentInactive.sql');
 
         //Go to shop to check is PayPal not visible in front end
         $this->openShop();
@@ -941,7 +938,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalDiscountsCategory()
     {
         // Add vouchers to shop
-        $this->importSql('acceptance/oePayPal/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
         //Go to shop and add product
         $this->openShop();
         $this->switchLanguage("English");
@@ -973,7 +970,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Total €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
         $this->assertTextPresent("Total €5,00 EUR");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
+        $this->clickPayPalContinue();
 
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertTextPresent("Ihr Warenkorb");
@@ -1036,7 +1034,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalDiscountsFromTill()
     {
         // Add vouchers to shop
-        $this->importSql('acceptance/oePayPal/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1070,7 +1068,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("-€0,30", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
         $this->assertEquals("Total €14,70 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
 
@@ -1129,7 +1127,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item total €45,00");
         $this->assertTextPresent("Shipping discount -€2,25");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
@@ -1196,7 +1194,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalVouchers()
     {
-        $this->importSql('acceptance/oePayPal/testSql/newVouchers_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/newVouchers_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1232,7 +1230,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("-€10,00", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
         $this->assertEquals("Total €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
@@ -1294,8 +1292,8 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalVAT()
     {
         // Change price for PayPal payment methode
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
-        $this->importSql('acceptance/oePayPal/testSql/testPaypaVAT_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/testPaypaVAT_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1346,7 +1344,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Shipping and handling:");
         $this->assertTextPresent("€15,47");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
 
@@ -1427,7 +1425,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalShippingCostNotLoginUser()
     {
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
 
         // Go to admin and set on "Calculate default Shipping costs when User is not logged in yet "
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -1474,7 +1472,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("€3.00");
         $this->assertTextPresent("Item total €31.45");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue_abovefold");
         $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
@@ -1499,7 +1497,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->waitForText("Gesamtbetrag €44,45 EUR");
 
         $this->click("id=continue_abovefold");
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
         $this->waitForItemAppear("id=breadCrumb");
 
         $this->assertTextPresent("Test product 3");
@@ -1551,7 +1549,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalStockOne()
     {
-        $this->importSql('acceptance/oePayPal/testSql/changeStock.sql');
+        $this->importSql(__DIR__ .'/testSql/changeStock.sql');
 
         $this->openShop();
         $this->searchFor("1001");
@@ -1578,7 +1576,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in PayPal ");
         $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
@@ -1610,7 +1608,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         // adding sleep to wait while "continue" button will be active
         sleep(1);
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
         $this->waitForItemAppear("id=breadCrumb");
 
         //Check are all info in the last order step correct
@@ -1632,7 +1630,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalProportional()
     {
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/newVAT.sql');
+        $this->importSql(__DIR__ .'/testSql/newVAT.sql');
 
         // Go to admin and set on all VAT options
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -1705,7 +1703,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Total €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
         $this->assertTextPresent("Item total €46,94");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
 
@@ -1837,7 +1835,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Total €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
         $this->assertTextPresent("Item total €46,94");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         $this->waitForItemAppear("id=continue");
 
@@ -1935,7 +1933,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalExpressNettoMode()
     {
         // Activate the necessary options Neto mode
-        $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -1943,7 +1941,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
 
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
 
         $this->openBasket("English");
 
@@ -1976,7 +1974,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item price: €2.52", "Gift card is not correct. Should be in Net mode.");
         $this->assertTextPresent("Item total €122.22", "Total items sum should be displayed");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         // Check if article sum and VAT is shown correctly after login to PayPal.
         // Continue button is visible before PayPal does callback.
@@ -1994,7 +1992,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->waitForItemAppear("id=displayShippingAmount");
         $this->assertTextPresent("Gesamtbetrag €158,45 EUR", "Total price is not displayed in PayPal");
 
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
         $this->waitForText("Please check all data on this overview before submitting your order!");
     }
 
@@ -2007,8 +2005,8 @@ class oePayPal_oePayPalTest extends oxTestCase
     {
         // Activate the necessary options Neto mode
         // Turn Trusted Shops functionality on
-        $this->importSql('acceptance/oePayPal/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
-        $this->importSql('acceptance/oePayPal/testSql/trustedShopsOxConfig_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/trustedShopsOxConfig_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2016,7 +2014,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
 
         // Change price for PayPal payment method
-        $this->importSql('acceptance/oePayPal/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
 
         // Need to wait after switching language as basket layout might not appear if JavaScript is not loaded.
         $this->switchLanguage("Deutsch");
@@ -2080,7 +2078,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Versandkosten:€13,00", "Product Shipping costs is not displayed in PayPal");
         $this->assertTextPresent("Gesamtbetrag €1.346,94 EUR", "Total price is not displayed in PayPal");
 
-        $this->_loginToSandbox();
+        $this->loginToSandbox();
 
         // Check if article sum and VAT is shown correctly after login to PayPal.
         $this->waitForItemAppear("id=continue");
@@ -2090,7 +2088,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Steuer:€212,99", "Product VAT is not displayed in PayPal");
         $this->assertTextPresent("Gesamtbetrag €1.346,94 EUR", "Total price is not displayed in PayPal");
 
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
 
         $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
     }
@@ -2103,7 +2101,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function testPayPalShortcut()
     {
         // Turn Off all PayPal shortcut in frontend
-        $this->importSql('acceptance/oePayPal/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ .'/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2136,33 +2134,12 @@ class oePayPal_oePayPalTest extends oxTestCase
     }
 
     /**
-     * Returns PayPal login data by variable name
-     *
-     * @param $sVarName
-     *
-     * @return mixed|null|string
-     * @throws Exception
-     */
-    protected function getLoginDataByName($sVarName)
-    {
-        if (!$sVarValue = getenv($sVarName)) {
-            $sVarValue = $this->getArrayValueFromFile($sVarName, 'acceptance/oePayPal/testData/oepaypalData.php');
-        }
-
-        if (!$sVarValue) {
-            throw new Exception('Undefined variable: ' . $sVarName);
-        }
-
-        return $sVarValue;
-    }
-
-    /**
      * Login to PayPal sandbox.
      *
      * @param string $sLoginEmail    email to login.
      * @param string $sLoginPassword password to login.
      */
-    protected function _loginToSandbox($sLoginEmail = null, $sLoginPassword = null)
+    protected function loginToSandbox($sLoginEmail = null, $sLoginPassword = null)
     {
         if (!isset($sLoginEmail)) {
             $sLoginEmail = $this->getLoginDataByName('sBuyerLogin');
@@ -2181,10 +2158,43 @@ class oePayPal_oePayPalTest extends oxTestCase
      * Then it becomes invisible while PayPal does callback.
      * Button appears when PayPal gets callback result.
      */
-    protected function _clickPayPalContinue()
+    protected function clickPayPalContinue()
     {
         $this->waitForItemAppear( "//input[@id='continue']", 10, true );
         $this->waitForEditable( "id=continue" );
         $this->clickAndWait( "id=continue" );
+    }
+
+    /**
+     * Selects shipping method in PayPal page
+     *
+     * @param string $method Method label
+     */
+    protected function selectPayPalShippingMethod($method)
+    {
+        $this->waitForItemAppear("id=shipping_method");
+        $this->select("id=shipping_method", "label=$method");
+        $this->waitForItemAppear("id=continue");
+    }
+
+    /**
+     * Returns PayPal login data by variable name
+     *
+     * @param $sVarName
+     *
+     * @return mixed|null|string
+     * @throws Exception
+     */
+    protected function getLoginDataByName($sVarName)
+    {
+        if (!$sVarValue = getenv($sVarName)) {
+            $sVarValue = $this->getArrayValueFromFile($sVarName, __DIR__ .'/testData/oepaypalData.php');
+        }
+
+        if (!$sVarValue) {
+            throw new Exception('Undefined variable: ' . $sVarName);
+        }
+
+        return $sVarValue;
     }
 }

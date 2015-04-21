@@ -910,6 +910,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     {
         // Set PayPal payment inactive.
         $this->importSql(__DIR__ .'/testSql/setPayPalPaymentInactive.sql');
+        $this->clearTemp();
 
         //Go to shop to check is PayPal not visible in front end
         $this->openShop();
@@ -971,7 +972,6 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Total €5,00 EUR");
 
         $this->loginToSandbox();
-        $this->clickPayPalContinue();
 
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertTextPresent("Ihr Warenkorb");
@@ -985,10 +985,9 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
         $this->click("id=continue_abovefold");
 
-        $this->_clickPayPalContinue();
+        $this->clickPayPalContinue();
 
         //Go to shop to finish the order
-        // $this->_clickPayPalContinue(); CHECK THIS<-
         $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 0", "Purchased product name is not displayed in last order step");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in last order step");

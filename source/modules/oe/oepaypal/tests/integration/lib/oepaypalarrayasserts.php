@@ -23,7 +23,10 @@
  * Basket constructor
  *
  */
-class oePayPalArrayAsserts extends PHPUnit_Framework_TestCase
+
+require_once __DIR__ . '/oepaypalintegrationtesthelper.php';
+
+class oePayPalArrayAsserts extends oePayPalIntegrationTestHelper
 {
 
     /**

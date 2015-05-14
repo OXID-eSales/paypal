@@ -21,6 +21,8 @@
 
 /**
  * Basket component
+ *
+ * @mixin oxcmp_Basket
  */
 class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
 {

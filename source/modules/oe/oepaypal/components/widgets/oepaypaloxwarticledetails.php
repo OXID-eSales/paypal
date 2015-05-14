@@ -21,6 +21,8 @@
 
 /**
  * Article box widget
+ *
+ * @mixin oxwArticleDetails
  */
 class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
 {

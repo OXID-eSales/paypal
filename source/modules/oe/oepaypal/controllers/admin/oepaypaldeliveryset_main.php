@@ -22,6 +22,8 @@
 
 /**
  * Adds additional functionality needed for PayPal when managing delivery sets.
+ *
+ * @mixin DeliverySet_Main
  */
 class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
 {

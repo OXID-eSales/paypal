@@ -21,6 +21,8 @@
 
 /**
  * PayPal Wrapping class
+ *
+ * @mixin Wrapping
  */
 class oePayPalWrapping extends oePayPalWrapping_parent
 {

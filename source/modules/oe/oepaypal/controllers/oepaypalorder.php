@@ -21,6 +21,8 @@
 
 /**
  * Order class wrapper for PayPal module
+ *
+ * @mixin Order
  */
 class oePayPalOrder extends oePayPalOrder_parent
 {

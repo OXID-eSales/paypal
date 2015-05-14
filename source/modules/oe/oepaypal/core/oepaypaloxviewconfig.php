@@ -21,6 +21,8 @@
 
 /**
  * oxViewConfig class wrapper for PayPal module.
+ *
+ * @mixin oxViewConfig
  */
 class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
 {

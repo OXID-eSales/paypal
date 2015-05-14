@@ -21,6 +21,8 @@
 
 /**
  * PayPal oxUser class.
+ *
+ * @mixin oxUser
  */
 class oePayPalOxUser extends oePayPalOxUser_parent
 {

@@ -21,6 +21,8 @@
 
 /**
  * Payment class wrapper for PayPal module
+ *
+ * @mixin Payment
  */
 class oePayPalPayment extends oePayPalPayment_parent
 {

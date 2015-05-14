@@ -22,6 +22,8 @@
 /**
  * Payment gateway manager.
  * Checks and sets payment method data, executes payment.
+ *
+ * @mixin oxPaymentGateway
  */
 class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
 {
@@ -230,7 +232,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
     /**
      * Returns PayPal order object
      *
-     * @return oxOrder
+     * @return oePayPalOxOrder|oxOrder
      */
     protected function _getPayPalOrder()
     {

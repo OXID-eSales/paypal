@@ -21,6 +21,8 @@
 
 /**
  * PayPal oxBasket class
+ *
+ * @mixin oxBasket
  */
 class oePayPalOxBasket extends oePayPalOxBasket_parent
 {

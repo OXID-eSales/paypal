@@ -21,6 +21,8 @@
 
 /**
  * PayPal oxArticle class
+ *
+ * @mixin oxArticle
  */
 class oePayPalOxArticle extends oePayPalOxArticle_parent
 {

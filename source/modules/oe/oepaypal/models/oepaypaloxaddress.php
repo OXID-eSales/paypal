@@ -21,6 +21,8 @@
 
 /**
  * PayPal oxAddress class
+ *
+ * @mixin oxAddress
  */
 class oePayPalOxAddress extends oePayPalOxAddress_parent
 {

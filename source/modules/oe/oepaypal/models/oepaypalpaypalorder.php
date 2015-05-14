@@ -25,6 +25,11 @@
 class oePayPalPayPalOrder extends oePayPalModel
 {
     /**
+     * Completion status
+     */
+    const PAYPAL_ORDER_STATE_COMPLETED = 'completed';
+
+    /**
      * List of order payments.
      *
      * @var oePayPalOrderPaymentList
@@ -189,6 +194,13 @@ class oePayPalPayPalOrder extends oePayPalModel
     public function setPaymentStatus($sStatus)
     {
         $this->_setValue('oepaypal_paymentstatus', $sStatus);
+
+        // if payment completed, set order paid
+        if ($sStatus == oePayPalPayPalOrder::PAYPAL_ORDER_STATE_COMPLETED) {
+            $order = oxNew('oxOrder');
+            $order->load($this->getOrderId());
+            $order->markOrderPaid();
+        }
     }
 
     /**
@@ -200,7 +212,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     {
         $sState = $this->_getValue('oepaypal_paymentstatus');
         if (empty($sState)) {
-            $sState = "completed";
+            $sState = self::PAYPAL_ORDER_STATE_COMPLETED;
         }
 
         return $sState;

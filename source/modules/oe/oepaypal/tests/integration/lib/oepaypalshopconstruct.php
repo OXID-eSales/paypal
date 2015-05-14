@@ -125,7 +125,7 @@ class oePayPalShopConstruct
      */
     public function setConfigParameters()
     {
-        $oConfig = modConfig::getInstance();
+        $oConfig = oxRegistry::getConfig();
         $aParams = $this->getParams('config');
         if (!empty($aParams)) {
             foreach ($aParams as $sKey => $sValue) {

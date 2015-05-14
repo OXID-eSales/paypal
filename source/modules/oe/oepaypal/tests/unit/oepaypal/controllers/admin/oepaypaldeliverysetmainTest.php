@@ -70,7 +70,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTe
      */
     public function testSave_SameShippingIdExistsDeliverySetMarkedAsSet_ShippingIdSame()
     {
-        $this->setRequestParam('isPayPalDefaultMobilePayment', true);
+        $this->setRequestParameter('isPayPalDefaultMobilePayment', true);
 
         $oPayPalDeliverySet_Main = $this->_getDeliverySet();
         $sDeliverySetId1 = $oPayPalDeliverySet_Main->getEditObjectId();
@@ -90,7 +90,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTe
      */
     public function testSave_NotSameShippingIdExistsDeliverySetMarkedAsSet_ShippingIdNew()
     {
-        $this->setRequestParam('isPayPalDefaultMobilePayment', true);
+        $this->setRequestParameter('isPayPalDefaultMobilePayment', true);
 
         $sPayPalModuleId = 'module:oepaypal';
         $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', 'standard', null, $sPayPalModuleId);
@@ -108,7 +108,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTe
      */
     public function testSave_ShippingIdDoNotExistsDeliverySetMarkedAsSet_ShippingIdNew()
     {
-        $this->setRequestParam('isPayPalDefaultMobilePayment', true);
+        $this->setRequestParameter('isPayPalDefaultMobilePayment', true);
 
         $oPayPalDeliverySet_Main = $this->_getDeliverySet();
         $sDeliverySetId2 = $oPayPalDeliverySet_Main->getEditObjectId();

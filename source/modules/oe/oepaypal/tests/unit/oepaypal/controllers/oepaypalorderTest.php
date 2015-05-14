@@ -60,7 +60,6 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
         $this->assertFalse($oView->isPayPal());
     }
 
-
     /**
      * Data provider for getUser test
      *
@@ -91,6 +90,7 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
         $this->getSession()->setVariable('usr', $sDefaultUserId);
 
         $oOrder = new oePayPalOrder();
+        $oOrder->setUser(null);
         $oUser = $oOrder->getUser();
 
         $this->assertEquals($sExpectedUserId, $oUser->oxuser__oxid->value);

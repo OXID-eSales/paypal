@@ -19,13 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-
-if (!class_exists('oePayPalOxOrder_parent')) {
-    class oePayPalOxOrder_parent extends oxOrder
-    {
-    }
-}
-
 /**
  * Testing oxAccessRightException class.
  */
@@ -172,12 +165,18 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
             'getPaymentId'  => 'oxidpaypal',
             'getShippingId' => 'oxidstandard',
         );
-        $oBasket = $this->_createStub('oePayPalOxBasket', $aBasketMethods);
+        $oBasket = $this->createStub('oePayPalOxBasket', $aBasketMethods);
 
         $oEmptyPayment = oxNew('oxPayment');
         $oEmptyPayment->load('oxempty');
         $oEmptyPayment->oxpayments__oxactive = new oxField(1);
         $oEmptyPayment->save();
+
+        $deliverySetList = $this->getMock('oxDeliverySetList', array('getDeliverySetList'));
+        $deliverySetList->expects($this->any())->method('getDeliveryList')->will($this->returnValue(array()));
+        oxRegistry::set("oxDeliverySetList", $deliverySetList);
+
+        /** @var oePayPalOxUser $oUser */
         $oUser = oxNew('oxUser');
 
         $oOrder = new oePayPalOxOrder();

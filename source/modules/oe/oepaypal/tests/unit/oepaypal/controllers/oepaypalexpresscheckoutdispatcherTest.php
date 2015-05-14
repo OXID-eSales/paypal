@@ -19,19 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-if (!class_exists('oePayPalOxUser_parent')) {
-    class oePayPalOxUser_parent extends oxUser
-    {
-    }
-}
-
-if (!class_exists('oePayPalOxAddress_parent')) {
-    class oePayPalOxAddress_parent extends oxAddress
-    {
-    }
-}
-
-
 /**
  * Testing oePayPalExpressCheckoutDispatcher class.
  */
@@ -42,6 +29,11 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
      */
     protected function setUp()
     {
+        parent::setUp();
+
+        $oUtilsMock = $this->getMock('oxUtils', array('showMessageAndExit'));
+        oxRegistry::set('oxUtils', $oUtilsMock);
+
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                      "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
@@ -279,7 +271,7 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
 
         // preparing utils view
         $oUtilsView = $this->getMock("oxUtilsView", array("addErrorToDisplay"));
-        $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($oExcp));
+        $oUtilsView->expects($this->once())->method("addErrorToDisplay")->will($this->returnValue(null));
 
         // preparing
         $oDispatcher = $this->getMock("oepaypalexpresscheckoutdispatcher", array("getPayPalCheckoutService", "_getUtilsView"));
@@ -307,7 +299,6 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
      */
     public function testProcessCallBack_cancelPayment_noUserCountryId()
     {
-
         // preparing paypal service
         $oPayPalService = $this->getMock("oePayPalService", array("callbackResponse"));
         $oPayPalService->expects($this->once())->method("callbackResponse");
@@ -340,7 +331,6 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
      */
     public function testProcessCallBack_cancelPayment_noDeliverySet()
     {
-
         // preparing paypal service
         $oPayPalService = $this->getMock("oePayPalService", array("callbackResponse"));
         $oPayPalService->expects($this->once())->method("callbackResponse");

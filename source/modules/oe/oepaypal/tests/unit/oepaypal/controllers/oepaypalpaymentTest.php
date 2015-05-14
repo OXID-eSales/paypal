@@ -39,14 +39,14 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     public function testValidatePayment()
     {
         // forcing payment id
-        $this->setRequestParam("paymentid", null);
+        $this->setRequestParameter("paymentid", null);
 
         $oView = new oePayPalPayment();
         $this->assertNull($oView->validatePayment());
 
         // forcing payment id
-        $this->setRequestParam("paymentid", "oxidpaypal");
-        $this->setRequestParam("displayCartInPayPal", 1);
+        $this->setRequestParameter("paymentid", "oxidpaypal");
+        $this->setRequestParameter("displayCartInPayPal", 1);
 
         $oView = new oePayPalPayment();
         $this->assertEquals("oePayPalStandardDispatcher?fnc=setExpressCheckout&displayCartInPayPal=1", $oView->validatePayment());
@@ -62,8 +62,8 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     public function testValidatePaymentIfCheckedByPayPal()
     {
         // forcing payment id
-        $this->setRequestParam("paymentid", "oxidpaypal");
-        $this->setRequestParam("displayCartInPayPal", 1);
+        $this->setRequestParameter("paymentid", "oxidpaypal");
+        $this->setRequestParameter("displayCartInPayPal", 1);
 
         $oView = $this->getMock("oePayPalPayment", array("isConfirmedByPayPal"));
         $oView->expects($this->once())->method("isConfirmedByPayPal")->will($this->returnValue(true));
@@ -81,7 +81,7 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     public function testIsConfirmedByPayPal()
     {
         // forcing payment id
-        $this->setRequestParam("paymentid", "oxidpaypal");
+        $this->setRequestParameter("paymentid", "oxidpaypal");
         $this->getSession()->setVariable("oepaypal-basketAmount", 129.00);
 
         $oPrice = $this->getMock("oxPrice", array("getBruttoPrice"));

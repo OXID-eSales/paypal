@@ -78,7 +78,7 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
      * Executes payment, returns true on success.
      *
      * @param double $dAmount Goods amount
-     * @param object &$oOrder User ordering object
+     * @param oePayPalOxOrder &$oOrder User ordering object
      *
      * @return bool
      */

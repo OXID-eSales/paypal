@@ -48,7 +48,7 @@ class oePayPalOrderPaymentActionManager
     /**
      * Sets order.
      *
-     * @param oePayPalOxOrder $oPayment
+     * @param oePayPalOrderPayment $oPayment
      */
     public function setPayment($oPayment)
     {
@@ -85,7 +85,7 @@ class oePayPalOrderPaymentActionManager
      * Checks whether action is available for given order
      *
      * @param string $sAction
-     * @param object $oPayment
+     * @param oePayPalOrderPayment $oPayment
      *
      * @return bool
      */

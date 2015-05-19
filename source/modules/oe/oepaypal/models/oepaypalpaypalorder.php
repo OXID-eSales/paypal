@@ -24,9 +24,7 @@
  */
 class oePayPalPayPalOrder extends oePayPalModel
 {
-    /**
-     * Completion status
-     */
+    /** Completion status */
     const PAYPAL_ORDER_STATE_COMPLETED = 'completed';
 
     /**
@@ -99,11 +97,11 @@ class oePayPalPayPalOrder extends oePayPalModel
     /**
      * Get PayPal captured amount.
      *
-     * @return string
+     * @return double
      */
     public function getCapturedAmount()
     {
-        return $this->_getValue('oepaypal_capturedamount');
+        return (double) $this->_getValue('oepaypal_capturedamount');
     }
 
     /**
@@ -129,17 +127,17 @@ class oePayPalPayPalOrder extends oePayPalModel
     /**
      * Get PayPal refunded amount.
      *
-     * @return string
+     * @return double
      */
     public function getRefundedAmount()
     {
-        return $this->_getValue('oepaypal_refundedamount');
+        return (double) $this->_getValue('oepaypal_refundedamount');
     }
 
     /**
      * Returns not yet captured (remaining) order sum.
      *
-     * @return string
+     * @return double
      */
     public function getRemainingRefundAmount()
     {
@@ -159,11 +157,11 @@ class oePayPalPayPalOrder extends oePayPalModel
     /**
      * Get PayPal refunded amount.
      *
-     * @return string
+     * @return double
      */
     public function getVoidedAmount()
     {
-        return $this->_getValue('oepaypal_voidedamount');
+        return (double) $this->_getValue('oepaypal_voidedamount');
     }
 
     /**

@@ -34,6 +34,8 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     {
         oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
         oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+
+        parent::setUp();
     }
 
     /**

@@ -21,9 +21,17 @@
 
 /**
  * PayPal oxOrder class
+ *
+ * @mixin oxOrder
  */
 class oePayPalOxOrder extends oePayPalOxOrder_parent
 {
+    /** Transaction was finished successfully. */
+    const OEPAYPAL_TRANSACTION_STATUS_OK = 'OK';
+
+    /** Transaction is not finished or failed. */
+    const OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED = 'NOT_FINISHED';
+
     /**
      * PayPal order information
      *
@@ -100,17 +108,16 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      * @param string $sTransactionId Order transaction ID
      * @param string $sDate          Order transaction date
      */
-    protected function _setPaymentInfoPayPalOrder($sTransactionId, $sDate)
+    protected function _setPaymentInfoPayPalOrder($sTransactionId)
     {
         // set transaction ID and payment date to order
         $oDb = oxDb::getDb();
 
-        $sQ = 'update oxorder set oxtransid=' . $oDb->quote($sTransactionId) . ', oxpaid=' . $oDb->quote($sDate) . '  where oxid=' . $oDb->quote($this->getId());
+        $sQ = 'update oxorder set oxtransid=' . $oDb->quote($sTransactionId) . ' where oxid=' . $oDb->quote($this->getId());
         $oDb->execute($sQ);
 
         //updating order object
         $this->oxorder__oxtransid = new oxField($sTransactionId);
-        $this->oxorder__oxpaid = new oxField($sDate);
     }
 
     /**
@@ -125,7 +132,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
         $sDate = date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime());
 
         // set order status, transaction ID and payment date to order
-        $this->_setPaymentInfoPayPalOrder($oResult->getTransactionId(), $sDate);
+        $this->_setPaymentInfoPayPalOrder($oResult->getTransactionId());
 
         $sCurrency = $oResult->getCurrencyCode();
         if (!$sCurrency) {
@@ -171,6 +178,39 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     }
 
     /**
+     * Paypal specific status checking.
+     *
+     * If status comes as OK, lets check real paypal payment state,
+     * and if really ok, so lets set it, otherwise dont change status.
+     *
+     * @param string $sStatus order transaction status
+     */
+    protected function _setOrderStatus($sStatus)
+    {
+        $paymentTypeObject = $this->getPaymentType();
+        if ($paymentTypeObject->getFieldData('oxpaymentsid') != 'oxidpaypal' || $sStatus != self::OEPAYPAL_TRANSACTION_STATUS_OK) {
+            parent::_setOrderStatus($sStatus);
+        }
+    }
+
+    /**
+     * Update order oxpaid to current time.
+     */
+    public function markOrderPaid()
+    {
+        parent::_setOrderStatus(self::OEPAYPAL_TRANSACTION_STATUS_OK);
+
+        $oDb = oxDb::getDb();
+        $sDate = date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime());
+
+        $sQ = 'update oxorder set oxpaid=? where oxid=?';
+        $oDb->execute($sQ, array($sDate, $this->getId()));
+
+        //updating order object
+        $this->oxorder__oxpaid = new oxField($sDate);
+    }
+
+    /**
      * Checks if delivery set used for current order is available and active.
      * Throws exception if not available
      *
@@ -187,6 +227,8 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
             if (!$oUser->loadUserPayPalUser()) {
                 $oUser = $this->getUser();
             }
+
+            $iValidState = null;
             if (!$this->_isPayPalPaymentValid($oUser, $dBasketPrice, $sShippingId)) {
                 $iValidState = self::ORDER_STATE_INVALIDDELIVERY;
             }

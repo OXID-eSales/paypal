@@ -24,6 +24,9 @@
  */
 class oePayPalPayPalOrder extends oePayPalModel
 {
+    /** Completion status */
+    const PAYPAL_ORDER_STATE_COMPLETED = 'completed';
+
     /**
      * List of order payments.
      *
@@ -94,11 +97,11 @@ class oePayPalPayPalOrder extends oePayPalModel
     /**
      * Get PayPal captured amount.
      *
-     * @return string
+     * @return double
      */
     public function getCapturedAmount()
     {
-        return $this->_getValue('oepaypal_capturedamount');
+        return (double) $this->_getValue('oepaypal_capturedamount');
     }
 
     /**
@@ -124,17 +127,17 @@ class oePayPalPayPalOrder extends oePayPalModel
     /**
      * Get PayPal refunded amount.
      *
-     * @return string
+     * @return double
      */
     public function getRefundedAmount()
     {
-        return $this->_getValue('oepaypal_refundedamount');
+        return (double) $this->_getValue('oepaypal_refundedamount');
     }
 
     /**
      * Returns not yet captured (remaining) order sum.
      *
-     * @return string
+     * @return double
      */
     public function getRemainingRefundAmount()
     {
@@ -154,11 +157,11 @@ class oePayPalPayPalOrder extends oePayPalModel
     /**
      * Get PayPal refunded amount.
      *
-     * @return string
+     * @return double
      */
     public function getVoidedAmount()
     {
-        return $this->_getValue('oepaypal_voidedamount');
+        return (double) $this->_getValue('oepaypal_voidedamount');
     }
 
     /**
@@ -189,6 +192,13 @@ class oePayPalPayPalOrder extends oePayPalModel
     public function setPaymentStatus($sStatus)
     {
         $this->_setValue('oepaypal_paymentstatus', $sStatus);
+
+        // if payment completed, set order paid
+        if ($sStatus == oePayPalPayPalOrder::PAYPAL_ORDER_STATE_COMPLETED) {
+            $order = oxNew('oxOrder');
+            $order->load($this->getOrderId());
+            $order->markOrderPaid();
+        }
     }
 
     /**
@@ -200,7 +210,7 @@ class oePayPalPayPalOrder extends oePayPalModel
     {
         $sState = $this->_getValue('oepaypal_paymentstatus');
         if (empty($sState)) {
-            $sState = "completed";
+            $sState = self::PAYPAL_ORDER_STATE_COMPLETED;
         }
 
         return $sState;

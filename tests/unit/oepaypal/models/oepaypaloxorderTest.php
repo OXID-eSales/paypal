@@ -82,7 +82,8 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $oOrder->oxorder__oxtransstatus = new oxField('NOT_FINISHED');
         $oOrder->save();
 
-        $oBasket = new oxBasket();
+        /** @var oxBasket $oBasket */
+        $oBasket = oxNew('oxBasket');
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
@@ -96,11 +97,11 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $oDetails->setData($aResult);
 
         $oOrder->finalizePayPalOrder($oDetails, $oBasket, 'Sale');
+
         $this->assertEquals('NOT_FINISHED', $oOrder->oxorder__oxtransstatus->value);
         $this->assertEquals('_testTranzactionId', $oOrder->oxorder__oxtransid->value);
 
-        $sDate = date('Y-m-d', oxRegistry::get('oxUtilsDate')->getTime());
-        $this->assertEquals($sDate, substr($oOrder->oxorder__oxpaid->value, 0, 10));
+        $this->assertEquals('0000-00-00', substr($oOrder->oxorder__oxpaid->value, 0, 10));
     }
 
     /**
@@ -111,19 +112,22 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
      */
     public function testFinalizeOrder_notPayPalPayment()
     {
-        $oTestOrder = new oxOrder();
+        $oTestOrder = oxNew('oxOrder');
         $oTestOrder->setId('_testOrderId');
         $oTestOrder->oxorder__oxtransstatus = new oxField("OK");
         $oTestOrder->save();
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
+        /** @var oxBasket|PHPUnit_Framework_MockObject_MockObject $oBasket */
         $oBasket = $this->getMock('oxBasket', array('getPaymentId'));
         $oBasket->expects($this->any())->method('getPaymentId')->will($this->returnValue("anotherPayment"));
 
-        $oUser = new oxUser();
+        /** @var oxUser $oUser */
+        $oUser = oxNew('oxUser');
 
-        $oOrder = new oePayPalOxOrder();
+        /** @var oxOrder $oOrder */
+        $oOrder = oxNew('oxOrder');
         $oOrder->setId('_testOrderId');
         $oOrder->finalizeOrder($oBasket, $oUser);
 

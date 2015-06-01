@@ -40,6 +40,11 @@ class oePayPalOrderManager
     protected $_oOrderPaymentStatusCalculator = null;
 
     /**
+     * @var oePayPalOrderPaymentListCalculator
+     */
+    protected $_oOrderPaymentListCalculator = null;
+
+    /**
      * Sets order payment.
      *
      * @param oePayPalOrderPayment $oOrderPayment
@@ -112,6 +117,31 @@ class oePayPalOrderManager
     }
 
     /**
+     * Sets oePayPalOrderPaymentListCalculator.
+     *
+     * @param oePayPalOrderPaymentListCalculator $oOrderPaymentListCalculator
+     */
+    public function setOrderPaymentListCalculator($oOrderPaymentListCalculator)
+    {
+        $this->_oOrderPaymentListCalculator = $oOrderPaymentListCalculator;
+    }
+
+    /**
+     * Returns oePayPalOrderPaymentListCalculator.
+     *
+     * @return oePayPalOrderPaymentStatusCalculator
+     */
+    public function getOrderPaymentListCalculator()
+    {
+        if (is_null($this->_oOrderPaymentListCalculator)) {
+            $oOrderPaymentListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
+            $this->setOrderPaymentListCalculator($oOrderPaymentListCalculator);
+        }
+
+        return $this->_oOrderPaymentListCalculator;
+    }
+
+    /**
      * Update order manager to status get from order status calculator.
      *
      * @return bool
@@ -120,14 +150,38 @@ class oePayPalOrderManager
     {
         $blOrderUpdated = false;
         $oOrder = $this->getOrder();
+
         if (!is_null($oOrder)) {
             $oOrderPayment = $this->getOrderPayment();
+            $oOrder = $this->recalculateAmounts($oOrder);
             $sNewOrderStatus = $this->_calculateOrderStatus($oOrderPayment, $oOrder);
             $this->_updateOrderStatus($oOrder, $sNewOrderStatus);
             $blOrderUpdated = true;
         }
 
         return $blOrderUpdated;
+    }
+
+    /**
+     * Recalculate order amounts from payment list.
+     *
+     * @param oePayPalPayPalOrder $order
+     *
+     * @return mixed
+     */
+    protected function recalculateAmounts($order)
+    {
+        $paymentList = $order->getPaymentList();
+        $orderPaymentListCalculator = $this->getOrderPaymentListCalculator();
+        $orderPaymentListCalculator->setPaymentList($paymentList);
+        $orderPaymentListCalculator->calculate();
+
+        $order->setCapturedAmount($orderPaymentListCalculator->getCapturedAmount());
+        $order->setVoidedAmount($orderPaymentListCalculator->getVoidedAmount());
+        $order->setRefundedAmount($orderPaymentListCalculator->getRefundedAmount());
+        $order->save();
+
+        return $order;
     }
 
     /**

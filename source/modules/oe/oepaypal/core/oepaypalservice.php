@@ -270,6 +270,7 @@ class oePayPalService
         $oCaller = $this->getCaller();
         $oCurl = $oCaller->getCurl();
         $oCurl->setConnectionCharset($sCharset);
+        $oCurl->setDataCharset($sCharset);
         $oCurl->setUrlToCall($this->getPayPalConfig()->getIPNResponseUrl());
 
         $oResponse = oxNew('oePayPalResponseDoVerifyWithPayPal');

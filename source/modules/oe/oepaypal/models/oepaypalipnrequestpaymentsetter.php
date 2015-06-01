@@ -25,6 +25,15 @@
 class oePayPalIPNRequestPaymentSetter
 {
     /**
+     * PayPal action that triggered this transaction.
+     *
+     * @var string
+     */
+    const CAPTURE_ACTION        = 'capture';
+    const REFUND_ACTION         = 'refund';
+    const AUTHORIZATION_ACTION  = 'authorization';
+
+    /**
      * Sandbox mode parameter name.
      *
      * @var string
@@ -58,6 +67,41 @@ class oePayPalIPNRequestPaymentSetter
      * @var string
      */
     const MC_CURRENCY = 'mc_currency';
+
+    /**
+     * String PayPal payment date.
+     *
+     * @var string
+     */
+    const PAYMENT_DATE = 'payment_date';
+
+    /**
+     * String PayPal payment correlation id.
+     *
+     * @var string
+     */
+    const CORRELATION_ID = 'correlation_id';
+
+    /**
+     * String PayPal payment ipn tracking id, might come instead of correlation id.
+     *
+     * @var string
+     */
+    const IPN_TRACK_ID = 'ipn_track_id';
+
+    /**
+     * String PayPal payment comment.
+     *
+     * @var string
+     */
+    const PAYPAL_IPN_MEMO = 'memo';
+
+    /**
+     * String PayPal status for successful refund.
+     *
+     * @var string
+     */
+    const PAYPAL_STATUS_REFUND_DONE = 'Refunded';
 
     /**
      * @var oePayPalRequest
@@ -112,6 +156,28 @@ class oePayPalIPNRequestPaymentSetter
     }
 
     /**
+     * Add comment for request payment if comment exists.
+     *
+     * @param  oePayPalOrderPayment $oRequestOrderPayment
+     * @return oePayPalOrderPayment
+     */
+    public function addRequestPaymentComment($requestOrderPayment)
+    {
+        $request = $this->getRequest();
+        $memo    = $request->getRequestParameter(self::PAYPAL_IPN_MEMO);
+
+        if (!empty($memo)) {
+            $comment = oxNew('oePayPalOrderPaymentComment');
+            $comment->setComment($memo);
+            $requestOrderPayment->addComment($comment);
+            if (0 < $requestOrderPayment->getId()) {
+                $requestOrderPayment->save();
+            }
+        }
+        return $requestOrderPayment;
+    }
+
+    /**
      * Prepare PayPal payment. Fill up with request values.
      *
      * @param oePayPalOrderPayment $oRequestOrderPayment order to set params.
@@ -123,6 +189,48 @@ class oePayPalIPNRequestPaymentSetter
         $oRequestOrderPayment->setStatus($oRequest->getRequestParameter(self::PAYPAL_PAYMENT_STATUS));
         $oRequestOrderPayment->setTransactionId($oRequest->getRequestParameter(self::PAYPAL_TRANSACTION_ID));
         $oRequestOrderPayment->setCurrency($oRequest->getRequestParameter(self::MC_CURRENCY));
-        $oRequestOrderPayment->setAmount($oRequest->getRequestParameter(self::MC_GROSS));
+        $oRequestOrderPayment->setAmount($this->getAmount());
+        $oRequestOrderPayment->setAction($this->getAction());
+
+        $correlationId = $oRequest->getRequestParameter(self::CORRELATION_ID);
+        if (empty($correlationId)) {
+            $correlationId = $oRequest->getRequestParameter(self::IPN_TRACK_ID);
+        }
+        $oRequestOrderPayment->setCorrelationId($correlationId);
+
+        $date = 0 < strlen($oRequest->getRequestParameter(self::PAYMENT_DATE)) ?
+                date('Y-m-d H:i:s', strtotime($oRequest->getRequestParameter(self::PAYMENT_DATE))) : null;
+        $oRequestOrderPayment->setDate($date);
     }
+
+    /**
+     * Get PayPal action from request, we might have a refund.
+     *
+     * @return string
+     */
+    protected function getAction()
+    {
+        $action    = self::CAPTURE_ACTION;
+        $request   = $this->getRequest();
+        $rawAmount = $request->getRequestParameter(self::MC_GROSS);
+        $status    = $request->getRequestParameter(self::PAYPAL_PAYMENT_STATUS);
+
+        if ( (0 > $rawAmount) && (self::PAYPAL_STATUS_REFUND_DONE == $status) ) {
+            $action = self::REFUND_ACTION;
+        }
+
+        return $action;
+    }
+
+    /**
+     * Get amount from request.
+     *
+     * @return number
+     */
+    protected function getAmount()
+    {
+        $request = $this->getRequest();
+        return !is_null($request->getRequestParameter(self::MC_GROSS)) ? abs($request->getRequestParameter(self::MC_GROSS)) : null;
+    }
+
 }

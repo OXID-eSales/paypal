@@ -24,29 +24,34 @@
  */
 class oePayPalIPNPaymentBuilder
 {
-    /**
-     * @var oePayPalRequest
-     */
+    /** @var string IPN request parameter names. */
+    const PAYPAL_IPN_AUTH_ID     = 'auth_id';
+
+    /** @var string IPN request parameter names. */
+    const PAYPAL_IPN_AUTH_STATUS = 'auth_status';
+
+    /** @var string IPN request parameter names. */
+    const PAYPAL_IPN_PARENT_TRANSACTION_ID = 'parent_txn_id';
+
+    /** @var string String PayPal transaction entity. */
+    const PAYPAL_IPN_TRANSACTION_ENTITY = 'transaction_entity';
+
+    /** @var string Class only handles IPÜN transaction payments. */
+    const HANDLE_TRANSACTION_ENTITY = 'payment';
+
+    /** @var oePayPalRequest */
     protected $_oRequest = null;
 
-    /**
-     * @var oePayPalIPNRequestPaymentSetter
-     */
+    /** @var oePayPalIPNRequestPaymentSetter */
     protected $_oPayPalIPNPaymentSetter = null;
 
-    /**
-     * @var oePayPalOrderPayment
-     */
+    /** @var oePayPalOrderPayment */
     protected $_oOrderPayment = null;
 
-    /**
-     * @var oePayPalIPNPaymentValidator
-     */
+    /** @var oePayPalIPNPaymentValidator */
     protected $_oPayPalIPNPaymentValidator = null;
 
-    /**
-     * @var oxLang
-     */
+    /** @var oxLang */
     protected $_oLang = null;
 
     /**
@@ -146,6 +151,8 @@ class oePayPalIPNPaymentBuilder
      */
     public function buildPayment()
     {
+        $oReturn = null;
+
         // Setter forms request payment from request parameters.
         $oRequestOrderPayment = $this->_prepareRequestOrderPayment();
 
@@ -159,17 +166,100 @@ class oePayPalIPNPaymentBuilder
             $oOrderPayment = $this->_addPaymentValidationInformation($oRequestOrderPayment, $oOrderPayment);
             $oOrderPayment = $this->_changePaymentStatusInfo($oRequestOrderPayment, $oOrderPayment);
             $oOrderPayment->save();
+            $oReturn = $oOrderPayment;
         } else {
-            $oOrderPayment = null;
+            $oReturn = $this->handleOrderPayment($oRequestOrderPayment);
         }
 
-        return $oOrderPayment;
+        return $oReturn;
+    }
+
+    /**
+     * IPN request might be for a transaction that does not yet exist in the shop database.
+     * In this case we have to
+     * - create payment
+     * - update parent transaction in case of refund
+     * - update authorization status (can be Pending, In Progress, Completed)
+     *
+     * In some cases we need to create an PayPal order payment from IPN request.
+     *
+     * @param oePayPalOrderPayment $requestOrderPayment
+     *
+     * @return oePayPalOrderPayment|null
+     */
+    protected function handleOrderPayment($requestOrderPayment)
+    {
+        $return              = null;
+        $request             = $this->getRequest();
+        $authId              = $request->getRequestParameter(self::PAYPAL_IPN_AUTH_ID);
+        $authStatus          = $request->getRequestParameter(self::PAYPAL_IPN_AUTH_STATUS);
+        $parentTransactionId = $request->getRequestParameter(self::PAYPAL_IPN_PARENT_TRANSACTION_ID);
+        $transactionEntity   = $request->getRequestParameter(self::PAYPAL_IPN_TRANSACTION_ENTITY);
+
+        if (self::HANDLE_TRANSACTION_ENTITY != $transactionEntity) {
+            return $return;
+        }
+
+        //search for the parent transaction
+        $orderPaymentParent = $this->_loadOrderPayment($parentTransactionId);
+
+        if ($orderPaymentParent->getOrderId()) {
+            $requestOrderPayment->setOrderId($orderPaymentParent->getOrderId());
+            $requestOrderPayment->save(); //need an
+            $requestPaymentSetter = $this->getOrderPaymentSetter();
+            $requestPaymentSetter->setRequest($this->getRequest());
+            $requestOrderPayment = $requestPaymentSetter->addRequestPaymentComment($requestOrderPayment);
+
+            $this->updateOrderPaymentAuthorizationStatus($authId, $authStatus, $orderPaymentParent->getOrderId());
+            $this->updateParentTransaction($orderPaymentParent, $requestOrderPayment);
+            $return = $requestOrderPayment;
+        }
+        return $return;
+    }
+
+    /**
+     * Update the parent transaction in case of refund.
+     *
+     * @param oePayPalOrderPayment $orderPaymentParent
+     * @param oePayPalOrderPayment $requestOrderPayment
+     *
+     * @return null
+     */
+    protected function updateParentTransaction($orderPaymentParent, $requestOrderPayment)
+    {
+        if (oePayPalIPNRequestPaymentSetter::REFUND_ACTION == $requestOrderPayment->getAction()) {
+            $orderPaymentParent->addRefundedAmount($requestOrderPayment->getAmount());
+            $orderPaymentParent->save();
+        }
+    }
+
+    /**
+     * The related authorization status might have changed, we need to update
+     * that transaction status as well according to the IPN request data.
+     *
+     * @param string $authId
+     * @param string $authStatus
+     * @param string $orderId
+     *
+     * @return null
+     */
+    protected function updateOrderPaymentAuthorizationStatus($authId, $authStatus, $orderId)
+    {
+        $orderPaymentAuthorization = $this->_loadOrderPayment($authId);
+        if ( (oePayPalIPNRequestPaymentSetter::AUTHORIZATION_ACTION == $orderPaymentAuthorization->getAction())
+             && !empty($authStatus)
+             && ($orderId == $orderPaymentAuthorization->getOrderId())
+           ) {
+            $orderPaymentAuthorization->setStatus($authStatus);
+            $orderPaymentAuthorization->save();
+        }
     }
 
     /**
      * Load order payment from transaction id.
      *
      * @param string $sTransactionId transaction id to load object.
+     * @param string $sCorrelationId correlation id to load object.
      *
      * @return oePayPalOrderPayment|null
      */

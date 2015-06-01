@@ -90,6 +90,7 @@ $aModule = array(
         'oePayPalOrderPaymentStatusList'                  => 'oe/oepaypal/models/oepaypalorderpaymentstatuslist.php',
         'oePayPalOrderPayment'                            => 'oe/oepaypal/models/oepaypalorderpayment.php',
         'oePayPalOrderPaymentList'                        => 'oe/oepaypal/models/oepaypalorderpaymentlist.php',
+        'oePayPalOrderPaymentListCalculator'              => 'oe/oepaypal/models/oepaypalorderpaymentlistcalculator.php',
         'oePayPalOrderActionManager'                      => 'oe/oepaypal/models/oepaypalorderactionmanager.php',
         'oePayPalPayPalOrder'                             => 'oe/oepaypal/models/oepaypalpaypalorder.php',
         'oePayPalOrderPaymentStatusCalculator'            => 'oe/oepaypal/models/oepaypalorderpaymentstatuscalculator.php',

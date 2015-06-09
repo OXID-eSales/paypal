@@ -36,7 +36,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest exte
             array(
                 array(
                     'VERIFIED'       => true,
-                    'receiver_email' => 'some@oxid-esales.com',
+                    'receiver_email' => 'some@oxid-esales.dev',
                     'test_ipn'       => true,
                     'payment_status' => 'refund',
                     'txn_id'         => '153d4fd1s',
@@ -45,7 +45,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest exte
                 ),
                 array(
                     'ack'            => true,
-                    'receiver_email' => 'some@oxid-esales.com',
+                    'receiver_email' => 'some@oxid-esales.dev',
                     'test_ipn'       => true,
                     'payment_status' => 'refund',
                     'transaction_id' => '153d4fd1s',
@@ -56,7 +56,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest exte
             array(
                 array(
                     'Not-VERIFIED'   => true,
-                    'receiver_email' => 'someone@oxid-esales.com',
+                    'receiver_email' => 'someone@oxid-esales.dev',
                     'test_ipn'       => false,
                     'payment_status' => 'completed',
                     'txn_id'         => '454asd4as46d4',
@@ -65,7 +65,7 @@ class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest exte
                 ),
                 array(
                     'ack'            => false,
-                    'receiver_email' => 'someone@oxid-esales.com',
+                    'receiver_email' => 'someone@oxid-esales.dev',
                     'test_ipn'       => false,
                     'payment_status' => 'completed',
                     'transaction_id' => '454asd4as46d4',

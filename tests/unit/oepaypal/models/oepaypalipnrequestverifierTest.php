@@ -38,7 +38,7 @@ class Unit_oePayPal_Models_oePayPalIPNRequestVerifierTest extends OxidTestCase
 
     public function testSetGetShopOwner()
     {
-        $sShopOwner = 'some@oxid-esales.com';
+        $sShopOwner = 'some@oxid-esales.dev';
 
         $oHandler = new oePayPalIPNRequestVerifier();
         $oHandler->setShopOwner($sShopOwner);
@@ -121,7 +121,7 @@ class Unit_oePayPal_Models_oePayPalIPNRequestVerifierTest extends OxidTestCase
      */
     public function testRequestCorrect($blValidatorSayIsValid)
     {
-        $sShopOwner = 'someone@oxid-esales.com';
+        $sShopOwner = 'someone@oxid-esales.dev';
         $aPayPalRequest = array('zzz' => 'yyy');
         $aPayPalResponse = array('aaa' => 'bbb');
         $sValidatorFailureMessage = 'some message';

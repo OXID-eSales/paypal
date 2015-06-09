@@ -34,12 +34,12 @@ class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends OxidTestCase
     {
         return array(
             array(true, null, null, array('VERIFIED' => 'true')),
-            array(true, 'none@oxid-esales.com', array('receiver_email' => 'none@oxid-esales.com'), array('VERIFIED' => '')),
-            array(true, 'none2@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('VERIFIED' => '')),
-            array(false, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('VERIFIED' => '')),
+            array(true, 'none@oxid-esales.dev', array('receiver_email' => 'none@oxid-esales.dev'), array('VERIFIED' => '')),
+            array(true, 'none2@oxid-esales.dev', array('receiver_email' => 'none2@oxid-esales.dev'), array('VERIFIED' => '')),
+            array(false, 'none@oxid-esales.dev', array('receiver_email' => 'none2@oxid-esales.dev'), array('VERIFIED' => '')),
             array(false, null, null, null),
-            array(false, 'none2@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('NOT_VERIFIED' => '')),
-            array(false, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('someString' => '')),
+            array(false, 'none2@oxid-esales.dev', array('receiver_email' => 'none2@oxid-esales.dev'), array('NOT_VERIFIED' => '')),
+            array(false, 'none@oxid-esales.dev', array('receiver_email' => 'none2@oxid-esales.dev'), array('someString' => '')),
         );
     }
 
@@ -68,11 +68,11 @@ class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends OxidTestCase
     {
         $aCases = array();
         $aMessages = array(
-            'Shop owner'           => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'VERIFIED',
-            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
+            'Shop owner'           => 'none@oxid-esales.dev', 'PayPal ID' => 'none2@oxid-esales.dev', 'PayPal ACK' => 'VERIFIED',
+            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.dev)',
             'PayPal Full Response' => 'Array(    [VERIFIED] => )',
         );
-        $aCases[] = array($aMessages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('VERIFIED' => ''));
+        $aCases[] = array($aMessages, 'none@oxid-esales.dev', array('receiver_email' => 'none2@oxid-esales.dev'), array('VERIFIED' => ''));
 
         $aMessages = array(
             'Shop owner'           => '', 'PayPal ID' => '', 'PayPal ACK' => 'NOT VERIFIED',
@@ -82,18 +82,18 @@ class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends OxidTestCase
         $aCases[] = array($aMessages, null, null, null);
 
         $aMessages = array(
-            'Shop owner'           => 'none2@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
-            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
+            'Shop owner'           => 'none2@oxid-esales.dev', 'PayPal ID' => 'none2@oxid-esales.dev', 'PayPal ACK' => 'NOT VERIFIED',
+            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.dev)',
             'PayPal Full Response' => 'Array(    [NOT_VERIFIED] => )',
         );
-        $aCases[] = array($aMessages, 'none2@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('NOT_VERIFIED' => ''));
+        $aCases[] = array($aMessages, 'none2@oxid-esales.dev', array('receiver_email' => 'none2@oxid-esales.dev'), array('NOT_VERIFIED' => ''));
 
         $aMessages = array(
-            'Shop owner'           => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
-            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
+            'Shop owner'           => 'none@oxid-esales.dev', 'PayPal ID' => 'none2@oxid-esales.dev', 'PayPal ACK' => 'NOT VERIFIED',
+            'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.dev)',
             'PayPal Full Response' => 'Array(    [someString] => )',
         );
-        $aCases[] = array($aMessages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('someString' => ''));
+        $aCases[] = array($aMessages, 'none@oxid-esales.dev', array('receiver_email' => 'none2@oxid-esales.dev'), array('someString' => ''));
 
         return $aCases;
     }

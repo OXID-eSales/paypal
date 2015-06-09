@@ -43,7 +43,7 @@ class Integration_oePayPal_IpnRequestHandler_oePayPalIpnHandlerTest extends Oxid
     {
         $oConfig = new oePayPalConfig();
         $sRealShopOwner = $oConfig->getUserEmail();
-        $sNotRealShopOwner = 'some12a1sd5@oxid-esales.com';
+        $sNotRealShopOwner = 'some12a1sd5@oxid-esales.dev';
 
         return array(
             // Correct values. Payment status changes to given from PayPal. Order status is calculated from payment.

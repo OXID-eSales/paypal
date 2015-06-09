@@ -113,7 +113,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
     {
         // Open shop and add product to the basket
         $this->openShop();
-        $this->loginInFrontendMobile("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontendMobile("testing_account@oxid-esales.dev", "useruser");
         $this->searchFor("1001");
         $this->clickAndWait("//ul[@id='searchList']/li/form/div[2]/h4/a");
         $this->clickAndWait("id=toBasket");
@@ -217,7 +217,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
     {
         //Add product and go to checkout
         $this->openShop();
-        $this->loginInFrontendMobile("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontendMobile("testing_account@oxid-esales.dev", "useruser");
         $this->searchFor("1001");
         $this->clickAndWait("//ul[@id='searchList']/li/form/div[2]/h4/a");
         $this->clickAndWait("id=toBasket");
@@ -253,7 +253,7 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         //Add product and go to checkout
         $this->clearCache();
         $this->openShop();
-        $this->loginInFrontendMobile("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontendMobile("testing_account@oxid-esales.dev", "useruser");
         $this->searchFor("1001");
         $this->clickAndWait("//ul[@id='searchList']/li/form/div[2]/h4/a");
         $this->assertFalse($this->isElementPresent("id=paypalExpressCheckoutDetailsButton"), "ECS button should be not visible in detail page");

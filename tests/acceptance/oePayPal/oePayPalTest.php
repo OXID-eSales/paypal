@@ -421,7 +421,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
         $this->openListItem("link=2");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");
 
         //Check user's order information in admin
@@ -542,7 +542,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
         $this->openListItem("2");
 
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");
 
         //Check user's order nr 2 information in admin
@@ -597,7 +597,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.2']/td[7]"), "Wrong user last name is displayed in order");
         $this->assertEquals("0000-00-00 00:00:00", $this->getText("//tr[@id='row.1']/td[4]"));
         $this->openListItem("3", "setfolder");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertTextPresent("Order No.: 3", "Order number is not displayed in admin");
         $this->assertEquals("1 *", $this->getText("//table[2]/tbody/tr/td[1]"));
         $this->assertEquals("Test product 1", $this->getText("//td[3]"), "Purchased product name is not displayed in Admin");
@@ -1008,7 +1008,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
         $this->openListItem("2");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertEquals("5,00 EUR", $this->getText("//td[5]"));
         $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("5,00", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
@@ -1168,7 +1168,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
         $this->openListItem("link=2");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertEquals("0,00 EUR", $this->getText("//td[5]"));
 
         $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
@@ -1262,7 +1262,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
         $this->openListItem("link=2");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertEquals("15,00 EUR", $this->getText("//td[5]"));
         $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("15,00", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
@@ -1396,7 +1396,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
         $this->openListItem("link=2");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertEquals("17,85 EUR", $this->getText("//td[5]"));
         $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("17,85", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
@@ -1520,7 +1520,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals($this->getLoginDataByName('sBuyerFirstName'), $this->getText("//tr[@id='row.1']/td[6]"));
         $this->assertEquals($this->getLoginDataByName('sBuyerLastName'), $this->getText("//tr[@id='row.1']/td[7]"));
         $this->openListItem("link=2");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertEquals("15,00 EUR", $this->getText("//td[5]"));
         $this->assertEquals("Billing Address: {$this->getLoginDataByName('sBuyerFirstName')} {$this->getLoginDataByName('sBuyerLastName')} ESpachstr. 1 79111 Freiburg Germany E-mail: {$this->getLoginDataByName('sBuyerLogin')}", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("15,00", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
@@ -1902,7 +1902,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.2']/td[6]"), "Wrong user name is displayed in order");
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.2']/td[7]"), "Wrong user last name is displayed in order");
         $this->openListItem("link=2");
-        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED");
         $this->assertEquals("10,00 EUR", $this->getText("//td[5]"));
 
         $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));

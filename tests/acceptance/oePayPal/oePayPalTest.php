@@ -597,7 +597,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.2']/td[7]"), "Wrong user last name is displayed in order");
         $this->assertEquals("0000-00-00 00:00:00", $this->getText("//tr[@id='row.1']/td[4]"));
         $this->openListItem("3", "setfolder");
-        $this->assertTextPresent("Internal Status: NOT_FINISHED");
+        $this->assertTextPresent("Internal Status: OK");
         $this->assertTextPresent("Order No.: 3", "Order number is not displayed in admin");
         $this->assertEquals("1 *", $this->getText("//table[2]/tbody/tr/td[1]"));
         $this->assertEquals("Test product 1", $this->getText("//td[3]"), "Purchased product name is not displayed in Admin");

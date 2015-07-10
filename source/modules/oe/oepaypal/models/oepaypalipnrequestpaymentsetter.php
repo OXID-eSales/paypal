@@ -53,9 +53,6 @@ class oePayPalIPNRequestPaymentSetter
     /** @var string PayPal payment ipn tracking id, might come instead of correlation id. */
     const IPN_TRACK_ID = 'ipn_track_id';
 
-    /** @var string PayPal payment comment. */
-    const PAYPAL_IPN_MEMO = 'memo';
-
     /** @var string PayPal status for successful refund. */
     const PAYPAL_STATUS_REFUND_DONE = 'Refunded';
 
@@ -109,28 +106,6 @@ class oePayPalIPNRequestPaymentSetter
         $this->_prepareOrderPayment($this->_oRequestOrderPayment);
 
         return $this->_oRequestOrderPayment;
-    }
-
-    /**
-     * Add comment for request payment if comment exists.
-     *
-     * @param  oePayPalOrderPayment $oRequestOrderPayment
-     * @return oePayPalOrderPayment
-     */
-    public function addRequestPaymentComment($requestOrderPayment)
-    {
-        $request = $this->getRequest();
-        $memo    = $request->getRequestParameter(self::PAYPAL_IPN_MEMO);
-
-        if ($memo) {
-            $comment = oxNew('oePayPalOrderPaymentComment');
-            $comment->setComment($memo);
-            $requestOrderPayment->addComment($comment);
-            if (0 < $requestOrderPayment->getId()) {
-                $requestOrderPayment->save();
-            }
-        }
-        return $requestOrderPayment;
     }
 
     /**

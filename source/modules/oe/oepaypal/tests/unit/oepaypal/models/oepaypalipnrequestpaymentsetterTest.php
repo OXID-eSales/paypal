@@ -37,7 +37,6 @@ class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends OxidTestC
                     'mc_currency'    => 'EUR',
                     'ipn_track_id'   => 'corrxxx',
                     'payment_date'   => '00:54:36 Jun 03, 2015 PDT',
-                    'memo'           => ''
                 ),
                 'capture'
             ),
@@ -51,7 +50,6 @@ class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends OxidTestC
                     'mc_currency'    => 'EUR',
                     'correlation_id' => 'corryyy',
                     'payment_date'   => '00:54:36 Jun 03, 2015 PDT',
-                    'memo'           => ''
                 ),
                 'refund'
             ),
@@ -65,7 +63,6 @@ class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends OxidTestC
      * Test case for oePayPalIPNRequestPaymentSetter::getRequest
      * Test case for oePayPalIPNRequestPaymentSetter::getAction
      * Test case for oePayPalIPNRequestPaymentSetter::getAmount
-     * Test case for oePayPalIPNRequestPaymentSetter::addRequestPaymentComment
      *
      * @param array  $aParams        parameters for POST imitating PayPal.
      * @param string $expectedAction Expected action for resulting payment.
@@ -86,12 +83,6 @@ class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends OxidTestC
             $oPayPalExpectedPayment->setCorrelationId($correlationId);
             $oPayPalExpectedPayment->setDate(date('Y-m-d H:i:s', strtotime($aParams['payment_date'])));
 
-            if (!empty($aParams['memo'])) {
-                $comment = oxNew('oePayPalOrderPaymentComment');
-                $comment->setComment($aParams['memo']);
-                $oPayPalExpectedPayment->addComment($comment);
-            }
-
         } else {
             $oPayPalExpectedPayment->setStatus(null);
             $oPayPalExpectedPayment->setTransactionId(null);
@@ -110,55 +101,8 @@ class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends OxidTestC
         $oPayPalIPNRequestSetter->setRequest($oRequest);
         $oPayPalIPNRequestSetter->setRequestOrderPayment($oPayPalPayment);
         $oRequestOrderPayment = $oPayPalIPNRequestSetter->getRequestOrderPayment();
-        $oRequestOrderPayment = $oPayPalIPNRequestSetter->addRequestPaymentComment($oRequestOrderPayment);
 
         $this->assertEquals($oPayPalExpectedPayment, $oRequestOrderPayment, 'Payment object do not have request parameters.');
-    }
-
-
-    public function providerGetRequestOrderPaymentComment()
-    {
-        return array(
-            'refund'  => array(
-                array(
-                    'payment_status' => 'Refunded',
-                    'txn_id'         => 'a2s12as1dxxx',
-                    'receiver_email' => 'test@oxid-esales.com',
-                    'mc_gross'       => -6.66,
-                    'mc_currency'    => 'EUR',
-                    'correlation_id' => 'corryyy',
-                    'payment_date'   => '00:54:36 Jun 03, 2015 PDT',
-                    'memo'           => 'transaction comment for capture'
-                )
-            ),
-        );
-    }
-
-    /**
-     *
-     * Test case for oePayPalIPNRequestPaymentSetter::getRequestPaymentComment
-     *
-     * @param array  $aParams        parameters for POST imitating PayPal.
-     * @param string $expectedAction Expected action for resulting payment.
-     *
-     * @dataProvider providerGetRequestOrderPaymentComment
-     */
-    public function testGetRequestOrderPaymentComment($aParams)
-    {
-        $_POST = $aParams;
-        $oRequest = new oePayPalRequest();
-        $oPayPalPayment = new oePayPalOrderPayment();
-
-        $oPayPalIPNRequestSetter = new oePayPalIPNRequestPaymentSetter();
-        $oPayPalIPNRequestSetter->setRequest($oRequest);
-        $oPayPalIPNRequestSetter->setRequestOrderPayment($oPayPalPayment);
-        $oRequestOrderPayment = $oPayPalIPNRequestSetter->getRequestOrderPayment();
-        $oRequestOrderPayment = $oPayPalIPNRequestSetter->addRequestPaymentComment($oRequestOrderPayment);
-
-        $commentList = $oRequestOrderPayment->getCommentList();
-        $comment = $commentList->current();
-        $this->assertTrue(is_a($comment, 'oePayPalOrderPaymentComment'));
-        $this->assertEquals($aParams['memo'], $comment->getComment(), 'Payment object comment not as expected.');
     }
 
 }

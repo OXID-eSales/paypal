@@ -107,6 +107,7 @@ $aModule = array(
         'oePayPalOrderPaymentCommentList'                 => 'oe/oepaypal/models/oepaypalorderpaymentcommentlist.php',
         'oePayPalOrderManager'                            => 'oe/oepaypal/models/oepaypalordermanager.php',
         'oePayPalIPNPaymentBuilder'                       => 'oe/oepaypal/models/oepaypalipnpaymentbuilder.php',
+        'oePayPalIPNPaymentCreator'                       => 'oe/oepaypal/models/oepaypalipnpaymentcreator.php',
         'oePayPalIPNRequestVerifier'                      => 'oe/oepaypal/models/oepaypalipnrequestverifier.php',
         'oePayPalIPNProcessor'                            => 'oe/oepaypal/models/oepaypalipnprocessor.php',
         'oePayPalOutOfStockValidator'                     => 'oe/oepaypal/models/oepaypaloutofstockvalidator.php',

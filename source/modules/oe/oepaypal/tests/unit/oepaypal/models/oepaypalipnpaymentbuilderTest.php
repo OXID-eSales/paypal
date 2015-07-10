@@ -78,6 +78,25 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
         $this->assertTrue($oPaymentBuilder->getOrderPaymentValidator() instanceof oePayPalIPNPaymentValidator, 'Getter should create oePayPalIPNRequestValidator.');
     }
 
+    public function testSetGetPaymentCreator()
+    {
+        $oPayPalIPNPaymentCreator = new oePayPalIPNPaymentCreator();
+
+        $oPaymentBuilder = new oePayPalIPNPaymentBuilder();
+        $oPaymentBuilder->setOrderPaymentSetter($oPayPalIPNPaymentCreator);
+
+        $this->assertEquals($oPayPalIPNPaymentCreator, $oPaymentBuilder->getPaymentCreator(), 'Getter should return what is set in setter.');
+    }
+
+    public function testGetPaymentCreator()
+    {
+        $oPaymentBuilder = new oePayPalIPNPaymentBuilder();
+        $oPayPalIPNPaymentCreator = $oPaymentBuilder->getPaymentCreator();
+
+        $this->assertTrue($oPayPalIPNPaymentCreator instanceof oePayPalIPNPaymentCreator, 'Getter should create oePayPalIPNPaymentCreator.');
+    }
+
+
     public function testSetGetLang()
     {
         $oLang = new oxLang();

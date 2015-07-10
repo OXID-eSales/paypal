@@ -163,7 +163,10 @@ class oePayPalOrderManager
     }
 
     /**
-     * Recalculate order amounts from payment list.
+     * Recalculate order amounts from connected PayPal payment list.
+     * This is especially needed if some new PayPal order payment
+     * entry was created by IPN handler or if we e.g. got a void
+     * on an existing authorization by IPN.
      *
      * @param oePayPalPayPalOrder $order
      *

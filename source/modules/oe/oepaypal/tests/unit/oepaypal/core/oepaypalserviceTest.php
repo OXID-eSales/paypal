@@ -232,19 +232,7 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     {
         $data = array();
 
-        //see http://en.wikipedia.org/wiki/Windows-1252
-        $windows1252Street = 'Blafööstraße_123';
-        $utf8City = 'Литовские';
-
-        $this->assertTrue(mb_check_encoding($windows1252Street,'windows-1252'));
-        $this->assertTrue(mb_check_encoding($windows1252Street,'utf-8'));
-        $this->assertFalse(mb_check_encoding($windows1252Street,'ascii'));
-
-        $this->assertFalse(mb_check_encoding($utf8City,'windows-1252'));
-        $this->assertTrue(mb_check_encoding($utf8City,'utf-8'));
-        $this->assertFalse(mb_check_encoding($utf8City,'ascii'));
-
-        $data['ascii_IPN'][0] = array(
+        $data['ascii_IPN'][0]['ipn'] = array(
             'payment_type'   => 'instant',
             'payment_date'   => 'Tue_May_26_2015_21:57:49_GMT_0200_(CEST)',
             'payment_status' => 'Completed',
@@ -258,8 +246,15 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
             'address_street' => 'meinestrasse_123',
             'charset'        => 'ISO-8859-1'
         );
+        $expectedPostback = 'payment_type=instant&payment_date=Tue_May_26_2015_21%3A57%3A49_GMT_0200_%28CEST%29&' .
+                            'payment_status=Completed&payer_status=verified&first_name=Bla&last_name=Foo&payer_email=' .
+                            'buyer%40paypalsandbox_com&payer_id=TESTBUYERID01&address_name=Bla_Foo&address_city=' .
+                            'Hamburg&address_street=meinestrasse_123&charset=ISO-8859-1';
 
-        $data['utf8_IPN'][0] = array(
+        $data['ascii_IPN'][0]['expected_postback'] = $expectedPostback;
+        $data['ascii_IPN'][0]['expected_data_encoding'] = 'ascii';
+
+        $data['utf8_IPN'][0]['ipn'] = array(
             'payment_type'   => 'instant',
             'payment_date'   => 'Tue_May_26_2015_21:57:49_GMT_0200_(CEST)',
             'payment_status' => 'Completed',
@@ -269,12 +264,20 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
             'payer_email'    => 'buyer@paypalsandbox_com',
             'payer_id'       => 'TESTBUYERID01',
             'address_name'   => 'Bla_Foo',
-            'address_city'   => $utf8City,
-            'address_street' => $windows1252Street,
+            'address_city'   => 'Литовские',
+            'address_street' => 'Blafööstraße_123',
             'charset'        => 'UTF-8'
         );
+        $expectedPostback = 'payment_type=instant&payment_date=Tue_May_26_2015_21%3A57%3A49_GMT_0200_%28CEST%29&' .
+                            'payment_status=Completed&payer_status=verified&first_name=Bla&last_name=Foo&payer_email=' .
+                            'buyer%40paypalsandbox_com&payer_id=TESTBUYERID01&address_name=Bla_Foo&address_city=' .
+                            '%D0%9B%D0%B8%D1%82%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%B5&address_street=' .
+                            'Blaf%C3%B6%C3%B6stra%C3%9Fe_123&charset=UTF-8';
+        $data['utf8_IPN'][0]['expected_postback'] = $expectedPostback;
+        $data['utf8_IPN'][0]['expected_data_encoding'] = 'utf-8';
 
-        $data['windows-1252_IPN'][0] = array(
+        //see http://en.wikipedia.org/wiki/Windows-1252
+        $data['windows-1252_IPN'][0]['ipn'] = array(
             'payment_type'   => 'instant',
             'payment_date'   => 'Tue_May_26_2015_21:57:49_GMT_0200_(CEST)',
             'payment_status' => 'Completed',
@@ -285,11 +288,70 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
             'payer_id'       => 'TESTBUYERID01',
             'address_name'   => 'Bla_Foo',
             'address_city'   => 'Hamburg',
-            'address_street' => $windows1252Street,
+            'address_street' => 'Blafööstraße_123',
             'charset'        => 'windows-1252'
         );
+        $expectedPostback = 'payment_type=instant&payment_date=Tue_May_26_2015_21%3A57%3A49_GMT_0200_%28CEST%29&' .
+                            'payment_status=Completed&payer_status=verified&first_name=Bla&last_name=Foo&payer_email=' .
+                            'buyer%40paypalsandbox_com&payer_id=TESTBUYERID01&address_name=Bla_Foo&address_city=' .
+                            'Hamburg&address_street=Blaf%C3%B6%C3%B6stra%C3%9Fe_123&charset=windows-1252';
+        $data['windows-1252_IPN'][0]['expected_postback'] = $expectedPostback;
+        $data['windows-1252_IPN'][0]['expected_data_encoding'] = 'windows-1252';
 
         return $data;
+    }
+
+    /**
+     * Check encoding of test data.
+     * Test data will be reused later.
+     *
+     * @dataProvider ipnPostbackEncodingProvider
+     */
+    public function testTestDataEncoding($data)
+    {
+        foreach ($data['ipn'] as $key => $value) {
+            $this->assertTrue(mb_check_encoding($value, $data['expected_data_encoding']));
+        }
+    }
+
+    /**
+     * Test PayPal caller service for IPN verification.
+     * Verify that charsets are set as required.
+     *
+     * @dataProvider ipnPostbackEncodingProvider
+     */
+    public function testPayPalIPNConnectionCharset($data)
+    {
+        $curl = $this->prepareCurlDoVerifyWithPayPal($data);
+        $this->assertEquals($data['charset'], $curl->getConnectionCharset());
+    }
+
+    /**
+     * Test PayPal caller service for IPN verification.
+     * Verify that charsets are set as required.
+     *
+     * @dataProvider ipnPostbackEncodingProvider
+     */
+    public function testPayPalIPNDataCharset($data)
+    {
+        $curl = $this->prepareCurlDoVerifyWithPayPal($data);
+        $this->assertEquals($data['charset'], $curl->getDataCharset());
+    }
+
+
+    /**
+     * Test PayPal caller service for IPN verification.
+     * Have a look what the curl object does with parameters,
+     * data should not have been changed so far
+     *
+     * @dataProvider ipnPostbackEncodingProvider
+     */
+    public function testPayPalIPNCurlParameters($data)
+    {
+        $curl = $this->prepareCurlDoVerifyWithPayPal($data);
+        $curlParameters = $curl->getParameters();
+        $this->assertEquals($data['ipn'], $curlParameters );
+
     }
 
     /**
@@ -300,32 +362,6 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
      */
     public function testPayPalIPNPostbackEncoding($data)
     {
-        $paypalConfig = $this->getPayPalConfigMock();
-
-        $paypalPayPalRequest = oxNew('oePayPalPayPalRequest');
-        foreach ($data as $key => $value) {
-            $paypalPayPalRequest->setParameter($key, $value);
-        }
-        $charset = $data['charset'];
-
-        $caller = $this->getMock('oePayPalCaller', array('call'));
-        $caller->expects($this->once())->method('call')->will($this->returnValue(array()));
-        $caller->setRequest($paypalPayPalRequest);
-
-        $paypalService = $this->getMock('oePayPalService', array('getCaller', 'getPayPalConfig'));
-        $paypalService->expects($this->any())->method('getPayPalConfig')->will($this->returnValue($paypalConfig));
-        $paypalService->expects($this->exactly(3))->method('getCaller')->will($this->returnValue($caller));
-
-        $result = $paypalService->doVerifyWithPayPal($paypalPayPalRequest, $charset);
-        $this->assertTrue(is_a( $result, 'oePayPalResponseDoVerifyWithPayPal'));
-
-        $caller = $paypalService->getCaller();
-        $curl = $caller->getCurl();
-
-        $this->assertTrue(is_a($curl, 'oePayPalCurl'));
-        $this->assertEquals($data['charset'], $curl->getConnectionCharset());
-        $this->assertEquals($data['charset'], $curl->getDataCharset());
-
         //Rule for PayPal IPN verification is to give them back whatever comes in and prepend
         //cmd=_notify-validate. As long as the shop does not try to reencode the original
         //request, all is well.
@@ -334,29 +370,11 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
         //As the address data from IPN requests is not used for shop currently, wrong encoding
         // does not matter here. It might matter for PayPalExpress checkout, as that one sets the
         // delivery address that's stored at PayPal.
-        //
-        //for manual testing:
-        //
-        //works
-        //$curl->setConnectionCharset('UTF-8');
-        //$curl->setDataCharset('UTF-8');
-        //
-        //fails
-        //$curl->setConnectionCharset('windows-1252');
-        //$curl->setDataCharset('UTF-8');
-        //
-        //works
-        //$curl->setConnectionCharset('windows-1252');
-        //$curl->setDataCharset('windows-1252');
 
-        //have a look what the curl object does with parameters, $data should not have been changed so far
-        $curl->setParameters($caller->getParameters());
-        $curlParameters = $curl->getParameters();
-        $this->assertEquals($data, $curlParameters );
+        $curl = $this->prepareCurlDoVerifyWithPayPal($data);
 
-        $expectedQuery = $this->preparePostBack($data, false);
         $query = $curl->getQuery();
-        $this->assertEquals($expectedQuery, $query);
+        $this->assertEquals($data['expected_postback'], $query);
     }
 
     /**
@@ -426,22 +444,32 @@ class Unit_oePayPal_core_oePayPalServiceTest extends OxidTestCase
     }
 
     /**
-     * Assemble data for postback.
+     * Test helper for preparing curl object that
+     * ran IPN verification with PayPal.
      *
-     * @param array $aData Data array to go into postback.
-     * @param bool  $addCommand Defaults to true, prepeds PayPayl command to result
+     * @param $data
      *
-     * @return string
+     * @return mixed
      */
-    protected function preparePostBack($data, $addCommand=true)
+    private function prepareCurlDoVerifyWithPayPal($data)
     {
-        $command = $addCommand ? self::POSTBACK_CMD : '';
-
-        foreach ($data as $key => $value) {
-            $value = urlencode(stripslashes($value));
-            $command .= '&' . $key . '=' . $value;
+        $paypalPayPalRequest = oxNew('oePayPalPayPalRequest');
+        foreach ($data['ipn'] as $key => $value) {
+            $paypalPayPalRequest->setParameter($key, $value);
         }
-        $command = !$addCommand ? ltrim($command, '&') : $command;
-        return $command;
+
+        $caller = $this->getMock('oePayPalCaller', array('call'));
+        $caller->expects($this->once())->method('call')->will($this->returnValue(array()));
+        $caller->setRequest($paypalPayPalRequest);
+
+        $curl = $caller->getCurl();
+        $curl->setParameters($caller->getParameters());
+
+        $paypalService = oxNew('oePayPalService');
+        $paypalService->setCaller($caller);
+        $paypalService->setPayPalConfig($this->getPayPalConfigMock());
+        $paypalService->doVerifyWithPayPal($paypalPayPalRequest, $data['charset']);
+
+        return $curl;
     }
 }

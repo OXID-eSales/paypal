@@ -24,28 +24,40 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
     /** @var string Command for paypal verification call. */
     const POSTBACK_CMD = 'cmd=_notify-validate';
 
-    /**
-     * Test data.
-     */
+    /** @var string PayPal transaction id */
     const PAYPAL_TRANSACTION_ID = '5H706430HM112602B';
+
+    /** @var string PayPal id of authorization transaction */
     const PAYPAL_AUTHID = '5H706430HM1126666';
+
+    /** @var string PayPal parent transaction id*/
     const PAYPAL_PARENT_TRANSACTION_ID = '8HF77866N86936335';
+
+    /** @var string Amount paid*/
     const PAYMENT_AMOUNT = 30.66;
+
+    /** @var string currency specifier*/
     const PAYMENT_CURRENCY = 'EUR';
+
+    /** @var string PayPal correlation id for transaction*/
     const PAYMENT_CORRELATION_ID = '361b9ebf97777';
+
+    /** @var string PayPal correlation id for authorization transaction*/
     const AUTH_CORRELATION_ID = '361b9ebf9bcee';
 
-    /** @var mixed Store original shop configuration values. */
-    protected $originalUtf8Mode = null;
+    /** @var string test order oxid*/
+    private $testOrderId = null;
 
-    protected $testOrderId = null;
-    protected $testUserId = null;
+    /** @var string test user oxid */
+    private $testUserId = null;
 
+    /**
+     * Set up fixture.
+     */
     protected function setUp()
     {
         parent::setUp();
 
-        $this->originalUtf8Mode = $this->getConfig()->getConfigParam('iUtfMode');
         $this->getConfig()->setConfigParam('iUtfMode', '1');
 
         oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
@@ -55,13 +67,14 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
         oePayPalEvents::addOrderPaymentsTable();
         oePayPalEvents::addOrderTable();
         oePayPalEvents::addOrderPaymentsCommentsTable();
+
     }
 
+    /**
+     * Tear down fixture.
+     */
     protected function tearDown()
     {
-        //restore config
-        $this->getConfig()->setConfigParam('iUtfMode', $this->originalUtf8Mode);
-
         $this->cleanUpTable('oxorder');
         $this->cleanUpTable('oxuser');
 
@@ -71,10 +84,10 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
     /**
      * @return array
      */
-    public function providerPayPalIPNPaymentBuilder()
+    public function providerPayPalIPNPaymentBuilderNewCapture()
     {
-        $data                   = array();
-        $data['capture_new'][0] = array(
+        $data = array();
+        $data['capture_new'][0]['ipn'] = array(
             'payment_type'         => 'instant',
             'payment_date'         => '00:54:36 Jun 03, 2015 PDT',
             'payment_status'       => 'Completed',
@@ -104,12 +117,44 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
             'auth_status'          => 'Completed',
             'memo'                 => 'capture_new'
         );
-        $data['capture_new'][1] = $data['capture_new'][0]['payment_status'];
-        $data['capture_new'][2] = $data['capture_new'][0]['txn_id'];
-        $data['capture_new'][3] = '2015-06-03 09:54:36';
-        $data['capture_new'][4] = $data['capture_new'][0]['correlation_id'];
+        $data['capture_new'][0]['expected_payment_status'] = $data['capture_new'][0]['ipn']['payment_status'];
+        $data['capture_new'][0]['expected_txn_id'] = $data['capture_new'][0]['ipn']['txn_id'];
+        $data['capture_new'][0]['expected_date'] = '2015-06-03 09:54:36';
+        $data['capture_new'][0]['expected_correlation_id'] = $data['capture_new'][0]['ipn']['correlation_id'];
 
-        $data['exists'][0] = array(
+        return $data;
+    }
+
+    /**
+     * Test IPN processing, payment building part.
+     *
+     * @dataProvider providerPayPalIPNPaymentBuilderNewCapture
+     */
+    public function testPayPalIPNPaymentBuilderNewCapture($data)
+    {
+        $this->prepareFullOrder();
+        $orderPaymentParent = $this->createPayPalOrderPaymentParent();
+        $orderPayment       = $this->getPayPalOrderPayment($data['ipn']);
+
+        $this->assertTrue(is_a($orderPayment, 'oePayPalOrderPayment'), 'wrong type of object');
+        $this->assertEquals($data['expected_payment_status'], $orderPayment->getStatus(), 'wrong payment status');
+        $this->assertTrue($orderPayment->getIsValid(), 'payment not valid');
+        $this->assertEquals($data['expected_txn_id'], $orderPayment->getTransactionId(), 'wrong transaction id');
+        $this->assertEquals($data['expected_correlation_id'], $orderPayment->getCorrelationId(),
+            'wrong correlation id');
+        $this->assertEquals($data['expected_date'], $orderPayment->getDate(), 'wrong date');
+
+        $orderPaymentParent->load();
+        $this->assertEquals('Completed', $orderPaymentParent->getStatus(), 'wrong payment status');
+        $this->assertEquals('0.00', $orderPaymentParent->getRefundedAmount(), 'wrong refunded amount');
+    }
+
+    /**
+     * @return array
+     */
+    public function providerPayPalIPNPaymentBuilderExistingTransaction()
+    {
+        $data['exists'][0]['ipn'] = array(
             'payment_type'         => 'instant',
             'payment_date'         => '00:54:36 Jun 03, 2015 PDT',
             'payment_status'       => 'Refunded',
@@ -138,12 +183,43 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
             'correlation_id'       => self::AUTH_CORRELATION_ID,
             'memo'                 => 'exists'
         );
-        $data['exists'][1] = $data['exists'][0]['payment_status'];
-        $data['exists'][2] = $data['exists'][0]['txn_id'];
-        $data['exists'][3] = '2015-04-01 12:12:12'; //orginal date
-        $data['exists'][4] = $data['exists'][0]['correlation_id'];
+        $data['exists'][0]['expected_payment_status'] = $data['exists'][0]['ipn']['payment_status'];
+        $data['exists'][0]['expected_txn_id']         = $data['exists'][0]['ipn']['txn_id'];
+        $data['exists'][0]['expected_date']           = '2015-04-01 12:12:12'; //orginal date
+        $data['exists'][0]['expected_correlation_id'] = $data['exists'][0]['ipn']['correlation_id'];
 
-        $data['refund_new'][0] = array(
+        return $data;
+    }
+
+    /**
+     * Test IPN processing, payment building part.
+     *
+     * @dataProvider providerPayPalIPNPaymentBuilderExistingTransaction
+     */
+    public function testPayPalIPNPaymentBuilderExistingTransaction($data)
+    {
+        $this->prepareFullOrder();
+        $orderPaymentParent = $this->createPayPalOrderPaymentParent();
+        $orderPayment       = $this->getPayPalOrderPayment($data['ipn']);
+
+        $this->assertTrue(is_a($orderPayment, 'oePayPalOrderPayment'), 'wrong type of object');
+        $this->assertEquals($data['expected_payment_status'], $orderPayment->getStatus(), 'wrong payment status');
+        $this->assertTrue($orderPayment->getIsValid(), 'payment not valid');
+        $this->assertEquals($data['expected_txn_id'], $orderPayment->getTransactionId(), 'wrong transaction id');
+        $this->assertEquals($data['expected_correlation_id'], $orderPayment->getCorrelationId(),
+            'wrong correlation id');
+        $this->assertEquals($data['expected_date'], $orderPayment->getDate(), 'wrong date');
+
+        $orderPaymentParent->load();
+        $this->assertEquals('0.00', $orderPaymentParent->getRefundedAmount(), 'wrong refunded amount');
+    }
+
+    /**
+     * @return array
+     */
+    public function providerPayPalIPNPaymentBuilderRefund()
+    {
+        $data['refund_new'][0]['ipn'] = array(
             'payment_type'         => 'instant',
             'payment_date'         => '00:54:36 Jun 03, 2015 PDT',
             'payment_status'       => 'Refunded',
@@ -172,16 +248,10 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
             'correlation_id'       => self::AUTH_CORRELATION_ID,
             'memo'                 => 'refund_new'
         );
-        $data['refund_new'][1] = $data['refund_new'][0]['payment_status'];
-        $data['refund_new'][2] = $data['refund_new'][0]['txn_id'];
-        $data['refund_new'][3] = '2015-06-03 09:54:36'; //orginal date
-        $data['refund_new'][4] = $data['refund_new'][0]['correlation_id'];
-
-        $data['wrong_entity'][0] = array('transaction_entity' => 'no_payment');
-        $data['wrong_entity'][1] = '';
-        $data['wrong_entity'][2] = '';
-        $data['wrong_entity'][3] = '';
-        $data['wrong_entity'][4] = '';
+        $data['refund_new'][0]['expected_payment_status'] = $data['refund_new'][0]['ipn']['payment_status'];
+        $data['refund_new'][0]['expected_txn_id']         = $data['refund_new'][0]['ipn']['txn_id'];
+        $data['refund_new'][0]['expected_date']           = '2015-06-03 09:54:36'; //orginal date
+        $data['refund_new'][0]['expected_correlation_id'] = $data['refund_new'][0]['ipn']['correlation_id'];
 
         return $data;
     }
@@ -189,61 +259,55 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
     /**
      * Test IPN processing, payment building part.
      *
-     * @dataProvider providerPayPalIPNPaymentBuilder
+     * @dataProvider providerPayPalIPNPaymentBuilderRefund
      */
-    public function testPayPalIPNPaymentBuilder(
-        $data,
-        $expectedStatus,
-        $expectedTxnId,
-        $expectedDate,
-        $expectedCorrelationId
-    ) {
-        $this->insertUser();
-        $this->createOrder();
-        $this->createPayPalOrder();
-        $orderPaymentParent = $this->createPayPalOrderPayment('authorization');
-        $this->assertEquals('Pending', $orderPaymentParent->getStatus());
+    public function testPayPalIPNPaymentBuilderRefund($data)
+    {
+        $this->prepareFullOrder();
+        $orderPaymentParent = $this->createPayPalOrderPaymentParent();
+        $orderPayment       = $this->getPayPalOrderPayment($data['ipn']);
 
-        $paypalConfig = $this->getPayPalConfigMock();
-        $lang         = $paypalConfig->getLang();
+        $this->assertTrue(is_a($orderPayment, 'oePayPalOrderPayment'), 'wrong type of object');
+        $this->assertEquals($data['expected_payment_status'], $orderPayment->getStatus(), 'wrong payment status');
+        $this->assertTrue($orderPayment->getIsValid(), 'payment not valid');
+        $this->assertEquals($data['expected_txn_id'], $orderPayment->getTransactionId(), 'wrong transaction id');
+        $this->assertEquals($data['expected_correlation_id'], $orderPayment->getCorrelationId(),
+            'wrong correlation id');
+        $this->assertEquals($data['expected_date'], $orderPayment->getDate(), 'wrong date');
 
-        //simulates IPN for capture
-        $paypalRequest = $this->getMock('oePayPalRequest', array('getPost'));
-        $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($data));
+        $orderPaymentParent->load();
 
-        $paymentBuilder = oxNew('oePayPalIPNPaymentBuilder');
-        $paymentBuilder->setLang($lang);
-        $paymentBuilder->setRequest($paypalRequest);
+        //in case of refund, parent transaction should now have set a refunded amount
+        $this->assertEquals('refund', $orderPayment->getAction(), 'wrong action');
+        $this->assertEquals(-$data['ipn']['mc_gross'], $orderPayment->getAmount(), 'wrong amount');
+        $this->assertEquals($orderPayment->getAmount(), $orderPaymentParent->getRefundedAmount(),
+            'wrong refunded amount');
+    }
 
-        //expect the capture transaction to be stored in table oepaypal_orderpayments
-        $orderPayment = $paymentBuilder->buildPayment();
+    /**
+     * @return array
+     */
+    public function providerPayPalIPNPaymentBuilderWrongEntity()
+    {
+        $data['wrong_entity'][0]['ipn']                     = array('transaction_entity' => 'no_payment');
+        $data['wrong_entity'][0]['expected_payment_status'] = '';
+        $data['wrong_entity'][0]['expected_txn_id']         = '';
+        $data['wrong_entity'][0]['expected_date']           = '';
+        $data['wrong_entity'][0]['expected_correlation_id'] = '';
 
-        if ('no_payment' == $data['transaction_entity']) {
-            $this->assertNull($orderPayment);
-        } else {
-            $this->assertTrue(is_a($orderPayment, 'oePayPalOrderPayment'));
-            $this->assertEquals($expectedStatus, $orderPayment->getStatus());
-            $this->assertTrue($orderPayment->getIsValid());
-            $this->assertEquals($expectedTxnId, $orderPayment->getTransactionId());
-            $this->assertEquals($expectedCorrelationId, $orderPayment->getCorrelationId());
-            $this->assertEquals($expectedDate, $orderPayment->getDate());
+        return $data;
+    }
 
-            $orderPaymentParent->load();
-
-            //in case of capture, auth status should have changed to Completed
-            if ('capture_new' == $data['payment_status']) {
-                $this->assertEquals('Completed', $orderPaymentParent->getStatus());
-            }
-
-            //in case of refund, parent transaction should now have set a refunded amount
-            if ('refund_new' == $data['memo']) {
-                $this->assertEquals('refund', $orderPayment->getAction());
-                $this->assertEquals(-$data['mc_gross'], $orderPayment->getAmount());
-                $this->assertEquals($orderPayment->getAmount(), $orderPaymentParent->getRefundedAmount());
-            } else {
-                $this->assertEquals('0.00', $orderPaymentParent->getRefundedAmount());
-            }
-        }
+    /**
+     * Test IPN processing, payment building part.
+     *
+     * @dataProvider providerPayPalIPNPaymentBuilderExistingTransaction
+     */
+    public function testPayPalIPNPaymentBuilderWrongEntity($data)
+    {
+        $this->prepareFullOrder();
+        $orderPayment = $this->getPayPalOrderPayment($data['ipn']);
+        $this->assertNull($orderPayment, 'did not expect order payment object');
     }
 
     /**
@@ -281,10 +345,10 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
             'correlation_id'       => '361b9ebf99999',
             'auth_status'          => 'Completed'
         );
-        $data['complete_capture'][1]['payment_count']   = 2;
-        $data['complete_capture'][1]['capture_amount']  = self::PAYMENT_AMOUNT;
-        $data['complete_capture'][1]['refunded_amount'] = 0.0;
-        $data['complete_capture'][1]['voided_amount']   = 0.0;
+        $data['complete_capture'][1]['expected_payment_count']   = 2;
+        $data['complete_capture'][1]['expected_capture_amount']  = self::PAYMENT_AMOUNT;
+        $data['complete_capture'][1]['expected_refunded_amount'] = 0.0;
+        $data['complete_capture'][1]['expected_voided_amount']   = 0.0;
 
         $data['capture_and_refund'][0]['capture'] = array(
             'payment_type'         => 'instant',
@@ -376,10 +440,10 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
             'auth_status'          => 'Voided'
         );
 
-        $data['capture_and_refund'][1]['payment_count']   = 3;
-        $data['capture_and_refund'][1]['capture_amount']  = round(0.7 * self::PAYMENT_AMOUNT, 2);
-        $data['capture_and_refund'][1]['refunded_amount'] = round(0.5 * self::PAYMENT_AMOUNT, 2);
-        $data['capture_and_refund'][1]['voided_amount']   = round(0.3 * self::PAYMENT_AMOUNT, 2);
+        $data['capture_and_refund'][1]['expected_payment_count']   = 3;
+        $data['capture_and_refund'][1]['expected_capture_amount']  = round(0.7 * self::PAYMENT_AMOUNT, 2);
+        $data['capture_and_refund'][1]['expected_refunded_amount'] = round(0.5 * self::PAYMENT_AMOUNT, 2);
+        $data['capture_and_refund'][1]['expected_voided_amount']   = round(0.3 * self::PAYMENT_AMOUNT, 2);
 
         return $data;
     }
@@ -393,49 +457,29 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
      * - 'capture_and_refund' => captrue, partial refund and void of the remaining auth amount
      *
      * @param array $data
-     * @param array $assert
+     * @param array $expectations
      *
      * @dataProvider providerPayPalIPNProcessor
      */
-    public function testPayPalIPNProcessing($data, $assert)
+    public function testPayPalIPNProcessing($data, $expectations)
     {
-        $this->insertUser();
-        $order = $this->createOrder();
-        $this->assertEquals('NOT_FINISHED', $order->oxorder__oxtransstatus->value);
-        $this->assertNull($order->oxorder__oxpaid->value);
-
-        $paypalOrder = $this->createPayPalOrder();
-        $this->assertEquals(0.00, $paypalOrder->getCapturedAmount());
-        $this->assertEquals(0.00, $paypalOrder->getRefundedAmount());
-        $this->assertEquals(0.00, $paypalOrder->getVoidedAmount());
-
+        $paypalOrder = $this->prepareFullOrder();
         $this->createPayPalOrderPayment('authorization');
-
-        $paypalConfig = $this->getPayPalConfigMock();
-        $lang         = $paypalConfig->getLang();
-
-        foreach ($data as $post) {
-            $paypalRequest = $this->getMock('oePayPalRequest', array('getPost'));
-            $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($post));
-            $processor = oxNew('oePayPalIPNProcessor');
-            $processor->setLang($lang);
-            $processor->setRequest($paypalRequest);
-            $processor->process();
-        }
+        $this->processIpn($data);
 
         //after
         $paypalOrder->load();
-        $this->assertEquals('completed', $paypalOrder->getPaymentStatus());
-        $this->assertEquals($assert['payment_count'], count($paypalOrder->getPaymentList()));
-        $this->assertEquals($assert['capture_amount'], $paypalOrder->getCapturedAmount());
-        $this->assertEquals($assert['refunded_amount'], $paypalOrder->getRefundedAmount());
-        $this->assertEquals($assert['voided_amount'], $paypalOrder->getVoidedAmount());
+        $this->assertEquals('completed', $paypalOrder->getPaymentStatus(), 'payment status');
+        $this->assertEquals($expectations['expected_payment_count'], count($paypalOrder->getPaymentList()), 'payment count');
+        $this->assertEquals($expectations['expected_capture_amount'], $paypalOrder->getCapturedAmount(), 'captured amount');
+        $this->assertEquals($expectations['expected_refunded_amount'], $paypalOrder->getRefundedAmount(), 'refunded amount');
+        $this->assertEquals($expectations['expected_voided_amount'], $paypalOrder->getVoidedAmount(), 'voided amount');
 
         // status of order in table oxorder
         $order = oxNew('oxOrder');
         $order->load($this->testOrderId);
-        $this->assertEquals('OK', $order->oxorder__oxtransstatus->value);
-        $this->assertNotNull($order->oxorder__oxpaid->value);
+        $this->assertEquals('OK', $order->oxorder__oxtransstatus->value, 'oxorder status');
+        $this->assertNotNull($order->oxorder__oxpaid->value, 'oxpaid date');
         $this->assertNotEquals('0000-00-00 00:00:00', $order->oxorder__oxpaid->value);
     }
 
@@ -443,7 +487,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
      * Test IPN processing.
      */
     public function testPayPalOrderManager()
-    {
+    { //hier weiter
         $this->insertUser();
         $this->createOrder();
         $this->createPayPalOrder();
@@ -510,7 +554,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
         $this->assertEquals(self::PAYMENT_AMOUNT - 10.0, $paypalOrder->getCapturedAmount());
     }
 
-    protected function getPayPalConfigMock()
+    private function getPayPalConfigMock()
     {
         $mocks = array(
             'getUserEmail'                         => 'devbiz_api1.oxid-efire.com',
@@ -542,7 +586,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
      *
      * @return oxOrder
      */
-    protected function createOrder($status = oePayPalOxOrder::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED)
+    private function createOrder($status = oePayPalOxOrder::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED)
     {
         if (empty($this->testUserId)) {
             $this->fail('please create related oxuser first');
@@ -588,7 +632,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
      *
      * @return oePayPalPayPalOrder
      */
-    protected function createPayPalOrder()
+    private function createPayPalOrder()
     {
         if (empty($this->testOrderId)) {
             $this->fail('please create related oxorder first');
@@ -613,7 +657,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
      *
      * @return oePayPalOrderPayment
      */
-    protected function createPayPalOrderPayment($mode = 'authorization')
+    private function createPayPalOrderPayment($mode = 'authorization')
     {
         if (empty($this->testOrderId)) {
             $this->fail('please create related oxorder first');
@@ -682,5 +726,75 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
         $user->oxuser__oxregister  = new oxField('2015-05-20 22:10:51', oxField::T_RAW);
         $user->oxuser__oxboni      = new oxField('1000', oxField::T_RAW);
         $user->save();
+    }
+
+    /**
+     * Test helper for creating order with PayPal.
+     *
+     * @param array test data
+     *
+     * @return oePayPalOrderPayment
+     */
+    private function getPayPalOrderPayment($data)
+    {
+        $paypalConfig = $this->getPayPalConfigMock();
+        $lang         = $paypalConfig->getLang();
+
+        //simulates IPN for capture
+        $paypalRequest = $this->getMock('oePayPalRequest', array('getPost'));
+        $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($data));
+
+        $paymentBuilder = oxNew('oePayPalIPNPaymentBuilder');
+        $paymentBuilder->setLang($lang);
+        $paymentBuilder->setRequest($paypalRequest);
+
+        //expect the capture transaction to be stored in table oepaypal_orderpayments
+        $orderPayment = $paymentBuilder->buildPayment();
+
+        return $orderPayment;
+    }
+
+    /**
+     * Test helper for creating order payment parent transaction with PayPal.
+     *
+     * @return oePayPalOrderPayment
+     */
+    private function createPayPalOrderPaymentParent()
+    {
+        $orderPaymentParent = $this->createPayPalOrderPayment('authorization');
+        $this->assertEquals('Pending', $orderPaymentParent->getStatus());
+        return $orderPaymentParent;
+    }
+
+    /**
+     * Test helper, creates order with paypal payment and all connected database entries.
+     * @return oePayPalPayPalOrder
+     */
+    private function prepareFullOrder()
+    {
+        $this->insertUser();
+        $this->createOrder();
+        $paypalOrder = $this->createPayPalOrder();
+        return $paypalOrder;
+    }
+
+    /**
+     * Test helper, processes IPN data.
+     *
+     * @param $data
+     */
+    private function processIpn($data)
+    {
+        $paypalConfig = $this->getPayPalConfigMock();
+        $lang         = $paypalConfig->getLang();
+
+        foreach ($data as $post) {
+            $paypalRequest = $this->getMock('oePayPalRequest', array('getPost'));
+            $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($post));
+            $processor = oxNew('oePayPalIPNProcessor');
+            $processor->setLang($lang);
+            $processor->setRequest($paypalRequest);
+            $processor->process();
+        }
     }
 }

@@ -36,7 +36,7 @@ class oePayPalIPNPaymentBuilder
     /** @var string String PayPal transaction entity. */
     const PAYPAL_IPN_TRANSACTION_ENTITY = 'transaction_entity';
 
-    /** @var string Class only handles IPÜN transaction payments. */
+    /** @var string Class only handles IPN transaction payments. */
     const HANDLE_TRANSACTION_ENTITY = 'payment';
 
     /** @var oePayPalRequest */
@@ -168,6 +168,7 @@ class oePayPalIPNPaymentBuilder
             $oOrderPayment->save();
             $oReturn = $oOrderPayment;
         } else {
+            //IPN request might be for a transaction that does not yet exist in the shop database.
             $oReturn = $this->handleOrderPayment($oRequestOrderPayment);
         }
 
@@ -175,13 +176,15 @@ class oePayPalIPNPaymentBuilder
     }
 
     /**
-     * IPN request might be for a transaction that does not yet exist in the shop database.
-     * In this case we have to
-     * - create payment
-     * - update parent transaction in case of refund
-     * - update authorization status (can be Pending, In Progress, Completed)
+     * Handling of IPN data that has not yet a paypal order payment
+     * entry in shop database.
+     * Checks if information from IPN is relevant for Shop. That is the case
+     * if the related PayPal parent transaction can be found in table oepaypal_orderpayments.
      *
-     * In some cases we need to create an PayPal order payment from IPN request.
+     * If data is relevant, we need to
+     * - create paypal order payment, store it in database and return it.
+     * - if it is a refund, update the parent transaction's refunded amount
+     * - update authorization status (can be Pending, In Progress, Completed)
      *
      * @param oePayPalOrderPayment $requestOrderPayment
      *

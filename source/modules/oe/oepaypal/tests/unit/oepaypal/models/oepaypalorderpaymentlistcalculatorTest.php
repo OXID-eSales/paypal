@@ -53,15 +53,116 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
 
     /**
      * Test case that a payment list is set.
+     *
+     * @return null
+     */
+    public function testCapturedAmountCalculateWithPaymentList()
+    {
+        $oOrderPaymentList = $this->createOrderPaymentList();
+
+        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
+        $oListCalculator->setPaymentList($oOrderPaymentList);
+        $oListCalculator->calculate();
+
+        $this->assertEquals('11.22', $oListCalculator->getCapturedAmount());
+    }
+
+    /**
+     * Test case that a payment list is set.
      * Void data is taken from voided Authorization.
      *
      * @return null
      */
-    public function testCalculateWithPaymentList()
+    public function testVoidedAmountCalculateWithPaymentList()
     {
+        $oOrderPaymentList = $this->createOrderPaymentList();
+
+        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
+        $oListCalculator->setPaymentList($oOrderPaymentList);
+        $oListCalculator->calculate();
+
+        $this->assertEquals('44.33', $oListCalculator->getVoidedAmount());
+    }
+
+    /**
+     * Test case that a payment list is set.
+     *
+     * @return null
+     */
+    public function testRefundedAmountCalculateWithPaymentList()
+    {
+        $oOrderPaymentList = $this->createOrderPaymentList();
+
+        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
+        $oListCalculator->setPaymentList($oOrderPaymentList);
+        $oListCalculator->calculate();
+
+        $this->assertEquals('6.78', $oListCalculator->getRefundedAmount());
+    }
+
+    /**
+     * Test case that a payment list is set.
+     * Voided amount comes from void action.
+     *
+     * @return null
+     */
+    public function testCapturedAmountCalculateWithPaymentListAndVoidAction()
+    {
+        $oOrderPaymentList = $this->createOrderPaymentListContainingVoidAction();
+
+        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
+        $oListCalculator->setPaymentList($oOrderPaymentList);
+        $oListCalculator->calculate();
+
+        $this->assertEquals('30.00', $oListCalculator->getCapturedAmount());
+    }
+
+    /**
+     * Test case that a payment list is set.
+     * Voided amount comes from void action.
+     *
+     * @return null
+     */
+    public function testVoidedAmountCalculateWithPaymentListAndVoidAction()
+    {
+        $oOrderPaymentList = $this->createOrderPaymentListContainingVoidAction();
+
+        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
+        $oListCalculator->setPaymentList($oOrderPaymentList);
+        $oListCalculator->calculate();
+
+        $this->assertEquals('11.00', $oListCalculator->getVoidedAmount());
+    }
+
+    /**
+     * Test case that a payment list is set.
+     * Voided amount comes from void action.
+     *
+     * @return null
+     */
+    public function testRefundedAmountCalculateWithPaymentListAndVoidAction()
+    {
+        $oOrderPaymentList = $this->createOrderPaymentListContainingVoidAction();
+
+        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
+        $oListCalculator->setPaymentList($oOrderPaymentList);
+        $oListCalculator->calculate();
+
+        $this->assertEquals('10.00', $oListCalculator->getRefundedAmount());
+    }
+
+    /**
+     * Test helper, prepares some paypal order payments.
+     *
+     * @return oePayPalOrderPaymentList
+     */
+    private function createOrderPaymentList()
+    {
+        $orderId = '123';
+
         $oOrderPayment = oxNew('oePayPalOrderPayment');
         $oOrderPayment->setPaymentId(1);
-        $oOrderPayment->setOrderId("123");
+        $oOrderPayment->setOrderId($orderId);
         $oOrderPayment->setAmount(55.55);
         $oOrderPayment->setAction('authorization');
         $oOrderPayment->setStatus('Voided');
@@ -112,28 +213,24 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
         $oOrderPayment->save();
 
         $oOrderPaymentList = oxNew('oePayPalOrderPaymentList');
-        $oOrderPaymentList->load("123");
+        $oOrderPaymentList->load($orderId);
 
-        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
-
-        $this->assertEquals('11.22', $oListCalculator->getCapturedAmount());
-        $this->assertEquals('44.33', $oListCalculator->getVoidedAmount());
-        $this->assertEquals('6.78', $oListCalculator->getRefundedAmount());
+        return $oOrderPaymentList;
     }
 
     /**
-     * Test case that a payment list is set.
+     * Test helper, prepares some paypal order payments.
      * Voided amount comes from void action.
      *
-     * @return null
+     * @return oePayPalOrderPaymentList
      */
-    public function testCalculateWithPaymentListAndVoidAction()
+    private function createOrderPaymentListContainingVoidAction()
     {
+        $orderId = '123';
+
         $oOrderPayment = oxNew('oePayPalOrderPayment');
         $oOrderPayment->setPaymentId(1);
-        $oOrderPayment->setOrderId("123");
+        $oOrderPayment->setOrderId($orderId);
         $oOrderPayment->setAmount(50.00);
         $oOrderPayment->setAction('authorization');
         $oOrderPayment->setStatus('Voided');
@@ -160,15 +257,8 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
         $oOrderPayment->save();
 
         $oOrderPaymentList = oxNew('oePayPalOrderPaymentList');
-        $oOrderPaymentList->load("123");
+        $oOrderPaymentList->load($orderId);
 
-        $oListCalculator = oxNew('oePayPalOrderPaymentListCalculator');
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
-
-        $this->assertEquals('30.00', $oListCalculator->getCapturedAmount());
-        $this->assertEquals('11.00', $oListCalculator->getVoidedAmount());
-        $this->assertEquals('10.00', $oListCalculator->getRefundedAmount());
+        return $oOrderPaymentList;
     }
-
 }

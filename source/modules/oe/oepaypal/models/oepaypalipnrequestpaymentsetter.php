@@ -24,83 +24,39 @@
  */
 class oePayPalIPNRequestPaymentSetter
 {
-    /**
-     * PayPal action that triggered this transaction.
-     *
-     * @var string
-     */
+    /** @var string PayPal action that triggered this transaction. */
     const CAPTURE_ACTION        = 'capture';
     const REFUND_ACTION         = 'refund';
     const AUTHORIZATION_ACTION  = 'authorization';
 
-    /**
-     * Sandbox mode parameter name.
-     *
-     * @var string
-     */
+    /** @var stringSandbox mode parameter name. */
     const PAYPAL_SANDBOX = 'test_ipn';
 
-    /**
-     * String PayPal payment status parameter name.
-     *
-     * @var string
-     */
+    /** @var string String PayPal payment status parameter name. */
     const PAYPAL_PAYMENT_STATUS = 'payment_status';
 
-    /**
-     * String PayPal transaction id.
-     *
-     * @var string
-     */
+    /** @var string PayPal transaction id. */
     const PAYPAL_TRANSACTION_ID = 'txn_id';
 
-    /**
-     * String PayPal whole price including payment and shipment.
-     *
-     * @var string
-     */
+    /** @var string PayPal whole price including payment and shipment. */
     const MC_GROSS = 'mc_gross';
 
-    /**
-     * String PayPal payment currency.
-     *
-     * @var string
-     */
+    /** @var string PayPal payment currency. */
     const MC_CURRENCY = 'mc_currency';
 
-    /**
-     * String PayPal payment date.
-     *
-     * @var string
-     */
+    /** @var string PayPal payment date. */
     const PAYMENT_DATE = 'payment_date';
 
-    /**
-     * String PayPal payment correlation id.
-     *
-     * @var string
-     */
+    /** @var string PayPal payment correlation id. */
     const CORRELATION_ID = 'correlation_id';
 
-    /**
-     * String PayPal payment ipn tracking id, might come instead of correlation id.
-     *
-     * @var string
-     */
+    /** @var string PayPal payment ipn tracking id, might come instead of correlation id. */
     const IPN_TRACK_ID = 'ipn_track_id';
 
-    /**
-     * String PayPal payment comment.
-     *
-     * @var string
-     */
+    /** @var string PayPal payment comment. */
     const PAYPAL_IPN_MEMO = 'memo';
 
-    /**
-     * String PayPal status for successful refund.
-     *
-     * @var string
-     */
+    /** @var string PayPal status for successful refund. */
     const PAYPAL_STATUS_REFUND_DONE = 'Refunded';
 
     /**
@@ -166,7 +122,7 @@ class oePayPalIPNRequestPaymentSetter
         $request = $this->getRequest();
         $memo    = $request->getRequestParameter(self::PAYPAL_IPN_MEMO);
 
-        if (!empty($memo)) {
+        if ($memo) {
             $comment = oxNew('oePayPalOrderPaymentComment');
             $comment->setComment($memo);
             $requestOrderPayment->addComment($comment);
@@ -193,7 +149,7 @@ class oePayPalIPNRequestPaymentSetter
         $oRequestOrderPayment->setAction($this->getAction());
 
         $correlationId = $oRequest->getRequestParameter(self::CORRELATION_ID);
-        if (empty($correlationId)) {
+        if (!$correlationId) {
             $correlationId = $oRequest->getRequestParameter(self::IPN_TRACK_ID);
         }
         $oRequestOrderPayment->setCorrelationId($correlationId);

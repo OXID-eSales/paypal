@@ -1,0 +1,28 @@
+<phpunit backupGlobals="true"
+         backupStaticAttributes="false"
+         bootstrap="bootstrap.php"
+         cacheTokens="true"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         forceCoversAnnotation="false"
+         mapTestClassNameToCoveredClassName="false"
+         printerClass="PHPUnit_TextUI_ResultPrinter"
+         processIsolation="false"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
+         strict="false"
+         verbose="false">
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">modules/oe/oepaypal/components</directory>
+            <directory suffix=".php">modules/oe/oepaypal/controllers</directory>
+            <directory suffix=".php">modules/oe/oepaypal/core</directory>
+            <directory suffix=".php">modules/oe/oepaypal/models</directory>
+        </whitelist>
+    </filter>
+</phpunit>

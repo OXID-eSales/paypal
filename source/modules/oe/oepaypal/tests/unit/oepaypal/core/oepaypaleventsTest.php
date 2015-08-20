@@ -29,6 +29,8 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+
         // Dropping order payments table
         oxDb::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_orderpayments`");
         oxDb::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_order`");
@@ -42,8 +44,6 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
         // Deleting enabled PayPal RDFA
         $sSql = "DELETE FROM `oxobject2payment` WHERE `OXID` = 'oepaypalrdfa'";
         oxDb::getDb()->execute($sSql);
-
-        parent::setUp();
     }
 
     public function tearDown()

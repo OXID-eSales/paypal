@@ -42,6 +42,7 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
      */
     protected function setUp()
     {
+        parent::setUp();
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                      "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";

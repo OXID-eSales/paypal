@@ -60,7 +60,6 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
         $this->assertFalse($oView->isPayPal());
     }
 
-
     /**
      * Data provider for getUser test
      *

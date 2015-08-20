@@ -19,13 +19,6 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-
-if (!class_exists('oePayPalOxOrder_parent')) {
-    class oePayPalOxOrder_parent extends oxOrder
-    {
-    }
-}
-
 /**
  * Testing oxAccessRightException class.
  */

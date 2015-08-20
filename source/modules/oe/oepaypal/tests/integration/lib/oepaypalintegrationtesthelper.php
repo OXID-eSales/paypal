@@ -21,4 +21,11 @@
  */
 abstract class oePayPalIntegrationTestHelper extends PHPUnit_Framework_TestCase
 {
+    /**
+     * The only way to skip this helper file with no errors
+     */
+    public function testSkip()
+    {
+        return;
+    }
 }

@@ -188,7 +188,8 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     protected function _setOrderStatus($sStatus)
     {
         $paymentTypeObject = $this->getPaymentType();
-        if ($paymentTypeObject->getFieldData('oxpaymentsid') != 'oxidpaypal' || $sStatus != self::OEPAYPAL_TRANSACTION_STATUS_OK) {
+        $paymentType = $paymentTypeObject ? $paymentTypeObject->getFieldData('oxpaymentsid') : null;
+        if ($paymentType != 'oxidpaypal' || $sStatus != self::OEPAYPAL_TRANSACTION_STATUS_OK) {
             parent::_setOrderStatus($sStatus);
         }
     }

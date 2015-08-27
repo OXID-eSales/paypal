@@ -172,12 +172,16 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $oBasket = $this->_createStub('oePayPalOxBasket', $aBasketMethods);
 
         $oEmptyPayment = oxNew('oxPayment');
-        $oEmptyPayment->load('oxempty');
+        $oEmptyPayment->load('oxEmpty');
         $oEmptyPayment->oxpayments__oxactive = new oxField(1);
         $oEmptyPayment->save();
-        $oUser = oxNew('oxUser');
 
-        $oOrder = new oePayPalOxOrder();
+        $deliverySetList = $this->getMock('oxDeliverySetList', array('getDeliverySetList'));
+        $deliverySetList->expects($this->any())->method('getDeliveryList')->will($this->returnValue(array()));
+        oxRegistry::set("oxDeliverySetList", $deliverySetList);
+
+        $oUser = oxNew('oxUser');
+        $oOrder = oxNew('oxOrder');
         $oOrder->setUser($oUser);
 
         $this->assertNull($oOrder->validateDelivery($oBasket));

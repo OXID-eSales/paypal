@@ -129,7 +129,7 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
         $oResult = new oePayPalResponseSetExpressCheckout();
         $oResult->setData(array('TOKEN' => 'token'));
 
-        $sUrl = "https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=token";
+        $sUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=token";
 
         //utils
         $oUtils = $this->getMock("oxUtils", array("redirect"));

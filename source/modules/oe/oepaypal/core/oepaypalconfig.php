@@ -50,14 +50,14 @@ class oePayPalConfig
      *
      * @var string
      */
-    protected $_sPayPalSandboxUrl = 'https://www.sandbox.paypal.com/webscr';
+    protected $_sPayPalSandboxUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 
     /**
      * PayPal Url where user must be redirected after his session gets PayPal token.
      *
      * @var string
      */
-    protected $_sPayPalUrl = 'https://www.paypal.com/webscr';
+    protected $_sPayPalUrl = 'https://www.paypal.com/cgi-bin/webscr';
 
     /**
      * PayPal sandbox API url.

@@ -313,7 +313,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testGetPayPalSandboxUrl_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals('https://www.sandbox.paypal.com/webscr', $oConfig->getPayPalSandboxUrl());
+        $this->assertEquals('https://www.sandbox.paypal.com/cgi-bin/webscr', $oConfig->getPayPalSandboxUrl());
     }
 
     public function testGetPayPalSandboxUrl_overrideWithConfig_configValue()
@@ -334,7 +334,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testGetPayPalUrl_default_definedClassAttribute()
     {
         $oConfig = new oePayPalConfig();
-        $this->assertEquals('https://www.paypal.com/webscr', $oConfig->getPayPalUrl());
+        $this->assertEquals('https://www.paypal.com/cgi-bin/webscr', $oConfig->getPayPalUrl());
     }
 
     public function testGetPayPalUrl_overrideWithConfig_configValue()
@@ -347,10 +347,10 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function providerGetPayPalCommunicationUrl()
     {
         return array(
-            array(true, null, null, 'TestToken', 'continue', 'https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=TestToken&useraction=continue'),
-            array(false, null, null, 'TestToken', 'commit', 'https://www.paypal.com/webscr&cmd=_express-checkout&token=TestToken&useraction=commit'),
-            array(true, null, 'paypalApiUrl', 'TestToken1', 'commit', 'https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=TestToken1&useraction=commit'),
-            array(false, 'sandboxApiUrl', null, 'TestToken1', 'continue', 'https://www.paypal.com/webscr&cmd=_express-checkout&token=TestToken1&useraction=continue'),
+            array(true, null, null, 'TestToken', 'continue', 'https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=TestToken&useraction=continue'),
+            array(false, null, null, 'TestToken', 'commit', 'https://www.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=TestToken&useraction=commit'),
+            array(true, null, 'paypalApiUrl', 'TestToken1', 'commit', 'https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=TestToken1&useraction=commit'),
+            array(false, 'sandboxApiUrl', null, 'TestToken1', 'continue', 'https://www.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=TestToken1&useraction=continue'),
             array(true, 'sandboxApiUrl', 'paypalApiUrl', 'TestToken2', 'action', 'sandboxApiUrl&cmd=_express-checkout&token=TestToken2&useraction=action'),
             array(false, 'sandboxApiUrl', 'paypalApiUrl', 'TestToken2', 'action', 'paypalApiUrl&cmd=_express-checkout&token=TestToken2&useraction=action'),
         );
@@ -541,7 +541,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals($oConfig->getIPNResponseUrl(), 'https://www.paypal.com/webscr&cmd=_notify-validate');
+        $this->assertEquals($oConfig->getIPNResponseUrl(), 'https://www.paypal.com/cgi-bin/webscr&cmd=_notify-validate');
     }
 
     /**
@@ -552,7 +552,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals($oConfig->getIPNResponseUrl(), 'https://www.sandbox.paypal.com/webscr&cmd=_notify-validate');
+        $this->assertEquals($oConfig->getIPNResponseUrl(), 'https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_notify-validate');
     }
 
     /**
@@ -563,7 +563,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', false);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals($oConfig->getUrl(), 'https://www.paypal.com/webscr');
+        $this->assertEquals($oConfig->getUrl(), 'https://www.paypal.com/cgi-bin/webscr');
     }
 
     /**
@@ -574,7 +574,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
 
         $oConfig = new oePayPalConfig();
-        $this->assertEquals($oConfig->getUrl(), 'https://www.sandbox.paypal.com/webscr');
+        $this->assertEquals($oConfig->getUrl(), 'https://www.sandbox.paypal.com/cgi-bin/webscr');
     }
 
     /**

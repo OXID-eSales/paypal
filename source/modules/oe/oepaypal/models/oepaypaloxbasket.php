@@ -206,6 +206,10 @@ class oePayPalOxBasket extends oePayPalOxBasket_parent
         $flBasketVatValue += $this->getPayPalPayCostVat();
         $flBasketVatValue += $this->getPayPalTsProtectionCostVat();
 
+        if ($this->getDeliveryCosts() < round($this->getDeliveryCosts(), 2)) {
+            return floor($flBasketVatValue * 100) / 100;
+        }
+
         return $flBasketVatValue;
     }
 

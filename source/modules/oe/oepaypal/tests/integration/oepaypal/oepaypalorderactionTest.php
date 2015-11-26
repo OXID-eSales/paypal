@@ -36,11 +36,11 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
     }
 
     /**
-     * @covers oePayPalOrderActionCapture::process
-     * @covers oePayPalOrderActionCapture::getPayPalResponse
-     * @covers oePayPalOrderActionCapture::getPayPalRequest
-     * @covers oePayPalOrderActionCapture::getAmount
-     * @covers oePayPalOrderActionCapture::getType
+     * @covers oePayPalOrderCaptureAction::process
+     * @covers oePayPalOrderCaptureActionHandler::getPayPalResponse
+     * @covers oePayPalOrderCaptureActionHandler::getPayPalRequest
+     * @covers oePayPalOrderCaptureActionData::getAmount
+     * @covers oePayPalOrderCaptureActionData::getType
      */
     public function testActionCapture()
     {
@@ -77,11 +77,11 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
     }
 
     /**
-     * @covers oePayPalOrderActionRefund::process
-     * @covers oePayPalOrderActionRefund::getPayPalResponse
-     * @covers oePayPalOrderActionRefund::getPayPalRequest
-     * @covers oePayPalOrderActionRefund::getAmount
-     * @covers oePayPalOrderActionRefund::getType
+     * @covers oePayPalOrderRefundAction::process
+     * @covers oePayPalOrderRefundActionHandler::getPayPalResponse
+     * @covers oePayPalOrderRefundActionHandler::getPayPalRequest
+     * @covers oePayPalOrderRefundActionData::getAmount
+     * @covers oePayPalOrderRefundActionData::getType
      */
     public function testActionRefund()
     {
@@ -128,9 +128,9 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
     }
 
     /**
-     * @covers oePayPalOrderActionReauthorize::process
-     * @covers oePayPalOrderActionReauthorize::getPayPalResponse
-     * @covers oePayPalOrderActionReauthorize::getPayPalRequest
+     * @covers oePayPalOrderReauthorizeAction::process
+     * @covers oePayPalOrderReauthorizeActionHandler::getPayPalResponse
+     * @covers oePayPalOrderReauthorizeActionHandler::getPayPalRequest
      */
     public function ___testActionReauthorize()
     {
@@ -158,9 +158,9 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
     }
 
     /**
-     * @covers oePayPalOrderActionVoid::process
-     * @covers oePayPalOrderActionVoid::getPayPalResponse
-     * @covers oePayPalOrderActionVoid::getPayPalRequest
+     * @covers oePayPalOrderVoidAction::process
+     * @covers oePayPalOrderVoidActionHandler::getPayPalResponse
+     * @covers oePayPalOrderVoidActionHandler::getPayPalRequest
      */
     public function testActionVoid()
     {
@@ -211,11 +211,17 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
         return $oAction;
     }
 
+    /**
+     * @return oePayPalRequestHelper
+     */
     protected function _getRequestHelper()
     {
         return new oePayPalRequestHelper();
     }
 
+    /**
+     * @return oePayPalCommunicationHelper
+     */
     protected function _getPayPalCommunicationHelper()
     {
         return new oePayPalCommunicationHelper();
@@ -237,6 +243,12 @@ class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
         return $oOrder;
     }
 
+    /**
+     * @param oePayPalRequest     $oRequest
+     * @param oePayPalPayPalOrder $oPayPalOrder
+     *
+     * @return oePayPalOrderActionFactory
+     */
     protected function _getActionFactory($oRequest, $oPayPalOrder)
     {
         $oOrder = $this->_createStub('oePayPalOxOrder', array('getPayPalOrder' => $oPayPalOrder));

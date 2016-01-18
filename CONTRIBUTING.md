@@ -1,10 +1,10 @@
 ###How to Contribute
 
-Before contributing for the first time, you must <a href="https://www.clahub.com/agreements/OXID-eSales/paypal">sign the Contributor License Agreement</a>.
+Before contributing for the first time, you must <a href="https://gist.github.com/OXID-Admin/6df6ed126d074a54507d">sign the Contributor License Agreement</a>.
 You can find more information about it on the FAQ page OXID Contribution and Contributor Agreement FAQ:
 http://wiki.oxidforge.org/OXID_Contribution_and_Contributor_Agreement_FAQ
 
-First off, you have to fork the repository "OXID-eSales/paypal" to your list of repositories.
+First off, you have to fork the repository "OXID-eSales/coding_standards" to your list of repositories.
 
 <b>Best practice</b>:
 * Please leave the the branch names as they are.
@@ -18,4 +18,3 @@ You will find technical help with Git and GitHub on this place:<br>
 https://help.github.com/
 
 When sending your pull request, please provide a clear, meaningful and detailed information about what your code is about and what it will do, best including a screen shot if possible.
-

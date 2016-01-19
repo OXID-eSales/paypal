@@ -85,6 +85,8 @@ $aLang = array(
     'SHOP_MODULE_blOEPayPalECheckoutInMiniBasket'        => 'Show Express Checkout in the mini cart',
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInMiniBasket'   => 'If PayPal Express is enabled, the PayPal Express button will be displayed in the mini cart.',
 
+    'SHOP_MODULE_blOEPayPalFinalizeOrderOnPayPal'        => 'Finalize order after PayPal checkout',
+
     'SHOP_MODULE_blOEPayPalECheckoutInDetails'           => 'Show Express Checkout in the products detail page',
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInDetails'      => 'If PayPal Express is enabled, the PayPal Express button will be displayed in the products detail page.',
 );

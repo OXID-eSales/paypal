@@ -4,7 +4,7 @@ Before contributing for the first time, you must <a href="https://gist.github.co
 You can find more information about it on the FAQ page OXID Contribution and Contributor Agreement FAQ:
 http://wiki.oxidforge.org/OXID_Contribution_and_Contributor_Agreement_FAQ
 
-First off, you have to fork the repository "OXID-eSales/coding_standards" to your list of repositories.
+First off, you have to fork current repository.
 
 <b>Best practice</b>:
 * Please leave the the branch names as they are.

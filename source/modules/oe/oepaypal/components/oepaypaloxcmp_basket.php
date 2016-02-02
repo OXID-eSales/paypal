@@ -96,7 +96,7 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
      */
     protected function _getExpressCheckoutUrl()
     {
-        return 'oePayPalExpressCheckoutDispatcher&fnc=setExpressCheckout&displayCartInPayPal=' . (int) $this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
+        return 'oePayPalExpressCheckoutDispatcher?fnc=setExpressCheckout&displayCartInPayPal=' . (int) $this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
     }
 
     /**

@@ -146,12 +146,18 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      */
     public function getExpressCheckoutDetails()
     {
+        $oBasket = $this->getSession()->getBasket();
+
         try {
             $oPayPalService = $this->getPayPalCheckoutService();
             $oBuilder = oxNew('oePayPalGetExpressCheckoutDetailsRequestBuilder');
             $oBuilder->setSession($this->getSession());
             $oRequest = $oBuilder->buildRequest();
             $oDetails = $oPayPalService->getExpressCheckoutDetails($oRequest);
+
+            // Revove flag of new item added
+            // to not show new "Item added" popup in order
+            $oBasket->isNewItemAdded();
 
             // creating new or using session user
             $oUser = $this->_initializeUserData($oDetails);
@@ -164,7 +170,6 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             return "basket";
         }
 
-        $oBasket = $this->getSession()->getBasket();
         $oBasket->setBasketUser($oUser);
 
         // setting PayPal as current active payment

@@ -43,6 +43,8 @@ class Integration_oePayPal_oePayPalCurlMainParametersTest extends OxidTestCase
 
     public function testCurlMainParameterCharset_default_iso()
     {
+        $this->getConfig()->setConfigParam('iUtfMode', false);
+
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
@@ -51,8 +53,6 @@ class Integration_oePayPal_oePayPalCurlMainParametersTest extends OxidTestCase
 
     public function testCurlMainParameterCharset_utfMode_utf()
     {
-        $this->getConfig()->setConfigParam('iUtfMode', true);
-
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 

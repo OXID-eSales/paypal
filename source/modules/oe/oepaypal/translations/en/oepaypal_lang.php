@@ -23,7 +23,7 @@
 // RESOURCE IDENTIFIER = STRING
 // -------------------------------
 $aLang = array(
-    'charset'                                    => 'ISO-8859-15',
+    'charset'                                    => 'UTF-8',
     'OEPAYPAL_LOCALE'                            => 'en_US',
     'OEPAYPAL_PARTNERBOX_LINK'                   => 'https://www.paypal.com/en/webapps/mpp/paypal-popup',
     'OEPAYPAL_ERROR_USER_ADDRESS'                => 'The delivery addresses in your shop account and in PayPal do not match. For security reasons we have to check your identity. Please log in to your shop account and re-start the PayPal Express Checkout.',

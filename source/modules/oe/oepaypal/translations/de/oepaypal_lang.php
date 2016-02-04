@@ -23,7 +23,7 @@
 // RESOURCE IDENTIFIER = STRING
 // -------------------------------
 $aLang = array(
-    'charset'                                    => 'ISO-8859-15',
+    'charset'                                    => 'UTF-8',
     'OEPAYPAL_LOCALE'                            => 'de_DE',
     'OEPAYPAL_PARTNERBOX_LINK'                   => 'https://www.paypal.com/de/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside',
     'OEPAYPAL_ERROR_USER_ADDRESS'                => 'Ihre im Shop hinterlegten Adressinformationen stimmen nicht mit Ihrer PayPal-Lieferadresse überein. Aus Sicherheitsgründen müssen wir Ihre Identität prüfen. Bitte loggen Sie sich im Shop ein und führen Sie den PayPal Express Checkout noch einmal durch.',

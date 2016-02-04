@@ -155,8 +155,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             $oRequest = $oBuilder->buildRequest();
             $oDetails = $oPayPalService->getExpressCheckoutDetails($oRequest);
 
-            // Revove flag of new item added
-            // to not show new "Item added" popup in order
+            // Remove flag of "new item added" to not show "Item added" popup when returning to checkout from paypal
             $oBasket->isNewItemAdded();
 
             // creating new or using session user

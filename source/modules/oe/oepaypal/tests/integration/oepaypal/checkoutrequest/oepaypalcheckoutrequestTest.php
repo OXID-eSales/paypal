@@ -46,7 +46,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     {
         parent::setUp();
         $this->_reset();
-
+        $this->cleanTmpDir();
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
     }
 

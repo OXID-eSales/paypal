@@ -90,8 +90,7 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
         $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(129.00));
 
         // preparing basket
-        $oBasket = $this->getMock("oxBasket", array("setBasketUser", "setPayment", "setShipping", "calculateBasket", "getAdditionalServicesVatPercent", "getPrice"));
-        $oBasket->expects($this->once())->method("setBasketUser")->with($this->equalTo($oUser));
+        $oBasket = $this->getMock("oxBasket", array("setPayment", "setShipping", "calculateBasket", "getAdditionalServicesVatPercent", "getPrice"));
         $oBasket->expects($this->once())->method("setPayment")->with($this->equalTo("oxidpaypal"));
         $oBasket->expects($this->once())->method("setShipping")->with($this->equalTo("123"));
         $oBasket->expects($this->once())->method("calculateBasket")->with($this->equalTo(true));
@@ -1048,5 +1047,170 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
 
         $oDispatcher = new oePayPalExpressCheckoutDispatcher();
         $this->assertEquals("testValue", $oDispatcher->UNITgetDeliverySetList($oUser));
+    }
+
+    /**
+     * Test case for oepaypalexpresscheckoutdispatcher::getExpressCheckoutDetails()
+     */
+    public function testGetExpressCheckoutDetailsChangedOrderTotal()
+    {
+        $aDetails = array(
+            'TOKEN'                                   => 'EC-3KM09768MH0883231',
+            'BILLINGAGREEMENTACCEPTEDSTATUS'          => '0',
+            'CHECKOUTSTATUS'                          => 'PaymentActionNotInitiated',
+            'TIMESTAMP'                               => '2016-02-15T14:12:43Z',
+            'CORRELATIONID'                           => '397ac1846e235',
+            'ACK'                                     => 'Success',
+            'VERSION'                                 => '84.0',
+            'BUILD'                                   => '18308778',
+            'EMAIL'                                   => 'testpp@oxideshop.dev',
+            'PAYERID'                                 => 'XXXXXXXXYYYYY',
+            'PAYERSTATUS'                             => 'verified',
+            'FIRSTNAME'                               => 'Max',
+            'LASTNAME'                                => 'Muster',
+            'COUNTRYCODE'                             => 'DE',
+            'SHIPTONAME'                              => 'Erna Helvetia',
+            'SHIPTOSTREET'                            => 'Dorfstrasse 117',
+            'SHIPTOCITY'                              => 'Oberbuchsiten',
+            'SHIPTOZIP'                               => '4625',
+            'SHIPTOCOUNTRYCODE'                       => 'CH',
+            'SHIPTOCOUNTRYNAME'                       => 'Switzerland',
+            'ADDRESSSTATUS'                           => 'Unconfirmed',
+            'CURRENCYCODE'                            => 'EUR',
+            'AMT'                                     => '29.90',
+            'ITEMAMT'                                 => '29.90',
+            'SHIPPINGAMT'                             => '0.00',
+            'HANDLINGAMT'                             => '0.00',
+            'TAXAMT'                                  => '0.00',
+            'CUSTOM'                                  => 'Your order at PayPal Testshop in the amount of 29,90 EUR',
+            'DESC'                                    => 'Your order at PayPal Testshop in the amount of 29,90 EUR',
+            'INSURANCEAMT'                            => '0.00',
+            'SHIPDISCAMT'                             => '0.00',
+            'INSURANCEOPTIONOFFERED'                  => 'false',
+            'L_NAME0'                                 => 'Kuyichi leather belt JEVER',
+            'L_NUMBER0'                               => '3503',
+            'L_QTY0'                                  => '1',
+            'L_TAXAMT0'                               => '0.00',
+            'L_AMT0'                                  => '29.90',
+            'L_ITEMWEIGHTVALUE0'                      => '   0.00000',
+            'L_ITEMLENGTHVALUE0'                      => '   0.00000',
+            'L_ITEMWIDTHVALUE0'                       => '   0.00000',
+            'L_ITEMHEIGHTVALUE0'                      => '   0.00000',
+            'SHIPPINGCALCULATIONMODE'                 => 'FlatRate',
+            'INSURANCEOPTIONSELECTED'                 => 'false',
+            'SHIPPINGOPTIONISDEFAULT'                 => 'true',
+            'SHIPPINGOPTIONAMOUNT'                    => '0.00',
+            'SHIPPINGOPTIONNAME'                      => 'Standard',
+            'PAYMENTREQUEST_0_CURRENCYCODE'           => 'EUR',
+            'PAYMENTREQUEST_0_AMT'                    => '29.90',
+            'PAYMENTREQUEST_0_ITEMAMT'                => '29.90',
+            'PAYMENTREQUEST_0_SHIPPINGAMT'            => '0.00',
+            'PAYMENTREQUEST_0_HANDLINGAMT'            => '0.00',
+            'PAYMENTREQUEST_0_TAXAMT'                 => '0.00',
+            'PAYMENTREQUEST_0_CUSTOM'                 => 'Your order at PayPal Testshop in the amount of 29,90 EUR',
+            'PAYMENTREQUEST_0_DESC'                   => 'Your order at PayPal Testshop in the amount of 29,90 EUR',
+            'PAYMENTREQUEST_0_INSURANCEAMT'           => '0.00',
+            'PAYMENTREQUEST_0_SHIPDISCAMT'            => '0.00',
+            'PAYMENTREQUEST_0_INSURANCEOPTIONOFFERED' => 'false',
+            'PAYMENTREQUEST_0_SHIPTONAME'             => 'Erna Helvetia',
+            'PAYMENTREQUEST_0_SHIPTOSTREET'           => 'Dorfstrasse 117',
+            'PAYMENTREQUEST_0_SHIPTOCITY'             => 'Oberbuchsiten',
+            'PAYMENTREQUEST_0_SHIPTOZIP'              => '4625',
+            'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE'      => 'CH',
+            'PAYMENTREQUEST_0_SHIPTOCOUNTRYNAME'      => 'Switzerland',
+            'PAYMENTREQUEST_0_ADDRESSSTATUS'          => 'Unconfirmed',
+            'L_PAYMENTREQUEST_0_NAME0'                => 'Kuyichi leather belt JEVER',
+            'L_PAYMENTREQUEST_0_NUMBER0'              => '3503',
+            'L_PAYMENTREQUEST_0_QTY0'                 => '1',
+            'L_PAYMENTREQUEST_0_TAXAMT0'              => '0.00',
+            'L_PAYMENTREQUEST_0_AMT0'                 => '29.90',
+            'L_PAYMENTREQUEST_0_ITEMWEIGHTVALUE0'     => '   0.00000',
+            'L_PAYMENTREQUEST_0_ITEMLENGTHVALUE0'     => '   0.00000',
+            'L_PAYMENTREQUEST_0_ITEMWIDTHVALUE0'      => '   0.00000',
+            'L_PAYMENTREQUEST_0_ITEMHEIGHTVALUE0'     => '   0.00000',
+            'PAYMENTREQUESTINFO_0_ERRORCODE'          => '0',
+        );
+
+        oxRegistry::set('oxVatSelector', new modOxVatSelector);
+
+        $oArticle = oxNew('oxarticle');
+        $oArticle->disableLazyLoading();
+        $oArticle->setId(substr_replace( oxUtilsObject::getInstance()->generateUId(), '_', 0, 1 ));
+        $oArticle->oxarticles__oxprice = new oxField('8.0', oxField::T_RAW);
+        $oArticle->oxarticles__oxartnum = new oxField('666-T-V', oxField::T_RAW);
+        $oArticle->oxarticles__oxactive = new oxField('1', oxField::T_RAW);
+        $oArticle->save();
+
+        $oBasket = oxNew('oxBasket');
+        $oBasket->addToBasket($oArticle->getId(), 1); //8 EUR
+        $this->getSession()->setBasket($oBasket);
+
+        $oDetails = oxNew('oePayPalResponseGetExpressCheckoutDetails');
+        $oDetails->setData($aDetails);
+
+        $oPayPalService = $this->getMock('oePayPalService', array('getExpressCheckoutDetails'));
+        $oPayPalService->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($oDetails));
+
+        $sProxy = $this->getProxyClassName('oePayPalExpressCheckoutDispatcher');
+        $oDispatcher = $this->getMock($sProxy, array('getPayPalCheckoutService', '_isPayPalPaymentValid'));
+        $oDispatcher->expects($this->any())->method('_isPayPalPaymentValid')->will($this->returnValue(true));
+        $oDispatcher->expects($this->any())->method('getPayPalCheckoutService')->will($this->returnValue($oPayPalService));
+
+        $oUtilsView = $this->getMock('oxUtilsView', array('addErrorToDisplay'));
+        $oUtilsView->expects($this->once())->method('addErrorToDisplay')-> with($this->equalTo('OEPAYPAL_ORDER_TOTAL_HAS_CHANGED'));
+        oxTestModules::addModuleObject('oxUtilsView', $oUtilsView);
+
+        $this->assertSame('basket', $oDispatcher->getExpressCheckoutDetails());
+
+        //proceed in normal checkout
+        $oBasket = $this->getSession()->getBasket();
+
+        //verify basket calculation results
+        $oBasket->calculateBasket(true);
+        $this->assertSame(6.72, $oBasket->getNettoSum());
+        $this->assertSame(6.72, $oBasket->getBruttoSum()); //no VAT for Switzerland
+
+        //Change to german address, verify VAT for Germany is charged
+        $this->_changeUser();
+
+        //during regular checkout, shop will work with a new instance of oxVatSelector
+        //Make sure we use one with clean cache here
+        oxRegistry::get('oxVatSelector')->cleanInstanceCache();
+
+        $oBasket = $this->getSession()->getBasket();
+        $oBasket->calculateBasket(true);
+        $this->assertSame(6.72, $oBasket->getNettoSum());
+        $this->assertSame(8.0, $oBasket->getBruttoSum());
+
+    }
+
+    /**
+     * Test helper, change user to german address.
+     */
+    private function _changeUser()
+    {
+        //now change the user address
+        $aRawValues = array('oxuser__oxfname'     => 'Erna',
+                            'oxuser__oxlname'     => 'Hahnentritt',
+                            'oxuser__oxstreetnr'  => '117',
+                            'oxuser__oxstreet'    => 'Landstrasse',
+                            'oxuser__oxzip'       => '22769',
+                            'oxuser__oxcity'      => 'Hamburg',
+                            'oxuser__oxcountryid' => 'a7c40f631fc920687.20179984');
+
+        $this->setRequestParameter('invadr', $aRawValues);
+        $this->setRequestParam('stoken', $this->getSession()->getSessionChallengeToken());
+
+        $oUserComponent = oxNew('oxcmp_user');
+        $this->assertSame('payment', $oUserComponent->changeUser());
+
+    }
+}
+
+class modOxVatSelector extends oxVatSelector
+{
+    public static function cleanInstanceCache()
+    {
+        self::$_aUserVatCache = array();
     }
 }

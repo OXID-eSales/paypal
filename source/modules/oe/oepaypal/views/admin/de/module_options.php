@@ -84,6 +84,8 @@ $aLang = array(
     'SHOP_MODULE_blOEPayPalECheckoutInDetails'           => 'Express Checkout auf der Artikel-Detailseite anzeigen',
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInDetails'      => 'Ist PayPal Express aktiv, wird der PayPal Express-Button auf der Artikel-Detailseite angezeigt.',
 
+    'SHOP_MODULE_blOEPayPalFinalizeOrderOnPayPal'        => 'Bestellung abschließen, nachdem PayPal kasse',
+
     'SHOP_MODULE_blOEPayPalECheckoutInMiniBasket'        => 'Express Checkout im Mini-Warenkorb anzeigen',
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInMiniBasket'   => 'Ist PayPal Express aktiv, wird der PayPal Express-Button im Mini-Warenkorb angezeigt.',
 );

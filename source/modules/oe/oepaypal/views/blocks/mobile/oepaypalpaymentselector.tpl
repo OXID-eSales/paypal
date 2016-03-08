@@ -12,7 +12,7 @@
                 <a href="#" class="paypalHelpIcon">?</a>
 
                 [{assign var="paypalHelpLink" value="OEPAYPAL_PAYMENT_HELP_LINK"|oxmultilangassign}]
-                [{oxscript add="$('.paypalPaymentImg, .paypalHelpIcon').click(function (){window.open('`$paypalHelpLink`','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=500, height=450');return false;});"}]
+                [{oxscript add="$('.paypalPaymentImg, .paypalHelpIcon').click(function (){window.open('`$paypalHelpLink`','olcwhatispaypal','toolbar=no', 'location=no', 'directories=no', 'status=no', 'menubar=no', 'scrollbars=yes', 'resizable=yes', 'width=500', 'height=450');return false;});"}]
 
                 [{if $paymentmethod->oxpayments__oxlongdesc|trim}]
                     <div class="paypalPaymentDesc">

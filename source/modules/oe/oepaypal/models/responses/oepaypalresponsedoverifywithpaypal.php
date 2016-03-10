@@ -82,7 +82,7 @@ class oePayPalResponseDoVerifyWithPayPal extends oePayPalResponse
     {
         $aResponse = $this->getData();
 
-        return isset($aResponse[self::PAYPAL_ACK]);
+        return array_key_exists(self::PAYPAL_ACK, $aResponse);
     }
 
     /**

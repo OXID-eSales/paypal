@@ -24,6 +24,12 @@ if (!defined('CURL_SSLVERSION_TLSv1'))
     define('CURL_SSLVERSION_TLSv1', 1);
 }
 
+
+if (!defined('CURL_SSLVERSION_TLSv1_2'))
+{
+    define('CURL_SSLVERSION_TLSv1_2', 6);
+}
+
 /**
  * PayPal Curl class
  */
@@ -66,7 +72,7 @@ class oePayPalCurl
         'CURLOPT_VERBOSE'        => 0,
         'CURLOPT_SSL_VERIFYPEER' => false,
         'CURLOPT_SSL_VERIFYHOST' => false,
-        'CURLOPT_SSLVERSION'     => CURL_SSLVERSION_TLSv1,
+        'CURLOPT_SSLVERSION'     => CURL_SSLVERSION_TLSv1_2,
         'CURLOPT_RETURNTRANSFER' => 1,
         'CURLOPT_POST'           => 1,
         'CURLOPT_HTTP_VERSION'   => CURL_HTTP_VERSION_1_1,

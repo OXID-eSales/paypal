@@ -1198,7 +1198,7 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
                             'oxuser__oxcity'      => 'Hamburg',
                             'oxuser__oxcountryid' => 'a7c40f631fc920687.20179984');
 
-        $this->setRequestParameter('invadr', $aRawValues);
+        $this->setRequestParam('invadr', $aRawValues);
         $this->setRequestParam('stoken', $this->getSession()->getSessionChallengeToken());
 
         $oUserComponent = oxNew('oxcmp_user');

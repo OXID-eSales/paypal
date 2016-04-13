@@ -1164,6 +1164,8 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
 
         $this->assertSame('basket', $dispatcher->getExpressCheckoutDetails());
 
+        $this->getSession()->setUser(null); // make sure we get the desired active user
+
         //proceed in normal checkout
         $basket = $this->getSession()->getBasket();
 
@@ -1201,7 +1203,7 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
                            'oxuser__oxcountryid' => 'a7c40f631fc920687.20179984');
 
         $this->setRequestParameter('invadr', $rawValues);
-        $this->setRequestParam('stoken', $this->getSession()->getSessionChallengeToken());
+        $this->setRequestParameter('stoken', $this->getSession()->getSessionChallengeToken());
 
         $userComponent = oxNew('oxcmp_user');
         $this->assertSame('payment', $userComponent->changeUser());

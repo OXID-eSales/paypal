@@ -87,20 +87,34 @@ class oePayPal_oePayPalMobileTest extends oxTestCase
         ));
 
         $this->selectMenu("Extensions", "Modules");
-        $this->openListItem("link=OXID eShop theme switch");
-        $this->openTab("Settings");
-        $this->click("//b[text()='General parameters']");
-        $this->type("//input[@name='confstrs[sOEThemeSwitcherMobileTheme]']", 'some_unexisting_theme');
-        $this->clickAndWait("//input[@name='save']");
-        $this->openTab("Overview");
-        if ($this->isElementPresent('module_activate')) {
-            $this->clickAndWait("module_activate");
-        }
+        if ($this->isElementPresent("link=OXID eShop theme switch")) {
+            $this->openListItem("link=OXID eShop theme switch");
+            $this->openTab("Settings");
+            $this->click("//b[text()='General parameters']");
+            $this->type("//input[@name='confstrs[sOEThemeSwitcherMobileTheme]']", 'some_unexisting_theme');
+            $this->clickAndWait("//input[@name='save']");
+            $this->openTab("Overview");
+            if ($this->isElementPresent('module_activate')) {
+                $this->clickAndWait("module_activate");
+            }
 
-        $this->selectMenu("Extensions", "Themes");
-        $this->openListItem("link=OXID eShop mobile theme");
-        if ($this->isElementPresent("//input[@value='Activate']")) {
-           $this->clickAndWait("//input[@value='Activate']");
+            $this->selectMenu("Extensions", "Themes");
+            $this->openListItem("link=OXID eShop mobile theme");
+            if ($this->isElementPresent("//input[@value='Activate']")) {
+               $this->clickAndWait("//input[@value='Activate']");
+            }
+        }
+    }
+
+    /**
+     * Checks if mobile theme is active.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if ($this->callShopSC('oxViewConfig', 'getActiveTheme') != 'mobile') {
+            $this->markTestSkipped('Mobile theme was not found or not active!');
         }
     }
 

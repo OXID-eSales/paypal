@@ -1,0 +1,11 @@
+{
+    "name": "oxid-esales/paypal-module",
+    "description": "This is PayPal module for OXID eShop.",
+    "type": "oxideshop-module",
+    "keywords": ["oxid", "modules", "eShop"],
+    "homepage": "https://www.oxid-esales.com/en/home.html",
+    "license": [
+        "GPL-3.0",
+        "proprietary"
+    ]
+}

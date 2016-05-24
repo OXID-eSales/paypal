@@ -9,8 +9,8 @@
         "proprietary"
     ],
     "extra": {
-      "oxideshop": {
-        "target-directory": "oe/oepaypal"
-      }
+        "oxideshop": {
+            "target-directory": "oe/oepaypal"
+        }
     }
 }

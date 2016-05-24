@@ -10,8 +10,7 @@
     ],
     "extra": {
       "oxideshop": {
-        "vendor-name": "oe",
-        "module-name": "paypal"
+        "target-directory": "oe/oepaypal"
       }
     }
 }

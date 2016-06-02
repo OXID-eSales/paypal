@@ -212,25 +212,25 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     {
         $oDb = oxDb::getDb();
         $oConfig = oxRegistry::getConfig();
-        $oDb->query("TRUNCATE oxarticles");
-        $oDb->query("TRUNCATE oxcategories");
-        $oDb->query("TRUNCATE oxcounters");
-        $oDb->query("TRUNCATE oxdiscount");
-        $oDb->query("TRUNCATE oxobject2discount");
-        $oDb->query("TRUNCATE oxgroups");
-        $oDb->query("TRUNCATE oxobject2group");
-        $oDb->query("TRUNCATE oxwrapping");
-        $oDb->query("TRUNCATE oxdelivery");
-        $oDb->query("TRUNCATE oxdel2delset");
-        $oDb->query("TRUNCATE oxobject2payment");
-        $oDb->query("TRUNCATE oxvouchers");
-        $oDb->query("TRUNCATE oxvoucherseries");
-        $oDb->query("TRUNCATE oxobject2delivery");
-        $oDb->query("TRUNCATE oxdeliveryset");
-        $oDb->query("TRUNCATE oxuser");
-        $oDb->query("TRUNCATE oxprice2article");
+        $oDb->execute("TRUNCATE oxarticles");
+        $oDb->execute("TRUNCATE oxcategories");
+        $oDb->execute("TRUNCATE oxcounters");
+        $oDb->execute("TRUNCATE oxdiscount");
+        $oDb->execute("TRUNCATE oxobject2discount");
+        $oDb->execute("TRUNCATE oxgroups");
+        $oDb->execute("TRUNCATE oxobject2group");
+        $oDb->execute("TRUNCATE oxwrapping");
+        $oDb->execute("TRUNCATE oxdelivery");
+        $oDb->execute("TRUNCATE oxdel2delset");
+        $oDb->execute("TRUNCATE oxobject2payment");
+        $oDb->execute("TRUNCATE oxvouchers");
+        $oDb->execute("TRUNCATE oxvoucherseries");
+        $oDb->execute("TRUNCATE oxobject2delivery");
+        $oDb->execute("TRUNCATE oxdeliveryset");
+        $oDb->execute("TRUNCATE oxuser");
+        $oDb->execute("TRUNCATE oxprice2article");
         $oConfig->setConfigParam("blShowVATForDelivery", true);
         $oConfig->setConfigParam("blShowVATForPayCharge", true);
-        $oDb->query("UPDATE oxpayments SET oxaddsum=0 WHERE oxid = 'oxidpaypal'");
+        $oDb->execute("UPDATE oxpayments SET oxaddsum=0 WHERE oxid = 'oxidpaypal'");
     }
 }

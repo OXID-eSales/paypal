@@ -41,15 +41,6 @@ class oePayPalPayment extends oePayPalPayment_parent
 
             $oSession->setVariable('paymentid', 'oxidpaypal');
 
-            if (oxRegistry::getConfig()->getRequestParameter('bltsprotection')) {
-                $sTsProductId = oxRegistry::getConfig()->getRequestParameter('stsprotection');
-                $oBasket->setTsProductId($sTsProductId);
-                $oSession->setVariable('stsprotection', $sTsProductId);
-            } else {
-                $oSession->deleteVariable('stsprotection');
-                $oBasket->setTsProductId(null);
-            }
-
             return 'oePayPalStandardDispatcher?fnc=setExpressCheckout'
                    . '&displayCartInPayPal=' . ((int) oxRegistry::getConfig()->getRequestParameter('displayCartInPayPal'));
         }

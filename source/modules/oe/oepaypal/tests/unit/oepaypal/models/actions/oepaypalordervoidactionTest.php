@@ -90,6 +90,10 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      */
     public function testProcess_CommentAdded()
     {
+        $oUtilsDate = $this->getMock('oxUtilsDate', array('getTime'));
+        $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue(time()));
+        oxRegistry::set('oxUtilsDate', $oUtilsDate);
+
         $sComment = 'testComment';
         $oComment = new oePayPalOrderPaymentComment();
         $oComment->setComment($sComment);

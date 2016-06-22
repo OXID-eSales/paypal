@@ -19,8 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once __DIR__ . '/../lib/oepaypalcommunicationhelper.php';
-require_once __DIR__ . '/../lib/oepaypalrequesthelper.php';
+require_once __DIR__ . '/lib/oepaypalcommunicationhelper.php';
+require_once __DIR__ . '/lib/oepaypalrequesthelper.php';
 
 class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
 {

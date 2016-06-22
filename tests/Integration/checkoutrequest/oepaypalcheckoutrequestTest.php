@@ -19,10 +19,10 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-require_once __DIR__ . '/../../lib/oepaypalshopconstruct.php';
-require_once __DIR__ . '/../../lib/oepaypalcommunicationhelper.php';
-require_once __DIR__ . '/../../lib/oepaypaltestcaseparser.php';
-require_once __DIR__ . '/../../lib/oepaypalarrayasserts.php';
+require_once __DIR__ . '/../lib/oepaypalshopconstruct.php';
+require_once __DIR__ . '/../lib/oepaypalcommunicationhelper.php';
+require_once __DIR__ . '/../lib/oepaypaltestcaseparser.php';
+require_once __DIR__ . '/../lib/oepaypalarrayasserts.php';
 
 class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends OxidTestCase
 {

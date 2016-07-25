@@ -2,8 +2,8 @@
 DELETE FROM `oxconfig` WHERE `OXVARNAME` IN ('blOEPayPalStandardCheckout','blOEPayPalExpressCheckout','blOEPayPalECheckoutInMiniBasket','blOEPayPalECheckoutInDetails');
 
 INSERT INTO `oxconfig` (`OXID`, `OXSHOPID`, `OXMODULE`, `OXVARNAME`, `OXVARTYPE`, `OXVARVALUE`) VALUES
-('__blOEPayPalStandardCheckout', 'oxbaseshop', 'module:oepaypal', 'blOEPayPalStandardCheckout', 'bool', ''),
-('__blOEPayPalExpressCheckout', 'oxbaseshop', 'module:oepaypal', 'blOEPayPalExpressCheckout', 'bool', ''),
-('__blOEPayPalECheckoutInMiniBasket', 'oxbaseshop', 'module:oepaypal', 'blOEPayPalECheckoutInMiniBasket', 'bool', ''),
-('__blOEPayPalECheckoutInDetails', 'oxbaseshop', 'module:oepaypal', 'blOEPayPalECheckoutInDetails', 'bool', '');
+('__blOEPayPalStandardCheckout', 1, 'module:oepaypal', 'blOEPayPalStandardCheckout', 'bool', ''),
+('__blOEPayPalExpressCheckout', 1, 'module:oepaypal', 'blOEPayPalExpressCheckout', 'bool', ''),
+('__blOEPayPalECheckoutInMiniBasket', 1, 'module:oepaypal', 'blOEPayPalECheckoutInMiniBasket', 'bool', ''),
+('__blOEPayPalECheckoutInDetails', 1, 'module:oepaypal', 'blOEPayPalECheckoutInDetails', 'bool', '');
 

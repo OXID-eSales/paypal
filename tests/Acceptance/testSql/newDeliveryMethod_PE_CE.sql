@@ -1,8 +1,8 @@
 # add 3 new shipping methods
 INSERT INTO `oxdeliveryset` (`OXID`,      `OXSHOPID`, `OXACTIVE`, `OXTITLE`,      		   `OXTITLE_1`,  		 `OXPOS`) VALUES
-                            ('testdelset1', 'oxbaseshop',            1,         'Test Paypal:6hour', 	   'Test Paypal:6 hour', 	  0),
-                ('testdelset2', 'oxbaseshop',          1,        'Test Paypal:12hour', 	   'Test Paypal:12 hour', 	  0),
-                ('testdelset3', 'oxbaseshop',          1,         'Test Paypal:specproduct', 'Test Paypal:specproduct', 0);
+                            ('testdelset1', 1,            1,         'Test Paypal:6hour', 	   'Test Paypal:6 hour', 	  0),
+                ('testdelset2', 1,          1,        'Test Paypal:12hour', 	   'Test Paypal:12 hour', 	  0),
+                ('testdelset3', 1,          1,         'Test Paypal:specproduct', 'Test Paypal:specproduct', 0);
 
 
 # assigned PayPal to these shipping methods
@@ -20,13 +20,13 @@ INSERT INTO `oxobject2delivery` (`OXID`,      `OXDELIVERYID`,    `OXOBJECTID`,  
 
 # added shipping cost rules
 INSERT INTO `oxdelivery` (`OXID`,  `OXSHOPID`, `OXACTIVE`, `OXTITLE`,       				 `OXTITLE_1`,    				`OXADDSUMTYPE`, `OXADDSUM`, `OXDELTYPE`, `OXPARAM`, `OXPARAMEND`, `OXFIXED`, `OXSORT`, `OXFINALIZE`) VALUES
-                   ('rules1', 'oxbaseshop',          1,         'test paypal from 0  till 10:6hours',    'test paypal from 0  till 10:6hours',  'abs',           0.5,         'p',          0,        10,        0,         9999,     0),
-                ('rules2', 'oxbaseshop',          1,       'test paypal from 10 till 20:6hours',    'test paypal from 10 till 20:6hours',  'abs',    	  0.4,         'p',         10,        20,        0,         9999,     0),
-                ('rules3', 'oxbaseshop',          1,        'test paypal from 20 till 99:6hours',    'test paypal from 20 till 99:6hours',  'abs',      	  0.3,         'p',         20,        99,        0,         9999,     0),
-                ('rules4', 'oxbaseshop',          1,         'test paypal from 0  till 10:12hours',   'test paypal from 0  till 10:12hours', 'abs',           0.9,         'p',         0,         10,        0,         9999,     0),
-                ('rules5', 'oxbaseshop',          1,         'test paypal from 10 till 20:12hours',   'test paypal from 10 till 20:12hours', 'abs',           0.8,         'p',         10,        20,        0,         9999,     0),
-                ('rules6', 'oxbaseshop',          1,         'test paypal from 20 till 99:12hours',   'test paypal from 20 till 99:12hours', 'abs',           0.7,         'p',         20,        99,        0,         9999,     0),
-                ('rules7', 'oxbaseshop',          1,         'test paypal with product',     	  'test paypal with product', 	       'abs',          0.15,        'p',         20,        30,        0,         9999,     0);
+                   ('rules1', 1,          1,         'test paypal from 0  till 10:6hours',    'test paypal from 0  till 10:6hours',  'abs',           0.5,         'p',          0,        10,        0,         9999,     0),
+                ('rules2', 1,          1,       'test paypal from 10 till 20:6hours',    'test paypal from 10 till 20:6hours',  'abs',    	  0.4,         'p',         10,        20,        0,         9999,     0),
+                ('rules3', 1,          1,        'test paypal from 20 till 99:6hours',    'test paypal from 20 till 99:6hours',  'abs',      	  0.3,         'p',         20,        99,        0,         9999,     0),
+                ('rules4', 1,          1,         'test paypal from 0  till 10:12hours',   'test paypal from 0  till 10:12hours', 'abs',           0.9,         'p',         0,         10,        0,         9999,     0),
+                ('rules5', 1,          1,         'test paypal from 10 till 20:12hours',   'test paypal from 10 till 20:12hours', 'abs',           0.8,         'p',         10,        20,        0,         9999,     0),
+                ('rules6', 1,          1,         'test paypal from 20 till 99:12hours',   'test paypal from 20 till 99:12hours', 'abs',           0.7,         'p',         20,        99,        0,         9999,     0),
+                ('rules7', 1,          1,         'test paypal with product',     	  'test paypal with product', 	       'abs',          0.15,        'p',         20,        30,        0,         9999,     0);
 
 
 

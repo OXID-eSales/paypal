@@ -8,10 +8,10 @@ SET @@session.sql_mode = '';
 
 # Articles demo data
 INSERT INTO `oxarticles` (`OXID`, `OXSHOPID`, `OXACTIVE`, `OXARTNUM`, `OXTITLE`,        `OXSHORTDESC`,              `OXPRICE`, `OXUNITNAME`, `OXUNITQUANTITY`, `OXVAT`, `OXWEIGHT`, `OXSTOCK`, `OXSTOCKFLAG`, `OXINSERT`,   `OXTIMESTAMP`,        `OXLENGTH`, `OXWIDTH`, `OXHEIGHT`, `OXSEARCHKEYS`, `OXISSEARCH`, `OXVARMINPRICE`, `OXTITLE_1`,      `OXSHORTDESC_1`,             `OXSUBCLASS`) VALUES
-                         ('1000',  'oxbaseshop',          1,         '1000',     'Test product 0', 'Test product 0 short desc', 10,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1000',    1,            50,             'Test product 0', 'Test product 0 short desc', 'oxarticle'),
-                         ('1001',  'oxbaseshop',          1,         '1001',     'Test product 1', 'Test product 1 short desc', 0.99,      '',            0,                NULL,    0,          0,         1,            '2008-02-04', '2008-02-04 17:35:43', 0,          0,         0,         'search1001',    1,            100,            'Test product 1', 'Test product 1 short desc', 'oxarticle'),
-                         ('1003',  'oxbaseshop',          1,         '1003',     'Test product 3', 'Test product 3 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1003',    1,            50,             'Test product 3', 'Test product 0 short desc', 'oxarticle'),
-                         ('1004',  'oxbaseshop',          1,         '1004',     'Test product 4', 'Test product 4 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1004',    1,            50,             'Test product 4', 'Test product 4 short desc', 'oxarticle');
+                         ('1000',  1,          1,         '1000',     'Test product 0', 'Test product 0 short desc', 10,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1000',    1,            50,             'Test product 0', 'Test product 0 short desc', 'oxarticle'),
+                         ('1001',  1,          1,         '1001',     'Test product 1', 'Test product 1 short desc', 0.99,      '',            0,                NULL,    0,          0,         1,            '2008-02-04', '2008-02-04 17:35:43', 0,          0,         0,         'search1001',    1,            100,            'Test product 1', 'Test product 1 short desc', 'oxarticle'),
+                         ('1003',  1,          1,         '1003',     'Test product 3', 'Test product 3 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1003',    1,            50,             'Test product 3', 'Test product 0 short desc', 'oxarticle'),
+                         ('1004',  1,          1,         '1004',     'Test product 4', 'Test product 4 short desc', 15,        'kg',          2,                NULL,    24,         15,        1,            '2008-02-04', '2008-02-04 17:07:29', 1,          2,         2,         'search1004',    1,            50,             'Test product 4', 'Test product 4 short desc', 'oxarticle');
 
 
 # Articles long desc
@@ -21,7 +21,7 @@ INSERT INTO `oxartextends` (`OXID`, `OXLONGDESC`,                             `O
 
 # Categories demo data
 INSERT INTO `oxcategories` (`OXID`,          `OXPARENTID`, `OXLEFT`, `OXRIGHT`, `OXROOTID`,     `OXSORT`, `OXACTIVE`, `OXHIDDEN`, `OXSHOPID`,    `OXTITLE`,         `OXDESC`,               `OXLONGDESC`,                  `OXDEFSORT`, `OXDEFSORTMODE`, `OXACTIVE_1`, `OXTITLE_1`,       `OXDESC_1`,             `OXLONGDESC_1`,                `OXVAT`, `OXSKIPDISCOUNTS`, `OXSHOWSUFFIX`) VALUES
-                           ('testcategory0', 'oxrootid',    1,        4,        'testcategory0', 1,        1,          0,          'oxbaseshop', 'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>', 'oxartnum',   0,               1,           'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>',  NULL,    0,                 1);
+                           ('testcategory0', 'oxrootid',    1,        4,        'testcategory0', 1,        1,          0,          1, 'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>', 'oxartnum',   0,               1,           'Test category 0', 'Test category 0 desc', '<p>Category 0 long desc</p>',  NULL,    0,                 1);
 
 # Payment demo data
 REPLACE INTO `oxpayments` (`OXID`,       `OXACTIVE`, `OXDESC`,             `OXADDSUM`, `OXADDSUMTYPE`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXCHECKED`, `OXDESC_1`,            `OXLONGDESC`,                `OXLONGDESC_1`,             `OXSORT`) VALUES
@@ -29,16 +29,16 @@ REPLACE INTO `oxpayments` (`OXID`,       `OXACTIVE`, `OXDESC`,             `OXAD
 
 # Delivery set demo data
 INSERT INTO `oxdeliveryset` (`OXID`,      `OXSHOPID`, `OXACTIVE`, `OXTITLE`,      `OXTITLE_1`,   `OXPOS`) VALUES
-                            ('testdelset', 'oxbaseshop',          1,         'Test S&H set', 'Test S&H set', 0);
+                            ('testdelset', 1,          1,         'Test S&H set', 'Test S&H set', 0);
 
 # Delivery demo data
 INSERT INTO `oxdelivery` (`OXID`,   `OXSHOPID`, `OXACTIVE`, `OXTITLE`,       `OXTITLE_1`,     `OXADDSUMTYPE`, `OXADDSUM`, `OXDELTYPE`, `OXPARAM`, `OXPARAMEND`, `OXFIXED`, `OXSORT`, `OXFINALIZE`) VALUES
-                         ('testdel', 'oxbaseshop',          1,         'Test delivery', 'Test delivery', 'abs',           0,         'a',          1,         99999,        0,         9998,     1);
+                         ('testdel', 1,          1,         'Test delivery', 'Test delivery', 'abs',           0,         'a',          1,         99999,        0,         9998,     1);
 
 # User demo data
 INSERT INTO `oxuser` (`OXID`,     `OXACTIVE`, `OXRIGHTS`, `OXSHOPID`,    `OXUSERNAME`,         `OXPASSWORD`,                       `OXPASSSALT`,        `OXCUSTNR`, `OXUSTID`, `OXCOMPANY`,             `OXFNAME`,                 `OXLNAME`,      `OXSTREET`,         `OXSTREETNR`, `OXADDINFO`,                `OXCITY`,            `OXCOUNTRYID`,                `OXZIP`, `OXFON`, `OXFAX`, `OXSAL`, `OXBONI`, `OXCREATE`,            `OXREGISTER`,          `OXPRIVFON`, `OXMOBFON`, `OXBIRTHDATE`, `OXURL`, `OXUPDATEKEY`, `OXUPDATEEXP`) VALUES
-                     ('testuser',  1,         'user',      'oxbaseshop', 'testing_account@oxid-esales.com', 'c9dadd994241c9e5fa6469547009328a', '7573657275736572',   8,         '',        'SeleniumTestCase Äß\'ü', 'Testing user acc Äß\'ü', 'PayPal Äß\'ü', 'Musterstr. Äß\'ü', '1',          'Testing acc for Selenium', 'Musterstadt Äß\'ü', 'a7c40f631fc920687.20179984', '79098', '',      '',      'MR',    500,      '2008-02-05 14:42:42', '2008-02-05 14:42:42', '',          '',         '0000-00-00',  '',      '',            0),
-                     ('testusera', 1,         'user',      'oxbaseshop', 'testing_account2@oxid-esales.com',    'a233c8b71a465807980f4b2b18f50fec', '757365724175736572', 9,         '',        'SeleniumTestCase',       'Testing user acc',       'PayPal',     'Musterstr.',       '2',          'Testing acc for Selenium', 'Musterstadt',       'a7c40f631fc920687.20179984', '79098', '',      '',      'MRS',   500,      '2008-02-05 14:49:31', '2008-02-05 14:49:31', '',          '',         '0000-00-00',  '',    '',            0);
+                     ('testuser',  1,         'user',      1, 'testing_account@oxid-esales.com', 'c9dadd994241c9e5fa6469547009328a', '7573657275736572',   8,         '',        'SeleniumTestCase Äß\'ü', 'Testing user acc Äß\'ü', 'PayPal Äß\'ü', 'Musterstr. Äß\'ü', '1',          'Testing acc for Selenium', 'Musterstadt Äß\'ü', 'a7c40f631fc920687.20179984', '79098', '',      '',      'MR',    500,      '2008-02-05 14:42:42', '2008-02-05 14:42:42', '',          '',         '0000-00-00',  '',      '',            0),
+                     ('testusera', 1,         'user',      1, 'testing_account2@oxid-esales.com',    'a233c8b71a465807980f4b2b18f50fec', '757365724175736572', 9,         '',        'SeleniumTestCase',       'Testing user acc',       'PayPal',     'Musterstr.',       '2',          'Testing acc for Selenium', 'Musterstadt',       'a7c40f631fc920687.20179984', '79098', '',      '',      'MRS',   500,      '2008-02-05 14:49:31', '2008-02-05 14:49:31', '',          '',         '0000-00-00',  '',    '',            0);
 
 # Delivery2DeliverySet
 INSERT INTO `oxdel2delset` (`OXID`,                       `OXDELID`, `OXDELSETID`) VALUES
@@ -55,9 +55,9 @@ INSERT INTO `oxobject2delivery` (`OXID`,                       `OXDELIVERYID`, `
 
 # object2group
 INSERT INTO `oxobject2group` (`OXID`,                      `OXSHOPID`, `OXOBJECTID`,  `OXGROUPSID`) VALUES
-                             ('96047a71c6f049988.94873501', 'oxbaseshop',         'testpayment', 'oxidnewcustomer'),
-                             ('15947a85a7ce23451.42160470', 'oxbaseshop',         'testuser',    'oxidnewcustomer'),
-                             ('15947a861e1dc7461.03139047', 'oxbaseshop',         'testusera',   'oxidnewcustomer');
+                             ('96047a71c6f049988.94873501', 1,         'testpayment', 'oxidnewcustomer'),
+                             ('15947a85a7ce23451.42160470', 1,         'testuser',    'oxidnewcustomer'),
+                             ('15947a861e1dc7461.03139047', 1,         'testusera',   'oxidnewcustomer');
 
 # object2payment
 INSERT INTO `oxobject2payment` (`OXID`,                       `OXPAYMENTID`,    `OXOBJECTID`,                 `OXTYPE`) VALUES
@@ -91,19 +91,19 @@ UPDATE `oxconfig` SET `OXVARVALUE` = 0xb0         WHERE `OXVARNAME` = 'iTopNaviC
 UPDATE `oxconfig` SET `OXVARVALUE` = 0xb0         WHERE `OXVARNAME` = 'iTopNaviCatCount'               AND `OXSHOPID` = 1 AND `OXMODULE` = 'theme:azure';
 
 INSERT INTO `oxconfig` (`OXID`,                      `OXSHOPID`,    `OXVARNAME`,               `OXVARTYPE`, `OXVARVALUE`) VALUES
-                       ('a0147ac17160e6556.25324407', 'oxbaseshop', 'blAllowNegativeStock',    'bool',       0x7900fdf51e),
-                       ('a0147ac17160fb173.47699884', 'oxbaseshop', 'blOverrideZeroABCPrices', 'bool',       0x7900fdf51e),
-                       ('a0147ac1716156ce5.75228443', 'oxbaseshop', 'blBidirectCross',         'bool',       0x7900fdf51e),
-                       ('a0147ac1781cb8160.56740074', 'oxbaseshop', 'blDisableNavBars',        'bool',       0x93ea1218),
-                       ('33bd5512d7d7366681eb850502', 'oxbaseshop', 'blOverrideZeroABCPrices', 'bool',       0x93ea1218),
-                       ('01d42bbeced070f0aef7aebff4', 'oxbaseshop', 'blUseContentCaching',     'bool',       0x93ea1218),
-                       ('00fc37d94581704c4ac5a2803d', 'oxbaseshop', 'blMallUsers',             'bool',       0x93ea1218);
+                       ('a0147ac17160e6556.25324407', 1, 'blAllowNegativeStock',    'bool',       0x7900fdf51e),
+                       ('a0147ac17160fb173.47699884', 1, 'blOverrideZeroABCPrices', 'bool',       0x7900fdf51e),
+                       ('a0147ac1716156ce5.75228443', 1, 'blBidirectCross',         'bool',       0x7900fdf51e),
+                       ('a0147ac1781cb8160.56740074', 1, 'blDisableNavBars',        'bool',       0x93ea1218),
+                       ('33bd5512d7d7366681eb850502', 1, 'blOverrideZeroABCPrices', 'bool',       0x93ea1218),
+                       ('01d42bbeced070f0aef7aebff4', 1, 'blUseContentCaching',     'bool',       0x93ea1218),
+                       ('00fc37d94581704c4ac5a2803d', 1, 'blMallUsers',             'bool',       0x93ea1218);
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x4dbace29724a51b6af7d09aac117301142e91c3c5b7eed9a850f85c1e3d58739aa9ea92523f05320a95060d60d57fbb027bad88efdaa0b928ebcd6aacf58084d31dd6ed5e718b833f1079b3805d28203f284492955c82cea3405879ea7588ec610ccde56acede495 WHERE `OXVARNAME` = 'aInterfaceProfiles';
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x4dba222b70e349f0c9d1aba6133981af1e8d79724d7309a19dd3eed099418943829510e114c4f6ffcb2543f5856ec4fea325d58b96e406decb977395c57d7cc79eec7f9f8dd6e30e2f68d198bd9d079dbe8b4f WHERE `OXVARNAME` = 'aNrofCatArticles';
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x4dba422a71e248f1c8d0aa1651570011febb9efc98177f036b0a6020a634f31d0bd0c20d9eb4818881fc066e5334236637f87dffd86e5583f7e63e579da1b5d11a7990967a63fe149e97097b5bcf3b2fb5cb5c19ef40b566b2d429e74af7223fd7c0b7a349a3dfcf42978929ba59931a4f2bff23326b91c5c9e0638593db43262e66202998b8c5e9a73b9ead14370a7528ef08393dbd998a6fc9322a21ab682a0f387784fcfe05f555b302f7f2e0d83380f551dd97040e99bbed30d37a3355dc28 WHERE `OXVARNAME` = 'aRssSelected';
 
 #updating smtp and emails data
-UPDATE `oxshops` SET `OXINFOEMAIL` = 'testing_account@oxid-esales.com', `OXORDEREMAIL` = 'testing_account@oxid-esales.com', `OXOWNEREMAIL` = 'testing_account@oxid-esales.com', `OXSMTP` = 'localhost', `OXDEFCAT` = '' WHERE `OXID` = 'oxbaseshop';
+UPDATE `oxshops` SET `OXINFOEMAIL` = 'testing_account@oxid-esales.com', `OXORDEREMAIL` = 'testing_account@oxid-esales.com', `OXOWNEREMAIL` = 'testing_account@oxid-esales.com', `OXSMTP` = 'localhost', `OXDEFCAT` = '' WHERE `OXID` = 1;
 
 
 #paypal demodata
@@ -126,19 +126,19 @@ INSERT INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) V
 INSERT INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) VALUES ('660f0f63epaypald63a78af0a4b7d44f', 'oxidpaypal', 'testdelset',                 'oxdelset');
 INSERT INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) VALUES ('26586trf09oiu927b50ed832f76feed4', 'oxidpaypal', '1b842e732a23255b1.91207750', 'oxdelset');
 UPDATE `oxdelivery` SET `OXADDSUM` = '0' WHERE `OXTITLE` = 'Versandkosten für Beispiel Set1: UPS 48 Std.: 9,90.-';
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c463cpaypal0ea6fc4d659ce444e697', 'oxbaseshop', 'oxidpaypal', 'oxidforeigncustomer');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4cc2paypal4ee57047656d8d3be15o', 'oxbaseshop', 'oxidpaypal', 'oxidsmallcust');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4712paypalc96fa79b4e205c4e94f8', 'oxbaseshop', 'oxidpaypal', 'oxidgoodcust');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4b36paypal4bbea41ecda871e33590', 'oxbaseshop', 'oxidpaypal', 'oxiddealer');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c40ccpaypal086c42ae2e7c7e3ad4ae', 'oxbaseshop', 'oxidpaypal', 'oxidnewcustomer');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c47capaypalfa475e0c6da4fb9d59f9', 'oxbaseshop', 'oxidpaypal', 'oxidcustomer');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c40e3paypal8e5c9169dd21851947bb', 'oxbaseshop', 'oxidpaypal', 'oxidmiddlecust');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4a95paypald75bf18f96bb04352720', 'oxbaseshop', 'oxidpaypal', 'oxidnotyetordered');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4eb4paypal6cae937f7f7d781d54bb', 'oxbaseshop', 'oxidpaypal', 'oxidadmin');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbeadpaypal295e83ca0a8ac74942a1', 'oxbaseshop', 'oxidpaypal', 'oxidblacklist');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdb817paypal4f300982c440d6bff476', 'oxbaseshop', 'oxidpaypal', 'oxidblocked');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdb7b8paypal00b89b4debfb8f90c54b', 'oxbaseshop', 'oxidpaypal', 'oxidnewsletter');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdb8fbpaypal65b73a73edd935eac4d9', 'oxbaseshop', 'oxidpaypal', 'oxidpowershopper');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbd1dpaypal7ab6a247dc8f5bab3932', 'oxbaseshop', 'oxidpaypal', 'oxidpricea');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbe0epaypalbbef45ec71bcbd6f41ae', 'oxbaseshop', 'oxidpaypal', 'oxidpriceb');
-INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbfe1paypalc65e3a0e54c2eb83b7ec', 'oxbaseshop', 'oxidpaypal', 'oxidpricec');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c463cpaypal0ea6fc4d659ce444e697', 1, 'oxidpaypal', 'oxidforeigncustomer');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4cc2paypal4ee57047656d8d3be15o', 1, 'oxidpaypal', 'oxidsmallcust');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4712paypalc96fa79b4e205c4e94f8', 1, 'oxidpaypal', 'oxidgoodcust');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4b36paypal4bbea41ecda871e33590', 1, 'oxidpaypal', 'oxiddealer');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c40ccpaypal086c42ae2e7c7e3ad4ae', 1, 'oxidpaypal', 'oxidnewcustomer');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c47capaypalfa475e0c6da4fb9d59f9', 1, 'oxidpaypal', 'oxidcustomer');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c40e3paypal8e5c9169dd21851947bb', 1, 'oxidpaypal', 'oxidmiddlecust');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4a95paypald75bf18f96bb04352720', 1, 'oxidpaypal', 'oxidnotyetordered');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('9c4eb4paypal6cae937f7f7d781d54bb', 1, 'oxidpaypal', 'oxidadmin');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbeadpaypal295e83ca0a8ac74942a1', 1, 'oxidpaypal', 'oxidblacklist');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdb817paypal4f300982c440d6bff476', 1, 'oxidpaypal', 'oxidblocked');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdb7b8paypal00b89b4debfb8f90c54b', 1, 'oxidpaypal', 'oxidnewsletter');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdb8fbpaypal65b73a73edd935eac4d9', 1, 'oxidpaypal', 'oxidpowershopper');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbd1dpaypal7ab6a247dc8f5bab3932', 1, 'oxidpaypal', 'oxidpricea');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbe0epaypalbbef45ec71bcbd6f41ae', 1, 'oxidpaypal', 'oxidpriceb');
+INSERT INTO `oxobject2group` (`OXID`, `OXSHOPID`, `OXOBJECTID`, `OXGROUPSID`) VALUES ('cdbfe1paypalc65e3a0e54c2eb83b7ec', 1, 'oxidpaypal', 'oxidpricec');

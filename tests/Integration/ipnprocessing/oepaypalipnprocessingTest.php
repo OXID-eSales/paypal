@@ -595,7 +595,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
         $this->testOrderId = substr_replace(oxUtilsObject::getInstance()->generateUId(), '_', 0, 1);
         $order             = $this->getMock('oxOrder', array('validateDeliveryAddress'));
         $order->setId($this->testOrderId);
-        $order->oxorder__oxshopid        = new oxField('oxbaseshop');
+        $order->oxorder__oxshopid        = new oxField(1);
         $order->oxorder__oxuserid        = new oxField($this->testUserId);
         $order->oxorder__oxorderdate     = new oxField('2015-05-29 10:41:03');
         $order->oxorder__oxbillemail     = new oxField('not@thepaypalmail.com');
@@ -704,7 +704,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
         $user->setId($this->testUserId);
         $user->oxuser__oxactive    = new oxField('1', oxField::T_RAW);
         $user->oxuser__oxrights    = new oxField('user', oxField::T_RAW);
-        $user->oxuser__oxshopid    = new oxField('oxbaseshop', oxField::T_RAW);
+        $user->oxuser__oxshopid    = new oxField(1, oxField::T_RAW);
         $user->oxuser__oxusername  = new oxField('testuser@oxideshop.dev', oxField::T_RAW);
         //password is asdfasdf
         $user->oxuser__oxpassword  = new oxField('c630e7f6dd47f9ad60ece4492468149bfed3da3429940181464baae99941d0ffa5562' .

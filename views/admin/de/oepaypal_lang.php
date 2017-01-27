@@ -25,7 +25,7 @@ $sLangName = 'Deutsch';
 // RESOURCE IDENTIFIER = STRING
 // -------------------------------
 $aLang = array(
-    'charset'                              => 'ISO-8859-15',
+    'charset'                              => 'UTF-8',
     'tbclorder_paypal'                     => 'PayPal',
     'OEPAYPAL_MOBILE_DEFAULT_PAYMENT'      => 'Für PayPal mit mobilen Endgeräten',
     'OEPAYPAL_AMOUNT'                      => 'Betrag',

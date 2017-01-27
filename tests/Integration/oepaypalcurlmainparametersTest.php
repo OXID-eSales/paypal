@@ -48,7 +48,7 @@ class Integration_oePayPal_oePayPalCurlMainParametersTest extends OxidTestCase
         $oService = new oePayPalService();
         $oCurl = $oService->getCaller()->getCurl();
 
-        $this->assertEquals('ISO-8859-15', $oCurl->getDataCharset());
+        $this->assertEquals('UTF-8', $oCurl->getDataCharset());
     }
 
     public function testCurlMainParameterCharset_utfMode_utf()

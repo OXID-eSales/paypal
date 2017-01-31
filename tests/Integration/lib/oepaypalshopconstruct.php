@@ -634,7 +634,11 @@ class oePayPalShopConstruct
         }
         $iCnt = count($aData);
         for ($i = 0; $i < $iCnt; $i++) {
-            $oObj = new oxBase();
+            if ($sObj2ObjTable === 'oxobject2group') {
+                $oObj = new oxObject2Group();
+            } else {
+                $oObj = new oxBase();
+            }
             $oObj->init($sObj2ObjTable);
             if ($iCnt < 2) {
                 $aObj = $aData[$i];

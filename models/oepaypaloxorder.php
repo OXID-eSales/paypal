@@ -67,7 +67,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     public function oePayPalUpdateOrderNumber()
     {
         if ($this->oxorder__oxordernr->value) {
-            $blUpdated = oxNew('oxCounter')->update($this->_getCounterIdent(), $this->oxorder__oxordernr->value);
+            $blUpdated = (bool) oxNew('oxCounter')->update($this->_getCounterIdent(), $this->oxorder__oxordernr->value);
         } else {
             $blUpdated = $this->_setNumber();
         }

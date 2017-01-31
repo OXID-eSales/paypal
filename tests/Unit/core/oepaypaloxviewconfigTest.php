@@ -18,6 +18,7 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2014
  */
+use OxidEsales\Eshop\Application\Model\Payment;
 
 /**
  * Testing oePayPalOxViewConfig class.
@@ -198,7 +199,7 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
         $oView = new oePayPalOxViewConfig();
         $oPayment = $oView->getPayPalPayment();
 
-        $this->assertTrue($oPayment instanceof oxPayment);
+        $this->assertTrue($oPayment instanceof Payment);
         $this->assertEquals("oxidpaypal", $oPayment->getId());
     }
 

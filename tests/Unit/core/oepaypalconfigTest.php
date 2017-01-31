@@ -19,6 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
+use OxidEsales\Eshop\Core\Language;
+use OxidEsales\Eshop\Core\Utils;
+
 /**
  * Testing oePayPalConfig class.
  */
@@ -595,7 +598,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $oConfig = new oePayPalConfig();
         $oLang = $oConfig->getLang();
 
-        $this->assertTrue(is_a($oLang, 'oxLang'), 'Method getLang() should return language object.');
+        $this->assertTrue(is_a($oLang, Language::class), 'Method getLang() should return language object.');
     }
 
     /**
@@ -606,7 +609,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $oConfig = new oePayPalConfig();
         $oUtils = $oConfig->getUtils();
 
-        $this->assertTrue(is_a($oUtils, 'oxUtils'), 'Method getUtils() should return utils object.');
+        $this->assertTrue(is_a($oUtils, Utils::class), 'Method getUtils() should return utils object.');
     }
 
     public function providerIsExpressCheckoutInDetailsPage()

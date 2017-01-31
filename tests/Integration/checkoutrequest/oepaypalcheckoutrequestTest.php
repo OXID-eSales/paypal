@@ -161,8 +161,11 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      */
     protected function _getOrder()
     {
+        /** @var \OxidEsales\Eshop\Application\Model\Order $oOrder */
         $oOrder = $this->getMock('oePayPalOxOrder', array('finalizePayPalOrder'));
         $oOrder->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
+        $oOrder->oxorder__oxid = new oxField('_test_order');
+        $oOrder->save();
 
         return $oOrder;
     }

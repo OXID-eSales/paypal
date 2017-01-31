@@ -196,6 +196,8 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
     public function testUpdateOrderNumber()
     {
         $oOrder = new oePayPalOxOrder();
+        $oOrder->oxorder__oxid = new oxField('_test_order');
+        $oOrder->save();
         $this->assertTrue($oOrder->oePayPalUpdateOrderNumber());
     }
 
@@ -207,6 +209,8 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $sCounterIdent = 'orderTestCounter';
         $oOrder = $this->getMock('oePayPalOxOrder', array('_getCounterIdent'));
         $oOrder->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($sCounterIdent));
+        $oOrder->oxorder__oxid = new oxField('_test_order');
+        $oOrder->save();
 
         $oCounter = new oxCounter();
         $iOrderNumber = $oCounter->getNext($sCounterIdent);

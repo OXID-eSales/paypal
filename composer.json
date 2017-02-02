@@ -12,5 +12,11 @@
         "oxideshop": {
             "target-directory": "oe/oepaypal"
         }
+    },
+    "require": {
+        "php": ">=5.6",
+        "lib-curl": "^7.34.0",
+        "ext-curl": "*",
+        "ext-openssl": "*"
     }
 }

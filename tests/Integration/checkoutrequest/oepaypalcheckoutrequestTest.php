@@ -80,7 +80,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
         $oDispatcher = $this->_getDispatcher($aTestCase);
         $this->_setCurlToDispatcher($oDispatcher, $oCurl);
 
-        $oDispatcher->$aTestCase['action']();
+        $oDispatcher->{$aTestCase['action']}();
 
         $aCurlParameters = $oCurl->getParameters();
 

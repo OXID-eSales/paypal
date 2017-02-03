@@ -94,6 +94,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalPayment1()
     {
@@ -201,6 +202,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testECS()
     {
@@ -281,6 +283,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalExpress2()
     {
@@ -395,6 +398,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalPaymentForGermany()
     {
@@ -630,6 +634,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalPaymentForLoginUser()
     {
@@ -887,6 +892,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalStandard()
     {
@@ -954,6 +960,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalDiscountsCategory()
     {
@@ -1051,6 +1058,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalDiscountsFromTill()
     {
@@ -1214,6 +1222,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalVouchers()
     {
@@ -1312,6 +1321,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalVAT()
     {
@@ -1446,6 +1456,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalShippingCostNotLoginUser()
     {
@@ -1573,6 +1584,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalStockOne()
     {
@@ -1656,6 +1668,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalProportional()
     {
@@ -1962,6 +1975,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalExpressNettoMode()
     {
@@ -2035,6 +2049,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group quarantine
      */
     public function testPayPalStandardNettoMode()
     {
@@ -2241,7 +2256,6 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     private function waitForPayPalPage()
     {
-        $this->markTestIncomplete('PayPal page changes its user interface. Need to change tests to fit it.');
         $this->waitForElement("id=submitLogin");
     }
 }

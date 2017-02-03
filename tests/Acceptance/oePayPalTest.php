@@ -93,6 +93,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * testing PayPal payment selection
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalPayment1()
     {
@@ -199,6 +200,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * testing PayPal ECS in detail page and ECS in mini basket
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testECS()
     {
@@ -278,6 +280,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * testing paypal express button
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalExpress2()
     {
@@ -391,6 +394,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * testing when payment method has unassigned country Germany, user is not login to the shop, and purchase as PayPal user from Germany
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalPaymentForGermany()
     {
@@ -625,6 +629,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * testing different countries with shipping rules assigned to this countries
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalPaymentForLoginUser()
     {
@@ -881,6 +886,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * testing ability to change country in standard PayPal
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalStandard()
     {
@@ -947,6 +953,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if discounts working correct with PayPal.
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalDiscountsCategory()
     {
@@ -1043,6 +1050,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if few different discounts working correct with PayPal.
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalDiscountsFromTill()
     {
@@ -1205,6 +1213,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if vouchers working correct with PayPal
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalVouchers()
     {
@@ -1302,6 +1311,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if VAT is calculated in PayPal correct with different VAT options set in admins
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalVAT()
     {
@@ -1435,6 +1445,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if option "Calculate default Shipping costs when User is not logged in yet" is working correct in PayPal
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalShippingCostNotLoginUser()
     {
@@ -1561,6 +1572,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if PayPal works correct when last product ir purchased.
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalStockOne()
     {
@@ -1643,6 +1655,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if PayPal works when proportional calculation is used for additional products.
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalProportional()
     {
@@ -1948,6 +1961,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if PayPal works in Netto mode
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalExpressNettoMode()
     {
@@ -2020,6 +2034,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      * test if PayPal works in Net mode
      *
      * @group paypal_standalone
+     * @group paypal_external
      */
     public function testPayPalStandardNettoMode()
     {

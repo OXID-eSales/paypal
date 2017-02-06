@@ -19,8 +19,18 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
+/**
+ * @todo add dependency between external tests. If one fails next should not start.
+ */
 class oePayPal_oePayPalTest extends oxTestCase
 {
+    const PAYPAL_LOGIN_BUTTON_ID_OLD = "id=submitLogin";
+    const PAYPAL_LOGIN_BUTTON_ID_NEW = "id=btnLogin";
+
+    private $newPayPalUserInterface = true;
+    const PAYPAL_FRAME_NAME = "injectedUl";
+    const THANK_YOU_PAGE_IDENTIFIER = "Thank you";
+
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
     protected $_iWaitTimeMultiplier = 9;
 
@@ -113,8 +123,9 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->click("payment_oxidpaypal");
 
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
-        $this->waitForPayPalPage();
 
+        $this->standardCheckoutWillBeUsed();
+        $this->waitForPayPalPage();
         $this->loginToSandbox();
         $this->clickPayPalContinue();
 
@@ -230,9 +241,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("//div[@id='popupECS']/div/div/button", "No cancel button in PayPal popup");
 
         // Select add to basket and go to checkout
-        $this->clickAndWait("id=actionAddToBasketAndGoToCheckout");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout("id=actionAddToBasketAndGoToCheckout");
 
         $this->assertTextPresent("Item price: €0.99");
         $this->assertTextPresent("Quantity: 2");
@@ -262,9 +271,9 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->waitForPayPalPage();
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=shipping_method");
+
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
         $this->assertTextPresent("€1,98", "Item price doesn't mach ot didn't displayed");
         $this->assertTextPresent("Anzahl: 2", "Item quantity doesn't mach ot didn't displayed");
@@ -275,7 +284,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("1,98 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
     }
 
     /**
@@ -293,6 +302,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->searchFor("1001");
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
         $this->openBasket("Deutsch");
+
         $this->waitForElement("paypalExpressCheckoutButton");
         $this->assertElementPresent("paypalExpressCheckoutButton");
         $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
@@ -300,10 +310,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
         //Go to PayPal express
-        $this->click("paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
-
+        $this->selectPayPalExpressCheckout();
         $this->loginToSandbox();
         $this->clickPayPalContinue();
 
@@ -322,11 +329,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
         //Go to PayPal express
-        $this->click("paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=shipping_method");
 
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
@@ -410,18 +414,20 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("Deutsch");
         $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+
         $this->click("userChangeAddress");
         $this->waitForItemAppear("order_remark");
         $this->type("order_remark", "Testing paypal");
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+
         $this->click("name=sShipSet");
         $this->selectAndWait("sShipSet", "label=Test S&H set");
         $this->waitForItemAppear("payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
 
+        $this->standardCheckoutWillBeUsed();
         $this->waitForPayPalPage();
-
         $this->loginToSandbox();
         $this->clickPayPalContinue();
 
@@ -488,18 +494,16 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("name=displayCartInPayPal","An option Display cart in PayPal is not displayed");
 
         //Go to PayPal express to make an order
-        $this->click("name=paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
 
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
 
         //Login to PayPal as US user
         $this->loginToSandbox($this->getLoginDataByName('sBuyerUSLogin'));
-
         //After login to PayPal check does all necessary element displayed correctly
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
+
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertElementPresent("id=showname0", "Purchased product is not displayed in basket in PayPal");
         $this->assertFalse($this->isTextPresent("Shipping method: Stadard Price:€6.90 EUR"), "Standard Price:€6.90 EUR Shipping costs for this user should not be displayed in PayPal");
@@ -604,7 +608,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         // $this->assertFalse($this->isTextPresent("PayPal"));
         $this->assertTextPresent("COD");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // After successful purchase, go to admin and check order status
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -659,23 +663,21 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
 
         //Go to PayPal via PayPal Express with "Display cart in PayPal"
-        $this->clickAndWait("paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
 
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in paypal ");
         $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
+
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Versandkosten:", "Shipping costs is not calculated in PayPal");
         $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Versandmethode: Test S&H set: €0,00 EUR", "Shipping method is not shown in PayPal");
+        $this->assertTextPresent("Test S&H set Price: €0,00 EUR", "Shipping method is not shown in PayPal");
         // $this->assertEquals("Testing user acc Äß&amp;#039;ü PayPal Äß&amp;#039;ü Musterstr. Äß&#039;ü 1 79098 Musterstadt Äß&#039;ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString($this->getText("//div[@class='inset confidential']")));
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
@@ -691,23 +693,21 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->uncheck("//input[@name='displayCartInPayPal']");
 
         //Go to PayPal via PayPal Express without  "Display cart in PayPal"
-        $this->click("name=paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
 
         $this->assertFalse($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
         $this->assertfalse($this->isTextPresent("Item number: 1001"), "Item number should not be displayed in PayPal");
         $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed in PayPal");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
+
         $this->assertFalse($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Versandkosten:", "Shipping costs: is not calculated in PayPal");
         $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Versandmethode: Test S&H set: €0,00 EUR");
+        $this->assertTextPresent("Test S&H set Price: €0,00 EUR");
         // $this->assertEquals("Testing user acc Äß&amp;#039;ü PayPal Äß&amp;#039;ü Musterstr. Äß&#039;ü 1 79098 Musterstadt Äß&#039;ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString($this->getText("//div[@class='inset confidential']")));
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
@@ -776,6 +776,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Check all available shipping methods
         $this->assertTextPresent("PayPal");
+        // Test Paypal:6 hour Price: €0.50 EUR
         $this->selectAndWait("sShipSet", "label=Test Paypal:6 hour");
 
         $this->assertTextPresent("Charges: 0,50 €");
@@ -787,17 +788,15 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Go to 1st step and make an order via PayPal express
         $this->clickAndWait("link=1. Cart");
-        $this->click("name=paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
 
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in the 1st order step ");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
+
         $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Versandkosten:€0,50", "Shipping costs is not calculated in PayPal");
         $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
@@ -844,15 +843,15 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Grand total: 20,60 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
 
         //Go to PayPal to make an order
-        $this->click("name=paypalExpressCheckoutButton");
-        $this->waitForItemAppear("id=submitLogin");
+        $this->selectPayPalExpressCheckout();
+
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in the PayPal");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
+
         $this->assertTextPresent("Warenwert€19,80", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Versandkosten:€0,80", "Shipping costs is not calculated in PayPal");
         $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
@@ -884,7 +883,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Test Paypal:6 hour", "Shipping costs is not calculated in PayPal");
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
     }
 
     /**
@@ -915,14 +914,13 @@ class oePayPal_oePayPalTest extends oxTestCase
         //Login to standard PayPal and check ability to change country
         $this->loginToSandbox();
 
-        $this->waitForItemAppear("id=continue");
         $this->assertFalse($this->isElementPresent("id=changeAddressButton"), "In standard PayPal there should be not possibility to change address");
         $this->assertEquals("Ihre Zahlungsinformationen auf einen Blick - PayPal", $this->getTitle());
         $this->clickPayPalContinue();
 
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
     }
 
 
@@ -991,28 +989,28 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->waitForPayPalPage();
 
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
-        $this->assertTextPresent("€5,00");
-        $this->assertTextPresent("€0,00");
-        $this->assertEquals("Total €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTextPresent("Total €5,00 EUR");
+        $this->assertPayPalTitleVisible();
+        $this->assertTextPresent("5.00 EUR");
 
         $this->loginToSandbox();
+//        $this->clickPayPalContinue();
+
+        $this->assertTextPresent('Testing user acc Äß\'ü PayPal Äß\'ü');
+        $this->assertTextPresent("5,00 EUR");
+
+//        $this->assertTextPresent("Ihr Warenkorb");
+//        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
+//        $this->assertTextPresent("Artikelpreis: 5,00 EUR", "Product price not shown in PayPal");
+//        $this->assertTextPresent("Artikelnummer: 1000", "Product number not shown in PayPal");
+//        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
+//        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
+//        $this->assertEquals("Artikelpreis: €0,00", $this->getText("//li[@id='multiitem1']/ul[2]/li[3]"), "Product price not shown in PayPal");
+//        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[2]/li[4]"), "Product quantity is not shown in PayPal");
+//        $this->assertTextPresent("€5,00");
+//        $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
+//        $this->click("id=confirmButtonTop");
+
         $this->clickPayPalContinue();
-
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-        $this->assertTextPresent("Artikelnummer: 1000", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €5,00", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €0,00", $this->getText("//li[@id='multiitem1']/ul[2]/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[2]/li[4]"), "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("€5,00");
-        $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
-        $this->click("id=continue_abovefold");
-
-        $this->_clickPayPalContinue();
 
         //Go to shop to finish the order
         // $this->_clickPayPalContinue(); CHECK THIS<-
@@ -1029,7 +1027,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("5,00 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         //Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -1092,14 +1090,16 @@ class oePayPal_oePayPalTest extends oxTestCase
         //Go to PayPal
         $this->waitForPayPalPage();
 
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertPayPalTitleVisible();
+        // @todo replace , to . when not logged in to PayPal
+        // There are much less visible in new PayPal login page.
+        // There might be other places written like this.
         $this->assertTextPresent("€15,00");
         $this->assertTextPresent("€0,00");
         $this->assertEquals("-€0,30", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
         $this->assertEquals("Total €14,70 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
 
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
@@ -1151,15 +1151,15 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->waitForPayPalPage();
 
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertPayPalTitleVisible();
         $this->assertTextPresent("Test product 4€45,00");
         $this->assertTextPresent("Test product 1€0,00");
         $this->assertTextPresent("Item total €45,00");
         $this->assertTextPresent("Shipping discount -€2,25");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
+
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertTextPresent("Ihr Warenkorb");
 
@@ -1192,7 +1192,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Shipping costs: 0,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Shipping costs is not displayed correctly");
         $this->assertEquals("Grand total: 42,75 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")), "Grand total is not displayed correctly");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         //Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -1257,14 +1257,14 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->waitForPayPalPage();
 
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertPayPalTitleVisible();
         $this->assertTextPresent("€15,00");
         $this->assertEquals("-€10,00", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
         $this->assertEquals("Total €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
+
         $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertTextPresent("Ihr Warenkorb");
         $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
@@ -1288,7 +1288,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Shipping costs: 0,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Shipping costs: is not displayed correctly");
         $this->assertEquals("Grand total: 5,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")), "Grand total is not displayed correctly");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         //Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -1368,7 +1368,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->waitForPayPalPage();
 
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertPayPalTitleVisible();
         $this->assertTextPresent("€17,85");
         $this->assertTextPresent("€12,50");
         $this->assertTextPresent("€3,51");
@@ -1379,7 +1379,6 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("€15,47");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
 
         $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
@@ -1424,7 +1423,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("3,57 €", $this->getText("basketGiftCardGross"), "Card price changed or didn't displayed");
         $this->assertEquals("52,90 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         //Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -1496,12 +1495,10 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("24,85 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         //Go to PayPal express
-        $this->click("paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
 
         //Go to PayPal
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertPayPalTitleVisible();
 
         $this->assertTextPresent("€15.00");
         $this->assertTextPresent("€10.50");
@@ -1510,8 +1507,8 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item total €31.45");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue_abovefold");
+
         $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
         $this->assertEquals("Artikelpreis: €15,00", $this->getText("//li[@id='multiitem1']/ul/li[3]"), "Product price not shown in PayPal");
         $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul/li[4]"), "Product quantity is not shown in PayPal");
@@ -1551,7 +1548,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("44,45 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         //Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -1609,16 +1606,13 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
 
         //Go to PayPal via PayPal Express with "Display cart in PayPal"
-        $this->click("paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
 
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Item number: 1001", "Product number not displayed in PayPal ");
         $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
         $this->waitForText("Gesamtbetrag €0,99 EUR");
@@ -1660,7 +1654,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
     }
 
     /**
@@ -1738,7 +1732,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         //Go to PayPal
         $this->waitForPayPalPage();
 
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertPayPalTitleVisible();
         $this->assertTextPresent("€10,00");
         $this->assertTextPresent("€0,99");
         $this->assertTextPresent("€15,00");
@@ -1748,7 +1742,6 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item total €46,94");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
 
         $this->assertTextPresent("Artikelnummer: 1000", "Product number not shown in PayPal");
@@ -1808,7 +1801,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("46,94 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
 
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         //Go to admin to activate proportional calculation
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -1871,7 +1864,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         //Go to PayPal
         $this->waitForPayPalPage();
 
-        $this->assertEquals("Pay with a PayPal account - PayPal", $this->getTitle());
+        $this->assertPayPalTitleVisible();
         $this->assertTextPresent("€10,00");
         $this->assertTextPresent("€0,99");
         $this->assertTextPresent("€15,00");
@@ -1881,7 +1874,6 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item total €46,94");
 
         $this->loginToSandbox();
-
         $this->waitForItemAppear("id=continue");
 
         $this->assertTextPresent("Artikelnummer: 1000", "Product number not shown in Paypal");
@@ -1941,7 +1933,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("46,94 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
 
         $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent("Thank you for your order in OXID eShop", "Order is not finished successful");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         //Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -2009,9 +2001,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         //Go to PayPal via PayPal Express with "Display cart in PayPal"
         $this->assertElementPresent("paypalExpressCheckoutButton");
-        $this->click("paypalExpressCheckoutButton");
-
-        $this->waitForPayPalPage();
+        $this->selectPayPalExpressCheckout();
 
         // Check if article is correct shown in login page.
         $this->assertTextPresent("Harness SOL KITE", "Purchased product name is not displayed in PayPal");
@@ -2023,7 +2013,6 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Item total €122.22", "Total items sum should be displayed");
 
         $this->loginToSandbox();
-
         // Check if article sum and VAT is shown correctly after login to PayPal.
         // Continue button is visible before PayPal does callback.
         // Then it becomes invisible while PayPal does callback.
@@ -2034,6 +2023,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         sleep(10);
         $this->waitForEditable('id=continue_abovefold');
         $this->waitForText("Steuer");
+
         $this->assertTextPresent("Harness SOL KITE", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Warenwert€122,22", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Steuer:€23,23", "Product VAT is not displayed in PayPal");
@@ -2130,10 +2120,10 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Gesamtbetrag €1.346,94 EUR", "Total price is not displayed in PayPal");
 
         $this->loginToSandbox();
-
         // Check if article sum and VAT is shown correctly after login to PayPal.
         $this->waitForItemAppear("id=continue");
         $this->waitForItemAppear("id=displayShippingAmount");
+
         $this->assertTextPresent("Trapez ION SOL KITE 2011", "Purchased product name is not displayed in PayPal");
         $this->assertTextPresent("Warenwert€1.120,95", "Product price is not displayed in PayPal");
         $this->assertTextPresent("Steuer:€212,99", "Product VAT is not displayed in PayPal");
@@ -2190,6 +2180,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      *
      * @param string $sLoginEmail    email to login.
      * @param string $sLoginPassword password to login.
+     *
+     * @todo wait, check that it actually logged in.
      */
     protected function loginToSandbox($sLoginEmail = null, $sLoginPassword = null)
     {
@@ -2200,21 +2192,31 @@ class oePayPal_oePayPalTest extends oxTestCase
             $sLoginPassword = $this->getLoginDataByName('sBuyerPassword');
         }
 
-        $this->type("login_email", $sLoginEmail);
-        $this->type("login_password", $sLoginPassword);
-        $this->clickAndWait("id=submitLogin");
+        if ($this->newPayPalUserInterface) {
+            $this->loginToNewSandbox($sLoginEmail, $sLoginPassword);
+        } else {
+            $this->loginToOldSandbox($sLoginEmail, $sLoginPassword);
+        }
     }
 
-    /**
-     * Continue button is visible before PayPal does callback.
-     * Then it becomes invisible while PayPal does callback.
-     * Button appears when PayPal gets callback result.
-     */
-    protected function clickPayPalContinue()
+    private function loginToNewSandbox($sLoginEmail, $sLoginPassword)
     {
-        $this->waitForItemAppear( "//input[@id='continue']", 10, true );
-        $this->waitForEditable( "id=continue" );
-        $this->clickAndWait( "id=continue" );
+        $this->selectCorrectLoginFrame();
+
+        $this->type("login_email", $sLoginEmail);
+        $this->type("login_password", $sLoginPassword);
+        $this->click(self::PAYPAL_LOGIN_BUTTON_ID_NEW);
+
+        $this->selectWindow(null);
+        $this->waitForElement("id=sliding-area");
+    }
+
+    private function loginToOldSandbox($sLoginEmail, $sLoginPassword)
+    {
+        $this->type("login_email", $sLoginEmail);
+        $this->type("login_password", $sLoginPassword);
+        $this->clickAndWait(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
+        $this->waitForItemAppear("id=continue");
     }
 
     /**
@@ -2251,11 +2253,119 @@ class oePayPal_oePayPalTest extends oxTestCase
     }
 
     /**
+     * Standard PayPal uses new User Interface.
+     */
+    private function standardCheckoutWillBeUsed()
+    {
+        $this->newPayPalUserInterface = true;
+    }
+
+    /**
+     * New PayPal interface uses iframe for user login.
+     */
+    protected function selectCorrectLoginFrame()
+    {
+        if ($this->newPayPalUserInterface) {
+            $this->frame(self::PAYPAL_FRAME_NAME);
+        }
+    }
+
+    /**
+     * Go to PayPal page by clicking Express Checkout button.
+     *
+     * @param string $expressCheckoutButtonIdentification PayPal Express Checkout button identification.
+     */
+    private function selectPayPalExpressCheckout($expressCheckoutButtonIdentification = "paypalExpressCheckoutButton")
+    {
+        $this->expressCheckoutWillBeUsed();
+        $this->click($expressCheckoutButtonIdentification);
+        $this->waitForPayPalPage();
+    }
+
+    /**
+     * Express Checkout uses old User Interface.
+     */
+    private function expressCheckoutWillBeUsed()
+    {
+        $this->newPayPalUserInterface = false;
+    }
+
+    /**
+     * PayPal has two pages with different layout.
+     */
+    protected function clickPayPalContinue()
+    {
+        if ($this->newPayPalUserInterface) {
+            $this->clickPayPalContinueNewPage();
+        } else {
+            $this->clickPayPalContinueOldPage();
+        }
+    }
+
+    /**
+     * Continue button is visible before PayPal does callback.
+     * Then it becomes invisible while PayPal does callback.
+     * Button appears when PayPal gets callback result.
+     */
+    protected function clickPayPalContinueNewPage()
+    {
+        $this->waitForItemAppear( "//input[@id='confirmButtonTop']", 10, true );
+        $this->waitForEditable( "id=confirmButtonTop" );
+        $this->clickAndWait( "id=confirmButtonTop" );
+    }
+
+    /**
+     * Continue button is visible before PayPal does callback.
+     * Then it becomes invisible while PayPal does callback.
+     * Button appears when PayPal gets callback result.
+     */
+    protected function clickPayPalContinueOldPage()
+    {
+        $this->waitForItemAppear( "//input[@id='continue']", 10, true );
+        $this->waitForEditable( "id=continue" );
+        $this->clickAndWait( "id=continue" );
+    }
+
+    /**
      * Waits until PayPal page is loaded.
-     * PayPal page is external and not Shop related.
+     * Decides if try to wait by new or old user interface.
      */
     private function waitForPayPalPage()
     {
-        $this->waitForElement("id=submitLogin");
+        if ($this->newPayPalUserInterface) {
+            $this->waitForPayPalNewPage();
+        } else {
+            $this->waitForPayPalOldPage();
+        }
+    }
+
+    /**
+     * Waits until PayPal page is loaded.
+     * PayPal page is external and not Shop related.
+     * New user interface has iFrame which must be selected.
+     */
+    private function waitForPayPalNewPage()
+    {
+        $this->waitForElement("id=injectedUnifiedLogin");
+
+        $this->selectCorrectLoginFrame();
+
+        $this->waitForElement(self::PAYPAL_LOGIN_BUTTON_ID_NEW);
+
+        $this->selectWindow(null);
+    }
+
+    /**
+     * Waits until PayPal page is loaded.
+     * PayPal page is external and not Shop related.
+     */
+    private function waitForPayPalOldPage()
+    {
+        $this->waitForElement(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
+    }
+
+    protected function assertPayPalTitleVisible()
+    {
+        $this->assertEquals("PayPal Checkout - Log in", $this->getTitle());
     }
 }

@@ -2186,18 +2186,6 @@ class oePayPal_oePayPalTest extends oxTestCase
     }
 
     /**
-     * Calls parent method and clears cache.
-     *
-     * @param string $filePath
-     * @return null|void
-     */
-    public function importSql($filePath)
-    {
-        parent::importSql($filePath);
-        $this->clearTemp();
-    }
-
-    /**
      * Login to PayPal sandbox.
      *
      * @param string $sLoginEmail    email to login.

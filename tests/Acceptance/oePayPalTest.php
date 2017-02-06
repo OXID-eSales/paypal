@@ -104,7 +104,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->searchFor("1001");
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
         $this->openBasket("Deutsch");
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
         $this->click("userChangeAddress");
         $this->waitForItemAppear("order_remark");
@@ -123,7 +123,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("0,99 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
         $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
         $this->assertEquals("Versandart Ändern Test S&H set", $this->clearString($this->getText("orderShipping")));
-        $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: testing_account@oxid-esales.com SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland Ihre Mitteilung an uns Testing paypal", $this->clearString($this->getText("orderAddress")));
+        $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: testing_account@oxid-esales.dev SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland Ihre Mitteilung an uns Testing paypal", $this->clearString($this->getText("orderAddress")));
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']", 90);
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
 
@@ -295,7 +295,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("Deutsch");
         $this->waitForElement("paypalExpressCheckoutButton");
         $this->assertElementPresent("paypalExpressCheckoutButton");
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->waitForElement("paypalExpressCheckoutButton");
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
@@ -308,7 +308,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickPayPalContinue();
 
         $this->assertEquals("0,99 €", $this->getText("name=basketGrandTotal"), "Grand total price changed or didn't displayed");
-        $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: testing_account@oxid-esales.com SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland", $this->clearString($this->getText("orderAddress")));
+        $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: testing_account@oxid-esales.dev SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland", $this->clearString($this->getText("orderAddress")));
 
         //Testing when user is not logged in
         $this->clearCache();
@@ -373,7 +373,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
         $this->openBasket("Deutsch");
         $this->assertElementNotPresent("paypalExpressCheckoutBox", "PayPal should not be displayed, because Paypal is deactivated");
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertElementNotPresent("paypalExpressCheckoutBox", "PayPal should not be displayed, because Paypal is deactivated");
 
         //On 2nd step
@@ -408,7 +408,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->searchFor("1001");
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
         $this->openBasket("Deutsch");
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
         $this->click("userChangeAddress");
         $this->waitForItemAppear("order_remark");
@@ -584,7 +584,7 @@ class oePayPal_oePayPalTest extends oxTestCase
 
         $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Grand total is not displayed correctly");
         $this->clickAndWait("//button[text()='Continue to the next step']");
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertElementPresent("id=showShipAddress", "Shipping address is not displayed in 2nd order step");
         $this->click("id=userNextStepBottom");
         $this->waitForElement("paymentNextStepBottom");
@@ -646,7 +646,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to the basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
         $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
@@ -751,7 +751,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
         //Check exist user address
-        $this->assertEquals("E-mail: testing_account@oxid-esales.com SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany", $this->clearString($this->getText("//ul[@id='addressText']//li")), "User address is incorect");
+        $this->assertEquals("E-mail: testing_account@oxid-esales.dev SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany", $this->clearString($this->getText("//ul[@id='addressText']//li")), "User address is incorect");
 
         //Change to new one which has not PayPal assigned as payment method inside PayPal
         $this->click("userChangeAddress");
@@ -902,7 +902,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->searchFor("1001");
         $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
         $this->openBasket("English");
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->clickAndWait("//button[text()='Continue to the next step']");
         $this->assertTextPresent("Germany", "Users country should be Germany");
         $this->clickAndWait("//button[text()='Continue to the next step']");
@@ -950,7 +950,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertFalse($this->isElementPresent("paypalExpressCheckoutButton"), "PayPal express button should be not visible in frontend");
 
         //Login to shop and go to the basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertFalse($this->isElementPresent("paypalExpressCheckoutButton"), "PayPal express button should be not visible in frontend");
     }
 
@@ -974,7 +974,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertTextPresent("Test product 0");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
         $this->assertTextPresent("+1");
@@ -1038,7 +1038,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openListItem("2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("5,00 EUR", $this->getText("//td[5]"));
-        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.com", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
+        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("5,00", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
         $this->assertEquals("- 0,00", $this->getText("//table[@id='order.info']/tbody/tr[2]/td[2]"));
         $this->assertEquals("4,20", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"));
@@ -1073,7 +1073,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertTextPresent("Test product 4");
 
         $this->assertEquals("Discount discount from 10 till 20", $this->getText("//div[@id='basketSummary']/table/tbody/tr[2]/th"));
@@ -1202,7 +1202,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("0,00 EUR", $this->getText("//td[5]"));
 
-        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.com", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
+        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("45,00", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
         $this->assertEquals("- 2,25", $this->getText("//table[@id='order.info']/tbody/tr[2]/td[2]"));
         $this->assertEquals("35,92", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"));
@@ -1236,7 +1236,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Grand total: 15,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
         $this->type("voucherNr", "111111");
@@ -1297,7 +1297,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("15,00 EUR", $this->getText("//td[5]"));
-        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.com", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
+        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("15,00", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
         $this->assertEquals("- 0,00", $this->getText("//table[@id='order.info']/tbody/tr[2]/td[2]"));
         $this->assertEquals("4,20", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"));
@@ -1337,7 +1337,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Test product 3", $this->getText("//tr[@id='cartItem_1']/td[3]/div[1]"));
 
@@ -1433,7 +1433,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("17,85 EUR", $this->getText("//td[5]"));
-        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.com", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
+        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("17,85", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
         $this->assertEquals("- 0,00", $this->getText("//table[@id='order.info']/tbody/tr[2]/td[2]"));
         $this->assertEquals("15,00", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"));
@@ -1596,7 +1596,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to the basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
         $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
@@ -1698,7 +1698,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertTextPresent("Test product 0");
         $this->assertTextPresent("Test product 1");
         $this->assertTextPresent("Test product 3");
@@ -1831,7 +1831,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->assertTextPresent("Test product 0");
         $this->assertTextPresent("Test product 1");
         $this->assertTextPresent("Test product 3");
@@ -1951,7 +1951,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("10,00 EUR", $this->getText("//td[5]"));
 
-        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.com", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
+        $this->assertEquals("Billing Address: Company SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany E-mail: testing_account@oxid-esales.dev", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("40,99", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
         $this->assertEquals("- 0,00", $this->getText("//table[@id='order.info']/tbody/tr[2]/td[2]"));
         $this->assertEquals("36,33", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"));
@@ -2098,7 +2098,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("205,96 €", "Articles VAT changed or didn't display");
         $this->assertEquals("1.322,46 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't display");
 
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
 
         //On 2nd step
         $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
@@ -2157,7 +2157,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         // Add articles to basket.
         $this->openShop();
         $this->switchLanguage("English");
-        $this->loginInFrontend("testing_account@oxid-esales.com", "useruser");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
         $this->searchFor("1001");
         $this->clickAndWait("//ul[@id='searchList']/li/form/div/a[2]/span");
         $this->assertFalse($this->isElementPresent("id=paypalExpressCheckoutDetailsButton"), "After PayPal is disabled in admin PayPal should not be visible in admin");

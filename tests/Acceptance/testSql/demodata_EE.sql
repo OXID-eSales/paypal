@@ -52,7 +52,7 @@ REPLACE INTO `oxdelivery2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
 
 # User demo data
 INSERT INTO `oxuser` (`OXID`, `OXACTIVE`, `OXRIGHTS`, `OXSHOPID`, `OXUSERNAME`, `OXPASSWORD`, `OXPASSSALT`, `OXCUSTNR`, `OXUSTID`, `OXUSTIDSTATUS`, `OXCOMPANY`, `OXFNAME`, `OXLNAME`, `OXSTREET`, `OXSTREETNR`, `OXADDINFO`, `OXCITY`, `OXCOUNTRYID`, `OXZIP`, `OXFON`, `OXFAX`, `OXSAL`, `OXBONI`, `OXCREATE`, `OXREGISTER`, `OXPRIVFON`, `OXMOBFON`, `OXBIRTHDATE`, `OXURL`, `OXLDAPKEY`, `OXWRONGLOGINS`, `OXUPDATEKEY`, `OXUPDATEEXP`) VALUES
-                     ('testuser',  1, 'user', 1, 'testing_account@oxid-esales.com', 'c9dadd994241c9e5fa6469547009328a', '7573657275736572',   8, '', 0, 'SeleniumTestCase Äß\'ü', 'Testing user acc Äß\'ü', 'PayPal Äß\'ü', 'Musterstr. Äß\'ü', '1', 'Testing acc for Selenium', 'Musterstadt Äß\'ü', 'a7c40f631fc920687.20179984', '79098', '', '', 'MR',  500, '2008-02-05 14:42:42', '2008-02-05 14:42:42', '', '', '0000-00-00', '', '', 0, '', 0),
+                     ('testuser',  1, 'user', 1, 'testing_account@oxid-esales.dev', 'c9dadd994241c9e5fa6469547009328a', '7573657275736572',   8, '', 0, 'SeleniumTestCase Äß\'ü', 'Testing user acc Äß\'ü', 'PayPal Äß\'ü', 'Musterstr. Äß\'ü', '1', 'Testing acc for Selenium', 'Musterstadt Äß\'ü', 'a7c40f631fc920687.20179984', '79098', '', '', 'MR',  500, '2008-02-05 14:42:42', '2008-02-05 14:42:42', '', '', '0000-00-00', '', '', 0, '', 0),
                      ('testusera', 1, 'user', 1, 'testing_account2@oxid-esales.com',    'a233c8b71a465807980f4b2b18f50fec', '757365724175736572', 9, '', 0, 'SeleniumTestCase',       'Testing user acc',       'PayPal',     'Musterstr.',       '2', 'Testing acc for Selenium', 'Musterstadt',       'a7c40f631fc920687.20179984', '79098', '', '', 'MRS', 500, '2008-02-05 14:49:31', '2008-02-05 14:49:31', '', '', '0000-00-00', '', '', 0, '', 0);
 
 # Delivery2DeliverySet
@@ -120,7 +120,7 @@ UPDATE `oxconfig` SET `OXVARVALUE` = 0x4dba222b70e349f0c9d1aba6133981af1e8d79724
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x4dba422a71e248f1c8d0aa1651570011febb9efc98177f036b0a6020a634f31d0bd0c20d9eb4818881fc066e5334236637f87dffd86e5583f7e63e579da1b5d11a7990967a63fe149e97097b5bcf3b2fb5cb5c19ef40b566b2d429e74af7223fd7c0b7a349a3dfcf42978929ba59931a4f2bff23326b91c5c9e0638593db43262e66202998b8c5e9a73b9ead14370a7528ef08393dbd998a6fc9322a21ab682a0f387784fcfe05f555b302f7f2e0d83380f551dd97040e99bbed30d37a3355dc28 WHERE `OXVARNAME` = 'aRssSelected' AND `OXSHOPID` = 1;
 
 # updating smtp and emails data
-UPDATE `oxshops` SET `OXINFOEMAIL` = 'testing_account@oxid-esales.com', `OXORDEREMAIL` = 'testing_account@oxid-esales.com', `OXOWNEREMAIL` = 'testing_account@oxid-esales.com', `OXSMTP` = 'localhost', `OXDEFCAT` = '' WHERE `OXID` = '1';
+UPDATE `oxshops` SET `OXINFOEMAIL` = 'testing_account@oxid-esales.dev', `OXORDEREMAIL` = 'testing_account@oxid-esales.dev', `OXOWNEREMAIL` = 'testing_account@oxid-esales.dev', `OXSMTP` = 'localhost', `OXDEFCAT` = '' WHERE `OXID` = '1';
 
 
 #paypal demo data

@@ -36,7 +36,6 @@ class oePayPal_oePayPalTest extends oxTestCase
     private $newPayPalUserInterface = true;
     const PAYPAL_FRAME_NAME = "injectedUl";
     const THANK_YOU_PAGE_IDENTIFIER = "Thank you";
-    const IDENTITY_ROW_ORDER_PAYPAL_TAB_BASKET_PRICE = 2;
     const IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE = 2;
 
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
@@ -196,6 +195,7 @@ class oePayPal_oePayPalTest extends oxTestCase
         // Perform capturing
         $this->click("id=captureButton");
         $this->frame("edit");
+        $this->clickAndWait("id=captureSubmit", 90);
 
         $basketPrice = "0,99";
         $capturedPrice = "0,99";
@@ -216,15 +216,15 @@ class oePayPal_oePayPalTest extends oxTestCase
         // Perform Refund and check all info
         $this->click("id=refundButton0");
         $this->clickAndWaitFrame("id=refundSubmit", 'edit');
-        $this->assertEquals("refund", $this->getText("//table[2]/tbody/tr[2]/td[2]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("0.99 EUR", $this->getText("//tr[2]/td[3]"));
-        $this->assertEquals("Instant", $this->getText("//tr[2]/td[4]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("capture", $this->getText("//table[2]/tbody/tr[3]/td[2]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("0.99 EUR", $this->getText("//tr[3]/td[3]"));
-        $this->assertEquals("Completed", $this->getText("//tr[3]/td[4]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("authorization", $this->getText("//table[2]/tbody/tr[4]/td[2]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("0.99 EUR", $this->getText("//tr[4]/td[3]"));
-        $this->assertEquals("Pending", $this->getText("//tr[4]/td[4]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("refund", $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[2]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("0.99 EUR", $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[3]"));
+        $this->assertEquals("Instant", $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[4]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("capture", $this->getText("//table[@id='historyTable']/tbody/tr[3]/td[2]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("0.99 EUR", $this->getText("//table[@id='historyTable']/tbody/tr[3]/td[3]"));
+        $this->assertEquals("Completed", $this->getText("//table[@id='historyTable']/tbody/tr[3]/td[4]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("authorization", $this->getText("//table[@id='historyTable']/tbody/tr[4]/td[2]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("0.99 EUR", $this->getText("//table[@id='historyTable']/tbody/tr[4]/td[3]"));
+        $this->assertEquals("Pending", $this->getText("//table[@id='historyTable']/tbody/tr[4]/td[4]"), "Money status is not displayed in admin PayPal tab");
     }
 
     /**
@@ -2389,6 +2389,10 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertEquals("PayPal Checkout - Log in", $this->getTitle());
     }
 
+    /**
+     * @param string $basketPrice
+     * @param string $capturedPrice
+     */
     private function checkOrderPayPalTabPricesCorrect($basketPrice, $capturedPrice)
     {
         $this->assertEquals("{$basketPrice} EUR", $this->getOrderPayPalTabBasketPrice(), "Full amount is not displayed in admin PayPal tab");
@@ -2400,9 +2404,13 @@ class oePayPal_oePayPalTest extends oxTestCase
 
     private function getOrderPayPalTabBasketPrice()
     {
-        return $this->getOrderPayPalTabPrice(self::IDENTITY_ROW_ORDER_PAYPAL_TAB_BASKET_PRICE, self::IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE);
+        return $this->getOrderPayPalTabPrice(2, 2);
     }
 
+    /**
+     * @param integer $row
+     * @param integer $column
+     */
     private function getOrderPayPalTabPrice($row, $column)
     {
         return $this->getText("//table[@class='paypalActionsTable']/tbody/tr[".$row."]/td[".$column."]/b");

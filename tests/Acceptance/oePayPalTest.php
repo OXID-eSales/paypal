@@ -27,12 +27,22 @@ class oePayPal_oePayPalTest extends oxTestCase
     const PAYPAL_LOGIN_BUTTON_ID_OLD = "id=submitLogin";
     const PAYPAL_LOGIN_BUTTON_ID_NEW = "id=btnLogin";
 
+    const SELECTOR_ADD_TO_BASKET = "//form[@name='tobasketsearchList_1']//button";
+    const SELECTOR_BASKET_NEXTSTEP = "//button[text()='Weiter zum nächsten Schritt']";
+
+    const LOGIN_USERNAME = "testing_account@oxid-esales.dev";
+    const LOGIN_USERPASS = "useruser";
+
     private $newPayPalUserInterface = true;
     const PAYPAL_FRAME_NAME = "injectedUl";
     const THANK_YOU_PAGE_IDENTIFIER = "Thank you";
+    const IDENTITY_ROW_ORDER_PAYPAL_TAB_BASKET_PRICE = 2;
+    const IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE = 2;
 
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
     protected $_iWaitTimeMultiplier = 9;
+
+    protected $retryTimes = 0;
 
     /**
      * Activates PayPal and adds configuration
@@ -44,14 +54,6 @@ class oePayPal_oePayPalTest extends oxTestCase
     public function addTestData($sTestSuitePath)
     {
         parent::addTestData($sTestSuitePath);
-
-        $this->open(shopURL . "admin");
-        $this->loginAdminForModule("Extensions", "Modules");
-
-        $this->openListItem("PayPal");
-        if ($this->isElementPresent('module_activate')) {
-            $this->clickAndWait("module_activate");
-        }
 
         $this->callShopSC("oxConfig", null, null, array(
             'sOEPayPalTransactionMode' => array(
@@ -108,35 +110,49 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalPayment1()
     {
-        $this->openShop();
+        // Startup/configure shop
 
+        $this->openShop();
         $this->switchLanguage("Deutsch");
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        // add found article to basket
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+
+
+        // Switch to basket
+
         $this->openBasket("Deutsch");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+
+        // advance to next step (choose address/Adresse wählen)
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
         $this->click("userChangeAddress");
+        // add remark/comment
         $this->waitForItemAppear("order_remark");
         $this->type("order_remark", "Testing paypal");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
         $this->click("payment_oxidpaypal");
 
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        // go to PayPal page
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
 
         $this->standardCheckoutWillBeUsed();
         $this->waitForPayPalPage();
         $this->loginToSandbox();
         $this->clickPayPalContinue();
 
+        // returned to basket step 4 (verify)
         $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
-        // Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!
         $this->assertEquals("0,99 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
         $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
         $this->assertEquals("Versandart Ändern Test S&H set", $this->clearString($this->getText("orderShipping")));
         $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: testing_account@oxid-esales.dev SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland Ihre Mitteilung an uns Testing paypal", $this->clearString($this->getText("orderAddress")));
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']", 90);
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
+
+        // Admin
 
         //Checking if order is saved in Admin
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -156,43 +172,46 @@ class oePayPal_oePayPalTest extends oxTestCase
         $this->assertTextPresent("Voided amount:", "record 'Voided amount:': is not displayed in admin PayPal tab");
         $this->assertTextPresent("Money capture:", "Money capture:': is not displayed in admin PayPal tab");
         $this->assertTextPresent("Pending", "status 'Pending': is not displayed in admin PayPal tab");
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[2]/td[2]/b"), "Full amount is not displayed in admin PayPal tab");
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[3]/td[2]/b"), "Captured amount is not displayed in admin PayPal tab");
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[4]/td[2]/b"), "Refunded amount is not displayed in admin PayPal tab");
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[5]/td[2]/b"), "Resulting amount is not displayed in admin PayPal tab");
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[6]/td[2]/b"), "Voided amount is not displayed in admin PayPal tab");
+
+        $basketPrice = "0,99";
+        $capturedPrice = "0,00";
+        $this->checkOrderPayPalTabPricesCorrect($basketPrice, $capturedPrice);
+
         $this->assertElementPresent("id=captureButton");
         $this->assertElementPresent("id=voidButton");
-        $this->assertEquals("authorization", $this->getText("//table[2]/tbody/tr[2]/td[2]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("0.99 EUR", $this->getText("//tr[2]/td[3]"));
-        $this->assertEquals("Pending", $this->getText("//tr[2]/td[4]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[2]/td[2]/b"));
-        $this->assertEquals("1", $this->getText("//tr[@id='art.1']/td"));
-        $this->assertEquals("1001", $this->getText("//tr[@id='art.1']/td[2]"));
-        $this->assertEquals("Test product 1", $this->getText("//tr[@id='art.1']/td[3]"));
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[4]"));
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[5]"));
-        $this->assertEquals("19", $this->getText("//tr[@id='art.1']/td[6]"));
+
+        $actionName = "authorization";
+        $amount = "0.99";
+        $paypalStatus = "Pending";
+        $this->checkOrderPayPalTabHistoryCorrect($actionName, $amount, $paypalStatus);
+
+        $quantity = "1";
+        $productNumber = "1001";
+        $productTitle = "Test product 1";
+        $productGrossPrice = "0,99";
+        $productTotalPrice = "0,99";
+        $productVat = "19";
+        $this->checkOrderPayPalTabProductsCorrect($quantity, $productNumber, $productTitle, $productGrossPrice, $productTotalPrice, $productVat);
 
         // Perform capturing
         $this->click("id=captureButton");
         $this->frame("edit");
-        $this->clickAndWait("id=captureSubmit", 90);
 
-        // Check does all order info displayed properly after capturing
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[2]/td[2]/b"));
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[3]/td[2]/b"));
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[4]/td[2]/b"));
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[5]/td[2]/b"));
-        $this->assertEquals("0,00 EUR", $this->getText("//tr[6]/td[2]/b"));
-        $this->assertEquals("Completed", $this->getText("//b"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("capture", $this->getText("//table[2]/tbody/tr[2]/td[2]"));
-        $this->assertEquals("0.99 EUR", $this->getText("//tr[2]/td[3]"));
-        $this->assertEquals("Completed", $this->getText("//tr[2]/td[4]"), "Money status is not displayed in admin PayPal tab");
+        $basketPrice = "0,99";
+        $capturedPrice = "0,99";
+        $this->checkOrderPayPalTabPricesCorrect($basketPrice, $capturedPrice);
+
         $this->assertElementPresent("id=refundButton0", "Refunding is not available");
-        $this->assertEquals("authorization", $this->getText("//table[2]/tbody/tr[3]/td[2]"), "Money status is not displayed in admin PayPal tab");
-        $this->assertEquals("0.99 EUR", $this->getText("//tr[3]/td[3]"));
-        $this->assertEquals("Pending", $this->getText("//tr[3]/td[4]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("Completed", $this->getText("//b"), "Money status is not displayed in admin PayPal tab");
+
+        $actionName = "capture";
+        $amount = "0.99";
+        $paypalStatus = "Completed";
+        $this->checkOrderPayPalTabHistoryCorrect($actionName, $amount, $paypalStatus);
+
+        $this->assertEquals("authorization", $this->getText("//table[@id='historyTable']/tbody/tr[3]/td[2]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("0.99 EUR", $this->getText("//table[@id='historyTable']/tbody/tr[3]/td[3]"));
+        $this->assertEquals("Pending", $this->getText("//table[@id='historyTable']/tbody/tr[3]/td[4]"), "Money status is not displayed in admin PayPal tab");
 
         // Perform Refund and check all info
         $this->click("id=refundButton0");
@@ -2295,6 +2314,7 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     protected function clickPayPalContinue()
     {
+        sleep(1);
         if ($this->newPayPalUserInterface) {
             $this->clickPayPalContinueNewPage();
         } else {
@@ -2367,5 +2387,54 @@ class oePayPal_oePayPalTest extends oxTestCase
     protected function assertPayPalTitleVisible()
     {
         $this->assertEquals("PayPal Checkout - Log in", $this->getTitle());
+    }
+
+    private function checkOrderPayPalTabPricesCorrect($basketPrice, $capturedPrice)
+    {
+        $this->assertEquals("{$basketPrice} EUR", $this->getOrderPayPalTabBasketPrice(), "Full amount is not displayed in admin PayPal tab");
+        $this->assertEquals("{$capturedPrice} EUR", $this->getOrderPayPalTabPrice(3, self::IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE), "Captured amount is not displayed in admin PayPal tab");
+        $this->assertEquals("0,00 EUR", $this->getOrderPayPalTabPrice(4, self::IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE), "Refunded amount is not displayed in admin PayPal tab");
+        $this->assertEquals("0,00 EUR", $this->getOrderPayPalTabPrice(5, self::IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE), "Resulting amount is not displayed in admin PayPal tab");
+        $this->assertEquals("0,00 EUR", $this->getOrderPayPalTabPrice(6, self::IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE), "Voided amount is not displayed in admin PayPal tab");
+    }
+
+    private function getOrderPayPalTabBasketPrice()
+    {
+        return $this->getOrderPayPalTabPrice(self::IDENTITY_ROW_ORDER_PAYPAL_TAB_BASKET_PRICE, self::IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE);
+    }
+
+    private function getOrderPayPalTabPrice($row, $column)
+    {
+        return $this->getText("//table[@class='paypalActionsTable']/tbody/tr[".$row."]/td[".$column."]/b");
+    }
+
+    /**
+     * @param $actionName
+     * @param $amount
+     * @param $paypalStatus
+     */
+    private function checkOrderPayPalTabHistoryCorrect($actionName, $amount, $paypalStatus)
+    {
+        $this->assertEquals($actionName, $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[2]"), "Money status is not displayed in admin PayPal tab");
+        $this->assertEquals("{$amount} EUR", $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[3]"));
+        $this->assertEquals($paypalStatus, $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[4]"), "Money status is not displayed in admin PayPal tab");
+    }
+
+    /**
+     * @param $quantity
+     * @param $productNumber
+     * @param $productTitle
+     * @param $productGrossPrice
+     * @param $productTotalPrice
+     * @param $productVat
+     */
+    private function checkOrderPayPalTabProductsCorrect($quantity, $productNumber, $productTitle, $productGrossPrice, $productTotalPrice, $productVat)
+    {
+        $this->assertEquals($quantity, $this->getText("//tr[@id='art.1']/td"));
+        $this->assertEquals($productNumber, $this->getText("//tr[@id='art.1']/td[2]"));
+        $this->assertEquals($productTitle, $this->getText("//tr[@id='art.1']/td[3]"));
+        $this->assertEquals("{$productGrossPrice} EUR", $this->getText("//tr[@id='art.1']/td[4]"));
+        $this->assertEquals("{$productTotalPrice} EUR", $this->getText("//tr[@id='art.1']/td[5]"));
+        $this->assertEquals($productVat, $this->getText("//tr[@id='art.1']/td[6]"));
     }
 }

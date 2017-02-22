@@ -107,21 +107,17 @@ class oePayPal_oePayPalTest extends oxTestCase
      * @group paypal_external
      * @group quarantine
      */
-    public function testPayPalPayment1()
+    public function testPayPalRegularCheckoutPayment()
     {
         // Startup/configure shop
-
         $this->openShop();
         $this->switchLanguage("Deutsch");
         $this->searchFor("1001");
+
         // add found article to basket
         $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
 
-
-        // Switch to basket
-
         $this->openBasket("Deutsch");
-
         $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
 
         // advance to next step (choose address/Adresse wählen)

@@ -184,6 +184,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
         $sShippingId = $this->_extractShippingId(urldecode($oDetails->getShippingOptionName()), $oUser);
 
+        $oBasket->setBasketUser($oUser);
         $oBasket->setShipping($sShippingId);
         $oBasket->onUpdate();
         $oBasket->calculateBasket(true);

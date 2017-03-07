@@ -1209,6 +1209,101 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
         $this->assertSame('payment', $userComponent->changeUser());
 
     }
+
+    /**
+     * Test if PayPal Express Checkout dispatcher is able to correctly calculate Total Sum of given basket
+     *
+     * The issue was triggered when a shipping cost was taken into account and no user was provided.
+     *
+     * Test covers the case of bug #6565, more information: This test case was written to cover the fix for the bug #6565.
+     *
+     * @covers oePayPalExpressCheckoutDispatcher::getExpressCheckoutDetails()
+     */
+    public function testGetExpressCheckoutDetailsIsAbleToCalculateCorrectTotalSumOfBasket()
+    {
+        $productPrice = 8;
+        $shippingCost = 100;
+
+        $paypalExpressResponseData = array(
+            'EMAIL'                              => 'testpp@oxideshop.dev',
+            'PAYMENTREQUEST_0_AMT'               => $productPrice + $shippingCost,
+            'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => 'DE',
+        );
+
+        $article = oxNew('oxarticle');
+        $article->disableLazyLoading();
+        $article->setId('_test_article_for_paypal');
+        $article->oxarticles__oxprice = new oxField($productPrice, oxField::T_RAW);
+        $article->oxarticles__oxartnum = new oxField('1001', oxField::T_RAW);
+        $article->oxarticles__oxactive = new oxField('1', oxField::T_RAW);
+        $article->save();
+
+        $this->prepareFixedPriceShippingCostRuleForPayPal($shippingCost);
+
+        $basket = oxNew('oxBasket');
+        $basket->addToBasket($article->getId(), 1);
+        $this->getSession()->setBasket($basket);
+
+        $paypalExpressResponse = oxNew('oePayPalResponseGetExpressCheckoutDetails');
+        $paypalExpressResponse->setData($paypalExpressResponseData);
+
+        $paypalServiceStub = $this->getMock('oePayPalService', array('getExpressCheckoutDetails'));
+        $paypalServiceStub->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($paypalExpressResponse));
+
+        $paypalExpressCheckoutDispatcherProxyClassName = $this->getProxyClassName('oePayPalExpressCheckoutDispatcher');
+        $paypalExpressCheckoutDispatcherPartialStub = $this->getMock($paypalExpressCheckoutDispatcherProxyClassName, array('getPayPalCheckoutService', '_isPayPalPaymentValid'));
+        $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('_isPayPalPaymentValid')->will($this->returnValue(true));
+        $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('getPayPalCheckoutService')->will($this->returnValue($paypalServiceStub));
+
+        /** @var oePayPalExpressCheckoutDispatcher $paypalExpressCheckoutDispatcherPartialStub */
+        $controllerNameWhichIndicatesSuccess = 'order?fnc=execute';
+        $controllerNameFromPaypalExpressCheckout = $paypalExpressCheckoutDispatcherPartialStub->getExpressCheckoutDetails();
+
+        $messageToCoverBugFix = 'Something went wrong during the calculation of Total sum for active basket. ' .
+            'This test case was written to cover the fix for the bug #6565. ' .
+            'More contextual information could be found at: https://bugs.oxid-esales.com/view.php?id=6565';
+        $messageForWrongControllerName = 'The expected controller name "order" was not provided by PayPal Express ' .
+            'Checkout process. ' . $messageToCoverBugFix;
+
+        $this->assertSame(
+            $controllerNameWhichIndicatesSuccess,
+            $controllerNameFromPaypalExpressCheckout,
+            $messageForWrongControllerName
+        );
+
+        $expectedTotalBasketSum = $productPrice + $shippingCost;
+        $paypalExpressTotalBasketSum = $this->getSession()->getVariable("oepaypal-basketAmount");
+        $messageForWrongBasketTotal = 'The Total sum of basket from PayPal Express Checkout does not match the ' .
+            'expected one. ' . $messageToCoverBugFix;
+
+        $this->assertSame((float)$expectedTotalBasketSum, $paypalExpressTotalBasketSum, $messageForWrongBasketTotal);
+    }
+
+    /**
+     * Helper to add shipping cost rule into the database
+     *
+     * @param int|float $shippingCost
+     */
+    private function prepareFixedPriceShippingCostRuleForPayPal($shippingCost)
+    {
+        $deliveryCostRule = new oxDelivery();
+        $deliveryCostRule->setId('_fixed_price_for_paypal_test');
+        $deliveryCostRule->oxdelivery__oxactive = new oxField(1, oxField::T_RAW);
+        $deliveryCostRule->oxdelivery__oxtitle = new oxField('Fixed price for PayPal test', oxField::T_RAW);
+        $deliveryCostRule->oxdelivery__oxaddsumtype = new oxField('abs', oxField::T_RAW);
+        $deliveryCostRule->oxdelivery__oxaddsum = new oxField($shippingCost, oxField::T_RAW);
+        $deliveryCostRule->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
+        $deliveryCostRule->oxdelivery__oxparam = new oxField(0, oxField::T_RAW);
+        $deliveryCostRule->oxdelivery__oxparamend = new oxField(1000, oxField::T_RAW);
+        $deliveryCostRule->save();
+
+        $deliveryCostRelation = new oxbase();
+        $deliveryCostRelation->init('oxdel2delset');
+        $deliveryCostRelation->setId('_fixed_price_2_oxidstandard');
+        $deliveryCostRelation->oxdel2delset__oxdelid = new oxField($deliveryCostRule->getId(), oxField::T_RAW);
+        $deliveryCostRelation->oxdel2delset__oxdelsetid = new oxField('oxidstandard', oxField::T_RAW);
+        $deliveryCostRelation->save();
+    }
 }
 
 class modOxVatSelector extends oxVatSelector

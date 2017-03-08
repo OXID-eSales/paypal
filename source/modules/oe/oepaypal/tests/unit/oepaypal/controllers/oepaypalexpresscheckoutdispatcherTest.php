@@ -1282,6 +1282,13 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
      */
     private function prepareFixedPriceShippingCostRuleForPayPal($shippingCost)
     {
+        // Mark standard delivery inactive.
+        // Test must get _fixed_price_for_paypal_test delivery to work correctly.
+        $deliveryCostRule = new oxDelivery();
+        $deliveryCostRule->setId('1b842e73470578914.54719298');
+        $deliveryCostRule->oxdelivery__oxactive = new oxField(0, oxField::T_RAW);
+        $deliveryCostRule->save();
+
         $deliveryCostRule = new oxDelivery();
         $deliveryCostRule->setId('_fixed_price_for_paypal_test');
         $deliveryCostRule->oxdelivery__oxactive = new oxField(1, oxField::T_RAW);

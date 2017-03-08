@@ -96,6 +96,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalPayment1()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         $this->openShop();
 
         $this->switchLanguage("Deutsch");
@@ -390,6 +392,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalPaymentForGermany()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         //Make an order with PayPal
         $this->openShop();
         $this->switchLanguage("Deutsch");
@@ -871,6 +875,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalStandard()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         //Login to shop and go standard PayPal
         $this->openShop();
         $this->switchLanguage("English");
@@ -938,6 +944,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalDiscountsCategory()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         // Add vouchers to shop
         $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
         //Go to shop and add product
@@ -1032,6 +1040,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalDiscountsFromTill()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         // Add vouchers to shop
         $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
 
@@ -1193,6 +1203,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalVouchers()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         $this->importSql(__DIR__ .'/testSql/newVouchers_'. SHOP_EDITION .'.sql');
 
         //Go to shop and add product
@@ -1290,6 +1302,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalVAT()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         // Change price for PayPal payment methode
         $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
         $this->importSql(__DIR__ .'/testSql/testPaypaVAT_'. SHOP_EDITION .'.sql');
@@ -1628,6 +1642,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalProportional()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         // Change price for PayPal payment method
         $this->importSql(__DIR__ .'/testSql/newVAT.sql');
 
@@ -2002,6 +2018,8 @@ class oePayPal_oePayPalTest extends oxTestCase
      */
     public function testPayPalStandardNettoMode()
     {
+        $this->skippDueToNewPayPalUserInterface();
+
         // Activate the necessary options Neto mode
         // Turn Trusted Shops functionality on
         $this->importSql(__DIR__ .'/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
@@ -2195,5 +2213,10 @@ class oePayPal_oePayPalTest extends oxTestCase
         }
 
         return $sVarValue;
+    }
+
+    private function skippDueToNewPayPalUserInterface()
+    {
+        $this->markTestSkipped('Skipped due to changes in PayPal user interface.');
     }
 }

@@ -185,7 +185,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
         $sShippingId = $this->_extractShippingId(urldecode($oDetails->getShippingOptionName()), $oUser);
 
-        $oBasket->setBasketUser($oUser);
+        $this->setAnonymousUser($oBasket, $oUser);
+
         $oBasket->setShipping($sShippingId);
         $oBasket->onUpdate();
         $oBasket->calculateBasket(true);
@@ -710,5 +711,18 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         }
 
         return $blValid;
+    }
+
+    /**
+     * PayPal express checkout might be called before user is set to basket.
+     * Also PayPal express checkout might return different Shipping and Billing addresses
+     * which should be used to calculate VAT.
+     *
+     * @param oxBasket $basket
+     * @param oxUser   $user
+     */
+    private function setAnonymousUser($basket, $user)
+    {
+        $basket->setBasketUser($user);
     }
 }

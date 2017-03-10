@@ -717,14 +717,11 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      * This happens if user is not logged in to the Shop
      * and it goes to PayPal from details page or basket first step.
      *
-     * @param oxBasket $oBasket
-     * @param oxUser   $oUser
+     * @param oxBasket $basket
+     * @param oxUser   $user
      */
-    private function setAnonymousUser($oBasket, $oUser)
+    private function setAnonymousUser($basket, $user)
     {
-        $basketUser = $oBasket->getUser();
-        if (!$basketUser) {
-            $oBasket->setBasketUser($oUser);
-        }
+        $basket->setBasketUser($user);
     }
 }

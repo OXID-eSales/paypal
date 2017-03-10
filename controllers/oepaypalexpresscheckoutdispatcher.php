@@ -184,7 +184,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
         $sShippingId = $this->_extractShippingId(urldecode($oDetails->getShippingOptionName()), $oUser);
 
-        $oBasket->setBasketUser($oUser);
+        $this->setAnonymousUser($oBasket, $oUser);
+
         $oBasket->setShipping($sShippingId);
         $oBasket->onUpdate();
         $oBasket->calculateBasket(true);
@@ -709,5 +710,21 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         }
 
         return $blValid;
+    }
+
+    /**
+     * PayPal express checkout might be called before user is set to basket.
+     * This happens if user is not logged in to the Shop
+     * and it goes to PayPal from details page or basket first step.
+     *
+     * @param oxBasket $oBasket
+     * @param oxUser   $oUser
+     */
+    private function setAnonymousUser($oBasket, $oUser)
+    {
+        $basketUser = $oBasket->getUser();
+        if (!$basketUser) {
+            $oBasket->setBasketUser($oUser);
+        }
     }
 }

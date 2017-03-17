@@ -106,7 +106,6 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
      * Updates order transaction status, ID and date.
      *
      * @param string $sTransactionId Order transaction ID
-     * @param string $sDate          Order transaction date
      */
     protected function _setPaymentInfoPayPalOrder($sTransactionId)
     {

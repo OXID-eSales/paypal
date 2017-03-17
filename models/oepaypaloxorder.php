@@ -99,7 +99,7 @@ class oePayPalOxOrder extends oePayPalOxOrder_parent
     public function delete($sOxId = null)
     {
         $this->getPayPalOrder($sOxId)->delete();
-        parent::delete($sOxId);
+        return parent::delete($sOxId);
     }
 
     /**

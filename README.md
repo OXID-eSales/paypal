@@ -3,7 +3,7 @@ PayPal - The OXID eFire extension
 
 ![OXID eFire extension paypal](paypal_banner.jpg)
 
-###Features
+### Features
 
 * PayPal is available as a regular payment method in the appropriate checkout step.
 * PayPal express is already included at the checkout (registration step), at the so called “mini cart” and at the product detail pages.
@@ -15,12 +15,12 @@ PayPal - The OXID eFire extension
 * The admin panel provides an overview of the PayPal payments per order.
 
 
-###Setup
+### Setup
 
 For installation instructions please see /documentation/UserManual_en.pdf in this package.
 
 
-###License
+### License
 
 Licensing of the software product depends on the shop edition used.
 The software for OXID eShop Community Edition is published under the GNU General Public License v3.

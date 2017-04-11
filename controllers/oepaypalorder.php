@@ -39,7 +39,7 @@ class oePayPalOrder extends oePayPalOrder_parent
     /**
      * Returns PayPal user
      *
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     public function getUser()
     {
@@ -47,7 +47,7 @@ class oePayPalOrder extends oePayPalOrder_parent
 
         $sUserId = $this->getSession()->getVariable("oepaypal-userId");
         if ($this->isPayPal() && $sUserId) {
-            $oPayPalUser = oxNew("oxUser");
+            $oPayPalUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
             if ($oPayPalUser->load($sUserId)) {
                 $oUser = $oPayPalUser;
             }
@@ -59,7 +59,7 @@ class oePayPalOrder extends oePayPalOrder_parent
     /**
      * Returns PayPal payment object if PayPal is on, or returns parent::getPayment()
      *
-     * @return oxPayment
+     * @return \OxidEsales\Eshop\Application\Model\Payment
      */
     public function getPayment()
     {
@@ -73,7 +73,7 @@ class oePayPalOrder extends oePayPalOrder_parent
 
         if ($this->_oPayment === null) {
             // payment is set ?
-            $oPayment = oxNew('oxPayment');
+            $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
             if ($oPayment->load('oxidpaypal')) {
                 $this->_oPayment = $oPayment;
             }
@@ -85,11 +85,11 @@ class oePayPalOrder extends oePayPalOrder_parent
     /**
      * Returns current order object
      *
-     * @return oxOrder
+     * @return \OxidEsales\Eshop\Application\Model\Order
      */
     protected function _getOrder()
     {
-        $oOrder = oxNew("oxOrder");
+        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oOrder->load($this->getSession()->getVariable('sess_challenge'));
 
         return $oOrder;
@@ -107,7 +107,7 @@ class oePayPalOrder extends oePayPalOrder_parent
         $sNextStep = parent::_getNextStep($iSuccess);
 
         // Detecting PayPal & loading order & execute payment only if go wrong
-        if ($this->isPayPal() && ($iSuccess == oxOrder::ORDER_STATE_PAYMENTERROR)) {
+        if ($this->isPayPal() && ($iSuccess == \OxidEsales\Eshop\Application\Model\Order::ORDER_STATE_PAYMENTERROR)) {
 
             $iPayPalType = (int) $this->getSession()->getVariable("oepaypal");
             $sNextStep = ($iPayPalType == 2) ? "basket" : "order";

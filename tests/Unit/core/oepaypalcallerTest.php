@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalCaller class.
  */
-class Unit_oePayPal_core_oePayPalCallerTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalCallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test case for oePayPalCallerService::setParameter()

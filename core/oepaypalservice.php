@@ -102,7 +102,7 @@ class oePayPalService
 
             if ($oConfig->isLoggingEnabled()) {
                 $oLogger = oxNew('oePayPalLogger');
-                $oLogger->setLoggerSessionId(oxRegistry::getSession()->getId());
+                $oLogger->setLoggerSessionId(\OxidEsales\Eshop\Core\Registry::getSession()->getId());
                 $oCaller->setLogger($oLogger);
             }
 
@@ -168,8 +168,6 @@ class oePayPalService
 
     /**
      * Executes PayPal callback request
-     *
-     * @return null
      */
     public function callbackResponse()
     {
@@ -284,8 +282,6 @@ class oePayPalService
      *
      * @param string $sKey
      * @param string $sValue
-     *
-     * @return null
      *
      * @deprecated still use in callback.
      */

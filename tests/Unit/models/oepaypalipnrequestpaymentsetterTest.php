@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalIPNRequest class.
  */
-class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends OxidTestCase
+class unit_oepaypal_models_oePayPalIPNRequestPaymentSetterTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function providerGetRequestOrderPayment()
     {

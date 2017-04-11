@@ -21,7 +21,7 @@
 
 
 if (!class_exists('oePayPalOxBasket_parent')) {
-    class oePayPalOxBasket_parent extends oxBasket
+    class oePayPalOxBasket_parent  extends \OxidEsales\Eshop\Application\Model\Basket
     {
     }
 }
@@ -30,7 +30,7 @@ if (!class_exists('oePayPalOxBasket_parent')) {
 /**
  * Testing oePayPalBasketValidator class.
  */
-class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function providerSetGetBasket()
     {
@@ -109,10 +109,10 @@ class Unit_oePayPal_Models_oePayPalOutOfStockValidatorTest extends OxidTestCase
      */
     protected function _createBasket($sProductId, $iBasketAmount, $iStockAmount)
     {
-        $oArticle = $this->getMock('oxArticle', array('getStockAmount'));
+        $oArticle = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getStockAmount'));
         $oArticle->expects($this->any())->method('getStockAmount')->will($this->returnValue($iStockAmount));
 
-        $oBasketItem = $this->getMock('oxBasketItem', array('getProductId', 'getAmount', 'getArticle'));
+        $oBasketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getAmount', 'getArticle'));
         $oBasketItem->expects($this->any())->method('getProductId')->will($this->returnValue($sProductId));
         $oBasketItem->expects($this->any())->method('getAmount')->will($this->returnValue($iBasketAmount));
         $oBasketItem->expects($this->any())->method('getArticle')->will($this->returnValue($oArticle));

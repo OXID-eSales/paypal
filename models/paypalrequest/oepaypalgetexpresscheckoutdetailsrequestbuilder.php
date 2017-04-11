@@ -34,7 +34,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     /**
      * Session object
      *
-     * @var oxSession
+     * @var \OxidEsales\Eshop\Core\Session
      */
     protected $_oSession = null;
 
@@ -65,7 +65,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     /**
      * Sets Session.
      *
-     * @param oxSession $oSession
+     * @param \OxidEsales\Eshop\Core\Session $oSession
      */
     public function setSession($oSession)
     {
@@ -75,7 +75,7 @@ class oePayPalGetExpressCheckoutDetailsRequestBuilder
     /**
      * Returns Session.
      *
-     * @return oxSession
+     * @return \OxidEsales\Eshop\Core\Session
      *
      * @throws oePayPalMissingParameterException
      */

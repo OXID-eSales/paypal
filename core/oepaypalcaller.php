@@ -95,8 +95,6 @@ class oePayPalCaller
      *
      * @param string $sParamName  parameter name
      * @param mixed  $mParamValue parameter value
-     *
-     * @return null
      */
     public function setParameter($sParamName, $mParamValue)
     {
@@ -107,8 +105,6 @@ class oePayPalCaller
      * PayPal request parameters setter.
      *
      * @param array $aParameters parameters to use to build request.
-     *
-     * @return null
      */
     public function setParameters($aParameters)
     {
@@ -205,8 +201,6 @@ class oePayPalCaller
      *
      * @param array  $aValue request / response parameters
      * @param string $sTitle section title in log file
-     *
-     * @return null
      */
     public function log($aValue, $sTitle = '')
     {

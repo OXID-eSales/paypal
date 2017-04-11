@@ -30,7 +30,9 @@ class oePayPalOrderPaymentComment extends oePayPalModel
      */
     public function __construct()
     {
-        $this->_setValue('oepaypal_date', date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime()));
+        $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
+
+        $this->_setValue('oepaypal_date', date('Y-m-d H:i:s', $utilsDate->getTime()));
     }
 
     /**

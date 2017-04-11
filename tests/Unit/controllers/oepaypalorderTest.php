@@ -20,7 +20,7 @@
  */
 
 if (!class_exists('oePayPalOrder_parent')) {
-    class oePayPalOrder_parent extends order
+    class oePayPalOrder_parent extends \OxidEsales\Eshop\Application\Controller\OrderController
     {
     }
 }
@@ -28,16 +28,14 @@ if (!class_exists('oePayPalOrder_parent')) {
 /**
  * Testing oePayPaleOrder class.
  */
-class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
+class Unit_oePayPal_Controllers_oePayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Tear down the fixture.
-     *
-     * @return null
      */
     protected function tearDown()
     {
-        oxDb::getDB()->execute("delete from oxpayments where OXID = 'oxidpaypal' ");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("delete from oxpayments where OXID = 'oxidpaypal' ");
 
         $this->cleanUpTable('oxuser', 'oxid');
 
@@ -46,8 +44,6 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOrder::isPayPal()
-     *
-     * @return null
      */
     public function testIsPayPal()
     {
@@ -81,7 +77,7 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
      */
     public function testGetUser($sPaymentId, $sPayPalUserId, $sDefaultUserId, $sExpectedUserId)
     {
-        $oUser = new oxUser();
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
         $oUser->setId($sPayPalUserId);
         $oUser->save();
 
@@ -115,8 +111,6 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOrder::getPayment()
-     *
-     * @return null
      */
     public function testGetPayment()
     {
@@ -129,7 +123,7 @@ class Unit_oePayPal_Controllers_oePayPalOrderTest extends OxidTestCase
         $this->getSession()->setVariable("paymentid", "oxidpaypal");
 
         $sSql = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`) VALUES ('oxidpaypal', 1, 'PayPal')";
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
 
         $oView = new oePayPalOrder();
         $oPayment = $oView->getPayment();

@@ -40,15 +40,13 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
     /**
      * Processes PayPal callback
-     *
-     * @return null
      */
     public function processCallBack()
     {
         $oPayPalService = $this->getPayPalCheckoutService();
         $this->_setParamsForCallbackResponse($oPayPalService);
         $sRequest = $oPayPalService->callbackResponse();
-        oxRegistry::getUtils()->showMessageAndExit($sRequest);
+        \OxidEsales\Eshop\Core\Registry::getUtils()->showMessageAndExit($sRequest);
     }
 
     /**
@@ -96,7 +94,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
                  * @var oePayPalException $oEx
                  */
                 $oEx = oxNew("oePayPalException");
-                $oEx->setMessage(oxRegistry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
+                $oEx->setMessage(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
                 throw $oEx;
             }
 
@@ -119,7 +117,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
             $oPayPalService = $this->getPayPalCheckoutService();
             $oResult = $oPayPalService->setExpressCheckout($oRequest);
-        } catch (oxException $oExcp) {
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
             // error - unable to set order info - display error message
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
 
@@ -160,7 +158,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
             // creating new or using session user
             $oUser = $this->_initializeUserData($oDetails);
-        } catch (oxException $oExcp) {
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
 
             $oLogger = $this->getLogger();
@@ -221,7 +219,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Returns transaction mode.
      *
-     * @param oxBasket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
      *
      * @return string
      */
@@ -283,12 +281,12 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      *
      * @param array $aData User data array.
      *
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     protected function _getCallBackUser($aData)
     {
         // simulating user object
-        $oUser = oxNew("oxUser");
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $oUser->initializeUserForCallBackPayPalUser($aData);
 
         return $oUser;
@@ -298,8 +296,6 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      * Sets parameters to PayPal callback
      *
      * @param oePayPalService $oPayPalService PayPal service
-     *
-     * @return null
      */
     protected function _setParamsForCallbackResponse($oPayPalService)
     {
@@ -370,9 +366,9 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      * Sets delivery sets parameters to PayPal callback
      *
      * @param oePayPalService   $oPayPalService   PayPal service.
-     * @param oxDeliverySetList $aDeliverySetList Delivery list.
-     * @param oxUser            $oUser            User object.
-     * @param oxBasket          $oBasket          Basket object.
+     * @param \OxidEsales\Eshop\Application\Model\DeliverySetList $aDeliverySetList Delivery list.
+     * @param \OxidEsales\Eshop\Application\Model\User            $oUser            User object.
+     * @param \OxidEsales\Eshop\Application\Model\Basket          $oBasket          Basket object.
      *
      * @return int Total amount of deliveries
      */
@@ -395,7 +391,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
                 continue;
             }
 
-            $oDeliveryList = oxNew('oxDeliveryList');
+            $oDeliveryList = oxNew(\OxidEsales\Eshop\Application\Model\DeliveryList::class);
             $aDeliveryList = array();
 
             // list of active delivery costs
@@ -415,7 +411,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
                 if ($dPrice <= $dMaxDeliveryAmount) {
                     $oPayPalService->setParameter("L_SHIPPINGOPTIONNAME{$iCnt}", getStr()->html_entity_decode($sDelSetName));
-                    $oPayPalService->setParameter("L_SHIPPINGOPTIONLABEL{$iCnt}", oxRegistry::getLang()->translateString("OEPAYPAL_PRICE"));
+                    $oPayPalService->setParameter("L_SHIPPINGOPTIONLABEL{$iCnt}", \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"));
                     $oPayPalService->setParameter("L_SHIPPINGOPTIONAMOUNT{$iCnt}", $this->_formatFloat($dPrice));
 
                     //setting active delivery set
@@ -448,7 +444,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Makes delivery set array with unique names
      *
-     * @param oxDeliveryList $oDelSetList delivery list
+     * @param \OxidEsales\Eshop\Application\Model\DeliveryList $oDelSetList delivery list
      *
      * @return array
      */
@@ -477,11 +473,11 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Returns PayPal user
      *
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     protected function _getPayPalUser()
     {
-        $oUser = oxNew('oxUser');
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         if (!$oUser->loadUserPayPalUser()) {
             $oUser = $this->getUser();
         }
@@ -492,8 +488,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Extracts shipping id from given parameter
      *
-     * @param string $sShippingOptionName Shipping option name, which comes from PayPal.
-     * @param oxUser $oUser               User object.
+     * @param string                                   $sShippingOptionName Shipping option name, which comes from PayPal.
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser               User object.
      *
      * @return string
      */
@@ -502,7 +498,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         $sCharset = $this->getPayPalConfig()->getCharset();
         $sShippingOptionName = htmlentities(html_entity_decode($sShippingOptionName, ENT_QUOTES, $sCharset), ENT_QUOTES, $sCharset);
 
-        $sName = trim(str_replace(oxRegistry::getLang()->translateString("OEPAYPAL_PRICE"), "", $sShippingOptionName));
+        $sName = trim(str_replace(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), "", $sShippingOptionName));
 
         $aDeliverySetList = $this->getSession()->getVariable("oepaypal-oxDelSetList");
 
@@ -523,8 +519,9 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      *
      * @param oePayPalResponseGetExpressCheckoutDetails $oDetails
      *
-     * @throws oxException
-     * @return oxUser
+     * @throws \OxidEsales\Eshop\Core\Exception\StandardException
+     *
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     protected function _initializeUserData($oDetails)
     {
@@ -534,7 +531,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             $sUserEmail = $oLoggedUser->oxuser__oxusername->value;
         }
 
-        $oUser = oxNew("oxUser");
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         if ($sUserId = $oUser->isRealPayPalUser($sUserEmail)) {
             // if user exist
             $oUser->load($sUserId);
@@ -542,9 +539,9 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             if (!$oLoggedUser) {
                 if (!$oUser->isSamePayPalUser($oDetails)) {
                     /**
-                     * @var $oEx oxException
+                     * @var $oEx \OxidEsales\Eshop\Core\Exception\StandardException
                      */
-                    $oEx = oxNew('oxException');
+                    $oEx = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
                     $oEx->setMessage('OEPAYPAL_ERROR_USER_ADDRESS');
                     throw $oEx;
                 }
@@ -576,7 +573,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      */
     protected function _createUserAddress($oDetails, $sUserId)
     {
-        $oAddress = oxNew("oxAddress");
+        $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
 
         return $oAddress->createPayPalAddress($oDetails, $sUserId);
     }
@@ -584,13 +581,13 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Checking if PayPal payment is available in user country
      *
-     * @param oxUser $oUser User object.
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser User object.
      *
      * @return boolean
      */
     protected function _isPaymentValidForUserCountry($oUser)
     {
-        $oPayment = oxNew("oxPayment");
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayment->load("oxidpaypal");
         $aPaymentCountries = $oPayment->getCountries();
 
@@ -605,15 +602,16 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Checks if selected delivery set has PayPal payment.
      *
-     * @param string $sDelSetId    Delivery set ID.
-     * @param double $dBasketPrice Basket price.
-     * @param oxUser $oUser        User object.
+     * @param string                                   $sDelSetId    Delivery set ID.
+     * @param double                                   $dBasketPrice Basket price.
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser        User object.
      *
      * @return boolean
      */
     protected function _isPayPalInDeliverySet($sDelSetId, $dBasketPrice, $oUser)
     {
-        $aPaymentList = oxRegistry::get("oxPaymentList")->getPaymentList($sDelSetId, $dBasketPrice, $oUser);
+        $paymentList = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Application\Model\PaymentList::class);
+        $aPaymentList = $paymentList->getPaymentList($sDelSetId, $dBasketPrice, $oUser);
 
         if (is_array($aPaymentList) && array_key_exists("oxidpaypal", $aPaymentList)) {
             return true;
@@ -626,8 +624,6 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      * Disables PayPal payment in PayPal side
      *
      * @param oePayPalService $oPayPalService PayPal service.
-     *
-     * @return null
      */
     protected function _setPayPalIsNotAvailable($oPayPalService)
     {
@@ -639,13 +635,13 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Get delivery set list for PayPal callback
      *
-     * @param oxUser $oUser User object.
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser User object.
      *
      * @return array
      */
     protected function _getDeliverySetList($oUser)
     {
-        $oDelSetList = oxNew("oxDeliverySetList");
+        $oDelSetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
 
         return $oDelSetList->getDeliverySetList($oUser, $this->_getUserShippingCountryId($oUser));
     }
@@ -653,7 +649,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Returns user shipping address country id.
      *
-     * @param oxUser $oUser
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser
      *
      * @return string
      */
@@ -671,9 +667,9 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Checks whether PayPal payment is available
      *
-     * @param oxUser $oUser
-     * @param double $dBasketPrice
-     * @param string $sShippingId
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser
+     * @param double                                   $dBasketPrice
+     * @param string                                   $sShippingId
      *
      * @return bool
      */
@@ -681,7 +677,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     {
         $blValid = true;
 
-        $oPayPalPayment = oxNew('oxPayment');
+        $oPayPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayPalPayment->load('oxidpaypal');
         if (!$oPayPalPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
             $blValid = $this->_isEmptyPaymentValid($oUser, $dBasketPrice, $sShippingId);
@@ -693,9 +689,9 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     /**
      * Checks whether Empty payment is available.
      *
-     * @param oxUser $oUser
-     * @param double $dBasketPrice
-     * @param string $sShippingId
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser
+     * @param double                                   $dBasketPrice
+     * @param string                                   $sShippingId
      *
      * @return bool
      */
@@ -703,7 +699,7 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
     {
         $blValid = true;
 
-        $oEmptyPayment = oxNew('oxPayment');
+        $oEmptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oEmptyPayment->load('oxempty');
         if (!$oEmptyPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
             $blValid = false;
@@ -717,8 +713,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
      * This happens if user is not logged in to the Shop
      * and it goes to PayPal from details page or basket first step.
      *
-     * @param oxBasket $basket
-     * @param oxUser   $user
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket
+     * @param \OxidEsales\Eshop\Application\Model\User   $user
      */
     private function setAnonymousUser($basket, $user)
     {

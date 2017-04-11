@@ -131,8 +131,6 @@ class oePayPalIPNHandler extends oePayPalController
      * IPN handling function.
      *  - Call to check if request is valid (from PayPal and to correct shop).
      *  - Initiate payment status changes according to IPN information.
-     *
-     * @return null
      */
     public function handleRequest()
     {

@@ -22,7 +22,7 @@
 /**
  * Tests for oeThemeSwitcherUserAgent class
  */
-class Unit_oePayPal_Core_oePayPalUserAgentTest extends OxidTestCase
+class Unit_oePayPal_Core_oePayPalUserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function providerIsMobile()
     {

@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalOrderActionFactory class.
  */
-class Unit_oePayPal_Models_Actions_Data_oePayPalOrderActionDataTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_Data_oePayPalOrderActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -31,7 +31,7 @@ class Unit_oePayPal_Models_Actions_Data_oePayPalOrderActionDataTest extends Oxid
     {
         $oRequest = $this->_getRequest(array());
         $oOrder = $this->_getOrder();
-        $oOrder->oxorder__oxtransid = new oxField('authorizationId');
+        $oOrder->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field('authorizationId');
 
         $oActionData = new oePayPalOrderActionData($oRequest, $oOrder);
 

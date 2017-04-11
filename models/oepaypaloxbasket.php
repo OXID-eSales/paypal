@@ -22,7 +22,7 @@
 /**
  * PayPal oxBasket class
  *
- * @mixin oxBasket
+ * @mixin \OxidEsales\Eshop\Application\Model\Basket
  */
 class oePayPalOxBasket extends oePayPalOxBasket_parent
 {

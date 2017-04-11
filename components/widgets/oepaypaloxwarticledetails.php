@@ -22,7 +22,7 @@
 /**
  * Article box widget
  *
- * @mixin oxwArticleDetails
+ * @mixin \OxidEsales\Eshop\Application\Component\Widget\ArticleDetails
  */
 class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
 {
@@ -69,7 +69,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     public function oePayPalShowECSPopup()
     {
-        return $this->getComponent('oxcmp_basket')->shopECSPopUp();
+        return $this->getComponent(\OxidEsales\Eshop\Application\Component\BasketComponent::class)->shopECSPopUp();
     }
 
     /**
@@ -79,7 +79,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     public function oePayPalGetCancelUrl()
     {
-        return $this->getComponent('oxcmp_basket')->getPayPalCancelURL();
+        return $this->getComponent(\OxidEsales\Eshop\Application\Component\BasketComponent::class)->getPayPalCancelURL();
     }
 
     /**
@@ -114,7 +114,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     protected function _oePayPalGetECSArticle()
     {
-        $aProducts = $this->getComponent('oxcmp_basket')->getCurrentArticleInfo();
+        $aProducts = $this->getComponent(\OxidEsales\Eshop\Application\Component\BasketComponent::class)->getCurrentArticleInfo();
 
         return $aProducts;
     }

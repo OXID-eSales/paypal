@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalResponseDoExpressCheckoutPayment class.
  */
-class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTest extends OxidTestCase
+class Unit_oePayPal_models_responses_oePayPalResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Returns response data

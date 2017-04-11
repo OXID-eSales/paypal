@@ -23,7 +23,7 @@
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOrderPaymentStatusListTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderPaymentStatusListTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
 

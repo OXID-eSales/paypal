@@ -21,13 +21,13 @@
 
 
 if (!class_exists('oePayPalOxUser_parent')) {
-    class oePayPalOxUser_parent extends oxUser
+    class oePayPalOxUser_parent extends \OxidEsales\Eshop\Application\Model\User
     {
     }
 }
 
 if (!class_exists('oePayPalOxAddress_parent')) {
-    class oePayPalOxAddress_parent extends oxAddress
+    class oePayPalOxAddress_parent extends \OxidEsales\Eshop\Application\Model\Address
     {
     }
 }
@@ -36,18 +36,16 @@ if (!class_exists('oePayPalOxAddress_parent')) {
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOxUserTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
      * Tear down the fixture.
-     *
-     * @return null
      */
     protected function tearDown()
     {
         $sDelete = 'TRUNCATE TABLE `oxuser`';
-        oxDb::getDb()->execute($sDelete);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sDelete);
     }
 
     /**
@@ -58,7 +56,7 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                      "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
-        oxDb::getDb()->execute($sSqlState);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSqlState);
     }
 
     /**
@@ -90,22 +88,20 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     /**
      * Test case for oePayPalOxUser::createPayPalUser()
      * Creating user
-     *
-     * @return null
      */
     public function testCreatePayPalUser()
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aPayPalData);
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $oPayPalUser = $this->getMock('oePayPalOxUser', array('_setAutoGroups'));
         $oPayPalUser->expects($this->once())->method('_setAutoGroups')->with($this->equalTo("8f241f11096877ac0.98748826"));
         $oPayPalUser->createPayPalUser($oDetails);
         $sUserId = $oPayPalUser->getId();
 
-        $oUser = new oxUser();
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
         $oUser->load($sUserId);
 
         $this->assertEquals(1, $oUser->oxuser__oxactive->value);
@@ -127,8 +123,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     /**
      * Test case for oePayPalOxUser::createPayPalUser()
      * Creating user
-     *
-     * @return null
      */
     public function testCreatePayPalUser_streetName()
     {
@@ -137,11 +131,11 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '12 testStreetName str.';
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aPayPalData);
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $oPayPalUser = new oePayPalOxUser();
         $oPayPalUser->createPayPalUser($oDetails);
-        $oUser = new oxUser();
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
         $oUser->load($oPayPalUser->getId());
 
         $this->assertEquals('testStreetName str.', $oUser->oxuser__oxstreet->value);
@@ -152,8 +146,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     /**
      * Test case for oePayPalOxUser::createPayPalUser()
      * Returning id if exist, not creating
-     *
-     * @return null
      */
     public function testCreatePayPalAddressIfExist()
     {
@@ -161,19 +153,19 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aPayPalData);
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $oPayPalOxUser = new oePayPalOxUser();
         $oPayPalOxUser->createPayPalUser($oDetails);
 
         $sQ = "SELECT COUNT(*) FROM `oxuser`";
-        $iAddressCount = oxDb::getDb()->getOne($sQ);
+        $iAddressCount = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
 
         // prepareing data fo new address - the same
         $oPayPalOxUser = new oePayPalOxUser();
         $oPayPalOxUser->createPayPalUser($oDetails);
 
-        $iAddressCountAfter = oxDb::getDb()->getOne($sQ);
+        $iAddressCountAfter = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
 
         // skips the same address
         $this->assertEquals($iAddressCount, $iAddressCountAfter);
@@ -181,15 +173,13 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxUser::isSamePayPalUser()
-     *
-     * @return null
      */
     public function testIsSamePayPalUser()
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aPayPalData);
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
         $oUser->createPayPalUser($oDetails);
@@ -218,22 +208,20 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxUser::isSamePayPalUser()
-     *
-     * @return null
      */
     public function testIsSamePayPalUser_decoding_html()
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aPayPalData);
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
         $oUser->createPayPalUser($oDetails);
 
         // by default single quote ' will be convrted to &#039;
-        $oUser->oxuser__oxfname = new oxField("test'FName");
-        $oUser->oxuser__oxlname = new oxField("test'LName");
+        $oUser->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field("test'FName");
+        $oUser->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field("test'LName");
 
         $aPayPalData["FIRSTNAME"] = "test'FName";
         $aPayPalData["LASTNAME"] = "test'LName";
@@ -243,15 +231,13 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxUser::isSamePayPalUser()
-     *
-     * @return null
      */
     public function testIsSameAddressPayPalUser()
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aPayPalData);
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
         $oUser->createPayPalUser($oDetails);
@@ -268,23 +254,21 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxUser::isSamePayPalUser()
-     *
-     * @return null
      */
     public function testIsSameAddressPayPalUser_decoding_html()
     {
         $aPayPalData = $this->_getPayPalData();
         $oDetails = new oePayPalResponseGetExpressCheckoutDetails();
         $oDetails->setData($aPayPalData);
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $oUser = new oePayPalOxUser();
         $oUser->createPayPalUser($oDetails);
 
         // by default single quote ' will be convrted to &#039;
-        $oUser->oxuser__oxstreet = new oxField("test'StreetName");;
-        $oUser->oxuser__oxstreetnr = new oxField("5");
-        $oUser->oxuser__oxcity = new oxField("test'City");
+        $oUser->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field("test'StreetName");;
+        $oUser->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field("5");
+        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field("test'City");
 
         $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = "test'StreetName 5";
         $aPayPalData["PAYMENTREQUEST_0_SHIPTOCITY"] = "test'City";
@@ -296,25 +280,23 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     /**
      * Test case for oePayPalOxUser::isRealPayPalUser()
      * In single shop
-     *
-     * @return null
      */
     public function testIsRealPayPalUser()
     {
-        $oConfig = $this->getMock('oxConfig', array('getConfigParam', 'getShopId'));
+        $oConfig = $this->getMock(\OxidEsales\Eshop\Core\Config::class, array('getConfigParam', 'getShopId'));
         $oConfig->expects($this->never())->method('getShopId');
         $oConfig->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(true));
 
-        $oUser = new oxUser();
-        $oUser->oxuser__oxusername = new oxField('test@test.test');
-        $oUser->oxuser__oxpassword = new oxField('paswd');
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.test');
+        $oUser->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('paswd');
         $oUser->setId('_testId');
         $oUser->setShopId('_testShop2');
         $oUser->save();
 
-        $oUser = new oxUser();
-        $oUser->oxuser__oxusername = new oxField('test1@test.test');
-        $oUser->oxuser__oxpassword = new oxField('');
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test1@test.test');
+        $oUser->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('');
         $oUser->setShopId('_testShop1');
         $oUser->save();
 
@@ -329,32 +311,30 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     /**
      * Test case for oePayPalOxUser::isRealPayPalUser()
      * In multi shop
-     *
-     * @return null
      */
     public function testIsRealPayPalUserMultiShop()
     {
-        $oConfig = $this->getMock('oxConfig', array('getConfigParam', 'getShopId'));
+        $oConfig = $this->getMock(\OxidEsales\Eshop\Core\Config::class, array('getConfigParam', 'getShopId'));
         $oConfig->expects($this->any())->method('getShopId')->will($this->returnValue('_testShop1'));
         $oConfig->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(false));
 
-        $oUser = new oxUser();
-        $oUser->oxuser__oxusername = new oxField('test@test.test');
-        $oUser->oxuser__oxpassword = new oxField('paswd');
-        $oUser->oxuser__oxshopid = new oxField('_testShop1');
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.test');
+        $oUser->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('paswd');
+        $oUser->oxuser__oxshopid = new \OxidEsales\Eshop\Core\Field('_testShop1');
         $oUser->setId('_testId');
         $oUser->save();
 
-        $oUser = new oxUser();
-        $oUser->oxuser__oxusername = new oxField('test3@test.test');
-        $oUser->oxuser__oxpassword = new oxField('paswd');
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test3@test.test');
+        $oUser->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('paswd');
         $oUser->setId('_testId2');
         $oUser->setShopId('_testShop2');
         $oUser->save();
 
-        $oUser = new oxUser();
-        $oUser->oxuser__oxusername = new oxField('test1@test.test');
-        $oUser->oxuser__oxpassword = new oxField('');
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test1@test.test');
+        $oUser->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('');
         $oUser->setShopId('_testShop1');
         $oUser->save();
 
@@ -371,8 +351,6 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
 
     /**
      * Test case for oePayPaloxUser::loadUserPayPalUser()
-     *
-     * @return null
      */
     public function testLoadUserPayPalUser()
     {
@@ -380,9 +358,9 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $oUser = new oePayPalOxUser();
         $this->assertNull($oUser->loadUserPayPalUser());
 
-        $oUser = new oxUser();
-        $oUser->oxuser__oxusername = new oxField('test@test.test');
-        $oUser->oxuser__oxpassword = new oxField('paswd');
+        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.test');
+        $oUser->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('paswd');
         $oUser->setId('_testId');
         $oUser->save();
 
@@ -397,12 +375,10 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
     /**
      * Test case for oePayPalOxUser::initializeUserForCallBackPayPalUser()
      * Creating user
-     *
-     * @return null
      */
     public function testInitializeUserForCallBackPayPalUser()
     {
-        oxTestModules::addModuleObject('oxAddress', new oePayPalOxAddress());
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new oePayPalOxAddress());
 
         $aPayPalData["SHIPTOSTREET"] = "testStreetName str. 12a";
         $aPayPalData["SHIPTOCITY"] = "testCity";
@@ -421,5 +397,22 @@ class Unit_oePayPal_models_oePayPalOxUserTest extends OxidTestCase
         $this->assertEquals('testZip', $oPayPalUser->oxuser__oxzip->value);
         $this->assertEquals('8f241f11096877ac0.98748826', $oPayPalUser->oxuser__oxcountryid->value);
         $this->assertEquals('333', $oPayPalUser->oxuser__oxstateid->value);
+    }
+
+    /**
+     * Mock an object which is created by oxNew.
+     *
+     * Attention: please don't use this method, we want to get rid of it - all places can, and should, be replaced
+     *            with plain mocks.
+     *
+     * Hint: see also unit/controllers/oepaypalexpresscheckoutdispatcherTest
+     *
+     * @param string $className The name under which the object will be created with oxNew.
+     * @param object $object    The mocked object oxNew should return instead of the original one.
+     */
+    protected function addModuleObject($className, $object)
+    {
+        \OxidEsales\Eshop\Core\Registry::set($className, null);
+        \OxidEsales\Eshop\Core\UtilsObject::setClassInstance($className, $object);
     }
 }

@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalIPNRequestValidator class.
  */
-class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalIPNRequestValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Data provider for testIsValid()

@@ -23,7 +23,7 @@
 /**
  * Testing ePayPalOrderPaymentListCalculator class.
  */
-class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      *  Setup: Prepare data - create need tables
@@ -32,14 +32,12 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
     {
         parent::setUp();
 
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
      * Test case that no payment list is set.
-     *
-     * @return null
      */
     public function testCalculateNoPaymentList()
     {
@@ -53,8 +51,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
 
     /**
      * Test case that a payment list is set.
-     *
-     * @return null
      */
     public function testCapturedAmountCalculateWithPaymentList()
     {
@@ -70,8 +66,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
     /**
      * Test case that a payment list is set.
      * Void data is taken from voided Authorization.
-     *
-     * @return null
      */
     public function testVoidedAmountCalculateWithPaymentList()
     {
@@ -86,8 +80,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
 
     /**
      * Test case that a payment list is set.
-     *
-     * @return null
      */
     public function testRefundedAmountCalculateWithPaymentList()
     {
@@ -103,8 +95,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
     /**
      * Test case that a payment list is set.
      * Voided amount comes from void action.
-     *
-     * @return null
      */
     public function testCapturedAmountCalculateWithPaymentListAndVoidAction()
     {
@@ -120,8 +110,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
     /**
      * Test case that a payment list is set.
      * Voided amount comes from void action.
-     *
-     * @return null
      */
     public function testVoidedAmountCalculateWithPaymentListAndVoidAction()
     {
@@ -137,8 +125,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListCalculatorTest extends OxidTe
     /**
      * Test case that a payment list is set.
      * Voided amount comes from void action.
-     *
-     * @return null
      */
     public function testRefundedAmountCalculateWithPaymentListAndVoidAction()
     {

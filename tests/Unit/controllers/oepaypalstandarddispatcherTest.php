@@ -20,12 +20,12 @@
  */
 
 if (!class_exists('oePayPalOxBasket_parent')) {
-    class oePayPalOxBasket_parent extends oxBasket
+    class oePayPalOxBasket_parent  extends \OxidEsales\Eshop\Application\Model\Basket
     {
     }
 }
 
-class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestCase
+class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Set up
@@ -36,7 +36,7 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                      "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
-        oxDb::getDb()->execute($sSqlState);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSqlState);
     }
 
     public function testSetGetPayPalCheckoutService()
@@ -58,8 +58,6 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
 
     /**
      * Test case for oepaypalstandarddispatcher::getExpressCheckoutDetails()
-     *
-     * @return null
      */
     public function testGetExpressCheckoutDetails()
     {
@@ -89,12 +87,10 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
 
     /**
      * Test case for oepaypalstandarddispatcher::getExpressCheckoutDetails()
-     *
-     * @return null
      */
     public function testGetExpressCheckoutDetailsError()
     {
-        $oExcp = new oxException();
+        $oExcp = new \OxidEsales\Eshop\Core\Exception\StandardException();
 
         // preparing config
         $oPayPalConfig = $this->getMock("oePayPalConfig", array("finalizeOrderOnPayPalSide"));
@@ -105,7 +101,7 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
         $oPayPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->throwException($oExcp));
 
         // preparing utils view
-        $oUtilsView = $this->getMock("oxUtilsView", array("addErrorToDisplay"));
+        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
         $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($oExcp));
 
         // preparing
@@ -121,8 +117,6 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
     /**
      * Test case for oepaypaldispatcher::setExpressCheckout()
      * Main functionality
-     *
-     * @return null
      */
     public function testSetExpressCheckout_onSuccess()
     {
@@ -132,7 +126,7 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
         $sUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=token";
 
         //utils
-        $oUtils = $this->getMock("oxUtils", array("redirect"));
+        $oUtils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array("redirect"));
         $oUtils->expects($this->once())->method("redirect")->with($this->equalTo($sUrl), $this->equalTo(false));
 
         //config
@@ -160,12 +154,10 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
     /**
      * Test case for oepaypaldispatcher::setExpressCheckout()
      * On error
-     *
-     * @return null
      */
     public function testSetExpressCheckout_onError()
     {
-        $oExcp = new oxException();
+        $oExcp = new \OxidEsales\Eshop\Core\Exception\StandardException();
 
         $oPayPalConfig = $this->getMock("oePayPalConfig", array("getPaypalUrl"));
         $oPayPalConfig->expects($this->never())->method("getPaypalUrl");
@@ -175,7 +167,7 @@ class Unit_oePayPal_Controllers_oePayPalStandardDispatcherTest extends OxidTestC
         $oPayPalService->expects($this->once())->method("setExpressCheckout")->will($this->throwException($oExcp));
 
         // preparing utils view
-        $oUtilsView = $this->getMock("oxUtilsView", array("addErrorToDisplay"));
+        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
         $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($oExcp));
 
         // preparing

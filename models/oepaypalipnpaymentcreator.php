@@ -119,8 +119,6 @@ class oePayPalIPNPaymentCreator
      *
      * @param oePayPalOrderPayment $orderPaymentParent
      * @param float                $amount
-     *
-     * @return null
      */
     private function updateParentTransactionRefundAmount($orderPaymentParent, $amount)
     {
@@ -133,8 +131,6 @@ class oePayPalIPNPaymentCreator
      * We need to update that transaction status as well if we got a value in IPN request data.
      *
      * @param $orderPaymentAuthorization Authorization paypal order payment.
-     *
-     * @return null
      */
     private function updateOrderPaymentAuthorizationStatus($orderPaymentAuthorization)
     {

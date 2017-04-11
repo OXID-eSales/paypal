@@ -195,7 +195,7 @@ class oePayPalPayPalOrder extends oePayPalModel
 
         // if payment completed, set order paid
         if ($sStatus == oePayPalPayPalOrder::PAYPAL_ORDER_STATE_COMPLETED) {
-            $order = oxNew('oxOrder');
+            $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             $order->load($this->getOrderId());
             $order->markOrderPaid();
         }

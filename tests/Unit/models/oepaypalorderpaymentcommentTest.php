@@ -23,7 +23,7 @@
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOrderPaymentCommentTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderPaymentCommentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -31,14 +31,12 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentTest extends OxidTestCase
      */
     public function setUp()
     {
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
     }
 
     /**
      * Test case for oePayPalPayPalOrder::save()
      * Tests adding / getting PayPal Order Payment history item
-     *
-     * @return null
      */
     public function testSavePayPalPayPalOrder_insertIdSet()
     {
@@ -63,8 +61,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::save()
      * Tests adding / getting PayPal Order Payment history item
-     *
-     * @return null
      */
     public function testSavePayPalPayPalOrder_withoutDate_dateSetNow()
     {
@@ -84,8 +80,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::save()
      * Tests adding / getting PayPal Order Payment history item
-     *
-     * @return null
      */
     public function testSavePayPalPayPalOrder_insertIdNotSet()
     {
@@ -107,8 +101,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentCommentTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::save()
      * Tests adding / getting PayPal Order Payment history item
-     *
-     * @return null
      */
     public function testSavePayPalPayPalOrder_update()
     {

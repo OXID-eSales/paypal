@@ -23,16 +23,16 @@
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOrderPaymentTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      *  Setup: Prepare data - create need tables
      */
     public function setUp()
     {
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**

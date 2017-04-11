@@ -79,13 +79,11 @@ abstract class oePayPalDispatcher extends oePayPalController
     }
 
     /**
-     * Returns oxUtilsView instance
-     *
-     * @return oxUtilsView
+     * @return  \OxidEsales\Eshop\Core\UtilsView
      */
     protected function _getUtilsView()
     {
-        return oxRegistry::get("oxUtilsView");
+        return \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsView::class);
     }
 
     /**
@@ -103,11 +101,11 @@ abstract class oePayPalDispatcher extends oePayPalController
     /**
      * Returns oxUtils instance
      *
-     * @return oxUtils
+     * @return  \OxidEsales\Eshop\Core\Utils
      */
     protected function _getUtils()
     {
-        return oxRegistry::getUtils();
+        return \OxidEsales\Eshop\Core\Registry::getUtils();
     }
 
     /**
@@ -118,7 +116,7 @@ abstract class oePayPalDispatcher extends oePayPalController
     protected function _getBaseUrl()
     {
         $oSession = $this->getSession();
-        $sUrl = $this->getConfig()->getSslShopUrl() . "index.php?lang=" . oxRegistry::getLang()->getBaseLanguage() . "&sid=" . $oSession->getId() . "&rtoken=" . $oSession->getRemoteAccessToken();
+        $sUrl = $this->getConfig()->getSslShopUrl() . "index.php?lang=" . \OxidEsales\Eshop\Core\Registry::getLang()->getBaseLanguage() . "&sid=" . $oSession->getId() . "&rtoken=" . $oSession->getRemoteAccessToken();
         $sUrl .= "&shp=" . $this->getConfig()->getShopId();
 
         return $sUrl;
@@ -127,11 +125,11 @@ abstract class oePayPalDispatcher extends oePayPalController
     /**
      * Returns PayPal order object
      *
-     * @return oxOrder
+     * @return \OxidEsales\Eshop\Application\Model\Order|object
      */
     protected function _getPayPalOrder()
     {
-        $oOrder = oxNew("oxOrder");
+        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         if ($oOrder->loadPayPalOrder()) {
             return $oOrder;
         }
@@ -140,12 +138,12 @@ abstract class oePayPalDispatcher extends oePayPalController
     /**
      * Returns PayPal payment object
      *
-     * @return oxPayment
+     * @return \OxidEsales\Eshop\Application\Model\Payment|object
      */
     protected function _getPayPalPayment()
     {
         if (($oOrder = $this->_getPayPalOrder())) {
-            $oUserPayment = oxNew('oxUserPayment');
+            $oUserPayment = oxNew(\OxidEsales\Eshop\Application\Model\UserPayment::class);
             $oUserPayment->load($oOrder->oxorder__oxpaymentid->value);
 
             return $oUserPayment;

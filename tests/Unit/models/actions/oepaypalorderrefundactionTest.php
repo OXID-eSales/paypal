@@ -24,7 +24,7 @@
 /**
  * Testing oePayPalOrderRefundAction class.
  */
-class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -32,9 +32,9 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      */
     public function setUp()
     {
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
@@ -128,9 +128,9 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderRefundActionTest extends OxidTes
      */
     public function testProcess_ProcessingOfServiceResponse_CommentAdded()
     {
-        $oUtilsDate = $this->getMock('oxUtilsDate', array('getTime'));
+        $oUtilsDate = $this->getMock(\OxidEsales\Eshop\Core\UtilsDate::class, array('getTime'));
         $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
-        oxRegistry::set('oxUtilsDate', $oUtilsDate);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $oUtilsDate);
         $sComment = 'testComment';
 
         $oComment = new oePayPalOrderPaymentComment();

@@ -55,7 +55,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     /**
      * Language object.
      *
-     * @var oxLang
+     * @var \OxidEsales\Eshop\Core\Language
      */
     protected $_oLang = null;
 
@@ -177,7 +177,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     /**
      * Sets Basket object.
      *
-     * @param oxBasket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
      */
     public function setBasket($oBasket)
     {
@@ -187,7 +187,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     /**
      * Returns basket object.
      *
-     * @return oxBasket
+     * @return \OxidEsales\Eshop\Application\Model\Basket
      *
      * @throws oePayPalMissingParameterException
      */
@@ -225,7 +225,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     /**
      * Sets Language object
      *
-     * @param oxLang $oLang
+     * @param \OxidEsales\Eshop\Core\Language $oLang
      */
     public function setLang($oLang)
     {
@@ -235,7 +235,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
     /**
      * Returns Language object.
      *
-     * @return oxLang
+     * @return \OxidEsales\Eshop\Core\Language
      */
     public function getLang()
     {
@@ -486,7 +486,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
         $oRequest->setParameter("PAYMENTREQUEST_0_SHIPPINGAMT", $this->_formatFloat($oBasket->getDeliveryCosts()));
         $oRequest->setParameter("PAYMENTREQUEST_0_SHIPDISCAMT", $this->_formatFloat($oBasket->getDiscountSumPayPalBasket() * -1));
 
-        $oDelivery = oxNew("oxDeliverySet");
+        $oDelivery = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySet::class);
         $sDeliveryName = ($oDelivery->load($oBasket->getShippingId())) ? $oDelivery->oxdeliveryset__oxtitle->value : "#1";
 
         $oRequest->setParameter("L_SHIPPINGOPTIONISDEFAULT0", "true");
@@ -588,8 +588,6 @@ class oePayPalSetExpressCheckoutRequestBuilder
 
     /**
      * Sets Address parameters to request.
-     *
-     * @return null
      */
     public function addAddressParams()
     {
@@ -603,7 +601,7 @@ class oePayPalSetExpressCheckoutRequestBuilder
 
         $sAddressId = $oUser->getSelectedAddressId();
         if ($sAddressId) {
-            $oAddress = oxNew("oxAddress");
+            $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
             $oAddress->load($sAddressId);
 
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTONAME", getStr()->html_entity_decode($oAddress->oxaddress__oxfname->value . " " . $oAddress->oxaddress__oxlname->value));
@@ -612,12 +610,12 @@ class oePayPalSetExpressCheckoutRequestBuilder
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $oAddress->oxaddress__oxzip->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $oAddress->oxaddress__oxfon->value);
 
-            $oCountry = oxNew("oxCountry");
+            $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
             $oCountry->load($oAddress->oxaddress__oxcountryid->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $oCountry->oxcountry__oxisoalpha2->value);
 
             if ($oAddress->oxaddress__oxstateid->value) {
-                $oState = oxNew("oxState");
+                $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
                 $oState->load($oAddress->oxaddress__oxstateid->value);
                 $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $oState->oxstates__oxisoalpha2->value);
             }
@@ -628,12 +626,12 @@ class oePayPalSetExpressCheckoutRequestBuilder
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $oUser->oxuser__oxzip->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $oUser->oxuser__oxfon->value);
 
-            $oCountry = oxNew("oxCountry");
+            $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
             $oCountry->load($oUser->oxuser__oxcountryid->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $oCountry->oxcountry__oxisoalpha2->value);
 
             if ($oUser->oxuser__oxstateid->value) {
-                $oState = oxNew("oxState");
+                $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
                 $oState->load($oUser->oxuser__oxstateid->value);
                 $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $oState->oxstates__oxisoalpha2->value);
             }

@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Tests default width getter, which is set to 190
@@ -109,7 +109,7 @@ class Unit_oePayPal_core_oePayPalShopLogoTest extends OxidTestCase
         $sDefaultImageName = "logo.png";
         $iDefaultWidth = 40;
         $iDefaultHeight = 30;
-        $oDefaultImageHandler = oxRegistry::get("oxUtilsPic");
+        $oDefaultImageHandler = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsPic::class);
         $sExpectedResized = $sDefaultImageDirUrl . "resized_logo.png";
         $sExpectedOriginal = $sDefaultImageDirUrl . $sDefaultImageName;
 

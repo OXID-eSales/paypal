@@ -23,7 +23,7 @@
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_responses_oePayPalResponseDoReAuthorizeTest extends OxidTestCase
+class Unit_oePayPal_models_responses_oePayPalResponseDoReAuthorizeTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Returns response data

@@ -75,7 +75,7 @@ class oePayPalShopLogo
     /**
      * Provided image handler.
      *
-     * @var oxUtilsPic
+     * @var \OxidEsales\Eshop\Core\UtilsPic
      */
     protected $_oImageHandler = null;
 
@@ -83,7 +83,7 @@ class oePayPalShopLogo
      * Set image handler to handle images.
      * Needs to have resizeImage method.
      *
-     * @param oxUtilsPic $oImageHandler
+     * @param \OxidEsales\Eshop\Core\UtilsPic $oImageHandler
      */
     public function setImageHandler($oImageHandler)
     {
@@ -240,8 +240,6 @@ class oePayPalShopLogo
 
     /**
      * Returns path to an image.
-     *
-     * @return null|string
      */
     protected function _getImagePath()
     {
@@ -260,8 +258,6 @@ class oePayPalShopLogo
 
     /**
      * Returns path to an image.
-     *
-     * @return null|string
      */
     protected function _getImageUrl()
     {
@@ -276,8 +272,6 @@ class oePayPalShopLogo
 
     /**
      * Returns resized image path.
-     *
-     * @return null|string
      */
     protected function _getResizedImagePath()
     {
@@ -294,8 +288,6 @@ class oePayPalShopLogo
 
     /**
      * Returns resized image path.
-     *
-     * @return null|string
      */
     protected function _getResizedImageUrl()
     {

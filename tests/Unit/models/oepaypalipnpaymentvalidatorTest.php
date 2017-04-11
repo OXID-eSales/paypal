@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalIPNPaymentValidator class.
  */
-class Unit_oePayPal_Models_oePayPalIPNPaymentValidatorTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalIPNPaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Data provider for testIsValid()
@@ -64,7 +64,7 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentValidatorTest extends OxidTestCase
 
         $sValidationMessage = '';
         $oPayPalIPNRequestValidator = new oePayPalIPNPaymentValidator();
-        $oPayPalIPNRequestValidator->setLang(oxRegistry::getLang());
+        $oPayPalIPNRequestValidator->setLang(\OxidEsales\Eshop\Core\Registry::getLang());
         $oPayPalIPNRequestValidator->setOrderPayment($oOrderPayment);
         $oPayPalIPNRequestValidator->setRequestOrderPayment($oRequestOrderPayment);
 
@@ -103,7 +103,7 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentValidatorTest extends OxidTestCase
 
     public function testSetGetLang()
     {
-        $oLang = new oxLang();
+        $oLang = new \OxidEsales\Eshop\Core\Language();
         $oLang->setBaseLanguage(0);
 
         $oPayPalIPNRequestValidator = new oePayPalIPNPaymentValidator();

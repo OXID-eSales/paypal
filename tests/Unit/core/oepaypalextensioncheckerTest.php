@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalExtensionChecker class.
  */
-class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Shop id setter and getter test
@@ -71,12 +71,12 @@ class Unit_oePayPal_core_oePayPalExtensionCheckerTest extends OxidTestCase
     public function getExtendedClassDataProvider()
     {
         $aExtendedClasses = array(
-            'order_list' => 'oe/oepaypal/controllers/admin/oepaypalorder_list',
-            'order'      => 'oe/oepaypal/controllers/oepaypalorder'
+            \OxidEsales\Eshop\Application\Controller\Admin\OrderList::class => 'oe/oepaypal/controllers/admin/oepaypalorder_list',
+            \OxidEsales\Eshop\Application\Controller\OrderController::class => 'oe/oepaypal/controllers/oepaypalorder'
         );
         $aExtendedClassesWith = array(
-            'order_list' => 'oe/testExtension/controllers/admin/oepaypalorder_list',
-            'order'      => 'oe/testExtension/controllers/oepaypalorder'
+            \OxidEsales\Eshop\Application\Controller\Admin\OrderList::class => 'oe/testExtension/controllers/admin/oepaypalorder_list',
+            \OxidEsales\Eshop\Application\Controller\OrderController::class => 'oe/testExtension/controllers/oepaypalorder'
         );
 
         $aDisabledModules = array(

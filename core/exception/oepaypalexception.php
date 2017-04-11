@@ -22,7 +22,7 @@
 /**
  * Exception base class for PayPal
  */
-class oePayPalException extends oxException
+class oePayPalException extends \OxidEsales\Eshop\Core\Exception\StandardException
 {
     /**
      * Exception constructor.

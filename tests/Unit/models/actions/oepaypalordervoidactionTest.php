@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalOrderVoidAction class.
  */
-class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -90,9 +90,9 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderVoidActionTest extends OxidTestC
      */
     public function testProcess_CommentAdded()
     {
-        $oUtilsDate = $this->getMock('oxUtilsDate', array('getTime'));
+        $oUtilsDate = $this->getMock(\OxidEsales\Eshop\Core\UtilsDate::class, array('getTime'));
         $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue(time()));
-        oxRegistry::set('oxUtilsDate', $oUtilsDate);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $oUtilsDate);
 
         $sComment = 'testComment';
         $oComment = new oePayPalOrderPaymentComment();

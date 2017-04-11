@@ -22,7 +22,7 @@
 /**
  * Tests for oeThemeSwitcherUserAgent class
  */
-class Unit_oePayPal_Core_oePayPalFullNameTest extends OxidTestCase
+class Unit_oePayPal_Core_oePayPalFullNameTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
 

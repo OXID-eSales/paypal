@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalCurl class.
  */
-class Unit_oePayPal_core_oePayPalCurlTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalCurlTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Checks if function returns null when nothing is set.

@@ -23,7 +23,7 @@
  * Payment gateway manager.
  * Checks and sets payment method data, executes payment.
  *
- * @mixin oxPaymentGateway
+ * @mixin \OxidEsales\Eshop\Application\Model\PaymentGateway
  */
 class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
 {
@@ -44,14 +44,14 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
     /**
      * Order.
      *
-     * @var oxOrder
+     * @var \OxidEsales\Eshop\Application\Model\Order
      */
     protected $_oPayPalOxOrder;
 
     /**
      * Sets order.
      *
-     * @param oxOrder $oOrder
+     * @param \OxidEsales\Eshop\Application\Model\Order $oOrder
      */
     public function setPayPalOxOrder($oOrder)
     {
@@ -61,12 +61,12 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
     /**
      * Gets order.
      *
-     * @return oxOrder
+     * @return \OxidEsales\Eshop\Application\Model\Order
      */
     public function getPayPalOxOrder()
     {
         if (is_null($this->_oPayPalOxOrder)) {
-            $oOrder = oxNew('oxOrder');
+            $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             $oOrder->loadPayPalOrder();
             $this->setPayPalOxOrder($oOrder);
         }
@@ -136,21 +136,22 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
                 $blSuccess = true;
             } else {
                 /**
-                 * @var $oEx oxException
+                 * @var $oEx \OxidEsales\Eshop\Core\Exception\StandardException
                  */
-                $oEx = oxNew('oxException');
+                $oEx = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
                 $oEx->setMessage('OEPAYPAL_ORDER_ERROR');
                 throw $oEx;
             }
-        } catch (oxException $oException) {
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oException) {
 
             // deleting order on error
             if ($oOrder) {
                 $oOrder->deletePayPalOrder();
             }
 
-            $this->_iLastErrorNo = oxOrder::ORDER_STATE_PAYMENTERROR;
-            oxRegistry::get('oxUtilsView')->addErrorToDisplay($oException);
+            $this->_iLastErrorNo = \OxidEsales\Eshop\Application\Model\Order::ORDER_STATE_PAYMENTERROR;
+            $utilsView = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsView::class);
+            $utilsView->addErrorToDisplay($oException);
         }
 
         return $blSuccess;
@@ -242,11 +243,11 @@ class oePayPalOxPaymentGateway extends oePayPalOxPaymentGateway_parent
     /**
      * Returns PayPal user
      *
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     protected function _getPayPalUser()
     {
-        $oUser = oxNew('oxUser');
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         if (!$oUser->loadUserPayPalUser()) {
             $oUser = $this->getUser();
         }

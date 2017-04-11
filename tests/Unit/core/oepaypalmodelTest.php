@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalModel class.
  */
-class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -32,7 +32,7 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
     {
         $sId = 'RecordIdToLoad';
         $aData = array('testkey' => 'testValue');
-        $oGateway = $this->getMock('TestGateway', array('load'));
+        $oGateway = $this->getMock('oePayPalOrderPaymentDbGateway', array('load'));
         $oGateway->expects($this->any())->method('load')->with($sId)->will($this->returnValue($aData));
 
         $oModel = $this->_getPayPalModel($oGateway, $sId);
@@ -48,7 +48,7 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
     {
         $sId = 'RecordIdToLoad';
         $aData = array('testkey' => 'testValue');
-        $oGateway = $this->getMock('TestGateway', array('load'));
+        $oGateway = $this->getMock('oePayPalOrderPaymentDbGateway', array('load'));
         $oGateway->expects($this->any())->method('load')->with($sId)->will($this->returnValue($aData));
 
         $oModel = $this->_getPayPalModel($oGateway, $sId, $sId);
@@ -62,7 +62,7 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
      */
     public function testIsLoaded_DatabaseRecordNotFound()
     {
-        $oGateway = $this->_createStub('TestGateway', array('load' => null));
+        $oGateway = $this->_createStub('oePayPalOrderPaymentDbGateway', array('load' => null));
 
         $oModel = $this->_getPayPalModel($oGateway);
         $oModel->load();
@@ -75,7 +75,7 @@ class Unit_oePayPal_core_oePayPalModelTest extends OxidTestCase
      */
     public function testIsLoaded_DatabaseRecordFound()
     {
-        $oGateway = $this->_createStub('TestGateway', array('load' => array('oePayPalId' => 'testId')));
+        $oGateway = $this->_createStub('oePayPalOrderPaymentDbGateway', array('load' => array('oePayPalId' => 'testId')));
 
         $oModel = $this->_getPayPalModel($oGateway);
         $oModel->load();

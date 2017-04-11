@@ -28,12 +28,10 @@ if (!class_exists('oePayPalWrapping_parent')) {
 /**
  * Testing oePayPalWrapping class.
  */
-class Unit_oePayPal_Controllers_oePayPalWrappingTest extends OxidTestCase
+class Unit_oePayPal_Controllers_oePayPalWrappingTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test case for oePayPalWrapping::isPayPal()
-     *
-     * @return null
      */
     public function testIsPayPal()
     {
@@ -48,8 +46,6 @@ class Unit_oePayPal_Controllers_oePayPalWrappingTest extends OxidTestCase
 
     /**
      * Test case for oePayPalWrapping::changeWrapping() - express chekcout
-     *
-     * @return null
      */
     public function testChangeWrapping_expressCheckout()
     {
@@ -62,8 +58,6 @@ class Unit_oePayPal_Controllers_oePayPalWrappingTest extends OxidTestCase
 
     /**
      * Test case for oePayPalWrapping::changeWrapping() - standart chekout
-     *
-     * @return null
      */
     public function testChangeWrapping_standardCheckout()
     {
@@ -76,8 +70,6 @@ class Unit_oePayPal_Controllers_oePayPalWrappingTest extends OxidTestCase
 
     /**
      * Test case for oePayPalWrapping::changeWrapping() - PayPal not active
-     *
-     * @return null
      */
     public function testChangeWrapping_PayPalNotActive()
     {

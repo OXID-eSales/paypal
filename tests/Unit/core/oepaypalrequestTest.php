@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalRequest class.
  */
-class Unit_oePayPal_core_oePayPalRequestTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Data provider for testGetPost()

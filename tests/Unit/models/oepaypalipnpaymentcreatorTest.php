@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalIPNPaymentCreator class.
  */
-class Unit_oePayPal_Models_oePayPalIPNPaymentCreatorTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalIPNPaymentCreatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /** @var string test order dummy oxid */
     const TEST_ORDER_ID = '_sometestoxorderoxid';
@@ -56,8 +56,8 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentCreatorTest extends OxidTestCase
     {
         parent::setUp();
 
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
     }
 
     /**

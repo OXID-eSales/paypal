@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalIPNRequestVerifier class.
  */
-class Unit_oePayPal_Models_oePayPalIPNProcessorTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalIPNProcessorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testSetGetRequest()
     {
@@ -37,7 +37,7 @@ class Unit_oePayPal_Models_oePayPalIPNProcessorTest extends OxidTestCase
 
     public function testSetGetLang()
     {
-        $oLang = new oxLang();
+        $oLang = new \OxidEsales\Eshop\Core\Language();
         $oProcessor = new oePayPalIPNProcessor();
         $oProcessor->setLang($oLang);
 
@@ -81,7 +81,7 @@ class Unit_oePayPal_Models_oePayPalIPNProcessorTest extends OxidTestCase
     public function testProcess()
     {
         $blOrderUpdated = true;
-        $oLang = new oxLang();
+        $oLang = new \OxidEsales\Eshop\Core\Language();
         $oRequest = new oePayPalRequest();
         $oPayment = new oePayPalOrderPayment();
         // Call Payment Builder with defined lang and defined request. Will return mocked payment.

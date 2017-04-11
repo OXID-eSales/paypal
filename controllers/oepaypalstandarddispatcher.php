@@ -55,7 +55,7 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
                  * @var oePayPalException $oEx
                  */
                 $oEx = oxNew("oePayPalException");
-                $oEx->setMessage(oxRegistry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
+                $oEx->setMessage(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
                 throw $oEx;
             }
 
@@ -73,7 +73,7 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
 
             $oPayPalService = $this->getPayPalCheckoutService();
             $oResult = $oPayPalService->setExpressCheckout($oRequest);
-        } catch (oxException $oExcp) {
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
             // error - unable to set order info - display error message
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
 
@@ -94,7 +94,7 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
     /**
      * Returns transaction mode.
      *
-     * @param oxBasket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
      *
      * @return string
      */
@@ -133,19 +133,19 @@ class oePayPalStandardDispatcher extends oePayPalDispatcher
             $oRequest = $oBuilder->buildRequest();
 
             $oDetails = $oPayPalService->getExpressCheckoutDetails($oRequest);
-        } catch (oxException $oExcp) {
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
             // display error message
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
 
             // problems fetching user info - redirect to payment selection
-            return "payment";
+            return 'payment';
         }
 
         $this->getSession()->setVariable("oepaypal-payerId", $oDetails->getPayerId());
         $this->getSession()->setVariable("oepaypal-basketAmount", $oDetails->getAmount());
 
         // next step - order page
-        $sNext = "order";
+        $sNext = 'order';
 
         // finalize order on paypal side?
         if ($this->getPayPalConfig()->finalizeOrderOnPayPalSide()) {

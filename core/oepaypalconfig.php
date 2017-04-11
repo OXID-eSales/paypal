@@ -558,7 +558,7 @@ class oePayPalConfig
             $oLogo->setImageDir($this->_getConfig()->getImageDir());
             $oLogo->setImageDirUrl($this->_getConfig()->getImageUrl());
             $oLogo->setImageName($sLogoName);
-            $oLogo->setImageHandler(oxRegistry::get('oxUtilsPic'));
+            $oLogo->setImageHandler(\OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsPic::class));
 
             $sLogoUrl = $oLogo->getShopLogoUrl();
         }
@@ -591,21 +591,21 @@ class oePayPalConfig
     /**
      * Wrapper to get language object from registry.
      *
-     * @return oxLang
+     * @return \OxidEsales\Eshop\Core\Language
      */
     public function getLang()
     {
-        return oxRegistry::getLang();
+        return \OxidEsales\Eshop\Core\Registry::getLang();
     }
 
     /**
      * Wrapper to get utils object from registry.
      *
-     * @return oxUtils
+     * @return \OxidEsales\Eshop\Core\Utils
      */
     public function getUtils()
     {
-        return oxRegistry::getUtils();
+        return \OxidEsales\Eshop\Core\Registry::getUtils();
     }
 
     /**
@@ -661,7 +661,7 @@ class oePayPalConfig
      */
     public function getCurrentUrl()
     {
-        return oxRegistry::get('oxUtilsUrl')->getCurrentUrl();
+        return \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsUrl::class)->getCurrentUrl();
     }
 
     /**
@@ -751,10 +751,10 @@ class oePayPalConfig
     /**
      * Returns oxConfig instance
      *
-     * @return oxConfig
+     * @return \OxidEsales\Eshop\Core\Config
      */
     protected function _getConfig()
     {
-        return oxRegistry::getConfig();
+        return \OxidEsales\Eshop\Core\Registry::getConfig();
     }
 }

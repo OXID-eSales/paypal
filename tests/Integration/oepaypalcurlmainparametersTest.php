@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-class Integration_oePayPal_oePayPalCurlMainParametersTest extends OxidTestCase
+class Integration_oePayPal_oePayPalCurlMainParametersTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testCurlMainParameterHost_modeSandbox_sandboxHost()
     {

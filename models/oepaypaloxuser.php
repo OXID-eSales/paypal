@@ -22,7 +22,7 @@
 /**
  * PayPal oxUser class.
  *
- * @mixin oxUser
+ * @mixin \OxidEsales\Eshop\Application\Model\User
  */
 class oePayPalOxUser extends oePayPalOxUser_parent
 {
@@ -42,7 +42,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      */
     public function isRealPayPalUser($sUserEmail)
     {
-        $oDb = oxDb::getDb();
+        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $sQ = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = " . $oDb->quote($sUserEmail) . " AND `oxpassword` != ''";
         if (!$this->getConfig()->getConfigParam('blMallUsers')) {
             $sQ .= " AND `oxshopid` = " . $oDb->quote($this->getConfig()->getShopId());
@@ -118,11 +118,11 @@ class oePayPalOxUser extends oePayPalOxUser_parent
     /**
      * Returns user from session associated with current PayPal order.
      *
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     public function loadUserPayPalUser()
     {
-        if (($sUserId = oxRegistry::getSession()->getVariable("oepaypal-userId"))) {
+        if (($sUserId = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable("oepaypal-userId"))) {
             return $this->load($sUserId);
         }
     }
@@ -141,20 +141,20 @@ class oePayPalOxUser extends oePayPalOxUser_parent
             $this->load($sUserId);
         }
 
-        $this->oxuser__oxactive = new oxField(1);
-        $this->oxuser__oxusername = new oxField($oPayPalData->getEmail());
-        $this->oxuser__oxfname = new oxField($aUserData['oxfname']);
-        $this->oxuser__oxlname = new oxField($aUserData['oxlname']);
-        $this->oxuser__oxfon = new oxField($aUserData['oxfon']);
-        $this->oxuser__oxsal = new oxField($aUserData['oxsal']);
-        $this->oxuser__oxcompany = new oxField($aUserData['oxcompany']);
-        $this->oxuser__oxstreet = new oxField($aUserData['oxstreet']);
-        $this->oxuser__oxstreetnr = new oxField($aUserData['oxstreetnr']);
-        $this->oxuser__oxcity = new oxField($aUserData['oxcity']);
-        $this->oxuser__oxzip = new oxField($aUserData['oxzip']);
-        $this->oxuser__oxcountryid = new oxField($aUserData['oxcountryid']);
-        $this->oxuser__oxstateid = new oxField($aUserData['oxstateid']);
-        $this->oxuser__oxaddinfo = new oxField($aUserData['oxaddinfo']);
+        $this->oxuser__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+        $this->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field($oPayPalData->getEmail());
+        $this->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field($aUserData['oxfname']);
+        $this->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field($aUserData['oxlname']);
+        $this->oxuser__oxfon = new \OxidEsales\Eshop\Core\Field($aUserData['oxfon']);
+        $this->oxuser__oxsal = new \OxidEsales\Eshop\Core\Field($aUserData['oxsal']);
+        $this->oxuser__oxcompany = new \OxidEsales\Eshop\Core\Field($aUserData['oxcompany']);
+        $this->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field($aUserData['oxstreet']);
+        $this->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field($aUserData['oxstreetnr']);
+        $this->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field($aUserData['oxcity']);
+        $this->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field($aUserData['oxzip']);
+        $this->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field($aUserData['oxcountryid']);
+        $this->oxuser__oxstateid = new \OxidEsales\Eshop\Core\Field($aUserData['oxstateid']);
+        $this->oxuser__oxaddinfo = new \OxidEsales\Eshop\Core\Field($aUserData['oxaddinfo']);
 
         if ($this->save()) {
             $this->_setAutoGroups($this->oxuser__oxcountryid->value);
@@ -186,13 +186,13 @@ class oePayPalOxUser extends oePayPalOxUser_parent
 
         $aUserData['oxcity'] = $oPayPalData->getShipToCity();
 
-        $oCountry = oxNew('oxCountry');
+        $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
         $sCountryId = $oCountry->getIdByCode($oPayPalData->getShipToCountryCode());
         $aUserData['oxcountryid'] = $sCountryId;
 
         $sStateId = '';
         if ($oPayPalData->getShipToState()) {
-            $oState = oxNew('oxState');
+            $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
             $sStateId = $oState->getIdByCode($oPayPalData->getShipToState(), $sCountryId);
         }
         $aUserData['oxstateid'] = $sStateId;
@@ -236,7 +236,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      */
     protected function _splitShipToStreetPayPalUser($sShipToStreet)
     {
-        $oAddress = oxNew("oxAddress");
+        $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
 
         return $oAddress->splitShipToStreetPayPalAddress($sShipToStreet);
     }
@@ -256,7 +256,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      *
      * @param string $sOxId oxId identifier.
      *
-     * @return oxList
+     * @return \OxidEsales\Eshop\Core\Model\ListModel
      */
     public function getUserGroups($sOxId = null)
     {
@@ -267,7 +267,7 @@ class oePayPalOxUser extends oePayPalOxUser_parent
         if (!$this->_oGroups) {
             $sViewName = getViewName("oxgroups");
             $sSelect = "select {$sViewName}.* from {$sViewName} where ({$sViewName}.oxid = 'oxidnotyetordered' OR {$sViewName}.oxid = 'oxidnewcustomer')";
-            $this->_oGroups = oxNew('oxlist', 'oxgroups');
+            $this->_oGroups = oxNew(\OxidEsales\Eshop\Core\Model\ListModel::class, \OxidEsales\Eshop\Application\Model\Groups::class);
             $this->_oGroups->selectString($sSelect);
         }
 
@@ -278,8 +278,6 @@ class oePayPalOxUser extends oePayPalOxUser_parent
      * Initializes call back user.
      *
      * @param array $aPayPalData Callback user data.
-     *
-     * @return null
      */
     public function initializeUserForCallBackPayPalUser($aPayPalData)
     {
@@ -290,22 +288,22 @@ class oePayPalOxUser extends oePayPalOxUser_parent
         $aStreet = $this->_splitShipToStreetPayPalUser($aPayPalData['SHIPTOSTREET']);
 
         // setting object id as it is requested later while processing user object
-        $this->setId(oxUtilsObject::getInstance()->generateUID());
+        $this->setId(\OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUID());
 
-        $this->oxuser__oxstreet = new oxField($aStreet['street']);
-        $this->oxuser__oxstreetnr = new oxField($aStreet['streetnr']);
-        $this->oxuser__oxcity = new oxField($aPayPalData['SHIPTOCITY']);
-        $this->oxuser__oxzip = new oxField($aPayPalData['SHIPTOZIP']);
+        $this->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field($aStreet['street']);
+        $this->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field($aStreet['streetnr']);
+        $this->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field($aPayPalData['SHIPTOCITY']);
+        $this->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field($aPayPalData['SHIPTOZIP']);
 
-        $oCountry = oxNew('oxCountry');
+        $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
         $sCountryId = $oCountry->getIdByCode($aPayPalData["SHIPTOCOUNTRY"]);
-        $this->oxuser__oxcountryid = new oxField($sCountryId);
+        $this->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field($sCountryId);
 
         $sStateId = '';
         if (isset($aPayPalData["SHIPTOSTATE"])) {
-            $oState = oxNew('oxState');
+            $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
             $sStateId = $oState->getIdByCode($aPayPalData["SHIPTOSTATE"], $sCountryId);
         }
-        $this->oxuser__oxstateid = new oxField($sStateId);
+        $this->oxuser__oxstateid = new \OxidEsales\Eshop\Core\Field($sStateId);
     }
 }

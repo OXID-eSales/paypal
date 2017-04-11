@@ -56,7 +56,7 @@ class oePayPalExtensionChecker
     public function getShopId()
     {
         if (is_null($this->_sShopId)) {
-            $this->setShopId(oxRegistry::getConfig()->getShopId());
+            $this->setShopId(\OxidEsales\Eshop\Core\Registry::getConfig()->getShopId());
         }
 
         return $this->_sShopId;
@@ -111,8 +111,8 @@ class oePayPalExtensionChecker
      */
     protected function _getConfigValue($sConfigName)
     {
-        $oDb = oxDb::getDb();
-        $oConfig = oxRegistry::getConfig();
+        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $oConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
         $sConfigKey = $oConfig->getConfigParam('sConfigKey');
 
         $sSelect = "SELECT DECODE( `oxvarvalue` , " . $oDb->quote($sConfigKey) . " ) AS `oxvarvalue` " .

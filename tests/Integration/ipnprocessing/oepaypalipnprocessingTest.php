@@ -19,7 +19,7 @@
 /**
  * Integration tests for IPN processing.
  */
-class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
+class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /** @var string Command for paypal verification call. */
     const POSTBACK_CMD = 'cmd=_notify-validate';
@@ -60,9 +60,9 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
 
         $this->getConfig()->setConfigParam('iUtfMode', '1');
 
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
 
         oePayPalEvents::addOrderPaymentsTable();
         oePayPalEvents::addOrderTable();
@@ -476,7 +476,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
         $this->assertEquals($expectations['expected_voided_amount'], $paypalOrder->getVoidedAmount(), 'voided amount');
 
         // status of order in table oxorder
-        $order = oxNew('oxOrder');
+        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $order->load($this->testOrderId);
         $this->assertEquals('OK', $order->oxorder__oxtransstatus->value, 'oxorder status');
         $this->assertNotNull($order->oxorder__oxpaid->value, 'oxpaid date');
@@ -499,7 +499,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
         $this->assertEquals('Completed', $orderPaymentAuthorization->getStatus());
 
         // status of order in table oxorder
-        $order = oxNew('oxOrder');
+        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $order->load($this->testOrderId);
         $this->assertEquals('NOT_FINISHED', $order->oxorder__oxtransstatus->value);
 
@@ -584,7 +584,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
      *
      * @param string $status
      *
-     * @return oxOrder
+     * @return \OxidEsales\Eshop\Application\Model\Order
      */
     private function createOrder($status = oePayPalOxOrder::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED)
     {
@@ -592,33 +592,33 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
             $this->fail('please create related oxuser first');
         }
 
-        $this->testOrderId = substr_replace(oxUtilsObject::getInstance()->generateUId(), '_', 0, 1);
-        $order             = $this->getMock('oxOrder', array('validateDeliveryAddress'));
+        $this->testOrderId = substr_replace(\OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUId(), '_', 0, 1);
+        $order             = $this->getMock(\OxidEsales\Eshop\Application\Model\Order::class, array('validateDeliveryAddress'));
         $order->setId($this->testOrderId);
-        $order->oxorder__oxshopid        = new oxField(1);
-        $order->oxorder__oxuserid        = new oxField($this->testUserId);
-        $order->oxorder__oxorderdate     = new oxField('2015-05-29 10:41:03');
-        $order->oxorder__oxbillemail     = new oxField('not@thepaypalmail.com');
-        $order->oxorder__oxbillfname     = new oxField('Max');
-        $order->oxorder__oxbillname      = new oxField('Muster');
-        $order->oxorder__oxbillstreet    = new oxField('Blafööstraße');
-        $order->oxorder__oxbillstreetnr  = new oxField('123');
-        $order->oxorder__oxbillcity      = new oxField('Литовские');
-        $order->oxorder__oxbillcountryid = new oxField('a7c40f631fc920687.20179984');
-        $order->oxorder__oxbillzip       = new oxField('22769');
-        $order->oxorder__oxbillsal       = new oxField('MR');
-        $order->oxorder__oxpaymentid     = new oxField('95700b639e4ef5e759bf6e3be4aabd44');
-        $order->oxorder__oxpaymenttype   = new oxField('oxidpaypal');
-        $order->oxorder__oxtotalnetsum   = new oxField(self::PAYMENT_AMOUNT / 1.19);
-        $order->oxorder__oxtotalbrutsum  = new oxField(self::PAYMENT_AMOUNT);
-        $order->oxorder__oxtotalordersum = new oxField(self::PAYMENT_AMOUNT);
-        $order->oxorder__oxartvat        = new oxField('19');
-        $order->oxorder__oxvatartprice1  = new oxField('4.77');
-        $order->oxorder__oxcurrency      = new oxField('EUR');
-        $order->oxorder__oxfolder        = new oxField('ORDERFOLDER_NEW');
-        $order->oxorder__oxdeltype       = new oxField('standard');
-        $order->oxorder__oxtransstatus   = new oxField($status);
-        $order->oxorder__oxtransid       = new oxField(self::PAYPAL_AUTHID, oxField::T_RAW);
+        $order->oxorder__oxshopid        = new \OxidEsales\Eshop\Core\Field(1);
+        $order->oxorder__oxuserid        = new \OxidEsales\Eshop\Core\Field($this->testUserId);
+        $order->oxorder__oxorderdate     = new \OxidEsales\Eshop\Core\Field('2015-05-29 10:41:03');
+        $order->oxorder__oxbillemail     = new \OxidEsales\Eshop\Core\Field('not@thepaypalmail.com');
+        $order->oxorder__oxbillfname     = new \OxidEsales\Eshop\Core\Field('Max');
+        $order->oxorder__oxbillname      = new \OxidEsales\Eshop\Core\Field('Muster');
+        $order->oxorder__oxbillstreet    = new \OxidEsales\Eshop\Core\Field('Blafööstraße');
+        $order->oxorder__oxbillstreetnr  = new \OxidEsales\Eshop\Core\Field('123');
+        $order->oxorder__oxbillcity      = new \OxidEsales\Eshop\Core\Field('Литовские');
+        $order->oxorder__oxbillcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f631fc920687.20179984');
+        $order->oxorder__oxbillzip       = new \OxidEsales\Eshop\Core\Field('22769');
+        $order->oxorder__oxbillsal       = new \OxidEsales\Eshop\Core\Field('MR');
+        $order->oxorder__oxpaymentid     = new \OxidEsales\Eshop\Core\Field('95700b639e4ef5e759bf6e3be4aabd44');
+        $order->oxorder__oxpaymenttype   = new \OxidEsales\Eshop\Core\Field('oxidpaypal');
+        $order->oxorder__oxtotalnetsum   = new \OxidEsales\Eshop\Core\Field(self::PAYMENT_AMOUNT / 1.19);
+        $order->oxorder__oxtotalbrutsum  = new \OxidEsales\Eshop\Core\Field(self::PAYMENT_AMOUNT);
+        $order->oxorder__oxtotalordersum = new \OxidEsales\Eshop\Core\Field(self::PAYMENT_AMOUNT);
+        $order->oxorder__oxartvat        = new \OxidEsales\Eshop\Core\Field('19');
+        $order->oxorder__oxvatartprice1  = new \OxidEsales\Eshop\Core\Field('4.77');
+        $order->oxorder__oxcurrency      = new \OxidEsales\Eshop\Core\Field('EUR');
+        $order->oxorder__oxfolder        = new \OxidEsales\Eshop\Core\Field('ORDERFOLDER_NEW');
+        $order->oxorder__oxdeltype       = new \OxidEsales\Eshop\Core\Field('standard');
+        $order->oxorder__oxtransstatus   = new \OxidEsales\Eshop\Core\Field($status);
+        $order->oxorder__oxtransid       = new \OxidEsales\Eshop\Core\Field(self::PAYPAL_AUTHID, \OxidEsales\Eshop\Core\Field::T_RAW);
         $order->save();
 
         //mocked to circumvent delivery address change md5 check from requestParameter
@@ -699,32 +699,32 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends OxidTestCase
      */
     private function insertUser()
     {
-        $this->testUserId = substr_replace(oxUtilsObject::getInstance()->generateUId(), '_', 0, 1);
-        $user             = oxNew('oxUser');
+        $this->testUserId = substr_replace(\OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUId(), '_', 0, 1);
+        $user             = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $user->setId($this->testUserId);
-        $user->oxuser__oxactive    = new oxField('1', oxField::T_RAW);
-        $user->oxuser__oxrights    = new oxField('user', oxField::T_RAW);
-        $user->oxuser__oxshopid    = new oxField(1, oxField::T_RAW);
-        $user->oxuser__oxusername  = new oxField('testuser@oxideshop.dev', oxField::T_RAW);
+        $user->oxuser__oxactive    = new \OxidEsales\Eshop\Core\Field('1', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxrights    = new \OxidEsales\Eshop\Core\Field('user', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxshopid    = new \OxidEsales\Eshop\Core\Field(1, \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxusername  = new \OxidEsales\Eshop\Core\Field('testuser@oxideshop.dev', \OxidEsales\Eshop\Core\Field::T_RAW);
         //password is asdfasdf
-        $user->oxuser__oxpassword  = new oxField('c630e7f6dd47f9ad60ece4492468149bfed3da3429940181464baae99941d0ffa5562' .
+        $user->oxuser__oxpassword  = new \OxidEsales\Eshop\Core\Field('c630e7f6dd47f9ad60ece4492468149bfed3da3429940181464baae99941d0ffa5562' .
                                                  'aaecd01eab71c4d886e5467c5fc4dd24a45819e125501f030f61b624d7d',
-                                                 oxField::T_RAW);
-        $user->oxuser__oxpasssalt  = new oxField('3ddda7c412dbd57325210968cd31ba86', oxField::T_RAW);
-        $user->oxuser__oxcustnr    = new oxField('666', oxField::T_RAW);
-        $user->oxuser__oxfname     = new oxField('Max', oxField::T_RAW);
-        $user->oxuser__oxlname     = new oxField('Muster', oxField::T_RAW);
-        $user->oxuser__oxstreet    = new oxField('blafoostreet', oxField::T_RAW);
-        $user->oxuser__oxstreetnr  = new oxField('123', oxField::T_RAW);
-        $user->oxuser__oxcity      = new oxField('Freiburg', oxField::T_RAW);
-        $user->oxuser__oxcountryid = new oxField('a7c40f631fc920687.20179984', oxField::T_RAW);
-        $user->oxuser__oxzip       = new oxField('22769', oxField::T_RAW);
-        $user->oxuser__oxsal       = new oxField('MR', oxField::T_RAW);
-        $user->oxuser__oxactive    = new oxField('1', oxField::T_RAW);
-        $user->oxuser__oxboni      = new oxField('1000', oxField::T_RAW);
-        $user->oxuser__oxcreate    = new oxField('2015-05-20 22:10:51', oxField::T_RAW);
-        $user->oxuser__oxregister  = new oxField('2015-05-20 22:10:51', oxField::T_RAW);
-        $user->oxuser__oxboni      = new oxField('1000', oxField::T_RAW);
+                                                 \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxpasssalt  = new \OxidEsales\Eshop\Core\Field('3ddda7c412dbd57325210968cd31ba86', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxcustnr    = new \OxidEsales\Eshop\Core\Field('666', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxfname     = new \OxidEsales\Eshop\Core\Field('Max', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxlname     = new \OxidEsales\Eshop\Core\Field('Muster', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxstreet    = new \OxidEsales\Eshop\Core\Field('blafoostreet', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxstreetnr  = new \OxidEsales\Eshop\Core\Field('123', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxcity      = new \OxidEsales\Eshop\Core\Field('Freiburg', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f631fc920687.20179984', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxzip       = new \OxidEsales\Eshop\Core\Field('22769', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxsal       = new \OxidEsales\Eshop\Core\Field('MR', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxactive    = new \OxidEsales\Eshop\Core\Field('1', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxboni      = new \OxidEsales\Eshop\Core\Field('1000', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxcreate    = new \OxidEsales\Eshop\Core\Field('2015-05-20 22:10:51', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxregister  = new \OxidEsales\Eshop\Core\Field('2015-05-20 22:10:51', \OxidEsales\Eshop\Core\Field::T_RAW);
+        $user->oxuser__oxboni      = new \OxidEsales\Eshop\Core\Field('1000', \OxidEsales\Eshop\Core\Field::T_RAW);
         $user->save();
     }
 

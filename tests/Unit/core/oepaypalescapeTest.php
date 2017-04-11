@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalEscape class.
  */
-class Unit_oePayPal_core_oePayPalEscapeTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalEscapeTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Testing input processor. Checking 3 cases - passing object, array, string.

@@ -23,14 +23,14 @@
 /**
  * Testing oePayPalIPNPaymentBuilder class.
  */
-class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function setUp()
     {
         parent::setUp();
 
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
     }
 
     public function testSetGetRequest()
@@ -99,7 +99,7 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
 
     public function testSetGetLang()
     {
-        $oLang = new oxLang();
+        $oLang = new \OxidEsales\Eshop\Core\Language();
         $oPaymentBuilder = new oePayPalIPNPaymentBuilder();
         $oPaymentBuilder->setLang($oLang);
 
@@ -178,11 +178,11 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
     /**
      * Wrapper to create oxLang.
      *
-     * @return oxLang
+     * @return \OxidEsales\Eshop\Core\Language
      */
     protected function _prepareLang()
     {
-        $oLang = new oxLang();
+        $oLang = new \OxidEsales\Eshop\Core\Language();
 
         return $oLang;
     }
@@ -221,7 +221,8 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
             $oOrderPayment->setIsValid(false);
         }
         if ($sValidationMessage) {
-            $sDate = date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime());
+            $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
+            $sDate = date('Y-m-d H:i:s', $utilsDate->getTime());
             $oOrderPayment->addComment($sDate, $sValidationMessage);
         }
 
@@ -232,11 +233,11 @@ class Unit_oePayPal_Models_oePayPalIPNPaymentBuilderTest extends OxidTestCase
      * Wrapper to create payment validator.
      * Check if called with correct parameters. Always return mocked validation information.
      *
-     * @param oePayPalOrderPayment $oRequestOrderPayment object validator will be called with.
-     * @param oePayPalOrderPayment $oOrderPayment        object validator will return.
-     * @param oxLang               $oLang                set to validator to translate validation failure message.
-     * @param bool                 $blValid              set if order is valid.
-     * @param string               $sValidationMessage   validation message.
+     * @param oePayPalOrderPayment            $oRequestOrderPayment object validator will be called with.
+     * @param oePayPalOrderPayment            $oOrderPayment        object validator will return.
+     * @param \OxidEsales\Eshop\Core\Language $oLang                set to validator to translate validation failure message.
+     * @param bool                            $blValid              set if order is valid.
+     * @param string                          $sValidationMessage   validation message.
      *
      * @return oePayPalIPNPaymentValidator
      */

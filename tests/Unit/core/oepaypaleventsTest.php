@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalEvents class.
  */
-class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalEventsTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Tear down the fixture.
@@ -30,27 +30,27 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
     protected function setUp()
     {
         // Dropping order payments table
-        oxDb::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_orderpayments`");
-        oxDb::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_order`");
-        oxDb::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_orderpayments`");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_order`");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`");
 
         // Deleting PayPal payment method
-        $oPayment = oxNew('oxPayment');
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayment->load('oxidpaypal');
         $oPayment->delete();
 
         // Deleting enabled PayPal RDFA
         $sSql = "DELETE FROM `oxobject2payment` WHERE `OXID` = 'oepaypalrdfa'";
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
 
         parent::setUp();
     }
 
     public function tearDown()
     {
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
 
         oePayPalEvents::addOrderPaymentsCommentsTable();
         oePayPalEvents::addOrderPaymentsTable();
@@ -66,9 +66,9 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
     {
         oePayPalEvents::onActivate();
 
-        $oDbMetaDataHandler = oxNew('oxDbMetaDataHandler');
+        $oDbMetaDataHandler = oxNew(\OxidEsales\Eshop\Core\DbMetaDataHandler::class);
 
-        // PayPal order table extends oxOrder table
+        // PayPal order table extends \OxidEsales\Eshop\Application\Model\Order table
         $this->assertTrue($oDbMetaDataHandler->tableExists('oepaypal_order'));
 
         // Payment history table created
@@ -78,7 +78,7 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
         $this->assertTrue($oDbMetaDataHandler->tableExists('oepaypal_orderpaymentcomments'));
 
         // Payment method exist and enabled
-        $oPayment = oxNew('oxPayment');
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayment->load('oxidpaypal');
         $this->assertEquals(1, $oPayment->oxpayments__oxactive->value);
 
@@ -95,9 +95,9 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
 
         oePayPalEvents::onActivate();
 
-        $oDbMetaDataHandler = oxNew('oxDbMetaDataHandler');
+        $oDbMetaDataHandler = oxNew(\OxidEsales\Eshop\Core\DbMetaDataHandler::class);
 
-        // PayPal order table extends oxOrder table
+        // PayPal order table extends \OxidEsales\Eshop\Application\Model\Order table
         $this->assertTrue($oDbMetaDataHandler->tableExists('oepaypal_order'));
 
         // Payment history table created
@@ -112,14 +112,14 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
             'oepaypal_orderpaymentcomments' => 'OEPAYPAL_TIMESTAMP',
         );
 
-        $oDbMetaDataHandler = oxNew('oxDbMetaDataHandler');
+        $oDbMetaDataHandler = oxNew(\OxidEsales\Eshop\Core\DbMetaDataHandler::class);
 
         foreach ($aTableFields as $sTableName => $sFieldName) {
             $this->assertTrue($oDbMetaDataHandler->fieldExists($sFieldName, $sTableName));
         }
 
         // Payment method exist and enabled
-        $oPayment = oxNew('oxPayment');
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayment->load('oxidpaypal');
         $this->assertEquals(1, $oPayment->oxpayments__oxactive->value);
 
@@ -145,7 +145,7 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
 
         $sSql = "CREATE TABLE IF NOT EXISTS `oepaypal_orderpaymentcomments` (
               `OEPAYPAL_COMMENTID` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -157,7 +157,7 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
 
         $sSql = "CREATE TABLE IF NOT EXISTS `oepaypal_order` (
               `OEPAYPAL_ORDERID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
@@ -172,7 +172,7 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
               KEY `OEPAYPAL_PAYMENTSTATUS` (`OEPAYPAL_PAYMENTSTATUS`)
             ) ENGINE=InnoDB;";
 
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
     }
 
     /**
@@ -183,7 +183,7 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
         oePayPalEvents::onActivate();
         oePayPalEvents::onDeactivate();
 
-        $oPayment = oxNew('oxPayment');
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayment->load('oxidpaypal');
         $this->assertEquals(0, $oPayment->oxpayments__oxactive->value);
 
@@ -219,6 +219,6 @@ class Unit_oePayPal_core_oePayPalEventsTest extends OxidTestCase
     {
         $sSql = "SELECT 1 FROM `oxobject2payment` WHERE `OXID` = 'oepaypalrdfa' LIMIT 1";
 
-        return (bool) oxDb::getDb()->getOne($sSql);
+        return (bool) \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sSql);
     }
 }

@@ -20,7 +20,7 @@
  */
 
 if (!class_exists('oePayPalOxBasket_parent')) {
-    class oePayPalOxBasket_parent extends oxBasket
+    class oePayPalOxBasket_parent  extends \OxidEsales\Eshop\Application\Model\Basket
     {
     }
 }
@@ -28,7 +28,7 @@ if (!class_exists('oePayPalOxBasket_parent')) {
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOxBasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test data provider
@@ -37,10 +37,10 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function isVirtualPayPalBasketDataProvider()
     {
-        $oProduct1 = $this->getMock('oxArticle', array('isVirtualPayPalArticle'));
+        $oProduct1 = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('isVirtualPayPalArticle'));
         $oProduct1->expects($this->any())->method('isVirtualPayPalArticle')->will($this->returnValue(true));
 
-        $oProduct2 = $this->getMock('oxArticle', array('isVirtualPayPalArticle'));
+        $oProduct2 = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('isVirtualPayPalArticle'));
         $oProduct2->expects($this->any())->method('isVirtualPayPalArticle')->will($this->returnValue(false));
 
         return array(
@@ -86,7 +86,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalWrappingCosts($blCalculationModeNetto, $dWrappingPriceBrutto, $dWrappingPriceNetto, $dWrappingPriceExpect)
     {
-        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getNettoPrice', 'getBruttoPrice'));
         $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dWrappingPriceBrutto));
         $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dWrappingPriceNetto));
 
@@ -104,7 +104,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalGiftCardCosts($blCalculationModeNetto, $dGiftCardPriceBrutto, $dGiftCardPriceNetto, $dGiftCardPrice)
     {
-        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getNettoPrice', 'getBruttoPrice'));
         $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dGiftCardPriceBrutto));
         $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dGiftCardPriceNetto));
 
@@ -122,7 +122,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalPaymentCosts($blCalculationModeNetto, $dPaymentCostsPriceBrutto, $dPaymentCostsPriceNetto, $dPaymentPrice)
     {
-        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getNettoPrice', 'getBruttoPrice'));
         $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dPaymentCostsPriceBrutto));
         $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dPaymentCostsPriceNetto));
 
@@ -140,7 +140,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalTsProtectionCosts($blCalculationModeNetto, $dPaymentCostsPriceBrutto, $dPaymentCostsPriceNetto, $dPaymentPrice)
     {
-        $oPrice = $this->getMock('oxPrice', array('getNettoPrice', 'getBruttoPrice'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getNettoPrice', 'getBruttoPrice'));
         $oPrice->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($dPaymentCostsPriceBrutto));
         $oPrice->expects($this->any())->method('getNettoPrice')->will($this->returnValue($dPaymentCostsPriceNetto));
 
@@ -158,14 +158,14 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function getDiscountSumPayPalBasketDataProvider()
     {
-        $oBasketDiscount1 = new oxPrice();
+        $oBasketDiscount1 = new \OxidEsales\Eshop\Core\Price();
         $oBasketDiscount1->setPrice(2);
 
-        $oBasketDiscount2 = new oxPrice();
+        $oBasketDiscount2 = new \OxidEsales\Eshop\Core\Price();
         $oBasketDiscount2->setPrice(4);
 
         // vouchers
-        $oVoucher = new oxVoucher();
+        $oVoucher = new \OxidEsales\Eshop\Application\Model\Voucher();
 
         $VoucherDiscount1 = $oVoucher->getSimpleVoucher();
         $VoucherDiscount1->dVoucherdiscount = 6;
@@ -208,8 +208,8 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
     public function getSumOfCostOfAllItemsPayPalBasketDataProvider()
     {
         // discounts
-        $oProductsPrice = new oxPriceList();
-        $oProductsPrice->addToPriceList(new oxPrice(15));
+        $oProductsPrice = new \OxidEsales\Eshop\Core\PriceList();
+        $oProductsPrice->addToPriceList(new \OxidEsales\Eshop\Core\Price(15));
         $dPaymentCost = 3;
         $dWrappingCost = 5;
 
@@ -320,7 +320,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalWrappingVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getVatValue'));
         $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
@@ -336,7 +336,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalGiftCardVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getVatValue'));
         $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
@@ -352,7 +352,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalPayCostVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getVatValue'));
         $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
@@ -368,7 +368,7 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
      */
     public function testGetPayPalTsProtectionCostVat($dCostVat, $dCostVatExpected)
     {
-        $oPrice = $this->getMock('oxPrice', array('getVatValue'));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getVatValue'));
         $oPrice->expects($this->any())->method('getVatValue')->will($this->returnValue($dCostVat));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getCosts'));
@@ -379,12 +379,10 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testIsFractionQuantityItemsPresentWhenFractionQuantityArticlePresent()
     {
-        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
         $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5.6));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
@@ -396,12 +394,10 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testSendOrderInfoToPayPalWhenNoFractionQuantityArticlesArePresent()
     {
-        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
         $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
@@ -413,8 +409,6 @@ class Unit_oePayPal_models_oePayPalOxBasketTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testSendOrderInfoToPayPalWhenBasketIsEmpty()
     {

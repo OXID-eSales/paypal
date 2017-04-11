@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalOxState class.
  */
-class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -33,8 +33,8 @@ class Unit_oePayPal_models_oePayPalOrderPaymentStatusCalculatorTest extends Oxid
     {
         oePayPalEvents::addOrderPaymentsTable();
         oePayPalEvents::addOrderTable();
-        oxDb::getDb()->execute('TRUNCATE TABLE `oepaypal_order`');
-        oxDb::getDb()->execute('TRUNCATE TABLE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE TABLE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE TABLE `oepaypal_orderpayments`');
     }
 
     /**

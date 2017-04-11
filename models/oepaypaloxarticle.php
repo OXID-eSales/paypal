@@ -22,7 +22,7 @@
 /**
  * PayPal oxArticle class
  *
- * @mixin oxArticle
+ * @mixin \OxidEsales\Eshop\Application\Model\Article
  */
 class oePayPalOxArticle extends oePayPalOxArticle_parent
 {

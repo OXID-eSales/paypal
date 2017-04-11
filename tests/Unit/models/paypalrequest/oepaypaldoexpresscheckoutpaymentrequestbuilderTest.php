@@ -21,13 +21,13 @@
 
 
 if (!class_exists('oePayPalOxBasket_parent')) {
-    class oePayPalOxBasket_parent extends oxBasket
+    class oePayPalOxBasket_parent  extends \OxidEsales\Eshop\Application\Model\Basket
     {
     }
 }
 
 if (!class_exists('oePayPalOxUser_parent')) {
-    class oePayPalOxUser_parent extends oxUser
+    class oePayPalOxUser_parent extends \OxidEsales\Eshop\Application\Model\User
     {
     }
 }
@@ -35,12 +35,10 @@ if (!class_exists('oePayPalOxUser_parent')) {
 /**
  * Testing oePayPalDoExpressCheckoutPaymentRequestBuilder class.
  */
-class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequestBuilderTest extends OxidTestCase
+class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test case for oepaypalstandarddispatcher::doExpressCheckoutPayment()
-     *
-     * @return null
      */
     public function testDoExpressCheckoutPayment()
     {
@@ -48,7 +46,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $aResult["PAYMENTINFO_0_TRANSACTIONID"] = "321";
 
         // preparing price
-        $oPrice = $this->getMock("oxPrice", array("getBruttoPrice"));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
         $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(123));
 
         // preparing basket
@@ -56,7 +54,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $oBasket->expects($this->once())->method("getPrice")->will($this->returnValue($oPrice));
 
         // preparing session
-        $oSession = $this->getMock("oxSession", array("getBasket"));
+        $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array("getBasket"));
         $oSession->expects($this->any())->method("getBasket")->will($this->returnValue($oBasket));
         $oSession->setVariable("oepaypal-token", "111");
         $oSession->setVariable("oepaypal-payerId", "222");
@@ -65,18 +63,18 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $oPayPalConfig = new oePayPalConfig();
 
         // preparing order
-        $oPayPalOrder = new oxOrder();
-        $oPayPalOrder->oxorder__oxordernr = new oxField("123");
+        $oPayPalOrder = new \OxidEsales\Eshop\Application\Model\Order();
+        $oPayPalOrder->oxorder__oxordernr = new \OxidEsales\Eshop\Core\Field("123");
 
         $oUser = new oePayPalOxUser();
-        $oUser->oxuser__oxfname = new oxField('firstname');
-        $oUser->oxuser__oxlname = new oxField('lastname');
-        $oUser->oxuser__oxstreet = new oxField('some street');
-        $oUser->oxuser__oxstreetnr = new oxField('47');
-        $oUser->oxuser__oxcity = new oxField('some city');
-        $oUser->oxuser__oxzip = new oxField('zip');
+        $oUser->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('firstname');
+        $oUser->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('lastname');
+        $oUser->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field('some street');
+        $oUser->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field('47');
+        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('some city');
+        $oUser->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field('zip');
 
-        $sSubj = sprintf(oxRegistry::getLang()->translateString("OEPAYPAL_ORDER_CONF_SUBJECT"), $oPayPalOrder->oxorder__oxordernr->value);
+        $sSubj = sprintf(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_ORDER_CONF_SUBJECT"), $oPayPalOrder->oxorder__oxordernr->value);
 
         $oConfig = $this->getConfig();
 
@@ -135,16 +133,16 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $aUserMethodValues = array(
             'getSelectedAddressId' => null,
         );
-        $oUser = $this->_createStub('oxUser', $aUserMethodValues);
-        $oUser->oxuser__oxusername = new oxField('test@test.com');
-        $oUser->oxuser__oxfname = new oxField('FirstName');
-        $oUser->oxuser__oxlname = new oxField('LastName');
-        $oUser->oxuser__oxstreet = new oxField('Street');
-        $oUser->oxuser__oxstreetnr = new oxField('StreetNr');
-        $oUser->oxuser__oxcity = new oxField('City');
-        $oUser->oxuser__oxzip = new oxField('Zip');
-        $oUser->oxuser__oxfon = new oxField('PhoneNum');
-        $oUser->oxuser__oxcity = new oxField('City');
+        $oUser = $this->_createStub(\OxidEsales\Eshop\Application\Model\User::class, $aUserMethodValues);
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
+        $oUser->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
+        $oUser->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');
+        $oUser->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field('Street');
+        $oUser->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field('StreetNr');
+        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
+        $oUser->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field('Zip');
+        $oUser->oxuser__oxfon = new \OxidEsales\Eshop\Core\Field('PhoneNum');
+        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
 
         $oBuilder = new oePayPalDoExpressCheckoutPaymentRequestBuilder();
         $oBuilder->setUser($oUser);

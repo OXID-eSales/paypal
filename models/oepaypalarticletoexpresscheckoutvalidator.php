@@ -61,7 +61,7 @@ class oePayPalArticleToExpressCheckoutValidator
     /**
      * Method sets basket object.
      *
-     * @param oxBasket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
      */
     public function setBasket($oBasket)
     {
@@ -71,7 +71,7 @@ class oePayPalArticleToExpressCheckoutValidator
     /**
      * Methods returns basket object.
      *
-     * @return oxBasket
+     * @return \OxidEsales\Eshop\Application\Model\Basket
      */
     public function getBasket()
     {
@@ -113,7 +113,7 @@ class oePayPalArticleToExpressCheckoutValidator
     /**
      * Checks if Article params equals with current items params.
      *
-     * @param oxBasketItem $oBasketItem
+     * @param \OxidEsales\Eshop\Application\Model\BasketItem $oBasketItem
      *
      * @return bool
      */

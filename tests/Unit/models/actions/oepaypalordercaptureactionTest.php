@@ -24,7 +24,7 @@
 /**
  * Testing oePayPalOrderCaptureAction class.
  */
-class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -113,9 +113,9 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
      */
     public function testProcess_ProcessingOfServiceResponse_CommentAdded()
     {
-        $oUtilsDate = $this->getMock('oxUtilsDate', array('getTime'));
+        $oUtilsDate = $this->getMock(\OxidEsales\Eshop\Core\UtilsDate::class, array('getTime'));
         $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
-        oxRegistry::set('oxUtilsDate', $oUtilsDate);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $oUtilsDate);
 
         $sComment = 'testComment';
         $oComment = new oePayPalOrderPaymentComment();
@@ -152,7 +152,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
 
         $oReauthorizePayPalResponse = $this->_getPayPalResponse();
 
-        $oReauthorizeHandler = $this->getMock('ReauthorizeActionHandler', array('getPayPalResponse'));
+        $oReauthorizeHandler = $this->getMock('oePayPalOrderReauthorizeActionHandler', array('getPayPalResponse'), array(new stdClass()));
         $oReauthorizeHandler->expects($this->never())->method('getPayPalResponse')->will($this->returnValue($oReauthorizePayPalResponse));
 
         $oAction = $this->_getAction($oPayPalResponse, $oOrder, null, $oReauthorizeHandler);
@@ -172,7 +172,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
 
         $oReauthorizePayPalResponse = $this->_getPayPalResponse();
 
-        $oReauthorizeHandler = $this->getMock('ReauthorizeActionHandler', array('getPayPalResponse'));
+        $oReauthorizeHandler = $this->getMock('oePayPalOrderReauthorizeActionHandler', array('getPayPalResponse'), array(new stdClass()));
         $oReauthorizeHandler->expects($this->once())->method('getPayPalResponse')->will($this->returnValue($oReauthorizePayPalResponse));
 
         $oAction = $this->_getAction($oPayPalResponse, $oOrder, null, $oReauthorizeHandler);
@@ -190,7 +190,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
         $oOrder = $this->_getOrder(array('getCapturedAmount'));
         $oOrder->expects($this->any())->method('getCapturedAmount')->will($this->returnValue(0.01));
 
-        $oReauthorizeHandler = $this->getMock('ReauthorizeActionHandler', array('getPayPalResponse'));
+        $oReauthorizeHandler = $this->getMock('oePayPalOrderReauthorizeActionHandler', array('getPayPalResponse'), array(new stdClass()));
         $oReauthorizeHandler->expects($this->once())->method('getPayPalResponse')->will($this->throwException(new oePayPalResponseException()));
 
         $oAction = $this->_getAction($oPayPalResponse, $oOrder, null, $oReauthorizeHandler);
@@ -285,7 +285,7 @@ class Unit_oePayPal_Models_Actions_oePayPalOrderCaptureActionTest extends OxidTe
     {
         $oData = $oData ? $oData : $this->_getData();
         $oHandler = $this->_createStub('CaptureActionHandler', array('getPayPalResponse' => $oPayPalResponse, 'getData' => $oData));
-        $oReauthorizeHandler = $oReauthorizeHandler ? $oReauthorizeHandler : $this->_createStub('ReauthorizeActionHandler', array());
+        $oReauthorizeHandler = $oReauthorizeHandler ? $oReauthorizeHandler : $this->_createStub('oePayPalOrderReauthorizeActionHandler', array());
 
         $oAction = $this->getMock('oePayPalOrderCaptureAction', array('getDate'), array($oHandler, $oOrder, $oReauthorizeHandler));
 

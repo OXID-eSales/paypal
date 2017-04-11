@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalIPNHandler class.
  */
-class Unit_oePayPal_Controllers_oePayPalIPNHandlerTest extends OxidTestCase
+class Unit_oePayPal_Controllers_oePayPalIPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testGetPayPalRequest()
     {

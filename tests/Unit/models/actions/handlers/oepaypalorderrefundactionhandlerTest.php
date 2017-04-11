@@ -24,7 +24,7 @@
 /**
  * Testing oePayPalOrderRefundAction class.
  */
-class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -32,9 +32,9 @@ class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderRefundActionHandlerTest
      */
     public function setUp()
     {
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**

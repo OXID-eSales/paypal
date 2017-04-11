@@ -35,17 +35,17 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     protected $_oPayPalConfig = null;
 
     /**
-     * @var oxBasket
+     * @var \OxidEsales\Eshop\Application\Model\Basket
      */
     protected $_oBasket = null;
 
     /**
-     * @var oxUser
+     * @var \OxidEsales\Eshop\Application\Model\User
      */
     protected $_oUser = null;
 
     /**
-     * @var oxSession
+     * @var \OxidEsales\Eshop\Core\Session
      */
     protected $_oSession = null;
 
@@ -55,12 +55,12 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     protected $_sTransactionMode;
 
     /**
-     * @var oxOrder
+     * @var \OxidEsales\Eshop\Application\Model\Order
      */
     protected $_oOrder = null;
 
     /**
-     * @var oxLang
+     * @var \OxidEsales\Eshop\Core\Language
      */
     protected $_oLang = null;
 
@@ -111,7 +111,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Sets basket.
      *
-     * @param oxBasket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
      */
     public function setBasket($oBasket)
     {
@@ -121,7 +121,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Returns basket object.
      *
-     * @return oxBasket
+     * @return \OxidEsales\Eshop\Application\Model\Basket
      *
      * @throws oePayPalMissingParameterException
      */
@@ -141,7 +141,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Sets order object.
      *
-     * @param oxOrder $oOrder
+     * @param \OxidEsales\Eshop\Application\Model\Order $oOrder
      */
     public function setOrder($oOrder)
     {
@@ -151,7 +151,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Tries to return basket object, but if fails throws exception.
      *
-     * @return oxBasket
+     * @return \OxidEsales\Eshop\Application\Model\Basket
      *
      * @throws oePayPalResponseException
      */
@@ -172,7 +172,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Sets session.
      *
-     * @param oxSession $oSession
+     * @param \OxidEsales\Eshop\Core\Session $oSession
      */
     public function setSession($oSession)
     {
@@ -182,7 +182,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Returns session.
      *
-     * @return oxSession
+     * @return \OxidEsales\Eshop\Core\Session
      */
     public function getSession()
     {
@@ -192,7 +192,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Returns request object.
      *
-     * @param oxLang $oLang
+     * @param \OxidEsales\Eshop\Core\Language $oLang
      */
     public function setLang($oLang)
     {
@@ -202,7 +202,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
     /**
      * Returns request object.
      *
-     * @return oxLang
+     * @return \OxidEsales\Eshop\Core\Language
      */
     public function getLang()
     {
@@ -278,8 +278,6 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
 
     /**
      * Sets Address parameters to request.
-     *
-     * @return null
      */
     public function addAddressParams()
     {
@@ -291,7 +289,7 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
 
         $sAddressId = $oUser->getSelectedAddressId();
         if ($sAddressId) {
-            $oAddress = oxNew("oxAddress");
+            $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
             $oAddress->load($sAddressId);
 
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTONAME", getStr()->html_entity_decode($oAddress->oxaddress__oxfname->value . " " . $oAddress->oxaddress__oxlname->value));
@@ -300,12 +298,12 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $oAddress->oxaddress__oxzip->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $oAddress->oxaddress__oxfon->value);
 
-            $oCountry = oxNew("oxCountry");
+            $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
             $oCountry->load($oAddress->oxaddress__oxcountryid->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $oCountry->oxcountry__oxisoalpha2->value);
 
             if ($oAddress->oxaddress__oxstateid->value) {
-                $oState = oxNew("oxState");
+                $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
                 $oState->load($oAddress->oxaddress__oxstateid->value);
                 $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $oState->oxstates__oxisoalpha2->value);
             }
@@ -316,12 +314,12 @@ class oePayPalDoExpressCheckoutPaymentRequestBuilder
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $oUser->oxuser__oxzip->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $oUser->oxuser__oxfon->value);
 
-            $oCountry = oxNew("oxCountry");
+            $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
             $oCountry->load($oUser->oxuser__oxcountryid->value);
             $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $oCountry->oxcountry__oxisoalpha2->value);
 
             if ($oUser->oxuser__oxstateid->value) {
-                $oState = oxNew("oxState");
+                $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
                 $oState->load($oUser->oxuser__oxstateid->value);
                 $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $oState->oxstates__oxisoalpha2->value);
             }

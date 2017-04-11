@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-class Integration_oePayPal_oePayPalOrderFinalizationTest extends OxidTestCase
+class Integration_oePayPal_oePayPalOrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     public function providerFinalizeOrder_TransStatusNotChange()
@@ -46,7 +46,7 @@ class Integration_oePayPal_oePayPalOrderFinalizationTest extends OxidTestCase
         $this->getSession()->setVariable('paymentid', 'oxidpaypal');
 
         /** @var oePayPalOxBasket $oBasket */
-        $oBasket = oxNew('oxBasket');
+        $oBasket = oxNew(\OxidEsales\Eshop\Application\Model\Basket::class);
 
         $paymentGateway = $this->getPaymentGateway($payPalReturnStatus);
 
@@ -57,7 +57,7 @@ class Integration_oePayPal_oePayPalOrderFinalizationTest extends OxidTestCase
         $oOrder->setId('_testOrderId');
         $oOrder->finalizeOrder($oBasket, $this->getUser());
 
-        $oUpdatedOrder = oxNew('oxOrder');
+        $oUpdatedOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oUpdatedOrder->load('_testOrderId');
         $this->assertEquals($transactionStatus, $oUpdatedOrder->getFieldData('oxtransstatus'));
         $oUpdatedOrder->delete();
@@ -81,7 +81,7 @@ class Integration_oePayPal_oePayPalOrderFinalizationTest extends OxidTestCase
         $oService->expects($this->any())->method('doExpressCheckoutPayment')->will($this->returnValue($result));
 
         /** @var oePayPalOxPaymentGateway $oPayPalPaymentGateway */
-        $oPayPalPaymentGateway = oxNew('oxPaymentGateway');
+        $oPayPalPaymentGateway = oxNew(\OxidEsales\Eshop\Application\Model\PaymentGateway::class);
         $oPayPalPaymentGateway->setPayPalCheckoutService($oService);
 
         return $oPayPalPaymentGateway;
@@ -93,7 +93,7 @@ class Integration_oePayPal_oePayPalOrderFinalizationTest extends OxidTestCase
     protected function getUser()
     {
         /** @var oePayPalOxUser $oUser */
-        $oUser = oxNew('oxUser');
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $oUser->load('oxdefaultadmin');
 
         return $oUser;

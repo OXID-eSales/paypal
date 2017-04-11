@@ -61,7 +61,7 @@ class oePayPalPayPalRequestBuilder
     {
         $this->getRequest()->setParameter('AMT', $dAmount);
         if (!$sCurrencyCode) {
-            $sCurrencyCode = oxRegistry::getConfig()->getActShopCurrencyObject()->name;
+            $sCurrencyCode = \OxidEsales\Eshop\Core\Registry::getConfig()->getActShopCurrencyObject()->name;
         }
         $this->getRequest()->setParameter('CURRENCYCODE', $sCurrencyCode);
     }

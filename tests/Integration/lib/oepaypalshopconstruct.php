@@ -26,12 +26,12 @@
 class oePayPalShopConstruct
 {
     /**
-     * @var oxUser
+     * @var \OxidEsales\Eshop\Application\Model\User
      */
     protected $_oParams = null;
 
     /**
-     * @var oxUser
+     * @var \OxidEsales\Eshop\Application\Model\User
      */
     protected $_oUser = null;
 
@@ -67,7 +67,7 @@ class oePayPalShopConstruct
     }
 
     /**
-     * @param oxUser $oUser
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser
      */
     public function setUser($oUser)
     {
@@ -75,7 +75,7 @@ class oePayPalShopConstruct
     }
 
     /**
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     public function getUser()
     {
@@ -94,7 +94,7 @@ class oePayPalShopConstruct
     }
 
     /**
-     * @param oxUser $oGroups
+     * @param \OxidEsales\Eshop\Application\Model\User $oGroups
      */
     public function setGroups($oGroups)
     {
@@ -102,7 +102,7 @@ class oePayPalShopConstruct
     }
 
     /**
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     public function getGroups()
     {
@@ -125,7 +125,7 @@ class oePayPalShopConstruct
      */
     public function setConfigParameters()
     {
-        $oConfig = oxRegistry::getConfig();
+        $oConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
         $aParams = $this->getParams('config');
         if (!empty($aParams)) {
             foreach ($aParams as $sKey => $sValue) {
@@ -139,7 +139,7 @@ class oePayPalShopConstruct
      */
     public function setSessionParameters()
     {
-        $oSession = oxRegistry::getSession();
+        $oSession = \OxidEsales\Eshop\Core\Registry::getSession();
         $aParams = $this->getParams('session');
         if (is_array($aParams)) {
             foreach ($aParams as $sName => $sValue) {
@@ -179,7 +179,7 @@ class oePayPalShopConstruct
      *
      * @param array $aParams test data to create mocks and what expect in return.
      *
-     * @return oxBasket
+     * @return \OxidEsales\Eshop\Application\Model\Basket
      */
     public function getBasket()
     {
@@ -252,12 +252,12 @@ class oePayPalShopConstruct
             return $aResult;
         }
         foreach ($aArticles as $aArticle) {
-            $oArticle = new oxArticle();
+            $oArticle = new \OxidEsales\Eshop\Application\Model\Article();
             $oArticle->setId($aArticle['oxid']);
             foreach ($aArticle as $sKey => $sValue) {
                 if (strstr($sKey, "ox")) {
                     $sField = "oxarticles__{$sKey}";
-                    $oArticle->$sField = new oxField($aArticle[$sKey]);
+                    $oArticle->$sField = new \OxidEsales\Eshop\Core\Field($aArticle[$sKey]);
                 }
             }
             $oArticle->save();
@@ -282,14 +282,14 @@ class oePayPalShopConstruct
      *
      * @param array $aUser user data
      *
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     protected function _createUser($aUser)
     {
-        $oUser = $this->createObj($aUser, "oxuser", "oxuser");
+        $oUser = $this->createObj($aUser, \OxidEsales\Eshop\Application\Model\User::class, "oxuser");
         if (isset($aUser['address'])) {
             $aUser['address']['oxuserid'] = $oUser->getId();
-            $this->createObj($aUser['address'], "oxaddress", "oxaddress");
+            $this->createObj($aUser['address'], \OxidEsales\Eshop\Application\Model\Address::class, "oxaddress");
         }
 
         return $oUser;
@@ -306,7 +306,7 @@ class oePayPalShopConstruct
             return;
         }
         foreach ($aCategories as $iKey => $aCat) {
-            $oCat = $this->createObj($aCat, 'oxcategory', ' oxcategories');
+            $oCat = $this->createObj($aCat, \OxidEsales\Eshop\Application\Model\Category::class, ' oxcategories');
             if (!empty($aCat['oxarticles'])) {
                 $iCnt = count($aCat['oxarticles']);
                 for ($i = 0; $i < $iCnt; $i++) {
@@ -337,15 +337,15 @@ class oePayPalShopConstruct
      */
     protected function _createField2Shop($oArt, $aOptions)
     {
-        $oField2Shop = oxNew("oxfield2shop");
+        $oField2Shop = oxNew(\OxidEsales\Eshop\Application\Model\Field2Shop::class);
         $oField2Shop->setProductData($oArt);
         if (!isset($aOptions['oxartid'])) {
-            $aOptions['oxartid'] = new oxField($oArt->getId());
+            $aOptions['oxartid'] = new \OxidEsales\Eshop\Core\Field($oArt->getId());
         }
         foreach ($aOptions as $sKey => $sValue) {
             if (strstr($sKey, "ox")) {
                 $sField = "oxfield2shop__{$sKey}";
-                $oField2Shop->$sField = new oxField($aOptions[$sKey]);
+                $oField2Shop->$sField = new \OxidEsales\Eshop\Core\Field($aOptions[$sKey]);
             }
         }
         $oField2Shop->save();
@@ -363,12 +363,12 @@ class oePayPalShopConstruct
         }
         foreach ($aDiscounts as $iKey => $aDiscount) {
             // add discounts
-            $oDiscount = new oxDiscount();
+            $oDiscount = new \OxidEsales\Eshop\Application\Model\Discount();
             $oDiscount->setId($aDiscount['oxid']);
             foreach ($aDiscount as $sKey => $mxValue) {
                 if (!is_array($mxValue)) {
                     $sField = "oxdiscount__" . $sKey;
-                    $oDiscount->$sField = new oxField("{$mxValue}");
+                    $oDiscount->$sField = new \OxidEsales\Eshop\Core\Field("{$mxValue}");
                 } // if $sValue is not empty array then create oxobject2discount
                 $oDiscount->save();
                 if (is_array($mxValue) && !empty($mxValue)) {
@@ -400,9 +400,9 @@ class oePayPalShopConstruct
         }
         if ($aTrustedShop['payments']) {
             foreach ($aTrustedShop['payments'] as $sShopPayId => $sTsPayId) {
-                $aPayment = new oxPayment();
+                $aPayment = new \OxidEsales\Eshop\Application\Model\Payment();
                 if ($aPayment->load($sShopPayId)) {
-                    $aPayment->oxpayments__oxtspaymentid = new oxField($sTsPayId);
+                    $aPayment->oxpayments__oxtspaymentid = new \OxidEsales\Eshop\Core\Field($sTsPayId);
                     $aPayment->save();
                 }
             }
@@ -425,12 +425,12 @@ class oePayPalShopConstruct
         }
         $aWrap = array();
         foreach ($aWrappings as $aWrapping) {
-            $oCard = oxNew('oxbase');
+            $oCard = oxNew(\OxidEsales\Eshop\Core\Model\BaseModel::class);
             $oCard->init('oxwrapping');
             foreach ($aWrapping as $sKey => $mxValue) {
                 if (!is_array($mxValue)) {
                     $sField = "oxwrapping__" . $sKey;
-                    $oCard->$sField = new oxField($mxValue, oxField::T_RAW);
+                    $oCard->$sField = new \OxidEsales\Eshop\Core\Field($mxValue, \OxidEsales\Eshop\Core\Field::T_RAW);
                 }
             }
             $oCard->save();
@@ -467,14 +467,14 @@ class oePayPalShopConstruct
                 'oxactive' => 1
             );
         }
-        $oDeliverySet = $this->createObj($aData, 'oxdeliveryset', 'oxdeliveryset');
+        $oDeliverySet = $this->createObj($aData, \OxidEsales\Eshop\Application\Model\DeliverySet::class, 'oxdeliveryset');
 
         foreach ($aDeliveryCosts as $iKey => $aDelivery) {
-            $oDelivery = new oxDelivery();
+            $oDelivery = new \OxidEsales\Eshop\Application\Model\Delivery();
             foreach ($aDelivery as $sKey => $mxValue) {
                 if (!is_array($mxValue)) {
                     $sField = "oxdelivery__" . $sKey;
-                    $oDelivery->$sField = new oxField("{$mxValue}");
+                    $oDelivery->$sField = new \OxidEsales\Eshop\Core\Field("{$mxValue}");
                 }
             }
             $oDelivery->save();
@@ -503,14 +503,14 @@ class oePayPalShopConstruct
         $aPay = array();
         foreach ($aPayments as $iKey => $aPayment) {
             // add discounts
-            $oPayment = new oxPayment();
+            $oPayment = new \OxidEsales\Eshop\Application\Model\Payment();
             if (isset($aPayment['oxid'])) {
                 $oPayment->setId($aPayment['oxid']);
             }
             foreach ($aPayment as $sKey => $mxValue) {
                 if (!is_array($mxValue)) {
                     $sField = "oxpayments__" . $sKey;
-                    $oPayment->$sField = new oxField("{$mxValue}");
+                    $oPayment->$sField = new \OxidEsales\Eshop\Core\Field("{$mxValue}");
                 }
             }
             $oPayment->save();
@@ -534,11 +534,11 @@ class oePayPalShopConstruct
         }
         $aVoucherIDs = array();
         foreach ($aVoucherSeries as $aVoucherSerie) {
-            $oVoucherSerie = oxNew('oxbase');
+            $oVoucherSerie = oxNew(\OxidEsales\Eshop\Core\Model\BaseModel::class);
             $oVoucherSerie->init('oxvoucherseries');
             foreach ($aVoucherSerie as $sKey => $mxValue) {
                 $sField = "oxvoucherseries__" . $sKey;
-                $oVoucherSerie->$sField = new oxField($mxValue, oxField::T_RAW);
+                $oVoucherSerie->$sField = new \OxidEsales\Eshop\Core\Field($mxValue, \OxidEsales\Eshop\Core\Field::T_RAW);
             }
             $oVoucherSerie->save();
             // inserting vouchers
@@ -548,7 +548,7 @@ class oePayPalShopConstruct
                     'oxvouchernr'      => md5(uniqid(rand(), true)),
                     'oxvoucherserieid' => $oVoucherSerie->getId()
                 );
-                $oVoucher = $this->createObj($aData, 'oxvoucher', 'oxvouchers');
+                $oVoucher = $this->createObj($aData, \OxidEsales\Eshop\Application\Model\Voucher::class, 'oxvouchers');
                 $aVoucherIDs[] = $oVoucher->getId();
             }
         }
@@ -635,9 +635,9 @@ class oePayPalShopConstruct
         $iCnt = count($aData);
         for ($i = 0; $i < $iCnt; $i++) {
             if ($sObj2ObjTable === 'oxobject2group') {
-                $oObj = new oxObject2Group();
+                $oObj = new \OxidEsales\Eshop\Application\Model\Object2Group();
             } else {
-                $oObj = new oxBase();
+                $oObj = new \OxidEsales\Eshop\Core\Model\BaseModel();
             }
             $oObj->init($sObj2ObjTable);
             if ($iCnt < 2) {
@@ -647,7 +647,7 @@ class oePayPalShopConstruct
             }
             foreach ($aObj as $sKey => $sValue) {
                 $sField = $sObj2ObjTable . "__" . $sKey;
-                $oObj->$sField = new oxField($sValue, oxField::T_RAW);
+                $oObj->$sField = new \OxidEsales\Eshop\Core\Field($sValue, \OxidEsales\Eshop\Core\Field::T_RAW);
             }
             $oObj->save();
         }
@@ -664,7 +664,7 @@ class oePayPalShopConstruct
             return;
         }
         foreach ($aData as $iKey => $aGroup) {
-            $oGroup = $this->createObj($aGroup, 'oxgroups', ' oxgroups');
+            $oGroup = $this->createObj($aGroup, \OxidEsales\Eshop\Application\Model\Groups::class, ' oxgroups');
             if (!empty($aGroup['oxobject2group'])) {
                 $iCnt = count($aGroup['oxobject2group']);
                 for ($i = 0; $i < $iCnt; $i++) {
@@ -699,7 +699,7 @@ class oePayPalShopConstruct
         foreach ($aData as $sKey => $sValue) {
             if (!is_array($sValue)) {
                 $sField = $sTable . "__" . $sKey;
-                $oObj->$sField = new oxField($sValue, oxField::T_RAW);
+                $oObj->$sField = new \OxidEsales\Eshop\Core\Field($sValue, \OxidEsales\Eshop\Core\Field::T_RAW);
             }
         }
         $oObj->save();
@@ -724,7 +724,7 @@ class oePayPalShopConstruct
                 $sField = "oxshops__" . $sKey;
                 $aParams[$sField] = $sValue;
             }
-            $oShop = oxNew("oxshop");
+            $oShop = oxNew(\OxidEsales\Eshop\Application\Model\Shop::class);
             $oShop->assign($aParams);
             $oShop->save();
             $oShop->generateViews();
@@ -744,7 +744,7 @@ class oePayPalShopConstruct
     public function setActiveShop($iShopId)
     {
         if ($iShopId) {
-            oxRegistry::getConfig()->setShopId($iShopId);
+            \OxidEsales\Eshop\Core\Registry::getConfig()->setShopId($iShopId);
         }
     }
 }

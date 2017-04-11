@@ -74,9 +74,9 @@ class oePayPalDeliverySet_Main extends oePayPalDeliverySet_Main_parent
     /**
      * Save default shipping id.
      *
-     * @param oxConfig       $oConfig       Config object to save.
-     * @param string         $sShippingId   Shipping id.
-     * @param oePayPalConfig $oPayPalConfig PayPal config.
+     * @param \OxidEsales\Eshop\Core\Config $oConfig       Config object to save.
+     * @param string                        $sShippingId   Shipping id.
+     * @param oePayPalConfig                $oPayPalConfig PayPal config.
      */
     protected function _saveECDefaultShippingId($oConfig, $sShippingId, $oPayPalConfig)
     {

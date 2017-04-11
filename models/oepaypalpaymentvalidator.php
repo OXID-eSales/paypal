@@ -35,21 +35,21 @@ class oePayPalPaymentValidator
     /**
      * Config object
      *
-     * @var oxConfig $_oConfig
+     * @var \OxidEsales\Eshop\Core\Config $_oConfig
      */
     protected $_oConfig = null;
 
     /**
      * User object
      *
-     * @var oxUser $_oUser
+     * @var \OxidEsales\Eshop\Application\Model\User $_oUser
      */
     protected $_oUser = null;
 
     /**
      * Payment object
      *
-     * @var oxPayment $_oPayment
+     * @var \OxidEsales\Eshop\Application\Model\Payment $_oPayment
      */
     protected $_oPayment = null;
 
@@ -83,7 +83,7 @@ class oePayPalPaymentValidator
     /**
      * Config object setter
      *
-     * @param oxConfig $oConfig
+     * @param \OxidEsales\Eshop\Core\Config $oConfig
      */
     public function setConfig($oConfig)
     {
@@ -93,7 +93,7 @@ class oePayPalPaymentValidator
     /**
      * Config object getter
      *
-     * @return oxConfig
+     * @return \OxidEsales\Eshop\Core\Config
      */
     public function getConfig()
     {
@@ -103,7 +103,7 @@ class oePayPalPaymentValidator
     /**
      * User object setter
      *
-     * @param oxUser $oUser
+     * @param \OxidEsales\Eshop\Application\Model\User $oUser
      */
     public function setUser($oUser)
     {
@@ -113,7 +113,7 @@ class oePayPalPaymentValidator
     /**
      * User object getter
      *
-     * @return oxUser
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
     public function getUser()
     {
@@ -123,7 +123,7 @@ class oePayPalPaymentValidator
     /**
      * Payment object setter
      *
-     * @param oxPayment $oPayment
+     * @param \OxidEsales\Eshop\Application\Model\Payment $oPayment
      */
     public function setPayment($oPayment)
     {
@@ -153,12 +153,12 @@ class oePayPalPaymentValidator
     /**
      * Payment object getter
      *
-     * @return oxPayment
+     * @return \OxidEsales\Eshop\Application\Model\Payment
      */
     public function getPayment()
     {
         if (is_null($this->_oPayment)) {
-            $oPayPalPayment = oxNew('oxPayment');
+            $oPayPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
             $oPayPalPayment->load('oxidpaypal');
             $this->setPayment($oPayPalPayment);
         }
@@ -299,7 +299,7 @@ class oePayPalPaymentValidator
     /**
      * Checks whether user is assigned to given groups array.
      *
-     * @param oxList $oGroups
+     * @param \OxidEsales\Eshop\Core\Model\ListModel $oGroups
      *
      * @return bool
      */

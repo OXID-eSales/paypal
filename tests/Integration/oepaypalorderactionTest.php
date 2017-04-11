@@ -22,13 +22,13 @@
 require_once __DIR__ . '/lib/oepaypalcommunicationhelper.php';
 require_once __DIR__ . '/lib/oepaypalrequesthelper.php';
 
-class Integration_oePayPal_oePayPalOrderActionTest extends OxidTestCase
+class Integration_oePayPal_oePayPalOrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function setUp()
     {
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
 
         oePayPalEvents::addOrderPaymentsCommentsTable();
         oePayPalEvents::addOrderPaymentsTable();

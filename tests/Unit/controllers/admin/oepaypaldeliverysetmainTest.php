@@ -20,17 +20,17 @@
  */
 
 if (!class_exists('oePayPalOxOrder_parent')) {
-    class oePayPalOxOrder_parent extends oxOrder
+    class oePayPalOxOrder_parent extends \OxidEsales\Eshop\Application\Model\Order
     {
     }
 }
 
-class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends OxidTestCase
+class Unit_oePayPal_Controllers_Admin_oePayPalDeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function tearDown()
     {
         parent::tearDown();
-        oxDb::getDb()->execute("delete from oxconfig where oxvarname = 'sOEPayPalMECDefaultShippingId' and oxmodule = 'module:oepaypal'");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute("delete from oxconfig where oxvarname = 'sOEPayPalMECDefaultShippingId' and oxmodule = 'module:oepaypal'");
     }
 
     /**

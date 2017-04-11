@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalCheckValidator class.
  */
-class Unit_oePayPal_core_oePayPalCheckValidatorTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalCheckValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**

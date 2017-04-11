@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends OxidTestCase
+class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     public function providerActionExpressCheckoutFromDetailsPage()

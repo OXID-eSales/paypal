@@ -82,8 +82,6 @@ class oePayPalOrderPaymentListCalculator
     /**
      * Sum up payment amounts for capture, void, refund.
      * Take into account successful transactions only.
-     *
-     * @return null
      */
     public function calculate()
     {
@@ -153,8 +151,6 @@ class oePayPalOrderPaymentListCalculator
      * @param $action PayPal order payment action type (e.g. cpture, refund, void)
      * @param $status PayPal order payment status.
      * @param $amount PayPal order payment amount.
-     *
-     * @return null
      */
     private function aggregateAmounts($action, $status, $amount)
     {

@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalGetExpressCheckoutDetailsRequestBuilder class.
  */
-class Unit_oePayPal_Models_PayPalRequest_oePayPalGetExpressCheckoutDetailsRequestBuilderTest extends OxidTestCase
+class Unit_oePayPal_Models_PayPalRequest_oePayPalGetExpressCheckoutDetailsRequestBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -34,7 +34,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalGetExpressCheckoutDetailsReques
         $aExpectedParams = array(
             'TOKEN' => '111',
         );
-        $oSession = new oxSession();
+        $oSession = new \OxidEsales\Eshop\Core\Session();
         $oSession->setVariable("oepaypal-token", "111");
 
         $oBuilder = $this->_getPayPalRequestBuilder();

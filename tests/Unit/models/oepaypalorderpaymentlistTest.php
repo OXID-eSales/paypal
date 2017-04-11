@@ -23,7 +23,7 @@
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -31,15 +31,13 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
      */
     protected function setUp()
     {
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
      * Test case for oePayPalOrderPayment::oePayPalOrderPaymentList()
      * Gets PayPal Order Payment history list
-     *
-     * @return null
      */
     public function testLoadOrderPayments()
     {
@@ -73,8 +71,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
     /**
      * Test case for oePayPalOrderPayment::hasFailedPayment()
      * Checks if list has failed payments
-     *
-     * @return null
      */
     public function testHasFailedPayment()
     {
@@ -103,8 +99,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
     /**
      * Test case for oePayPalOrderPayment::hasPendingPayment()
      * Checks if list has pending payments
-     *
-     * @return null
      */
     public function testHasPendingPayment()
     {
@@ -133,8 +127,6 @@ class Unit_oePayPal_models_oePayPalOrderPaymentListTest extends OxidTestCase
     /**
      * Test case for oePayPalOrderPayment::hasPendingPayment()
      * Checks if list has pending payments
-     *
-     * @return null
      */
     public function testAddPayment()
     {

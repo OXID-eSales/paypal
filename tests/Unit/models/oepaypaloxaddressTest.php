@@ -21,7 +21,7 @@
 
 
 if (!class_exists('oePayPalOxAddress_parent')) {
-    class oePayPalOxAddress_parent extends oxAddress
+    class oePayPalOxAddress_parent extends \OxidEsales\Eshop\Application\Model\Address
     {
     }
 }
@@ -29,7 +29,7 @@ if (!class_exists('oePayPalOxAddress_parent')) {
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOxAddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Tear down the fixture.
@@ -41,7 +41,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
 
         $this->getSession()->setVariable('deladrid', null);
         $sDelete = 'TRUNCATE TABLE `oxaddress`';
-        oxDb::getDb()->execute($sDelete);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sDelete);
     }
 
     /**
@@ -54,7 +54,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
         // fix for state ID compatability between editions
         $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                      "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
-        oxDb::getDb()->execute($sSqlState);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSqlState);
     }
 
     /**
@@ -90,8 +90,6 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
     /**
      * Test case for oePayPalAddress::createPayPalAddress()
      * Creating new address
-     *
-     * @return null
      */
     public function testCreatePayPalAddress()
     {
@@ -104,7 +102,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
         //$sAddressId = $oPayPalOxAddress->getId();
         $sAddressId = $this->getSession()->getVariable('deladrid');
 
-        $oAddress = new oxAddress();
+        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
         $oAddress->load($sAddressId);
 
         $this->assertEquals('testUserId', $oAddress->oxaddress__oxuserid->value);
@@ -135,9 +133,6 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
      * Test case for oePayPalOxAddress::createPayPalAddress()
      * Testing if address is save without checking if required fields are not empty.
      * This is not needed as we assume that PayPal data is correct.
-     *
-     *
-     * @return null
      */
     public function testCreatePayPalAddressFail()
     {
@@ -153,7 +148,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
 
         $oPayPalAddress->createPayPalAddress($oPayPalData, 'testUserId');
 
-        $oAddress = new oxAddress();
+        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
         $oAddress->load($oPayPalAddress->getId());
 
         $this->assertEquals('testName', $oAddress->oxaddress__oxfname->value);
@@ -163,30 +158,28 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
     /**
      * Test case for oePayPalAddress::createPayPalAddress()
      * Not creating if exist
-     *
-     * @return null
      */
     public function testCreatePayPalAddressIfExist()
     {
         //creating existing address
-        $oAddress = new oxAddress();
-        $oAddress->oxaddress__oxuserid = new oxField('testUserId');
-        $oAddress->oxaddress__oxfname = new oxField('testName');
-        $oAddress->oxaddress__oxlname = new oxField('testSurname');
-        $oAddress->oxaddress__oxstreet = new oxField('testStreetName str.');
-        $oAddress->oxaddress__oxstreetnr = new oxField('12');
-        $oAddress->oxaddress__oxcity = new oxField('testCity');
-        $oAddress->oxaddress__oxstateid = new oxField('333');
-        $oAddress->oxaddress__oxzip = new oxField('testZip');
-        $oAddress->oxaddress__oxfon = new oxField('testPhoneNum');
-        $oAddress->oxaddress__oxcountryid = new oxField('8f241f11096877ac0.98748826');
+        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
+        $oAddress->oxaddress__oxuserid = new \OxidEsales\Eshop\Core\Field('testUserId');
+        $oAddress->oxaddress__oxfname = new \OxidEsales\Eshop\Core\Field('testName');
+        $oAddress->oxaddress__oxlname = new \OxidEsales\Eshop\Core\Field('testSurname');
+        $oAddress->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field('testStreetName str.');
+        $oAddress->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field('12');
+        $oAddress->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field('testCity');
+        $oAddress->oxaddress__oxstateid = new \OxidEsales\Eshop\Core\Field('333');
+        $oAddress->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field('testZip');
+        $oAddress->oxaddress__oxfon = new \OxidEsales\Eshop\Core\Field('testPhoneNum');
+        $oAddress->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field('8f241f11096877ac0.98748826');
         $oAddress->save();
         $sAddressId = $oAddress->getId();
 
         $this->getSession()->setVariable('deladrid', null);
 
         $sQ = "SELECT COUNT(*) FROM `oxaddress`";
-        $iAddressCount = oxDb::getDb()->getOne($sQ);
+        $iAddressCount = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
 
         // preparing data fo new address - the same
         $aPayPalData = $this->_getPayPalData();
@@ -196,7 +189,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
         $oPayPalOxAddress = new oePayPalOxAddress();
         $oPayPalOxAddress->createPayPalAddress($oPayPalData, 'testUserId');
 
-        $iAddressCountAfter = oxDb::getDb()->getOne($sQ);
+        $iAddressCountAfter = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
         // skips the same address
         $this->assertEquals($iAddressCount, $iAddressCountAfter);
 
@@ -248,8 +241,6 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
      * Creating new address
      *
      * @dataProvider createPayPalAddress_splittingAddress_dataProvider
-     *
-     * @return null
      */
     public function testCreatePayPalAddress_splittingAddress($sAddress, $aResult)
     {
@@ -262,7 +253,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
         $oPayPalOxAddress->createPayPalAddress($oPayPalData, 'testUserId');
         $sAddressId = $oPayPalOxAddress->getId();
 
-        $oAddress = new oxAddress();
+        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
         $oAddress->load($sAddressId);
 
         $this->assertEquals($aResult[0], $oAddress->oxaddress__oxstreet->value);
@@ -299,8 +290,6 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
      * Creating new address
      *
      * @dataProvider createPayPalAddress_splittingUserName_dataProvider
-     *
-     * @return null
      */
     public function testCreatePayPalAddress_splittingUserName($sName, $aResult)
     {
@@ -313,7 +302,7 @@ class Unit_oePayPal_models_oePayPalOxAddressTest extends OxidTestCase
         $oPayPalOxAddress->createPayPalAddress($oPayPalData, 'testUserId');
         $sAddressId = $oPayPalOxAddress->getId();
 
-        $oAddress = new oxAddress();
+        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
         $oAddress->load($sAddressId);
 
         $this->assertEquals($aResult[0], $oAddress->oxaddress__oxfname->value);

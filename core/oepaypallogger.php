@@ -90,8 +90,6 @@ class oePayPalLogger
      * Writes log message.
      *
      * @param mixed $mLogData logger data
-     *
-     * @return null
      */
     public function log($mLogData)
     {

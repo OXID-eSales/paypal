@@ -22,7 +22,7 @@
 /**
  * oxViewConfig class wrapper for PayPal module.
  *
- * @mixin oxViewConfig
+ * @mixin \OxidEsales\Eshop\Core\ViewConfig
  */
 class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
 {
@@ -32,7 +32,7 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     /**
      * PayPal payment object.
      *
-     * @var bool
+     * @var \OxidEsales\Eshop\Application\Model\Payment|bool
      */
     protected $_oPayPalPayment = null;
 
@@ -195,13 +195,13 @@ class oePayPalOxViewConfig extends oePayPalOxViewConfig_parent
     /**
      * Returns PayPal payment object.
      *
-     * @return oxPayment
+     * @return \OxidEsales\Eshop\Application\Model\Payment
      */
     public function getPayPalPayment()
     {
         if ($this->_oPayPalPayment === null) {
             $this->_oPayPalPayment = false;
-            $oPayPalPayment = oxNew("oxpayment");
+            $oPayPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
 
             // payment is not available/active?
             if ($oPayPalPayment->load("oxidpaypal") && $oPayPalPayment->oxpayments__oxactive->value) {

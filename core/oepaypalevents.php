@@ -47,7 +47,7 @@ class oePayPalEvents
               KEY `OEPAYPAL_PAYMENTSTATUS` (`OEPAYPAL_PAYMENTSTATUS`)
             ) ENGINE=InnoDB;";
 
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
     }
 
     /**
@@ -60,24 +60,24 @@ class oePayPalEvents
             'de' => '<div>Bei Auswahl der Zahlungsart PayPal werden Sie im n&auml;chsten Schritt zu PayPal weitergeleitet. Dort k&ouml;nnen Sie sich in Ihr PayPal-Konto einloggen oder ein neues PayPal-Konto er&ouml;ffnen und die Zahlung autorisieren. Sobald Sie Ihre Daten f&uuml;r die Zahlung best&auml;tigt haben, werden Sie automatisch wieder zur&uuml;ck in den Shop geleitet, um die Bestellung abzuschlie&szlig;en.</div> <div style="margin-top: 5px">Erst dann wird die Zahlung ausgef&uuml;hrt.</div>'
         );
 
-        $oPayment = oxNew('oxPayment');
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         if (!$oPayment->load('oxidpaypal')) {
             $oPayment->setId('oxidpaypal');
-            $oPayment->oxpayments__oxactive = new oxField(1);
-            $oPayment->oxpayments__oxdesc = new oxField('PayPal');
-            $oPayment->oxpayments__oxaddsum = new oxField(0);
-            $oPayment->oxpayments__oxaddsumtype = new oxField('abs');
-            $oPayment->oxpayments__oxfromboni = new oxField(0);
-            $oPayment->oxpayments__oxfromamount = new oxField(0);
-            $oPayment->oxpayments__oxtoamount = new oxField(10000);
+            $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+            $oPayment->oxpayments__oxdesc = new \OxidEsales\Eshop\Core\Field('PayPal');
+            $oPayment->oxpayments__oxaddsum = new \OxidEsales\Eshop\Core\Field(0);
+            $oPayment->oxpayments__oxaddsumtype = new \OxidEsales\Eshop\Core\Field('abs');
+            $oPayment->oxpayments__oxfromboni = new \OxidEsales\Eshop\Core\Field(0);
+            $oPayment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field(0);
+            $oPayment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field(10000);
 
-            $oLanguage = oxRegistry::get('oxLang');
+            $oLanguage = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\Language::class);
             $aLanguages = $oLanguage->getLanguageIds();
             foreach ($aPaymentDescriptions as $sLanguageAbbreviation => $sDescription) {
                 $iLanguageId = array_search($sLanguageAbbreviation, $aLanguages);
                 if ($iLanguageId !== false) {
                     $oPayment->setLanguage($iLanguageId);
-                    $oPayment->oxpayments__oxlongdesc = new oxField($sDescription);
+                    $oPayment->oxpayments__oxlongdesc = new \OxidEsales\Eshop\Core\Field($sDescription);
                     $oPayment->save();
                 }
             }
@@ -92,7 +92,7 @@ class oePayPalEvents
     public static function isPayPalActiveOnSubShops()
     {
         $blActive = false;
-        $oConfig = oxRegistry::getConfig();
+        $oConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
         $oExtensionChecker = oxNew('oePayPalExtensionChecker');
         $aShops = $oConfig->getShopIds();
         $sActiveShopId = $oConfig->getShopId();
@@ -116,9 +116,9 @@ class oePayPalEvents
      */
     public static function disablePaymentMethod()
     {
-        $oPayment = oxNew('oxpayment');
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayment->load('oxidpaypal');
-        $oPayment->oxpayments__oxactive = new oxField(0);
+        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(0);
         $oPayment->save();
     }
 
@@ -127,9 +127,9 @@ class oePayPalEvents
      */
     public static function enablePaymentMethod()
     {
-        $oPayment = oxNew('oxpayment');
+        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oPayment->load('oxidpaypal');
-        $oPayment->oxpayments__oxactive = new oxField(1);
+        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
         $oPayment->save();
     }
 
@@ -155,7 +155,7 @@ class oePayPalEvents
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
     }
 
     /**
@@ -174,23 +174,21 @@ class oePayPalEvents
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
     }
 
     /**
      * Enables PayPal RDF
-     *
-     * @return null
      */
     public static function enablePayPalRDFA()
     {
         // If PayPal activated on other sub shops do not change global RDF setting.
-        if ('EE' == oxRegistry::getConfig()->getEdition() && self::isPayPalActiveOnSubShops()) {
+        if ('EE' == \OxidEsales\Eshop\Core\Registry::getConfig()->getEdition() && self::isPayPalActiveOnSubShops()) {
             return;
         }
 
         $sSql = "INSERT IGNORE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) VALUES('oepaypalrdfa', 'oxidpaypal', 'PayPal', 'rdfapayment')";
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
     }
 
     /**
@@ -200,7 +198,7 @@ class oePayPalEvents
     {
         $sSql = "DELETE FROM `oxobject2payment` WHERE `OXID` = 'oepaypalrdfa'";
 
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
     }
 
     /**
@@ -208,7 +206,7 @@ class oePayPalEvents
      */
     public static function addMissingFieldsOnUpdate()
     {
-        $oDbMetaDataHandler = oxNew('oxDbMetaDataHandler');
+        $oDbMetaDataHandler = oxNew(\OxidEsales\Eshop\Core\DbMetaDataHandler::class);
 
         $aTableFields = array(
             'oepaypal_order'                => 'OEPAYPAL_TIMESTAMP',
@@ -218,7 +216,7 @@ class oePayPalEvents
 
         foreach ($aTableFields as $sTableName => $sFieldName) {
             if (!$oDbMetaDataHandler->fieldExists($sFieldName, $sTableName)) {
-                oxDb::getDb()->execute(
+                \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute(
                     "ALTER TABLE `" . $sTableName
                     . "` ADD `" . $sFieldName . "` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;"
                 );
@@ -254,13 +252,11 @@ class oePayPalEvents
 
     /**
      * Execute action on deactivate event
-     *
-     * @return null
      */
     public static function onDeactivate()
     {
         // If PayPal activated on other sub shops do not remove payment method and RDF setting
-        if ('EE' == oxRegistry::getConfig()->getEdition() && self::isPayPalActiveOnSubShops()) {
+        if ('EE' == \OxidEsales\Eshop\Core\Registry::getConfig()->getEdition() && self::isPayPalActiveOnSubShops()) {
             return;
         }
         self::disablePaymentMethod();

@@ -24,7 +24,7 @@
 /**
  * Testing oePayPalOrderCaptureAction class.
  */
-class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderCaptureActionHandlerTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_Handlers_oePayPalOrderCaptureActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**

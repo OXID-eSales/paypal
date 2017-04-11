@@ -20,12 +20,12 @@
  */
 
 if (!class_exists('oePayPalOxOrder_parent')) {
-    class oePayPalOxOrder_parent extends oxOrder
+    class oePayPalOxOrder_parent extends \OxidEsales\Eshop\Application\Model\Order
     {
     }
 }
 
-class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCase
+class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -33,7 +33,7 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
      */
     public function setUp()
     {
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
     }
 
     /**
@@ -91,12 +91,12 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
         $oPayPalOrder = new oePayPalOrder_PayPal();
         $soxId = '_testOrderId';
 
-        $oSession = new oxSession();
+        $oSession = new \OxidEsales\Eshop\Core\Session();
         $oSession->setVariable('saved_oxid', $soxId);
 
-        $oOrder = new oxorder;
+        $oOrder = new \OxidEsales\Eshop\Application\Model\Order;
         $oOrder->setId($soxId);
-        $oOrder->oxorder__oxpaymenttype = new oxField('oxidpaypal');
+        $oOrder->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('oxidpaypal');
         $oOrder->save();
 
         $this->assertTrue($oPayPalOrder->isPayPalOrder());
@@ -111,12 +111,12 @@ class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends OxidTestCa
         $oPayPalOrder = new oePayPalOrder_PayPal();
         $soxId = '_testOrderId';
 
-        $oSession = new oxSession();
+        $oSession = new \OxidEsales\Eshop\Core\Session();
         $oSession->setVariable('saved_oxid', $soxId);
 
-        $oOrder = new oxOrder();
+        $oOrder = new \OxidEsales\Eshop\Application\Model\Order();
         $oOrder->setId($soxId);
-        $oOrder->oxorder__oxpaymenttype = new oxField('other');
+        $oOrder->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('other');
         $oOrder->save();
 
         $this->assertFalse($oPayPalOrder->isPayPalOrder());

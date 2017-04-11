@@ -21,7 +21,7 @@
 
 
 if (!class_exists('oePayPalOxBasket_parent')) {
-    class oePayPalOxBasket_parent extends oxBasket
+    class oePayPalOxBasket_parent  extends \OxidEsales\Eshop\Application\Model\Basket
     {
     }
 }
@@ -29,7 +29,7 @@ if (!class_exists('oePayPalOxBasket_parent')) {
 /**
  * Testing oePayPalSetExpressCheckoutRequestBuilder class.
  */
-class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilderTest extends OxidTestCase
+class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      */
@@ -126,7 +126,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
     {
         $aBasketMethodValues = array(
             'isVirtualPayPalBasket'              => true,
-            'getPrice'                           => new oxPrice(),
+            'getPrice'                           => new \OxidEsales\Eshop\Core\Price(),
             'getPayPalBasketVatValue'            => '88.88',
             'isCalculationModeNetto'             => true,
             'getTransactionMode'                 => '88.88',
@@ -140,7 +140,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             $aBasketMethodValues[$sKey] = $sValue;
         }
 
-        return $this->_createStub('oxBasket', $aBasketMethodValues);
+        return $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
     }
 
     public function testSetBasket_AllParamsSet()
@@ -159,7 +159,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'L_SHIPPINGOPTIONAMOUNT0'       => '66.66',
         );
 
-        $oPrice = $this->_createStub('oxPrice', array('getBruttoPrice' => '99.99'));
+        $oPrice = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, array('getBruttoPrice' => '99.99'));
 
         $aBasketMethodValues = array('getPrice' => $oPrice);
         $oBasket = $this->_getBasketStub($aBasketMethodValues);
@@ -176,7 +176,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
      */
     public function testSetBasket_OnUpdateCalledOnBasket()
     {
-        $oBasket = $this->getMock('oxBasket', array('onUpdate', 'calculateBasket', 'isVirtualPayPalBasket', 'getSumOfCostOfAllItemsPayPalBasket', 'getDiscountSumPayPalBasket'));
+        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('onUpdate', 'calculateBasket', 'isVirtualPayPalBasket', 'getSumOfCostOfAllItemsPayPalBasket', 'getDiscountSumPayPalBasket'));
         $oBasket->expects($this->at(0))->method('onUpdate');
         $oBasket->expects($this->at(1))->method('calculateBasket');
         $oBasket->expects($this->atLeastOnce())->method('isVirtualPayPalBasket');
@@ -237,12 +237,12 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
         $aBasketMethodValues = array(
             'getFPrice' => '99.99',
         );
-        $oBasket = $this->_createStub('oxBasket', $aBasketMethodValues);
+        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
 
         $aConfigMethodValues = array('getBrandName' => 'ShopName');
         $oConfig = $this->_createStub('oePayPalConfig', $aConfigMethodValues);
 
-        $oLang = $this->_createStub('oxLang', array('translateString' => '%s %s %s'));
+        $oLang = $this->_createStub(\OxidEsales\Eshop\Core\Language::class, array('translateString' => '%s %s %s'));
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setLang($oLang);
@@ -277,13 +277,13 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'L_PAYMENTREQUEST_0_NUMBER1'  => 'BasketItemArtNum',
         );
 
-        $oArticle = new oxArticle();
-        $oArticle->oxarticles__oxartnum = new oxField('BasketItemArtNum');
+        $oArticle = new \OxidEsales\Eshop\Application\Model\Article();
+        $oArticle->oxarticles__oxartnum = new \OxidEsales\Eshop\Core\Field('BasketItemArtNum');
 
         $aPriceMethodValues = array(
             'getPrice' => '99.99',
         );
-        $oPrice = $this->_createStub('oxPrice', $aPriceMethodValues);
+        $oPrice = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, $aPriceMethodValues);
 
         $aBasketItemMethodValues = array(
             'getTitle'     => 'BasketItemTitle',
@@ -293,7 +293,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'getArticle'   => $oArticle,
         );
 
-        $oBasketItem = $this->_createStub('oxBasketItem', $aBasketItemMethodValues);
+        $oBasketItem = $this->_createStub(\OxidEsales\Eshop\Application\Model\BasketItem::class, $aBasketItemMethodValues);
         $aBasketItems = array($oBasketItem, $oBasketItem);
 
         $aBasketMethodValues = array(
@@ -303,7 +303,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub('oxBasket', $aBasketMethodValues);
+        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setBasket($oBasket);
@@ -327,7 +327,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub('oxBasket', $aBasketMethodValues);
+        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setBasket($oBasket);
@@ -351,7 +351,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub('oxBasket', $aBasketMethodValues);
+        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setBasket($oBasket);
@@ -375,7 +375,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'getPayPalGiftCardCosts'     => 100.99,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub('oxBasket', $aBasketMethodValues);
+        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setBasket($oBasket);
@@ -399,7 +399,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 100.99,
         );
-        $oBasket = $this->_createStub('oxBasket', $aBasketMethodValues);
+        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setBasket($oBasket);
@@ -419,7 +419,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
         $aBasketMethodValues = array(
             'getSumOfCostOfAllItemsPayPalBasket' => '99.99'
         );
-        $oBasket = $this->_createStub('oxBasket', $aBasketMethodValues);
+        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setBasket($oBasket);
@@ -443,16 +443,16 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
         $aUserMethodValues = array(
             'getSelectedAddressId' => null,
         );
-        $oUser = $this->_createStub('oxUser', $aUserMethodValues);
-        $oUser->oxuser__oxusername = new oxField('test@test.com');
-        $oUser->oxuser__oxfname = new oxField('FirstName');
-        $oUser->oxuser__oxlname = new oxField('LastName');
-        $oUser->oxuser__oxstreet = new oxField('Street');
-        $oUser->oxuser__oxstreetnr = new oxField('StreetNr');
-        $oUser->oxuser__oxcity = new oxField('City');
-        $oUser->oxuser__oxzip = new oxField('Zip');
-        $oUser->oxuser__oxfon = new oxField('PhoneNum');
-        $oUser->oxuser__oxcity = new oxField('City');
+        $oUser = $this->_createStub(\OxidEsales\Eshop\Application\Model\User::class, $aUserMethodValues);
+        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
+        $oUser->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
+        $oUser->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');
+        $oUser->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field('Street');
+        $oUser->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field('StreetNr');
+        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
+        $oUser->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field('Zip');
+        $oUser->oxuser__oxfon = new \OxidEsales\Eshop\Core\Field('PhoneNum');
+        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
 
         $oBuilder = $this->_getPayPalRequestBuilder();
         $oBuilder->setUser($oUser);
@@ -466,7 +466,7 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalSetExpressCheckoutRequestBuilde
      */
     protected function _getPayPalRequestBuilder()
     {
-        $oLang = $this->getMock('oxLang', array('translateString'));
+        $oLang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array('translateString'));
         $oLang->expects($this->any())
             ->method('translateString')
             ->will($this->returnArgument(0));

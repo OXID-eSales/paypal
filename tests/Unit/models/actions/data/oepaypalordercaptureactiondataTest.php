@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalOrderActionFactory class.
  */
-class Unit_oePayPal_Models_Actions_Data_oePayPalOrderCaptureActionDataTest extends OxidTestCase
+class Unit_oePayPal_Models_Actions_Data_oePayPalOrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**

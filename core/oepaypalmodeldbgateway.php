@@ -27,11 +27,11 @@ abstract class oePayPalModelDbGateway
     /**
      * Returns data base resource.
      *
-     * @return oxDb
+     * @return \OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface
      */
     protected function _getDb()
     {
-        return oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
+        return \OxidEsales\Eshop\Core\DatabaseProvider::getDb(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
     }
 
     /**

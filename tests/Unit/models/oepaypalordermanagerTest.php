@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalOxState class.
  */
-class Unit_oePayPal_models_oePayPalOrderManagerTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderManagerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testGetOrder_noOrderSetWithPaymentSet_orderCreatedFomPayment()
     {

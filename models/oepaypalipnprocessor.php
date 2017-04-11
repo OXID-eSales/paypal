@@ -64,7 +64,7 @@ class oePayPalIPNProcessor
     /**
      * Sets language object.
      *
-     * @param oxLang $oLang
+     * @param \OxidEsales\Eshop\Core\Language $oLang
      */
     public function setLang($oLang)
     {
@@ -74,7 +74,7 @@ class oePayPalIPNProcessor
     /**
      * Returns language object.
      *
-     * @return oxLang
+     * @return \OxidEsales\Eshop\Core\Language
      */
     public function getLang()
     {
@@ -131,8 +131,6 @@ class oePayPalIPNProcessor
 
     /**
      * Initiate payment status changes according to IPN information.
-     *
-     * @return null
      */
     public function process()
     {

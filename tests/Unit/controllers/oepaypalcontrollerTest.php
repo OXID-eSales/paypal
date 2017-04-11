@@ -22,7 +22,7 @@
 /**
  * Testing oePayPalController class.
  */
-class Unit_oePayPal_Controllers_oePayPalControllerTest extends OxidTestCase
+class Unit_oePayPal_Controllers_oePayPalControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test case for oePayPalController::getRequest()

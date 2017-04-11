@@ -39,7 +39,7 @@ class oePayPalIPNPaymentBuilder
     /** @var oePayPalIPNPaymentCreator */
     protected $_oPayPalIPNPaymentCreator = null;
 
-    /** @var oxLang */
+    /** @var \OxidEsales\Eshop\Core\Language */
     protected $_oLang = null;
 
     /**
@@ -141,7 +141,7 @@ class oePayPalIPNPaymentBuilder
     /**
      * Sets oxLang object
      *
-     * @param oxLang $oLang
+     * @param \OxidEsales\Eshop\Core\Language $oLang
      */
     public function setLang($oLang)
     {
@@ -151,7 +151,7 @@ class oePayPalIPNPaymentBuilder
     /**
      * Returns oxLang object.
      *
-     * @return oxLang
+     * @return \OxidEsales\Eshop\Core\Language
      */
     public function getLang()
     {

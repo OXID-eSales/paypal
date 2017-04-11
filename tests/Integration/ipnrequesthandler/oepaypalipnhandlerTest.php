@@ -21,16 +21,16 @@
 
 require_once __DIR__ . '/../lib/oepaypalcommunicationhelper.php';
 
-class Integration_oePayPal_IpnRequestHandler_oePayPalIpnHandlerTest extends OxidTestCase
+class Integration_oePayPal_IpnRequestHandler_oePayPalIpnHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      *  Setup: Prepare data - create need tables
      */
     public function setUp()
     {
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
 
         oePayPalEvents::addOrderPaymentsTable();
         oePayPalEvents::addOrderTable();
@@ -152,7 +152,7 @@ class Integration_oePayPal_IpnRequestHandler_oePayPalIpnHandlerTest extends Oxid
         $oPayPalIPNHandler->setIPNRequestVerifier($oIPNRequestVerifier);
         $oPayPalIPNHandler->handleRequest();
 
-        $oOrder = oxNew('oxOrder');
+        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oOrder->load($sOrderId);
         $this->assertEquals($sTransactionStatus, $oOrder->getFieldData('oxtransstatus'));
     }
@@ -163,13 +163,13 @@ class Integration_oePayPal_IpnRequestHandler_oePayPalIpnHandlerTest extends Oxid
      * @param string $sOrderId
      * @param string $sStatus
      *
-     * @return oxOrder
+     * @return \OxidEsales\Eshop\Application\Model\Order
      */
     protected function _createOrder($sOrderId, $sStatus)
     {
-        $oOrder = oxNew('oxOrder');
+        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oOrder->setId($sOrderId);
-        $oOrder->oxorder__oxtransstatus = new oxField($sStatus);
+        $oOrder->oxorder__oxtransstatus = new \OxidEsales\Eshop\Core\Field($sStatus);
         $oOrder->save();
 
         return $oOrder;

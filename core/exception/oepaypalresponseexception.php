@@ -32,7 +32,7 @@ class oePayPalResponseException extends oePayPalException
      */
     public function __construct($sMessage = "", $iCode = 0)
     {
-        $sPrefix = oxRegistry::getLang()->translateString("OEPAYPAL_RESPONSE_FROM_PAYPAL");
+        $sPrefix = \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_RESPONSE_FROM_PAYPAL");
 
         parent::__construct($sPrefix . $sMessage, $iCode);
     }

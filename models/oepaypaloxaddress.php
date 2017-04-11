@@ -22,7 +22,7 @@
 /**
  * PayPal oxAddress class
  *
- * @mixin oxAddress
+ * @mixin \OxidEsales\Eshop\Application\Model\Address
  */
 class oePayPalOxAddress extends oePayPalOxAddress_parent
 {
@@ -37,22 +37,22 @@ class oePayPalOxAddress extends oePayPalOxAddress_parent
         $aAddressData = $this->_prepareDataPayPalAddress($oDetails);
 
         if ($sAddressId = $this->_existPayPalAddress($aAddressData)) {
-            oxRegistry::getSession()->setVariable("deladrid", $sAddressId);
+            \OxidEsales\Eshop\Core\Registry::getSession()->setVariable("deladrid", $sAddressId);
         } else {
-            $this->oxaddress__oxuserid = new oxField($sUserId);
-            $this->oxaddress__oxfname = new oxField($aAddressData['oxfname']);
-            $this->oxaddress__oxlname = new oxField($aAddressData['oxlname']);
-            $this->oxaddress__oxstreet = new oxField($aAddressData['oxstreet']);
-            $this->oxaddress__oxstreetnr = new oxField($aAddressData['oxstreetnr']);
-            $this->oxaddress__oxaddinfo = new oxField($aAddressData['oxaddinfo']);
-            $this->oxaddress__oxcity = new oxField($aAddressData['oxcity']);
-            $this->oxaddress__oxcountryid = new oxField($aAddressData['oxcountryid']);
-            $this->oxaddress__oxstateid = new oxField($aAddressData['oxstateid']);
-            $this->oxaddress__oxzip = new oxField($aAddressData['oxzip']);
-            $this->oxaddress__oxfon = new oxField($aAddressData['oxfon']);
+            $this->oxaddress__oxuserid = new \OxidEsales\Eshop\Core\Field($sUserId);
+            $this->oxaddress__oxfname = new \OxidEsales\Eshop\Core\Field($aAddressData['oxfname']);
+            $this->oxaddress__oxlname = new \OxidEsales\Eshop\Core\Field($aAddressData['oxlname']);
+            $this->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field($aAddressData['oxstreet']);
+            $this->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field($aAddressData['oxstreetnr']);
+            $this->oxaddress__oxaddinfo = new \OxidEsales\Eshop\Core\Field($aAddressData['oxaddinfo']);
+            $this->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field($aAddressData['oxcity']);
+            $this->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field($aAddressData['oxcountryid']);
+            $this->oxaddress__oxstateid = new \OxidEsales\Eshop\Core\Field($aAddressData['oxstateid']);
+            $this->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field($aAddressData['oxzip']);
+            $this->oxaddress__oxfon = new \OxidEsales\Eshop\Core\Field($aAddressData['oxfon']);
             $this->save();
 
-            oxRegistry::getSession()->setVariable("deladrid", $this->getId());
+            \OxidEsales\Eshop\Core\Registry::getSession()->setVariable("deladrid", $this->getId());
         }
     }
 
@@ -78,12 +78,12 @@ class oePayPalOxAddress extends oePayPalOxAddress_parent
 
         $aAddressData['oxcity'] = $oDetails->getShipToCity();
 
-        $oCountry = oxNew('oxCountry');
+        $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
         $sCountryId = $oCountry->getIdByCode($oDetails->getShipToCountryCode());
         $aAddressData['oxcountryid'] = $sCountryId;
 
         if ($oDetails->getShipToState()) {
-            $oState = oxNew('oxState');
+            $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
             $sStateId = $oState->getIdByCode($oDetails->getShipToState(), $sCountryId);
         }
         $aAddressData['oxstateid'] = $sStateId;
@@ -126,7 +126,7 @@ class oePayPalOxAddress extends oePayPalOxAddress_parent
      */
     protected function _existPayPalAddress($aAddressData)
     {
-        $oDb = oxDb::getDb();
+        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
 
         $sQ = "SELECT `oxid` FROM `oxaddress` WHERE 1 ";
         $sQ .= " AND `oxfname` = " . $oDb->quote($aAddressData['oxfname']);

@@ -37,17 +37,17 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
     {
         $sTemplate = parent::render();
 
-        $sPaymentStatus = oxRegistry::getConfig()->getRequestParameter("paypalpaymentstatus");
-        $sPayment = oxRegistry::getConfig()->getRequestParameter("paypalpayment");
+        $sPaymentStatus = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpaymentstatus");
+        $sPayment = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpayment");
 
         $this->_aViewData["spaypalpaymentstatus"] = $sPaymentStatus ? $sPaymentStatus : -1;
         $this->_aViewData["opaypalpaymentstatuslist"] = new oePayPalOrderPaymentStatusList();
 
         $this->_aViewData["paypalpayment"] = $sPayment ? $sPayment : -1;
 
-        /** @var oxList $oPaymentList */
-        $oPaymentList = oxNew('oxList');
-        $oPaymentList->init('oxPayment');
+        /** @var \OxidEsales\Eshop\Core\Model\ListModel $oPaymentList */
+        $oPaymentList = oxNew(\OxidEsales\Eshop\Core\Model\ListModel::class);
+        $oPaymentList->init(\OxidEsales\Eshop\Application\Model\Payment::class);
 
         $this->_aViewData["oPayments"] = $oPaymentList->getList();
 
@@ -86,10 +86,10 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
      */
     protected function _prepareWhereQuery($aWhere, $sqlFull)
     {
-        $oDb = oxDb::getDb();
+        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $sQ = parent::_prepareWhereQuery($aWhere, $sqlFull);
 
-        $sPaymentStatus = oxRegistry::getConfig()->getRequestParameter("paypalpaymentstatus");
+        $sPaymentStatus = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpaymentstatus");
         $oPaymentStatusList = new oePayPalOrderPaymentStatusList();
 
         if ($sPaymentStatus && $sPaymentStatus != '-1' && in_array($sPaymentStatus, $oPaymentStatusList->getArray())) {
@@ -97,7 +97,7 @@ class oePayPalOrder_List extends oePayPalOrder_List_parent
             $sQ .= " AND ( `oepaypal_order`.`oepaypal_orderid` IS NOT NULL ) ";
         }
 
-        $sPayment = oxRegistry::getConfig()->getRequestParameter("paypalpayment");
+        $sPayment = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpayment");
         if ($sPayment && $sPayment != '-1') {
             $sQ .= " and ( oxorder.oxpaymenttype = " . $oDb->quote($sPayment) . " )";
         }

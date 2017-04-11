@@ -22,7 +22,7 @@
 /**
  * @todo add dependency between external tests. If one fails next should not start.
  */
-class oePayPal_oePayPalTest extends oxTestCase
+class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
 {
     const PAYPAL_LOGIN_BUTTON_ID_OLD = "id=submitLogin";
     const PAYPAL_LOGIN_BUTTON_ID_NEW = "id=btnLogin";
@@ -54,7 +54,7 @@ class oePayPal_oePayPalTest extends oxTestCase
     {
         parent::addTestData($sTestSuitePath);
 
-        $this->callShopSC("oxConfig", null, null, array(
+        $this->callShopSC('oxConfig', null, null, array(
             'sOEPayPalTransactionMode' => array(
                 'type' => 'select',
                 'value' => 'Authorization',

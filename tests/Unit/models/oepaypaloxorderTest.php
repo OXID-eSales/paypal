@@ -22,30 +22,26 @@
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOxOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Tear down the fixture.
-     *
-     * @return null
      */
     protected function tearDown()
     {
         $sDelete = 'TRUNCATE TABLE `oxorder`';
-        oxDb::getDb()->execute($sDelete);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sDelete);
 
         $this->getSession()->setVariable('sess_challenge', null);
     }
 
     /**
      * Test case for oePayPalOxOrder::loadPayPalOrder()
-     *
-     * @return null
      */
     public function testLoadPayPalOrder()
     {
         // creating order
-        $oOrder = new oxOrder();
+        $oOrder = new \OxidEsales\Eshop\Application\Model\Order();
         $oOrder->setId('_testOrderId');
         $oOrder->save();
 
@@ -64,19 +60,17 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxOrder::finalizePayPalOrder()
-     *
-     * @return null
      */
     public function testFinalizePayPalOrder()
     {
         // creating order
-        $oOrder = new oxOrder();
+        $oOrder = new \OxidEsales\Eshop\Application\Model\Order();
         $oOrder->setId('_testOrderId');
-        $oOrder->oxorder__oxtransstatus = new oxField('NOT_FINISHED');
+        $oOrder->oxorder__oxtransstatus = new \OxidEsales\Eshop\Core\Field('NOT_FINISHED');
         $oOrder->save();
 
-        /** @var oxBasket $oBasket */
-        $oBasket = oxNew('oxBasket');
+        /** @var \OxidEsales\Eshop\Application\Model\Basket $oBasket */
+        $oBasket = oxNew(\OxidEsales\Eshop\Application\Model\Basket::class);
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
@@ -100,43 +94,39 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
     /**
      * Test case for oePayPalOxOrder::finalizePayPalOrder() - when processing order with other payment method
      * (not PayPal), order status should not be changed.
-     *
-     * @return null
      */
     public function testFinalizeOrder_notPayPalPayment()
     {
-        $oTestOrder = oxNew('oxOrder');
+        $oTestOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oTestOrder->setId('_testOrderId');
-        $oTestOrder->oxorder__oxtransstatus = new oxField("OK");
+        $oTestOrder->oxorder__oxtransstatus = new \OxidEsales\Eshop\Core\Field("OK");
         $oTestOrder->save();
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
-        /** @var oxBasket|PHPUnit_Framework_MockObject_MockObject $oBasket */
-        $oBasket = $this->getMock('oxBasket', array('getPaymentId'));
+        /** @var \OxidEsales\Eshop\Application\Model\Basket|PHPUnit_Framework_MockObject_MockObject $oBasket */
+        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPaymentId'));
         $oBasket->expects($this->any())->method('getPaymentId')->will($this->returnValue("anotherPayment"));
 
-        /** @var oxUser $oUser */
-        $oUser = oxNew('oxUser');
+        /** @var \OxidEsales\Eshop\Application\Model\User $oUser */
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
 
-        /** @var oxOrder $oOrder */
-        $oOrder = oxNew('oxOrder');
+        /** @var \OxidEsales\Eshop\Application\Model\Order $oOrder */
+        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oOrder->setId('_testOrderId');
         $oOrder->finalizeOrder($oBasket, $oUser);
 
-        $oUpdatedOrder = new oxOrder();
+        $oUpdatedOrder = new \OxidEsales\Eshop\Application\Model\Order();
         $oUpdatedOrder->load('_testOrderId');
         $this->assertEquals("OK", $oUpdatedOrder->oxorder__oxtransstatus->value);
     }
 
     /**
      * Test case for oePayPalOxOrder::deletePayPalOrder()
-     *
-     * @return null
      */
     public function testDeletePayPalOrder()
     {
-        $oTestOrder = new oxOrder();
+        $oTestOrder = new \OxidEsales\Eshop\Application\Model\Order();
         $oTestOrder->setId('_testOrderId');
         $oTestOrder->save();
 
@@ -145,7 +135,7 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $oOrder = new oePayPalOxOrder();
         $oOrder->deletePayPalOrder();
 
-        $oUpdatedOrder = new oxOrder();
+        $oUpdatedOrder = new \OxidEsales\Eshop\Application\Model\Order();
         $this->assertFalse($oUpdatedOrder->load('_testOrderId'));
     }
 
@@ -155,7 +145,7 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
     public function testGetAuthorizationId()
     {
         $oTestOrder = new oePayPalOxOrder();
-        $oTestOrder->oxorder__oxtransid = new oxField('testAuthorizationId');
+        $oTestOrder->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field('testAuthorizationId');
 
         $this->assertEquals('testAuthorizationId', $oTestOrder->getAuthorizationId());
     }
@@ -171,17 +161,17 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         );
         $oBasket = $this->createStub('oePayPalOxBasket', $aBasketMethods);
 
-        $oEmptyPayment = oxNew('oxPayment');
+        $oEmptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $oEmptyPayment->load('oxempty');
-        $oEmptyPayment->oxpayments__oxactive = new oxField(1);
+        $oEmptyPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
         $oEmptyPayment->save();
 
-        $deliverySetList = $this->getMock('oxDeliverySetList', array('getDeliverySetList'));
+        $deliverySetList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, array('getDeliverySetList'));
         $deliverySetList->expects($this->any())->method('getDeliveryList')->will($this->returnValue(array()));
-        oxRegistry::set("oxDeliverySetList", $deliverySetList);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, $deliverySetList);
 
         /** @var oePayPalOxUser $oUser */
-        $oUser = oxNew('oxUser');
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
 
         $oOrder = new oePayPalOxOrder();
         $oOrder->setUser($oUser);
@@ -196,7 +186,7 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
     public function testUpdateOrderNumber()
     {
         $oOrder = new oePayPalOxOrder();
-        $oOrder->oxorder__oxid = new oxField('_test_order');
+        $oOrder->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $oOrder->save();
         $this->assertTrue($oOrder->oePayPalUpdateOrderNumber());
     }
@@ -209,10 +199,10 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $sCounterIdent = 'orderTestCounter';
         $oOrder = $this->getMock('oePayPalOxOrder', array('_getCounterIdent'));
         $oOrder->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($sCounterIdent));
-        $oOrder->oxorder__oxid = new oxField('_test_order');
+        $oOrder->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $oOrder->save();
 
-        $oCounter = new oxCounter();
+        $oCounter = new \OxidEsales\Eshop\Core\Counter();
         $iOrderNumber = $oCounter->getNext($sCounterIdent);
 
         $oOrder->oePayPalUpdateOrderNumber();
@@ -229,10 +219,10 @@ class Unit_oePayPal_models_oePayPalOxOrderTest extends OxidTestCase
         $oOrder = $this->getMock('oePayPalOxOrder', array('_getCounterIdent'));
         $oOrder->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($sCounterIdent));
 
-        $oCounter = new oxCounter();
+        $oCounter = new \OxidEsales\Eshop\Core\Counter();
         $oCounter->getNext($sCounterIdent);
 
-        $oOrder->oxorder__oxordernr = new oxField(5);
+        $oOrder->oxorder__oxordernr = new \OxidEsales\Eshop\Core\Field(5);
         $oOrder->oePayPalUpdateOrderNumber();
 
         $this->assertEquals(5, $oOrder->oxorder__oxordernr->value);

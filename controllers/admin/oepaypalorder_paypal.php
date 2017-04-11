@@ -22,7 +22,7 @@
 /**
  * Order class wrapper for PayPal module
  */
-class oePayPalOrder_PayPal extends oxAdminDetails
+class oePayPalOrder_PayPal extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController
 {
     /**
      * Executes parent method parent::render(), creates oxOrder object,
@@ -39,8 +39,8 @@ class oePayPalOrder_PayPal extends oxAdminDetails
         if ($this->isNewPayPalOrder()) {
             $this->_aViewData['oOrder'] = $this->getEditObject();
         } else {
-            $this->_aViewData['sMessage'] = $this->isPayPalOrder() ? oxRegistry::getLang()->translateString("OEPAYPAL_ONLY_FOR_NEW_PAYPAL_PAYMENT") :
-                oxRegistry::getLang()->translateString("OEPAYPAL_ONLY_FOR_PAYPAL_PAYMENT");
+            $this->_aViewData['sMessage'] = $this->isPayPalOrder() ? \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_ONLY_FOR_NEW_PAYPAL_PAYMENT") :
+                \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_ONLY_FOR_PAYPAL_PAYMENT");
         }
 
         return "order_paypal.tpl";
@@ -63,7 +63,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
             $oAction = $oActionFactory->createAction($sAction);
 
             $oAction->process();
-        } catch (oxException $oException) {
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oException) {
             $this->_aViewData["error"] = $oException->getMessage();
         }
     }
@@ -129,7 +129,7 @@ class oePayPalOrder_PayPal extends oxAdminDetails
     {
         $soxId = $this->getEditObjectId();
         if ($this->_oEditObject === null && isset($soxId) && $soxId != '-1') {
-            $this->_oEditObject = oxNew('oxOrder');
+            $this->_oEditObject = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             $this->_oEditObject->load($soxId);
         }
 
@@ -180,6 +180,6 @@ class oePayPalOrder_PayPal extends oxAdminDetails
      */
     public function formatPrice($dPrice)
     {
-        return oxRegistry::getLang()->formatCurrency($dPrice);
+        return \OxidEsales\Eshop\Core\Registry::getLang()->formatCurrency($dPrice);
     }
 }

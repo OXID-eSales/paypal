@@ -34,7 +34,7 @@ class oePayPalPayment extends oePayPalPayment_parent
      */
     public function validatePayment()
     {
-        $sPaymentId = oxRegistry::getConfig()->getRequestParameter('paymentid');
+        $sPaymentId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('paymentid');
         $oSession = $this->getSession();
         $oBasket = $oSession->getBasket();
         if ($sPaymentId === 'oxidpaypal' && !$this->isConfirmedByPayPal($oBasket)) {
@@ -42,7 +42,7 @@ class oePayPalPayment extends oePayPalPayment_parent
             $oSession->setVariable('paymentid', 'oxidpaypal');
 
             return 'oePayPalStandardDispatcher?fnc=setExpressCheckout'
-                   . '&displayCartInPayPal=' . ((int) oxRegistry::getConfig()->getRequestParameter('displayCartInPayPal'));
+                   . '&displayCartInPayPal=' . ((int) \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('displayCartInPayPal'));
         }
 
         return parent::validatePayment();
@@ -51,7 +51,7 @@ class oePayPalPayment extends oePayPalPayment_parent
     /**
      * Detects if current payment was already successfully processed by PayPal
      *
-     * @param oxBasket $oBasket basket object
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket basket object
      *
      * @return bool
      */

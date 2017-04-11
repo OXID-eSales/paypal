@@ -23,7 +23,7 @@
 /**
  * Testing oePayPalResponseDoVerifyWithPayPal class.
  */
-class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest extends OxidTestCase
+class Unit_oePayPal_models_responses_oePayPalResponseDoVerifyWithPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Returns response data

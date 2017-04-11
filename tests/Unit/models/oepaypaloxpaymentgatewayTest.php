@@ -21,7 +21,7 @@
 
 
 if (!class_exists('oePayPalOxPaymentGateway_parent')) {
-    class oePayPalOxPaymentGateway_parent extends oxPaymentGateway
+    class oePayPalOxPaymentGateway_parent extends \OxidEsales\Eshop\Application\Model\PaymentGateway
     {
     }
 }
@@ -29,7 +29,7 @@ if (!class_exists('oePayPalOxPaymentGateway_parent')) {
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testGetPayPalConfig_notSet_config()
     {
@@ -50,15 +50,15 @@ class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
     public function testDoExpressCheckoutPayment_onSuccess_true()
     {
         // preparing price
-        $oPrice = $this->getMock("oxPrice", array("getBruttoPrice"));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
         $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(123));
 
         // preparing basket
-        $oBasket = $this->getMock("oxBasket", array("getPrice"));
+        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("getPrice"));
         $oBasket->expects($this->once())->method("getPrice")->will($this->returnValue($oPrice));
 
         // preparing session
-        $oSession = $this->getMock("oxSession", array("getBasket"));
+        $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array("getBasket"));
         $oSession->expects($this->any())->method("getBasket")->will($this->returnValue($oBasket));
 
         // preparing config
@@ -79,7 +79,7 @@ class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
         $oPaymentGateway->expects($this->any())->method("_getPayPalOrder")->will($this->returnValue($oPayPalOrder));
         $oPaymentGateway->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($oPayPalConfig));
         $oPaymentGateway->expects($this->any())->method("getSession")->will($this->returnValue($oSession));
-        $oPaymentGateway->expects($this->any())->method("_getPayPalUser")->will($this->returnValue(new oxUser()));
+        $oPaymentGateway->expects($this->any())->method("_getPayPalUser")->will($this->returnValue(new \OxidEsales\Eshop\Application\Model\User()));
 
         // testing
         $this->assertTrue($oPaymentGateway->doExpressCheckoutPayment());
@@ -87,18 +87,18 @@ class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
 
     public function testDoExpressCheckoutPayment_onResponseError_FalseAndException()
     {
-        $oException = new oxException();
+        $oException = new \OxidEsales\Eshop\Core\Exception\StandardException();
 
         // preparing price
-        $oPrice = $this->getMock("oxPrice", array("getBruttoPrice"));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
         $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(123));
 
         // preparing basket
-        $oBasket = $this->getMock("oxBasket", array("getPrice"));
+        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("getPrice"));
         $oBasket->expects($this->once())->method("getPrice")->will($this->returnValue($oPrice));
 
         // preparing session
-        $oSession = $this->getMock("oxSession", array("getBasket"));
+        $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array("getBasket"));
         $oSession->expects($this->any())->method("getBasket")->will($this->returnValue($oBasket));
 
         // preparing config
@@ -119,7 +119,7 @@ class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
         $oPaymentGateway->expects($this->any())->method("_getPayPalOrder")->will($this->returnValue($oPayPalOrder));
         $oPaymentGateway->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($oPayPalConfig));
         $oPaymentGateway->expects($this->any())->method("getSession")->will($this->returnValue($oSession));
-        $oPaymentGateway->expects($this->any())->method("_getPayPalUser")->will($this->returnValue(new oxUser()));
+        $oPaymentGateway->expects($this->any())->method("_getPayPalUser")->will($this->returnValue(new \OxidEsales\Eshop\Application\Model\User()));
 
         // testing
         $this->assertFalse($oPaymentGateway->doExpressCheckoutPayment());
@@ -129,6 +129,6 @@ class Unit_oePayPal_models_oePayPalOxPaymentGatewayTest extends OxidTestCase
     {
         $oPaymentGateway = new oePayPalOxPaymentGateway();
 
-        $this->assertInstanceOf('oxOrder', $oPaymentGateway->getPayPalOxOrder());
+        $this->assertInstanceOf(\OxidEsales\Eshop\Application\Model\Order::class, $oPaymentGateway->getPayPalOxOrder());
     }
 }

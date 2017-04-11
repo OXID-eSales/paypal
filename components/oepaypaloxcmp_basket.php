@@ -22,7 +22,7 @@
 /**
  * Basket component
  *
- * @mixin oxcmp_Basket
+ * @mixin \OxidEsales\Eshop\Application\Component\BasketComponent
  */
 class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
 {
@@ -195,9 +195,10 @@ class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
 
         $sUrl = "{$sUrl}index.php?{$sHeader}";
 
-        $sUrl = oxRegistry::get("oxUtilsUrl")->processUrl($sUrl);
+        $sUrl = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsUrl::class)->processUrl($sUrl);
 
-        if (oxRegistry::getUtils()->seoIsActive() && $sSeoUrl = oxRegistry::get("oxSeoEncoder")->getStaticUrl($sUrl)) {
+        $seoIsActive = \OxidEsales\Eshop\Core\Registry::getUtils()->seoIsActive();
+        if ($seoIsActive && $sSeoUrl = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\SeoEncoder::class)->getStaticUrl($sUrl)) {
             $sUrl = $sSeoUrl;
         }
 

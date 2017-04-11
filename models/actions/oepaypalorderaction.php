@@ -79,7 +79,9 @@ abstract class oePayPalOrderAction
      */
     public function getDate()
     {
-        return date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime());
+        $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
+
+        return date('Y-m-d H:i:s', $utilsDate->getTime());
     }
 
     /**

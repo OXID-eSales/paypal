@@ -22,7 +22,7 @@
 /**
  * Main PayPal controller
  */
-class oePayPalController extends oxUBase
+class oePayPalController extends \OxidEsales\Eshop\Application\Controller\FrontendController
 {
     /**
      * @var oePayPalRequest

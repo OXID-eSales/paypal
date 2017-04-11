@@ -25,16 +25,14 @@ use OxidEsales\Eshop\Core\Utils;
 /**
  * Testing oePayPalConfig class.
  */
-class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
+class Unit_oePayPal_core_oePayPalConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Cleans oxConfig table and calls parent::tearDown();
-     *
-     * @return null
      */
     protected function tearDown()
     {
-        oxDb::getDb()->execute("delete from oxconfig where oxvarname like 'paypal_%'");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute("delete from oxconfig where oxvarname like 'paypal_%'");
 
         parent::tearDown();
     }
@@ -87,7 +85,7 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
         $this->getConfig()->setConfigParam('sOEPayPalBrandName', $sParamName);
 
         $oShop = $this->getConfig()->getActiveShop();
-        $oShop->oxshops__oxname = new oxField($sShopName);
+        $oShop->oxshops__oxname = new \OxidEsales\Eshop\Core\Field($sShopName);
         $oShop->save();
 
         $this->assertEquals($sResultName, $oConfig->getBrandName());
@@ -95,8 +93,6 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testSendOrderInfoToPayPal()
     {
@@ -110,8 +106,6 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalConfig::isGuestBuyEnabled()
-     *
-     * @return null
      */
     public function testIsGuestBuyEnabled()
     {
@@ -125,8 +119,6 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalConfig::isGiroPayEnabled()
-     *
-     * @return null
      */
     public function testIsGiroPayEnabled()
     {
@@ -136,8 +128,6 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalConfig::isSandboxEnabled()
-     *
-     * @return null
      */
     public function testIsSandboxEnabled()
     {
@@ -638,9 +628,9 @@ class Unit_oePayPal_core_oePayPalConfigTest extends OxidTestCase
     public function testGetCurrentUrl()
     {
         $sCurrentUrl = 'http://oxideshop.com/test';
-        $oUtilsUrl = $this->getMock('oxUtilsUrl', array('getCurrentUrl'));
+        $oUtilsUrl = $this->getMock(\OxidEsales\Eshop\Core\UtilsUrl::class, array('getCurrentUrl'));
         $oUtilsUrl->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($sCurrentUrl));
-        oxRegistry::set('oxUtilsUrl', $oUtilsUrl);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsUrl::class, $oUtilsUrl);
 
         $oConfig = new oePayPalConfig();
         $this->assertEquals($sCurrentUrl, $oConfig->getCurrentUrl());

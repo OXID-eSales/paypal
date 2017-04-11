@@ -24,7 +24,7 @@ require_once __DIR__ . '/../lib/oepaypalcommunicationhelper.php';
 require_once __DIR__ . '/../lib/oepaypaltestcaseparser.php';
 require_once __DIR__ . '/../lib/oepaypalarrayasserts.php';
 
-class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends OxidTestCase
+class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test cases directory
@@ -129,7 +129,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      */
     protected function _getSession()
     {
-        $oSession = $this->getMock('oxSession', array('getRemoteAccessToken'));
+        $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array('getRemoteAccessToken'));
         $oSession->expects($this->any())->method('getRemoteAccessToken')->will($this->returnValue('token'));
 
         return $oSession;
@@ -157,14 +157,14 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
     /**
      * Returns mocked order object
      *
-     * @return oxOrder
+     * @return \OxidEsales\Eshop\Application\Model\Order
      */
     protected function _getOrder()
     {
         /** @var \OxidEsales\Eshop\Application\Model\Order $oOrder */
         $oOrder = $this->getMock('oePayPalOxOrder', array('finalizePayPalOrder'));
         $oOrder->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
-        $oOrder->oxorder__oxid = new oxField('_test_order');
+        $oOrder->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $oOrder->save();
 
         return $oOrder;
@@ -175,9 +175,9 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      */
     protected function _setMockedUtils()
     {
-        $oUtils = $this->getMock('oxUtils', array('redirect'));
+        $oUtils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array('redirect'));
         $oUtils->expects($this->any())->method('redirect')->will($this->returnValue(null));
-        oxRegistry::set('oxUtils', $oUtils);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Utils::class, $oUtils);
     }
 
     /**
@@ -213,8 +213,8 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
      */
     protected function _reset()
     {
-        $oDb = oxDb::getDb();
-        $oConfig = oxRegistry::getConfig();
+        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $oConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
         $oDb->execute("TRUNCATE oxarticles");
         $oDb->execute("TRUNCATE oxcategories");
         $oDb->execute("TRUNCATE oxcounters");

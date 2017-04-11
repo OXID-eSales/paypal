@@ -23,24 +23,20 @@ use OxidEsales\Eshop\Application\Model\Payment;
 /**
  * Testing oePayPalOxViewConfig class.
  */
-class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
+class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Tear down the fixture.
-     *
-     * @return null
      */
     protected function tearDown()
     {
-        oxDb::getDB()->execute("delete from oxpayments where OXID = 'oxidpaypal' ");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("delete from oxpayments where OXID = 'oxidpaypal' ");
 
         parent::tearDown();
     }
 
     /**
      * Test case for oePayPalOxViewConfig::isStandardCheckoutEnabled()
-     *
-     * @return null
      */
     public function testIsStandardCheckoutEnabled()
     {
@@ -54,8 +50,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::isExpressCheckoutEnabledInDetails()
-     *
-     * @return null
      */
     public function testIsExpressCheckoutEnabledCheckoutIsEnabledTrue()
     {
@@ -70,8 +64,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::isExpressCheckoutEnabledInDetails()
-     *
-     * @return null
      */
     public function testIsExpressCheckoutEnabledWhenCheckoutIsDisabled()
     {
@@ -86,8 +78,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::isExpressCheckoutEnabledInDetails()
-     *
-     * @return null
      */
     public function testIsExpressCheckoutEnabledWhenPaymentNotValid()
     {
@@ -102,8 +92,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::isExpressCheckoutEnabledInDetails()
-     *
-     * @return null
      */
     public function testIsExpressCheckoutEnabledInDetailsWhenExpressCheckoutIsEnabled()
     {
@@ -120,8 +108,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::isExpressCheckoutEnabledInDetails()
-     *
-     * @return null
      */
     public function testIsExpressCheckoutEnabledInDetailsWhenExpressCheckoutIsDisabled()
     {
@@ -138,8 +124,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::isExpressCheckoutEnabledInMiniBasket()
-     *
-     * @return null
      */
     public function testIsExpressCheckoutEnabledInMiniBasketWhenExpressCheckoutIsEnabled()
     {
@@ -156,8 +140,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::isExpressCheckoutEnabledInMiniBasket()
-     *
-     * @return null
      */
     public function testIsExpressCheckoutEnabledInMiniBasketWhenExpressCheckoutIsDisabled()
     {
@@ -174,13 +156,11 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::getPayPalPaymentDescription()
-     *
-     * @return null
      */
     public function testGetPayPalPaymentDescription()
     {
         $sSql = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXLONGDESC`) VALUES ('oxidpaypal', 1, 'PayPal', 'testLongDesc')";
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
 
         $oView = new oePayPalOxViewConfig();
         $this->assertEquals('testLongDesc', $oView->getPayPalPaymentDescription());
@@ -188,13 +168,11 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::getPayPalPayment()
-     *
-     * @return null
      */
     public function testGetPayPalPayment()
     {
         $sSql = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXLONGDESC`) VALUES ('oxidpaypal', 1, 'PayPal', 'testLongDesc')";
-        oxDb::getDb()->execute($sSql);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
 
         $oView = new oePayPalOxViewConfig();
         $oPayment = $oView->getPayPalPayment();
@@ -205,8 +183,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testSendOrderInfoToPayPal()
     {
@@ -220,14 +196,12 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testSendOrderInfoToPayPalWhenFractionQuantityArticleIsInBasket()
     {
         $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
 
-        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
         $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5.6));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
@@ -241,14 +215,12 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testSendOrderInfoToPayPalWhenNoFractionQuantityArticleIsInBasket()
     {
         $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
 
-        $oArticle = $this->getMock('oxArticle', array('getAmount'));
+        $oArticle = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
         $oArticle->expects($this->any())->method('getAmount')->will($this->returnValue(5));
 
         $oBasket = $this->getMock('oePayPalOxBasket', array('getContents'));
@@ -262,8 +234,6 @@ class Unit_oePayPal_Core_oePayPalOxViewConfigTest extends OxidTestCase
 
     /**
      * Test case for oePayPalOxViewConfig::sendOrderInfoToPayPal()
-     *
-     * @return null
      */
     public function testSendOrderInfoToPayPalWhenBasketIsEmpty()
     {

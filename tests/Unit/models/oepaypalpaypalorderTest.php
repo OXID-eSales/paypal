@@ -24,7 +24,7 @@
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalPayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**
@@ -32,8 +32,8 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
      */
     public function setUp()
     {
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
-        oxDb::getDb()->execute('TRUNCATE `oepaypal_order`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
 
         parent::setUp();
     }
@@ -41,8 +41,6 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::getOrderId()
      * Tests adding / getting PayPal Order Payment history item
-     *
-     * @return null
      */
     public function testSetGet()
     {
@@ -55,8 +53,6 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::save()
      * Tests adding / getting PayPal Order Payment history item
-     *
-     * @return null
      */
     public function testSavePayPalPayPalOrder_insert()
     {
@@ -88,8 +84,6 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::save()
      * Tests adding / getting PayPal Order Payment history item
-     *
-     * @return null
      */
     public function testSavePayPalPayPalOrder_update()
     {
@@ -124,8 +118,6 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::addRefundedAmount()
      * Tests adding amount to PayPal refunded amount
-     *
-     * @return null
      */
     public function testAddRefundedAmountWhenEmpty()
     {
@@ -139,8 +131,6 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::addCapturedAmount()
      * Tests adding amount to PayPal refunded amount
-     *
-     * @return null
      */
     public function testAddCapturedAmountWhenEmpty()
     {
@@ -154,8 +144,6 @@ class Unit_oePayPal_models_oePayPalPayPalOrderTest extends OxidTestCase
     /**
      * Test case for oePayPalPayPalOrder::getPaymentStatus()
      * Tests PayPal payment status getter
-     *
-     * @return null
      */
     public function testGetPayPalPaymentStatusWhenStatusEmpty()
     {

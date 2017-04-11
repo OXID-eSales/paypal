@@ -28,13 +28,11 @@ if (!class_exists('oePayPalPayment_parent')) {
 /**
  * Testing oePayPalPayment class.
  */
-class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
+class Unit_oePayPal_Controllers_oePayPalPaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test case for oePayPalPayment::validatePayment()
      * Test validatePayment
-     *
-     * @return null
      */
     public function testValidatePayment()
     {
@@ -56,8 +54,6 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     /**
      * Test case for oePayPalPayment::validatePayment()
      * Test validatePayment if Order was already checked by paypal
-     *
-     * @return null
      */
     public function testValidatePaymentIfCheckedByPayPal()
     {
@@ -75,8 +71,6 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
     /**
      * Test case for oePayPalPayment::isConfirmedByPayPal()
      * Test isConfirmedByPayPal
-     *
-     * @return null
      */
     public function testIsConfirmedByPayPal()
     {
@@ -84,10 +78,10 @@ class Unit_oePayPal_Controllers_oePayPalPaymentTest extends OxidTestCase
         $this->setRequestParameter("paymentid", "oxidpaypal");
         $this->getSession()->setVariable("oepaypal-basketAmount", 129.00);
 
-        $oPrice = $this->getMock("oxPrice", array("getBruttoPrice"));
+        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
         $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(129.00));
 
-        $oBasket = $this->getMock("oxBasket", array("getPrice"));
+        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("getPrice"));
         $oBasket->expects($this->once())->method("getPrice")->will($this->returnValue($oPrice));
 
         $oView = new oePayPalPayment();

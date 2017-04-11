@@ -21,7 +21,7 @@
 
 
 if (!class_exists('oePayPalOxOrder_parent')) {
-    class oePayPalOxOrder_parent extends oxOrder
+    class oePayPalOxOrder_parent extends \OxidEsales\Eshop\Application\Model\Order
     {
     }
 }
@@ -29,7 +29,7 @@ if (!class_exists('oePayPalOxOrder_parent')) {
 /**
  * Testing oePayPalOxState class.
  */
-class Unit_oePayPal_models_oePayPalOrderActionManagerTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOrderActionManagerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**

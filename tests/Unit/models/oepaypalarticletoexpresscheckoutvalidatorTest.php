@@ -19,12 +19,12 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 if (!class_exists('oePayPalOxBasket_parent')) {
-    class oePayPalOxBasket_parent extends oxBasket
+    class oePayPalOxBasket_parent  extends \OxidEsales\Eshop\Application\Model\Basket
     {
     }
 }
 
-class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     public function providerSetGetItemToValidate()
@@ -172,7 +172,7 @@ class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutValidatorTest extends
 
         //if $sBasketProductId is null we say that $aBasketItemsList is empty array
         if (!is_null($sBasketProductId)) {
-            $oBasketItem = $this->getMock('oxBasketItem', array('getProductId', 'getPersParams', 'getSelList'));
+            $oBasketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getPersParams', 'getSelList'));
             $oBasketItem->expects($this->any())->method('getProductId')->will($this->returnValue($sBasketProductId));
             $oBasketItem->expects($this->any())->method('getSelList')->will($this->returnValue($aBasketSelectionList));
             $oBasketItem->expects($this->any())->method('getPersParams')->will($this->returnValue($aBasketPersistentParam));

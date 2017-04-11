@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest extends OxidTestCase
+class Unit_oePayPal_Models_oePayPalArticleToExpressCheckoutCurrentItemTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Tests setter and getter.

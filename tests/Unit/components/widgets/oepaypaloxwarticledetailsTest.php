@@ -25,12 +25,12 @@ if (!class_exists('oePayPalOxwArticleDetails_parent')) {
     }
 }
 
-class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends OxidTestCase
+class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     protected function _createDetailsMock($oArticleInfo, $blShowECSPopUp = 0)
     {
-        $oBasketComponent = $this->getMock('BasketComponent', array('getCurrentArticleInfo', 'shopECSPopUp'));
+        $oBasketComponent = $this->getMock(\OxidEsales\Eshop\Application\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));
         $oBasketComponent->expects($this->any())->method('getCurrentArticleInfo')->will($this->returnValue($oArticleInfo));
         $oBasketComponent->expects($this->any())->method('shopECSPopUp')->will($this->returnValue($blShowECSPopUp));
 

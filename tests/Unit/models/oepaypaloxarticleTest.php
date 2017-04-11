@@ -20,7 +20,7 @@
  */
 
 if (!class_exists('oePayPalOxArticle_parent')) {
-    class oePayPalOxArticle_parent extends oxArticle
+    class oePayPalOxArticle_parent extends \OxidEsales\Eshop\Application\Model\Article
     {
     }
 }
@@ -28,7 +28,7 @@ if (!class_exists('oePayPalOxArticle_parent')) {
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOxArticleTest extends OxidTestCase
+class Unit_oePayPal_models_oePayPalOxArticleTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * @dataProvider provider
@@ -50,8 +50,8 @@ class Unit_oePayPal_models_oePayPalOxArticleTest extends OxidTestCase
     {
         $oArticle = oxNew("oePayPalOxArticle");
 
-        $oArticle->oxarticles__oxnonmaterial = new oxField($blIsMaterial);
-        $oArticle->oxarticles__oxisdownloadable = new oxField($blIsDownloadable);
+        $oArticle->oxarticles__oxnonmaterial = new \OxidEsales\Eshop\Core\Field($blIsMaterial);
+        $oArticle->oxarticles__oxisdownloadable = new \OxidEsales\Eshop\Core\Field($blIsDownloadable);
 
         $this->assertEquals($blResult, $oArticle->isVirtualPayPalArticle());
     }
@@ -62,7 +62,7 @@ class Unit_oePayPal_models_oePayPalOxArticleTest extends OxidTestCase
     {
         $oArticle = oxNew("oePayPalOxArticle");
 
-        $oArticle->oxarticles__oxstock = new oxField(321);
+        $oArticle->oxarticles__oxstock = new \OxidEsales\Eshop\Core\Field(321);
 
         $this->assertEquals(321, $oArticle->getStockAmount());
     }

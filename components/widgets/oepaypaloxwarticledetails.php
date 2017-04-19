@@ -69,7 +69,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     public function oePayPalShowECSPopup()
     {
-        return $this->getComponent(\OxidEsales\Eshop\Application\Component\BasketComponent::class)->shopECSPopUp();
+        return $this->getComponent('oxcmp_basket')->shopECSPopUp();
     }
 
     /**
@@ -79,7 +79,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     public function oePayPalGetCancelUrl()
     {
-        return $this->getComponent(\OxidEsales\Eshop\Application\Component\BasketComponent::class)->getPayPalCancelURL();
+        return $this->getComponent('oxcmp_basket')->getPayPalCancelURL();
     }
 
     /**
@@ -114,7 +114,7 @@ class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
      */
     protected function _oePayPalGetECSArticle()
     {
-        $aProducts = $this->getComponent(\OxidEsales\Eshop\Application\Component\BasketComponent::class)->getCurrentArticleInfo();
+        $aProducts = $this->getComponent('oxcmp_basket')->getCurrentArticleInfo();
 
         return $aProducts;
     }

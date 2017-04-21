@@ -19,9 +19,12 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
-{
+namespace OxidEsales\PayPalModule\Tests\Unit\Component;
 
+use OxidEsales\PayPalModule\Component\BasketComponent;
+
+class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
+{
     public function providerActionExpressCheckoutFromDetailsPage()
     {
         $sUrl = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
@@ -55,8 +58,8 @@ class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends \OxidEsales\Testi
         $oCurrentItem = $this->getMock('oePayPalArticleToExpressCheckoutCurrentItem', array('getArticleAmount'));
         $oCurrentItem->expects($this->any())->method('getArticleAmount')->will($this->returnValue($iArticleAmount));
 
-        /** @var oePayPalOxcmp_Basket|PHPUnit_Framework_MockObject_MockObject $oCmpBasket */
-        $oCmpBasket = $this->getMock('oePayPalOxcmp_Basket', array('_getValidator', '_getCurrentArticle'));
+        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $oCmpBasket */
+        $oCmpBasket = $this->getMock(BasketComponent::class, array('_getValidator', '_getCurrentArticle'));
         $oCmpBasket->expects($this->any())->method('_getValidator')->will($this->returnValue($oValidator));
         $oCmpBasket->expects($this->any())->method('_getCurrentArticle')->will($this->returnValue($oCurrentItem));
 
@@ -77,8 +80,8 @@ class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends \OxidEsales\Testi
         $oValidator = $this->getMock('oePayPalArticleToExpressCheckoutValidator', array('isArticleValid'));
         $oValidator->expects($this->any())->method('isArticleValid')->will($this->returnValue(true));
 
-        /** @var oePayPalOxcmp_Basket|PHPUnit_Framework_MockObject_MockObject $oCmpBasket */
-        $oCmpBasket = $this->getMock('oePayPalOxcmp_Basket', array('_getValidator'));
+        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $oCmpBasket */
+        $oCmpBasket = $this->getMock(BasketComponent::class, array('_getValidator'));
         $oCmpBasket->expects($this->any())->method('_getValidator')->will($this->returnValue($oValidator));
 
         $this->assertEquals($sExpectedURL, $oCmpBasket->actionExpressCheckoutFromDetailsPage());
@@ -95,7 +98,7 @@ class Unit_oePayPal_Components_oepaypaloxcmpBasketTest extends \OxidEsales\Testi
         $sCancelURL = urlencode($sUrl);
         $sExpectedUrl = 'oePayPalExpressCheckoutDispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . $sCancelURL;
 
-        $oCmpBasket = new oePayPalOxcmp_Basket();
+        $oCmpBasket = new BasketComponent();
 
         $this->assertEquals($sExpectedUrl, $oCmpBasket->actionNotAddToBasketAndGoToCheckout());
     }

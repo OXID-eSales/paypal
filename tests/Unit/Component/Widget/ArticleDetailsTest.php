@@ -19,22 +19,18 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
-if (!class_exists('oePayPalOxwArticleDetails_parent')) {
-    class oePayPalOxwArticleDetails_parent extends Details
-    {
-    }
-}
+namespace OxidEsales\PayPalModule\Tests\Unit\Component\Widget;
 
-class Unit_oePayPal_Components_Widgets_oePayPalOxwArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     protected function _createDetailsMock($oArticleInfo, $blShowECSPopUp = 0)
     {
-        $oBasketComponent = $this->getMock(\OxidEsales\Eshop\Application\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));
+        $oBasketComponent = $this->getMock(\OxidEsales\PayPalModule\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));
         $oBasketComponent->expects($this->any())->method('getCurrentArticleInfo')->will($this->returnValue($oArticleInfo));
         $oBasketComponent->expects($this->any())->method('shopECSPopUp')->will($this->returnValue($blShowECSPopUp));
 
-        $oDetails = $this->getMock('oePayPalOxwArticleDetails', array('_oePayPalGetRequest', 'getComponent'));
+        $oDetails = $this->getMock(\OxidEsales\PayPalModule\Component\Widget\ArticleDetails::class, array('_oePayPalGetRequest', 'getComponent'));
         $oDetails->expects($this->any())->method('getComponent')->will($this->returnValue($oBasketComponent));
 
         return $oDetails;

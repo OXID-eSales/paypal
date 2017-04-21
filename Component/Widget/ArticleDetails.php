@@ -19,12 +19,14 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
+namespace OxidEsales\PayPalModule\Component\Widget;
+
 /**
  * Article box widget
  *
  * @mixin \OxidEsales\Eshop\Application\Component\Widget\ArticleDetails
  */
-class oePayPalOxwArticleDetails extends oePayPalOxwArticleDetails_parent
+class ArticleDetails extends ArticleDetails_parent
 {
     /**
      * Returns products amount to .tpl pages.

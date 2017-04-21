@@ -19,12 +19,14 @@
  * @copyright (C) OXID eSales AG 2003-2014
  */
 
+namespace OxidEsales\PayPalModule\Component;
+
 /**
  * Basket component
  *
  * @mixin \OxidEsales\Eshop\Application\Component\BasketComponent
  */
-class oePayPalOxcmp_Basket extends oePayPalOxcmp_Basket_parent
+class BasketComponent extends BasketComponent_parent
 {
     /**
      * Show ECS PopUp

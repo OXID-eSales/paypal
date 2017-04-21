@@ -6,7 +6,7 @@
         <form action="[{$oViewConf->getSslSelfLink()}]" method="post">
             <div>
                 [{$oViewConf->getHiddenSid()}]
-                <input type="hidden" name="cl" value="oePayPalExpressCheckoutDispatcher"/>
+                <input type="hidden" name="cl" value="oepaypalexpresscheckoutdispatcher"/>
                 <input type="hidden" name="fnc" value="setExpressCheckout"/>
                 <input type="hidden" name="oePayPalCancelURL" value="[{$oViewConf->getCurrentURL()}]"/>
                 <input type="image" name="paypalExpressCheckoutButton" id="paypalExpressCheckoutMiniBasketImage"

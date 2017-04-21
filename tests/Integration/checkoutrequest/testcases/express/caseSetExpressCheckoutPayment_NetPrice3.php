@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 /**
@@ -26,7 +26,7 @@
  * Case with discount.
  */
 $aData = array(
-    'class'         => 'oePayPalExpressCheckoutDispatcher',
+    'class'         => \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class,
     'action'        => 'setExpressCheckout',
     'articles'      => array(
         0 => array(
@@ -75,10 +75,10 @@ $aData = array(
             'SOLUTIONTYPE'                       => 'Mark',
             'BRANDNAME'                          => 'PayPal Testshop',
             'CARTBORDERCOLOR'                    => '2b8da4',
-            'RETURNURL'                          => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=oePayPalExpressCheckoutDispatcher&fnc=getExpressCheckoutDetails',
+            'RETURNURL'                          => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=oepaypalexpresscheckoutdispatcher&fnc=getExpressCheckoutDetails',
             'CANCELURL'                          => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=basket',
             'PAYMENTREQUEST_0_PAYMENTACTION'     => 'Authorization',
-            'CALLBACK'                           => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=oePayPalExpressCheckoutDispatcher&fnc=processCallBack',
+            'CALLBACK'                           => '{SHOP_URL}index.php?lang=0&sid=&rtoken=token&shp={SHOP_ID}&cl=oepaypalexpresscheckoutdispatcher&fnc=processCallBack',
             'CALLBACKTIMEOUT'                    => '6',
             'NOSHIPPING'                         => '2',
             'PAYMENTREQUEST_0_TAXAMT'            => '19.00',

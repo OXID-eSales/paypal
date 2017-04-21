@@ -64,9 +64,9 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
 
-        oePayPalEvents::addOrderPaymentsTable();
-        oePayPalEvents::addOrderTable();
-        oePayPalEvents::addOrderPaymentsCommentsTable();
+        \OxidEsales\PayPalModule\Core\Events::addOrderPaymentsTable();
+        \OxidEsales\PayPalModule\Core\Events::addOrderTable();
+        \OxidEsales\PayPalModule\Core\Events::addOrderPaymentsCommentsTable();
 
     }
 
@@ -136,7 +136,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         $orderPaymentParent = $this->createPayPalOrderPaymentParent();
         $orderPayment       = $this->getPayPalOrderPayment($data['ipn']);
 
-        $this->assertTrue(is_a($orderPayment, 'oePayPalOrderPayment'), 'wrong type of object');
+        $this->assertTrue(is_a($orderPayment, \OxidEsales\PayPalModule\Model\OrderPayment::class), 'wrong type of object');
         $this->assertEquals($data['expected_payment_status'], $orderPayment->getStatus(), 'wrong payment status');
         $this->assertTrue($orderPayment->getIsValid(), 'payment not valid');
         $this->assertEquals($data['expected_txn_id'], $orderPayment->getTransactionId(), 'wrong transaction id');
@@ -202,7 +202,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         $orderPaymentParent = $this->createPayPalOrderPaymentParent();
         $orderPayment       = $this->getPayPalOrderPayment($data['ipn']);
 
-        $this->assertTrue(is_a($orderPayment, 'oePayPalOrderPayment'), 'wrong type of object');
+        $this->assertTrue(is_a($orderPayment, \OxidEsales\PayPalModule\Model\OrderPayment::class), 'wrong type of object');
         $this->assertEquals($data['expected_payment_status'], $orderPayment->getStatus(), 'wrong payment status');
         $this->assertTrue($orderPayment->getIsValid(), 'payment not valid');
         $this->assertEquals($data['expected_txn_id'], $orderPayment->getTransactionId(), 'wrong transaction id');
@@ -267,7 +267,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         $orderPaymentParent = $this->createPayPalOrderPaymentParent();
         $orderPayment       = $this->getPayPalOrderPayment($data['ipn']);
 
-        $this->assertTrue(is_a($orderPayment, 'oePayPalOrderPayment'), 'wrong type of object');
+        $this->assertTrue(is_a($orderPayment, \OxidEsales\PayPalModule\Model\OrderPayment::class), 'wrong type of object');
         $this->assertEquals($data['expected_payment_status'], $orderPayment->getStatus(), 'wrong payment status');
         $this->assertTrue($orderPayment->getIsValid(), 'payment not valid');
         $this->assertEquals($data['expected_txn_id'], $orderPayment->getTransactionId(), 'wrong transaction id');
@@ -506,10 +506,10 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         //we have the capture paypal transactions that completes the payment
         //in table oepaypal_orderpayments and need to update oepaypal_order and oxorder__oxtransstatus
 
-        $orderManager = $this->getProxyClass('oePayPalOrderManager');
+        $orderManager = $this->getProxyClass(\OxidEsales\PayPalModule\Model\OrderManager::class);
         $orderManager->setOrderPayment($orderPayment);
         $paypalOrder = $orderManager->getOrder();
-        $this->assertTrue(is_a($paypalOrder, 'oePayPalPayPalOrder'));
+        $this->assertTrue(is_a($paypalOrder, \OxidEsales\PayPalModule\Model\PayPalOrder::class));
         $this->assertEquals($this->testOrderId, $paypalOrder->getId());
         $this->assertEquals(0.0, $paypalOrder->getCapturedAmount());
         $this->assertEquals('pending', $paypalOrder->getPaymentStatus());
@@ -546,7 +546,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         $orderPayment->setAmount(self::PAYMENT_AMOUNT - 10.0);
         $orderPayment->save();
 
-        $orderManager = $this->getProxyClass('oePayPalOrderManager');
+        $orderManager = $this->getProxyClass(\OxidEsales\PayPalModule\Model\OrderManager::class);
         $orderManager->setOrderPayment($orderPayment);
         $paypalOrder = $orderManager->getOrder();
 
@@ -569,8 +569,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
             'getTransactionMode'                   => 'AUTHORIZATION',
         );
 
-        $paypalConfig = $this->getMock('oePayPalConfig',
-            array_keys($mocks));
+        $paypalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array_keys($mocks));
 
         foreach ($mocks as $method => $returnValue) {
             $paypalConfig->expects($this->any())->method($method)->will($this->returnValue($returnValue));
@@ -586,7 +585,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
      *
      * @return \OxidEsales\Eshop\Application\Model\Order
      */
-    private function createOrder($status = oePayPalOxOrder::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED)
+    private function createOrder($status = \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED)
     {
         if (empty($this->testUserId)) {
             $this->fail('please create related oxuser first');
@@ -630,7 +629,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
     /**
      * Create order in database by given ID.
      *
-     * @return oePayPalPayPalOrder
+     * @return \OxidEsales\PayPalModule\Model\PayPalOrder
      */
     private function createPayPalOrder()
     {
@@ -638,7 +637,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
             $this->fail('please create related oxorder first');
         }
 
-        $paypalOrder = oxNew('oePayPalPayPalOrder');
+        $paypalOrder = oxNew(\OxidEsales\PayPalModule\Model\PayPalOrder::class);
         $paypalOrder->setOrderId($this->testOrderId);
         $paypalOrder->setPaymentStatus('pending');
         $paypalOrder->setCapturedAmount(0.0);
@@ -655,7 +654,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
      *
      * @param string $mode Chose type of orderpayment (authorization or capture)
      *
-     * @return oePayPalOrderPayment
+     * @return \OxidEsales\PayPalModule\Model\OrderPayment::class
      */
     private function createPayPalOrderPayment($mode = 'authorization')
     {
@@ -683,7 +682,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
             'setDate'          => '2015-04-01 13:13:13'
         );
 
-        $paypalOrderPayment = oxNew('oePayPalOrderPayment');
+        $paypalOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
         $paypalOrderPayment->setOrderid($this->testOrderId);
 
         foreach ($data[$mode] as $function => $argument) {
@@ -733,7 +732,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
      *
      * @param array test data
      *
-     * @return oePayPalOrderPayment
+     * @return \OxidEsales\PayPalModule\Model\OrderPayment::class
      */
     private function getPayPalOrderPayment($data)
     {
@@ -741,10 +740,10 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         $lang         = $paypalConfig->getLang();
 
         //simulates IPN for capture
-        $paypalRequest = $this->getMock('oePayPalRequest', array('getPost'));
+        $paypalRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost'));
         $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($data));
 
-        $paymentBuilder = oxNew('oePayPalIPNPaymentBuilder');
+        $paymentBuilder = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class);
         $paymentBuilder->setLang($lang);
         $paymentBuilder->setRequest($paypalRequest);
 
@@ -757,7 +756,7 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
     /**
      * Test helper for creating order payment parent transaction with PayPal.
      *
-     * @return oePayPalOrderPayment
+     * @return \OxidEsales\PayPalModule\Model\OrderPayment::class
      */
     private function createPayPalOrderPaymentParent()
     {
@@ -768,13 +767,16 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
 
     /**
      * Test helper, creates order with paypal payment and all connected database entries.
-     * @return oePayPalPayPalOrder
+     *
+     * @return \OxidEsales\PayPalModule\Model\PayPalOrder
      */
     private function prepareFullOrder()
     {
         $this->insertUser();
         $this->createOrder();
+
         $paypalOrder = $this->createPayPalOrder();
+
         return $paypalOrder;
     }
 
@@ -789,9 +791,9 @@ class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary
         $lang         = $paypalConfig->getLang();
 
         foreach ($data as $post) {
-            $paypalRequest = $this->getMock('oePayPalRequest', array('getPost'));
+            $paypalRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost'));
             $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($post));
-            $processor = oxNew('oePayPalIPNProcessor');
+            $processor = oxNew(\OxidEsales\PayPalModule\Model\IPNProcessor::class);
             $processor->setLang($lang);
             $processor->setRequest($paypalRequest);
             $processor->process();

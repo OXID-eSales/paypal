@@ -16,13 +16,13 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 /**
  * Metadata version
  */
-$sMetadataVersion = '1.2';
+$sMetadataVersion = '2.0';
 
 /**
  * Module information
@@ -40,111 +40,30 @@ $aModule = array(
     'url'          => 'http://www.oxid-esales.com',
     'email'        => 'info@oxid-esales.com',
     'extend'       => array(
-        \OxidEsales\Eshop\Core\ViewConfig::class                              => 'oe/oepaypal/core/oepaypaloxviewconfig',
+        \OxidEsales\Eshop\Core\ViewConfig::class                              => \OxidEsales\PayPalModule\Core\ViewConfig::class,
         \OxidEsales\Eshop\Application\Component\BasketComponent::class        => \OxidEsales\PayPalModule\Component\BasketComponent::class,
         \OxidEsales\Eshop\Application\Component\Widget\ArticleDetails::class  => \OxidEsales\PayPalModule\Component\Widget\ArticleDetails::class,
-        \OxidEsales\Eshop\Application\Controller\OrderController::class       => 'oe/oepaypal/controllers/oepaypalorder',
-        \OxidEsales\Eshop\Application\Controller\PaymentController::class     => 'oe/oepaypal/controllers/oepaypalpayment',
-        \OxidEsales\Eshop\Application\Controller\WrappingController::class    => 'oe/oepaypal/controllers/oepaypalwrapping',
-        \OxidEsales\Eshop\Application\Controller\Admin\OrderList::class       => 'oe/oepaypal/controllers/admin/oepaypalorder_list',
-        \OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain::class => 'oe/oepaypal/controllers/admin/oepaypaldeliveryset_main',
-        \OxidEsales\Eshop\Application\Model\Address::class                    => 'oe/oepaypal/models/oepaypaloxaddress',
-        \OxidEsales\Eshop\Application\Model\User::class                       => 'oe/oepaypal/models/oepaypaloxuser',
-        \OxidEsales\Eshop\Application\Model\Order::class                      => 'oe/oepaypal/models/oepaypaloxorder',
-        \OxidEsales\Eshop\Application\Model\Basket::class                     => 'oe/oepaypal/models/oepaypaloxbasket',
-        \OxidEsales\Eshop\Application\Model\Article::class                    => 'oe/oepaypal/models/oepaypaloxarticle',
-        \OxidEsales\Eshop\Application\Model\PaymentGateway::class             => 'oe/oepaypal/models/oepaypaloxpaymentgateway',
+        \OxidEsales\Eshop\Application\Controller\OrderController::class       => \OxidEsales\PayPalModule\Controller\OrderController::class,
+        \OxidEsales\Eshop\Application\Controller\PaymentController::class     => \OxidEsales\PayPalModule\Controller\PaymentController::class,
+        \OxidEsales\Eshop\Application\Controller\WrappingController::class    => \OxidEsales\PayPalModule\Controller\WrappingController::class,
+        \OxidEsales\Eshop\Application\Controller\Admin\OrderList::class       => \OxidEsales\PayPalModule\Controller\Admin\OrderList::class,
+        \OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain::class => \OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain::class,
+        \OxidEsales\Eshop\Application\Model\Address::class                    => \OxidEsales\PayPalModule\Model\Address::class,
+        \OxidEsales\Eshop\Application\Model\User::class                       => \OxidEsales\PayPalModule\Model\User::class,
+        \OxidEsales\Eshop\Application\Model\Order::class                      => \OxidEsales\PayPalModule\Model\Order::class,
+        \OxidEsales\Eshop\Application\Model\Basket::class                     => \OxidEsales\PayPalModule\Model\Basket::class,
+        \OxidEsales\Eshop\Application\Model\Article::class                    => \OxidEsales\PayPalModule\Model\Article::class,
+        \OxidEsales\Eshop\Application\Model\PaymentGateway::class             => \OxidEsales\PayPalModule\Model\PaymentGateway::class,
     ),
-    'files' => array(
-        // Core
-        'oePayPalException'                 => 'oe/oepaypal/core/exception/oepaypalexception.php',
-        'oePayPalMissingParameterException' => 'oe/oepaypal/core/exception/oepaypalmissingparameterexception.php',
-        'oePayPalResponseException'         => 'oe/oepaypal/core/exception/oepaypalresponseexception.php',
-        'oePayPalInvalidActionException'    => 'oe/oepaypal/core/exception/oepaypalinvalidactionexception.php',
-        'oePayPalService'                   => 'oe/oepaypal/core/oepaypalservice.php',
-        'oePayPalCheckValidator'            => 'oe/oepaypal/core/oepaypalcheckvalidator.php',
-        'oePayPalLogger'                    => 'oe/oepaypal/core/oepaypallogger.php',
-        'oePayPalConfig'                    => 'oe/oepaypal/core/oepaypalconfig.php',
-        'oePayPalShopLogo'                  => 'oe/oepaypal/core/oepaypalshoplogo.php',
-        'oePayPalCaller'                    => 'oe/oepaypal/core/oepaypalcaller.php',
-        'oePayPalExtensionChecker'          => 'oe/oepaypal/core/oepaypalextensionchecker.php',
-        'oePayPalEvents'                    => 'oe/oepaypal/core/oepaypalevents.php',
-        'oePayPalCurl'                      => 'oe/oepaypal/core/oepaypalcurl.php',
-        'oePayPalModelDbGateway'            => 'oe/oepaypal/core/oepaypalmodeldbgateway.php',
-        'oePayPalModel'                     => 'oe/oepaypal/core/oepaypalmodel.php',
-        'oePayPalRequest'                   => 'oe/oepaypal/core/oepaypalrequest.php',
-        'oePayPalEscape'                    => 'oe/oepaypal/core/oepaypalescape.php',
-        'oePayPalList'                      => 'oe/oepaypal/core/oepaypallist.php',
-        'oePayPalUserAgent'                 => 'oe/oepaypal/core/oepaypaluseragent.php',
-        'oePayPalFullName'                  => 'oe/oepaypal/core/oepaypalfullname.php',
-
-        // Controllers
-        'oePayPalController'                => 'oe/oepaypal/controllers/oepaypalcontroller.php',
-        'oePayPalDispatcher'                => 'oe/oepaypal/controllers/oepaypaldispatcher.php',
-        'oePayPalExpressCheckoutDispatcher' => 'oe/oepaypal/controllers/oepaypalexpresscheckoutdispatcher.php',
-        'oePayPalStandardDispatcher'        => 'oe/oepaypal/controllers/oepaypalstandarddispatcher.php',
-        'oePayPalIPNHandler'                => 'oe/oepaypal/controllers/oepaypalipnhandler.php',
-        // Admin
-        'oePayPalOrder_PayPal' => 'oe/oepaypal/controllers/admin/oepaypalorder_paypal.php',
-        // Models
-        'oePayPalOrderPaymentStatusList'                  => 'oe/oepaypal/models/oepaypalorderpaymentstatuslist.php',
-        'oePayPalOrderPayment'                            => 'oe/oepaypal/models/oepaypalorderpayment.php',
-        'oePayPalOrderPaymentList'                        => 'oe/oepaypal/models/oepaypalorderpaymentlist.php',
-        'oePayPalOrderPaymentListCalculator'              => 'oe/oepaypal/models/oepaypalorderpaymentlistcalculator.php',
-        'oePayPalOrderActionManager'                      => 'oe/oepaypal/models/oepaypalorderactionmanager.php',
-        'oePayPalPayPalOrder'                             => 'oe/oepaypal/models/oepaypalpaypalorder.php',
-        'oePayPalOrderPaymentStatusCalculator'            => 'oe/oepaypal/models/oepaypalorderpaymentstatuscalculator.php',
-        'oePayPalOrderPaymentActionManager'               => 'oe/oepaypal/models/oepaypalorderpaymentactionmanager.php',
-        'oePayPalIPNRequestPaymentSetter'                 => 'oe/oepaypal/models/oepaypalipnrequestpaymentsetter.php',
-        'oePayPalIPNRequestValidator'                     => 'oe/oepaypal/models/oepaypalipnrequestvalidator.php',
-        'oePayPalIPNPaymentValidator'                     => 'oe/oepaypal/models/oepaypalipnpaymentvalidator.php',
-        'oePayPalArticleToExpressCheckoutValidator'       => 'oe/oepaypal/models/oepaypalarticletoexpresscheckoutvalidator.php',
-        'oePayPalArticleToExpressCheckoutCurrentItem'     => 'oe/oepaypal/models/oepaypalarticletoexpresscheckoutcurrentitem.php',
-        'oePayPalPayPalOrderDbGateway'                    => 'oe/oepaypal/models/dbgateways/oepaypalpaypalorderdbgateway.php',
-        'oePayPalOrderPaymentCommentDbGateway'            => 'oe/oepaypal/models/dbgateways/oepaypalorderpaymentcommentdbgateway.php',
-        'oePayPalOrderPaymentDbGateway'                   => 'oe/oepaypal/models/dbgateways/oepaypalorderpaymentdbgateway.php',
-        'oePayPalOrderPaymentComment'                     => 'oe/oepaypal/models/oepaypalorderpaymentcomment.php',
-        'oePayPalOrderPaymentCommentList'                 => 'oe/oepaypal/models/oepaypalorderpaymentcommentlist.php',
-        'oePayPalOrderManager'                            => 'oe/oepaypal/models/oepaypalordermanager.php',
-        'oePayPalIPNPaymentBuilder'                       => 'oe/oepaypal/models/oepaypalipnpaymentbuilder.php',
-        'oePayPalIPNPaymentCreator'                       => 'oe/oepaypal/models/oepaypalipnpaymentcreator.php',
-        'oePayPalIPNRequestVerifier'                      => 'oe/oepaypal/models/oepaypalipnrequestverifier.php',
-        'oePayPalIPNProcessor'                            => 'oe/oepaypal/models/oepaypalipnprocessor.php',
-        'oePayPalOutOfStockValidator'                     => 'oe/oepaypal/models/oepaypaloutofstockvalidator.php',
-        'oePayPalPayPalRequest'                           => 'oe/oepaypal/models/paypalrequest/oepaypalpaypalrequest.php',
-        'oePayPalPayPalRequestBuilder'                    => 'oe/oepaypal/models/paypalrequest/oepaypalpaypalrequestbuilder.php',
-        'oePayPalSetExpressCheckoutRequestBuilder'        => 'oe/oepaypal/models/paypalrequest/oepaypalsetexpresscheckoutrequestbuilder.php',
-        'oePayPalDoExpressCheckoutPaymentRequestBuilder'  => 'oe/oepaypal/models/paypalrequest/oepaypaldoexpresscheckoutpaymentrequestbuilder.php',
-        'oePayPalGetExpressCheckoutDetailsRequestBuilder' => 'oe/oepaypal/models/paypalrequest/oepaypalgetexpresscheckoutdetailsrequestbuilder.php',
-        'oePayPalResponse'                                => 'oe/oepaypal/models/responses/oepaypalresponse.php',
-        'oePayPalResponseDoVoid'                          => 'oe/oepaypal/models/responses/oepaypalresponsedovoid.php',
-        'oePayPalResponseDoRefund'                        => 'oe/oepaypal/models/responses/oepaypalresponsedorefund.php',
-        'oePayPalResponseDoCapture'                       => 'oe/oepaypal/models/responses/oepaypalresponsedocapture.php',
-        'oePayPalResponseDoReAuthorize'                   => 'oe/oepaypal/models/responses/oepaypalresponsedoreauthorize.php',
-        'oePayPalResponseSetExpressCheckout'              => 'oe/oepaypal/models/responses/oepaypalresponsesetexpresscheckout.php',
-        'oePayPalResponseGetExpressCheckoutDetails'       => 'oe/oepaypal/models/responses/oepaypalresponsegetexpresscheckoutdetails.php',
-        'oePayPalResponseDoExpressCheckoutPayment'        => 'oe/oepaypal/models/responses/oepaypalresponsedoexpresscheckoutpayment.php',
-        'oePayPalResponseDoVerifyWithPayPal'              => 'oe/oepaypal/models/responses/oepaypalresponsedoverifywithpaypal.php',
-        'oePayPalOrderActionFactory'                      => 'oe/oepaypal/models/actions/oepaypalorderactionfactory.php',
-        'oePayPalOrderAction'                             => 'oe/oepaypal/models/actions/oepaypalorderaction.php',
-        'oePayPalOrderCaptureAction'                      => 'oe/oepaypal/models/actions/oepaypalordercaptureaction.php',
-        'oePayPalOrderRefundAction'                       => 'oe/oepaypal/models/actions/oepaypalorderrefundaction.php',
-        'oePayPalOrderVoidAction'                         => 'oe/oepaypal/models/actions/oepaypalordervoidaction.php',
-        'oePayPalOrderActionData'                         => 'oe/oepaypal/models/actions/data/oepaypalorderactiondata.php',
-        'oePayPalOrderCaptureActionData'                  => 'oe/oepaypal/models/actions/data/oepaypalordercaptureactiondata.php',
-        'oePayPalOrderRefundActionData'                   => 'oe/oepaypal/models/actions/data/oepaypalorderrefundactiondata.php',
-        'oePayPalOrderReauthorizeActionData'              => 'oe/oepaypal/models/actions/data/oepaypalorderreauthorizeactiondata.php',
-        'oePayPalOrderVoidActionData'                     => 'oe/oepaypal/models/actions/data/oepaypalordervoidactiondata.php',
-        'oePayPalOrderActionHandler'                      => 'oe/oepaypal/models/actions/handlers/oepaypalorderactionhandler.php',
-        'oePayPalOrderCaptureActionHandler'               => 'oe/oepaypal/models/actions/handlers/oepaypalordercaptureactionhandler.php',
-        'oePayPalOrderRefundActionHandler'                => 'oe/oepaypal/models/actions/handlers/oepaypalorderrefundactionhandler.php',
-        'oePayPalOrderReauthorizeActionHandler'           => 'oe/oepaypal/models/actions/handlers/oepaypalorderreauthorizeactionhandler.php',
-        'oePayPalOrderVoidActionHandler'                  => 'oe/oepaypal/models/actions/handlers/oepaypalordervoidactionhandler.php',
-        'oePayPalPaymentValidator'                        => 'oe/oepaypal/models/oepaypalpaymentvalidator.php',
+    'controllers' => array(
+        'oepaypalexpresscheckoutdispatcher' => \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class,
+        'oepaypalstandarddispatcher'        => \OxidEsales\PayPalModule\Controller\StandardDispatcher::class,
+        'oepaypalipnhandler'                => \OxidEsales\PayPalModule\Controller\IPNHandler::class,
+        'oepaypalorder_paypal'              => \OxidEsales\PayPalModule\Controller\Admin\OrderController::class
     ),
     'events'       => array(
-        'onActivate'   => 'oePayPalEvents::onActivate',
-        'onDeactivate' => 'oePayPalEvents::onDeactivate'
+        'onActivate'   => '\OxidEsales\PayPalModule\Core\Events::onActivate',
+        'onDeactivate' => '\OxidEsales\PayPalModule\Core\Events::onDeactivate'
     ),
     'templates' => array(
         'order_paypal.tpl' => 'oe/oepaypal/views/admin/tpl/order_paypal.tpl',

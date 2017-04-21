@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 /**
@@ -47,7 +47,7 @@
  * Short description: bug entry / support case other info;
  */
 $aData = array(
-    'class'     => 'oePayPalOxPaymentGateway',
+    'class'     => \OxidEsales\PayPalModule\Model\PaymentGateway::class,
     'action'    => 'doExpressCheckoutPayment',
     'articles'  => array(
         0 => array(
@@ -85,7 +85,7 @@ $aData = array(
             'PAYMENTREQUEST_0_PAYMENTACTION'     => 'Authorization',
             'PAYMENTREQUEST_0_AMT'               => '4355.82',
             'PAYMENTREQUEST_0_CURRENCYCODE'      => 'EUR',
-            'PAYMENTREQUEST_0_NOTIFYURL'         => '{SHOP_URL}index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp={SHOP_ID}',
+            'PAYMENTREQUEST_0_NOTIFYURL'         => '{SHOP_URL}index.php?cl=oepaypalipnhandler&fnc=handleRequest&shp={SHOP_ID}',
             'PAYMENTREQUEST_0_DESC'              => 'Bestellnummer 1',
             'PAYMENTREQUEST_0_CUSTOM'            => 'Bestellnummer 1',
             'BUTTONSOURCE'                       => '{BN_ID}',

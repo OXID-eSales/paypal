@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 namespace OxidEsales\PayPalModule\Component;
@@ -100,7 +100,7 @@ class BasketComponent extends BasketComponent_parent
      */
     protected function _getExpressCheckoutUrl()
     {
-        return 'oePayPalExpressCheckoutDispatcher?fnc=setExpressCheckout&displayCartInPayPal=' . (int) $this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
+        return 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=' . (int) $this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
     }
 
     /**
@@ -123,11 +123,11 @@ class BasketComponent extends BasketComponent_parent
     /**
      * Method sets params for article and returns it's object.
      *
-     * @return oePayPalArticleToExpressCheckoutCurrentItem
+     * @return \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem
      */
     protected function _getCurrentArticle()
     {
-        $oCurrentItem = oxNew('oePayPalArticleToExpressCheckoutCurrentItem');
+        $oCurrentItem = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class);
         $sCurrentArticleId = $this->_getRequest()->getPostParameter('aid');
         $aProducts = $this->_getItems();
         $aProductInfo = $aProducts[$sCurrentArticleId];
@@ -142,21 +142,21 @@ class BasketComponent extends BasketComponent_parent
     /**
      * Method returns request object.
      *
-     * @return oePayPalRequest
+     * @return \OxidEsales\PayPalModule\Core\Request
      */
     protected function _getRequest()
     {
-        return oxNew('oePayPalRequest');
+        return oxNew(\OxidEsales\PayPalModule\Core\Request::class);
     }
 
     /**
      * Method sets params for validator and returns it's object.
      *
-     * @return oePayPalArticleToExpressCheckoutValidator
+     * @return \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator
      */
     protected function _getValidator()
     {
-        $oValidator = oxNew('oePayPalArticleToExpressCheckoutValidator');
+        $oValidator = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class);
 
         return $oValidator;
     }

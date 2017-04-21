@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 namespace OxidEsales\PayPalModule\Component\Widget;
@@ -102,11 +102,11 @@ class ArticleDetails extends ArticleDetails_parent
     /**
      * Method returns request object.
      *
-     * @return oePayPalRequest
+     * @return \OxidEsales\PayPalModule\Core\Request
      */
     protected function _oePayPalGetRequest()
     {
-        return oxNew('oePayPalRequest');
+        return oxNew(\OxidEsales\PayPalModule\Core\Request::class);
     }
 
     /**

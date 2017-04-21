@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 /**
@@ -47,7 +47,7 @@
  * Short description: bug entry / support case other info;
  */
 $aData = array(
-    'class'     => 'oePayPalExpressCheckoutDispatcher',
+    'class'     => \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class,
     'action'    => 'getExpressCheckoutDetails',
     'articles'  => array(),
     'discounts' => array(),

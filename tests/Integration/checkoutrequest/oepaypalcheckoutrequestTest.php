@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 require_once __DIR__ . '/../lib/oepaypalshopconstruct.php';
@@ -102,7 +102,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \
      *
      * @param array $aTestCase
      *
-     * @return oePayPalExpressCheckoutDispatcher
+     * @return \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class
      */
     protected function _getDispatcher($aTestCase)
     {
@@ -162,7 +162,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \
     protected function _getOrder()
     {
         /** @var \OxidEsales\Eshop\Application\Model\Order $oOrder */
-        $oOrder = $this->getMock('oePayPalOxOrder', array('finalizePayPalOrder'));
+        $oOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('finalizePayPalOrder'));
         $oOrder->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
         $oOrder->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $oOrder->save();

@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 /**
@@ -192,7 +192,7 @@ class oePayPalShopConstruct
         $aPayment = $this->_setPayments($aCosts['payment']);
         $aVoucherIDs = $this->_setVouchers($aCosts['voucherserie']);
 
-        $oBasket = new oePayPalOxBasket();
+        $oBasket = new \OxidEsales\PayPalModule\Model\Basket();
 
         $oBasket->setBasketUser($this->getUser());
 

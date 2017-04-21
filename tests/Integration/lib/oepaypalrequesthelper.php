@@ -16,7 +16,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 
 require_once __DIR__ . '/oepaypalintegrationtesthelper.php';
@@ -24,16 +24,16 @@ require_once __DIR__ . '/oepaypalintegrationtesthelper.php';
 class oePayPalRequestHelper extends oePayPalIntegrationTestHelper
 {
     /**
-     * Returns loaded oePayPalRequest object with given parameters
+     * Returns loaded \OxidEsales\PayPalModule\Core\Request object with given parameters
      *
      * @param array $aPostParams
      * @param array $aGetParams
      *
-     * @return oePayPalRequest
+     * @return \OxidEsales\PayPalModule\Core\Request
      */
     public function getRequest($aPostParams = null, $aGetParams = null)
     {
-        $oRequest = $this->getMock('oePayPalRequest', array('getPost', 'getGet'));
+        $oRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost', 'getGet'));
         $oRequest->expects($this->any())->method('getPost')->will($this->returnValue($aPostParams));
         $oRequest->expects($this->any())->method('getGet')->will($this->returnValue($aGetParams));
 

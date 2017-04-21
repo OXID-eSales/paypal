@@ -5,7 +5,7 @@
         <form action="[{$oViewConf->getSslSelfLink()}]" method="post">
             <div>
                 [{$oViewConf->getHiddenSid()}]
-                <input type="hidden" name="cl" value="oePayPalExpressCheckoutDispatcher">
+                <input type="hidden" name="cl" value="oepaypalexpresscheckoutdispatcher">
                 <input type="hidden" name="fnc" value="setExpressCheckout">
                 <input type="image" name="paypalExpressCheckoutButton" class="paypalCheckoutBtn"
                        src="[{$oViewConf->getModuleUrl('oepaypal','out/img/')}][{$oViewConf->getActLanguageAbbr()}]-btn-expresscheckout.png"

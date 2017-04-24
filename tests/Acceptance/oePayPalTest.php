@@ -192,6 +192,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->click("id=captureButton");
         $this->frame("edit");
         $this->clickAndWait("id=captureSubmit", 90);
+        $this->waitForItemDisappear("id=captureSubmit");
 
         $basketPrice = "0,99";
         $capturedPrice = "0,99";
@@ -212,6 +213,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         // Perform Refund and check all info
         $this->click("id=refundButton0");
         $this->clickAndWaitFrame("id=refundSubmit", 'edit');
+        $this->waitForItemDisappear("id=refundSubmit");
         $this->assertEquals("refund", $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[2]"), "Money status is not displayed in admin PayPal tab");
         $this->assertEquals("0.99 EUR", $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[3]"));
         $this->assertEquals("Instant", $this->getText("//table[@id='historyTable']/tbody/tr[2]/td[4]"), "Money status is not displayed in admin PayPal tab");

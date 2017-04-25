@@ -16,10 +16,12 @@
  * @copyright (C) OXID eSales AG 2003-2015
  */
 
+namespace OxidEsales\PayPalModule\Tests\Integration\IPNProcessing;
+
 /**
  * Integration tests for IPN processing.
  */
-class Unit_oePayPal_oePayPalIPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /** @var string Command for paypal verification call. */
     const POSTBACK_CMD = 'cmd=_notify-validate';

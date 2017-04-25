@@ -19,11 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-/**
- * Basket constructor
- *
- */
-class oePayPalTestCaseParser
+namespace OxidEsales\PayPalModule\Tests\Integration\Library;
+
+class TestCaseParser
 {
 
     /**
@@ -166,7 +164,7 @@ class oePayPalTestCaseParser
     private function _getFilesInDirectory($sPath)
     {
         $aFiles = array();
-        foreach (new DirectoryIterator($sPath) as $oFile) {
+        foreach (new \DirectoryIterator($sPath) as $oFile) {
             if ($oFile->isDir() && !$oFile->isDot()) {
                 $aFiles = array_merge($aFiles, $this->_getFilesInDirectory($oFile->getPathname()));
             }

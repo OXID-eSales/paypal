@@ -48,6 +48,8 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     {
         \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("delete from oxaddress where OXID = '_testUserAddressId' ");
 
+        $this->resetTestDataDeliveryCostRule();
+
         parent::tearDown();
     }
 
@@ -1192,8 +1194,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $paypalServiceStub = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('getExpressCheckoutDetails'));
         $paypalServiceStub->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($paypalExpressResponse));
 
-        $paypalExpressCheckoutDispatcherProxyClassName = $this->getProxyClassName('\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher');
-        $paypalExpressCheckoutDispatcherPartialStub = $this->getMock($paypalExpressCheckoutDispatcherProxyClassName, array('getPayPalCheckoutService', '_isPayPalPaymentValid'));
+        $paypalExpressCheckoutDispatcherPartialStub = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array('getPayPalCheckoutService', '_isPayPalPaymentValid'));
         $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('_isPayPalPaymentValid')->will($this->returnValue(true));
         $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('getPayPalCheckoutService')->will($this->returnValue($paypalServiceStub));
 
@@ -1245,6 +1246,8 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     private function prepareFixedPriceShippingCostRuleForPayPal($shippingCost)
     {
+        $this->deactivateTestDataDeliveryCostRule();
+
         $deliveryCostRule = new \OxidEsales\Eshop\Application\Model\Delivery();
         $deliveryCostRule->setId('_fixed_price_for_paypal_test');
         $deliveryCostRule->oxdelivery__oxactive = new \OxidEsales\Eshop\Core\Field(1, \OxidEsales\Eshop\Core\Field::T_RAW);
@@ -1262,6 +1265,34 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $deliveryCostRelation->oxdel2delset__oxdelid = new \OxidEsales\Eshop\Core\Field($deliveryCostRule->getId(), \OxidEsales\Eshop\Core\Field::T_RAW);
         $deliveryCostRelation->oxdel2delset__oxdelsetid = new \OxidEsales\Eshop\Core\Field('oxidstandard', \OxidEsales\Eshop\Core\Field::T_RAW);
         $deliveryCostRelation->save();
+    }
+
+    /**
+     * Cause the delivery costs come out of the database sometimes in different order (which makes a test fail),
+     * we deactivate this one from the test data.
+     */
+    protected function deactivateTestDataDeliveryCostRule()
+    {
+        $deliveryCostRule = new \OxidEsales\Eshop\Application\Model\Delivery();
+
+        $deliveryCostRule->setId('1b842e73470578914.54719298');
+        $deliveryCostRule->oxdelivery__oxactive = new \OxidEsales\Eshop\Core\Field(0, \OxidEsales\Eshop\Core\Field::T_RAW);
+
+        $deliveryCostRule->save();
+    }
+
+    /**
+     * Cause the delivery costs come out of the database sometimes in different order (which makes a test fail),
+     * we deactivated this one from the test data. With this method we clean up and activate it again.
+     */
+    protected function resetTestDataDeliveryCostRule()
+    {
+        $deliveryCostRule = new \OxidEsales\Eshop\Application\Model\Delivery();
+
+        $deliveryCostRule->setId('1b842e73470578914.54719298');
+        $deliveryCostRule->oxdelivery__oxactive = new \OxidEsales\Eshop\Core\Field(1, \OxidEsales\Eshop\Core\Field::T_RAW);
+
+        $deliveryCostRule->save();
     }
 }
 

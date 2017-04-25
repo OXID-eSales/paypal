@@ -19,9 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-require_once __DIR__ . '/oepaypalintegrationtesthelper.php';
+namespace OxidEsales\PayPalModule\Tests\Integration\Library;
 
-class oePayPalCommunicationHelper extends oePayPalIntegrationTestHelper
+class CommunicationHelper extends \OxidEsales\PayPalModule\Tests\Integration\Library\IntegrationTestHelper
 {
     /**
      * Returns loaded Caller object returning given parameters on call

@@ -19,24 +19,15 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-require_once __DIR__ . '/oepaypalintegrationtesthelper.php';
+namespace OxidEsales\PayPalModule\Tests\Integration\Library;
 
-class oePayPalRequestHelper extends oePayPalIntegrationTestHelper
+abstract class IntegrationTestHelper extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Returns loaded \OxidEsales\PayPalModule\Core\Request object with given parameters
-     *
-     * @param array $aPostParams
-     * @param array $aGetParams
-     *
-     * @return \OxidEsales\PayPalModule\Core\Request
+     * The only way to skip this helper file with no errors
      */
-    public function getRequest($aPostParams = null, $aGetParams = null)
+    public function testSkip()
     {
-        $oRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost', 'getGet'));
-        $oRequest->expects($this->any())->method('getPost')->will($this->returnValue($aPostParams));
-        $oRequest->expects($this->any())->method('getGet')->will($this->returnValue($aGetParams));
-
-        return $oRequest;
+        return;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -19,13 +18,25 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2017
  */
-abstract class oePayPalIntegrationTestHelper extends PHPUnit_Framework_TestCase
+
+namespace OxidEsales\PayPalModule\Tests\Integration\Library;
+
+class RequestHelper extends \OxidEsales\PayPalModule\Tests\Integration\Library\IntegrationTestHelper
 {
     /**
-     * The only way to skip this helper file with no errors
+     * Returns loaded \OxidEsales\PayPalModule\Core\Request object with given parameters
+     *
+     * @param array $aPostParams
+     * @param array $aGetParams
+     *
+     * @return \OxidEsales\PayPalModule\Core\Request
      */
-    public function testSkip()
+    public function getRequest($aPostParams = null, $aGetParams = null)
     {
-        return;
+        $oRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost', 'getGet'));
+        $oRequest->expects($this->any())->method('getPost')->will($this->returnValue($aPostParams));
+        $oRequest->expects($this->any())->method('getGet')->will($this->returnValue($aGetParams));
+
+        return $oRequest;
     }
 }

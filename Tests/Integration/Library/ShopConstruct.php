@@ -19,11 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-/**
- * Basket constructor
- *
- */
-class oePayPalShopConstruct
+namespace OxidEsales\PayPalModule\Tests\Integration\Library;
+
+class ShopConstruct
 {
     /**
      * @var \OxidEsales\Eshop\Application\Model\User

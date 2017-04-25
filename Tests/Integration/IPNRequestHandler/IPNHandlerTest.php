@@ -18,9 +18,8 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2017
  */
-namespace OxidEsales\PayPalModule\Tests\Integration;
 
-require_once __DIR__ . '/../lib/oepaypalcommunicationhelper.php';
+namespace OxidEsales\PayPalModule\Tests\Integration\IPNRequestHandler;
 
 class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
@@ -259,10 +258,10 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * @return oePayPalCommunicationHelper
+     * @return \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper
      */
     protected function _getPayPalCommunicationHelper()
     {
-        return oxNew('oePayPalCommunicationHelper');
+        return oxNew(\OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper::class);
     }
 }

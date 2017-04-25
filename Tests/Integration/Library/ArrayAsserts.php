@@ -19,14 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-/**
- * Basket constructor
- *
- */
+namespace OxidEsales\PayPalModule\Tests\Integration\Library;
 
-require_once __DIR__ . '/oepaypalintegrationtesthelper.php';
-
-class oePayPalArrayAsserts extends oePayPalIntegrationTestHelper
+class ArrayAsserts extends \OxidEsales\PayPalModule\Tests\Integration\Library\IntegrationTestHelper
 {
 
     /**
@@ -56,7 +51,7 @@ class oePayPalArrayAsserts extends oePayPalIntegrationTestHelper
             try {
                 $this->assertArrayHasKey($sKey, $aResult);
                 $this->assertEquals($sValue, $aResult[$sKey]);
-            } catch (Exception $oException) {
+            } catch (\Exception $oException) {
                 $aExpectedNotMatched[$sKey] = $sValue;
                 $aResultNotMatched[$sKey] = $aResult[$sKey];
             }

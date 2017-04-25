@@ -21,9 +21,6 @@
 
 namespace OxidEsales\PayPalModule\Tests\Integration;
 
-require_once __DIR__ . '/lib/oepaypalcommunicationhelper.php';
-require_once __DIR__ . '/lib/oepaypalrequesthelper.php';
-
 class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function setUp()
@@ -214,19 +211,19 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * @return \oePayPalRequestHelper
+     * @return \OxidEsales\PayPalModule\Tests\Integration\Library\RequestHelper
      */
     protected function _getRequestHelper()
     {
-        return new \oePayPalRequestHelper();
+        return new \OxidEsales\PayPalModule\Tests\Integration\Library\RequestHelper();
     }
 
     /**
-     * @return \oePayPalCommunicationHelper
+     * @return \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper
      */
     protected function _getPayPalCommunicationHelper()
     {
-        return new \oePayPalCommunicationHelper();
+        return new \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper();
     }
 
     /**

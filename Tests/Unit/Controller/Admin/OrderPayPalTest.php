@@ -19,7 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-class Unit_oePayPal_Controllers_Admin_oePayPalOrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
+namespace OxidEsales\PayPalModule\Tests\Unit\Controller\Admin;
+
+class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     /**

@@ -50,7 +50,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @param string $sTestSuitePath
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function addTestData($sTestSuitePath)
     {
@@ -2263,7 +2263,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      * @param $sVarName
      *
      * @return mixed|null|string
-     * @throws Exception
+     * @throws \Exception
      */
     protected function getLoginDataByName($sVarName)
     {
@@ -2272,7 +2272,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         }
 
         if (!$sVarValue) {
-            throw new Exception('Undefined variable: ' . $sVarName);
+            throw new \Exception('Undefined variable: ' . $sVarName);
         }
 
         return $sVarValue;
@@ -2417,6 +2417,8 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     /**
      * @param integer $row
      * @param integer $column
+     *
+     * @return bool
      */
     private function getOrderPayPalTabPrice($row, $column)
     {

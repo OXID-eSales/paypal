@@ -19,12 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-require_once __DIR__ . '/../lib/oepaypalshopconstruct.php';
-require_once __DIR__ . '/../lib/oepaypalcommunicationhelper.php';
-require_once __DIR__ . '/../lib/oepaypaltestcaseparser.php';
-require_once __DIR__ . '/../lib/oepaypalarrayasserts.php';
+namespace OxidEsales\PayPalModule\Tests\Integration\CheckoutRequest;
 
-class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * Test cases directory
@@ -55,7 +52,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \
      */
     public function providerDoExpressCheckoutPayment()
     {
-        $oParser = new oePayPalTestCaseParser();
+        $oParser = new \OxidEsales\PayPalModule\Tests\Integration\Library\TestCaseParser();
         $oParser->setDirectory(__DIR__ . $this->_sTestCasesPath);
         if (isset($this->_aTestCases)) {
             $oParser->setTestCases($this->_aTestCases);
@@ -74,7 +71,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \
             return;
         }
 
-        $oCommunicationHelper = new oePayPalCommunicationHelper();
+        $oCommunicationHelper = new \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper();
         $oCurl = $oCommunicationHelper->getCurl(array());
 
         $oDispatcher = $this->_getDispatcher($aTestCase);
@@ -86,7 +83,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \
 
         $aExpected = $aTestCase['expected'];
 
-        $aAsserts = new oePayPalArrayAsserts();
+        $aAsserts = new \OxidEsales\PayPalModule\Tests\Integration\Library\ArrayAsserts();
 
         $aAsserts->assertArraysEqual($aExpected['requestToPayPal'], $aCurlParameters);
 
@@ -106,7 +103,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends \
      */
     protected function _getDispatcher($aTestCase)
     {
-        $oBasketConstruct = new oePayPalShopConstruct();
+        $oBasketConstruct = new \OxidEsales\PayPalModule\Tests\Integration\Library\ShopConstruct();
         $oBasketConstruct->setParams($aTestCase);
 
         $oBasket = $oBasketConstruct->getBasket();

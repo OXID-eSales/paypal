@@ -225,6 +225,76 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->assertEquals("Pending", $this->getText("//table[@id='historyTable']/tbody/tr[4]/td[4]"), "Money status is not displayed in admin PayPal tab");
     }
 
+
+    /**
+     * Checkout a single product and change the quantity of the product to 5 afterards.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     * @group quarantine
+     */
+    public function testPayPalRegularCheckoutAndChangeQuantityAfterwardsViaAdmin()
+    {
+        //Make an order with PayPal
+        $this->openShop();
+        $this->switchLanguage("Deutsch");
+        $this->searchFor("1001");
+        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->openBasket("Deutsch");
+        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+
+        $this->click("userChangeAddress");
+        $this->waitForItemAppear("order_remark");
+        $this->type("order_remark", "Testing paypal");
+        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+
+        $this->click("name=sShipSet");
+        $this->selectAndWait("sShipSet", "label=Test S&H set");
+        $this->waitForItemAppear("payment_oxidpaypal");
+        $this->click("id=payment_oxidpaypal");
+        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+
+        $this->standardCheckoutWillBeUsed();
+        $this->waitForPayPalPage();
+        $this->loginToSandbox();
+        $this->clickPayPalContinue();
+
+        $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
+        $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
+        $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "The order not finished successful");
+
+        //Go to an admin and check this order nr
+        $this->loginAdminForModule("Administer Orders", "Orders");
+        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
+        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->openListItem("link=2");
+        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");
+
+        //Check user's order information in admin
+        $this->assertEquals("1 *", $this->getText("//table[2]/tbody/tr/td[1]"), "Quantity of product is not correct in admin");
+        $this->assertEquals("Test product 1", $this->getText("//td[3]"), "Purchased product name is not displayed in admin");
+        $this->assertEquals("0,99 EUR", $this->getText("//td[5]"), "Unit price is not displayed in admin");
+        $this->assertEquals("0,99", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"));
+
+        $this->openTab("Products");
+        $this->assertEquals("1", $this->getValue("//tr[@id='art.1']/td[1]/input"), "Quantity of product is not correct in admin");
+        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[7]"), "Unit price is not displayed in admin");
+        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[8]"), "Total price is not displayed in admin");
+
+        //Update product quantities to 5
+        $this->type("//tr[@id='art.1']/td[1]/input", "5");
+        $this->clickAndWait("//input[@value='Update']");
+        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[7]"), "Unit price is not displayed in admin");
+        $this->assertEquals("4,95 EUR", $this->getText("//tr[@id='art.1']/td[8]"), "Total price is incorrect after update");
+        $this->assertEquals("4,95", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"));
+
+        $this->openTab("Main");
+        $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"), "Shipping method is not displayed in admin");
+        $this->assertEquals("PayPal", $this->getSelectedLabel("setPayment"));
+    }
+
     /**
      * testing PayPal ECS in detail page and ECS in mini basket
      *
@@ -423,65 +493,6 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
      */
     public function testPayPalPaymentForGermany()
     {
-        //Make an order with PayPal
-        $this->openShop();
-        $this->switchLanguage("Deutsch");
-        $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
-        $this->openBasket("Deutsch");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
-
-        $this->click("userChangeAddress");
-        $this->waitForItemAppear("order_remark");
-        $this->type("order_remark", "Testing paypal");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
-
-        $this->click("name=sShipSet");
-        $this->selectAndWait("sShipSet", "label=Test S&H set");
-        $this->waitForItemAppear("payment_oxidpaypal");
-        $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
-
-        $this->standardCheckoutWillBeUsed();
-        $this->waitForPayPalPage();
-        $this->loginToSandbox();
-        $this->clickPayPalContinue();
-
-        $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
-        $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
-        $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "The order not finished successful");
-
-        //Go to an admin and check this order nr
-        $this->loginAdminForModule("Administer Orders", "Orders");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
-        $this->openListItem("link=2");
-        $this->assertTextPresent("Internal Status: OK");
-        $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");
-
-        //Check user's order information in admin
-        $this->assertEquals("1 *", $this->getText("//table[2]/tbody/tr/td[1]"), "Quantity of product is not correct in admin");
-        $this->assertEquals("Test product 1", $this->getText("//td[3]"), "Purchased product name is not displayed in admin");
-        $this->assertEquals("0,99 EUR", $this->getText("//td[5]"), "Unit price is not displayed in admin");
-        $this->assertEquals("0,99", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"));
-
-        $this->openTab("Products");
-        $this->assertEquals("1", $this->getValue("//tr[@id='art.1']/td[1]/input"), "Quantity of product is not correct in admin");
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[7]"), "Unit price is not displayed in admin");
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[8]"), "Total price is not displayed in admin");
-
-        //Update product quantities to 5
-        $this->type("//tr[@id='art.1']/td[1]/input", "5");
-        $this->clickAndWait("//input[@value='Update']");
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[7]"), "Unit price is not displayed in admin");
-        $this->assertEquals("4,95 EUR", $this->getText("//tr[@id='art.1']/td[8]"), "Total price is incorrect after update");
-        $this->assertEquals("4,95", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"));
-
-        $this->openTab("Main");
-        $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"), "Shipping method is not displayed in admin");
-        $this->assertEquals("PayPal", $this->getSelectedLabel("setPayment"));
-
         //Separate Germany from PayPal payment method and assign United States
         $this->importSql(__DIR__ . '/testSql/unasignCountryFromPayPal.sql');
 

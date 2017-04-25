@@ -239,21 +239,21 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("Deutsch");
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("Deutsch");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
 
         $this->click("userChangeAddress");
         $this->waitForItemAppear("order_remark");
         $this->type("order_remark", "Testing paypal");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
 
         $this->click("name=sShipSet");
         $this->selectAndWait("sShipSet", "label=Test S&H set");
         $this->waitForItemAppear("payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
 
         $this->standardCheckoutWillBeUsed();
         $this->waitForPayPalPage();
@@ -387,12 +387,12 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("Deutsch");
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("Deutsch");
 
         $this->waitForElement("paypalExpressCheckoutButton");
         $this->assertElementPresent("paypalExpressCheckoutButton");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->waitForElement("paypalExpressCheckoutButton");
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
@@ -409,7 +409,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("Deutsch");
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("Deutsch");
 
         $this->waitForElement("paypalExpressCheckoutButton");
@@ -461,18 +461,18 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("Deutsch");
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("Deutsch");
         $this->assertElementNotPresent("paypalExpressCheckoutBox", "PayPal should not be displayed, because Paypal is deactivated");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertElementNotPresent("paypalExpressCheckoutBox", "PayPal should not be displayed, because Paypal is deactivated");
 
         //On 2nd step
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
         $this->waitForText("Lieferadresse");
 
         //On 3rd step
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
         $this->waitForText("Bitte wählen Sie Ihre Versandart");
         $this->selectAndWait("sShipSet", "label=Standard");
         $this->assertEquals("Kosten: 3,90 €", $this->getText("shipSetCost"));
@@ -508,7 +508,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
 
         //Search for the product and add to cart
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
         $this->waitForElement("paypalExpressCheckoutButton");
         $this->assertElementPresent("link=Test product 1", "Product:Test product 1 is not shown in 1st order step ");
@@ -611,12 +611,12 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->clearCache();
         $this->openShop();
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
 
         $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Grand total is not displayed correctly");
         $this->clickAndWait("//button[text()='Continue to the next step']");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertElementPresent("id=showShipAddress", "Shipping address is not displayed in 2nd order step");
         $this->click("id=userNextStepBottom");
         $this->waitForElement("paymentNextStepBottom");
@@ -674,11 +674,11 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
 
         //Search for the product and add to cart
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
 
         //Login to shop and go to the basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
         $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
@@ -927,9 +927,9 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->clickAndWait("//button[text()='Continue to the next step']");
         $this->assertTextPresent("Germany", "Users country should be Germany");
         $this->clickAndWait("//button[text()='Continue to the next step']");
@@ -943,7 +943,6 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->loginToSandbox();
 
         $this->assertFalse($this->isElementPresent("id=changeAddressButton"), "In standard PayPal there should be not possibility to change address");
-        $this->assertEquals("Ihre Zahlungsinformationen auf einen Blick - PayPal", $this->getTitle());
         $this->clickPayPalContinue();
 
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
@@ -971,12 +970,12 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
 
         //Go to basket and check is express PayPal not visible
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
         $this->assertFalse($this->isElementPresent("paypalExpressCheckoutButton"), "PayPal express button should be not visible in frontend");
 
         //Login to shop and go to the basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertFalse($this->isElementPresent("paypalExpressCheckoutButton"), "PayPal express button should be not visible in frontend");
     }
 
@@ -996,11 +995,11 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("1000");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertTextPresent("Test product 0");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
         $this->assertTextPresent("+1");
@@ -1095,11 +1094,11 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("1004");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertTextPresent("Test product 4");
 
         $this->assertEquals("Discount discount from 10 till 20", $this->getText("//div[@id='basketSummary']/table/tbody/tr[2]/th"));
@@ -1260,11 +1259,11 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("1003");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Grand total: 15,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
         $this->type("voucherNr", "111111");
@@ -1361,11 +1360,11 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("1003");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Test product 3", $this->getText("//tr[@id='cartItem_1']/td[3]/div[1]"));
 
@@ -1503,7 +1502,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("1003");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Test product 3", $this->getText("//tr[@id='cartItem_1']/td[3]/div[1]"));
@@ -1524,9 +1523,6 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
 
         //Go to PayPal express
         $this->selectPayPalExpressCheckout();
-
-        //Go to PayPal
-        $this->assertPayPalTitleVisible();
 
         $this->assertTextPresent("€15.00");
         $this->assertTextPresent("€10.50");
@@ -1617,11 +1613,11 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
 
         $this->openShop();
         $this->searchFor("1001");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
 
         //Login to shop and go to the basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
         $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
@@ -1712,7 +1708,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("100");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->clickAndWait("//form[@name='tobasketsearchList_2']//button");
         $this->clickAndWait("//form[@name='tobasketsearchList_3']//button");
         $this->clickAndWait("//form[@name='tobasketsearchList_4']//button");
@@ -1720,7 +1716,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertTextPresent("Test product 0");
         $this->assertTextPresent("Test product 1");
         $this->assertTextPresent("Test product 3");
@@ -1844,7 +1840,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openShop();
         $this->switchLanguage("English");
         $this->searchFor("100");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->clickAndWait("//form[@name='tobasketsearchList_2']//button");
         $this->clickAndWait("//form[@name='tobasketsearchList_3']//button");
         $this->clickAndWait("//form[@name='tobasketsearchList_4']//button");
@@ -1852,7 +1848,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->openBasket("English");
 
         //Login to shop and go to basket
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->assertTextPresent("Test product 0");
         $this->assertTextPresent("Test product 1");
         $this->assertTextPresent("Test product 3");
@@ -2005,7 +2001,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         // Add articles to basket.
         $this->openShop();
         $this->searchFor("1401");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
 
         // Change price for PayPal payment method
         $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
@@ -2079,7 +2075,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         // Add articles to basket.
         $this->openShop();
         $this->searchFor("1401");
-        $this->clickAndWait("//form[@name='tobasketsearchList_1']//button");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
 
         // Change price for PayPal payment method
         $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
@@ -2116,14 +2112,14 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         $this->assertTextPresent("205,96 €", "Articles VAT changed or didn't display");
         $this->assertEquals("1.322,46 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't display");
 
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
 
         //On 2nd step
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
         $this->waitForText("Lieferadresse");
 
         //On 3rd step
-        $this->clickAndWait("//button[text()='Weiter zum nächsten Schritt']");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
         $this->waitForText("Bitte wählen Sie Ihre Versandart");
 
         // Check trusted shop protection
@@ -2131,7 +2127,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
 
         // Go to PayPal
         $this->click("payment_oxidpaypal");
-        $this->click("//button[text()='Weiter zum nächsten Schritt']");
+        $this->click(self::SELECTOR_BASKET_NEXTSTEP);
 
         $this->waitForPayPalPage();
 
@@ -2175,7 +2171,7 @@ class oePayPal_oePayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCas
         // Add articles to basket.
         $this->openShop();
         $this->switchLanguage("English");
-        $this->loginInFrontend("testing_account@oxid-esales.dev", "useruser");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->searchFor("1001");
         $this->clickAndWait("//ul[@id='searchList']/li/form/div/a[2]/span");
         $this->assertFalse($this->isElementPresent("id=paypalExpressCheckoutDetailsButton"), "After PayPal is disabled in admin PayPal should not be visible in admin");

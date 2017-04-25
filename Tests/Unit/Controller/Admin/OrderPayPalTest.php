@@ -49,7 +49,7 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $oPayPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
         $oPayPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($oPayPalOrderModel));
 
-        $oPayPalOrder = $this->getMock('oePayPalOrder_PayPal', array('getEditObject', 'isPayPalOrder'));
+        $oPayPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
         $oPayPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($oPayPalOxOrder));
         $oPayPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(true));
 
@@ -71,7 +71,7 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $oPayPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
         $oPayPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($oPayPalOrderModel));
 
-        $oPayPalOrder = $this->getMock('oePayPalOrder_PayPal', array('getEditObject', 'isPayPalOrder'));
+        $oPayPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
         $oPayPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($oPayPalOxOrder));
         $oPayPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(false));
 
@@ -84,7 +84,7 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPalOrder_True()
     {
-        $oPayPalOrder = new oePayPalOrder_PayPal();
+        $oPayPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
         $soxId = '_testOrderId';
 
         $oSession = new \OxidEsales\Eshop\Core\Session();
@@ -104,7 +104,7 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPalOrder_False()
     {
-        $oPayPalOrder = new oePayPalOrder_PayPal();
+        $oPayPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
         $soxId = '_testOrderId';
 
         $oSession = new \OxidEsales\Eshop\Core\Session();

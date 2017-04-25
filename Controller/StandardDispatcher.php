@@ -164,7 +164,8 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      */
     protected function _getReturnUrl()
     {
-        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=" . get_class() . "&fnc=getExpressCheckoutDetails");
+        $controllerKey = \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getIdByClassName(get_class());
+        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=" . $controllerKey . "&fnc=getExpressCheckoutDetails");
     }
 
     /**

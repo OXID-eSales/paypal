@@ -54,7 +54,7 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
     {
         try {
             /** @var \OxidEsales\PayPalModule\Core\Request $oRequest */
-            $oRequest = oxNew(\OxidEsales\PayPalModule\Core\Request);
+            $oRequest = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
             $sAction = $oRequest->getRequestParameter('action');
 
             $oOrder = $this->getEditObject();

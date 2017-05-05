@@ -2202,6 +2202,42 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     }
 
     /**
+     * This is a regression test:
+     * There was a bug in the PayPal module, that after deactivation of the PayPal module the admin was not working any
+     * more until the browser session was cleared.
+     * Technical background: the basket object is stored in/restored from the session on each page or frame reload,
+     * As the PayPal module extends the basket object, an instance of the specific PayPal basket object is stored.
+     * After module deactivation this object cannot be restored.
+     */
+    public function testModuleDeactivationDoesNotResultInMaintenancePage()
+    {
+        $pageReloadTime = 2; // seconds
+        $this->loginAdminForModule("Extensions", "Modules");
+        $this->openListItem("PayPal");
+        $this->frame("edit");
+        // Deactivate the PayPal module, if it is not active activate it first.
+        try {
+            $this->click("module_deactivate");
+        } catch (\Exception $exception) {
+            // The module was not active, so activate and deactivate it
+            $this->click("module_activate");
+            $this->logoutAdmin("link=Logout");
+            $this->loginAdminForModule("Extensions", "Modules");
+            $this->openListItem("PayPal");
+            $this->frame("edit");
+            $this->click("module_deactivate");
+        }
+
+        // It is not possible to use assertTextNotPresent here, as the timeout of that function is to long
+        sleep($pageReloadTime);
+        $this->assertFalse(
+            $this->isTextPresent('Maintenance mode'),
+            'The eShop Admin went into Maintenance mode after module deactivation. 
+                The text "Maintenance mode" is present on the page.'
+        );
+    }
+
+    /**
      * Login to PayPal sandbox.
      *
      * @param string $sLoginEmail    email to login.

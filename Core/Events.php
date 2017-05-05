@@ -249,6 +249,15 @@ class Events
     }
 
     /**
+     * Delete the basket object, which is saved in the session, as it is an instance of \OxidEsales\PayPalModule\Model\Basket
+     * and it is no longer a valid object after the module has been deactivated.
+     */
+    public static function deleteSessionBasket()
+    {
+        \OxidEsales\Eshop\Core\Registry::getSession()->delBasket();
+    }
+
+    /**
      * Execute action on deactivate event
      */
     public static function onDeactivate()
@@ -259,5 +268,6 @@ class Events
         }
         self::disablePaymentMethod();
         self::disablePayPalRDFA();
+        self::deleteSessionBasket();
     }
 }

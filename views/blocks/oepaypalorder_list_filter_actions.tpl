@@ -3,8 +3,8 @@
         <div class="b1">
             <select name="paypalpayment" onChange="document.search.submit();">
                 <option value="-1" style="color: #000000;">[{oxmultilang ident="OEPAYPAL_LIST_STATUS_ALL"}]</option>
-                [{foreach from=$oPayments item=oPayment}]
-            <option value="[{$oPayment->getId()}]" [{if $paypalpayment == $oPayment->getId()}]SELECTED[{/if}] >[{$oPayment->oxpayments__oxdesc->value}]</option>
+                [{foreach from=$oPayments item=payment}]
+            <option value="[{$payment->getId()}]" [{if $paypalpayment == $payment->getId()}]SELECTED[{/if}] >[{$payment->oxpayments__oxdesc->value}]</option>
                 [{/foreach}]
             </select>
         </div>

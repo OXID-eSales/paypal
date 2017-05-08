@@ -26,10 +26,10 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
 
     public function providerSetGetItemToValidate()
     {
-        $oItem = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
+        $item = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
 
         return array(
-            array($oItem),
+            array($item),
             array(null)
         );
     }
@@ -37,24 +37,24 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
     /**
      * Tests setBasket and getBasket, sets basket object and checks if it get correct
      *
-     * @param $oItem
+     * @param $item
      *
      * @dataProvider providerSetGetItemToValidate
      */
-    public function testSetGetItemToValidate($oItem)
+    public function testSetGetItemToValidate($item)
     {
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
-        $oArticleToExpressCheckoutValidator->setItemToValidate($oItem);
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
+        $articleToExpressCheckoutValidator->setItemToValidate($item);
 
-        $this->assertEquals($oItem, $oArticleToExpressCheckoutValidator->getItemToValidate());
+        $this->assertEquals($item, $articleToExpressCheckoutValidator->getItemToValidate());
     }
 
     public function providerSetGetBasket()
     {
-        $oOxBasket = new \OxidEsales\PayPalModule\Model\Basket();
+        $oxBasket = new \OxidEsales\PayPalModule\Model\Basket();
 
         return array(
-            array($oOxBasket),
+            array($oxBasket),
             array(null)
         );
     }
@@ -62,16 +62,16 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
     /**
      * Tests setBasket and getBasket, sets basket object and checks if it get correct
      *
-     * @param $oBasket
+     * @param $basket
      *
      * @dataProvider providerSetGetBasket
      */
-    public function testSetGetBasket($oBasket)
+    public function testSetGetBasket($basket)
     {
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
-        $oArticleToExpressCheckoutValidator->setBasket($oBasket);
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
+        $articleToExpressCheckoutValidator->setBasket($basket);
 
-        $this->assertEquals($oBasket, $oArticleToExpressCheckoutValidator->getBasket());
+        $this->assertEquals($basket, $articleToExpressCheckoutValidator->getBasket());
     }
 
     public function providerIsArticleValid_True()
@@ -87,33 +87,33 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
     /**
      * Checks if item is same in given basket
      *
-     * @param $sBasketProductId
-     * @param $aBasketSelectionList
-     * @param $aBasketPersistentParam
+     * @param $basketProductId
+     * @param $basketSelectionList
+     * @param $basketPersistentParam
      *
      * @dataProvider providerIsArticleValid_True
      */
-    public function testIsArticleValid_True($sBasketProductId, $aBasketSelectionList, $aBasketPersistentParam)
+    public function testIsArticleValid_True($basketProductId, $basketSelectionList, $basketPersistentParam)
     {
-        $sProductId = 'ProductId';
-        $aSelectionList = array('testable' => 'list');
-        $aPersistentParam = array('testable' => 'persistent param');
-        $iAmount = 1;
+        $productId = 'ProductId';
+        $selectionList = array('testable' => 'list');
+        $persistentParam = array('testable' => 'persistent param');
+        $amount = 1;
 
-        $oBasket = $this->_createBasket($sBasketProductId, $aBasketSelectionList, $aBasketPersistentParam);
+        $basket = $this->createBasket($basketProductId, $basketSelectionList, $basketPersistentParam);
 
-        $oArticleToExpressCheckoutCurrentItem = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
+        $articleToExpressCheckoutCurrentItem = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
 
-        $oArticleToExpressCheckoutCurrentItem->setPersistParam($aPersistentParam);
-        $oArticleToExpressCheckoutCurrentItem->setSelectList($aSelectionList);
-        $oArticleToExpressCheckoutCurrentItem->setArticleId($sProductId);
-        $oArticleToExpressCheckoutCurrentItem->setArticleAmount($iAmount);
+        $articleToExpressCheckoutCurrentItem->setPersistParam($persistentParam);
+        $articleToExpressCheckoutCurrentItem->setSelectList($selectionList);
+        $articleToExpressCheckoutCurrentItem->setArticleId($productId);
+        $articleToExpressCheckoutCurrentItem->setArticleAmount($amount);
 
-        $oArticleToExpressCheckoutValidator->setBasket($oBasket);
-        $oArticleToExpressCheckoutValidator->setItemToValidate($oArticleToExpressCheckoutCurrentItem);
+        $articleToExpressCheckoutValidator->setBasket($basket);
+        $articleToExpressCheckoutValidator->setItemToValidate($articleToExpressCheckoutCurrentItem);
 
-        $this->assertTrue($oArticleToExpressCheckoutValidator->isArticleValid());
+        $this->assertTrue($articleToExpressCheckoutValidator->isArticleValid());
     }
 
     public function providerIsArticleValid_False()
@@ -132,56 +132,56 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
      *
      * @dataProvider providerIsArticleValid_False
      */
-    public function testIsArticleValid_False($sProductId, $aSelectionList, $aPersistentParam, $iAmount)
+    public function testIsArticleValid_False($productId, $selectionList, $persistentParam, $amount)
     {
-        $sBasketProductId = 'ProductId';
-        $aBasketSelectionList = array('testable' => 'list');
-        $aBasketPersistentParam = array('testable' => 'persistent param');
+        $basketProductId = 'ProductId';
+        $basketSelectionList = array('testable' => 'list');
+        $basketPersistentParam = array('testable' => 'persistent param');
 
-        $oBasket = $this->_createBasket($sBasketProductId, $aBasketSelectionList, $aBasketPersistentParam);
+        $basket = $this->createBasket($basketProductId, $basketSelectionList, $basketPersistentParam);
 
-        $oArticleToExpressCheckoutCurrentItem = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
+        $articleToExpressCheckoutCurrentItem = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator();
 
-        $oArticleToExpressCheckoutCurrentItem->setPersistParam($aPersistentParam);
-        $oArticleToExpressCheckoutCurrentItem->setSelectList($aSelectionList);
-        $oArticleToExpressCheckoutCurrentItem->setArticleId($sProductId);
-        $oArticleToExpressCheckoutCurrentItem->setArticleAmount($iAmount);
+        $articleToExpressCheckoutCurrentItem->setPersistParam($persistentParam);
+        $articleToExpressCheckoutCurrentItem->setSelectList($selectionList);
+        $articleToExpressCheckoutCurrentItem->setArticleId($productId);
+        $articleToExpressCheckoutCurrentItem->setArticleAmount($amount);
 
-        $oArticleToExpressCheckoutValidator->setBasket($oBasket);
-        $oArticleToExpressCheckoutValidator->setItemToValidate($oArticleToExpressCheckoutCurrentItem);
+        $articleToExpressCheckoutValidator->setBasket($basket);
+        $articleToExpressCheckoutValidator->setItemToValidate($articleToExpressCheckoutCurrentItem);
 
-        $this->assertFalse($oArticleToExpressCheckoutValidator->isArticleValid());
+        $this->assertFalse($articleToExpressCheckoutValidator->isArticleValid());
     }
 
     /**
      * Function creates mocked basket
      *
-     * @param $sBasketProductId
-     * @param $aBasketSelectionList
-     * @param $aBasketPersistentParam
+     * @param $basketProductId
+     * @param $basketSelectionList
+     * @param $basketPersistentParam
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _createBasket($sBasketProductId, $aBasketSelectionList, $aBasketPersistentParam)
+    protected function createBasket($basketProductId, $basketSelectionList, $basketPersistentParam)
     {
-        $aBasketItemsList = array();
+        $basketItemsList = array();
 
-        //if $sBasketProductId is null we say that $aBasketItemsList is empty array
-        if (!is_null($sBasketProductId)) {
-            $oBasketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getPersParams', 'getSelList'));
-            $oBasketItem->expects($this->any())->method('getProductId')->will($this->returnValue($sBasketProductId));
-            $oBasketItem->expects($this->any())->method('getSelList')->will($this->returnValue($aBasketSelectionList));
-            $oBasketItem->expects($this->any())->method('getPersParams')->will($this->returnValue($aBasketPersistentParam));
+        //if $basketProductId is null we say that $basketItemsList is empty array
+        if (!is_null($basketProductId)) {
+            $basketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getPersParams', 'getSelList'));
+            $basketItem->expects($this->any())->method('getProductId')->will($this->returnValue($basketProductId));
+            $basketItem->expects($this->any())->method('getSelList')->will($this->returnValue($basketSelectionList));
+            $basketItem->expects($this->any())->method('getPersParams')->will($this->returnValue($basketPersistentParam));
 
-            $aBasketItemsList = array(
-                $sBasketProductId => $oBasketItem
+            $basketItemsList = array(
+                $basketProductId => $basketItem
             );
         }
 
-        $oBasket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
-        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue($aBasketItemsList));
+        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket->expects($this->any())->method('getContents')->will($this->returnValue($basketItemsList));
 
-        return $oBasket;
+        return $basket;
     }
 }

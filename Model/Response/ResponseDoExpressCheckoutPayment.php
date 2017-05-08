@@ -34,7 +34,7 @@ class ResponseDoExpressCheckoutPayment extends \OxidEsales\PayPalModule\Model\Re
      */
     public function getTransactionId()
     {
-        return $this->_getValue('PAYMENTINFO_0_TRANSACTIONID');
+        return $this->getValue('PAYMENTINFO_0_TRANSACTIONID');
     }
 
     /**
@@ -44,7 +44,7 @@ class ResponseDoExpressCheckoutPayment extends \OxidEsales\PayPalModule\Model\Re
      */
     public function getCorrelationId()
     {
-        return $this->_getValue('CORRELATIONID');
+        return $this->getValue('CORRELATIONID');
     }
 
     /**
@@ -54,7 +54,7 @@ class ResponseDoExpressCheckoutPayment extends \OxidEsales\PayPalModule\Model\Re
      */
     public function getPaymentStatus()
     {
-        return $this->_getValue('PAYMENTINFO_0_PAYMENTSTATUS');
+        return $this->getValue('PAYMENTINFO_0_PAYMENTSTATUS');
     }
 
     /**
@@ -64,7 +64,7 @@ class ResponseDoExpressCheckoutPayment extends \OxidEsales\PayPalModule\Model\Re
      */
     public function getAmount()
     {
-        return ( float ) $this->_getValue('PAYMENTINFO_0_AMT');
+        return ( float ) $this->getValue('PAYMENTINFO_0_AMT');
     }
 
     /**
@@ -74,6 +74,6 @@ class ResponseDoExpressCheckoutPayment extends \OxidEsales\PayPalModule\Model\Re
      */
     public function getCurrencyCode()
     {
-        return $this->_getValue('PAYMENTINFO_0_CURRENCYCODE');
+        return $this->getValue('PAYMENTINFO_0_CURRENCYCODE');
     }
 }

@@ -48,12 +48,12 @@ class PayPalCheckValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider isIsPayPalCheckValid_dataProvider
      */
-    public function testIsPayPalCheckValid($dNewAmount, $dOldAmount, $blResult)
+    public function testIsPayPalCheckValid($newAmount, $oldAmount, $result)
     {
-        $oCheckValidator = new \OxidEsales\PayPalModule\Core\PayPalCheckValidator();
-        $oCheckValidator->setNewBasketAmount($dNewAmount);
-        $oCheckValidator->setOldBasketAmount($dOldAmount);
-        $this->assertEquals($blResult, $oCheckValidator->isPayPalCheckValid());
+        $checkValidator = new \OxidEsales\PayPalModule\Core\PayPalCheckValidator();
+        $checkValidator->setNewBasketAmount($newAmount);
+        $checkValidator->setOldBasketAmount($oldAmount);
+        $this->assertEquals($result, $checkValidator->isPayPalCheckValid());
     }
 
     /**
@@ -61,10 +61,10 @@ class PayPalCheckValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetGetOldBasketAmount()
     {
-        $oValidator = new \OxidEsales\PayPalModule\Core\PayPalCheckValidator();
-        $oValidator->setOldBasketAmount('3.5');
+        $validator = new \OxidEsales\PayPalModule\Core\PayPalCheckValidator();
+        $validator->setOldBasketAmount('3.5');
 
-        $this->assertEquals(3.5, $oValidator->getOldBasketAmount());
+        $this->assertEquals(3.5, $validator->getOldBasketAmount());
     }
 
     /**
@@ -72,10 +72,10 @@ class PayPalCheckValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetGetNewBasketAmount()
     {
-        $oValidator = new \OxidEsales\PayPalModule\Core\PayPalCheckValidator();
-        $oValidator->setNewBasketAmount('3.5');
+        $validator = new \OxidEsales\PayPalModule\Core\PayPalCheckValidator();
+        $validator->setNewBasketAmount('3.5');
 
-        $this->assertEquals(3.5, $oValidator->getNewBasketAmount());
+        $this->assertEquals(3.5, $validator->getNewBasketAmount());
     }
 }
 

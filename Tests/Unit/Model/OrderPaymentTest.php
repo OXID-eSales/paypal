@@ -41,30 +41,30 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      */
     public function testCreatePayPalOrderPayment()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId('123');
-        $oOrderPayment->setTransactionId('transactionId');
-        $oOrderPayment->setCorrelationId('correlationId');
-        $oOrderPayment->setAmount(50);
-        $oOrderPayment->setRefundedAmount(12.13);
-        $oOrderPayment->setAction('capture');
-        $oOrderPayment->setDate('2012-04-13 15:16:32');
-        $oOrderPayment->setStatus('status');
-        $oOrderPayment->setCurrency('LTL');
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId('123');
+        $orderPayment->setTransactionId('transactionId');
+        $orderPayment->setCorrelationId('correlationId');
+        $orderPayment->setAmount(50);
+        $orderPayment->setRefundedAmount(12.13);
+        $orderPayment->setAction('capture');
+        $orderPayment->setDate('2012-04-13 15:16:32');
+        $orderPayment->setStatus('status');
+        $orderPayment->setCurrency('LTL');
+        $orderPayment->save();
 
-        $oOrderPaymentLoaded = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPaymentLoaded->load($oOrderPayment->getPaymentId());
+        $orderPaymentLoaded = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPaymentLoaded->load($orderPayment->getPaymentId());
 
-        $this->assertEquals('123', $oOrderPaymentLoaded->getOrderId());
-        $this->assertEquals('transactionId', $oOrderPaymentLoaded->getTransactionId());
-        $this->assertEquals('correlationId', $oOrderPaymentLoaded->getCorrelationId());
-        $this->assertEquals(50, $oOrderPaymentLoaded->getAmount());
-        $this->assertEquals(12.13, $oOrderPaymentLoaded->getRefundedAmount());
-        $this->assertEquals('capture', $oOrderPaymentLoaded->getAction());
-        $this->assertEquals('2012-04-13 15:16:32', $oOrderPaymentLoaded->getDate());
-        $this->assertEquals('status', $oOrderPaymentLoaded->getStatus());
-        $this->assertEquals('LTL', $oOrderPaymentLoaded->getCurrency());
+        $this->assertEquals('123', $orderPaymentLoaded->getOrderId());
+        $this->assertEquals('transactionId', $orderPaymentLoaded->getTransactionId());
+        $this->assertEquals('correlationId', $orderPaymentLoaded->getCorrelationId());
+        $this->assertEquals(50, $orderPaymentLoaded->getAmount());
+        $this->assertEquals(12.13, $orderPaymentLoaded->getRefundedAmount());
+        $this->assertEquals('capture', $orderPaymentLoaded->getAction());
+        $this->assertEquals('2012-04-13 15:16:32', $orderPaymentLoaded->getDate());
+        $this->assertEquals('status', $orderPaymentLoaded->getStatus());
+        $this->assertEquals('LTL', $orderPaymentLoaded->getCurrency());
     }
 
     /**
@@ -72,10 +72,10 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      */
     public function testAddRefundedAmount_WhenEmpty()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->addRefundedAmount(100);
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->addRefundedAmount(100);
 
-        $this->assertEquals(100, $oOrderPayment->getRefundedAmount());
+        $this->assertEquals(100, $orderPayment->getRefundedAmount());
     }
 
     /**
@@ -83,11 +83,11 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      */
     public function testAddRefundedAmount_NotEmpty()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setRefundedAmount(100);
-        $oOrderPayment->addRefundedAmount(100);
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setRefundedAmount(100);
+        $orderPayment->addRefundedAmount(100);
 
-        $this->assertEquals(200, $oOrderPayment->getRefundedAmount());
+        $this->assertEquals(200, $orderPayment->getRefundedAmount());
     }
 
     /**
@@ -95,15 +95,15 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      */
     public function testLoadByTransactionId()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId('orderId');
-        $oOrderPayment->setTransactionId('transactionId');
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId('orderId');
+        $orderPayment->setTransactionId('transactionId');
+        $orderPayment->save();
 
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->loadByTransactionId('transactionId');
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->loadByTransactionId('transactionId');
 
-        $this->assertEquals('orderId', $oOrderPayment->getOrderId());
+        $this->assertEquals('orderId', $orderPayment->getOrderId());
     }
 
     /**
@@ -121,15 +121,15 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      * Test case for \OxidEsales\PayPalModule\Model\OrderPayment::setIsValid
      * Test case for \OxidEsales\PayPalModule\Model\OrderPayment::getIsValid
      *
-     * @param bool $blIsValid
+     * @param bool $isValid
      *
      * @dataProvider providerSetGetIsValid
      */
-    public function testSetGetIsValid($blIsValid)
+    public function testSetGetIsValid($isValid)
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setIsValid($blIsValid);
-        $this->assertEquals($blIsValid, $oOrderPayment->getIsValid(), 'Should be same value from getter as set in setter.');
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setIsValid($isValid);
+        $this->assertEquals($isValid, $orderPayment->getIsValid(), 'Should be same value from getter as set in setter.');
     }
 
     /**
@@ -149,18 +149,18 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      */
     public function testAddComment_setParams_CheckInDb()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId('123');
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId('123');
+        $orderPayment->save();
 
-        $this->assertEquals(0, count($oOrderPayment->getCommentList()), 'No comments - default value empty array.');
+        $this->assertEquals(0, count($orderPayment->getCommentList()), 'No comments - default value empty array.');
 
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setComment('comment');
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setComment('comment');
 
-        $oOrderPayment->addComment($oComment);
+        $orderPayment->addComment($comment);
 
-        $this->assertEquals(1, count($oOrderPayment->getCommentList()));
+        $this->assertEquals(1, count($orderPayment->getCommentList()));
     }
 
     /**
@@ -168,18 +168,18 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      */
     public function testAddComment_NoDateGiven()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId('123');
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId('123');
+        $orderPayment->save();
 
-        $this->assertEquals(0, count($oOrderPayment->getCommentList()), 'No comments - default value empty array.');
+        $this->assertEquals(0, count($orderPayment->getCommentList()), 'No comments - default value empty array.');
 
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setComment('comment');
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setComment('comment');
 
-        $oOrderPayment->addComment($oComment);
+        $orderPayment->addComment($comment);
 
-        $this->assertEquals(1, count($oOrderPayment->getCommentList()));
+        $this->assertEquals(1, count($orderPayment->getCommentList()));
     }
 
     /**
@@ -187,9 +187,9 @@ class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingL
      */
     public function testGetCommentList_noComments_instanceOfCommentList()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
         $this->assertTrue(
-            $oOrderPayment->getCommentList() instanceof \OxidEsales\PayPalModule\Model\OrderPaymentCommentList,
+            $orderPayment->getCommentList() instanceof \OxidEsales\PayPalModule\Model\OrderPaymentCommentList,
             'No comments - default value empty array.');
     }
 }

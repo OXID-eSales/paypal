@@ -31,15 +31,15 @@ class ResponseDoVoidTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return array
      */
-    protected function _getResponseData()
+    protected function getResponseData()
     {
-        $aData = array(
+        $data = array(
             'AUTHORIZATIONID' => 'authorizationId',
             'CORRELATIONID'   => 'correlationId',
             'PAYMENTSTATUS'   => 'completed'
         );
 
-        return $aData;
+        return $data;
     }
 
     /**
@@ -47,9 +47,9 @@ class ResponseDoVoidTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetAuthorizationId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVoid();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('authorizationId', $oResponse->getAuthorizationId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVoid();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('authorizationId', $response->getAuthorizationId());
     }
 
     /**
@@ -57,8 +57,8 @@ class ResponseDoVoidTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetCorrelationId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoCapture();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('correlationId', $oResponse->getCorrelationId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoCapture();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('correlationId', $response->getCorrelationId());
     }
 }

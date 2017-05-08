@@ -38,30 +38,30 @@ class IPNRequestValidator
      *
      * @var string
      */
-    protected $_sShopOwnerUserName = null;
+    protected $shopOwnerUserName = null;
 
     /**
      * PayPal response if OK.
      *
-     * @var string
+     * @var \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal
      */
-    protected $_oPayPalResponse = null;
+    protected $payPalResponse = null;
 
     /**
      * PayPal request to get email.
      *
-     * @var string
+     * @var array
      */
-    protected $_aPayPalRequest = null;
+    protected $payPalRequest = null;
 
     /**
      * Set shop owner user name - payPal ID.
      *
-     * @param string $sShopOwnerUserName
+     * @param string $shopOwnerUserName
      */
-    public function setShopOwnerUserName($sShopOwnerUserName)
+    public function setShopOwnerUserName($shopOwnerUserName)
     {
-        $this->_sShopOwnerUserName = $sShopOwnerUserName;
+        $this->shopOwnerUserName = $shopOwnerUserName;
     }
 
     /**
@@ -71,17 +71,17 @@ class IPNRequestValidator
      */
     public function getShopOwnerUserName()
     {
-        return $this->_sShopOwnerUserName;
+        return $this->shopOwnerUserName;
     }
 
     /**
      * Set PayPal response object.
      *
-     * @param \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal $sPayPalResponse
+     * @param \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal|Response\Response $payPalResponse
      */
-    public function setPayPalResponse($sPayPalResponse)
+    public function setPayPalResponse($payPalResponse)
     {
-        $this->_oPayPalResponse = $sPayPalResponse;
+        $this->payPalResponse = $payPalResponse;
     }
 
     /**
@@ -91,17 +91,17 @@ class IPNRequestValidator
      */
     public function getPayPalResponse()
     {
-        return $this->_oPayPalResponse;
+        return $this->payPalResponse;
     }
 
     /**
      * Set PayPal request array.
      *
-     * @param array $sPayPalRequest
+     * @param array $payPalRequest
      */
-    public function setPayPalRequest($sPayPalRequest)
+    public function setPayPalRequest($payPalRequest)
     {
-        $this->_aPayPalRequest = $sPayPalRequest;
+        $this->payPalRequest = $payPalRequest;
     }
 
     /**
@@ -111,7 +111,7 @@ class IPNRequestValidator
      */
     public function getPayPalRequest()
     {
-        return $this->_aPayPalRequest;
+        return $this->payPalRequest;
     }
 
     /**
@@ -121,20 +121,20 @@ class IPNRequestValidator
      */
     public function getValidationFailureMessage()
     {
-        $aPayPalRequest = $this->getPayPalRequest();
-        $oPayPalResponse = $this->getPayPalResponse();
-        $sShopOwnerUserName = $this->getShopOwnerUserName();
-        $sReceiverEmailPayPal = $aPayPalRequest[self::RECEIVER_EMAIL];
+        $payPalRequest = $this->getPayPalRequest();
+        $payPalResponse = $this->getPayPalResponse();
+        $shopOwnerUserName = $this->getShopOwnerUserName();
+        $receiverEmailPayPal = $payPalRequest[self::RECEIVER_EMAIL];
 
-        $aValidationMessage = array(
-            'Shop owner'           => (string) $sShopOwnerUserName,
-            'PayPal ID'            => (string) $sReceiverEmailPayPal,
-            'PayPal ACK'           => ($oPayPalResponse->isPayPalAck() ? 'VERIFIED' : 'NOT VERIFIED'),
-            'PayPal Full Request'  => print_r($aPayPalRequest, true),
-            'PayPal Full Response' => print_r($oPayPalResponse->getData(), true),
+        $validationMessage = array(
+            'Shop owner'           => (string) $shopOwnerUserName,
+            'PayPal ID'            => (string) $receiverEmailPayPal,
+            'PayPal ACK'           => ($payPalResponse->isPayPalAck() ? 'VERIFIED' : 'NOT VERIFIED'),
+            'PayPal Full Request'  => print_r($payPalRequest, true),
+            'PayPal Full Response' => print_r($payPalResponse->getData(), true),
         );
 
-        return $aValidationMessage;
+        return $validationMessage;
     }
 
     /**
@@ -144,11 +144,11 @@ class IPNRequestValidator
      */
     public function isValid()
     {
-        $aPayPalRequest = $this->getPayPalRequest();
-        $oPayPalResponse = $this->getPayPalResponse();
-        $sShopOwnerUserName = $this->getShopOwnerUserName();
-        $sReceiverEmailPayPal = $aPayPalRequest[self::RECEIVER_EMAIL];
+        $payPalRequest = $this->getPayPalRequest();
+        $payPalResponse = $this->getPayPalResponse();
+        $shopOwnerUserName = $this->getShopOwnerUserName();
+        $receiverEmailPayPal = $payPalRequest[self::RECEIVER_EMAIL];
 
-        return ($oPayPalResponse->isPayPalAck() && $sReceiverEmailPayPal == $sShopOwnerUserName);
+        return ($payPalResponse->isPayPalAck() && $receiverEmailPayPal == $shopOwnerUserName);
     }
 }

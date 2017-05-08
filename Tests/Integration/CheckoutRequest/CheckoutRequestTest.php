@@ -42,7 +42,7 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_reset();
+        $this->reset();
         $this->cleanTmpDir();
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
     }
@@ -52,44 +52,44 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function providerDoExpressCheckoutPayment()
     {
-        $oParser = new \OxidEsales\PayPalModule\Tests\Integration\Library\TestCaseParser();
-        $oParser->setDirectory(__DIR__ . $this->_sTestCasesPath);
+        $parser = new \OxidEsales\PayPalModule\Tests\Integration\Library\TestCaseParser();
+        $parser->setDirectory(__DIR__ . $this->_sTestCasesPath);
         if (isset($this->_aTestCases)) {
-            $oParser->setTestCases($this->_aTestCases);
+            $parser->setTestCases($this->_aTestCases);
         }
-        $oParser->setReplacements($this->_getReplacements());
+        $parser->setReplacements($this->getReplacements());
 
-        return $oParser->getData();
+        return $parser->getData();
     }
 
     /**
      * @dataProvider providerDoExpressCheckoutPayment
      */
-    public function testExpressCheckoutPaymentRequest($aTestCase)
+    public function testExpressCheckoutPaymentRequest($testCase)
     {
-        if ($aTestCase['skipped']) {
+        if ($testCase['skipped']) {
             return;
         }
 
-        $oCommunicationHelper = new \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper();
-        $oCurl = $oCommunicationHelper->getCurl(array());
+        $communicationHelper = new \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper();
+        $curl = $communicationHelper->getCurl(array());
 
-        $oDispatcher = $this->_getDispatcher($aTestCase);
-        $this->_setCurlToDispatcher($oDispatcher, $oCurl);
+        $dispatcher = $this->getDispatcher($testCase);
+        $this->setCurlToDispatcher($dispatcher, $curl);
 
-        $oDispatcher->{$aTestCase['action']}();
+        $dispatcher->{$testCase['action']}();
 
-        $aCurlParameters = $oCurl->getParameters();
+        $curlParameters = $curl->getParameters();
 
-        $aExpected = $aTestCase['expected'];
+        $expected = $testCase['expected'];
 
-        $aAsserts = new \OxidEsales\PayPalModule\Tests\Integration\Library\ArrayAsserts();
+        $asserts = new \OxidEsales\PayPalModule\Tests\Integration\Library\ArrayAsserts();
 
-        $aAsserts->assertArraysEqual($aExpected['requestToPayPal'], $aCurlParameters);
+        $asserts->assertArraysEqual($expected['requestToPayPal'], $curlParameters);
 
-        if (isset($aExpected['header'])) {
-            $aCurlHeader = $oCurl->getHeader();
-            $aAsserts->assertArraysEqual($aExpected['header'], $aCurlHeader);
+        if (isset($expected['header'])) {
+            $curlHeader = $curl->getHeader();
+            $asserts->assertArraysEqual($expected['header'], $curlHeader);
         }
     }
 
@@ -97,58 +97,58 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Return dispatcher object
      *
-     * @param array $aTestCase
+     * @param array $testCase
      *
      * @return \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class
      */
-    protected function _getDispatcher($aTestCase)
+    protected function getDispatcher($testCase)
     {
-        $oBasketConstruct = new \OxidEsales\PayPalModule\Tests\Integration\Library\ShopConstruct();
-        $oBasketConstruct->setParams($aTestCase);
+        $basketConstruct = new \OxidEsales\PayPalModule\Tests\Integration\Library\ShopConstruct();
+        $basketConstruct->setParams($testCase);
 
-        $oBasket = $oBasketConstruct->getBasket();
-        $oSession = $this->_getSession();
-        $oSession->setBasket($oBasket);
+        $basket = $basketConstruct->getBasket();
+        $session = $this->getSessionMock();
+        $session->setBasket($basket);
 
-        $this->_setMockedUtils();
+        $this->setMockedUtils();
 
-        $oDispatcher = $this->getMock($aTestCase['class'], array('_getPayPalOrder'));
-        $oDispatcher->expects($this->any())->method('_getPayPalOrder')->will($this->returnValue($this->_getOrder()));
+        $dispatcher = $this->getMock($testCase['class'], array('getPayPalOrder'));
+        $dispatcher->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($this->getOrder()));
 
-        $oDispatcher->setSession($oSession);
-        $oDispatcher->setUser($oBasketConstruct->getUser());
+        $dispatcher->setSession($session);
+        $dispatcher->setUser($basketConstruct->getUser());
 
-        return $oDispatcher;
+        return $dispatcher;
     }
 
     /**
      *
      */
-    protected function _getSession()
+    protected function getSessionMock()
     {
-        $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array('getRemoteAccessToken'));
-        $oSession->expects($this->any())->method('getRemoteAccessToken')->will($this->returnValue('token'));
+        $session = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array('getRemoteAccessToken'));
+        $session->expects($this->any())->method('getRemoteAccessToken')->will($this->returnValue('token'));
 
-        return $oSession;
+        return $session;
     }
 
     /**
      * Sets Curl to dispatcher
      *
-     * @param $oDispatcher
-     * @param $oCurl
+     * @param $dispatcher
+     * @param $curl
      */
-    protected function _setCurlToDispatcher($oDispatcher, $oCurl)
+    protected function setCurlToDispatcher($dispatcher, $curl)
     {
-        $oCommunicationService = $oDispatcher->getPayPalCheckoutService();
-        $oCaller = $oCommunicationService->getCaller();
-        $oOldCurl = $oCaller->getCurl();
+        $communicationService = $dispatcher->getPayPalCheckoutService();
+        $caller = $communicationService->getCaller();
+        $oldCurl = $caller->getCurl();
 
-        $oCurl->setHost($oOldCurl->getHost());
-        $oCurl->setDataCharset($oOldCurl->getDataCharset());
-        $oCurl->setUrlToCall($oOldCurl->getUrlToCall());
+        $curl->setHost($oldCurl->getHost());
+        $curl->setDataCharset($oldCurl->getDataCharset());
+        $curl->setUrlToCall($oldCurl->getUrlToCall());
 
-        $oCaller->setCurl($oCurl);
+        $caller->setCurl($curl);
     }
 
     /**
@@ -156,25 +156,25 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return \OxidEsales\Eshop\Application\Model\Order
      */
-    protected function _getOrder()
+    protected function getOrder()
     {
-        /** @var \OxidEsales\Eshop\Application\Model\Order $oOrder */
-        $oOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('finalizePayPalOrder'));
-        $oOrder->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
-        $oOrder->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
-        $oOrder->save();
+        /** @var \OxidEsales\Eshop\Application\Model\Order $order */
+        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('finalizePayPalOrder'));
+        $order->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
+        $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
+        $order->save();
 
-        return $oOrder;
+        return $order;
     }
 
     /**
      * Mocks oxUtils redirect method so that no redirect would be made
      */
-    protected function _setMockedUtils()
+    protected function setMockedUtils()
     {
-        $oUtils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array('redirect'));
-        $oUtils->expects($this->any())->method('redirect')->will($this->returnValue(null));
-        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Utils::class, $oUtils);
+        $utils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array('redirect'));
+        $utils->expects($this->any())->method('redirect')->will($this->returnValue(null));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Utils::class, $utils);
     }
 
     /**
@@ -182,55 +182,55 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return array
      */
-    protected function _getReplacements()
+    protected function getReplacements()
     {
-        $oConfig = $this->getConfig();
-        if ($oConfig->getEdition() == 'EE') {
-            $sResult = 'OXID_Cart_EnterpriseECS';
+        $config = $this->getConfig();
+        if ($config->getEdition() == 'EE') {
+            $result = 'OXID_Cart_EnterpriseECS';
         } else {
-            if ($oConfig->getEdition() == 'PE') {
-                $sResult = 'OXID_Cart_ProfessionalECS';
+            if ($config->getEdition() == 'PE') {
+                $result = 'OXID_Cart_ProfessionalECS';
             } else {
-                if ($oConfig->getEdition() == 'CE') {
-                    $sResult = 'OXID_Cart_CommunityECS';
+                if ($config->getEdition() == 'CE') {
+                    $result = 'OXID_Cart_CommunityECS';
                 }
             }
         }
-        $aReplacements = array(
+        $replacements = array(
             '{SHOP_URL}' => $this->getConfig()->getShopUrl(),
             '{SHOP_ID}'  => $this->getConfig()->getShopId(),
-            '{BN_ID}'    => $sResult,
+            '{BN_ID}'    => $result,
         );
 
-        return $aReplacements;
+        return $replacements;
     }
 
     /**
      * Resets db tables, required configs
      */
-    protected function _reset()
+    protected function reset()
     {
-        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
-        $oConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $oDb->execute("TRUNCATE oxarticles");
-        $oDb->execute("TRUNCATE oxcategories");
-        $oDb->execute("TRUNCATE oxcounters");
-        $oDb->execute("TRUNCATE oxdiscount");
-        $oDb->execute("TRUNCATE oxobject2discount");
-        $oDb->execute("TRUNCATE oxgroups");
-        $oDb->execute("TRUNCATE oxobject2group");
-        $oDb->execute("TRUNCATE oxwrapping");
-        $oDb->execute("TRUNCATE oxdelivery");
-        $oDb->execute("TRUNCATE oxdel2delset");
-        $oDb->execute("TRUNCATE oxobject2payment");
-        $oDb->execute("TRUNCATE oxvouchers");
-        $oDb->execute("TRUNCATE oxvoucherseries");
-        $oDb->execute("TRUNCATE oxobject2delivery");
-        $oDb->execute("TRUNCATE oxdeliveryset");
-        $oDb->execute("TRUNCATE oxuser");
-        $oDb->execute("TRUNCATE oxprice2article");
-        $oConfig->setConfigParam("blShowVATForDelivery", true);
-        $oConfig->setConfigParam("blShowVATForPayCharge", true);
-        $oDb->execute("UPDATE oxpayments SET oxaddsum=0 WHERE oxid = 'oxidpaypal'");
+        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $db->execute("TRUNCATE oxarticles");
+        $db->execute("TRUNCATE oxcategories");
+        $db->execute("TRUNCATE oxcounters");
+        $db->execute("TRUNCATE oxdiscount");
+        $db->execute("TRUNCATE oxobject2discount");
+        $db->execute("TRUNCATE oxgroups");
+        $db->execute("TRUNCATE oxobject2group");
+        $db->execute("TRUNCATE oxwrapping");
+        $db->execute("TRUNCATE oxdelivery");
+        $db->execute("TRUNCATE oxdel2delset");
+        $db->execute("TRUNCATE oxobject2payment");
+        $db->execute("TRUNCATE oxvouchers");
+        $db->execute("TRUNCATE oxvoucherseries");
+        $db->execute("TRUNCATE oxobject2delivery");
+        $db->execute("TRUNCATE oxdeliveryset");
+        $db->execute("TRUNCATE oxuser");
+        $db->execute("TRUNCATE oxprice2article");
+        $config->setConfigParam("blShowVATForDelivery", true);
+        $config->setConfigParam("blShowVATForPayCharge", true);
+        $db->execute("UPDATE oxpayments SET oxaddsum=0 WHERE oxid = 'oxidpaypal'");
     }
 }

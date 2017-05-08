@@ -29,33 +29,33 @@ abstract class Model
     /**
      * Data base gateway.
      *
-     * @var oePayPalPayPalDbGateway
+     * @var \OxidEsales\PayPalModule\Core\ModelDbGateway
      */
-    protected $_oDbGateway = null;
+    protected $dbGateway = null;
 
     /**
      * Model data.
      *
      * @var array
      */
-    protected $_aData = null;
+    protected $data = null;
 
     /**
      * Was object information found in database.
      *
      * @var bool
      */
-    protected $_blIsLoaded = false;
+    protected $isLoaded = false;
 
     /**
      * Set response data.
      *
-     * @param array $aData model data
+     * @param array $data model data
      */
-    public function setData($aData)
+    public function setData($data)
     {
-        $aData = array_change_key_case($aData, CASE_LOWER);
-        $this->_aData = $aData;
+        $data = array_change_key_case($data, CASE_LOWER);
+        $this->data = $data;
     }
 
     /**
@@ -65,49 +65,49 @@ abstract class Model
      */
     public function getData()
     {
-        return $this->_aData;
+        return $this->data;
     }
 
     /**
      * Return value from data by given key.
      *
-     * @param string $sKey key of data value
+     * @param string $key key of data value
      *
      * @return string
      */
-    protected function _getValue($sKey)
+    protected function getValue($key)
     {
-        $aData = $this->getData();
+        $data = $this->getData();
 
-        return $aData[$sKey];
+        return $data[$key];
     }
 
     /**
      * Return value from data by given key.
      *
-     * @param string $sKey   key of data value
-     * @param string $sValue data value
+     * @param string $key   key of data value
+     * @param string $value data value
      */
-    protected function _setValue($sKey, $sValue)
+    protected function setValue($key, $value)
     {
-        $this->_aData[$sKey] = $sValue;
+        $this->data[$key] = $value;
     }
 
     /**
      * Returns model database gateway.
      *
-     * @var $oDbGateway
+     * @var $dbGateway
      */
-    abstract protected function _getDbGateway();
+    abstract protected function getDbGateway();
 
     /**
      * Set model database gateway.
      *
-     * @param oePayPalPayPalDbGateway $oDbGateway
+     * @param \OxidEsales\PayPalModule\Core\ModelDbGateway $dbGateway
      */
-    protected function _setDbGateway($oDbGateway)
+    protected function setDbGateway($dbGateway)
     {
-        $this->_oDbGateway = $oDbGateway;
+        $this->dbGateway = $dbGateway;
     }
 
     /**
@@ -117,46 +117,46 @@ abstract class Model
      */
     public function save()
     {
-        $mId = $this->_getDbGateway()->save($this->getData());
-        $this->setId($mId);
+        $id = $this->getDbGateway()->save($this->getData());
+        $this->setId($id);
 
-        return $mId;
+        return $id;
     }
 
     /**
      * Delete model data from db.
      *
-     * @param string $sId model id
+     * @param string $id model id
      *
      * @return bool
      */
-    public function delete($sId = null)
+    public function delete($id = null)
     {
-        if (!is_null($sId)) {
-            $this->setId($sId);
+        if (!is_null($id)) {
+            $this->setId($id);
         }
 
-        return $this->_getDbGateway()->delete($this->getId());
+        return $this->getDbGateway()->delete($this->getId());
     }
 
     /**
      * Method for loading model, if loaded returns true.
      *
-     * @param string $sId model id
+     * @param string $id model id
      *
      * @return bool
      */
-    public function load($sId = null)
+    public function load($id = null)
     {
-        if (!is_null($sId)) {
-            $this->setId($sId);
+        if (!is_null($id)) {
+            $this->setId($id);
         }
 
-        $this->_blIsLoaded = false;
-        $aData = $this->_getDbGateway()->load($this->getId());
-        if ($aData) {
-            $this->setData($aData);
-            $this->_blIsLoaded = true;
+        $this->isLoaded = false;
+        $data = $this->getDbGateway()->load($this->getId());
+        if ($data) {
+            $this->setData($data);
+            $this->isLoaded = true;
         }
 
         return $this->isLoaded();
@@ -169,15 +169,15 @@ abstract class Model
      */
     public function isLoaded()
     {
-        return $this->_blIsLoaded;
+        return $this->isLoaded;
     }
 
     /**
      * Abstract method for delete model.
      *
-     * @param string $sId model id
+     * @param string $id model id
      */
-    abstract public function setId($sId);
+    abstract public function setId($id);
 
     /**
      * Abstract method for getting id.

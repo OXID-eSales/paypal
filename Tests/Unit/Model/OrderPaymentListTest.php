@@ -42,30 +42,30 @@ class OrderPaymentListTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLoadOrderPayments()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setPaymentId(1);
-        $oOrderPayment->setOrderId("123");
-        $oOrderPayment->setAmount(50);
-        $oOrderPayment->setAction("OEPAYPAL_STATUS_COMPLETED");
-        $oOrderPayment->setDate("2012-04-13 12:13:15");
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setPaymentId(1);
+        $orderPayment->setOrderId("123");
+        $orderPayment->setAmount(50);
+        $orderPayment->setAction("OEPAYPAL_STATUS_COMPLETED");
+        $orderPayment->setDate("2012-04-13 12:13:15");
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(2);
-        $oOrderPayment->setDate("2012-02-01");
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(2);
+        $orderPayment->setDate("2012-02-01");
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(3);
-        $oOrderPayment->setDate("2012-01-15");
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(3);
+        $orderPayment->setDate("2012-01-15");
+        $orderPayment->save();
 
-        $oOrderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
-        $oOrderPaymentList->load("123");
+        $orderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
+        $orderPaymentList->load("123");
 
-        $this->assertEquals(3, count($oOrderPaymentList));
+        $this->assertEquals(3, count($orderPaymentList));
 
         $i = 1;
-        foreach ($oOrderPaymentList as $oOrderPayment) {
-            $this->assertEquals($i++, $oOrderPayment->getPaymentId());
+        foreach ($orderPaymentList as $orderPayment) {
+            $this->assertEquals($i++, $orderPayment->getPaymentId());
         }
     }
 
@@ -75,26 +75,26 @@ class OrderPaymentListTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testHasFailedPayment()
     {
-        $oOrderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
+        $orderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
 
-        $oOrderPaymentList->load("order");
-        $this->assertFalse($oOrderPaymentList->hasFailedPayment());
+        $orderPaymentList->load("order");
+        $this->assertFalse($orderPaymentList->hasFailedPayment());
 
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId("order");
-        $oOrderPayment->setStatus("Completed");
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId("order");
+        $orderPayment->setStatus("Completed");
+        $orderPayment->save();
 
-        $oOrderPaymentList->load("order");
-        $this->assertFalse($oOrderPaymentList->hasFailedPayment());
+        $orderPaymentList->load("order");
+        $this->assertFalse($orderPaymentList->hasFailedPayment());
 
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId("order");
-        $oOrderPayment->setStatus("Failed");
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId("order");
+        $orderPayment->setStatus("Failed");
+        $orderPayment->save();
 
-        $oOrderPaymentList->load("order");
-        $this->assertTrue($oOrderPaymentList->hasFailedPayment());
+        $orderPaymentList->load("order");
+        $this->assertTrue($orderPaymentList->hasFailedPayment());
     }
 
     /**
@@ -103,26 +103,26 @@ class OrderPaymentListTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testHasPendingPayment()
     {
-        $oOrderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
+        $orderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
 
-        $oOrderPaymentList->load("order");
-        $this->assertFalse($oOrderPaymentList->hasPendingPayment());
+        $orderPaymentList->load("order");
+        $this->assertFalse($orderPaymentList->hasPendingPayment());
 
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId("order");
-        $oOrderPayment->setStatus("Completed");
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId("order");
+        $orderPayment->setStatus("Completed");
+        $orderPayment->save();
 
-        $oOrderPaymentList->load("order");
-        $this->assertFalse($oOrderPaymentList->hasPendingPayment());
+        $orderPaymentList->load("order");
+        $this->assertFalse($orderPaymentList->hasPendingPayment());
 
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId("order");
-        $oOrderPayment->setStatus("Pending");
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId("order");
+        $orderPayment->setStatus("Pending");
+        $orderPayment->save();
 
-        $oOrderPaymentList->load("order");
-        $this->assertTrue($oOrderPaymentList->hasPendingPayment());
+        $orderPaymentList->load("order");
+        $this->assertTrue($orderPaymentList->hasPendingPayment());
     }
 
     /**
@@ -131,29 +131,29 @@ class OrderPaymentListTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testAddPayment()
     {
-        $oOrderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
-        $oOrderPaymentList->load("order");
+        $orderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
+        $orderPaymentList->load("order");
 
-        $this->assertEquals(0, count($oOrderPaymentList));
+        $this->assertEquals(0, count($orderPaymentList));
 
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setOrderId("order");
-        $oOrderPayment->save();
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setOrderId("order");
+        $orderPayment->save();
 
-        $oOrderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
-        $oOrderPaymentList->load("order");
+        $orderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
+        $orderPaymentList->load("order");
 
-        $this->assertEquals(1, count($oOrderPaymentList));
+        $this->assertEquals(1, count($orderPaymentList));
 
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setDate('2013-01-12');
-        $oOrderPayment->setAction('Pending');
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setDate('2013-01-12');
+        $orderPayment->setAction('Pending');
 
-        $oOrderPaymentList->addPayment($oOrderPayment);
+        $orderPaymentList->addPayment($orderPayment);
 
-        $oOrderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
-        $oOrderPaymentList->load("order");
+        $orderPaymentList = new \OxidEsales\PayPalModule\Model\OrderPaymentList();
+        $orderPaymentList->load("order");
 
-        $this->assertEquals(2, count($oOrderPaymentList));
+        $this->assertEquals(2, count($orderPaymentList));
     }
 }

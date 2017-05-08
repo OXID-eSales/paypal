@@ -25,7 +25,7 @@
  *
  * Case with discount.
  */
-$aData = array(
+$data = array(
     'class'         => \OxidEsales\PayPalModule\Controller\StandardDispatcher::class,
     'action'        => 'setExpressCheckout',
     'articles'      => array(

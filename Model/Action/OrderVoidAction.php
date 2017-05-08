@@ -31,30 +31,30 @@ class OrderVoidAction extends \OxidEsales\PayPalModule\Model\Action\OrderAction
      */
     public function process()
     {
-        $oHandler = $this->getHandler();
-        $oResponse = $oHandler->getPayPalResponse();
-        $oData = $oHandler->getData();
+        $handler = $this->getHandler();
+        $response = $handler->getPayPalResponse();
+        $data = $handler->getData();
 
-        $oOrder = $this->getOrder();
-        $dAmount = $oOrder->getRemainingOrderSum();
-        $oOrder->setVoidedAmount($dAmount);
-        $oOrder->setPaymentStatus($oData->getOrderStatus());
-        $oOrder->save();
+        $order = $this->getOrder();
+        $amount = $order->getRemainingOrderSum();
+        $order->setVoidedAmount($amount);
+        $order->setPaymentStatus($data->getOrderStatus());
+        $order->save();
 
-        $oPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oPayment->setDate($this->getDate());
-        $oPayment->setTransactionId($oResponse->getAuthorizationId());
-        $oPayment->setCorrelationId($oResponse->getCorrelationId());
-        $oPayment->setAction('void');
-        $oPayment->setStatus('Voided');
-        $oPayment->setAmount($dAmount);
+        $payment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $payment->setDate($this->getDate());
+        $payment->setTransactionId($response->getAuthorizationId());
+        $payment->setCorrelationId($response->getCorrelationId());
+        $payment->setAction('void');
+        $payment->setStatus('Voided');
+        $payment->setAmount($amount);
 
-        $oPayment = $oOrder->getPaymentList()->addPayment($oPayment);
+        $payment = $order->getPaymentList()->addPayment($payment);
 
-        if ($oData->getComment()) {
-            $oComment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
-            $oComment->setComment($oData->getComment());
-            $oPayment->addComment($oComment);
+        if ($data->getComment()) {
+            $comment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
+            $comment->setComment($data->getComment());
+            $payment->addComment($comment);
         }
     }
 }

@@ -31,13 +31,13 @@ class WrappingControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPal()
     {
-        $oView = new \OxidEsales\PayPalModule\Controller\WrappingController();
+        $view = new \OxidEsales\PayPalModule\Controller\WrappingController();
 
         $this->getSession()->setVariable("paymentid", "oxidpaypal");
-        $this->assertTrue($oView->isPayPal());
+        $this->assertTrue($view->isPayPal());
 
         $this->getSession()->setVariable("paymentid", "notoxidpaypal");
-        $this->assertFalse($oView->isPayPal());
+        $this->assertFalse($view->isPayPal());
     }
 
     /**
@@ -45,11 +45,11 @@ class WrappingControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testChangeWrapping_expressCheckout()
     {
-        $oView = $this->getMock(\OxidEsales\PayPalModule\Controller\WrappingController::class, array("isPayPal"));
-        $oView->expects($this->once())->method("isPayPal")->will($this->returnValue(true));
+        $view = $this->getMock(\OxidEsales\PayPalModule\Controller\WrappingController::class, array("isPayPal"));
+        $view->expects($this->once())->method("isPayPal")->will($this->returnValue(true));
 
         $this->getSession()->setVariable("oepaypal", "2");
-        $this->assertEquals("basket", $oView->changeWrapping());
+        $this->assertEquals("basket", $view->changeWrapping());
     }
 
     /**
@@ -57,11 +57,11 @@ class WrappingControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testChangeWrapping_standardCheckout()
     {
-        $oView = $this->getMock(\OxidEsales\PayPalModule\Controller\WrappingController::class, array("isPayPal"));
-        $oView->expects($this->once())->method("isPayPal")->will($this->returnValue(true));
+        $view = $this->getMock(\OxidEsales\PayPalModule\Controller\WrappingController::class, array("isPayPal"));
+        $view->expects($this->once())->method("isPayPal")->will($this->returnValue(true));
 
         $this->getSession()->setVariable("oepaypal", "1");
-        $this->assertEquals("payment", $oView->changeWrapping());
+        $this->assertEquals("payment", $view->changeWrapping());
     }
 
     /**
@@ -69,9 +69,9 @@ class WrappingControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testChangeWrapping_PayPalNotActive()
     {
-        $oView = $this->getMock(\OxidEsales\PayPalModule\Controller\WrappingController::class, array("isPayPal"));
-        $oView->expects($this->once())->method("isPayPal")->will($this->returnValue(false));
+        $view = $this->getMock(\OxidEsales\PayPalModule\Controller\WrappingController::class, array("isPayPal"));
+        $view->expects($this->once())->method("isPayPal")->will($this->returnValue(false));
 
-        $this->assertEquals("order", $oView->changeWrapping());
+        $this->assertEquals("order", $view->changeWrapping());
     }
 }

@@ -35,18 +35,18 @@ class Article extends Article_parent
      */
     public function isVirtualPayPalArticle()
     {
-        $blVirtual = true;
+        $virtual = true;
 
         // non material products
         if (!$this->oxarticles__oxnonmaterial->value) {
-            $blVirtual = false;
+            $virtual = false;
         } elseif (isset($this->oxarticles__oxisdownloadable) &&
                   !$this->oxarticles__oxisdownloadable->value
         ) {
-            $blVirtual = false;
+            $virtual = false;
         }
 
-        return $blVirtual;
+        return $virtual;
     }
 
     /**

@@ -28,30 +28,30 @@ abstract class OrderAction
 {
     /**
      *
-     * @var \OxidEsales\PayPalModule\Core\Request
+     * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
     protected $_oOrder = null;
 
     /**
      * @var string
      */
-    protected $_sOrderStatus = null;
+    protected $orderStatus = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler
      */
-    protected $_oHandler = null;
+    protected $handler = null;
 
     /**
      * Sets handler and order.
      *
-     * @param \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler $oHandler
-     * @param \OxidEsales\PayPalModule\Core\Request                                   $oOrder
+     * @param \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler $handler
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder                              $order
      */
-    public function __construct($oHandler, $oOrder)
+    public function __construct($handler, $order)
     {
-        $this->_oHandler = $oHandler;
-        $this->_oOrder = $oOrder;
+        $this->handler = $handler;
+        $this->order = $order;
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class OrderAction
      */
     public function getHandler()
     {
-        return $this->_oHandler;
+        return $this->handler;
     }
 
     /**
@@ -71,7 +71,7 @@ abstract class OrderAction
      */
     public function getOrder()
     {
-        return $this->_oOrder;
+        return $this->order;
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class OrderAction
      */
     public function getDate()
     {
-        $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
+        $utilsDate = \OxidEsales\Eshop\Core\Registry::getUtilsDate();
 
         return date('Y-m-d H:i:s', $utilsDate->getTime());
     }

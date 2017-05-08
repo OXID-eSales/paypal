@@ -29,51 +29,51 @@ namespace OxidEsales\PayPalModule\Core;
 class ViewConfig extends ViewConfig_parent
 {
     /** @var null \OxidEsales\PayPalModule\Core\Config */
-    protected $_oPayPalConfig = null;
+    protected $payPalConfig = null;
 
     /**
      * PayPal payment object.
      *
      * @var \OxidEsales\Eshop\Application\Model\Payment|bool
      */
-    protected $_oPayPalPayment = null;
+    protected $payPalPayment = null;
 
     /**
      * Status if Express checkout is ON.
      *
      * @var bool
      */
-    protected $_blExpressCheckoutEnabled = null;
+    protected $expressCheckoutEnabled = null;
 
     /**
      * Status if Standard checkout is ON.
      *
      * @var bool
      */
-    protected $_blStandardCheckoutEnabled = null;
+    protected $standardCheckoutEnabled = null;
 
     /**
      * Status if PayPal is ON.
      *
      * @var bool
      */
-    protected $_blPayPalEnabled = null;
+    protected $payPalEnabled = null;
 
     /**
      * PayPal Payment Validator object.
      *
      * @var \OxidEsales\PayPalModule\Model\PaymentValidator
      */
-    protected $_oPaymentValidator = null;
+    protected $paymentValidator = null;
 
     /**
      * Set \OxidEsales\PayPalModule\Model\PaymentValidator.
      *
-     * @param \OxidEsales\PayPalModule\Model\PaymentValidator $oPaymentValidator
+     * @param \OxidEsales\PayPalModule\Model\PaymentValidator $paymentValidator
      */
-    public function setPaymentValidator($oPaymentValidator)
+    public function setPaymentValidator($paymentValidator)
     {
-        $this->_oPaymentValidator = $oPaymentValidator;
+        $this->paymentValidator = $paymentValidator;
     }
 
     /**
@@ -83,11 +83,11 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getPaymentValidator()
     {
-        if (is_null($this->_oPaymentValidator)) {
+        if (is_null($this->paymentValidator)) {
             $this->setPaymentValidator(oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class));
         }
 
-        return $this->_oPaymentValidator;
+        return $this->paymentValidator;
     }
 
     /**
@@ -98,20 +98,20 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isExpressCheckoutEnabled()
     {
-        if ($this->_blExpressCheckoutEnabled === null) {
-            $this->_blExpressCheckoutEnabled = false;
-            if ($this->_getPayPalConfig()->isExpressCheckoutEnabled()) {
-                $oUser = $this->getUser();
-                $oValidator = $this->getPaymentValidator();
-                $oValidator->setUser($oUser);
-                $oValidator->setConfig($this->getConfig());
-                $oValidator->setCheckCountry(false);
+        if ($this->expressCheckoutEnabled === null) {
+            $this->expressCheckoutEnabled = false;
+            if ($this->getPayPalConfig()->isExpressCheckoutEnabled()) {
+                $user = $this->getUser();
+                $validator = $this->getPaymentValidator();
+                $validator->setUser($user);
+                $validator->setConfig($this->getConfig());
+                $validator->setCheckCountry(false);
 
-                $this->_blExpressCheckoutEnabled = $oValidator->isPaymentValid();
+                $this->expressCheckoutEnabled = $validator->isPaymentValid();
             }
         }
 
-        return $this->_blExpressCheckoutEnabled;
+        return $this->expressCheckoutEnabled;
     }
 
     /**
@@ -121,12 +121,12 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isExpressCheckoutEnabledInMiniBasket()
     {
-        $blExpressCheckoutEnabledInMiniBasket = false;
-        if ($this->isExpressCheckoutEnabled() && $this->_getPayPalConfig()->isExpressCheckoutInMiniBasketEnabled()) {
-            $blExpressCheckoutEnabledInMiniBasket = true;
+        $expressCheckoutEnabledInMiniBasket = false;
+        if ($this->isExpressCheckoutEnabled() && $this->getPayPalConfig()->isExpressCheckoutInMiniBasketEnabled()) {
+            $expressCheckoutEnabledInMiniBasket = true;
         }
 
-        return $blExpressCheckoutEnabledInMiniBasket;
+        return $expressCheckoutEnabledInMiniBasket;
     }
 
     /**
@@ -137,12 +137,12 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isExpressCheckoutEnabledInDetails()
     {
-        $blExpressCheckoutEnabledInDetails = false;
-        if ($this->isExpressCheckoutEnabled() && $this->_getPayPalConfig()->isExpressCheckoutInDetailsPage()) {
-            $blExpressCheckoutEnabledInDetails = true;
+        $expressCheckoutEnabledInDetails = false;
+        if ($this->isExpressCheckoutEnabled() && $this->getPayPalConfig()->isExpressCheckoutInDetailsPage()) {
+            $expressCheckoutEnabledInDetails = true;
         }
 
-        return $blExpressCheckoutEnabledInDetails;
+        return $expressCheckoutEnabledInDetails;
     }
 
     /**
@@ -153,19 +153,19 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isStandardCheckoutEnabled()
     {
-        if ($this->_blStandardCheckoutEnabled === null) {
-            $this->_blStandardCheckoutEnabled = false;
-            if ($this->_getPayPalConfig()->isStandardCheckoutEnabled()) {
-                $oUser = $this->getUser();
-                $oValidator = $this->getPaymentValidator();
-                $oValidator->setUser($oUser);
-                $oValidator->setConfig($this->getConfig());
+        if ($this->standardCheckoutEnabled === null) {
+            $this->standardCheckoutEnabled = false;
+            if ($this->getPayPalConfig()->isStandardCheckoutEnabled()) {
+                $user = $this->getUser();
+                $validator = $this->getPaymentValidator();
+                $validator->setUser($user);
+                $validator->setConfig($this->getConfig());
 
-                $this->_blStandardCheckoutEnabled = $oValidator->isPaymentValid();
+                $this->standardCheckoutEnabled = $validator->isPaymentValid();
             }
         }
 
-        return $this->_blStandardCheckoutEnabled;
+        return $this->standardCheckoutEnabled;
     }
 
     /**
@@ -186,12 +186,12 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getPayPalPaymentDescription()
     {
-        $sDesc = "";
-        if (($oPayPalPayment = $this->getPayPalPayment())) {
-            $sDesc = $oPayPalPayment->oxpayments__oxlongdesc->getRawValue();
+        $desc = "";
+        if (($payPalPayment = $this->getPayPalPayment())) {
+            $desc = $payPalPayment->oxpayments__oxlongdesc->getRawValue();
         }
 
-        return $sDesc;
+        return $desc;
     }
 
     /**
@@ -201,17 +201,17 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getPayPalPayment()
     {
-        if ($this->_oPayPalPayment === null) {
-            $this->_oPayPalPayment = false;
-            $oPayPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+        if ($this->payPalPayment === null) {
+            $this->payPalPayment = false;
+            $payPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
 
             // payment is not available/active?
-            if ($oPayPalPayment->load("oxidpaypal") && $oPayPalPayment->oxpayments__oxactive->value) {
-                $this->_oPayPalPayment = $oPayPalPayment;
+            if ($payPalPayment->load("oxidpaypal") && $payPalPayment->oxpayments__oxactive->value) {
+                $this->payPalPayment = $payPalPayment;
             }
         }
 
-        return $this->_oPayPalPayment;
+        return $this->payPalPayment;
     }
 
     /**
@@ -221,14 +221,14 @@ class ViewConfig extends ViewConfig_parent
      */
     public function sendOrderInfoToPayPal()
     {
-        $blSendInfoToPayPalEnabled = $this->_getPayPalConfig()->sendOrderInfoToPayPal();
-        if ($blSendInfoToPayPalEnabled) {
-            /** @var \OxidEsales\PayPalModule\Model\Basket $oBasket */
-            $oBasket = $this->getSession()->getBasket();
-            $blSendInfoToPayPalEnabled = !$oBasket->isFractionQuantityItemsPresent();
+        $sendInfoToPayPalEnabled = $this->getPayPalConfig()->sendOrderInfoToPayPal();
+        if ($sendInfoToPayPalEnabled) {
+            /** @var \OxidEsales\PayPalModule\Model\Basket $basket */
+            $basket = $this->getSession()->getBasket();
+            $sendInfoToPayPalEnabled = !$basket->isFractionQuantityItemsPresent();
         }
 
-        return $blSendInfoToPayPalEnabled;
+        return $sendInfoToPayPalEnabled;
     }
 
     /**
@@ -238,7 +238,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function sendOrderInfoToPayPalDefault()
     {
-        return $this->_getPayPalConfig()->sendOrderInfoToPayPalDefault();
+        return $this->getPayPalConfig()->sendOrderInfoToPayPalDefault();
     }
 
     /**
@@ -246,13 +246,13 @@ class ViewConfig extends ViewConfig_parent
      *
      * @return \OxidEsales\PayPalModule\Core\Config
      */
-    protected function _getPayPalConfig()
+    protected function getPayPalConfig()
     {
-        if (is_null($this->_oPayPalConfig)) {
-            $this->_oPayPalConfig = oxNew(\OxidEsales\PayPalModule\Core\Config::class);
+        if (is_null($this->payPalConfig)) {
+            $this->payPalConfig = oxNew(\OxidEsales\PayPalModule\Core\Config::class);
         }
 
-        return $this->_oPayPalConfig;
+        return $this->payPalConfig;
     }
 
     /**
@@ -262,6 +262,6 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getCurrentUrl()
     {
-        return $this->_getPayPalConfig()->getCurrentUrl();
+        return $this->getPayPalConfig()->getCurrentUrl();
     }
 }

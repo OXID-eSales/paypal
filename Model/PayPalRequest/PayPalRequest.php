@@ -31,39 +31,39 @@ class PayPalRequest
      *
      * @var array
      */
-    protected $_aData = array();
+    protected $data = array();
 
     /**
      * Sets value to data by given key.
      *
-     * @param string $sKey   Key of data value.
-     * @param string $sValue Data value.
+     * @param string $key   Key of data value.
+     * @param string $value Data value.
      */
-    public function setParameter($sKey, $sValue)
+    public function setParameter($key, $value)
     {
-        $this->_aData[$sKey] = $sValue;
+        $this->data[$key] = $value;
     }
 
     /**
      * Returns value by given key.
      *
-     * @param string $sKey Key of data value.
+     * @param string $key Key of data value.
      *
      * @return string
      */
-    public function getParameter($sKey)
+    public function getParameter($key)
     {
-        return $this->_aData[$sKey];
+        return $this->data[$key];
     }
 
     /**
      * Set request data.
      *
-     * @param array $aResponseData Response data from PayPal.
+     * @param array $responseData Response data from PayPal.
      */
-    public function setData($aResponseData)
+    public function setData($responseData)
     {
-        $this->_aData = $aResponseData;
+        $this->data = $responseData;
     }
 
     /**
@@ -73,17 +73,17 @@ class PayPalRequest
      */
     public function getData()
     {
-        return $this->_aData;
+        return $this->data;
     }
 
     /**
      * Return value from data by given key.
      *
-     * @param string $sKey   Key of data value.
-     * @param string $sValue Data value.
+     * @param string $key   Key of data value.
+     * @param string $value Data value.
      */
-    protected function _setValue($sKey, $sValue)
+    protected function setValue($key, $value)
     {
-        $this->_aData[$sKey] = $sValue;
+        $this->data[$key] = $value;
     }
 }

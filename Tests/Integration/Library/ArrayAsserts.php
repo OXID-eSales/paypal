@@ -27,35 +27,35 @@ class ArrayAsserts extends \OxidEsales\PayPalModule\Tests\Integration\Library\In
     /**
      * Checks whether array length are equal and array keys and values are equal independent on keys position
      *
-     * @param $aExpected
-     * @param $aResult
+     * @param $expected
+     * @param $result
      */
-    public function assertArraysEqual($aExpected, $aResult)
+    public function assertArraysEqual($expected, $result)
     {
-        $this->assertArraysContains($aExpected, $aResult);
-        $this->assertEquals(count($aExpected), count($aResult), 'Failed asserting that expected array has equal amount of elements with result array');
+        $this->assertArraysContains($expected, $result);
+        $this->assertEquals(count($expected), count($result), 'Failed asserting that expected array has equal amount of elements with result array');
     }
 
     /**
      * Checks whether array array keys and values are equal independent on keys position
      *
-     * @param $aExpected
-     * @param $aResult
+     * @param $expected
+     * @param $result
      */
-    public function assertArraysContains($aExpected, $aResult)
+    public function assertArraysContains($expected, $result)
     {
-        $aExpectedNotMatched = array();
-        $aResultNotMatched = array();
+        $expectedNotMatched = array();
+        $resultNotMatched = array();
 
-        foreach ($aExpected as $sKey => $sValue) {
+        foreach ($expected as $key => $value) {
             try {
-                $this->assertArrayHasKey($sKey, $aResult);
-                $this->assertEquals($sValue, $aResult[$sKey]);
-            } catch (\Exception $oException) {
-                $aExpectedNotMatched[$sKey] = $sValue;
-                $aResultNotMatched[$sKey] = $aResult[$sKey];
+                $this->assertArrayHasKey($key, $result);
+                $this->assertEquals($value, $result[$key]);
+            } catch (\Exception $exception) {
+                $expectedNotMatched[$key] = $value;
+                $resultNotMatched[$key] = $result[$key];
             }
         }
-        $this->assertEquals($aExpectedNotMatched, $aResultNotMatched, 'Values not matched in given arrays');
+        $this->assertEquals($expectedNotMatched, $resultNotMatched, 'Values not matched in given arrays');
     }
 }

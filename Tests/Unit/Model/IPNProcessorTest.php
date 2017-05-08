@@ -28,93 +28,93 @@ class IPNProcessorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testSetGetRequest()
     {
-        $oRequestSet = new \OxidEsales\PayPalModule\Core\Request();
+        $requestSet = new \OxidEsales\PayPalModule\Core\Request();
 
-        $oProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
-        $oProcessor->setRequest($oRequestSet);
+        $processor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
+        $processor->setRequest($requestSet);
 
-        $this->assertEquals($oRequestSet, $oProcessor->getRequest(), 'Getter should return what is set in setter.');
+        $this->assertEquals($requestSet, $processor->getRequest(), 'Getter should return what is set in setter.');
     }
 
     public function testSetGetLang()
     {
-        $oLang = new \OxidEsales\Eshop\Core\Language();
-        $oProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
-        $oProcessor->setLang($oLang);
+        $lang = new \OxidEsales\Eshop\Core\Language();
+        $processor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
+        $processor->setLang($lang);
 
-        $this->assertEquals($oLang, $oProcessor->getLang(), 'Getter should return what is set in setter.');
+        $this->assertEquals($lang, $processor->getLang(), 'Getter should return what is set in setter.');
     }
 
     public function testSetGetPaymentBuilder()
     {
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
 
-        $oProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
-        $oProcessor->setPaymentBuilder($oPaymentBuilder);
+        $processor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
+        $processor->setPaymentBuilder($paymentBuilder);
 
-        $this->assertEquals($oPaymentBuilder, $oProcessor->getPaymentBuilder(), 'Getter should return what is set in setter.');
+        $this->assertEquals($paymentBuilder, $processor->getPaymentBuilder(), 'Getter should return what is set in setter.');
     }
 
     public function testGetPaymentBuilder()
     {
-        $oProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
+        $processor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
 
-        $this->assertTrue($oProcessor->getPaymentBuilder() instanceof \OxidEsales\PayPalModule\Model\IPNPaymentBuilder, 'Getter should create payment builder if nothing is set.');
+        $this->assertTrue($processor->getPaymentBuilder() instanceof \OxidEsales\PayPalModule\Model\IPNPaymentBuilder, 'Getter should create payment builder if nothing is set.');
     }
 
     public function testSetGetOrderManager()
     {
-        $oOrderManager = new \OxidEsales\PayPalModule\Model\OrderManager();
+        $orderManager = new \OxidEsales\PayPalModule\Model\OrderManager();
 
-        $oProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
-        $oProcessor->setOrderManager($oOrderManager);
+        $processor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
+        $processor->setOrderManager($orderManager);
 
-        $this->assertEquals($oOrderManager, $oProcessor->getOrderManager(), 'Getter should return what is set in setter.');
+        $this->assertEquals($orderManager, $processor->getOrderManager(), 'Getter should return what is set in setter.');
     }
 
     public function testGetOrderManager()
     {
-        $oProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
+        $processor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
 
-        $this->assertTrue($oProcessor->getOrderManager() instanceof \OxidEsales\PayPalModule\Model\OrderManager, 'Getter should create order manager if nothing is set.');
+        $this->assertTrue($processor->getOrderManager() instanceof \OxidEsales\PayPalModule\Model\OrderManager, 'Getter should create order manager if nothing is set.');
     }
 
     public function testProcess()
     {
-        $blOrderUpdated = true;
-        $oLang = new \OxidEsales\Eshop\Core\Language();
-        $oRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $oPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderUpdated = true;
+        $lang = new \OxidEsales\Eshop\Core\Language();
+        $request = new \OxidEsales\PayPalModule\Core\Request();
+        $payment = new \OxidEsales\PayPalModule\Model\OrderPayment();
         // Call Payment Builder with defined lang and defined request. Will return mocked payment.
-        $oPaymentBuilder = $this->_preparePaymentBuilder($oLang, $oRequest, $oPayment);
+        $paymentBuilder = $this->preparePaymentBuilder($lang, $request, $payment);
         // Call Order Manager with payment from payment builder. Will return if order updated == PayPal call processed.
-        $oPayPalOrderManager = $this->_prepareOrderManager($oPayment, $blOrderUpdated);
+        $payPalOrderManager = $this->prepareOrderManager($payment, $orderUpdated);
 
-        $oPayPalIPNProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
-        $oPayPalIPNProcessor->setLang($oLang);
-        $oPayPalIPNProcessor->setRequest($oRequest);
-        $oPayPalIPNProcessor->setPaymentBuilder($oPaymentBuilder);
-        $oPayPalIPNProcessor->setOrderManager($oPayPalOrderManager);
+        $payPalIPNProcessor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
+        $payPalIPNProcessor->setLang($lang);
+        $payPalIPNProcessor->setRequest($request);
+        $payPalIPNProcessor->setPaymentBuilder($paymentBuilder);
+        $payPalIPNProcessor->setOrderManager($payPalOrderManager);
 
-        $this->assertEquals($blOrderUpdated, $oPayPalIPNProcessor->process(), 'Order manager decide if order updated - processed successfully.');
+        $this->assertEquals($orderUpdated, $payPalIPNProcessor->process(), 'Order manager decide if order updated - processed successfully.');
     }
 
-    protected function _preparePaymentBuilder($oLang, $oRequest, $oPayment)
+    protected function preparePaymentBuilder($lang, $request, $payment)
     {
-        $oPaymentBuilder = $this->getMock(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class, array('setLang', 'setRequest', 'buildPayment'));
-        $oPaymentBuilder->expects($this->atLeastOnce())->method('setLang')->with($oLang);
-        $oPaymentBuilder->expects($this->atLeastOnce())->method('setRequest')->with($oRequest);
-        $oPaymentBuilder->expects($this->atLeastOnce())->method('buildPayment')->will($this->returnValue($oPayment));
+        $paymentBuilder = $this->getMock(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class, array('setLang', 'setRequest', 'buildPayment'));
+        $paymentBuilder->expects($this->atLeastOnce())->method('setLang')->with($lang);
+        $paymentBuilder->expects($this->atLeastOnce())->method('setRequest')->with($request);
+        $paymentBuilder->expects($this->atLeastOnce())->method('buildPayment')->will($this->returnValue($payment));
 
-        return $oPaymentBuilder;
+        return $paymentBuilder;
     }
 
-    protected function _prepareOrderManager($oPayment, $blOrderUpdated)
+    protected function prepareOrderManager($payment, $orderUpdated)
     {
-        $oOrderManager = $this->getMock(\OxidEsales\PayPalModule\Model\OrderManager::class, array('setOrderPayment', 'updateOrderStatus'));
-        $oOrderManager->expects($this->atLeastOnce())->method('setOrderPayment')->with($oPayment);
-        $oOrderManager->expects($this->atLeastOnce())->method('updateOrderStatus')->will($this->returnValue($blOrderUpdated));
+        $orderManager = $this->getMock(\OxidEsales\PayPalModule\Model\OrderManager::class, array('setOrderPayment', 'updateOrderStatus'));
+        $orderManager->expects($this->atLeastOnce())->method('setOrderPayment')->with($payment);
+        $orderManager->expects($this->atLeastOnce())->method('updateOrderStatus')->will($this->returnValue($orderUpdated));
 
-        return $oOrderManager;
+        return $orderManager;
     }
 }

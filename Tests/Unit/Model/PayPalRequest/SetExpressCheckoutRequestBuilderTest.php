@@ -30,7 +30,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testAddBaseParams()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'CALLBACKVERSION'                => '84.0',
             'LOCALECODE'                     => 'OEPAYPAL_LOCALE',
             'SOLUTIONTYPE'                   => 'Sole',
@@ -42,37 +42,37 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'CANCELURL'                      => null,
         );
 
-        $aConfigMethodValues = array(
+        $configMethodValues = array(
             'getBrandName'      => 'ShopName',
             'getBorderColor'    => 'BorderColor',
             'getLogoUrl'        => 'LogoImg',
             'isGuestBuyEnabled' => true,
         );
-        $oConfig = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $aConfigMethodValues);
+        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setPayPalConfig($oConfig);
-        $oBuilder->setTransactionMode('TransactionMode');
-        $oBuilder->addBaseParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setPayPalConfig($config);
+        $builder->setTransactionMode('TransactionMode');
+        $builder->addBaseParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddBaseParams_NoLogoImg_NoLogoParamSet()
     {
-        $aConfigMethodValues = array(
+        $configMethodValues = array(
             'getBrandName'      => 'ShopName',
             'getBorderColor'    => 'BorderColor',
             'isGuestBuyEnabled' => true,
             'getLogoUrl'        => null,
         );
-        $oConfig = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $aConfigMethodValues);
+        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setPayPalConfig($oConfig);
-        $oBuilder->addBaseParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setPayPalConfig($config);
+        $builder->addBaseParams();
 
-        $this->assertNotContains('LOGOIMG', $oBuilder->getPayPalRequest()->getData());
+        $this->assertNotContains('LOGOIMG', $builder->getPayPalRequest()->getData());
     }
 
     /**
@@ -80,45 +80,45 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testAddBaseParams_NoConfigSet_ExceptionThrown()
     {
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->addBaseParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->addBaseParams();
     }
 
     public function testAddBaseParams_CancelUrlSet_ParameterNotNull()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'CANCELURL' => 'cancelUrl',
         );
 
-        $oConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $config = new \OxidEsales\PayPalModule\Core\Config();
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setPayPalConfig($oConfig);
-        $oBuilder->setCancelUrl('cancelUrl');
-        $oBuilder->addBaseParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setPayPalConfig($config);
+        $builder->setCancelUrl('cancelUrl');
+        $builder->addBaseParams();
 
-        $this->_assertArraysContains($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysContains($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddBaseParams_ReturnUrlSet_ParameterNotNull()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'RETURNURL' => 'returnUrl',
         );
 
-        $oConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $config = new \OxidEsales\PayPalModule\Core\Config();
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setPayPalConfig($oConfig);
-        $oBuilder->setReturnUrl('returnUrl');
-        $oBuilder->addBaseParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setPayPalConfig($config);
+        $builder->setReturnUrl('returnUrl');
+        $builder->addBaseParams();
 
-        $this->_assertArraysContains($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysContains($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
-    protected function _getBasketStub($aParams = array())
+    protected function getBasketStub($params = array())
     {
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'isVirtualPayPalBasket'              => true,
             'getPrice'                           => new \OxidEsales\Eshop\Core\Price(),
             'getPayPalBasketVatValue'            => '88.88',
@@ -130,16 +130,16 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getShippingId'                      => null,
         );
 
-        foreach ($aParams as $sKey => $sValue) {
-            $aBasketMethodValues[$sKey] = $sValue;
+        foreach ($params as $key => $value) {
+            $basketMethodValues[$key] = $value;
         }
 
-        return $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        return $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
     }
 
     public function testSetBasket_AllParamsSet()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'NOSHIPPING'                    => '1',
             'REQCONFIRMSHIPPING'            => '0',
             'PAYMENTREQUEST_0_AMT'          => '99.99',
@@ -153,16 +153,16 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'L_SHIPPINGOPTIONAMOUNT0'       => '66.66',
         );
 
-        $oPrice = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, array('getBruttoPrice' => '99.99'));
+        $price = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, array('getBruttoPrice' => '99.99'));
 
-        $aBasketMethodValues = array('getPrice' => $oPrice);
-        $oBasket = $this->_getBasketStub($aBasketMethodValues);
+        $basketMethodValues = array('getPrice' => $price);
+        $basket = $this->getBasketStub($basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
 
@@ -170,47 +170,47 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testSetBasket_OnUpdateCalledOnBasket()
     {
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('onUpdate', 'calculateBasket', 'isVirtualPayPalBasket', 'getSumOfCostOfAllItemsPayPalBasket', 'getDiscountSumPayPalBasket'));
-        $oBasket->expects($this->at(0))->method('onUpdate');
-        $oBasket->expects($this->at(1))->method('calculateBasket');
-        $oBasket->expects($this->atLeastOnce())->method('isVirtualPayPalBasket');
-        $oBasket->expects($this->atLeastOnce())->method('getSumOfCostOfAllItemsPayPalBasket');
-        $oBasket->expects($this->atLeastOnce())->method('getDiscountSumPayPalBasket');
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('onUpdate', 'calculateBasket', 'isVirtualPayPalBasket', 'getSumOfCostOfAllItemsPayPalBasket', 'getDiscountSumPayPalBasket'));
+        $basket->expects($this->at(0))->method('onUpdate');
+        $basket->expects($this->at(1))->method('calculateBasket');
+        $basket->expects($this->atLeastOnce())->method('isVirtualPayPalBasket');
+        $basket->expects($this->atLeastOnce())->method('getSumOfCostOfAllItemsPayPalBasket');
+        $basket->expects($this->atLeastOnce())->method('getDiscountSumPayPalBasket');
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketParams();
 
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setParameter"));
-        $oPayPalService->expects($this->any())->method("setParameter");
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setParameter"));
+        $payPalService->expects($this->any())->method("setParameter");
     }
 
     public function testSetBasket_NotVirtualBasket_ShippingReconfirmNotSet()
     {
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'isVirtualPayPalBasket' => false,
         );
-        $oBasket = $this->_getBasketStub($aBasketMethodValues);
+        $basket = $this->getBasketStub($basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketParams();
 
-        $this->assertNotContains('REQCONFIRMSHIPPING', $oBuilder->getPayPalRequest()->getData());
+        $this->assertNotContains('REQCONFIRMSHIPPING', $builder->getPayPalRequest()->getData());
     }
 
     public function testSetBasket_NotNettoMode_TaxAmountNotSet()
     {
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'isCalculationModeNetto' => false,
         );
-        $oBasket = $this->_getBasketStub($aBasketMethodValues);
+        $basket = $this->getBasketStub($basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketParams();
 
-        $this->assertNotContains('PAYMENTREQUEST_0_TAXAMT', $oBuilder->getPayPalRequest()->getData());
+        $this->assertNotContains('PAYMENTREQUEST_0_TAXAMT', $builder->getPayPalRequest()->getData());
     }
 
     /**
@@ -218,33 +218,33 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testSetBasket_NoConfigSet_ExceptionThrown()
     {
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->addBasketParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->addBasketParams();
     }
 
     public function testSetDescription()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'PAYMENTREQUEST_0_DESC'   => 'ShopName 99.99 EUR',
             'PAYMENTREQUEST_0_CUSTOM' => 'ShopName 99.99 EUR',
         );
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'getFPrice' => '99.99',
         );
-        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $aConfigMethodValues = array('getBrandName' => 'ShopName');
-        $oConfig = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $aConfigMethodValues);
+        $configMethodValues = array('getBrandName' => 'ShopName');
+        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
-        $oLang = $this->_createStub(\OxidEsales\Eshop\Core\Language::class, array('translateString' => '%s %s %s'));
+        $lang = $this->_createStub(\OxidEsales\Eshop\Core\Language::class, array('translateString' => '%s %s %s'));
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setLang($oLang);
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->setPayPalConfig($oConfig);
-        $oBuilder->addDescriptionParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setLang($lang);
+        $builder->setBasket($basket);
+        $builder->setPayPalConfig($config);
+        $builder->addDescriptionParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     /**
@@ -252,13 +252,13 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testSetDescription_NoConfigSet_ExceptionThrown()
     {
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->addDescriptionParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->addDescriptionParams();
     }
 
     public function testAddBasketItemParams_WithItems()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'L_PAYMENTREQUEST_0_NAME0'    => 'BasketItemTitle',
             'L_PAYMENTREQUEST_0_AMT0'     => '99.99',
             'L_PAYMENTREQUEST_0_QTY0'     => '88',
@@ -271,160 +271,160 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'L_PAYMENTREQUEST_0_NUMBER1'  => 'BasketItemArtNum',
         );
 
-        $oArticle = new \OxidEsales\Eshop\Application\Model\Article();
-        $oArticle->oxarticles__oxartnum = new \OxidEsales\Eshop\Core\Field('BasketItemArtNum');
+        $article = new \OxidEsales\Eshop\Application\Model\Article();
+        $article->oxarticles__oxartnum = new \OxidEsales\Eshop\Core\Field('BasketItemArtNum');
 
-        $aPriceMethodValues = array(
+        $priceMethodValues = array(
             'getPrice' => '99.99',
         );
-        $oPrice = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, $aPriceMethodValues);
+        $price = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, $priceMethodValues);
 
-        $aBasketItemMethodValues = array(
+        $basketItemMethodValues = array(
             'getTitle'     => 'BasketItemTitle',
-            'getUnitPrice' => $oPrice,
+            'getUnitPrice' => $price,
             'getAmount'    => '88',
             'getLink'      => 'BasketItemUrl',
-            'getArticle'   => $oArticle,
+            'getArticle'   => $article,
         );
 
-        $oBasketItem = $this->_createStub(\OxidEsales\Eshop\Application\Model\BasketItem::class, $aBasketItemMethodValues);
-        $aBasketItems = array($oBasketItem, $oBasketItem);
+        $basketItem = $this->_createStub(\OxidEsales\Eshop\Application\Model\BasketItem::class, $basketItemMethodValues);
+        $basketItems = array($basketItem, $basketItem);
 
-        $aBasketMethodValues = array(
-            'getContents'                => $aBasketItems,
+        $basketMethodValues = array(
+            'getContents'                => $basketItems,
             'getPayPalPaymentCosts'      => 0,
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketItemParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketItemParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddBasketItemParams_WithPayment()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'OEPAYPAL_SURCHARGE OEPAYPAL_TYPE_OF_PAYMENT',
             'L_PAYMENTREQUEST_0_AMT0'  => '66.74',
             'L_PAYMENTREQUEST_0_QTY0'  => 1,
         );
 
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'getContents'                => array(),
             'getPayPalPaymentCosts'      => 66.74,
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketItemParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketItemParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddBasketItemParams_WithWrapping()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'OEPAYPAL_GIFTWRAPPER',
             'L_PAYMENTREQUEST_0_AMT0'  => '100.00',
             'L_PAYMENTREQUEST_0_QTY0'  => 1,
         );
 
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'getContents'                => array(),
             'getPayPalPaymentCosts'      => 0,
             'getPayPalWrappingCosts'     => 100,
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketItemParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketItemParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddBasketItemParams_WithGiftCard()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'OEPAYPAL_GREETING_CARD',
             'L_PAYMENTREQUEST_0_AMT0'  => '100.99',
             'L_PAYMENTREQUEST_0_QTY0'  => 1,
         );
 
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'getContents'                => array(),
             'getPayPalPaymentCosts'      => 0,
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 100.99,
             'getPayPalTsProtectionCosts' => 0,
         );
-        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketItemParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketItemParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddBasketItemParams_WithTrustedShop()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'OEPAYPAL_TRUSTED_SHOP_PROTECTION',
             'L_PAYMENTREQUEST_0_AMT0'  => '100.99',
             'L_PAYMENTREQUEST_0_QTY0'  => 1,
         );
 
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'getContents'                => array(),
             'getPayPalPaymentCosts'      => 0,
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 0,
             'getPayPalTsProtectionCosts' => 100.99,
         );
-        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketItemParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketItemParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddBasketGrandTotalParams()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'OEPAYPAL_GRAND_TOTAL',
             'L_PAYMENTREQUEST_0_AMT0'  => '99.99',
             'L_PAYMENTREQUEST_0_QTY0'  => 1,
         );
 
-        $aBasketMethodValues = array(
+        $basketMethodValues = array(
             'getSumOfCostOfAllItemsPayPalBasket' => '99.99'
         );
-        $oBasket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $aBasketMethodValues);
+        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setBasket($oBasket);
-        $oBuilder->addBasketGrandTotalParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setBasket($basket);
+        $builder->addBasketGrandTotalParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     public function testAddAddressParams_SelectedAddressIdNotSet_TakeInfoFromUser()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'EMAIL'                              => 'test@test.com',
             'PAYMENTREQUEST_0_SHIPTONAME'        => 'FirstName LastName',
             'PAYMENTREQUEST_0_SHIPTOSTREET'      => 'Street StreetNr',
@@ -434,79 +434,79 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => null,
         );
 
-        $aUserMethodValues = array(
+        $userMethodValues = array(
             'getSelectedAddressId' => null,
         );
-        $oUser = $this->_createStub(\OxidEsales\Eshop\Application\Model\User::class, $aUserMethodValues);
-        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
-        $oUser->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
-        $oUser->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');
-        $oUser->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field('Street');
-        $oUser->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field('StreetNr');
-        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
-        $oUser->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field('Zip');
-        $oUser->oxuser__oxfon = new \OxidEsales\Eshop\Core\Field('PhoneNum');
-        $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
+        $user = $this->_createStub(\OxidEsales\Eshop\Application\Model\User::class, $userMethodValues);
+        $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
+        $user->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
+        $user->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');
+        $user->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field('Street');
+        $user->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field('StreetNr');
+        $user->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
+        $user->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field('Zip');
+        $user->oxuser__oxfon = new \OxidEsales\Eshop\Core\Field('PhoneNum');
+        $user->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setUser($oUser);
-        $oBuilder->addAddressParams();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setUser($user);
+        $builder->addAddressParams();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     /**
-     * @return oePayPalCheckoutRequestBuilder
+     * @return \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder
      */
-    protected function _getPayPalRequestBuilder()
+    protected function getPayPalRequestBuilder()
     {
-        $oLang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array('translateString'));
-        $oLang->expects($this->any())
+        $lang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array('translateString'));
+        $lang->expects($this->any())
             ->method('translateString')
             ->will($this->returnArgument(0));
 
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder();
-        $oBuilder->setLang($oLang);
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder();
+        $builder->setLang($lang);
 
-        return $oBuilder;
+        return $builder;
     }
 
     /**
      * Checks whether array length are equal and array keys and values are equal independent on keys position
      *
-     * @param $aExpected
-     * @param $aResult
+     * @param $expected
+     * @param $result
      */
-    protected function _assertArraysEqual($aExpected, $aResult)
+    protected function assertArraysEqual($expected, $result)
     {
-        $this->_assertArraysContains($aExpected, $aResult);
-        $this->assertEquals(count($aExpected), count($aResult));
+        $this->assertArraysContains($expected, $result);
+        $this->assertEquals(count($expected), count($result));
     }
 
     /**
      * Checks whether array array keys and values are equal independent on keys position
      *
-     * @param $aExpected
-     * @param $aResult
+     * @param $expected
+     * @param $result
      */
-    protected function _assertArraysContains($aExpected, $aResult)
+    protected function assertArraysContains($expected, $result)
     {
-        foreach ($aExpected as $sKey => $sValue) {
-            $this->assertArrayHasKey($sKey, $aResult, "Key not found: $sKey");
-            $this->assertEquals($sValue, $aResult[$sKey], "Key '$sKey' value is not equal to '$sValue'");
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $result, "Key not found: $key");
+            $this->assertEquals($value, $result[$key], "Key '$key' value is not equal to '$value'");
         }
     }
 
     public function testGetMaxDeliveryAmount_notSet_0()
     {
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder();
-        $this->assertEquals(0, $oBuilder->getMaxDeliveryAmount());
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder();
+        $this->assertEquals(0, $builder->getMaxDeliveryAmount());
     }
 
     public function testGetMaxDeliveryAmount_setValue_setValue()
     {
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder();
-        $oBuilder->setMaxDeliveryAmount(13);
-        $this->assertEquals(13, $oBuilder->getMaxDeliveryAmount());
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder();
+        $builder->setMaxDeliveryAmount(13);
+        $this->assertEquals(13, $builder->getMaxDeliveryAmount());
     }
 }

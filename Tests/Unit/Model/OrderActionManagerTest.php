@@ -64,19 +64,19 @@ class OrderActionManagerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider testIsActionAvailable_dataProvider
      */
-    public function testIsActionAvailable($sTransactionMode, $sAction, $dTotal, $dCaptured, $dRefunded, $dVoided, $dIsValid)
+    public function testIsActionAvailable($transactionMode, $action, $total, $captured, $refunded, $voided, $isValid)
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
 
-        $oOrder->setTotalOrderSum($dTotal);
-        $oOrder->setCapturedAmount($dCaptured);
-        $oOrder->setRefundedAmount($dRefunded);
-        $oOrder->setVoidedAmount($dVoided);
-        $oOrder->setTransactionMode($sTransactionMode);
+        $order->setTotalOrderSum($total);
+        $order->setCapturedAmount($captured);
+        $order->setRefundedAmount($refunded);
+        $order->setVoidedAmount($voided);
+        $order->setTransactionMode($transactionMode);
 
-        $oActionManager = new \OxidEsales\PayPalModule\Model\OrderActionManager();
-        $oActionManager->setOrder($oOrder);
+        $actionManager = new \OxidEsales\PayPalModule\Model\OrderActionManager();
+        $actionManager->setOrder($order);
 
-        $this->assertEquals($dIsValid, $oActionManager->isActionAvailable($sAction));
+        $this->assertEquals($isValid, $actionManager->isActionAvailable($action));
     }
 }

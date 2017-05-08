@@ -31,23 +31,23 @@ class PayPalService
      *
      * @var \OxidEsales\PayPalModule\Core\Caller
      */
-    protected $_oCaller = null;
+    protected $caller = null;
 
     /**
      * PayPal Caller.
      *
      * @var \OxidEsales\PayPalModule\Core\Config
      */
-    protected $_oPayPalConfig = null;
+    protected $payPalConfig = null;
 
     /**
      * PayPal config setter.
      *
-     * @param \OxidEsales\PayPalModule\Core\Config $oPayPalConfig
+     * @param \OxidEsales\PayPalModule\Core\Config $payPalConfig
      */
-    public function setPayPalConfig($oPayPalConfig)
+    public function setPayPalConfig($payPalConfig)
     {
-        $this->_oPayPalConfig = $oPayPalConfig;
+        $this->payPalConfig = $payPalConfig;
     }
 
     /**
@@ -57,21 +57,21 @@ class PayPalService
      */
     public function getPayPalConfig()
     {
-        if (is_null($this->_oPayPalConfig)) {
+        if (is_null($this->payPalConfig)) {
             $this->setPayPalConfig(oxNew(\OxidEsales\PayPalModule\Core\Config::class));
         }
 
-        return $this->_oPayPalConfig;
+        return $this->payPalConfig;
     }
 
     /**
      * PayPal caller setter.
      *
-     * @param \OxidEsales\PayPalModule\Core\Caller $oCaller
+     * @param \OxidEsales\PayPalModule\Core\Caller $caller
      */
-    public function setCaller($oCaller)
+    public function setCaller($caller)
     {
-        $this->_oCaller = $oCaller;
+        $this->caller = $caller;
     }
 
     /**
@@ -81,95 +81,97 @@ class PayPalService
      */
     public function getCaller()
     {
-        if (is_null($this->_oCaller)) {
+        if (is_null($this->caller)) {
 
             /**
-             * @var \OxidEsales\PayPalModule\Core\Caller $oCaller
+             * @var \OxidEsales\PayPalModule\Core\Caller $caller
              */
-            $oCaller = oxNew(\OxidEsales\PayPalModule\Core\Caller::class);
+            $caller = oxNew(\OxidEsales\PayPalModule\Core\Caller::class);
 
-            $oConfig = $this->getPayPalConfig();
+            $config = $this->getPayPalConfig();
 
-            $oCaller->setParameter('VERSION', '84.0');
-            $oCaller->setParameter('PWD', $oConfig->getPassword());
-            $oCaller->setParameter('USER', $oConfig->getUserName());
-            $oCaller->setParameter('SIGNATURE', $oConfig->getSignature());
+            $caller->setParameter('VERSION', '84.0');
+            $caller->setParameter('PWD', $config->getPassword());
+            $caller->setParameter('USER', $config->getUserName());
+            $caller->setParameter('SIGNATURE', $config->getSignature());
 
-            $oCurl = oxNew(\OxidEsales\PayPalModule\Core\Curl::class);
-            $oCurl->setDataCharset($oConfig->getCharset());
-            $oCurl->setHost($oConfig->getHost());
-            $oCurl->setUrlToCall($oConfig->getApiUrl());
+            $curl = oxNew(\OxidEsales\PayPalModule\Core\Curl::class);
+            $curl->setDataCharset($config->getCharset());
+            $curl->setHost($config->getHost());
+            $curl->setUrlToCall($config->getApiUrl());
 
-            $oCaller->setCurl($oCurl);
+            $caller->setCurl($curl);
 
-            if ($oConfig->isLoggingEnabled()) {
-                $oLogger = oxNew(\OxidEsales\PayPalModule\Core\Logger::class);
-                $oLogger->setLoggerSessionId(\OxidEsales\Eshop\Core\Registry::getSession()->getId());
-                $oCaller->setLogger($oLogger);
+            if ($config->isLoggingEnabled()) {
+                $logger = oxNew(\OxidEsales\PayPalModule\Core\Logger::class);
+                $logger->setLoggerSessionId(\OxidEsales\Eshop\Core\Registry::getSession()->getId());
+                $caller->setLogger($logger);
             }
 
-            $this->setCaller($oCaller);
+            $this->setCaller($caller);
         }
 
-        return $this->_oCaller;
+        return $this->caller;
     }
 
     /**
      * Executes "SetExpressCheckout". Returns response object from PayPal.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      *
      * @return \OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout
      */
-    public function setExpressCheckout($oRequest)
+    public function setExpressCheckout($request)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout::class);
-        $oResponse->setData($oCaller->call('SetExpressCheckout'));
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout::class);
+        $response->setData($caller->call('SetExpressCheckout'));
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Executes "GetExpressCheckoutDetails". Returns response object from PayPal.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      *
      * @return \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails
      */
-    public function getExpressCheckoutDetails($oRequest)
+    public function getExpressCheckoutDetails($request)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails::class);
-        $oResponse->setData($oCaller->call('GetExpressCheckoutDetails'));
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails::class);
+        $response->setData($caller->call('GetExpressCheckoutDetails'));
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Executes "DoExpressCheckoutPayment". Returns response object from PayPal.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      *
      * @return \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment
      */
-    public function doExpressCheckoutPayment($oRequest)
+    public function doExpressCheckoutPayment($request)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment::class);
-        $oResponse->setData($oCaller->call('DoExpressCheckoutPayment'));
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment::class);
+        $response->setData($caller->call('DoExpressCheckoutPayment'));
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Executes PayPal callback request
+     *
+     * @return string
      */
     public function callbackResponse()
     {
@@ -185,110 +187,110 @@ class PayPalService
     /**
      * Executes "DoVoid". Returns response array from PayPal
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      *
      * @return \OxidEsales\PayPalModule\Model\Response\Response
      */
-    public function doVoid($oRequest)
+    public function doVoid($request)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoVoid::class);
-        $oResponse->setData($oCaller->call('DoVoid'));
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoVoid::class);
+        $response->setData($caller->call('DoVoid'));
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Executes "RefundTransaction". Returns response array from PayPal
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      *
      * @return \OxidEsales\PayPalModule\Model\Response\Response
      */
-    public function refundTransaction($oRequest)
+    public function refundTransaction($request)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoRefund::class);
-        $oResponse->setData($oCaller->call('RefundTransaction'));
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoRefund::class);
+        $response->setData($caller->call('RefundTransaction'));
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Executes "DoCapture". Returns response array from PayPal
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest request
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request request
      *
      * @return \OxidEsales\PayPalModule\Model\Response\Response
      */
-    public function doCapture($oRequest)
+    public function doCapture($request)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class);
-        $oResponse->setData($oCaller->call('DoCapture'));
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class);
+        $response->setData($caller->call('DoCapture'));
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Executes "DoReauthorization". Returns response array from PayPal.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      *
      * @return \OxidEsales\PayPalModule\Model\Response\Response
      */
-    public function doReAuthorization($oRequest)
+    public function doReAuthorization($request)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoReAuthorize::class);
-        $oResponse->setData($oCaller->call('DoReauthorization'));
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoReAuthorize::class);
+        $response->setData($caller->call('DoReauthorization'));
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Executes call to PayPal IPN.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
-     * @param string                 $sCharset
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
+     * @param string                                                     $charset
      *
      * @return \OxidEsales\PayPalModule\Model\Response\Response
      */
-    public function doVerifyWithPayPal($oRequest, $sCharset)
+    public function doVerifyWithPayPal($request, $charset)
     {
-        $oCaller = $this->getCaller();
-        $oCaller->setRequest($oRequest);
+        $caller = $this->getCaller();
+        $caller->setRequest($request);
 
-        $oCaller = $this->getCaller();
-        $oCurl = $oCaller->getCurl();
-        $oCurl->setConnectionCharset($sCharset);
-        $oCurl->setDataCharset($sCharset);
-        $oCurl->setUrlToCall($this->getPayPalConfig()->getIPNResponseUrl());
+        $caller = $this->getCaller();
+        $curl = $caller->getCurl();
+        $curl->setConnectionCharset($charset);
+        $curl->setDataCharset($charset);
+        $curl->setUrlToCall($this->getPayPalConfig()->getIPNResponseUrl());
 
-        $oResponse = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal::class);
-        $oResponse->setData($oCaller->call());
+        $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal::class);
+        $response->setData($caller->call());
 
-        return $oResponse;
+        return $response;
     }
 
     /**
      * Set parameter to caller by it's key.
      *
-     * @param string $sKey
-     * @param string $sValue
+     * @param string $key
+     * @param string $value
      *
      * @deprecated still use in callback.
      */
-    public function setParameter($sKey, $sValue)
+    public function setParameter($key, $value)
     {
-        return $this->getCaller()->setParameter($sKey, $sValue);
+        $this->getCaller()->setParameter($key, $value);
     }
 }

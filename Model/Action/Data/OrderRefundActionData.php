@@ -30,7 +30,7 @@ class OrderRefundActionData extends \OxidEsales\PayPalModule\Model\Action\Data\O
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderPayment::class
      */
-    public $_oPaymentBeingRefunded = null;
+    public $paymentBeingRefunded = null;
 
     /**
      * Returns action type.
@@ -59,9 +59,9 @@ class OrderRefundActionData extends \OxidEsales\PayPalModule\Model\Action\Data\O
      */
     public function getAmount()
     {
-        $dAmount = $this->getRequest()->getRequestParameter('refund_amount');
+        $amount = $this->getRequest()->getRequestParameter('refund_amount');
 
-        return $dAmount ? $dAmount : $this->getPaymentBeingRefunded()->getRemainingRefundAmount();
+        return $amount ? $amount : $this->getPaymentBeingRefunded()->getRemainingRefundAmount();
     }
 
     /**
@@ -77,15 +77,15 @@ class OrderRefundActionData extends \OxidEsales\PayPalModule\Model\Action\Data\O
     /**
      * Returns payment to refund.
      *
-     * @return float
+     * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
     public function getPaymentBeingRefunded()
     {
-        if (is_null($this->_oPaymentBeingRefunded)) {
-            $this->_oPaymentBeingRefunded = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-            $this->_oPaymentBeingRefunded->loadByTransactionId($this->getTransactionId());
+        if (is_null($this->paymentBeingRefunded)) {
+            $this->paymentBeingRefunded = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+            $this->paymentBeingRefunded->loadByTransactionId($this->getTransactionId());
         }
 
-        return $this->_oPaymentBeingRefunded;
+        return $this->paymentBeingRefunded;
     }
 }

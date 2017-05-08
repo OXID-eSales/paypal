@@ -43,26 +43,26 @@ class OrderPaymentCommentListTest extends \OxidEsales\TestingLibrary\UnitTestCas
      */
     public function testLoadOrderPayments()
     {
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setDate('2013-02-03 12:12:12');
-        $oComment->setComment('comment1');
-        $oComment->setPaymentId(2);
-        $oComment->save();
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setDate('2013-02-03 12:12:12');
+        $comment->setComment('comment1');
+        $comment->setPaymentId(2);
+        $comment->save();
 
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setDate('2013-02-03 12:12:12');
-        $oComment->setComment('comment2');
-        $oComment->setPaymentId(2);
-        $oComment->save();
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setDate('2013-02-03 12:12:12');
+        $comment->setComment('comment2');
+        $comment->setPaymentId(2);
+        $comment->save();
 
-        $aComments = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
-        $aComments->load(2);
+        $comments = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
+        $comments->load(2);
 
-        $this->assertEquals(2, count($aComments));
+        $this->assertEquals(2, count($comments));
 
         $i = 1;
-        foreach ($aComments as $oComment) {
-            $this->assertEquals('comment' . $i++, $oComment->getComment());
+        foreach ($comments as $comment) {
+            $this->assertEquals('comment' . $i++, $comment->getComment());
         }
     }
 
@@ -73,27 +73,27 @@ class OrderPaymentCommentListTest extends \OxidEsales\TestingLibrary\UnitTestCas
      */
     public function testAddComment()
     {
-        $oList = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
-        $oList->load('payment');
+        $list = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
+        $list->load('payment');
 
-        $this->assertEquals(0, count($oList));
+        $this->assertEquals(0, count($list));
 
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setPaymentId('payment');
-        $oComment->save();
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setPaymentId('payment');
+        $comment->save();
 
-        $oList = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
-        $oList->load('payment');
+        $list = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
+        $list->load('payment');
 
-        $this->assertEquals(1, count($oList));
+        $this->assertEquals(1, count($list));
 
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setComment('Comment');
-        $oList->addComment($oComment);
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setComment('Comment');
+        $list->addComment($comment);
 
-        $oList = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
-        $oList->load('payment');
+        $list = new \OxidEsales\PayPalModule\Model\OrderPaymentCommentList();
+        $list->load('payment');
 
-        $this->assertEquals(2, count($oList));
+        $this->assertEquals(2, count($list));
     }
 }

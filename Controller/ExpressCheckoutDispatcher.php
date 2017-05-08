@@ -30,24 +30,24 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      *
      * @var int
      */
-    protected $_iServiceType = 2;
+    protected $serviceType = 2;
 
     /**
      * Action for express checkout process
      *
      * @var string
      */
-    protected $_sUserAction = "commit";
+    protected $userAction = "commit";
 
     /**
      * Processes PayPal callback
      */
     public function processCallBack()
     {
-        $oPayPalService = $this->getPayPalCheckoutService();
-        $this->_setParamsForCallbackResponse($oPayPalService);
-        $sRequest = $oPayPalService->callbackResponse();
-        \OxidEsales\Eshop\Core\Registry::getUtils()->showMessageAndExit($sRequest);
+        $payPalService = $this->getPayPalCheckoutService();
+        $this->setParamsForCallbackResponse($payPalService);
+        $request = $payPalService->callbackResponse();
+        \OxidEsales\Eshop\Core\Registry::getUtils()->showMessageAndExit($request);
     }
 
     /**
@@ -59,81 +59,81 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     public function setExpressCheckout()
     {
-        $oSession = $this->getSession();
-        $oSession->setVariable("oepaypal", "2");
+        $session = $this->getSession();
+        $session->setVariable("oepaypal", "2");
         try {
-            /** @var \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder $oBuilder */
-            $oBuilder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder::class);
+            /** @var \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder $builder */
+            $builder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder::class);
 
-            $oBasket = $oSession->getBasket();
-            $oUser = $this->getUser();
+            $basket = $session->getBasket();
+            $user = $this->getUser();
 
-            $oBasket->setPayment("oxidpaypal");
+            $basket->setPayment("oxidpaypal");
 
-            $blPrevOptionValue = $this->getConfig()->getConfigParam('blCalculateDelCostIfNotLoggedIn');
+            $prevOptionValue = $this->getConfig()->getConfigParam('blCalculateDelCostIfNotLoggedIn');
             if ($this->getPayPalConfig()->isDeviceMobile()) {
                 if ($this->getPayPalConfig()->getMobileECDefaultShippingId()) {
                     $this->getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
-                    $oBasket->setShipping($this->getPayPalConfig()->getMobileECDefaultShippingId());
+                    $basket->setShipping($this->getPayPalConfig()->getMobileECDefaultShippingId());
                 } else {
                     $this->getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', false);
                 }
             }
 
-            $oBasket->onUpdate();
-            $oBasket->calculateBasket(true);
-            $this->getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', $blPrevOptionValue);
+            $basket->onUpdate();
+            $basket->calculateBasket(true);
+            $this->getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', $prevOptionValue);
 
-            $oValidator = oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
-            $oValidator->setUser($oUser);
-            $oValidator->setConfig($this->getConfig());
-            $oValidator->setPrice($oBasket->getPrice()->getPrice());
-            $oValidator->setCheckCountry(false);
+            $validator = oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
+            $validator->setUser($user);
+            $validator->setConfig($this->getConfig());
+            $validator->setPrice($basket->getPrice()->getPrice());
+            $validator->setCheckCountry(false);
 
-            if (!$oValidator->isPaymentValid()) {
+            if (!$validator->isPaymentValid()) {
                 /**
-                 * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $oEx
+                 * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $exception
                  */
-                $oEx = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
-                $oEx->setMessage(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
-                throw $oEx;
+                $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
+                $exception->setMessage(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
+                throw $exception;
             }
 
-            $oBuilder->setPayPalConfig($this->getPayPalConfig());
-            $oBuilder->setBasket($oBasket);
-            $oBuilder->setUser($oUser);
-            $oBuilder->setReturnUrl($this->_getReturnUrl());
-            $oBuilder->setCancelUrl($this->_getCancelUrl());
+            $builder->setPayPalConfig($this->getPayPalConfig());
+            $builder->setBasket($basket);
+            $builder->setUser($user);
+            $builder->setReturnUrl($this->getReturnUrl());
+            $builder->setCancelUrl($this->getCancelUrl());
 
             if (!$this->getPayPalConfig()->isDeviceMobile()) {
-                $oBuilder->setCallBackUrl($this->_getCallBackUrl());
-                $oBuilder->setMaxDeliveryAmount($this->getPayPalConfig()->getMaxPayPalDeliveryAmount());
+                $builder->setCallBackUrl($this->getCallBackUrl());
+                $builder->setMaxDeliveryAmount($this->getPayPalConfig()->getMaxPayPalDeliveryAmount());
             }
-            $blShowCartInPayPal = $this->getRequest()->getRequestParameter("displayCartInPayPal");
-            $blShowCartInPayPal = $blShowCartInPayPal && !$oBasket->isFractionQuantityItemsPresent();
-            $oBuilder->setShowCartInPayPal($blShowCartInPayPal);
-            $oBuilder->setTransactionMode($this->_getTransactionMode($oBasket));
+            $showCartInPayPal = $this->getRequest()->getRequestParameter("displayCartInPayPal");
+            $showCartInPayPal = $showCartInPayPal && !$basket->isFractionQuantityItemsPresent();
+            $builder->setShowCartInPayPal($showCartInPayPal);
+            $builder->setTransactionMode($this->getTransactionMode($basket));
 
-            $oRequest = $oBuilder->buildExpressCheckoutRequest();
+            $request = $builder->buildExpressCheckoutRequest();
 
-            $oPayPalService = $this->getPayPalCheckoutService();
-            $oResult = $oPayPalService->setExpressCheckout($oRequest);
-        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
+            $payPalService = $this->getPayPalCheckoutService();
+            $result = $payPalService->setExpressCheckout($request);
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $excp) {
             // error - unable to set order info - display error message
-            $this->_getUtilsView()->addErrorToDisplay($oExcp);
+            $this->getUtilsView()->addErrorToDisplay($excp);
 
             // return to basket view
             return "basket";
         }
 
         // saving PayPal token into session
-        $this->getSession()->setVariable("oepaypal-token", $oResult->getToken());
+        $this->getSession()->setVariable("oepaypal-token", $result->getToken());
 
         // extracting token and building redirect url
-        $sUrl = $this->getPayPalConfig()->getPayPalCommunicationUrl($oResult->getToken(), $this->_sUserAction);
+        $url = $this->getPayPalConfig()->getPayPalCommunicationUrl($result->getToken(), $this->userAction);
 
         // redirecting to PayPal's login/registration page
-        $this->_getUtils()->redirect($sUrl, false);
+        $this->getUtils()->redirect($url, false);
     }
 
     /**
@@ -145,101 +145,100 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     public function getExpressCheckoutDetails()
     {
-        $oBasket = $this->getSession()->getBasket();
+        $basket = $this->getSession()->getBasket();
 
         try {
-            $oPayPalService = $this->getPayPalCheckoutService();
-            $oBuilder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::class);
-            $oBuilder->setSession($this->getSession());
-            $oRequest = $oBuilder->buildRequest();
-            $oDetails = $oPayPalService->getExpressCheckoutDetails($oRequest);
+            $payPalService = $this->getPayPalCheckoutService();
+            $builder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::class);
+            $builder->setSession($this->getSession());
+            $request = $builder->buildRequest();
+            $details = $payPalService->getExpressCheckoutDetails($request);
 
             // Remove flag of "new item added" to not show "Item added" popup when returning to checkout from paypal
-            $oBasket->isNewItemAdded();
+            $basket->isNewItemAdded();
 
             // creating new or using session user
-            $oUser = $this->_initializeUserData($oDetails);
-        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
-            $this->_getUtilsView()->addErrorToDisplay($oExcp);
+            $user = $this->initializeUserData($details);
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $excp) {
+            $this->getUtilsView()->addErrorToDisplay($excp);
 
-            $oLogger = $this->getLogger();
-            $oLogger->log("PayPal error: " . $oExcp->getMessage());
+            $logger = $this->getLogger();
+            $logger->log("PayPal error: " . $excp->getMessage());
 
             return "basket";
         }
 
         // setting PayPal as current active payment
         $this->getSession()->setVariable('paymentid', "oxidpaypal");
-        $oBasket->setPayment("oxidpaypal");
+        $basket->setPayment("oxidpaypal");
 
-        if (!$this->_isPaymentValidForUserCountry($oUser)) {
-            $this->_getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_SELECT_ANOTHER_PAYMENT');
+        if (!$this->isPaymentValidForUserCountry($user)) {
+            $this->getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_SELECT_ANOTHER_PAYMENT');
 
-            $oLogger = $this->getLogger();
-            $oLogger->log("Shop error: PayPal payment validation by user country failed. Payment is not valid for this country.");
+            $logger = $this->getLogger();
+            $logger->log("Shop error: PayPal payment validation by user country failed. Payment is not valid for this country.");
 
             return "payment";
         }
 
-        $sShippingId = $this->_extractShippingId(urldecode($oDetails->getShippingOptionName()), $oUser);
+        $shippingId = $this->extractShippingId(urldecode($details->getShippingOptionName()), $user);
 
-        $this->setAnonymousUser($oBasket, $oUser);
+        $this->setAnonymousUser($basket, $user);
 
-        $oBasket->setShipping($sShippingId);
-        $oBasket->onUpdate();
-        $oBasket->calculateBasket(true);
+        $basket->setShipping($shippingId);
+        $basket->onUpdate();
+        $basket->calculateBasket(true);
 
-        $dBasketPrice = $oBasket->getPrice()->getBruttoPrice();
+        $basketPrice = $basket->getPrice()->getBruttoPrice();
 
-        if (!$this->_isPayPalPaymentValid($oUser, $dBasketPrice, $oBasket->getShippingId())) {
-            $this->_getUtilsView()->addErrorToDisplay("OEPAYPAL_SELECT_ANOTHER_SHIPMENT");
+        if (!$this->isPayPalPaymentValid($user, $basketPrice, $basket->getShippingId())) {
+            $this->getUtilsView()->addErrorToDisplay("OEPAYPAL_SELECT_ANOTHER_SHIPMENT");
 
             return "order";
         }
 
         // Checking if any additional discount was applied after we returned from PayPal.
-        if ($dBasketPrice != $oDetails->getAmount()) {
-            $this->_getUtilsView()->addErrorToDisplay("OEPAYPAL_ORDER_TOTAL_HAS_CHANGED");
+        if ($basketPrice != $details->getAmount()) {
+            $this->getUtilsView()->addErrorToDisplay("OEPAYPAL_ORDER_TOTAL_HAS_CHANGED");
 
             return "basket";
         }
 
-        $this->getSession()->setVariable("oepaypal-payerId", $oDetails->getPayerId());
-        $this->getSession()->setVariable("oepaypal-userId", $oUser->getId());
-        $this->getSession()->setVariable("oepaypal-basketAmount", $oDetails->getAmount());
+        $this->getSession()->setVariable("oepaypal-payerId", $details->getPayerId());
+        $this->getSession()->setVariable("oepaypal-userId", $user->getId());
+        $this->getSession()->setVariable("oepaypal-basketAmount", $details->getAmount());
 
-        $sNext = "order";
+        $next = "order";
 
         if ($this->getPayPalConfig()->finalizeOrderOnPayPalSide()) {
-            $sNext .= "?fnc=execute";
+            $next .= "?fnc=execute";
         }
 
-        return $sNext;
+        return $next;
     }
 
     /**
      * Returns transaction mode.
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket
      *
      * @return string
      */
-    protected function _getTransactionMode($oBasket)
+    protected function getTransactionMode($basket)
     {
-        $sTransactionMode = $this->getPayPalConfig()->getTransactionMode();
+        $transactionMode = $this->getPayPalConfig()->getTransactionMode();
 
-        if ($sTransactionMode == "Automatic") {
+        if ($transactionMode == "Automatic") {
+            $outOfStockValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
+            $outOfStockValidator->setBasket($basket);
+            $outOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
-            $oOutOfStockValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
-            $oOutOfStockValidator->setBasket($oBasket);
-            $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
+            $transactionMode = ($outOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
 
-            $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
-
-            return $sTransactionMode;
+            return $transactionMode;
         }
 
-        return $sTransactionMode;
+        return $transactionMode;
     }
 
     /**
@@ -247,10 +246,10 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      *
      * @return string
      */
-    protected function _getReturnUrl()
+    protected function getReturnUrl()
     {
         $controllerKey = \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getIdByClassName(get_class());
-        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=" . $controllerKey . "&fnc=getExpressCheckoutDetails");
+        return $this->getSession()->processUrl($this->getBaseUrl() . "&cl=" . $controllerKey . "&fnc=getExpressCheckoutDetails");
     }
 
     /**
@@ -258,14 +257,14 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      *
      * @return string
      */
-    protected function _getCancelUrl()
+    protected function getCancelUrl()
     {
-        $sCancelUrl = $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=basket");
-        if ($sCancelURLFromRequest = $this->getRequest()->getRequestParameter('oePayPalCancelURL')) {
-            $sCancelUrl = html_entity_decode(urldecode($sCancelURLFromRequest));
+        $cancelUrl = $this->getSession()->processUrl($this->getBaseUrl() . "&cl=basket");
+        if ($cancelURLFromRequest = $this->getRequest()->getRequestParameter('oePayPalCancelURL')) {
+            $cancelUrl = html_entity_decode(urldecode($cancelURLFromRequest));
         }
 
-        return $sCancelUrl;
+        return $cancelUrl;
     }
 
     /**
@@ -273,204 +272,203 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      *
      * @return string
      */
-    protected function _getCallBackUrl()
+    protected function getCallBackUrl()
     {
         $controllerKey = \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getIdByClassName(get_class());
-        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=" . $controllerKey . "&fnc=processCallBack");
+        return $this->getSession()->processUrl($this->getBaseUrl() . "&cl=" . $controllerKey . "&fnc=processCallBack");
     }
 
     /**
      *  Initialize new user from user data.
      *
-     * @param array $aData User data array.
+     * @param array $data User data array.
      *
      * @return \OxidEsales\Eshop\Application\Model\User
      */
-    protected function _getCallBackUser($aData)
+    protected function getCallBackUser($data)
     {
         // simulating user object
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->initializeUserForCallBackPayPalUser($aData);
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->initializeUserForCallBackPayPalUser($data);
 
-        return $oUser;
+        return $user;
     }
 
     /**
      * Sets parameters to PayPal callback
      *
-     * @param \OxidEsales\PayPalModule\Core\PayPalService $oPayPalService PayPal service
+     * @param \OxidEsales\PayPalModule\Core\PayPalService $payPalService PayPal service
+     *
+     * @return null
      */
-    protected function _setParamsForCallbackResponse($oPayPalService)
+    protected function setParamsForCallbackResponse($payPalService)
     {
         //logging request from PayPal
-        $oLogger = $this->getLogger();
-        $oLogger->setTitle("CALLBACK REQUEST FROM PAYPAL");
-        $oLogger->log(http_build_query($_REQUEST, "", "&"));
+        $logger = $this->getLogger();
+        $logger->setTitle("CALLBACK REQUEST FROM PAYPAL");
+        $logger->log(http_build_query($_REQUEST, "", "&"));
 
         // initializing user..
-        $oUser = $this->_getCallBackUser($_REQUEST);
+        $user = $this->getCallBackUser($_REQUEST);
 
         // unknown country?
-        if (!$this->_getUserShippingCountryId($oUser)) {
-            $oLogger = $this->getLogger();
-            $oLogger->log("Callback error: NO SHIPPING COUNTRY ID");
+        if (!$this->getUserShippingCountryId($user)) {
+            $logger = $this->getLogger();
+            $logger->log("Callback error: NO SHIPPING COUNTRY ID");
 
             // unknown country - no delivery
-            $this->_setPayPalIsNotAvailable($oPayPalService);
+            $this->setPayPalIsNotAvailable($payPalService);
 
             return;
         }
 
         //basket
-        $oBasket = $this->getSession()->getBasket();
+        $basket = $this->getSession()->getBasket();
 
         // get possible delivery sets
-        $oDelSetList = $this->_getDeliverySetList($oUser);
+        $delSetList = $this->getDeliverySetList($user);
 
         //no shipping methods for user country
-        if (!count($oDelSetList)) {
-            $oLogger = $this->getLogger();
-            $oLogger->log("Callback error: NO DELIVERY LIST SET");
+        if (!count($delSetList)) {
+            $logger = $this->getLogger();
+            $logger->log("Callback error: NO DELIVERY LIST SET");
 
-            $this->_setPayPalIsNotAvailable($oPayPalService);
+            $this->setPayPalIsNotAvailable($payPalService);
 
             return;
         }
 
-        $aDeliverySetList = $this->_makeUniqueNames($oDelSetList);
+        $deliverySetList = $this->makeUniqueNames($delSetList);
 
         // checking if PayPal is valid payment for selected user country
-        if (!$this->_isPaymentValidForUserCountry($oUser)) {
-            $oLogger->log("Callback error: NOT VALID COUNTRY ID");
+        if (!$this->isPaymentValidForUserCountry($user)) {
+            $logger->log("Callback error: NOT VALID COUNTRY ID");
 
             // PayPal payment is not possible for user country
-            $this->_setPayPalIsNotAvailable($oPayPalService);
+            $this->setPayPalIsNotAvailable($payPalService);
 
             return;
         }
 
-        $this->getSession()->setVariable('oepaypal-oxDelSetList', $aDeliverySetList);
+        $this->getSession()->setVariable('oepaypal-oxDelSetList', $deliverySetList);
 
-        $iTotalDeliveries = $this->_setDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket);
+        $totalDeliveries = $this->setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket);
 
         // if none of deliveries contain PayPal - disabling PayPal
-        if ($iTotalDeliveries == 0) {
-            $oLogger->log("Callback error: DELIVERY SET LIST HAS NO PAYPAL");
+        if ($totalDeliveries == 0) {
+            $logger->log("Callback error: DELIVERY SET LIST HAS NO PAYPAL");
 
-            $this->_setPayPalIsNotAvailable($oPayPalService);
+            $this->setPayPalIsNotAvailable($payPalService);
 
             return;
         }
 
-        $oPayPalService->setParameter("OFFERINSURANCEOPTION", "false");
+        $payPalService->setParameter("OFFERINSURANCEOPTION", "false");
     }
 
     /**
      * Sets delivery sets parameters to PayPal callback
      *
-     * @param \OxidEsales\PayPalModule\Core\PayPalService         $oPayPalService   PayPal service.
-     * @param \OxidEsales\Eshop\Application\Model\DeliverySetList $aDeliverySetList Delivery list.
-     * @param \OxidEsales\Eshop\Application\Model\User            $oUser            User object.
-     * @param \OxidEsales\Eshop\Application\Model\Basket          $oBasket          Basket object.
+     * @param \OxidEsales\PayPalModule\Core\PayPalService $payPalService   PayPal service.
+     * @param array                                       $deliverySetList Delivery list.
+     * @param \OxidEsales\Eshop\Application\Model\User    $user            User object.
+     * @param \OxidEsales\Eshop\Application\Model\Basket  $basket          Basket object.
      *
      * @return int Total amount of deliveries
      */
-    protected function _setDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket)
+    protected function setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket)
     {
-        $dMaxDeliveryAmount = $this->getPayPalConfig()->getMaxPayPalDeliveryAmount();
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $dBasketPrice = $oBasket->getPriceForPayment() / $oCur->rate;
-        $sActShipSet = $oBasket->getShippingId();
-        $blHasActShipSet = false;
-        $iCnt = 0;
+        $maxDeliveryAmount = $this->getPayPalConfig()->getMaxPayPalDeliveryAmount();
+        $cur = $this->getConfig()->getActShopCurrencyObject();
+        $basketPrice = $basket->getPriceForPayment() / $cur->rate;
+        $actShipSet = $basket->getShippingId();
+        $hasActShipSet = false;
+        $cnt = 0;
 
         // VAT for delivery will be calculated always
-        $fDelVATPercent = $oBasket->getAdditionalServicesVatPercent();
+        $delVATPercent = $basket->getAdditionalServicesVatPercent();
 
-        foreach ($aDeliverySetList as $sDelSetId => $sDelSetName) {
-
+        foreach ($deliverySetList as $delSetId => $delSetName) {
             // checking if PayPal is valid payment for selected delivery set
-            if (!$this->_isPayPalInDeliverySet($sDelSetId, $dBasketPrice, $oUser)) {
+            if (!$this->isPayPalInDeliverySet($delSetId, $basketPrice, $user)) {
                 continue;
             }
 
-            $oDeliveryList = oxNew(\OxidEsales\Eshop\Application\Model\DeliveryList::class);
-            $aDeliveryList = array();
+            $deliveryListProvider = oxNew(\OxidEsales\Eshop\Application\Model\DeliveryList::class);
+            $deliveryList = array();
 
             // list of active delivery costs
-            if ($oDeliveryList->hasDeliveries($oBasket, $oUser, $this->_getUserShippingCountryId($oUser), $sDelSetId)) {
-                $aDeliveryList = $oDeliveryList->getDeliveryList($oBasket, $oUser, $this->_getUserShippingCountryId($oUser), $sDelSetId);
+            if ($deliveryListProvider->hasDeliveries($basket, $user, $this->getUserShippingCountryId($user), $delSetId)) {
+                $deliveryList = $deliveryListProvider->getDeliveryList($basket, $user, $this->getUserShippingCountryId($user), $delSetId);
             }
 
-            if (count($aDeliveryList) > 0) {
-
-                $dPrice = 0;
+            if (count($deliveryList) > 0) {
+                $price = 0;
 
                 if ($this->getConfig()->getConfigParam('bl_perfLoadDelivery')) {
-                    foreach ($aDeliveryList as $oDelivery) {
-                        $dPrice += $oDelivery->getDeliveryPrice($fDelVATPercent)->getBruttoPrice();
+                    foreach ($deliveryList as $delivery) {
+                        $price += $delivery->getDeliveryPrice($delVATPercent)->getBruttoPrice();
                     }
                 }
 
-                if ($dPrice <= $dMaxDeliveryAmount) {
-                    $oPayPalService->setParameter("L_SHIPPINGOPTIONNAME{$iCnt}", getStr()->html_entity_decode($sDelSetName));
-                    $oPayPalService->setParameter("L_SHIPPINGOPTIONLABEL{$iCnt}", \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"));
-                    $oPayPalService->setParameter("L_SHIPPINGOPTIONAMOUNT{$iCnt}", $this->_formatFloat($dPrice));
+                if ($price <= $maxDeliveryAmount) {
+                    $payPalService->setParameter("L_SHIPPINGOPTIONNAME{$cnt}", \OxidEsales\Eshop\Core\Str::getStr()->html_entity_decode($delSetName));
+                    $payPalService->setParameter("L_SHIPPINGOPTIONLABEL{$cnt}", \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"));
+                    $payPalService->setParameter("L_SHIPPINGOPTIONAMOUNT{$cnt}", $this->formatFloat($price));
 
                     //setting active delivery set
-                    if ($sDelSetId == $sActShipSet) {
-                        $blHasActShipSet = true;
-                        $oPayPalService->setParameter("L_SHIPPINGOPTIONISDEFAULT{$iCnt}", "true");
+                    if ($delSetId == $actShipSet) {
+                        $hasActShipSet = true;
+                        $payPalService->setParameter("L_SHIPPINGOPTIONISDEFAULT{$cnt}", "true");
                     } else {
-                        $oPayPalService->setParameter("L_SHIPPINGOPTIONISDEFAULT{$iCnt}", "false");
+                        $payPalService->setParameter("L_SHIPPINGOPTIONISDEFAULT{$cnt}", "false");
                     }
 
-                    if ($oBasket->isCalculationModeNetto()) {
-                        $oPayPalService->setParameter("L_TAXAMT{$iCnt}", $this->_formatFloat($oBasket->getPayPalBasketVatValue()));
+                    if ($basket->isCalculationModeNetto()) {
+                        $payPalService->setParameter("L_TAXAMT{$cnt}", $this->formatFloat($basket->getPayPalBasketVatValue()));
                     } else {
-                        $oPayPalService->setParameter("L_TAXAMT{$iCnt}", $this->_formatFloat(0));
+                        $payPalService->setParameter("L_TAXAMT{$cnt}", $this->formatFloat(0));
                     }
                 }
 
-                $iCnt++;
+                $cnt++;
             }
         }
 
         //checking if active delivery set was set - if not, setting first in the list
-        if ($iCnt > 0 && !$blHasActShipSet) {
-            $oPayPalService->setParameter("L_SHIPPINGOPTIONISDEFAULT0", "true");
+        if ($cnt > 0 && !$hasActShipSet) {
+            $payPalService->setParameter("L_SHIPPINGOPTIONISDEFAULT0", "true");
         }
 
-        return $iCnt;
+        return $cnt;
     }
 
     /**
      * Makes delivery set array with unique names
      *
-     * @param \OxidEsales\Eshop\Application\Model\DeliveryList $oDelSetList delivery list
+     * @param array $deliverySetList delivery list
      *
      * @return array
      */
-    public function _makeUniqueNames($oDelSetList)
+    public function makeUniqueNames($deliverySetList)
     {
-        $aDelSetList = array();
-        $aNameCounts = array();
+        $result = array();
+        $nameCounts = array();
 
-        foreach ($oDelSetList as $oDelSet) {
+        foreach ($deliverySetList as $deliverySet) {
+            $deliverySetName = trim($deliverySet->oxdeliveryset__oxtitle->value);
 
-            $sDelSetName = trim($oDelSet->oxdeliveryset__oxtitle->value);
-
-            if (isset($aNameCounts[$sDelSetName])) {
-                $aNameCounts[$sDelSetName] += 1;
+            if (isset($nameCounts[$deliverySetName])) {
+                $nameCounts[$deliverySetName] += 1;
             } else {
-                $aNameCounts[$sDelSetName] = 1;
+                $nameCounts[$deliverySetName] = 1;
             }
 
-            $sSuffix = ($aNameCounts[$sDelSetName] > 1) ? " (" . $aNameCounts[$sDelSetName] . ")" : '';
-            $aDelSetList[$oDelSet->oxdeliveryset__oxid->value] = $sDelSetName . $sSuffix;
+            $suffix = ($nameCounts[$deliverySetName] > 1) ? " (" . $nameCounts[$deliverySetName] . ")" : '';
+            $result[$deliverySet->oxdeliveryset__oxid->value] = $deliverySetName . $suffix;
         }
 
-        return $aDelSetList;
+        return $result;
     }
 
     /**
@@ -478,145 +476,149 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      *
      * @return \OxidEsales\Eshop\Application\Model\User
      */
-    protected function _getPayPalUser()
+    protected function getPayPalUser()
     {
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        if (!$oUser->loadUserPayPalUser()) {
-            $oUser = $this->getUser();
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        if (!$user->loadUserPayPalUser()) {
+            $user = $this->getUser();
         }
 
-        return $oUser;
+        return $user;
     }
 
     /**
      * Extracts shipping id from given parameter
      *
-     * @param string                                   $sShippingOptionName Shipping option name, which comes from PayPal.
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser               User object.
+     * @param string                                   $shippingOptionName Shipping option name, which comes from PayPal.
+     * @param \OxidEsales\Eshop\Application\Model\User $user               User object.
      *
      * @return string
      */
-    protected function _extractShippingId($sShippingOptionName, $oUser)
+    protected function extractShippingId($shippingOptionName, $user)
     {
-        $sCharset = $this->getPayPalConfig()->getCharset();
-        $sShippingOptionName = htmlentities(html_entity_decode($sShippingOptionName, ENT_QUOTES, $sCharset), ENT_QUOTES, $sCharset);
+        $result = null;
 
-        $sName = trim(str_replace(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), "", $sShippingOptionName));
+        $charset = $this->getPayPalConfig()->getCharset();
+        $shippingOptionName = htmlentities(html_entity_decode($shippingOptionName, ENT_QUOTES, $charset), ENT_QUOTES, $charset);
 
-        $aDeliverySetList = $this->getSession()->getVariable("oepaypal-oxDelSetList");
+        $name = trim(str_replace(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), "", $shippingOptionName));
 
-        if (!$aDeliverySetList) {
-            $oDelSetList = $this->_getDeliverySetList($oUser);
-            $aDeliverySetList = $this->_makeUniqueNames($oDelSetList);
+        $deliverySetList = $this->getSession()->getVariable("oepaypal-oxDelSetList");
+
+        if (!$deliverySetList) {
+            $delSetList = $this->getDeliverySetList($user);
+            $deliverySetList = $this->makeUniqueNames($delSetList);
         }
 
-        if (is_array($aDeliverySetList)) {
-            $aFlipped = array_flip($aDeliverySetList);
+        if (is_array($deliverySetList)) {
+            $flipped = array_flip($deliverySetList);
 
-            return $aFlipped[$sName];
+            $result = $flipped[$name];
         }
+
+        return $result;
     }
 
     /**
      * Creates new or returns session user
      *
-     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $oDetails
+     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $details
      *
      * @throws \OxidEsales\Eshop\Core\Exception\StandardException
      *
      * @return \OxidEsales\Eshop\Application\Model\User
      */
-    protected function _initializeUserData($oDetails)
+    protected function initializeUserData($details)
     {
-        $sUserEmail = $oDetails->getEmail();
-        $oLoggedUser = $this->getUser();
-        if ($oLoggedUser) {
-            $sUserEmail = $oLoggedUser->oxuser__oxusername->value;
+        $userEmail = $details->getEmail();
+        $loggedUser = $this->getUser();
+        if ($loggedUser) {
+            $userEmail = $loggedUser->oxuser__oxusername->value;
         }
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        if ($sUserId = $oUser->isRealPayPalUser($sUserEmail)) {
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        if ($userId = $user->isRealPayPalUser($userEmail)) {
             // if user exist
-            $oUser->load($sUserId);
+            $user->load($userId);
 
-            if (!$oLoggedUser) {
-                if (!$oUser->isSamePayPalUser($oDetails)) {
+            if (!$loggedUser) {
+                if (!$user->isSamePayPalUser($details)) {
                     /**
-                     * @var $oEx \OxidEsales\Eshop\Core\Exception\StandardException
+                     * @var $exception \OxidEsales\Eshop\Core\Exception\StandardException
                      */
-                    $oEx = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
-                    $oEx->setMessage('OEPAYPAL_ERROR_USER_ADDRESS');
-                    throw $oEx;
+                    $exception = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
+                    $exception->setMessage('OEPAYPAL_ERROR_USER_ADDRESS');
+                    throw $exception;
                 }
-            } elseif (!$oUser->isSameAddressUserPayPalUser($oDetails) || !$oUser->isSameAddressPayPalUser($oDetails)) {
+            } elseif (!$user->isSameAddressUserPayPalUser($details) || !$user->isSameAddressPayPalUser($details)) {
                 // user has selected different address in PayPal (not equal with usr shop address)
                 // so adding PayPal address as new user address to shop user account
-                $this->_createUserAddress($oDetails, $sUserId);
+                $this->createUserAddress($details, $userId);
             } else {
                 // removing custom shipping address ID from session as user uses billing
                 // address for shipping
                 $this->getSession()->deleteVariable('deladrid');
             }
         } else {
-            $oUser->createPayPalUser($oDetails);
+            $user->createPayPalUser($details);
         }
 
-        $this->getSession()->setVariable('usr', $oUser->getId());
+        $this->getSession()->setVariable('usr', $user->getId());
 
-        return $oUser;
+        return $user;
     }
 
     /**
      * Creates user address and sets address id into session
      *
-     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $oDetails User address info.
-     * @param string                                                                    $sUserId  User id.
+     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $details User address info.
+     * @param string                                                                    $userId  User id.
      *
      * @return bool
      */
-    protected function _createUserAddress($oDetails, $sUserId)
+    protected function createUserAddress($details, $userId)
     {
-        $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
+        $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
 
-        return $oAddress->createPayPalAddress($oDetails, $sUserId);
+        return $address->createPayPalAddress($details, $userId);
     }
 
     /**
      * Checking if PayPal payment is available in user country
      *
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser User object.
+     * @param \OxidEsales\Eshop\Application\Model\User $user User object.
      *
      * @return boolean
      */
-    protected function _isPaymentValidForUserCountry($oUser)
+    protected function isPaymentValidForUserCountry($user)
     {
-        $oPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-        $oPayment->load("oxidpaypal");
-        $aPaymentCountries = $oPayment->getCountries();
+        $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $payment->load("oxidpaypal");
+        $paymentCountries = $payment->getCountries();
 
-        if (!is_array($aPaymentCountries) || empty($aPaymentCountries)) {
+        if (!is_array($paymentCountries) || empty($paymentCountries)) {
             // not assigned to any country - valid to all countries
             return true;
         }
 
-        return in_array($this->_getUserShippingCountryId($oUser), $aPaymentCountries);
+        return in_array($this->getUserShippingCountryId($user), $paymentCountries);
     }
 
     /**
      * Checks if selected delivery set has PayPal payment.
      *
-     * @param string                                   $sDelSetId    Delivery set ID.
-     * @param double                                   $dBasketPrice Basket price.
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser        User object.
+     * @param string                                   $delSetId    Delivery set ID.
+     * @param double                                   $basketPrice Basket price.
+     * @param \OxidEsales\Eshop\Application\Model\User $user        User object.
      *
      * @return boolean
      */
-    protected function _isPayPalInDeliverySet($sDelSetId, $dBasketPrice, $oUser)
+    protected function isPayPalInDeliverySet($delSetId, $basketPrice, $user)
     {
         $paymentList = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Application\Model\PaymentList::class);
-        $aPaymentList = $paymentList->getPaymentList($sDelSetId, $dBasketPrice, $oUser);
+        $paymentList = $paymentList->getPaymentList($delSetId, $basketPrice, $user);
 
-        if (is_array($aPaymentList) && array_key_exists("oxidpaypal", $aPaymentList)) {
+        if (is_array($paymentList) && array_key_exists("oxidpaypal", $paymentList)) {
             return true;
         }
 
@@ -626,89 +628,89 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
     /**
      * Disables PayPal payment in PayPal side
      *
-     * @param \OxidEsales\PayPalModule\Core\PayPalService $oPayPalService PayPal service.
+     * @param \OxidEsales\PayPalModule\Core\PayPalService $payPalService PayPal service.
      */
-    protected function _setPayPalIsNotAvailable($oPayPalService)
+    protected function setPayPalIsNotAvailable($payPalService)
     {
         // "NO_SHIPPING_OPTION_DETAILS" works only in version 61, so need to switch version
-        $oPayPalService->setParameter("CALLBACKVERSION", "61.0");
-        $oPayPalService->setParameter("NO_SHIPPING_OPTION_DETAILS", "1");
+        $payPalService->setParameter("CALLBACKVERSION", "61.0");
+        $payPalService->setParameter("NO_SHIPPING_OPTION_DETAILS", "1");
     }
 
     /**
      * Get delivery set list for PayPal callback
      *
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser User object.
+     * @param \OxidEsales\Eshop\Application\Model\User $user User object.
      *
      * @return array
      */
-    protected function _getDeliverySetList($oUser)
+    protected function getDeliverySetList($user)
     {
-        $oDelSetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
+        $delSetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
 
-        return $oDelSetList->getDeliverySetList($oUser, $this->_getUserShippingCountryId($oUser));
+        return $delSetList->getDeliverySetList($user, $this->getUserShippingCountryId($user));
     }
 
     /**
      * Returns user shipping address country id.
      *
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser
+     * @param \OxidEsales\Eshop\Application\Model\User $user
      *
      * @return string
      */
-    protected function _getUserShippingCountryId($oUser)
+    protected function getUserShippingCountryId($user)
     {
-        if ($oUser->getSelectedAddressId() && $oUser->getSelectedAddress()) {
-            $sCountryId = $oUser->getSelectedAddress()->oxaddress__oxcountryid->value;
+        if ($user->getSelectedAddressId() && $user->getSelectedAddress()) {
+            $countryId = $user->getSelectedAddress()->oxaddress__oxcountryid->value;
         } else {
-            $sCountryId = $oUser->oxuser__oxcountryid->value;
+            $countryId = $user->oxuser__oxcountryid->value;
         }
 
-        return $sCountryId;
+        return $countryId;
     }
 
     /**
      * Checks whether PayPal payment is available
      *
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser
-     * @param double                                   $dBasketPrice
-     * @param string                                   $sShippingId
+     * @param \OxidEsales\Eshop\Application\Model\User $user
+     * @param double                                   $basketPrice
+     * @param string                                   $shippingId
      *
      * @return bool
      */
-    protected function _isPayPalPaymentValid($oUser, $dBasketPrice, $sShippingId)
+    protected function isPayPalPaymentValid($user, $basketPrice, $shippingId)
     {
-        $blValid = true;
+        $valid = true;
 
-        $oPayPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-        $oPayPalPayment->load('oxidpaypal');
-        if (!$oPayPalPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
-            $blValid = $this->_isEmptyPaymentValid($oUser, $dBasketPrice, $sShippingId);
+        $payPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $payPalPayment->load('oxidpaypal');
+        if (!$payPalPayment->isValidPayment(null, null, $user, $basketPrice, $shippingId)) {
+            $valid = $this->isEmptyPaymentValid($user, $basketPrice, $shippingId);
         }
 
-        return $blValid;
+        return $valid;
     }
 
     /**
      * Checks whether Empty payment is available.
      *
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser
-     * @param double                                   $dBasketPrice
-     * @param string                                   $sShippingId
+     * @param \OxidEsales\Eshop\Application\Model\User $user
+     * @param double                                   $basketPrice
+     * @param string                                   $shippingId
      *
      * @return bool
      */
-    protected function _isEmptyPaymentValid($oUser, $dBasketPrice, $sShippingId)
+    protected function isEmptyPaymentValid($user, $basketPrice, $shippingId)
     {
-        $blValid = true;
+        $valid = true;
 
-        $oEmptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-        $oEmptyPayment->load('oxempty');
-        if (!$oEmptyPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
-            $blValid = false;
+        $emptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $emptyPayment->load('oxempty');
+        if (!$emptyPayment->isValidPayment(null, null, $user, $basketPrice, $shippingId)) {
+            $valid = false;
         }
 
-        return $blValid;
+        return $valid;
     }
 
     /**

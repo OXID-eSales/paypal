@@ -6,7 +6,7 @@
     </td>
     <td class="edittext">
         <input class="edittext" type="checkbox" name="isPayPalDefaultMobilePayment" value='1'
-        [{if $blIsPayPalDefaultMobilePayment}]checked[{/if}]>
+        [{if $isPayPalDefaultMobilePayment}]checked[{/if}]>
         [{oxinputhelp ident="OEPAYPAL_HELP_MOBILE_DEFAULT_PAYMENT"}]
     </td>
 </tr>

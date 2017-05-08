@@ -32,7 +32,7 @@ class OrderPaymentActionManager
      *
      * @var array
      */
-    protected $_availableActions = array(
+    protected $availableActions = array(
         "capture" => array(
             "Completed" => array(
                 'refund'
@@ -45,16 +45,16 @@ class OrderPaymentActionManager
      *
      * @var \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected $_oPayment = null;
+    protected $payment = null;
 
     /**
      * Sets order.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $payment
      */
-    public function setPayment($oPayment)
+    public function setPayment($payment)
     {
-        $this->_oPayment = $oPayment;
+        $this->payment = $payment;
     }
 
     /**
@@ -64,53 +64,53 @@ class OrderPaymentActionManager
      */
     public function getPayment()
     {
-        return $this->_oPayment;
+        return $this->payment;
     }
 
     /**
      * Returns available actions for given payment action
      *
-     * @param string $sPaymentAction
-     * @param string $sPaymentStatus
+     * @param string $paymentAction
+     * @param string $paymentStatus
      *
      * @return array
      */
-    protected function _getAvailableActions($sPaymentAction, $sPaymentStatus)
+    protected function getAvailableActions($paymentAction, $paymentStatus)
     {
-        $aActions = $this->_availableActions[$sPaymentAction][$sPaymentStatus];
+        $actions = $this->availableActions[$paymentAction][$paymentStatus];
 
-        return $aActions ? $aActions : array();
+        return $actions ? $actions : array();
     }
 
 
     /**
      * Checks whether action is available for given order
      *
-     * @param string                                      $sAction
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oPayment
+     * @param string                                      $action
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $payment
      *
      * @return bool
      */
-    public function isActionAvailable($sAction, $oPayment = null)
+    public function isActionAvailable($action, $payment = null)
     {
-        if ($oPayment) {
-            $this->setPayment($oPayment);
+        if ($payment) {
+            $this->setPayment($payment);
         }
 
-        $oPayment = $this->getPayment();
+        $payment = $this->getPayment();
 
-        $blIsAvailable = in_array($sAction, $this->_getAvailableActions($oPayment->getAction(), $oPayment->getStatus()));
+        $isAvailable = in_array($action, $this->getAvailableActions($payment->getAction(), $payment->getStatus()));
 
-        if ($blIsAvailable) {
-            $blIsAvailable = false;
+        if ($isAvailable) {
+            $isAvailable = false;
 
-            switch ($sAction) {
+            switch ($action) {
                 case 'refund':
-                    $blIsAvailable = ($oPayment->getAmount() > $oPayment->getRefundedAmount());
+                    $isAvailable = ($payment->getAmount() > $payment->getRefundedAmount());
                     break;
             }
         }
 
-        return $blIsAvailable;
+        return $isAvailable;
     }
 }

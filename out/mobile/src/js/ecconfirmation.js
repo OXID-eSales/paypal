@@ -31,7 +31,7 @@ var oECConfirmation = (function () {
             _displayConfirmation();
             _oHideButton.click(_displayContent);
         }
-    }
+    };
 
     function _displayConfirmation() {
         _oPageContainer.hide();

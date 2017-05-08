@@ -33,7 +33,7 @@ abstract class ModelDbGateway
      *
      * @return \OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface
      */
-    protected function _getDb()
+    protected function getDb()
     {
         return \OxidEsales\Eshop\Core\DatabaseProvider::getDb(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
     }
@@ -41,21 +41,21 @@ abstract class ModelDbGateway
     /**
      * Abstract method for data saving (insert and update).
      *
-     * @param array $aData model data
+     * @param array $data model data
      */
-    abstract public function save($aData);
+    abstract public function save($data);
 
     /**
      * Abstract method for loading model data.
      *
-     * @param string $sId model id
+     * @param string $id model id
      */
-    abstract public function load($sId);
+    abstract public function load($id);
 
     /**
      * Abstract method for delete model data.
      *
-     * @param string $sId model id
+     * @param string $id model id
      */
-    abstract public function delete($sId);
+    abstract public function delete($id);
 }

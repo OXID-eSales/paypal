@@ -38,58 +38,58 @@ class ShopLogo
      *
      * @var string
      */
-    protected $_sImageDir = null;
+    protected $imageDir = null;
 
     /**
      * Image directory to work in.
      *
      * @var string
      */
-    protected $_sImageDirUrl = null;
+    protected $imageDirUrl = null;
 
     /**
      * Image name.
      *
      * @var string
      */
-    protected $_sImageName = null;
+    protected $imageName = null;
 
     /**
      * Path to an image, not null only when it exists.
      *
      * @var string
      */
-    protected $_sImagePath = null;
+    protected $imagePath = null;
     /**
      * Image maximum width.
      *
      * @var int
      */
-    protected $_iWidth = 190;
+    protected $width = 190;
 
     /**
      * Image maximum height.
      *
      * @var int
      */
-    protected $_iHeight = 160;
+    protected $height = 160;
 
     /**
      * Provided image handler.
      *
      * @var \OxidEsales\Eshop\Core\UtilsPic
      */
-    protected $_oImageHandler = null;
+    protected $imageHandler = null;
 
     /**
      * Set image handler to handle images.
      * Needs to have resizeImage method.
      *
-     * @param \OxidEsales\Eshop\Core\UtilsPic $oImageHandler
+     * @param \OxidEsales\Eshop\Core\UtilsPic $imageHandler
      */
-    public function setImageHandler($oImageHandler)
+    public function setImageHandler($imageHandler)
     {
-        $this->_oImageHandler = $oImageHandler;
+        $this->imageHandler = $imageHandler;
     }
 
     /**
@@ -99,17 +99,17 @@ class ShopLogo
      */
     public function getImageHandler()
     {
-        return $this->_oImageHandler;
+        return $this->imageHandler;
     }
 
     /**
      * Sets image maximum width.
      *
-     * @param int $iWidth
+     * @param int $width
      */
-    public function setWidth($iWidth)
+    public function setWidth($width)
     {
-        $this->_iWidth = $iWidth;
+        $this->width = $width;
     }
 
     /**
@@ -119,17 +119,17 @@ class ShopLogo
      */
     public function getWidth()
     {
-        return $this->_iWidth;
+        return $this->width;
     }
 
     /**
      * Sets image maximum height.
      *
-     * @param int $iHeight
+     * @param int $height
      */
-    public function setHeight($iHeight)
+    public function setHeight($height)
     {
-        $this->_iHeight = $iHeight;
+        $this->height = $height;
     }
 
     /**
@@ -139,7 +139,7 @@ class ShopLogo
      */
     public function getHeight()
     {
-        return $this->_iHeight;
+        return $this->height;
     }
 
     /**
@@ -147,32 +147,31 @@ class ShopLogo
      *
      * @return bool
      */
-    protected function _getResize()
+    protected function getResize()
     {
-        $blResize = false;
-        $sImagePath = $this->_getImagePath();
-        if ($sImagePath) {
-            $aImageSize = $this->_getImageSize($sImagePath);
+        $resize = false;
+        $imagePath = $this->getImagePath();
+        if ($imagePath) {
+            $imageSize = $this->getImageSize($imagePath);
 
-            if ($aImageSize['width'] > $this->getWidth() ||
-                $aImageSize['height'] > $this->getHeight()
+            if ($imageSize['width'] > $this->getWidth() ||
+                $imageSize['height'] > $this->getHeight()
             ) {
-
-                $blResize = true;
+                $resize = true;
             }
         }
 
-        return $blResize;
+        return $resize;
     }
 
     /**
      * Sets image directory.
      *
-     * @param string $sImagePath
+     * @param string $imagePath
      */
-    public function setImageDir($sImagePath)
+    public function setImageDir($imagePath)
     {
-        $this->_sImageDir = $sImagePath;
+        $this->imageDir = $imagePath;
     }
 
     /**
@@ -182,17 +181,17 @@ class ShopLogo
      */
     public function getImageDir()
     {
-        return $this->_sImageDir;
+        return $this->imageDir;
     }
 
     /**
      * Set image directory URL.
      *
-     * @param string $sImageDirUrl
+     * @param string $imageDirUrl
      */
-    public function setImageDirUrl($sImageDirUrl)
+    public function setImageDirUrl($imageDirUrl)
     {
-        $this->_sImageDirUrl = $sImageDirUrl;
+        $this->imageDirUrl = $imageDirUrl;
     }
 
     /**
@@ -202,17 +201,17 @@ class ShopLogo
      */
     public function getImageDirUrl()
     {
-        return $this->_sImageDirUrl;
+        return $this->imageDirUrl;
     }
 
     /**
      * Set name of an image.
      *
-     * @param string $sImageName
+     * @param string $imageName
      */
-    public function setImageName($sImageName)
+    public function setImageName($imageName)
     {
-        $this->_sImageName = $sImageName;
+        $this->imageName = $imageName;
     }
 
     /**
@@ -222,7 +221,7 @@ class ShopLogo
      */
     public function getImageName()
     {
-        return $this->_sImageName;
+        return $this->imageName;
     }
 
     /**
@@ -230,76 +229,83 @@ class ShopLogo
      *
      * @return string
      */
-    protected function _getResizedImageName()
+    protected function getResizedImageName()
     {
-        $sResizedImageName = "";
+        $resizedImageName = "";
         if ($this->getImageName()) {
-            $sResizedImageName = $this->_suffix . $this->getImageName();
+            $resizedImageName = $this->_suffix . $this->getImageName();
         }
 
-        return $sResizedImageName;
+        return $resizedImageName;
     }
 
     /**
      * Returns path to an image.
+     *
+     * @return string
      */
-    protected function _getImagePath()
+    protected function getImagePath()
     {
-        if (null == $this->_sImagePath) {
+        if (null == $this->imagePath) {
+            $dir = $this->getImageDir();
+            $name = $this->getImageName();
 
-            $sDir = $this->getImageDir();
-            $sName = $this->getImageName();
-
-            if ($sDir && $sName && $this->_fileExists($sDir . $sName)) {
-                $this->_sImagePath = $sDir . $sName;
+            if ($dir && $name && $this->fileExists($dir . $name)) {
+                $this->imagePath = $dir . $name;
             }
         }
 
-        return $this->_sImagePath;
+        return $this->imagePath;
     }
 
     /**
      * Returns path to an image.
+     *
+     * @return string
      */
-    protected function _getImageUrl()
+    protected function getImageUrl()
     {
-        $sImageUrl = "";
+        $imageUrl = "";
 
-        if ($this->_getImagePath()) {
-            $sImageUrl = $this->getImageDirUrl() . $this->getImageName();
+        if ($this->getImagePath()) {
+            $imageUrl = $this->getImageDirUrl() . $this->getImageName();
         }
 
-        return $sImageUrl;
+        return $imageUrl;
     }
 
     /**
      * Returns resized image path.
+     *
+     * @return string
      */
-    protected function _getResizedImagePath()
+    protected function getResizedImagePath()
     {
-        $sResizedImagePath = "";
-        $sDir = $this->getImageDir();
-        $sName = $this->_getResizedImageName();
+        $resizedImagePath = "";
+        $dir = $this->getImageDir();
+        $name = $this->getResizedImageName();
 
-        if ($sDir && $sName) {
-            $sResizedImagePath = $sDir . $sName;
+        if ($dir && $name) {
+            $resizedImagePath = $dir . $name;
         }
 
-        return $sResizedImagePath;
+        return $resizedImagePath;
     }
 
     /**
      * Returns resized image path.
+     *
+     * @return string
      */
-    protected function _getResizedImageUrl()
+    protected function getResizedImageUrl()
     {
-        $sImageUrl = "";
+        $imageUrl = "";
 
-        if ($this->_getResizedImagePath()) {
-            $sImageUrl = $this->getImageDirUrl() . $this->_getResizedImageName();
+        if ($this->getResizedImagePath()) {
+            $imageUrl = $this->getImageDirUrl() . $this->getResizedImageName();
         }
 
-        return $sImageUrl;
+        return $imageUrl;
     }
 
     /**
@@ -309,51 +315,51 @@ class ShopLogo
      */
     public function getShopLogoUrl()
     {
-        $sImagePath = $this->_getImageUrl();
-        $sResizedImagePath = $this->_getResizedImageUrl();
+        $imagePath = $this->getImageUrl();
+        $resizedImagePath = $this->getResizedImageUrl();
 
-        if ($this->_getResize()) {
-            $sShopLogoPath = $sResizedImagePath;
+        if ($this->getResize()) {
+            $shopLogoPath = $resizedImagePath;
 
-            if (!$this->_fileExists($sResizedImagePath)) {
-                if (!$this->_resizeImage($sImagePath, $sResizedImagePath)) {
+            if (!$this->fileExists($resizedImagePath)) {
+                if (!$this->resizeImage()) {
                     // fallback to original image if can not be resized
-                    $sShopLogoPath = $sImagePath;
+                    $shopLogoPath = $imagePath;
                 }
             }
         } else {
-            $sShopLogoPath = $sImagePath;
+            $shopLogoPath = $imagePath;
         }
 
-        return $sShopLogoPath;
+        return $shopLogoPath;
     }
 
     /**
      * Checks if given image file exists.
      *
-     * @param string $sPath
+     * @param string $path
      *
      * @return bool
      */
-    protected function _fileExists($sPath)
+    protected function fileExists($path)
     {
-        return file_exists($sPath);
+        return file_exists($path);
     }
 
     /**
      * Returns array with width and height of given image
      *
-     * @param string $sImagePath
+     * @param string $imagePath
      *
      * @return array
      */
-    protected function _getImageSize($sImagePath)
+    protected function getImageSize($imagePath)
     {
-        $aImageSize = getimagesize($sImagePath);
+        $imageSize = getimagesize($imagePath);
 
         return array(
-            'width'  => $aImageSize[0],
-            'height' => $aImageSize[1]
+            'width'  => $imageSize[0],
+            'height' => $imageSize[1]
         );
     }
 
@@ -365,17 +371,17 @@ class ShopLogo
      *
      * @return bool
      */
-    protected function _resizeImage()
+    protected function resizeImage()
     {
-        $blResized = false;
+        $resized = false;
 
-        if ($oUtilsPic = $this->getImageHandler()) {
+        if ($utilsPic = $this->getImageHandler()) {
             // checks if image can be resized, and resizes the image
-            if ($oUtilsPic->resizeImage($this->_getImagePath(), $this->_getResizedImagePath(), $this->getWidth(), $this->getHeight())) {
-                $blResized = true;
+            if ($utilsPic->resizeImage($this->getImagePath(), $this->getResizedImagePath(), $this->getWidth(), $this->getHeight())) {
+                $resized = true;
             }
         }
 
-        return $blResized;
+        return $resized;
     }
 }

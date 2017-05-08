@@ -40,20 +40,20 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $soxId = '_testOrderId';
 
-        $oPayPalOrderModel = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oPayPalOrderModel->setOrderId($soxId);
-        $oPayPalOrderModel->save();
+        $payPalOrderModel = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $payPalOrderModel->setOrderId($soxId);
+        $payPalOrderModel->save();
 
-        $oPayPalOrderModel->load();
+        $payPalOrderModel->load();
 
-        $oPayPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
-        $oPayPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($oPayPalOrderModel));
+        $payPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
+        $payPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($payPalOrderModel));
 
-        $oPayPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
-        $oPayPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($oPayPalOxOrder));
-        $oPayPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(true));
+        $payPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
+        $payPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($payPalOxOrder));
+        $payPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(true));
 
-        $this->assertTrue($oPayPalOrder->isNewPayPalOrder());
+        $this->assertTrue($payPalOrder->isNewPayPalOrder());
     }
 
     /**
@@ -64,18 +64,18 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $soxId = '_testOrderId';
 
-        $oPayPalOrderModel = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oPayPalOrderModel->setOrderId($soxId);
-        $oPayPalOrderModel->save();
+        $payPalOrderModel = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $payPalOrderModel->setOrderId($soxId);
+        $payPalOrderModel->save();
 
-        $oPayPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
-        $oPayPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($oPayPalOrderModel));
+        $payPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
+        $payPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($payPalOrderModel));
 
-        $oPayPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
-        $oPayPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($oPayPalOxOrder));
-        $oPayPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(false));
+        $payPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
+        $payPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($payPalOxOrder));
+        $payPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(false));
 
-        $this->assertFalse($oPayPalOrder->isNewPayPalOrder());
+        $this->assertFalse($payPalOrder->isNewPayPalOrder());
     }
 
     /**
@@ -84,18 +84,18 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPalOrder_True()
     {
-        $oPayPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
+        $payPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
         $soxId = '_testOrderId';
 
-        $oSession = new \OxidEsales\Eshop\Core\Session();
-        $oSession->setVariable('saved_oxid', $soxId);
+        $session = new \OxidEsales\Eshop\Core\Session();
+        $session->setVariable('saved_oxid', $soxId);
 
-        $oOrder = new \OxidEsales\Eshop\Application\Model\Order;
-        $oOrder->setId($soxId);
-        $oOrder->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('oxidpaypal');
-        $oOrder->save();
+        $order = new \OxidEsales\Eshop\Application\Model\Order;
+        $order->setId($soxId);
+        $order->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('oxidpaypal');
+        $order->save();
 
-        $this->assertTrue($oPayPalOrder->isPayPalOrder());
+        $this->assertTrue($payPalOrder->isPayPalOrder());
     }
 
     /**
@@ -104,17 +104,17 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPalOrder_False()
     {
-        $oPayPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
+        $payPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
         $soxId = '_testOrderId';
 
-        $oSession = new \OxidEsales\Eshop\Core\Session();
-        $oSession->setVariable('saved_oxid', $soxId);
+        $session = new \OxidEsales\Eshop\Core\Session();
+        $session->setVariable('saved_oxid', $soxId);
 
-        $oOrder = new \OxidEsales\Eshop\Application\Model\Order();
-        $oOrder->setId($soxId);
-        $oOrder->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('other');
-        $oOrder->save();
+        $order = new \OxidEsales\Eshop\Application\Model\Order();
+        $order->setId($soxId);
+        $order->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('other');
+        $order->save();
 
-        $this->assertFalse($oPayPalOrder->isPayPalOrder());
+        $this->assertFalse($payPalOrder->isPayPalOrder());
     }
 }

@@ -51,11 +51,11 @@
         [{/if}]
         [{*Add same values to selection list*}]
         [{if $oView->oePayPalGetSelection()}]
-        [{foreach from=$oView->oePayPalGetSelection() item=sSelection key=iKey}]
+        [{foreach from=$oView->oePayPalGetSelection() item=selection key=key}]
         [{oxscript add='
-                        $( "#productSelections input[name=\'sel['|cat:$iKey|cat:']\']" ).val( "'|cat:$sSelection|cat:'" );
-                        var sSelectionName'|cat:$iKey|cat:' = $( "#productSelections div.dropdown:eq('|cat:$iKey|cat:') ul li a[data-selection-id='|cat:$sSelection|cat:']" ).text();
-                        $( "#productSelections div.dropdown:eq('|cat:$iKey|cat:') a span" ).text( sSelectionName'|cat:$iKey|cat:' );
+                        $( "#productSelections input[name=\'sel['|cat:$key|cat:']\']" ).val( "'|cat:$selection|cat:'" );
+                        var sSelectionName'|cat:$key|cat:' = $( "#productSelections div.dropdown:eq('|cat:$key|cat:') ul li a[data-selection-id='|cat:$selection|cat:']" ).text();
+                        $( "#productSelections div.dropdown:eq('|cat:$key|cat:') a span" ).text( sSelectionName'|cat:$key|cat:' );
                     '}]
         [{/foreach}]
     [{/if}]

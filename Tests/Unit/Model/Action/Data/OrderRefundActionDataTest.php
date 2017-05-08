@@ -32,24 +32,24 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSettingParameters_FromRequest()
     {
-        $sTransactionId = '123456';
-        $sAmount = '59.92';
-        $sType = 'Full';
+        $transactionId = '123456';
+        $amount = '59.92';
+        $type = 'Full';
 
-        $aParams = array(
-            'transaction_id' => $sTransactionId,
-            'refund_amount'  => $sAmount,
-            'refund_type'    => $sType,
+        $params = array(
+            'transaction_id' => $transactionId,
+            'refund_amount'  => $amount,
+            'refund_type'    => $type,
         );
-        $oRequest = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $aParams));
+        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
 
-        $oOrder = $this->_getOrder();
+        $order = $this->getOrder();
 
-        $oActionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData($oRequest, $oOrder);
+        $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData($request, $order);
 
-        $this->assertEquals($sTransactionId, $oActionData->getTransactionId());
-        $this->assertEquals($sAmount, $oActionData->getAmount());
-        $this->assertEquals($sType, $oActionData->getType());
+        $this->assertEquals($transactionId, $actionData->getTransactionId());
+        $this->assertEquals($amount, $actionData->getAmount());
+        $this->assertEquals($type, $actionData->getType());
     }
 
     /**
@@ -57,17 +57,17 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetAmount_AmountNotSet_TakenFromOrderPayment()
     {
-        $sRemainingRefundSum = 59.67;
+        $remainingRefundSum = 59.67;
 
-        $oPayment = $this->_createStub('oePayPalPayPalOrderPayment', array('getRemainingRefundAmount' => $sRemainingRefundSum));
-        $oRequest = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
+        $payment = $this->_createStub('oePayPalPayPalOrderPayment', array('getRemainingRefundAmount' => $remainingRefundSum));
+        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
 
-        $oOrder = $this->_getOrder();
+        $order = $this->getOrder();
 
-        $oActionData = $this->getMock(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class, array('getPaymentBeingRefunded'), array($oRequest, $oOrder));
-        $oActionData->expects($this->any())->method('getPaymentBeingRefunded')->will($this->returnValue($oPayment));
+        $actionData = $this->getMock(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class, array('getPaymentBeingRefunded'), array($request, $order));
+        $actionData->expects($this->any())->method('getPaymentBeingRefunded')->will($this->returnValue($payment));
 
-        $this->assertEquals($sRemainingRefundSum, $oActionData->getAmount());
+        $this->assertEquals($remainingRefundSum, $actionData->getAmount());
     }
 
     /**
@@ -75,46 +75,46 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPaymentBeingRefunded_LoadedByTransactionId_TransactionIdSet()
     {
-        $sTransactionId = 'test_transId';
+        $transactionId = 'test_transId';
 
-        $oPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oPayment->setTransactionId($sTransactionId);
-        $oPayment->setOrderId('_testOrderId');
-        $oPayment->save();
+        $payment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $payment->setTransactionId($transactionId);
+        $payment->setOrderId('_testOrderId');
+        $payment->save();
 
-        $aParams = array('transaction_id' => $sTransactionId);
-        $oRequest = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $aParams));
+        $params = array('transaction_id' => $transactionId);
+        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
 
-        $oOrder = $this->_getOrder();
+        $order = $this->getOrder();
 
-        $oActionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData($oRequest, $oOrder);
+        $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData($request, $order);
 
-        $oPayment = $oActionData->getPaymentBeingRefunded();
+        $payment = $actionData->getPaymentBeingRefunded();
 
-        $this->assertEquals($sTransactionId, $oPayment->getTransactionId());
+        $this->assertEquals($transactionId, $payment->getTransactionId());
     }
 
     /**
      *  Returns Request object with given parameters
      *
-     * @param $aParams
+     * @param $params
      *
      * @return mixed
      */
-    protected function _getRequest($aParams)
+    protected function getRequest($params)
     {
-        $oRequest = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $aParams));
+        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
 
-        return $oRequest;
+        return $request;
     }
 
     /**
      *
      */
-    protected function _getOrder()
+    protected function getOrder()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
 
-        return $oOrder;
+        return $order;
     }
 }

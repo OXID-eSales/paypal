@@ -31,23 +31,23 @@ class ExtensionChecker
      *
      * @var string
      */
-    protected $_sShopId = null;
+    protected $shopId = null;
 
     /**
      * Extension id
      *
      * @var string
      */
-    protected $_sExtensionId = '';
+    protected $extensionId = '';
 
     /**
      * Set shop id
      *
-     * @param string $sShopId shop id
+     * @param string $shopId shop id
      */
-    public function setShopId($sShopId)
+    public function setShopId($shopId)
     {
-        $this->_sShopId = $sShopId;
+        $this->shopId = $shopId;
     }
 
     /**
@@ -57,21 +57,21 @@ class ExtensionChecker
      */
     public function getShopId()
     {
-        if (is_null($this->_sShopId)) {
+        if (is_null($this->shopId)) {
             $this->setShopId(\OxidEsales\Eshop\Core\Registry::getConfig()->getShopId());
         }
 
-        return $this->_sShopId;
+        return $this->shopId;
     }
 
     /**
      * Set extension id
      *
-     * @param string $sExtensionId extension id
+     * @param string $extensionId extension id
      */
-    public function setExtensionId($sExtensionId)
+    public function setExtensionId($extensionId)
     {
-        $this->_sExtensionId = $sExtensionId;
+        $this->extensionId = $extensionId;
     }
 
     /**
@@ -81,7 +81,7 @@ class ExtensionChecker
      */
     public function getExtensionId()
     {
-        return $this->_sExtensionId;
+        return $this->extensionId;
     }
 
     /**
@@ -89,9 +89,9 @@ class ExtensionChecker
      *
      * @return array
      */
-    protected function _getExtendedClasses()
+    protected function getExtendedClasses()
     {
-        return $this->_getConfigValue('aModules');
+        return $this->getConfigValue('aModules');
     }
 
     /**
@@ -99,28 +99,28 @@ class ExtensionChecker
      *
      * @return array
      */
-    protected function _getDisabledModules()
+    protected function getDisabledModules()
     {
-        return $this->_getConfigValue('aDisabledModules');
+        return $this->getConfigValue('aDisabledModules');
     }
 
     /**
      * Return config value
      *
-     * @param string $sConfigName - config parameter name were stored arrays od extended classes
+     * @param string $configName - config parameter name were stored arrays od extended classes
      *
      * @return array
      */
-    protected function _getConfigValue($sConfigName)
+    protected function getConfigValue($configName)
     {
-        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
-        $oConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $sConfigKey = $oConfig->getConfigParam('sConfigKey');
+        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $configKey = $config->getConfigParam('sConfigKey');
 
-        $sSelect = "SELECT DECODE( `oxvarvalue` , " . $oDb->quote($sConfigKey) . " ) AS `oxvarvalue` " .
-                   "FROM `oxconfig` WHERE `oxvarname` = " . $oDb->quote($sConfigName) . " AND `oxshopid` = " . $oDb->quote($this->getShopId());
+        $select = "SELECT DECODE( `oxvarvalue` , " . $db->quote($configKey) . " ) AS `oxvarvalue` " .
+                   "FROM `oxconfig` WHERE `oxvarname` = " . $db->quote($configName) . " AND `oxshopid` = " . $db->quote($this->getShopId());
 
-        return unserialize($oDb->getOne($sSelect));
+        return unserialize($db->getOne($select));
     }
 
     /**
@@ -130,31 +130,30 @@ class ExtensionChecker
      */
     public function isActive()
     {
-        $sModuleId = $this->getExtensionId();
-        $blModuleIsActive = false;
+        $moduleId = $this->getExtensionId();
+        $moduleIsActive = false;
 
-        $aModules = $this->_getExtendedClasses();
+        $modules = $this->getExtendedClasses();
 
-        if (is_array($aModules)) {
+        if (is_array($modules)) {
             // Check if module was ever installed.
-            $blModuleExists = false;
-            foreach ($aModules as $sExtendPath) {
-                if (false !== strpos($sExtendPath, '/' . $sModuleId . '/')) {
-
-                    $blModuleExists = true;
+            $moduleExists = false;
+            foreach ($modules as $extendPath) {
+                if (false !== strpos($extendPath, '/' . $moduleId . '/')) {
+                    $moduleExists = true;
                     break;
                 }
             }
 
             // If module exists, check if it is not disabled.
-            if ($blModuleExists) {
-                $aDisabledModules = $this->_getDisabledModules();
-                if (!(is_array($aDisabledModules) && in_array($sModuleId, $aDisabledModules))) {
-                    $blModuleIsActive = true;
+            if ($moduleExists) {
+                $disabledModules = $this->getDisabledModules();
+                if (!(is_array($disabledModules) && in_array($moduleId, $disabledModules))) {
+                    $moduleIsActive = true;
                 }
             }
         }
 
-        return $blModuleIsActive;
+        return $moduleIsActive;
     }
 }

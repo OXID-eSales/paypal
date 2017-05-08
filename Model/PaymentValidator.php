@@ -32,44 +32,44 @@ class PaymentValidator
      *
      * @var double $_dPrice
      */
-    protected $_dPrice;
+    protected $price;
 
     /**
      * Config object
      *
      * @var \OxidEsales\Eshop\Core\Config $_oConfig
      */
-    protected $_oConfig = null;
+    protected $config = null;
 
     /**
      * User object
      *
      * @var \OxidEsales\Eshop\Application\Model\User $_oUser
      */
-    protected $_oUser = null;
+    protected $user = null;
 
     /**
      * Payment object
      *
      * @var \OxidEsales\Eshop\Application\Model\Payment $_oPayment
      */
-    protected $_oPayment = null;
+    protected $payment = null;
 
     /**
      * Check country in validator.
      *
      * @var bool
      */
-    protected $_blCheckCountry = true;
+    protected $checkCountry = true;
 
     /**
      * Basket price setter
      *
-     * @param double $dPrice
+     * @param double $price
      */
-    public function setPrice($dPrice)
+    public function setPrice($price)
     {
-        $this->_dPrice = $dPrice;
+        $this->price = $price;
     }
 
     /**
@@ -79,17 +79,17 @@ class PaymentValidator
      */
     public function getPrice()
     {
-        return $this->_dPrice;
+        return $this->price;
     }
 
     /**
      * Config object setter
      *
-     * @param \OxidEsales\Eshop\Core\Config $oConfig
+     * @param \OxidEsales\Eshop\Core\Config $config
      */
-    public function setConfig($oConfig)
+    public function setConfig($config)
     {
-        $this->_oConfig = $oConfig;
+        $this->config = $config;
     }
 
     /**
@@ -99,17 +99,17 @@ class PaymentValidator
      */
     public function getConfig()
     {
-        return $this->_oConfig;
+        return $this->config;
     }
 
     /**
      * User object setter
      *
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser
+     * @param \OxidEsales\Eshop\Application\Model\User $user
      */
-    public function setUser($oUser)
+    public function setUser($user)
     {
-        $this->_oUser = $oUser;
+        $this->user = $user;
     }
 
     /**
@@ -119,27 +119,27 @@ class PaymentValidator
      */
     public function getUser()
     {
-        return $this->_oUser;
+        return $this->user;
     }
 
     /**
      * Payment object setter
      *
-     * @param \OxidEsales\Eshop\Application\Model\Payment $oPayment
+     * @param \OxidEsales\Eshop\Application\Model\Payment $payment
      */
-    public function setPayment($oPayment)
+    public function setPayment($payment)
     {
-        $this->_oPayment = $oPayment;
+        $this->payment = $payment;
     }
 
     /**
      * Check country setter.
      *
-     * @param boolean $blCheckCountry
+     * @param boolean $checkCountry
      */
-    public function setCheckCountry($blCheckCountry)
+    public function setCheckCountry($checkCountry)
     {
-        $this->_blCheckCountry = $blCheckCountry;
+        $this->checkCountry = $checkCountry;
     }
 
     /**
@@ -149,7 +149,7 @@ class PaymentValidator
      */
     public function getCheckCountry()
     {
-        return $this->_blCheckCountry;
+        return $this->checkCountry;
     }
 
     /**
@@ -159,13 +159,13 @@ class PaymentValidator
      */
     public function getPayment()
     {
-        if (is_null($this->_oPayment)) {
-            $oPayPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-            $oPayPalPayment->load('oxidpaypal');
-            $this->setPayment($oPayPalPayment);
+        if (is_null($this->payment)) {
+            $payPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+            $payPalPayment->load('oxidpaypal');
+            $this->setPayment($payPalPayment);
         }
 
-        return $this->_oPayment;
+        return $this->payment;
     }
 
     /**
@@ -175,12 +175,12 @@ class PaymentValidator
      */
     public function isPaymentActive()
     {
-        $blResult = false;
-        if ($oPayPalPayment = $this->getPayment()) {
-            $blResult = $oPayPalPayment->oxpayments__oxactive->value ? true : false;
+        $result = false;
+        if ($payPalPayment = $this->getPayment()) {
+            $result = $payPalPayment->oxpayments__oxactive->value ? true : false;
         }
 
-        return $blResult;
+        return $result;
     }
 
 
@@ -191,22 +191,22 @@ class PaymentValidator
      */
     public function isPaymentValid()
     {
-        $blIsValid = $this->isPaymentActive();
+        $isValid = $this->isPaymentActive();
 
-        if ($blIsValid && !is_null($this->getPrice())) {
-            $blIsValid = $this->_checkPriceRange() && $this->_checkMinOrderPrice();
+        if ($isValid && !is_null($this->getPrice())) {
+            $isValid = $this->checkPriceRange() && $this->checkMinOrderPrice();
         }
 
-        $oUser = $this->getUser();
-        if ($blIsValid && $oUser && $oUser->hasAccount()) {
-            $blIsValid = $this->_checkUserGroup();
+        $user = $this->getUser();
+        if ($isValid && $user && $user->hasAccount()) {
+            $isValid = $this->checkUserGroup();
         }
 
-        if ($blIsValid && $oUser && $this->getCheckCountry()) {
-            $blIsValid = $this->_checkUserCountry();
+        if ($isValid && $user && $this->getCheckCountry()) {
+            $isValid = $this->checkUserCountry();
         }
 
-        return $blIsValid;
+        return $isValid;
     }
 
     /**
@@ -215,24 +215,23 @@ class PaymentValidator
      *
      * @return bool
      */
-    protected function _checkPriceRange()
+    protected function checkPriceRange()
     {
-        $blIsValid = true;
+        $isValid = true;
 
-        $oPayPalPayment = $this->getPayment();
+        $payPalPayment = $this->getPayment();
 
-        if ($oPayPalPayment->oxpayments__oxfromamount->value != 0 ||
-            $oPayPalPayment->oxpayments__oxtoamount->value != 0
+        if ($payPalPayment->oxpayments__oxfromamount->value != 0 ||
+            $payPalPayment->oxpayments__oxtoamount->value != 0
         ) {
+            $cur = $this->getConfig()->getActShopCurrencyObject();
+            $price = $this->getPrice() / $cur->rate;
 
-            $oCur = $this->getConfig()->getActShopCurrencyObject();
-            $dPrice = $this->getPrice() / $oCur->rate;
-
-            $blIsValid = (($dPrice >= $oPayPalPayment->oxpayments__oxfromamount->value) &&
-                          ($dPrice <= $oPayPalPayment->oxpayments__oxtoamount->value));
+            $isValid = (($price >= $payPalPayment->oxpayments__oxfromamount->value) &&
+                          ($price <= $payPalPayment->oxpayments__oxtoamount->value));
         }
 
-        return $blIsValid;
+        return $isValid;
     }
 
     /**
@@ -241,15 +240,15 @@ class PaymentValidator
      *
      * @return bool
      */
-    protected function _checkMinOrderPrice()
+    protected function checkMinOrderPrice()
     {
-        $blIsValid = true;
+        $isValid = true;
 
-        if ($iMinOrderPrice = $this->getConfig()->getConfigParam('iMinOrderPrice')) {
-            $blIsValid = $this->getPrice() > $iMinOrderPrice;
+        if ($minOrderPrice = $this->getConfig()->getConfigParam('iMinOrderPrice')) {
+            $isValid = $this->getPrice() > $minOrderPrice;
         }
 
-        return $blIsValid;
+        return $isValid;
     }
 
     /**
@@ -258,24 +257,24 @@ class PaymentValidator
      *
      * @return bool
      */
-    protected function _checkUserCountry()
+    protected function checkUserCountry()
     {
-        $blIsValid = true;
+        $isValid = true;
 
-        $oPayPalPayment = $this->getPayment();
+        $payPalPayment = $this->getPayment();
 
-        $aCountries = $oPayPalPayment->getCountries();
-        if ($aCountries) {
-            $blIsValid = false;
-            foreach ($aCountries as $sCountryId) {
-                if ($sCountryId === $this->_getShippingCountryId()) {
-                    $blIsValid = true;
+        $countries = $payPalPayment->getCountries();
+        if ($countries) {
+            $isValid = false;
+            foreach ($countries as $countryId) {
+                if ($countryId === $this->getShippingCountryId()) {
+                    $isValid = true;
                     break;
                 }
             }
         }
 
-        return $blIsValid;
+        return $isValid;
     }
 
     /**
@@ -284,40 +283,40 @@ class PaymentValidator
      *
      * @return bool
      */
-    protected function _checkUserGroup()
+    protected function checkUserGroup()
     {
-        $blIsValid = true;
+        $isValid = true;
 
-        $oPayPalPayment = $this->getPayment();
-        $oGroups = $oPayPalPayment->getGroups();
+        $payPalPayment = $this->getPayment();
+        $groups = $payPalPayment->getGroups();
 
-        if ($oGroups && $oGroups->count() > 0) {
-            $blIsValid = $this->_isUserAssignedToGroup($oGroups);
+        if ($groups && $groups->count() > 0) {
+            $isValid = $this->isUserAssignedToGroup($groups);
         }
 
-        return $blIsValid;
+        return $isValid;
     }
 
     /**
      * Checks whether user is assigned to given groups array.
      *
-     * @param \OxidEsales\Eshop\Core\Model\ListModel $oGroups
+     * @param \OxidEsales\Eshop\Core\Model\ListModel $groups
      *
      * @return bool
      */
-    protected function _isUserAssignedToGroup($oGroups)
+    protected function isUserAssignedToGroup($groups)
     {
-        $blIsValid = false;
+        $isValid = false;
 
-        $oUser = $this->getUser();
-        foreach ($oGroups as $oGroup) {
-            if ($oUser->inGroup($oGroup->getId())) {
-                $blIsValid = true;
+        $user = $this->getUser();
+        foreach ($groups as $group) {
+            if ($user->inGroup($group->getId())) {
+                $isValid = true;
                 break;
             }
         }
 
-        return $blIsValid;
+        return $isValid;
     }
 
     /**
@@ -325,15 +324,15 @@ class PaymentValidator
      *
      * @return string
      */
-    protected function _getShippingCountryId()
+    protected function getShippingCountryId()
     {
-        $oUser = $this->getUser();
-        if ($oUser->getSelectedAddressId()) {
-            $sCountryId = $oUser->getSelectedAddress()->oxaddress__oxcountryid->value;
+        $user = $this->getUser();
+        if ($user->getSelectedAddressId()) {
+            $countryId = $user->getSelectedAddress()->oxaddress__oxcountryid->value;
         } else {
-            $sCountryId = $oUser->oxuser__oxcountryid->value;
+            $countryId = $user->oxuser__oxcountryid->value;
         }
 
-        return $sCountryId;
+        return $countryId;
     }
 }

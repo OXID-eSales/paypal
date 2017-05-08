@@ -32,28 +32,28 @@ class OrderVoidActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetAmount_AmountNotSet_TakenFromOrder()
     {
-        $sRemainingOrderSum = 59.67;
+        $remainingOrderSum = 59.67;
 
-        $oPayPalOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $sRemainingOrderSum));
-        $oOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $oPayPalOrder));
-        $oRequest = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
+        $payPalOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $remainingOrderSum));
+        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
+        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
 
-        $oAction = new \OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData($oRequest, $oOrder);
+        $action = new \OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData($request, $order);
 
-        $this->assertEquals($sRemainingOrderSum, $oAction->getAmount());
+        $this->assertEquals($remainingOrderSum, $action->getAmount());
     }
 
     /**
      *  Returns Request object with given parameters
      *
-     * @param $aParams
+     * @param $params
      *
      * @return mixed
      */
-    protected function _getRequest($aParams)
+    protected function getRequest($params)
     {
-        $oRequest = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $aParams));
+        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
 
-        return $oRequest;
+        return $request;
     }
 }

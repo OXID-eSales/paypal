@@ -34,7 +34,7 @@ class PayPalList implements Iterator, Countable
      *
      * @var array $_aArray
      */
-    protected $_aArray = array();
+    protected $array = array();
 
     /**
      * Save the state, that active element was unset
@@ -42,14 +42,14 @@ class PayPalList implements Iterator, Countable
      *
      * @var bool $_blRemovedActive
      */
-    protected $_blRemovedActive = false;
+    protected $removedActive = false;
 
     /**
      * Flag if array is ok or not.
      *
      * @var boolean $_blValid
      */
-    private $_blValid = true;
+    private $valid = true;
 
     /**
      * -----------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ class PayPalList implements Iterator, Countable
      */
     public function arrayKeys()
     {
-        return array_keys($this->_aArray);
+        return array_keys($this->array);
     }
 
     /**
@@ -74,8 +74,8 @@ class PayPalList implements Iterator, Countable
      */
     public function rewind()
     {
-        $this->_blRemovedActive = false;
-        $this->_blValid = (false !== reset($this->_aArray));
+        $this->removedActive = false;
+        $this->valid = (false !== reset($this->array));
     }
 
     /**
@@ -85,7 +85,7 @@ class PayPalList implements Iterator, Countable
      */
     public function current()
     {
-        return current($this->_aArray);
+        return current($this->array);
     }
 
     /**
@@ -95,7 +95,7 @@ class PayPalList implements Iterator, Countable
      */
     public function key()
     {
-        return key($this->_aArray);
+        return key($this->array);
     }
 
     /**
@@ -105,14 +105,14 @@ class PayPalList implements Iterator, Countable
      */
     public function prev()
     {
-        $oVar = prev($this->_aArray);
-        if ($oVar === false) {
+        $var = prev($this->array);
+        if ($var === false) {
             // the first element, reset pointer
-            $oVar = reset($this->_aArray);
+            $var = reset($this->array);
         }
-        $this->_blRemovedActive = false;
+        $this->removedActive = false;
 
-        return $oVar;
+        return $var;
     }
 
     /**
@@ -120,13 +120,13 @@ class PayPalList implements Iterator, Countable
      */
     public function next()
     {
-        if ($this->_blRemovedActive === true && current($this->_aArray)) {
-            $oVar = $this->prev();
+        if ($this->removedActive === true && current($this->array)) {
+            $var = $this->prev();
         } else {
-            $oVar = next($this->_aArray);
+            $var = next($this->array);
         }
 
-        $this->_blValid = (false !== $oVar);
+        $this->valid = (false !== $var);
     }
 
     /**
@@ -136,7 +136,7 @@ class PayPalList implements Iterator, Countable
      */
     public function valid()
     {
-        return $this->_blValid;
+        return $this->valid;
     }
 
     /**
@@ -146,7 +146,7 @@ class PayPalList implements Iterator, Countable
      */
     public function count()
     {
-        return count($this->_aArray);
+        return count($this->array);
     }
 
     /**
@@ -154,17 +154,17 @@ class PayPalList implements Iterator, Countable
      */
     public function clear()
     {
-        $this->_aArray = array();
+        $this->array = array();
     }
 
     /**
-     * copies a given array over the objects internal array (something like old $myList->aList = $aArray).
+     * copies a given array over the objects internal array (something like old $myList->aList = $array).
      *
-     * @param array $aArray array of list items
+     * @param array $array array of list items
      */
-    public function setArray($aArray)
+    public function setArray($array)
     {
-        $this->_aArray = $aArray;
+        $this->array = $array;
     }
 
     /**
@@ -174,7 +174,7 @@ class PayPalList implements Iterator, Countable
      */
     public function reverse()
     {
-        return array_reverse($this->_aArray);
+        return array_reverse($this->array);
     }
 
     /**
@@ -186,13 +186,13 @@ class PayPalList implements Iterator, Countable
     /**
      * Backward compatibility method.
      *
-     * @param string $sName Variable name
+     * @param string $name Variable name
      *
      * @return mixed
      */
-    public function __get($sName)
+    public function __get($name)
     {
-        return $this->_aArray;
+        return $this->array;
     }
 
     /**
@@ -202,6 +202,6 @@ class PayPalList implements Iterator, Countable
      */
     public function getArray()
     {
-        return $this->_aArray;
+        return $this->array;
     }
 }

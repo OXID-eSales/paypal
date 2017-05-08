@@ -28,11 +28,11 @@ class ArticleToExpressCheckoutCurrentItemTest extends \OxidEsales\TestingLibrary
      */
     public function testSetGetArticleId()
     {
-        $sArticleId = 'this is product id';
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setArticleId($sArticleId);
+        $articleId = 'this is product id';
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
+        $articleToExpressCheckoutValidator->setArticleId($articleId);
 
-        $this->assertEquals($sArticleId, $oArticleToExpressCheckoutValidator->getArticleId());
+        $this->assertEquals($articleId, $articleToExpressCheckoutValidator->getArticleId());
     }
 
     /**
@@ -40,11 +40,11 @@ class ArticleToExpressCheckoutCurrentItemTest extends \OxidEsales\TestingLibrary
      */
     public function testSetGeSelectList()
     {
-        $aSelectList = array('testable' => 'selection list');
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setSelectList($aSelectList);
+        $selectList = array('testable' => 'selection list');
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
+        $articleToExpressCheckoutValidator->setSelectList($selectList);
 
-        $this->assertEquals($aSelectList, $oArticleToExpressCheckoutValidator->getSelectList());
+        $this->assertEquals($selectList, $articleToExpressCheckoutValidator->getSelectList());
     }
 
     /**
@@ -52,11 +52,11 @@ class ArticleToExpressCheckoutCurrentItemTest extends \OxidEsales\TestingLibrary
      */
     public function testSetGetPersistParam()
     {
-        $aPersistentParam = array('testable' => 'persistent param');
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setPersistParam($aPersistentParam);
+        $persistentParam = array('testable' => 'persistent param');
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
+        $articleToExpressCheckoutValidator->setPersistParam($persistentParam);
 
-        $this->assertEquals($aPersistentParam, $oArticleToExpressCheckoutValidator->getPersistParam());
+        $this->assertEquals($persistentParam, $articleToExpressCheckoutValidator->getPersistParam());
     }
 
     /**
@@ -64,10 +64,10 @@ class ArticleToExpressCheckoutCurrentItemTest extends \OxidEsales\TestingLibrary
      */
     public function testSetGetArticleAmount()
     {
-        $iAmount = 5;
-        $oArticleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
-        $oArticleToExpressCheckoutValidator->setArticleAmount($iAmount);
+        $amount = 5;
+        $articleToExpressCheckoutValidator = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();
+        $articleToExpressCheckoutValidator->setArticleAmount($amount);
 
-        $this->assertEquals($iAmount, $oArticleToExpressCheckoutValidator->getArticleAmount());
+        $this->assertEquals($amount, $articleToExpressCheckoutValidator->getArticleAmount());
     }
 }

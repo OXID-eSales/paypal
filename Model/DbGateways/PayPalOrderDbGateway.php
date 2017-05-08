@@ -29,79 +29,80 @@ class PayPalOrderDbGateway extends \OxidEsales\PayPalModule\Core\ModelDbGateway
     /**
      * Save PayPal order data to database.
      *
-     * @param array $aData
+     * @param array $data
      *
      * @return bool
      */
-    public function save($aData)
+    public function save($data)
     {
-        $oDb = $this->_getDb();
+        $db = $this->getDb();
+        $fields = [];
 
-        foreach ($aData as $sField => $sData) {
-            $aSql[] = '`' . $sField . '` = ' . $oDb->quote($sData);
+        foreach ($data as $field => $value) {
+            $fields[] = '`' . $field . '` = ' . $db->quote($value);
         }
 
-        $sSql = 'INSERT INTO `oepaypal_order` SET ';
-        $sSql .= implode(', ', $aSql);
-        $sSql .= ' ON DUPLICATE KEY UPDATE ';
-        $sSql .= ' `oepaypal_orderid`=LAST_INSERT_ID(`oepaypal_orderid`), ';
-        $sSql .= implode(', ', $aSql);
+        $query = 'INSERT INTO `oepaypal_order` SET ';
+        $query .= implode(', ', $fields);
+        $query .= ' ON DUPLICATE KEY UPDATE ';
+        $query .= ' `oepaypal_orderid`=LAST_INSERT_ID(`oepaypal_orderid`), ';
+        $query .= implode(', ', $fields);
 
-        $oDb->execute($sSql);
+        $db->execute($query);
 
-        $iId = $aData['oepaypal_orderid'];
-        if (empty($iId)) {
-            $iId = $oDb->getOne('SELECT LAST_INSERT_ID()');
+        $id = $data['oepaypal_orderid'];
+        if (empty($id)) {
+            $id = $db->getOne('SELECT LAST_INSERT_ID()');
         }
 
-        return $iId;
+        return $id;
     }
 
     /**
      * Load PayPal order data from Db.
      *
-     * @param string $sOrderId Order id.
+     * @param string $orderId Order id.
      *
      * @return array
      */
-    public function load($sOrderId)
+    public function load($orderId)
     {
-        $oDb = $this->_getDb();
-        $aData = $oDb->getRow('SELECT * FROM `oepaypal_order` WHERE `oepaypal_orderid` = ' . $oDb->quote($sOrderId));
+        $db = $this->getDb();
+        $data = $db->getRow('SELECT * FROM `oepaypal_order` WHERE `oepaypal_orderid` = ' . $db->quote($orderId));
 
-        return $aData;
+        return $data;
     }
 
     /**
      * Delete PayPal order data from database.
      *
-     * @param string $sOrderId Order id.
+     * @param string $orderId Order id.
      *
      * @return bool
      */
-    public function delete($sOrderId)
+    public function delete($orderId)
     {
-        $oDb = $this->_getDb();
-        $oDb->startTransaction();
+        $db = $this->getDb();
+        $db->startTransaction();
 
-        $blDeleteCommentsResult = $oDb->execute(
+        $deleteCommentsResult = $db->execute(
             'DELETE
                 `oepaypal_orderpaymentcomments`
             FROM `oepaypal_orderpaymentcomments`
                 INNER JOIN `oepaypal_orderpayments` ON `oepaypal_orderpayments`.`oepaypal_paymentid` = `oepaypal_orderpaymentcomments`.`oepaypal_paymentid`
-            WHERE `oepaypal_orderpayments`.`oepaypal_orderid` = ' . $oDb->quote($sOrderId)
+            WHERE `oepaypal_orderpayments`.`oepaypal_orderid` = ' . $db->quote($orderId)
         );
-        $blDeleteOrderPaymentResult = $oDb->execute('DELETE FROM `oepaypal_orderpayments` WHERE `oepaypal_orderid` = ' . $oDb->quote($sOrderId));
-        $blDeleteOrderResult = $oDb->execute('DELETE FROM `oepaypal_order` WHERE `oepaypal_orderid` = ' . $oDb->quote($sOrderId));
+        $deleteOrderPaymentResult = $db->execute('DELETE FROM `oepaypal_orderpayments` WHERE `oepaypal_orderid` = ' . $db->quote($orderId));
+        $deleteOrderResult = $db->execute('DELETE FROM `oepaypal_order` WHERE `oepaypal_orderid` = ' . $db->quote($orderId));
 
-        $blResult = ($blDeleteOrderResult !== false) || ($blDeleteOrderPaymentResult !== false) || ($blDeleteCommentsResult !== false);
+        $result = ($deleteOrderResult !== false) || ($deleteOrderPaymentResult !== false) || ($deleteCommentsResult !== false);
 
-        if ($blResult) {
-            $oDb->commitTransaction();
+        if ($result) {
+            $db->commitTransaction();
         } else {
-            $oDb->rollbackTransaction();
+            $db->rollbackTransaction();
         }
 
-        return $blResult;
+        return $result;
     }
 }

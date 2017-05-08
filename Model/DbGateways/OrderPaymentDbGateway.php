@@ -29,102 +29,102 @@ class OrderPaymentDbGateway extends \OxidEsales\PayPalModule\Core\ModelDbGateway
     /**
      * Save PayPal order payment data to database.
      *
-     * @param array $aData
+     * @param array $data
      *
      * @return int
      */
-    public function save($aData)
+    public function save($data)
     {
-        $oDb = $this->_getDb();
+        $db = $this->getDb();
 
-        foreach ($aData as $sField => $sData) {
-            $aSql[] = '`' . $sField . '` = ' . $oDb->quote($sData);
+        foreach ($data as $field => $value) {
+            $fields[] = '`' . $field . '` = ' . $db->quote($value);
         }
 
-        $sSql = 'INSERT INTO `oepaypal_orderpayments` SET ';
-        $sSql .= implode(', ', $aSql);
-        $sSql .= ' ON DUPLICATE KEY UPDATE ';
-        $sSql .= ' `oepaypal_paymentid`=LAST_INSERT_ID(`oepaypal_paymentid`), ';
-        $sSql .= implode(', ', $aSql);
-        $oDb->execute($sSql);
+        $query = 'INSERT INTO `oepaypal_orderpayments` SET ';
+        $query .= implode(', ', $fields);
+        $query .= ' ON DUPLICATE KEY UPDATE ';
+        $query .= ' `oepaypal_paymentid`=LAST_INSERT_ID(`oepaypal_paymentid`), ';
+        $query .= implode(', ', $fields);
+        $db->execute($query);
 
-        $iId = $aData['oepaypal_paymentid'];
-        if (empty($iId)) {
-            $iId = $oDb->getOne('SELECT LAST_INSERT_ID()');
+        $id = $data['oepaypal_paymentid'];
+        if (empty($id)) {
+            $id = $db->getOne('SELECT LAST_INSERT_ID()');
         }
 
-        return $iId;
+        return $id;
     }
 
     /**
      * Load PayPal order payment data from Db.
      *
-     * @param string $sPaymentId Order id.
+     * @param string $paymentId Order id.
      *
      * @return array
      */
-    public function load($sPaymentId)
+    public function load($paymentId)
     {
-        $oDb = $this->_getDb();
-        $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId));
+        $db = $this->getDb();
+        $data = $db->getRow('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $db->quote($paymentId));
 
-        return $aData;
+        return $data;
     }
 
     /**
      * Load PayPal order payment data from Db.
      *
-     * @param string $sTransactionId Order id.
+     * @param string $transactionId Order id.
      *
      * @return array
      */
-    public function loadByTransactionId($sTransactionId)
+    public function loadByTransactionId($transactionId)
     {
-        $oDb = $this->_getDb();
-        $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_transactionid` = ' . $oDb->quote($sTransactionId));
+        $db = $this->getDb();
+        $data = $db->getRow('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_transactionid` = ' . $db->quote($transactionId));
 
-        return $aData;
+        return $data;
     }
 
     /**
      * Delete PayPal order payment data from database.
      *
-     * @param string $sPaymentId Order id.
+     * @param string $paymentId Order id.
      *
      * @return bool
      */
-    public function delete($sPaymentId)
+    public function delete($paymentId)
     {
-        $oDb = $this->_getDb();
-        $oDb->startTransaction();
+        $db = $this->getDb();
+        $db->startTransaction();
 
-        $blDeleteResult = $oDb->execute('DELETE FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId));
-        $blDeleteCommentResult = $oDb->execute('DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId));
+        $deleteResult = $db->execute('DELETE FROM `oepaypal_orderpayments` WHERE `oepaypal_paymentid` = ' . $db->quote($paymentId));
+        $deleteCommentResult = $db->execute('DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $db->quote($paymentId));
 
-        $blResult = ($blDeleteResult !== false) || ($blDeleteCommentResult !== false);
+        $result = ($deleteResult !== false) || ($deleteCommentResult !== false);
 
-        if ($blResult) {
-            $oDb->commitTransaction();
+        if ($result) {
+            $db->commitTransaction();
         } else {
-            $oDb->rollbackTransaction();
+            $db->rollbackTransaction();
         }
 
-        return $blResult;
+        return $result;
     }
 
 
     /**
      * Load PayPal order payment data from Db.
      *
-     * @param string $sOrderId Order id.
+     * @param string $orderId Order id.
      *
      * @return array
      */
-    public function getList($sOrderId)
+    public function getList($orderId)
     {
-        $oDb = $this->_getDb();
-        $aData = $oDb->getAll('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_orderid` = ' . $oDb->quote($sOrderId) . ' ORDER BY `oepaypal_date` DESC');
+        $db = $this->getDb();
+        $data = $db->getAll('SELECT * FROM `oepaypal_orderpayments` WHERE `oepaypal_orderid` = ' . $db->quote($orderId) . ' ORDER BY `oepaypal_date` DESC');
 
-        return $aData;
+        return $data;
     }
 }

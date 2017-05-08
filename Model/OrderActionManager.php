@@ -31,7 +31,7 @@ class OrderActionManager
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected $_aAvailableActions = array(
+    protected $availableActions = array(
         'Sale'          => array(),
         'Authorization' => array('capture', 'reauthorize', 'void'),
     );
@@ -41,16 +41,16 @@ class OrderActionManager
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected $_oOrder = null;
+    protected $order = null;
 
     /**
      * Sets order
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $oOrder
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $order
      */
-    public function setOrder($oOrder)
+    public function setOrder($order)
     {
-        $this->_oOrder = $oOrder;
+        $this->order = $order;
     }
 
     /**
@@ -60,52 +60,52 @@ class OrderActionManager
      */
     public function getOrder()
     {
-        return $this->_oOrder;
+        return $this->order;
     }
 
     /**
      * Return state for given transaction mode
      *
-     * @param string $sMode transaction mode
+     * @param string $mode transaction mode
      *
      * @return array
      */
-    protected function _getAvailableAction($sMode)
+    protected function getAvailableAction($mode)
     {
-        $aActions = $this->_aAvailableActions[$sMode];
+        $actions = $this->availableActions[$mode];
 
-        return $aActions ? $aActions : array();
+        return $actions ? $actions : array();
     }
 
     /**
      * Checks whether action is available for given order
      *
-     * @param string $sAction
+     * @param string $action
      *
      * @return bool
      */
-    public function isActionAvailable($sAction)
+    public function isActionAvailable($action)
     {
-        $oOrder = $this->getOrder();
+        $order = $this->getOrder();
 
-        $aAvailableActions = $this->_getAvailableAction($oOrder->getTransactionMode());
+        $availableActions = $this->getAvailableAction($order->getTransactionMode());
 
-        $blIsAvailable = in_array($sAction, $aAvailableActions);
+        $isAvailable = in_array($action, $availableActions);
 
-        if ($blIsAvailable) {
-            $blIsAvailable = false;
+        if ($isAvailable) {
+            $isAvailable = false;
 
-            switch ($sAction) {
+            switch ($action) {
                 case 'capture':
                 case 'reauthorize':
                 case 'void':
-                    if ($oOrder->getRemainingOrderSum() > 0 && $oOrder->getVoidedAmount() < $oOrder->getRemainingOrderSum()) {
-                        $blIsAvailable = true;
+                    if ($order->getRemainingOrderSum() > 0 && $order->getVoidedAmount() < $order->getRemainingOrderSum()) {
+                        $isAvailable = true;
                     }
                     break;
             }
         }
 
-        return $blIsAvailable;
+        return $isAvailable;
     }
 }

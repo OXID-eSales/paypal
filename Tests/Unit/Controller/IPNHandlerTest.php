@@ -28,9 +28,9 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testGetPayPalRequest()
     {
-        $oPayPalHandler = new \OxidEsales\PayPalModule\Controller\IPNHandler();
-        $oPayPalRequest = $oPayPalHandler->getPayPalRequest();
-        $this->assertTrue(is_a($oPayPalRequest, \OxidEsales\PayPalModule\Core\Request::class));
+        $payPalHandler = new \OxidEsales\PayPalModule\Controller\IPNHandler();
+        $payPalRequest = $payPalHandler->getPayPalRequest();
+        $this->assertTrue(is_a($payPalRequest, \OxidEsales\PayPalModule\Core\Request::class));
     }
 
     /**
@@ -39,9 +39,9 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testHandleRequest_emptyData_false()
     {
-        $oPayPalIPNHandler = new \OxidEsales\PayPalModule\Controller\IPNHandler();
-        $blResult = $oPayPalIPNHandler->handleRequest();
+        $payPalIPNHandler = new \OxidEsales\PayPalModule\Controller\IPNHandler();
+        $result = $payPalIPNHandler->handleRequest();
 
-        $this->assertEquals(false, $blResult);
+        $this->assertEquals(false, $result);
     }
 }

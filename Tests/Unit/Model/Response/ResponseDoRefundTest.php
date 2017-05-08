@@ -31,9 +31,9 @@ class ResponseDoRefundTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return array
      */
-    protected function _getResponseData()
+    protected function getResponseData()
     {
-        $aData = array(
+        $data = array(
             'REFUNDTRANSACTIONID' => 'transactionId',
             'CORRELATIONID'       => 'correlationId',
             'REFUNDSTATUS'        => 'completed',
@@ -41,7 +41,7 @@ class ResponseDoRefundTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'CURRENCYCODE'        => 'LTL'
         );
 
-        return $aData;
+        return $data;
     }
 
     /**
@@ -49,9 +49,9 @@ class ResponseDoRefundTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGeTransactionId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('transactionId', $oResponse->getTransactionId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('transactionId', $response->getTransactionId());
     }
 
     /**
@@ -59,9 +59,9 @@ class ResponseDoRefundTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetCorrelationId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoCapture();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('correlationId', $oResponse->getCorrelationId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoCapture();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('correlationId', $response->getCorrelationId());
     }
 
     /**
@@ -69,9 +69,9 @@ class ResponseDoRefundTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPaymentStatus()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('completed', $oResponse->getPaymentStatus());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('completed', $response->getPaymentStatus());
     }
 
     /**
@@ -79,9 +79,9 @@ class ResponseDoRefundTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetRefundAmount()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals(12.45, $oResponse->getRefundAmount());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
+        $response->setData($this->getResponseData());
+        $this->assertEquals(12.45, $response->getRefundAmount());
     }
 
     /**
@@ -89,8 +89,8 @@ class ResponseDoRefundTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetCurrency()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('LTL', $oResponse->getCurrency());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('LTL', $response->getCurrency());
     }
 }

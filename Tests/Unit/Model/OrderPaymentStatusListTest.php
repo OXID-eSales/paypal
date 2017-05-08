@@ -50,10 +50,10 @@ class OrderPaymentStatusListTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider testAvailableStatuses_dataProvider
      */
-    public function testGetAvailableStatuses($sAction, $aStatusList)
+    public function testGetAvailableStatuses($action, $statusList)
     {
-        $oStatusList = new \OxidEsales\PayPalModule\Model\OrderPaymentStatusList();
+        $statusListProvider = new \OxidEsales\PayPalModule\Model\OrderPaymentStatusList();
 
-        $this->assertEquals($aStatusList, $oStatusList->getAvailableStatuses($sAction));
+        $this->assertEquals($statusList, $statusListProvider->getAvailableStatuses($action));
     }
 }

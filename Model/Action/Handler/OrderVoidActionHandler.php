@@ -31,7 +31,7 @@ class OrderVoidActionHandler extends \OxidEsales\PayPalModule\Model\Action\Handl
      *
      * @var \OxidEsales\PayPalModule\Core\Request
      */
-    protected $_oPayPalRequest = null;
+    protected $payPalRequest = null;
 
     /**
      * Returns PayPal response; initiates if not set.
@@ -40,10 +40,10 @@ class OrderVoidActionHandler extends \OxidEsales\PayPalModule\Model\Action\Handl
      */
     public function getPayPalResponse()
     {
-        $oService = $this->getPayPalService();
-        $oRequest = $this->getPayPalRequest();
+        $service = $this->getPayPalService();
+        $request = $this->getPayPalRequest();
 
-        return $oService->doVoid($oRequest);
+        return $service->doVoid($request);
     }
 
     /**
@@ -53,28 +53,28 @@ class OrderVoidActionHandler extends \OxidEsales\PayPalModule\Model\Action\Handl
      */
     public function getPayPalRequest()
     {
-        if (is_null($this->_oPayPalRequest)) {
-            $oRequestBuilder = $this->getPayPalRequestBuilder();
+        if (is_null($this->payPalRequest)) {
+            $requestBuilder = $this->getPayPalRequestBuilder();
 
-            $oData = $this->getData();
+            $data = $this->getData();
 
-            $oRequestBuilder->setAuthorizationId($oData->getAuthorizationId());
-            $oRequestBuilder->setAmount($oData->getAmount(), $oData->getCurrency());
-            $oRequestBuilder->setComment($oData->getComment());
+            $requestBuilder->setAuthorizationId($data->getAuthorizationId());
+            $requestBuilder->setAmount($data->getAmount(), $data->getCurrency());
+            $requestBuilder->setComment($data->getComment());
 
-            $this->_oPayPalRequest = $oRequestBuilder->getRequest();
+            $this->payPalRequest = $requestBuilder->getRequest();
         }
 
-        return $this->_oPayPalRequest;
+        return $this->payPalRequest;
     }
 
     /**
      * Sets PayPal request.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oPayPalRequest Request object.
+     * @param \OxidEsales\PayPalModule\Core\Request $payPalRequest Request object.
      */
-    public function setPayPalRequest($oPayPalRequest)
+    public function setPayPalRequest($payPalRequest)
     {
-        $this->_oPayPalRequest = $oPayPalRequest;
+        $this->payPalRequest = $payPalRequest;
     }
 }

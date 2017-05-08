@@ -29,42 +29,42 @@ class PayPalRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testSetGetData()
     {
-        $aData = array(
+        $data = array(
             'AUTHORIZATIONID' => 'AuthorizationId'
         );
 
-        $oRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
-        $oRequest->setData($aData);
-        $this->assertEquals($aData, $oRequest->getData());
+        $request = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
+        $request->setData($data);
+        $this->assertEquals($data, $request->getData());
     }
 
     public function testGetData_NoDataSet()
     {
-        $oRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
-        $this->assertEquals(array(), $oRequest->getData());
+        $request = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
+        $this->assertEquals(array(), $request->getData());
     }
 
     public function testSetGetParameter()
     {
-        $oRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
-        $oRequest->setParameter('AUTHORIZATIONID', 'AuthorizationId');
+        $request = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
+        $request->setParameter('AUTHORIZATIONID', 'AuthorizationId');
 
-        $this->assertEquals('AuthorizationId', $oRequest->getParameter('AUTHORIZATIONID'));
+        $this->assertEquals('AuthorizationId', $request->getParameter('AUTHORIZATIONID'));
     }
 
     public function testSetGetParameter_OverwritingOfSetData()
     {
-        $aData = array(
+        $data = array(
             'AUTHORIZATIONID' => 'AuthorizationId',
             'TRANSACTIONID'   => 'TransactionId',
         );
-        $sNewId = 'NewAuthorizationId';
+        $newId = 'NewAuthorizationId';
 
-        $oRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
-        $oRequest->setData($aData);
-        $oRequest->setParameter('AUTHORIZATIONID', $sNewId);
+        $request = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
+        $request->setData($data);
+        $request->setParameter('AUTHORIZATIONID', $newId);
 
-        $aData['AUTHORIZATIONID'] = $sNewId;
-        $this->assertEquals($aData, $oRequest->getData());
+        $data['AUTHORIZATIONID'] = $newId;
+        $this->assertEquals($data, $request->getData());
     }
 }

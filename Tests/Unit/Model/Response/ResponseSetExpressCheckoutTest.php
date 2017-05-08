@@ -31,13 +31,13 @@ class ResponseSetExpressCheckoutTest extends \OxidEsales\TestingLibrary\UnitTest
      *
      * @return array
      */
-    protected function _getResponseData()
+    protected function getResponseData()
     {
-        $aData = array(
+        $data = array(
             'TOKEN' => 'thisIsToken',
         );
 
-        return $aData;
+        return $data;
     }
 
     /**
@@ -45,8 +45,8 @@ class ResponseSetExpressCheckoutTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testGetToken()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('thisIsToken', $oResponse->getToken());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('thisIsToken', $response->getToken());
     }
 }

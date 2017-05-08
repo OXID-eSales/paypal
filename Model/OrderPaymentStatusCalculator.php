@@ -32,21 +32,21 @@ class OrderPaymentStatusCalculator
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected $_oOrder = null;
+    protected $order = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderPayment::class
      */
-    protected $_oOrderPayment = null;
+    protected $orderPayment = null;
 
     /**
      * Set PayPal Order.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $oOrder PayPal order
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $order PayPal order
      */
-    public function setOrder($oOrder)
+    public function setOrder($order)
     {
-        $this->_oOrder = $oOrder;
+        $this->order = $order;
     }
 
     /**
@@ -56,17 +56,17 @@ class OrderPaymentStatusCalculator
      */
     public function getOrder()
     {
-        return $this->_oOrder;
+        return $this->order;
     }
 
     /**
      * Sets PayPal OrderPayment.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment
      */
-    public function setOrderPayment($oOrderPayment)
+    public function setOrderPayment($orderPayment)
     {
-        $this->_oOrderPayment = $oOrderPayment;
+        $this->orderPayment = $orderPayment;
     }
 
     /**
@@ -76,7 +76,7 @@ class OrderPaymentStatusCalculator
      */
     public function getOrderPayment()
     {
-        return $this->_oOrderPayment;
+        return $this->orderPayment;
     }
 
     /**
@@ -84,15 +84,15 @@ class OrderPaymentStatusCalculator
      *
      * @return bool
      */
-    protected function _getSuggestStatusOnVoid()
+    protected function getSuggestStatusOnVoid()
     {
-        $sStatus = 'canceled';
+        $status = 'canceled';
 
         if ($this->getOrder()->getCapturedAmount() > 0) {
-            $sStatus = 'completed';
+            $status = 'completed';
         }
 
-        return $sStatus;
+        return $status;
     }
 
     /**
@@ -100,11 +100,11 @@ class OrderPaymentStatusCalculator
      *
      * @return bool
      */
-    protected function _isOrderPaymentStatusFinal()
+    protected function isOrderPaymentStatusFinal()
     {
-        $sOrderPaymentStatus = $this->getOrder()->getPaymentStatus();
+        $orderPaymentStatus = $this->getOrder()->getPaymentStatus();
 
-        return $sOrderPaymentStatus == 'failed' || $sOrderPaymentStatus == 'canceled';
+        return $orderPaymentStatus == 'failed' || $orderPaymentStatus == 'canceled';
     }
 
     /**
@@ -118,37 +118,37 @@ class OrderPaymentStatusCalculator
             return;
         }
 
-        $sStatus = $this->_getOrderPaymentStatusFinal();
+        $status = $this->getOrderPaymentStatusFinal();
 
-        if (is_null($sStatus)) {
-            $sStatus = $this->_getOrderPaymentStatusPaymentValid();
+        if (is_null($status)) {
+            $status = $this->getOrderPaymentStatusPaymentValid();
         }
-        if (is_null($sStatus)) {
-            $sStatus = $this->_getOrderPaymentStatusPayments();
+        if (is_null($status)) {
+            $status = $this->getOrderPaymentStatusPayments();
         }
 
-        return $sStatus;
+        return $status;
     }
 
     /**
      * Returns order suggestion for payment status on given action and on given payment.
      *
-     * @param string $sAction - action with order payment: void, refund, capture, refund_partial, capture_partial
+     * @param string $action - action with order payment: void, refund, capture, refund_partial, capture_partial
      *
      * @return string|null
      */
-    public function getSuggestStatus($sAction)
+    public function getSuggestStatus($action)
     {
         if (is_null($this->getOrder())) {
             return;
         }
 
-        $sStatus = $this->_getOrderPaymentStatusPaymentValid();
-        if (is_null($sStatus)) {
-            $sStatus = $this->_getStatusByAction($sAction);
+        $status = $this->getOrderPaymentStatusPaymentValid();
+        if (is_null($status)) {
+            $status = $this->getStatusByAction($action);
         }
 
-        return $sStatus;
+        return $status;
     }
 
     /**
@@ -156,14 +156,14 @@ class OrderPaymentStatusCalculator
      *
      * @return string|null
      */
-    protected function _getOrderPaymentStatusFinal()
+    protected function getOrderPaymentStatusFinal()
     {
-        $sStatus = null;
-        if ($this->_isOrderPaymentStatusFinal()) {
-            $sStatus = $this->getOrder()->getPaymentStatus();
+        $status = null;
+        if ($this->isOrderPaymentStatusFinal()) {
+            $status = $this->getOrder()->getPaymentStatus();
         }
 
-        return $sStatus;
+        return $status;
     }
 
     /**
@@ -171,15 +171,15 @@ class OrderPaymentStatusCalculator
      *
      * @return string|null
      */
-    protected function _getOrderPaymentStatusPaymentValid()
+    protected function getOrderPaymentStatusPaymentValid()
     {
-        $sStatus = null;
-        $oOrderPayment = $this->getOrderPayment();
-        if (isset($oOrderPayment) && !$oOrderPayment->getIsValid()) {
-            $sStatus = 'failed';
+        $status = null;
+        $orderPayment = $this->getOrderPayment();
+        if (isset($orderPayment) && !$orderPayment->getIsValid()) {
+            $status = 'failed';
         }
 
-        return $sStatus;
+        return $status;
     }
 
     /**
@@ -187,47 +187,47 @@ class OrderPaymentStatusCalculator
      *
      * @return string|null
      */
-    protected function _getOrderPaymentStatusPayments()
+    protected function getOrderPaymentStatusPayments()
     {
-        $sStatus = 'completed';
-        $oPaymentList = $this->getOrder()->getPaymentList();
+        $status = 'completed';
+        $paymentList = $this->getOrder()->getPaymentList();
 
-        if ($oPaymentList->hasPendingPayment()) {
-            $sStatus = 'pending';
-        } elseif ($oPaymentList->hasFailedPayment()) {
-            $sStatus = 'failed';
+        if ($paymentList->hasPendingPayment()) {
+            $status = 'pending';
+        } elseif ($paymentList->hasFailedPayment()) {
+            $status = 'failed';
         }
 
-        return $sStatus;
+        return $status;
     }
 
     /**
      * Returns order suggestion for payment status on given action.
      *
-     * @param string $sAction performed action.
+     * @param string $action performed action.
      *
      * @return string
      */
-    protected function _getStatusByAction($sAction)
+    protected function getStatusByAction($action)
     {
-        $sStatus = null;
-        switch ($sAction) {
+        $status = null;
+        switch ($action) {
             case 'void':
-                $sStatus = $this->_getSuggestStatusOnVoid();
+                $status = $this->getSuggestStatusOnVoid();
                 break;
             case 'refund_partial':
             case 'reauthorize':
-                $sStatus = $this->getOrder()->getPaymentStatus();
+                $status = $this->getOrder()->getPaymentStatus();
                 break;
             case 'refund':
             case 'capture':
             case 'capture_partial':
-                $sStatus = 'completed';
+                $status = 'completed';
                 break;
             default:
-                $sStatus = 'completed';
+                $status = 'completed';
         }
 
-        return $sStatus;
+        return $status;
     }
 }

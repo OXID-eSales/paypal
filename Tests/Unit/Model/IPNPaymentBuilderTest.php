@@ -36,72 +36,72 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testSetGetRequest()
     {
-        $oRequest = $this->_prepareRequest();
+        $request = $this->prepareRequest();
 
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
-        $oPaymentBuilder->setRequest($oRequest);
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $paymentBuilder->setRequest($request);
 
-        $this->assertEquals($oRequest, $oPaymentBuilder->getRequest(), 'Getter should return what is set in setter.');
+        $this->assertEquals($request, $paymentBuilder->getRequest(), 'Getter should return what is set in setter.');
     }
 
     public function testSetGetOrderPaymentSetter()
     {
-        $oPayPalIPNPaymentSetter = new \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter();
+        $payPalIPNPaymentSetter = new \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter();
 
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
-        $oPaymentBuilder->setOrderPaymentSetter($oPayPalIPNPaymentSetter);
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $paymentBuilder->setOrderPaymentSetter($payPalIPNPaymentSetter);
 
-        $this->assertEquals($oPayPalIPNPaymentSetter, $oPaymentBuilder->getOrderPaymentSetter(), 'Getter should return what is set in setter.');
+        $this->assertEquals($payPalIPNPaymentSetter, $paymentBuilder->getOrderPaymentSetter(), 'Getter should return what is set in setter.');
     }
 
     public function testGetOrderPaymentSetter()
     {
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
-        $oPayPalIPNPaymentSetter = $oPaymentBuilder->getOrderPaymentSetter();
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $payPalIPNPaymentSetter = $paymentBuilder->getOrderPaymentSetter();
 
         $this->assertTrue(
-            $oPayPalIPNPaymentSetter instanceof \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter,
+            $payPalIPNPaymentSetter instanceof \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter,
             'Getter should create IPNRequestPaymentSetter.'
         );
     }
 
     public function testSetOrderPaymentValidator()
     {
-        $oPayPalIPNPaymentValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
+        $payPalIPNPaymentValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
 
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
-        $oPaymentBuilder->setOrderPaymentValidator($oPayPalIPNPaymentValidator);
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $paymentBuilder->setOrderPaymentValidator($payPalIPNPaymentValidator);
 
-        $this->assertEquals($oPayPalIPNPaymentValidator, $oPaymentBuilder->getOrderPaymentValidator(), 'Getter should return what is set in Validator.');
+        $this->assertEquals($payPalIPNPaymentValidator, $paymentBuilder->getOrderPaymentValidator(), 'Getter should return what is set in Validator.');
     }
 
     public function testGetOrderPaymentValidator()
     {
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
 
         $this->assertTrue(
-            $oPaymentBuilder->getOrderPaymentValidator() instanceof \OxidEsales\PayPalModule\Model\IPNPaymentValidator,
+            $paymentBuilder->getOrderPaymentValidator() instanceof \OxidEsales\PayPalModule\Model\IPNPaymentValidator,
             'Getter should create \OxidEsales\PayPalModule\Model\IPNRequestValidator.'
         );
     }
 
     public function testSetGetPaymentCreator()
     {
-        $oPayPalIPNPaymentCreator = new \OxidEsales\PayPalModule\Model\IPNPaymentCreator();
+        $payPalIPNPaymentCreator = new \OxidEsales\PayPalModule\Model\IPNPaymentCreator();
 
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
-        $oPaymentBuilder->setOrderPaymentSetter($oPayPalIPNPaymentCreator);
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $paymentBuilder->setOrderPaymentSetter($payPalIPNPaymentCreator);
 
-        $this->assertEquals($oPayPalIPNPaymentCreator, $oPaymentBuilder->getPaymentCreator(), 'Getter should return what is set in setter.');
+        $this->assertEquals($payPalIPNPaymentCreator, $paymentBuilder->getPaymentCreator(), 'Getter should return what is set in setter.');
     }
 
     public function testGetPaymentCreator()
     {
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
-        $oPayPalIPNPaymentCreator = $oPaymentBuilder->getPaymentCreator();
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $payPalIPNPaymentCreator = $paymentBuilder->getPaymentCreator();
 
         $this->assertTrue(
-            $oPayPalIPNPaymentCreator instanceof \OxidEsales\PayPalModule\Model\IPNPaymentCreator,
+            $payPalIPNPaymentCreator instanceof \OxidEsales\PayPalModule\Model\IPNPaymentCreator,
             'Getter should create \OxidEsales\PayPalModule\Model\IPNPaymentCreator.'
         );
     }
@@ -109,11 +109,11 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testSetGetLang()
     {
-        $oLang = new \OxidEsales\Eshop\Core\Language();
-        $oPaymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
-        $oPaymentBuilder->setLang($oLang);
+        $lang = new \OxidEsales\Eshop\Core\Language();
+        $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
+        $paymentBuilder->setLang($lang);
 
-        $this->assertEquals($oLang, $oPaymentBuilder->getLang(), 'Getter should return what is set in Validator.');
+        $this->assertEquals($lang, $paymentBuilder->getLang(), 'Getter should return what is set in Validator.');
     }
 
     /**
@@ -131,45 +131,45 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      * Check if payment is formed from request.
      * Check if payment is formed with validator results.
      *
-     * @param bool   $blPaymentValid     if payment is valid.
-     * @param string $sValidationMessage validation message.
+     * @param bool   $paymentValid     if payment is valid.
+     * @param string $validationMessage validation message.
      *
      * @dataProvider provideGetPayment
      */
-    public function testGetPayment($blPaymentValid, $sValidationMessage)
+    public function testGetPayment($paymentValid, $validationMessage)
     {
-        $sTransactionIdRequestPayment = '_someId';
-        $sTransactionIdCreatedOrder = '_someOtherid';
-        $oRequest = $this->_prepareRequest();
-        $oRequestOrderPayment = $this->_prepareOrderPayment($sTransactionIdRequestPayment);
-        $oOrderPayment = $this->_prepareOrderPayment($sTransactionIdCreatedOrder);
-        $oLang = $this->_prepareLang();
+        $transactionIdRequestPayment = '_someId';
+        $transactionIdCreatedOrder = '_someOtherid';
+        $request = $this->prepareRequest();
+        $requestOrderPayment = $this->prepareOrderPayment($transactionIdRequestPayment);
+        $orderPayment = $this->prepareOrderPayment($transactionIdCreatedOrder);
+        $lang = $this->prepareLang();
 
         // Request Payment should be called with request object.
-        $oPayPalIPNPaymentSetter = $this->_prepareRequestPaymentSetter($oRequest, $oRequestOrderPayment);
-        $oPayPalIPNPaymentValidator = $this->_prepareIPNPaymentValidator($oRequestOrderPayment, $oOrderPayment, $oLang, $blPaymentValid, $sValidationMessage);
+        $payPalIPNPaymentSetter = $this->prepareRequestPaymentSetter($request, $requestOrderPayment);
+        $payPalIPNPaymentValidator = $this->prepareIPNPaymentValidator($requestOrderPayment, $orderPayment, $lang, $paymentValid, $validationMessage);
 
         // Mock order loading, so we do not touch database.
-        /** @var \OxidEsales\PayPalModule\Model\IPNPaymentBuilder $oPaymentBuilder */
-        $oPaymentBuilder = $this->getMock(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class, array('_loadOrderPayment'));
-        $oPaymentBuilder->expects($this->atLeastOnce())->method('_loadOrderPayment')->with($sTransactionIdRequestPayment)->will($this->returnValue($oOrderPayment));
-        $oPaymentBuilder->setRequest($oRequest);
-        $oPaymentBuilder->setLang($oLang);
-        $oPaymentBuilder->setOrderPaymentSetter($oPayPalIPNPaymentSetter);
-        $oPaymentBuilder->setOrderPaymentValidator($oPayPalIPNPaymentValidator);
+        /** @var \OxidEsales\PayPalModule\Model\IPNPaymentBuilder $paymentBuilder */
+        $paymentBuilder = $this->getMock(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class, array('loadOrderPayment'));
+        $paymentBuilder->expects($this->atLeastOnce())->method('loadOrderPayment')->with($transactionIdRequestPayment)->will($this->returnValue($orderPayment));
+        $paymentBuilder->setRequest($request);
+        $paymentBuilder->setLang($lang);
+        $paymentBuilder->setOrderPaymentSetter($payPalIPNPaymentSetter);
+        $paymentBuilder->setOrderPaymentValidator($payPalIPNPaymentValidator);
 
-        $oBuildOrderPayment = $oPaymentBuilder->buildPayment();
+        $buildOrderPayment = $paymentBuilder->buildPayment();
 
         // Get first comment as there should be only one.
-        $aComments = $oBuildOrderPayment->getCommentList();
-        $aComments = $aComments->getArray();
-        $sComment = $aComments[0]->getComment();
+        $comments = $buildOrderPayment->getCommentList();
+        $comments = $comments->getArray();
+        $comment = $comments[0]->getComment();
         // Payment should be built with validator results from setter request.
         // Save on order payment as it is already loaded from database.
-        $this->assertEquals($blPaymentValid, $oBuildOrderPayment->getIsValid(), 'Payment should be valid or not as it is mocked in validator.');
-        $this->assertEquals(1, count($aComments), 'There should be only one comment - failure message.');
-        $this->assertEquals($sValidationMessage, $sComment, 'Validation message should be same as it is mocked in validator.');
-        $this->assertEquals($sTransactionIdCreatedOrder, $oBuildOrderPayment->getTransactionId(), 'Payment should have same id as get from payment setter.');
+        $this->assertEquals($paymentValid, $buildOrderPayment->getIsValid(), 'Payment should be valid or not as it is mocked in validator.');
+        $this->assertEquals(1, count($comments), 'There should be only one comment - failure message.');
+        $this->assertEquals($validationMessage, $comment, 'Validation message should be same as it is mocked in validator.');
+        $this->assertEquals($transactionIdCreatedOrder, $buildOrderPayment->getTransactionId(), 'Payment should have same id as get from payment setter.');
     }
 
     /**
@@ -177,12 +177,12 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return \OxidEsales\PayPalModule\Core\Request
      */
-    protected function _prepareRequest()
+    protected function prepareRequest()
     {
         $_POST['zzz'] = 'yyy';
-        $oRequest = new \OxidEsales\PayPalModule\Core\Request();
+        $request = new \OxidEsales\PayPalModule\Core\Request();
 
-        return $oRequest;
+        return $request;
     }
 
     /**
@@ -190,80 +190,80 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return \OxidEsales\Eshop\Core\Language
      */
-    protected function _prepareLang()
+    protected function prepareLang()
     {
-        $oLang = new \OxidEsales\Eshop\Core\Language();
+        $lang = new \OxidEsales\Eshop\Core\Language();
 
-        return $oLang;
+        return $lang;
     }
 
     /**
-     * @param \OxidEsales\PayPalModule\Core\Request       $oRequest      request.
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment order payment.
+     * @param \OxidEsales\PayPalModule\Core\Request       $request      request.
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment order payment.
      *
      * @return \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter
      */
-    protected function _prepareRequestPaymentSetter($oRequest, $oOrderPayment)
+    protected function prepareRequestPaymentSetter($request, $orderPayment)
     {
-        $oPayPalIPNPaymentSetter = $this->getMock(\OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::class, array('setRequest', 'getRequestOrderPayment'));
-        $oPayPalIPNPaymentSetter->expects($this->atLeastOnce())->method('setRequest')->with($oRequest);
-        $oPayPalIPNPaymentSetter->expects($this->atLeastOnce())->method('getRequestOrderPayment')->will($this->returnValue($oOrderPayment));
+        $payPalIPNPaymentSetter = $this->getMock(\OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::class, array('setRequest', 'getRequestOrderPayment'));
+        $payPalIPNPaymentSetter->expects($this->atLeastOnce())->method('setRequest')->with($request);
+        $payPalIPNPaymentSetter->expects($this->atLeastOnce())->method('getRequestOrderPayment')->will($this->returnValue($orderPayment));
 
-        return $oPayPalIPNPaymentSetter;
+        return $payPalIPNPaymentSetter;
     }
 
     /**
      * Wrapper to create order payment.
      *
-     * @param string $sTransactionId     transaction id.
-     * @param bool   $blValid            if payment should be marked as not valid.
-     * @param string $sValidationMessage validation message
+     * @param string $transactionId     transaction id.
+     * @param bool   $valid            if payment should be marked as not valid.
+     * @param string $validationMessage validation message
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected function _prepareOrderPayment($sTransactionId, $blValid = true, $sValidationMessage = '')
+    protected function prepareOrderPayment($transactionId, $valid = true, $validationMessage = '')
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setPaymentId('__a24das5das45');
-        $oOrderPayment->setOrderId('_sOrderId');
-        $oOrderPayment->setTransactionId($sTransactionId);
-        if (!$blValid) {
-            $oOrderPayment->setIsValid(false);
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setPaymentId('__a24das5das45');
+        $orderPayment->setOrderId('_sOrderId');
+        $orderPayment->setTransactionId($transactionId);
+        if (!$valid) {
+            $orderPayment->setIsValid(false);
         }
-        if ($sValidationMessage) {
-            $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
-            $sDate = date('Y-m-d H:i:s', $utilsDate->getTime());
-            $oOrderPayment->addComment($sDate, $sValidationMessage);
+        if ($validationMessage) {
+            $utilsDate = \OxidEsales\Eshop\Core\Registry::getUtilsDate();
+            $date = date('Y-m-d H:i:s', $utilsDate->getTime());
+            $orderPayment->addComment($date . ' ' . $validationMessage);
         }
 
-        return $oOrderPayment;
+        return $orderPayment;
     }
 
     /**
      * Wrapper to create payment validator.
      * Check if called with correct parameters. Always return mocked validation information.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oRequestOrderPayment object validator will be called with.
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment        object validator will return.
-     * @param \OxidEsales\Eshop\Core\Language             $oLang                set to validator to translate validation failure message.
-     * @param bool                                        $blValid              set if order is valid.
-     * @param string                                      $sValidationMessage   validation message.
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $requestOrderPayment object validator will be called with.
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment        object validator will return.
+     * @param \OxidEsales\Eshop\Core\Language             $lang                set to validator to translate validation failure message.
+     * @param bool                                        $valid              set if order is valid.
+     * @param string                                      $validationMessage   validation message.
      *
      * @return \OxidEsales\PayPalModule\Model\IPNPaymentValidator
      */
-    protected function _prepareIPNPaymentValidator($oRequestOrderPayment, $oOrderPayment, $oLang, $blValid, $sValidationMessage)
+    protected function prepareIPNPaymentValidator($requestOrderPayment, $orderPayment, $lang, $valid, $validationMessage)
     {
-        $oPayPalIPNPaymentValidator = $this->getMock(
+        $payPalIPNPaymentValidator = $this->getMock(
             \OxidEsales\PayPalModule\Model\IPNPaymentValidator::class
             , array('setRequestOrderPayment', 'setOrderPayment', 'setLang', 'isValid', 'getValidationFailureMessage')
         );
-        $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setRequestOrderPayment')->with($oRequestOrderPayment);
-        $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setOrderPayment')->with($oOrderPayment);
-        $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setLang')->with($oLang);
-        $oPayPalIPNPaymentValidator->expects($this->atLeastOnce())->method('isValid')->will($this->returnValue($blValid));
+        $payPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setRequestOrderPayment')->with($requestOrderPayment);
+        $payPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setOrderPayment')->with($orderPayment);
+        $payPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setLang')->with($lang);
+        $payPalIPNPaymentValidator->expects($this->atLeastOnce())->method('isValid')->will($this->returnValue($valid));
         // Validation message will be checked only when validation fail.
-        $oPayPalIPNPaymentValidator->expects($this->any())->method('getValidationFailureMessage')->will($this->returnValue($sValidationMessage));
+        $payPalIPNPaymentValidator->expects($this->any())->method('getValidationFailureMessage')->will($this->returnValue($validationMessage));
 
-        return $oPayPalIPNPaymentValidator;
+        return $payPalIPNPaymentValidator;
     }
 }

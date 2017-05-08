@@ -32,15 +32,15 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLoad_LoadByGetId_DataLoaded()
     {
-        $sId = 'RecordIdToLoad';
-        $aData = array('testkey' => 'testValue');
-        $oGateway = $this->getMock(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load'));
-        $oGateway->expects($this->any())->method('load')->with($sId)->will($this->returnValue($aData));
+        $id = 'RecordIdToLoad';
+        $data = array('testkey' => 'testValue');
+        $gateway = $this->getMock(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load'));
+        $gateway->expects($this->any())->method('load')->with($id)->will($this->returnValue($data));
 
-        $oModel = $this->_getPayPalModel($oGateway, $sId);
+        $model = $this->getPayPalModel($gateway, $id);
 
-        $this->assertTrue($oModel->load());
-        $this->assertEquals($aData, $oModel->getData());
+        $this->assertTrue($model->load());
+        $this->assertEquals($data, $model->getData());
     }
 
     /**
@@ -48,15 +48,15 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLoad_LoadByPassedId_DataLoaded()
     {
-        $sId = 'RecordIdToLoad';
-        $aData = array('testkey' => 'testValue');
-        $oGateway = $this->getMock(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load'));
-        $oGateway->expects($this->any())->method('load')->with($sId)->will($this->returnValue($aData));
+        $id = 'RecordIdToLoad';
+        $data = array('testkey' => 'testValue');
+        $gateway = $this->getMock(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load'));
+        $gateway->expects($this->any())->method('load')->with($id)->will($this->returnValue($data));
 
-        $oModel = $this->_getPayPalModel($oGateway, $sId, $sId);
+        $model = $this->getPayPalModel($gateway, $id, $id);
 
-        $this->assertTrue($oModel->load($sId));
-        $this->assertEquals($aData, $oModel->getData());
+        $this->assertTrue($model->load($id));
+        $this->assertEquals($data, $model->getData());
     }
 
     /**
@@ -64,12 +64,12 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsLoaded_DatabaseRecordNotFound()
     {
-        $oGateway = $this->_createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => null));
+        $gateway = $this->_createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => null));
 
-        $oModel = $this->_getPayPalModel($oGateway);
-        $oModel->load();
+        $model = $this->getPayPalModel($gateway);
+        $model->load();
 
-        $this->assertFalse($oModel->isLoaded());
+        $this->assertFalse($model->isLoaded());
     }
 
     /**
@@ -77,31 +77,31 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsLoaded_DatabaseRecordFound()
     {
-        $oGateway = $this->_createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => array('oePayPalId' => 'testId')));
+        $gateway = $this->_createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => array('oePayPalId' => 'testId')));
 
-        $oModel = $this->_getPayPalModel($oGateway);
-        $oModel->load();
+        $model = $this->getPayPalModel($gateway);
+        $model->load();
 
-        $this->assertTrue($oModel->isLoaded());
+        $this->assertTrue($model->isLoaded());
     }
 
     /**
      * Creates model with mocked abstract methods
      *
-     * @param object $oGateway
-     * @param string $sGetId
-     * @param string $sSetId
+     * @param object $gateway
+     * @param string $getId
+     * @param string $setId
      *
      * @return \OxidEsales\PayPalModule\Core\Model
      */
-    protected function _getPayPalModel($oGateway, $sGetId = null, $sSetId = null)
+    protected function getPayPalModel($gateway, $getId = null, $setId = null)
     {
-        $oModel = $this->_createStub(\OxidEsales\PayPalModule\Core\Model::class, array('_getDbGateway' => $oGateway, 'getId' => $sGetId), array('setId'));
-        if ($sSetId) {
-            $oModel->expects($this->any())->method('setId')->with($sSetId);
+        $model = $this->_createStub(\OxidEsales\PayPalModule\Core\Model::class, array('getDbGateway' => $gateway, 'getId' => $getId), array('setId'));
+        if ($setId) {
+            $model->expects($this->any())->method('setId')->with($setId);
         }
 
-        return $oModel;
+        return $model;
     }
 }
 

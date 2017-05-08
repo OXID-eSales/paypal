@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link      http://www.oxid-esales.com
+ * @link          http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2017
  */
+
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
 
 /**
@@ -25,6 +26,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
  */
 class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+
     /**
      * Set up
      */
@@ -32,13 +34,13 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     {
         parent::setUp();
 
-        $oUtilsMock = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array('showMessageAndExit'));
-        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Utils::class, $oUtilsMock);
+        $utilsMock = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array('showMessageAndExit'));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Utils::class, $utilsMock);
 
         // fix for state ID compatability between editions
-        $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
-                     "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
-        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSqlState);
+        $sqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
+                    "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sqlState);
     }
 
     /**
@@ -46,7 +48,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     protected function tearDown()
     {
-        \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("delete from oxaddress where OXID = '_testUserAddressId' ");
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("DELETE FROM oxaddress WHERE OXID = '_testUserAddressId' ");
 
         $this->resetTestDataDeliveryCostRule();
 
@@ -59,16 +61,16 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     public function testProcessCallBack()
     {
         // preparing service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
-        $oPayPalService->expects($this->once())->method("callbackResponse");
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
+        $payPalService->expects($this->once())->method("callbackResponse");
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "_setParamsForCallbackResponse"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("_setParamsForCallbackResponse")->with($this->equalTo($oPayPalService));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "setParamsForCallbackResponse"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("setParamsForCallbackResponse")->with($this->equalTo($payPalService));
 
         // testing
-        $oDispatcher->processCallBack();
+        $dispatcher->processCallBack();
     }
 
     /**
@@ -76,56 +78,58 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetExpressCheckoutDetails()
     {
-        $aDetails["SHIPPINGOPTIONNAME"] = "222";
-        $aDetails["PAYERID"] = "111";
-        $aDetails["PAYMENTREQUEST_0_AMT"] = "129.00";
+        $detailsData = [
+            "SHIPPINGOPTIONNAME"   => "222",
+            "PAYERID"              => "111",
+            "PAYMENTREQUEST_0_AMT" => "129.00"
+        ];
 
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oDetails->setData($aDetails);
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($detailsData);
 
         // preparing useer
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getId"));
-        $oUser->expects($this->any())->method("getId")->will($this->returnValue("321"));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getId"));
+        $user->expects($this->any())->method("getId")->will($this->returnValue("321"));
 
-        $oPrice = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
-        $oPrice->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(129.00));
+        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
+        $price->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(129.00));
 
         // preparing basket
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("setPayment", "setShipping", "calculateBasket", "getAdditionalServicesVatPercent", "getPrice"));
-        $oBasket->expects($this->once())->method("setPayment")->with($this->equalTo("oxidpaypal"));
-        $oBasket->expects($this->once())->method("setShipping")->with($this->equalTo("123"));
-        $oBasket->expects($this->once())->method("calculateBasket")->with($this->equalTo(true));
-        $oBasket->expects($this->any())->method("getAdditionalServicesVatPercent")->will($this->returnValue(0));
-        $oBasket->expects($this->once())->method("getPrice")->will($this->returnValue($oPrice));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("setPayment", "setShipping", "calculateBasket", "getAdditionalServicesVatPercent", "getPrice"));
+        $basket->expects($this->once())->method("setPayment")->with($this->equalTo("oxidpaypal"));
+        $basket->expects($this->once())->method("setShipping")->with($this->equalTo("123"));
+        $basket->expects($this->once())->method("calculateBasket")->with($this->equalTo(true));
+        $basket->expects($this->any())->method("getAdditionalServicesVatPercent")->will($this->returnValue(0));
+        $basket->expects($this->once())->method("getPrice")->will($this->returnValue($price));
 
         // preparing config
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("finalizeOrderOnPayPalSide"));
-        $oPayPalConfig->expects($this->once())->method("finalizeOrderOnPayPalSide")->will($this->returnValue(true));
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("finalizeOrderOnPayPalSide"));
+        $payPalConfig->expects($this->once())->method("finalizeOrderOnPayPalSide")->will($this->returnValue(true));
 
         // preparing service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
-        $oPayPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($oDetails));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
+        $payPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($details));
 
         // preparing session basket
-        $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array("getBasket"));
-        $oSession->expects($this->once())->method("getBasket")->will($this->returnValue($oBasket));
+        $session = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array("getBasket"));
+        $session->expects($this->once())->method("getBasket")->will($this->returnValue($basket));
 
         // preparing payment list
-        $oPaymentList = $this->getMock(\OxidEsales\Eshop\Application\Model\PaymentList::class, array("getPaymentList"));
-        $oPaymentList->expects($this->once())->method("getPaymentList")->will($this->returnValue(array('oxidpaypal' => '')));
-        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\PaymentList::class, $oPaymentList);
+        $paymentList = $this->getMock(\OxidEsales\Eshop\Application\Model\PaymentList::class, array("getPaymentList"));
+        $paymentList->expects($this->once())->method("getPaymentList")->will($this->returnValue(array('oxidpaypal' => '')));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\PaymentList::class, $paymentList);
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "_initializeUserData", "getSession", "getPayPalConfig", "_isPaymentValidForUserCountry", "_extractShippingId"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("_initializeUserData")->with($this->equalTo($oDetails))->will($this->returnValue($oUser));
-        $oDispatcher->expects($this->any())->method("getSession")->will($this->returnValue($oSession));
-        $oDispatcher->expects($this->once())->method("_extractShippingId")->with($this->equalTo("222"), $this->equalTo($oUser))->will($this->returnValue("123"));
-        $oDispatcher->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($oPayPalConfig));
-        $oDispatcher->expects($this->once())->method("_isPaymentValidForUserCountry")->with($this->equalTo($oUser))->will($this->returnValue(true));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "initializeUserData", "getSession", "getPayPalConfig", "isPaymentValidForUserCountry", "extractShippingId"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("initializeUserData")->with($this->equalTo($details))->will($this->returnValue($user));
+        $dispatcher->expects($this->any())->method("getSession")->will($this->returnValue($session));
+        $dispatcher->expects($this->once())->method("extractShippingId")->with($this->equalTo("222"), $this->equalTo($user))->will($this->returnValue("123"));
+        $dispatcher->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
+        $dispatcher->expects($this->once())->method("isPaymentValidForUserCountry")->with($this->equalTo($user))->will($this->returnValue(true));
 
         // testing
-        $this->assertEquals("order?fnc=execute", $oDispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("order?fnc=execute", $dispatcher->getExpressCheckoutDetails());
         $this->assertEquals("111", $this->getSession()->getVariable("oepaypal-payerId"));
         $this->assertEquals("321", $this->getSession()->getVariable("oepaypal-userId"));
         $this->assertEquals("129.00", $this->getSession()->getVariable("oepaypal-basketAmount"));
@@ -139,33 +143,33 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetExpressCheckoutDetails_onError_returnToBasket()
     {
-        $oExcp = new \OxidEsales\Eshop\Core\Exception\StandardException();
+        $excp = new \OxidEsales\Eshop\Core\Exception\StandardException();
 
         // preparing config
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("finalizeOrderOnPayPalSide"));
-        $oPayPalConfig->expects($this->never())->method("finalizeOrderOnPayPalSide");
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("finalizeOrderOnPayPalSide"));
+        $payPalConfig->expects($this->never())->method("finalizeOrderOnPayPalSide");
 
         // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
-        $oPayPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->throwException($oExcp));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
+        $payPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->throwException($excp));
 
         // preparing utils view
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
-        $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($oExcp));
+        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
+        $utilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($excp));
 
         // preparing logger
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
-        $oPayPalLogger->expects($this->once())->method("log");
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
+        $payPalLogger->expects($this->once())->method("log");
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig", "_getUtilsView", "getLogger"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("_getUtilsView")->will($this->returnValue($oUtilsView));
-        $oDispatcher->expects($this->once())->method("getLogger")->will($this->returnValue($oPayPalLogger));
-        $oDispatcher->expects($this->never())->method("getPayPalConfig");
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig", "getUtilsView", "getLogger"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("getUtilsView")->will($this->returnValue($utilsView));
+        $dispatcher->expects($this->once())->method("getLogger")->will($this->returnValue($payPalLogger));
+        $dispatcher->expects($this->never())->method("getPayPalConfig");
 
         // testing
-        $this->assertEquals("basket", $oDispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("basket", $dispatcher->getExpressCheckoutDetails());
     }
 
     /**
@@ -174,43 +178,43 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetExpressCheckoutDetails_CountryValidationError()
     {
-        $aDetails["SHIPPINGOPTIONNAME"] = "222";
-        $aDetails["PAYERID"] = "111";
+        $details["SHIPPINGOPTIONNAME"] = "222";
+        $details["PAYERID"] = "111";
 
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oDetails->setData($aDetails);
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($details);
 
         // preparing config
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("finalizeOrderOnPayPalSide"));
-        $oPayPalConfig->expects($this->never())->method("finalizeOrderOnPayPalSide");
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("finalizeOrderOnPayPalSide"));
+        $payPalConfig->expects($this->never())->method("finalizeOrderOnPayPalSide");
 
         // preparing user
-        $oUser = new \OxidEsales\Eshop\Application\Model\User();
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
+        $user = new \OxidEsales\Eshop\Application\Model\User();
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
 
         // preparing service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
-        $oPayPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($oDetails));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
+        $payPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($details));
 
         // preparing utils view
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
-        $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo("MESSAGE_PAYMENT_SELECT_ANOTHER_PAYMENT"));
+        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
+        $utilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo("MESSAGE_PAYMENT_SELECT_ANOTHER_PAYMENT"));
 
         // preparing logger
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
-        $oPayPalLogger->expects($this->once())->method("log");
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
+        $payPalLogger->expects($this->once())->method("log");
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "_initializeUserData", "getPayPalConfig", "_isPaymentValidForUserCountry", "_getUtilsView", "getLogger"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("_initializeUserData")->with($this->equalTo($oDetails))->will($this->returnValue($oUser));
-        $oDispatcher->expects($this->once())->method("_getUtilsView")->will($this->returnValue($oUtilsView));
-        $oDispatcher->expects($this->once())->method("getLogger")->will($this->returnValue($oPayPalLogger));
-        $oDispatcher->expects($this->once())->method("_isPaymentValidForUserCountry")->with($this->equalTo($oUser))->will($this->returnValue(false));
-        $oDispatcher->expects($this->never())->method("getPayPalConfig");
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "initializeUserData", "getPayPalConfig", "isPaymentValidForUserCountry", "getUtilsView", "getLogger"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("initializeUserData")->with($this->equalTo($details))->will($this->returnValue($user));
+        $dispatcher->expects($this->once())->method("getUtilsView")->will($this->returnValue($utilsView));
+        $dispatcher->expects($this->once())->method("getLogger")->will($this->returnValue($payPalLogger));
+        $dispatcher->expects($this->once())->method("isPaymentValidForUserCountry")->with($this->equalTo($user))->will($this->returnValue(false));
+        $dispatcher->expects($this->never())->method("getPayPalConfig");
 
         // testing
-        $this->assertEquals("payment", $oDispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("payment", $dispatcher->getExpressCheckoutDetails());
     }
 
     /**
@@ -218,28 +222,31 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testSetExpressCheckout_onSuccess()
     {
-        $oResult = new \OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout();
-        $oResult->setData(array('TOKEN' => 'token'));
+        $result = new \OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout();
+        $result->setData(array('TOKEN' => 'token'));
 
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPayPalCommunicationUrl"));
-        $oPayPalConfig->expects($this->once())->method("getPayPalCommunicationUrl")->with($this->equalTo($oResult->getToken()))->will($this->returnValue('url+123'));
-
-        // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout", "getRedirectUrl"));
-        $oPayPalService->expects($this->once())->method("setExpressCheckout")->will($this->returnValue($oResult));
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPayPalCommunicationUrl"));
+        $payPalConfig->expects($this->once())->method("getPayPalCommunicationUrl")->with($this->equalTo($result->getToken()))->will($this->returnValue('url+123'));
 
         // preparing paypal service
-        $oUtils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array("redirect"));
-        $oUtils->expects($this->once())->method("redirect")->with($this->equalTo("url+123"), $this->equalTo(false));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout", "getRedirectUrl"));
+        $payPalService->expects($this->once())->method("setExpressCheckout")->will($this->returnValue($result));
+
+        // preparing paypal service
+        $utils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array("redirect"));
+        $utils->expects($this->once())->method("redirect")->with($this->equalTo("url+123"), $this->equalTo(false));
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "_getUtils", "getPayPalConfig"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($oPayPalConfig));
-        $oDispatcher->expects($this->once())->method("_getUtils")->will($this->returnValue($oUtils));
+        $dispatcher = $this->getMock(
+            \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class,
+            array("getPayPalCheckoutService", "getUtils", "getPayPalConfig")
+        );
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
+        $dispatcher->expects($this->once())->method("getUtils")->will($this->returnValue($utils));
 
         // testing
-        $oDispatcher->setExpressCheckout();
+        $dispatcher->setExpressCheckout();
         $this->assertEquals("token", $this->getSession()->getVariable("oepaypal-token"));
     }
 
@@ -248,26 +255,26 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testSetExpressCheckout_Error()
     {
-        $oExcp = new \OxidEsales\Eshop\Core\Exception\StandardException();
+        $excp = new \OxidEsales\Eshop\Core\Exception\StandardException();
 
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPayPalCommunicationUrl"));
-        $oPayPalConfig->expects($this->never())->method("getPayPalCommunicationUrl");
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPayPalCommunicationUrl"));
+        $payPalConfig->expects($this->never())->method("getPayPalCommunicationUrl");
 
         // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout"));
-        $oPayPalService->expects($this->once())->method("setExpressCheckout")->will($this->throwException($oExcp));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout"));
+        $payPalService->expects($this->once())->method("setExpressCheckout")->will($this->throwException($excp));
 
         // preparing utils view
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
-        $oUtilsView->expects($this->once())->method("addErrorToDisplay")->will($this->returnValue(null));
+        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
+        $utilsView->expects($this->once())->method("addErrorToDisplay")->will($this->returnValue(null));
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "_getUtilsView"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("_getUtilsView")->will($this->returnValue($oUtilsView));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getUtilsView"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("getUtilsView")->will($this->returnValue($utilsView));
 
         // testing
-        $this->assertEquals("basket", $oDispatcher->setExpressCheckout());
+        $this->assertEquals("basket", $dispatcher->setExpressCheckout());
     }
 
     /**
@@ -286,28 +293,28 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     public function testProcessCallBack_cancelPayment_noUserCountryId()
     {
         // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
-        $oPayPalService->expects($this->once())->method("callbackResponse");
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
+        $payPalService->expects($this->once())->method("callbackResponse");
 
         // preparing logger
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
-        $oPayPalLogger->expects($this->at(0))->method("log");
-        $oPayPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NO SHIPPING COUNTRY ID"));
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
+        $payPalLogger->expects($this->at(0))->method("log");
+        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NO SHIPPING COUNTRY ID"));
 
         // creating user without set country id
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->load("oxdefaultadmin");
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->load("oxdefaultadmin");
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("");
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "_getCallBackUser", "_setPayPalIsNotAvailable"));
-        $oDispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($oPayPalLogger));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "getCallBackUser", "setPayPalIsNotAvailable"));
+        $dispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($payPalLogger));
 
-        $oDispatcher->expects($this->once())->method("_getCallBackUser")->will($this->returnValue($oUser));
-        $oDispatcher->expects($this->once())->method("_setPayPalIsNotAvailable");
+        $dispatcher->expects($this->once())->method("getCallBackUser")->will($this->returnValue($user));
+        $dispatcher->expects($this->once())->method("setPayPalIsNotAvailable");
 
-        $oDispatcher->processCallBack();
+        $dispatcher->processCallBack();
     }
 
     /**
@@ -316,27 +323,27 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     public function testProcessCallBack_cancelPayment_noDeliverySet()
     {
         // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
-        $oPayPalService->expects($this->once())->method("callbackResponse");
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
+        $payPalService->expects($this->once())->method("callbackResponse");
 
         // preparing logger
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
-        $oPayPalLogger->expects($this->at(0))->method("log");
-        $oPayPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NO DELIVERY LIST SET"));
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
+        $payPalLogger->expects($this->at(0))->method("log");
+        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NO DELIVERY LIST SET"));
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->load("oxdefaultadmin");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->load("oxdefaultadmin");
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "_getCallBackUser", "_getDeliverySetList", "_setPayPalIsNotAvailable"));
-        $oDispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($oPayPalLogger));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "getCallBackUser", "getDeliverySetList", "setPayPalIsNotAvailable"));
+        $dispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($payPalLogger));
 
-        $oDispatcher->expects($this->once())->method("_getCallBackUser")->will($this->returnValue($oUser));
-        $oDispatcher->expects($this->once())->method("_getDeliverySetList")->will($this->returnValue(null));
-        $oDispatcher->expects($this->once())->method("_setPayPalIsNotAvailable");
+        $dispatcher->expects($this->once())->method("getCallBackUser")->will($this->returnValue($user));
+        $dispatcher->expects($this->once())->method("getDeliverySetList")->will($this->returnValue(null));
+        $dispatcher->expects($this->once())->method("setPayPalIsNotAvailable");
 
-        $oDispatcher->processCallBack();
+        $dispatcher->processCallBack();
     }
 
     /**
@@ -346,28 +353,28 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     {
 
         // preparing PayPal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
-        $oPayPalService->expects($this->once())->method("callbackResponse");
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
+        $payPalService->expects($this->once())->method("callbackResponse");
 
         // preparing logger
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
-        $oPayPalLogger->expects($this->at(0))->method("log");
-        $oPayPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NOT VALID COUNTRY ID"));
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
+        $payPalLogger->expects($this->at(0))->method("log");
+        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NOT VALID COUNTRY ID"));
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->load("oxdefaultadmin");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->load("oxdefaultadmin");
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "_getCallBackUser", "_getDeliverySetList", "_isPaymentValidForUserCountry", "_setPayPalIsNotAvailable"));
-        $oDispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($oPayPalLogger));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "getCallBackUser", "getDeliverySetList", "isPaymentValidForUserCountry", "setPayPalIsNotAvailable"));
+        $dispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($payPalLogger));
 
-        $oDispatcher->expects($this->once())->method("_getCallBackUser")->will($this->returnValue($oUser));
-        $oDispatcher->expects($this->once())->method("_getDeliverySetList")->will($this->returnValue(array(1)));
-        $oDispatcher->expects($this->once())->method("_isPaymentValidForUserCountry")->will($this->returnValue(false));
-        $oDispatcher->expects($this->once())->method("_setPayPalIsNotAvailable");
+        $dispatcher->expects($this->once())->method("getCallBackUser")->will($this->returnValue($user));
+        $dispatcher->expects($this->once())->method("getDeliverySetList")->will($this->returnValue(array(1)));
+        $dispatcher->expects($this->once())->method("isPaymentValidForUserCountry")->will($this->returnValue(false));
+        $dispatcher->expects($this->once())->method("setPayPalIsNotAvailable");
 
-        $oDispatcher->processCallBack();
+        $dispatcher->processCallBack();
     }
 
     /**
@@ -377,29 +384,29 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     {
 
         // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
-        $oPayPalService->expects($this->once())->method("callbackResponse");
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("callbackResponse"));
+        $payPalService->expects($this->once())->method("callbackResponse");
 
         // preparing logger
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
-        $oPayPalLogger->expects($this->at(0))->method("log");
-        $oPayPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: DELIVERY SET LIST HAS NO PAYPAL"));
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array("log"));
+        $payPalLogger->expects($this->at(0))->method("log");
+        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: DELIVERY SET LIST HAS NO PAYPAL"));
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->load("oxdefaultadmin");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->load("oxdefaultadmin");
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "_getCallBackUser", "_getDeliverySetList", "_isPaymentValidForUserCountry", "_setDeliverySetListForCallbackResponse", "_setPayPalIsNotAvailable"));
-        $oDispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($oPayPalLogger));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getPayPalCheckoutService", "getLogger", "getCallBackUser", "getDeliverySetList", "isPaymentValidForUserCountry", "setDeliverySetListForCallbackResponse", "setPayPalIsNotAvailable"));
+        $dispatcher->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->any())->method("getLogger")->will($this->returnValue($payPalLogger));
 
-        $oDispatcher->expects($this->once())->method("_getCallBackUser")->will($this->returnValue($oUser));
-        $oDispatcher->expects($this->once())->method("_getDeliverySetList")->will($this->returnValue(array(1)));
-        $oDispatcher->expects($this->once())->method("_isPaymentValidForUserCountry")->will($this->returnValue(true));
-        $oDispatcher->expects($this->once())->method("_setDeliverySetListForCallbackResponse")->will($this->returnValue(0));
-        $oDispatcher->expects($this->once())->method("_setPayPalIsNotAvailable");
+        $dispatcher->expects($this->once())->method("getCallBackUser")->will($this->returnValue($user));
+        $dispatcher->expects($this->once())->method("getDeliverySetList")->will($this->returnValue(array(1)));
+        $dispatcher->expects($this->once())->method("isPaymentValidForUserCountry")->will($this->returnValue(true));
+        $dispatcher->expects($this->once())->method("setDeliverySetListForCallbackResponse")->will($this->returnValue(0));
+        $dispatcher->expects($this->once())->method("setPayPalIsNotAvailable");
 
-        $oDispatcher->processCallBack();
+        $dispatcher->processCallBack();
     }
 
     /**
@@ -407,21 +414,21 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testInitializeUserData_newPayPalUser()
     {
-        $aUserDetails["EMAIL"] = "testUserEmail";
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oDetails->setData($aUserDetails);
+        $userDetails["EMAIL"] = "testUserEmail";
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($userDetails);
 
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "createPayPalUser"));
-        $oUser->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testUserEmail"))->will($this->returnValue(false));
-        $oUser->expects($this->once())->method("createPayPalUser")->with($this->equalTo($oDetails));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "createPayPalUser"));
+        $user->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testUserEmail"))->will($this->returnValue(false));
+        $user->expects($this->once())->method("createPayPalUser")->with($this->equalTo($details));
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $oUser);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $user);
 
         // preparing
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
 
         // testing
-        $oDispatcher->UNITinitializeUserData($oDetails);
+        $dispatcher->initializeUserData($details);
     }
 
     /**
@@ -430,24 +437,24 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testInitializeUserData_userAlreadyExistsWithDifferentAddress()
     {
-        $aUserDetails["EMAIL"] = "testUserEmail";
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oDetails->setData($aUserDetails);
+        $userDetails["EMAIL"] = "testUserEmail";
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($userDetails);
 
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "isSamePayPalUser"));
-        $oUser->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testUserEmail"))->will($this->returnValue(true));
-        $oUser->expects($this->once())->method("isSamePayPalUser")->with($this->equalTo($oDetails))->will($this->returnValue(false));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "isSamePayPalUser"));
+        $user->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testUserEmail"))->will($this->returnValue(true));
+        $user->expects($this->once())->method("isSamePayPalUser")->with($this->equalTo($details))->will($this->returnValue(false));
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $oUser);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $user);
 
         // setting expected exception
         $this->setExpectedException(\OxidEsales\Eshop\Core\Exception\StandardException::class);
 
         // preparing
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
 
         // testing
-        $oDispatcher->UNITinitializeUserData($oDetails);
+        $dispatcher->initializeUserData($details);
     }
 
     /**
@@ -456,26 +463,26 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testInitializeUserData_loggedUser_addingNewAddress()
     {
-        $aUserDetails["EMAIL"] = "testUserEmail";
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oDetails->setData($aUserDetails);
+        $userDetails["EMAIL"] = "testUserEmail";
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($userDetails);
 
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "isSamePayPalUser", "isSameAddressPayPalUser", 'isSameAddressUserPayPalUser'));
-        $oUser->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testLoggedUserEmail"))->will($this->returnValue("testLoggedUserId"));
-        $oUser->expects($this->any())->method("isSameAddressPayPalUser")->with($this->equalTo($oDetails))->will($this->returnValue(false));
-        $oUser->expects($this->any())->method("isSameAddressUserPayPalUser")->with($this->equalTo($oDetails))->will($this->returnValue(false));
-        $oUser->expects($this->never())->method("isSamePayPalUser");
-        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field("testLoggedUserEmail");
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "isSamePayPalUser", "isSameAddressPayPalUser", 'isSameAddressUserPayPalUser'));
+        $user->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testLoggedUserEmail"))->will($this->returnValue("testLoggedUserId"));
+        $user->expects($this->any())->method("isSameAddressPayPalUser")->with($this->equalTo($details))->will($this->returnValue(false));
+        $user->expects($this->any())->method("isSameAddressUserPayPalUser")->with($this->equalTo($details))->will($this->returnValue(false));
+        $user->expects($this->never())->method("isSamePayPalUser");
+        $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field("testLoggedUserEmail");
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $oUser);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $user);
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("_createUserAddress", "getUser"));
-        $oDispatcher->expects($this->once())->method("_createUserAddress")->with($this->equalTo($oDetails), $this->equalTo("testLoggedUserId"));
-        $oDispatcher->expects($this->once())->method("getUser")->will($this->returnValue($oUser));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("createUserAddress", "getUser"));
+        $dispatcher->expects($this->once())->method("createUserAddress")->with($this->equalTo($details), $this->equalTo("testLoggedUserId"));
+        $dispatcher->expects($this->once())->method("getUser")->will($this->returnValue($user));
 
         // testing
-        $oDispatcher->UNITinitializeUserData($oDetails);
+        $dispatcher->initializeUserData($details);
     }
 
     /**
@@ -484,29 +491,29 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testInitializeUserData_loggedUser_sameAddress()
     {
-        $aUserDetails["EMAIL"] = "testUserEmail";
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oDetails->setData($aUserDetails);
+        $userDetails["EMAIL"] = "testUserEmail";
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($userDetails);
 
         $this->getSession()->setVariable("deladrid", "testDelId");
         $this->assertEquals("testDelId", $this->getSession()->getVariable("deladrid"));
 
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "isSamePayPalUser", "isSameAddressPayPalUser", 'isSameAddressUserPayPalUser'));
-        $oUser->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testLoggedUserEmail"))->will($this->returnValue("testLoggedUserId"));
-        $oUser->expects($this->once())->method("isSameAddressPayPalUser")->with($this->equalTo($oDetails))->will($this->returnValue(true));
-        $oUser->expects($this->once())->method("isSameAddressUserPayPalUser")->with($this->equalTo($oDetails))->will($this->returnValue(true));
-        $oUser->expects($this->never())->method("isSamePayPalUser");
-        $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field("testLoggedUserEmail");
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("isRealPayPalUser", "isSamePayPalUser", "isSameAddressPayPalUser", 'isSameAddressUserPayPalUser'));
+        $user->expects($this->once())->method("isRealPayPalUser")->with($this->equalTo("testLoggedUserEmail"))->will($this->returnValue("testLoggedUserId"));
+        $user->expects($this->once())->method("isSameAddressPayPalUser")->with($this->equalTo($details))->will($this->returnValue(true));
+        $user->expects($this->once())->method("isSameAddressUserPayPalUser")->with($this->equalTo($details))->will($this->returnValue(true));
+        $user->expects($this->never())->method("isSamePayPalUser");
+        $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field("testLoggedUserEmail");
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $oUser);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $user);
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("_createUserAddress", "getUser"));
-        $oDispatcher->expects($this->never())->method("_createUserAddress");
-        $oDispatcher->expects($this->once())->method("getUser")->will($this->returnValue($oUser));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("createUserAddress", "getUser"));
+        $dispatcher->expects($this->never())->method("createUserAddress");
+        $dispatcher->expects($this->once())->method("getUser")->will($this->returnValue($user));
 
         // testing
-        $oDispatcher->UNITinitializeUserData($oDetails);
+        $dispatcher->initializeUserData($details);
 
         // delivery address id storred in session should be deleted
         $this->assertNull($this->getSession()->getVariable("deladrid"));
@@ -523,26 +530,26 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $this->setConfigParam("blShowVATForDelivery", false);
 
         // preparing config
-        $oPayPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
         // preparing delyvery set
-        $aDeliverySetList = array();
+        $deliverySetList = array();
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->load("oxdefaultadmin");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->load("oxdefaultadmin");
 
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment'));
-        $oBasket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment'));
+        $basket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
 
         // preparing
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $this->assertEquals(0, $oDispatcher->UNITsetDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket));
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $this->assertEquals(0, $dispatcher->setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket));
 
-        $aPayPalParams = $oPayPalService->getCaller()->getParameters();
+        $payPalParams = $payPalService->getCaller()->getParameters();
 
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONNAME0"]);
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONLABEL0"]);
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONNAME0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONLABEL0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
     }
 
     /**
@@ -556,27 +563,27 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $this->setConfigParam("blShowVATForDelivery", false);
 
         // preparing config
-        $oPayPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
         // preparing delivery set
-        $aDeliverySetList = array("oxidstandart" => "DeliverySet Name");
+        $deliverySetList = array("oxidstandart" => "DeliverySet Name");
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
 
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment'));
-        $oBasket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment'));
+        $basket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("_isPayPalInDeliverySet"));
-        $oDispatcher->expects($this->once())->method("_isPayPalInDeliverySet")->with($this->equalTo("oxidstandart"), $this->equalTo(5), $this->equalTo($oUser))->will($this->returnValue(false));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("isPayPalInDeliverySet"));
+        $dispatcher->expects($this->once())->method("isPayPalInDeliverySet")->with($this->equalTo("oxidstandart"), $this->equalTo(5), $this->equalTo($user))->will($this->returnValue(false));
 
-        $this->assertEquals(0, $oDispatcher->UNITsetDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket));
+        $this->assertEquals(0, $dispatcher->setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket));
 
-        $aPayPalParams = $oPayPalService->getCaller()->getParameters();
+        $payPalParams = $payPalService->getCaller()->getParameters();
 
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONNAME0"]);
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONLABEL0"]);
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONNAME0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONLABEL0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
     }
 
     /**
@@ -589,32 +596,43 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $this->setConfigParam("blShowVATForDelivery", false);
 
         // preparing config
-        $oPayPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
         // preparing delivery set
-        $aDeliverySetList = array("oxidstandart" => "DeliverySet Name");
+        $deliverySetList = array("oxidstandart" => "DeliverySet Name");
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
 
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment'));
-        $oBasket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment'));
+        $basket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
 
-        $oDeliveryList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries'));
-        $oDeliveryList->expects($this->once())->method("hasDeliveries")->with($this->equalTo($oBasket), $this->equalTo($oUser), $this->equalTo("testCountryId"), $this->equalTo("oxidstandart"))->will($this->returnValue(false));
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $oDeliveryList);
+        $deliveryList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries'));
+        $deliveryList->expects($this->once())->method("hasDeliveries")->with($this->equalTo($basket), $this->equalTo($user), $this->equalTo("testCountryId"), $this->equalTo("oxidstandart"))->will($this->returnValue(false));
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $deliveryList);
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("_isPayPalInDeliverySet"));
-        $oDispatcher->expects($this->once())->method("_isPayPalInDeliverySet")->with($this->equalTo("oxidstandart"), $this->equalTo(5), $this->equalTo($oUser))->will($this->returnValue(true));
+        $dispatcher = $this->getMock(
+            \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class,
+            array("isPayPalInDeliverySet")
+        );
+        $dispatcher
+            ->expects($this->once())
+            ->method("isPayPalInDeliverySet")
+            ->with(
+                $this->equalTo("oxidstandart"),
+                $this->equalTo(5),
+                $this->equalTo($user)
+            )
+            ->will($this->returnValue(true));
 
-        $this->assertEquals(0, $oDispatcher->UNITsetDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket));
+        $this->assertEquals(0, $dispatcher->setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket));
 
-        $aPayPalParams = $oPayPalService->getCaller()->getParameters();
+        $payPalParams = $payPalService->getCaller()->getParameters();
 
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONNAME0"]);
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONLABEL0"]);
-        $this->assertNull($aPayPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONNAME0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONLABEL0"]);
+        $this->assertNull($payPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
     }
 
     /**
@@ -631,59 +649,59 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      * Test case for \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::_setDeliverySetListForCallbackResponse()
      * Deliveries found in selected delivery set
      *
-     * @param bool $blIsNettoMode if netto mode true
+     * @param bool $isNetMode if net mode true
      *
      * @dataProvider testSetDeliverySetListForCallbackResponse_deliveriesFitsInDeliverySet_dataProvider
      */
-    public function testSetDeliverySetListForCallbackResponse_deliveriesFitsInDeliverySet($blIsNettoMode)
+    public function testSetDeliverySetListForCallbackResponse_deliveriesFitsInDeliverySet($isNetMode)
     {
         // preparing config
-        $oPayPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
         // preparing delivery set
-        $aDeliverySetList = array("oxidstandart" => "DeliverySet Name");
+        $deliverySetList = array("oxidstandart" => "DeliverySet Name");
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
 
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment', 'getAdditionalServicesVatPercent', 'isCalculationModeNetto', 'getPayPalBasketVatValue'));
-        $oBasket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
-        $oBasket->expects($this->once())->method('getAdditionalServicesVatPercent')->will($this->returnValue(0));
-        $oBasket->expects($this->any())->method('isCalculationModeNetto')->will($this->returnValue($blIsNettoMode));
-        $oBasket->expects($this->any())->method('getPayPalBasketVatValue')->will($this->returnValue(13.12));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment', 'getAdditionalServicesVatPercent', 'isCalculationModeNetto', 'getPayPalBasketVatValue'));
+        $basket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
+        $basket->expects($this->once())->method('getAdditionalServicesVatPercent')->will($this->returnValue(0));
+        $basket->expects($this->any())->method('isCalculationModeNetto')->will($this->returnValue($isNetMode));
+        $basket->expects($this->any())->method('getPayPalBasketVatValue')->will($this->returnValue(13.12));
 
         // preparing delivery
-        $oPrice = new \OxidEsales\Eshop\Core\Price();
-        $oPrice->setPrice(27);
+        $price = new \OxidEsales\Eshop\Core\Price();
+        $price->setPrice(27);
 
-        $oDelivery = $this->getMock(\OxidEsales\Eshop\Application\Model\Delivery::class, array('getDeliveryPrice'));
-        $oDelivery->expects($this->once())->method('getDeliveryPrice')->with($this->equalTo(0))->will($this->returnValue($oPrice));
-        $aDeliveryList = array($oDelivery);
+        $delivery = $this->getMock(\OxidEsales\Eshop\Application\Model\Delivery::class, array('getDeliveryPrice'));
+        $delivery->expects($this->once())->method('getDeliveryPrice')->with($this->equalTo(0))->will($this->returnValue($price));
+        $deliveryList = array($delivery);
 
-        $oDeliveryList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries', 'getDeliveryList'));
-        $oDeliveryList->expects($this->once())->method("hasDeliveries")->with($this->equalTo($oBasket), $this->equalTo($oUser), $this->equalTo("testCountryId"), $this->equalTo("oxidstandart"))->will($this->returnValue(true));
-        $oDeliveryList->expects($this->once())->method("getDeliveryList")->with($this->equalTo($oBasket), $this->equalTo($oUser), $this->equalTo("testCountryId"), $this->equalTo("oxidstandart"))->will($this->returnValue($aDeliveryList));
+        $deliveryListProvider = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries', 'getDeliveryList'));
+        $deliveryListProvider->expects($this->once())->method("hasDeliveries")->with($this->equalTo($basket), $this->equalTo($user), $this->equalTo("testCountryId"), $this->equalTo("oxidstandart"))->will($this->returnValue(true));
+        $deliveryListProvider->expects($this->once())->method("getDeliveryList")->with($this->equalTo($basket), $this->equalTo($user), $this->equalTo("testCountryId"), $this->equalTo("oxidstandart"))->will($this->returnValue($deliveryList));
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $oDeliveryList);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $deliveryListProvider);
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("_isPayPalInDeliverySet"));
-        $oDispatcher->expects($this->once())->method("_isPayPalInDeliverySet")->with($this->equalTo("oxidstandart"), $this->equalTo(5), $this->equalTo($oUser))->will($this->returnValue(true));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("isPayPalInDeliverySet"));
+        $dispatcher->expects($this->once())->method("isPayPalInDeliverySet")->with($this->equalTo("oxidstandart"), $this->equalTo(5), $this->equalTo($user))->will($this->returnValue(true));
 
-        $this->assertEquals(1, $oDispatcher->UNITsetDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket));
+        $this->assertEquals(1, $dispatcher->setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket));
 
-        $aPayPalParams = $oPayPalService->getCaller()->getParameters();
+        $payPalParams = $payPalService->getCaller()->getParameters();
 
-        if ($blIsNettoMode) {
-            $this->assertEquals(13.12, $aPayPalParams["L_TAXAMT0"]);
+        if ($isNetMode) {
+            $this->assertEquals(13.12, $payPalParams["L_TAXAMT0"]);
         } else {
-            $this->assertEquals(0, $aPayPalParams["L_TAXAMT0"]);
+            $this->assertEquals(0, $payPalParams["L_TAXAMT0"]);
         }
 
-        $this->assertEquals("DeliverySet Name", $aPayPalParams["L_SHIPPINGOPTIONNAME0"]);
-        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $aPayPalParams["L_SHIPPINGOPTIONLABEL0"]);
-        $this->assertEquals(27, $aPayPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
-        $this->assertEquals('true', $aPayPalParams["L_SHIPPINGOPTIONISDEFAULT0"]);
+        $this->assertEquals("DeliverySet Name", $payPalParams["L_SHIPPINGOPTIONNAME0"]);
+        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $payPalParams["L_SHIPPINGOPTIONLABEL0"]);
+        $this->assertEquals(27, $payPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
+        $this->assertEquals('true', $payPalParams["L_SHIPPINGOPTIONISDEFAULT0"]);
     }
 
     /**
@@ -693,53 +711,53 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     public function testSetDeliverySetListForCallbackResponse_deliveriesFitsInMultipleDeliverySet()
     {
         // preparing config
-        $oPayPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
         // preparing delivery set
-        $aDeliverySetList = array("oxidstandart" => "DeliverySet Name", "oxidstandart2" => "DeliverySet Name 2");
+        $deliverySetList = array("oxidstandart" => "DeliverySet Name", "oxidstandart2" => "DeliverySet Name 2");
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
 
         // setting basket delivery set
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment', "getShippingId", 'getAdditionalServicesVatPercent', 'getPayPalBasketVatValue'));
-        $oBasket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
-        $oBasket->expects($this->once())->method('getShippingId')->will($this->returnValue("oxidstandart2"));
-        $oBasket->expects($this->once())->method('getAdditionalServicesVatPercent')->will($this->returnValue(0));
-        $oBasket->expects($this->any())->method('getPayPalBasketVatValue');
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment', "getShippingId", 'getAdditionalServicesVatPercent', 'getPayPalBasketVatValue'));
+        $basket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
+        $basket->expects($this->once())->method('getShippingId')->will($this->returnValue("oxidstandart2"));
+        $basket->expects($this->once())->method('getAdditionalServicesVatPercent')->will($this->returnValue(0));
+        $basket->expects($this->any())->method('getPayPalBasketVatValue');
 
         // preparing delivery
-        $oPrice = new \OxidEsales\Eshop\Core\Price();
-        $oPrice->setPrice(27);
+        $price = new \OxidEsales\Eshop\Core\Price();
+        $price->setPrice(27);
 
-        $oDelivery = $this->getMock(\OxidEsales\Eshop\Application\Model\Delivery::class, array('getDeliveryPrice'));
-        $oDelivery->expects($this->exactly(2))->method('getDeliveryPrice')->with($this->equalTo(0))->will($this->returnValue($oPrice));
-        $aDeliveryList = array($oDelivery);
+        $delivery = $this->getMock(\OxidEsales\Eshop\Application\Model\Delivery::class, array('getDeliveryPrice'));
+        $delivery->expects($this->exactly(2))->method('getDeliveryPrice')->with($this->equalTo(0))->will($this->returnValue($price));
+        $deliveryList = array($delivery);
 
-        $oDeliveryList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries', 'getDeliveryList'));
-        $oDeliveryList->expects($this->exactly(2))->method("hasDeliveries")->will($this->returnValue(true));
-        $oDeliveryList->expects($this->exactly(2))->method("getDeliveryList")->will($this->returnValue($aDeliveryList));
+        $deliveryListProvider = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries', 'getDeliveryList'));
+        $deliveryListProvider->expects($this->exactly(2))->method("hasDeliveries")->will($this->returnValue(true));
+        $deliveryListProvider->expects($this->exactly(2))->method("getDeliveryList")->will($this->returnValue($deliveryList));
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $oDeliveryList);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $deliveryListProvider);
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("_isPayPalInDeliverySet"));
-        $oDispatcher->expects($this->exactly(2))->method("_isPayPalInDeliverySet")->will($this->returnValue(true));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("isPayPalInDeliverySet"));
+        $dispatcher->expects($this->exactly(2))->method("isPayPalInDeliverySet")->will($this->returnValue(true));
 
-        $this->assertEquals(2, $oDispatcher->UNITsetDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket));
+        $this->assertEquals(2, $dispatcher->setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket));
 
-        $aPayPalParams = $oPayPalService->getCaller()->getParameters();
+        $payPalParams = $payPalService->getCaller()->getParameters();
 
-        $this->assertEquals("DeliverySet Name", $aPayPalParams["L_SHIPPINGOPTIONNAME0"]);
-        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $aPayPalParams["L_SHIPPINGOPTIONLABEL0"]);
-        $this->assertEquals(27, $aPayPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
+        $this->assertEquals("DeliverySet Name", $payPalParams["L_SHIPPINGOPTIONNAME0"]);
+        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $payPalParams["L_SHIPPINGOPTIONLABEL0"]);
+        $this->assertEquals(27, $payPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
 
-        $this->assertEquals("DeliverySet Name 2", $aPayPalParams["L_SHIPPINGOPTIONNAME1"]);
-        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $aPayPalParams["L_SHIPPINGOPTIONLABEL1"]);
-        $this->assertEquals(27, $aPayPalParams["L_SHIPPINGOPTIONAMOUNT1"]);
+        $this->assertEquals("DeliverySet Name 2", $payPalParams["L_SHIPPINGOPTIONNAME1"]);
+        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $payPalParams["L_SHIPPINGOPTIONLABEL1"]);
+        $this->assertEquals(27, $payPalParams["L_SHIPPINGOPTIONAMOUNT1"]);
 
         // second shipping should be active
-        $this->assertEquals('true', $aPayPalParams["L_SHIPPINGOPTIONISDEFAULT1"]);
+        $this->assertEquals('true', $payPalParams["L_SHIPPINGOPTIONISDEFAULT1"]);
     }
 
 
@@ -753,46 +771,46 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $this->setConfigParam("blShowVATForDelivery", true);
 
         // preparing config
-        $oPayPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
         // preparing delivery set
-        $aDeliverySetList = array("oxidstandart" => "DeliverySet Name");
+        $deliverySetList = array("oxidstandart" => "DeliverySet Name");
 
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
 
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment', 'getAdditionalServicesVatPercent', 'getPayPalBasketVatValue'));
-        $oBasket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
-        $oBasket->expects($this->once())->method('getAdditionalServicesVatPercent')->will($this->returnValue(19));
-        $oBasket->expects($this->any())->method('getPayPalBasketVatValue');
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPriceForPayment', 'getAdditionalServicesVatPercent', 'getPayPalBasketVatValue'));
+        $basket->expects($this->once())->method('getPriceForPayment')->will($this->returnValue(5));
+        $basket->expects($this->once())->method('getAdditionalServicesVatPercent')->will($this->returnValue(19));
+        $basket->expects($this->any())->method('getPayPalBasketVatValue');
 
         // preparing delivery
-        $oPrice = new \OxidEsales\Eshop\Core\Price();
-        $oPrice->setPrice(27);
+        $price = new \OxidEsales\Eshop\Core\Price();
+        $price->setPrice(27);
 
         // delivery VAT should be passed to "getDeliveryPrice" method
-        $oDelivery = $this->getMock(\OxidEsales\Eshop\Application\Model\Delivery::class, array('getDeliveryPrice'));
-        $oDelivery->expects($this->once())->method('getDeliveryPrice')->with($this->equalTo(19))->will($this->returnValue($oPrice));
-        $aDeliveryList = array($oDelivery);
+        $delivery = $this->getMock(\OxidEsales\Eshop\Application\Model\Delivery::class, array('getDeliveryPrice'));
+        $delivery->expects($this->once())->method('getDeliveryPrice')->with($this->equalTo(19))->will($this->returnValue($price));
+        $deliveryList = array($delivery);
 
-        $oDeliveryList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries', 'getDeliveryList'));
-        $oDeliveryList->expects($this->once())->method("hasDeliveries")->will($this->returnValue(true));
-        $oDeliveryList->expects($this->once())->method("getDeliveryList")->will($this->returnValue($aDeliveryList));
+        $deliveryListProvider = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliveryList::class, array('hasDeliveries', 'getDeliveryList'));
+        $deliveryListProvider->expects($this->once())->method("hasDeliveries")->will($this->returnValue(true));
+        $deliveryListProvider->expects($this->once())->method("getDeliveryList")->will($this->returnValue($deliveryList));
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $oDeliveryList);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliveryList::class, $deliveryListProvider);
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("_isPayPalInDeliverySet"));
-        $oDispatcher->expects($this->once())->method("_isPayPalInDeliverySet")->will($this->returnValue(true));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("isPayPalInDeliverySet"));
+        $dispatcher->expects($this->once())->method("isPayPalInDeliverySet")->will($this->returnValue(true));
 
-        $this->assertEquals(1, $oDispatcher->UNITsetDeliverySetListForCallbackResponse($oPayPalService, $aDeliverySetList, $oUser, $oBasket));
+        $this->assertEquals(1, $dispatcher->setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket));
 
-        $aPayPalParams = $oPayPalService->getCaller()->getParameters();
+        $payPalParams = $payPalService->getCaller()->getParameters();
 
-        $this->assertEquals("DeliverySet Name", $aPayPalParams["L_SHIPPINGOPTIONNAME0"]);
-        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $aPayPalParams["L_SHIPPINGOPTIONLABEL0"]);
-        $this->assertEquals(27, $aPayPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
-        $this->assertEquals('true', $aPayPalParams["L_SHIPPINGOPTIONISDEFAULT0"]);
+        $this->assertEquals("DeliverySet Name", $payPalParams["L_SHIPPINGOPTIONNAME0"]);
+        $this->assertEquals(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), $payPalParams["L_SHIPPINGOPTIONLABEL0"]);
+        $this->assertEquals(27, $payPalParams["L_SHIPPINGOPTIONAMOUNT0"]);
+        $this->assertEquals('true', $payPalParams["L_SHIPPINGOPTIONISDEFAULT0"]);
     }
 
     /**
@@ -800,27 +818,27 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetCallBackUser()
     {
-        $aPayPalData["SHIPTOSTREET"] = "testStreetName str. 12a";
-        $aPayPalData["SHIPTOCITY"] = "testCity";
-        $aPayPalData["SHIPTOSTATE"] = "SS";
-        $aPayPalData["SHIPTOCOUNTRY"] = "US";
-        $aPayPalData["SHIPTOZIP"] = "testZip";
+        $payPalData["SHIPTOSTREET"] = "testStreetName str. 12a";
+        $payPalData["SHIPTOCITY"] = "testCity";
+        $payPalData["SHIPTOSTATE"] = "SS";
+        $payPalData["SHIPTOCOUNTRY"] = "US";
+        $payPalData["SHIPTOZIP"] = "testZip";
 
         $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, new \OxidEsales\PayPalModule\Model\User());
         $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new \OxidEsales\PayPalModule\Model\Address());
 
         // preparing
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
 
-        $oPayPalUser = $oDispatcher->UNITgetCallBackUser($aPayPalData);
+        $payPalUser = $dispatcher->getCallBackUser($payPalData);
 
-        $this->assertTrue(is_string($oPayPalUser->getId()));
-        $this->assertEquals('testStreetName str.', $oPayPalUser->oxuser__oxstreet->value);
-        $this->assertEquals('12a', $oPayPalUser->oxuser__oxstreetnr->value);
-        $this->assertEquals('testCity', $oPayPalUser->oxuser__oxcity->value);
-        $this->assertEquals('testZip', $oPayPalUser->oxuser__oxzip->value);
-        $this->assertEquals('8f241f11096877ac0.98748826', $oPayPalUser->oxuser__oxcountryid->value);
-        $this->assertEquals('333', $oPayPalUser->oxuser__oxstateid->value);
+        $this->assertTrue(is_string($payPalUser->getId()));
+        $this->assertEquals('testStreetName str.', $payPalUser->oxuser__oxstreet->value);
+        $this->assertEquals('12a', $payPalUser->oxuser__oxstreetnr->value);
+        $this->assertEquals('testCity', $payPalUser->oxuser__oxcity->value);
+        $this->assertEquals('testZip', $payPalUser->oxuser__oxzip->value);
+        $this->assertEquals('8f241f11096877ac0.98748826', $payPalUser->oxuser__oxcountryid->value);
+        $this->assertEquals('333', $payPalUser->oxuser__oxstateid->value);
     }
 
     /**
@@ -834,14 +852,14 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         // setting user id to session
         $this->setSessionParam("oepaypal-userId", null);
 
-        $oTestUser = new \OxidEsales\Eshop\Application\Model\User();
-        $oTestUser->setId("testUserId");
+        $testUser = new \OxidEsales\Eshop\Application\Model\User();
+        $testUser->setId("testUserId");
 
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getUser"));
-        $oDispatcher->expects($this->once())->method("getUser")->will($this->returnValue($oTestUser));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array("getUser"));
+        $dispatcher->expects($this->once())->method("getUser")->will($this->returnValue($testUser));
 
-        $oPayPalUser = $oDispatcher->UNITgetPayPalUser();
-        $this->assertEquals("testUserId", $oPayPalUser->getId());
+        $payPalUser = $dispatcher->getPayPalUser();
+        $this->assertEquals("testUserId", $payPalUser->getId());
     }
 
     /**
@@ -854,9 +872,9 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         // setting user id to session
         $this->setSessionParam("oepaypal-userId", "oxdefaultadmin");
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $oPayPalUser = $oDispatcher->UNITgetPayPalUser();
-        $this->assertEquals("oxdefaultadmin", $oPayPalUser->getId());
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $payPalUser = $dispatcher->getPayPalUser();
+        $this->assertEquals("oxdefaultadmin", $payPalUser->getId());
     }
 
     /**
@@ -864,19 +882,19 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testExtractShippingId()
     {
-        $oLang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array("translateString"));
-        $oLang->expects($this->once())->method("translateString")->with($this->equalTo("OEPAYPAL_PRICE"))->will($this->returnValue("Price:"));
-        $this->addModuleObject(\OxidEsales\Eshop\Core\Language::class, $oLang);
+        $lang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array("translateString"));
+        $lang->expects($this->once())->method("translateString")->with($this->equalTo("OEPAYPAL_PRICE"))->will($this->returnValue("Price:"));
+        $this->addModuleObject(\OxidEsales\Eshop\Core\Language::class, $lang);
 
-        $oPayPalConfig = $this->_createStub('ePayPalConfig', array('getCharset' => 'UTF-8'));
+        $payPalConfig = $this->_createStub('ePayPalConfig', array('getCharset' => 'UTF-8'));
 
-        $aDeliverySetList = array("oxidstandart" => "Delivery Set Name");
-        $this->setSessionParam("oepaypal-oxDelSetList", $aDeliverySetList);
+        $deliverySetList = array("oxidstandart" => "Delivery Set Name");
+        $this->setSessionParam("oepaypal-oxDelSetList", $deliverySetList);
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $oDispatcher->setPayPalConfig($oPayPalConfig);
-        $sId = $oDispatcher->UNITextractShippingId("Delivery Set Name Price:", null);
-        $this->assertEquals("oxidstandart", $sId);
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $dispatcher->setPayPalConfig($payPalConfig);
+        $id = $dispatcher->extractShippingId("Delivery Set Name Price:", null);
+        $this->assertEquals("oxidstandart", $id);
     }
 
     /**
@@ -884,26 +902,26 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testIsPaymentValidForUserCountry()
     {
-        $aPaymentCountries = array("testCountryId");
+        $paymentCountries = array("testCountryId");
 
-        $oPayment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("load", "getCountries"));
-        $oPayment->expects($this->atLeastOnce())->method("load")->with($this->equalTo("oxidpaypal"));
-        $oPayment->expects($this->atLeastOnce())->method("getCountries")->will($this->returnValue($aPaymentCountries));;
+        $payment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("load", "getCountries"));
+        $payment->expects($this->atLeastOnce())->method("load")->with($this->equalTo("oxidpaypal"));
+        $payment->expects($this->atLeastOnce())->method("getCountries")->will($this->returnValue($paymentCountries));;
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Payment::class, $oPayment);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Payment::class, $payment);
 
-        $oUser1 = new \OxidEsales\Eshop\Application\Model\User();
-        $oUser1->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
+        $user1 = new \OxidEsales\Eshop\Application\Model\User();
+        $user1->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
 
-        $oUser2 = new \OxidEsales\Eshop\Application\Model\User();
-        $oUser2->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId_2");
+        $user2 = new \OxidEsales\Eshop\Application\Model\User();
+        $user2->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId_2");
 
-        $oUser3 = new \OxidEsales\Eshop\Application\Model\User();
+        $user3 = new \OxidEsales\Eshop\Application\Model\User();
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $this->assertTrue($oDispatcher->UNITisPaymentValidForUserCountry($oUser1));
-        $this->assertFalse($oDispatcher->UNITisPaymentValidForUserCountry($oUser2));
-        $this->assertFalse($oDispatcher->UNITisPaymentValidForUserCountry($oUser3));
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $this->assertTrue($dispatcher->isPaymentValidForUserCountry($user1));
+        $this->assertFalse($dispatcher->isPaymentValidForUserCountry($user2));
+        $this->assertFalse($dispatcher->isPaymentValidForUserCountry($user3));
     }
 
     /**
@@ -912,18 +930,18 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testIsPaymentValidForUserCountry_noAssignedCountries()
     {
-        $aPaymentCountries = array();
+        $paymentCountries = array();
 
-        $oPayment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("load", "getCountries"));
-        $oPayment->expects($this->atLeastOnce())->method("load")->with($this->equalTo("oxidpaypal"));
-        $oPayment->expects($this->atLeastOnce())->method("getCountries")->will($this->returnValue($aPaymentCountries));;
+        $payment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("load", "getCountries"));
+        $payment->expects($this->atLeastOnce())->method("load")->with($this->equalTo("oxidpaypal"));
+        $payment->expects($this->atLeastOnce())->method("getCountries")->will($this->returnValue($paymentCountries));;
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Payment::class, $oPayment);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Payment::class, $payment);
 
-        $oUser1 = new \OxidEsales\Eshop\Application\Model\User();
+        $user1 = new \OxidEsales\Eshop\Application\Model\User();
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $this->assertTrue($oDispatcher->UNITisPaymentValidForUserCountry($oUser1));
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $this->assertTrue($dispatcher->isPaymentValidForUserCountry($user1));
     }
 
     /**
@@ -931,16 +949,16 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testIsPayPalInDeliverySet()
     {
-        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $user = new \OxidEsales\Eshop\Application\Model\User();
 
-        $aPaymentList = array("oxidpaypal" => "1", "oxidstandart" => "2");
-        $oPaymentList = $this->getMock(\OxidEsales\Eshop\Application\Model\PaymentList::class, array("getPaymentList"));
-        $oPaymentList->expects($this->once())->method("getPaymentList")->with($this->equalTo("testDelSetId"), $this->equalTo(5), $this->equalTo($oUser))->will($this->returnValue($aPaymentList));;
+        $paymentList = array("oxidpaypal" => "1", "oxidstandart" => "2");
+        $paymentListProvider = $this->getMock(\OxidEsales\Eshop\Application\Model\PaymentList::class, array("getPaymentList"));
+        $paymentListProvider->expects($this->once())->method("getPaymentList")->with($this->equalTo("testDelSetId"), $this->equalTo(5), $this->equalTo($user))->will($this->returnValue($paymentList));;
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\PaymentList::class, $oPaymentList);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\PaymentList::class, $paymentListProvider);
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $this->assertTrue($oDispatcher->UNITisPayPalInDeliverySet("testDelSetId", 5, $oUser));
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $this->assertTrue($dispatcher->isPayPalInDeliverySet("testDelSetId", 5, $user));
     }
 
     /**
@@ -949,16 +967,16 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testIsPayPalInDeliverySet_notInList()
     {
-        $oUser = new \OxidEsales\Eshop\Application\Model\User();
+        $user = new \OxidEsales\Eshop\Application\Model\User();
 
-        $aPaymentList = array("oxidstandart" => "2");
-        $oPaymentList = $this->getMock(\OxidEsales\Eshop\Application\Model\PaymentList::class, array("getPaymentList"));
-        $oPaymentList->expects($this->once())->method("getPaymentList")->with($this->equalTo("testDelSetId"), $this->equalTo(5), $this->equalTo($oUser))->will($this->returnValue($aPaymentList));
+        $paymentList = array("oxidstandart" => "2");
+        $paymentList = $this->getMock(\OxidEsales\Eshop\Application\Model\PaymentList::class, array("getPaymentList"));
+        $paymentList->expects($this->once())->method("getPaymentList")->with($this->equalTo("testDelSetId"), $this->equalTo(5), $this->equalTo($user))->will($this->returnValue($paymentList));
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\PaymentList::class, $oPaymentList);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\PaymentList::class, $paymentList);
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $this->assertFalse($oDispatcher->UNITisPayPalInDeliverySet("testDelSetId", 5, $oUser));
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $this->assertFalse($dispatcher->isPayPalInDeliverySet("testDelSetId", 5, $user));
     }
 
     /**
@@ -966,15 +984,15 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testSetPayPalIsNotAvailable()
     {
-        $oPayPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $oDispatcher->UNITsetPayPalIsNotAvailable($oPayPalService);
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $dispatcher->setPayPalIsNotAvailable($payPalService);
 
-        $aPayPalParams = $oPayPalService->getCaller()->getParameters();
+        $payPalParams = $payPalService->getCaller()->getParameters();
 
-        $this->assertEquals("61.0", $aPayPalParams["CALLBACKVERSION"]);
-        $this->assertEquals("1", $aPayPalParams["NO_SHIPPING_OPTION_DETAILS"]);
+        $this->assertEquals("61.0", $payPalParams["CALLBACKVERSION"]);
+        $this->assertEquals("1", $payPalParams["NO_SHIPPING_OPTION_DETAILS"]);
     }
 
     /**
@@ -982,16 +1000,16 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetDeliverySetList()
     {
-        $oUser = new \OxidEsales\Eshop\Application\Model\User();
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
+        $user = new \OxidEsales\Eshop\Application\Model\User();
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field("testCountryId");
 
-        $oDelSetList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, array("getDeliverySetList"));
-        $oDelSetList->expects($this->once())->method("getDeliverySetList")->with($this->equalTo($oUser), $this->equalTo("testCountryId"))->will($this->returnValue("testValue"));
+        $delSetList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, array("getDeliverySetList"));
+        $delSetList->expects($this->once())->method("getDeliverySetList")->with($this->equalTo($user), $this->equalTo("testCountryId"))->will($this->returnValue("testValue"));
 
-        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, $oDelSetList);
+        $this->addModuleObject(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, $delSetList);
 
-        $oDispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $this->assertEquals("testValue", $oDispatcher->UNITgetDeliverySetList($oUser));
+        $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
+        $this->assertEquals("testValue", $dispatcher->getDeliverySetList($user));
     }
 
     /**
@@ -1080,7 +1098,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
 
         $article = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
         $article->disableLazyLoading();
-        $article->setId(substr_replace( \OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUId(), '_', 0, 1 ));
+        $article->setId(substr_replace(\OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUId(), '_', 0, 1));
         $article->oxarticles__oxprice = new \OxidEsales\Eshop\Core\Field('8.0', \OxidEsales\Eshop\Core\Field::T_RAW);
         $article->oxarticles__oxartnum = new \OxidEsales\Eshop\Core\Field('666-T-V', \OxidEsales\Eshop\Core\Field::T_RAW);
         $article->oxarticles__oxactive = new \OxidEsales\Eshop\Core\Field('1', \OxidEsales\Eshop\Core\Field::T_RAW);
@@ -1097,12 +1115,12 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $payPalService->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($details));
 
         $proxy = $this->getProxyClassName('\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher');
-        $dispatcher = $this->getMock($proxy, array('getPayPalCheckoutService', '_isPayPalPaymentValid'));
-        $dispatcher->expects($this->any())->method('_isPayPalPaymentValid')->will($this->returnValue(true));
+        $dispatcher = $this->getMock($proxy, array('getPayPalCheckoutService', 'isPayPalPaymentValid'));
+        $dispatcher->expects($this->any())->method('isPayPalPaymentValid')->will($this->returnValue(true));
         $dispatcher->expects($this->any())->method('getPayPalCheckoutService')->will($this->returnValue($payPalService));
 
         $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array('addErrorToDisplay'));
-        $utilsView->expects($this->once())->method('addErrorToDisplay')-> with($this->equalTo('OEPAYPAL_ORDER_TOTAL_HAS_CHANGED'));
+        $utilsView->expects($this->once())->method('addErrorToDisplay')->with($this->equalTo('OEPAYPAL_ORDER_TOTAL_HAS_CHANGED'));
         $this->addModuleObject(\OxidEsales\Eshop\Core\UtilsView::class, $utilsView);
 
         $this->assertSame('basket', $dispatcher->getExpressCheckoutDetails());
@@ -1129,7 +1147,6 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $basket->calculateBasket(true);
         $this->assertSame(6.72, $basket->getNettoSum());
         $this->assertSame(8.0, $basket->getBruttoSum());
-
     }
 
     /**
@@ -1151,7 +1168,6 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
 
         $userComponent = oxNew(\OxidEsales\Eshop\Application\Component\UserComponent::class);
         $this->assertSame('payment', $userComponent->changeUser());
-
     }
 
     /**
@@ -1194,8 +1210,8 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $paypalServiceStub = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('getExpressCheckoutDetails'));
         $paypalServiceStub->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($paypalExpressResponse));
 
-        $paypalExpressCheckoutDispatcherPartialStub = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array('getPayPalCheckoutService', '_isPayPalPaymentValid'));
-        $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('_isPayPalPaymentValid')->will($this->returnValue(true));
+        $paypalExpressCheckoutDispatcherPartialStub = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array('getPayPalCheckoutService', 'isPayPalPaymentValid'));
+        $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('isPayPalPaymentValid')->will($this->returnValue(true));
         $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('getPayPalCheckoutService')->will($this->returnValue($paypalServiceStub));
 
         /** @var \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher $paypalExpressCheckoutDispatcherPartialStub */
@@ -1203,10 +1219,10 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $controllerNameFromPaypalExpressCheckout = $paypalExpressCheckoutDispatcherPartialStub->getExpressCheckoutDetails();
 
         $messageToCoverBugFix = 'Something went wrong during the calculation of Total sum for active basket. ' .
-            'This test case was written to cover the fix for the bug #6565. ' .
-            'More contextual information could be found at: https://bugs.oxid-esales.com/view.php?id=6565';
+                                'This test case was written to cover the fix for the bug #6565. ' .
+                                'More contextual information could be found at: https://bugs.oxid-esales.com/view.php?id=6565';
         $messageForWrongControllerName = 'The expected controller name "order" was not provided by PayPal Express ' .
-            'Checkout process. ' . $messageToCoverBugFix;
+                                         'Checkout process. ' . $messageToCoverBugFix;
 
         $this->assertSame(
             $controllerNameWhichIndicatesSuccess,
@@ -1217,9 +1233,9 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $expectedTotalBasketSum = $productPrice + $shippingCost;
         $paypalExpressTotalBasketSum = $this->getSession()->getVariable("oepaypal-basketAmount");
         $messageForWrongBasketTotal = 'The Total sum of basket from PayPal Express Checkout does not match the ' .
-            'expected one. ' . $messageToCoverBugFix;
+                                      'expected one. ' . $messageToCoverBugFix;
 
-        $this->assertSame((float)$expectedTotalBasketSum, $paypalExpressTotalBasketSum, $messageForWrongBasketTotal);
+        $this->assertSame((float) $expectedTotalBasketSum, $paypalExpressTotalBasketSum, $messageForWrongBasketTotal);
     }
 
     /**
@@ -1298,6 +1314,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
 
 class modOxVatSelector extends \OxidEsales\Eshop\Application\Model\VatSelector
 {
+
     public static function cleanInstanceCache()
     {
         self::$_aUserVatCache = array();

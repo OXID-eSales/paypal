@@ -28,8 +28,8 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetWidthDefault()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $this->assertEquals(190, $oLogo->getWidth());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $this->assertEquals(190, $logo->getWidth());
     }
 
     /**
@@ -37,9 +37,9 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetWidthIsSet()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $oLogo->setWidth(200);
-        $this->assertEquals(200, $oLogo->getWidth());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $logo->setWidth(200);
+        $this->assertEquals(200, $logo->getWidth());
     }
 
     /**
@@ -47,8 +47,8 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetHeightDefault()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $this->assertEquals(160, $oLogo->getHeight());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $this->assertEquals(160, $logo->getHeight());
     }
 
     /**
@@ -56,9 +56,9 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetHeightIsSet()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $oLogo->setHeight(200);
-        $this->assertEquals(200, $oLogo->getHeight());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $logo->setHeight(200);
+        $this->assertEquals(200, $logo->getHeight());
     }
 
     /**
@@ -66,8 +66,8 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetImageNameNotSet()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $this->assertNull($oLogo->getImageName());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $this->assertNull($logo->getImageName());
     }
 
     /**
@@ -75,9 +75,9 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetImageNameIsSet()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $oLogo->setImageName("name.png");
-        $this->assertEquals("name.png", $oLogo->getImageName());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $logo->setImageName("name.png");
+        $this->assertEquals("name.png", $logo->getImageName());
     }
 
     /**
@@ -85,8 +85,8 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetImageDirNotSet()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $this->assertNull($oLogo->getImageDir());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $this->assertNull($logo->getImageDir());
     }
 
     /**
@@ -94,9 +94,9 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetImageDirIsSet()
     {
-        $oLogo = new \OxidEsales\PayPalModule\Core\ShopLogo();
-        $oLogo->setImageDir("/var/www");
-        $this->assertEquals("/var/www", $oLogo->getImageDir());
+        $logo = new \OxidEsales\PayPalModule\Core\ShopLogo();
+        $logo->setImageDir("/var/www");
+        $this->assertEquals("/var/www", $logo->getImageDir());
     }
 
     /**
@@ -106,26 +106,26 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function getShopLogoUrlProvider()
     {
-        $sDefaultImageDir = $this->getConfig()->getImageDir();
-        $sDefaultImageDirUrl = $this->getConfig()->getImageUrl();
-        $sDefaultImageName = "logo.png";
-        $iDefaultWidth = 40;
-        $iDefaultHeight = 30;
-        $oDefaultImageHandler = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsPic::class);
-        $sExpectedResized = $sDefaultImageDirUrl . "resized_logo.png";
-        $sExpectedOriginal = $sDefaultImageDirUrl . $sDefaultImageName;
+        $defaultImageDir = $this->getConfig()->getImageDir();
+        $defaultImageDirUrl = $this->getConfig()->getImageUrl();
+        $defaultImageName = "logo.png";
+        $defaultWidth = 40;
+        $defaultHeight = 30;
+        $defaultImageHandler = \OxidEsales\Eshop\Core\Registry::getUtilsPic();
+        $expectedResized = $defaultImageDirUrl . "resized_logo.png";
+        $expectedOriginal = $defaultImageDirUrl . $defaultImageName;
 
         return array(
-            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 30, 30, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, $sExpectedOriginal),
-            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 50, 50, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, $sExpectedResized),
-            array(null, $sDefaultImageDirUrl, $sDefaultImageName, 40, 40, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
-            array($sDefaultImageDir, $sDefaultImageDirUrl, null, 50, 50, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
-            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, $iDefaultWidth, $iDefaultHeight, null, $sExpectedOriginal),
+            array($defaultImageDir, $defaultImageDirUrl, $defaultImageName, 30, 30, $defaultWidth, $defaultHeight, $defaultImageHandler, $expectedOriginal),
+            array($defaultImageDir, $defaultImageDirUrl, $defaultImageName, 50, 50, $defaultWidth, $defaultHeight, $defaultImageHandler, $expectedResized),
+            array(null, $defaultImageDirUrl, $defaultImageName, 40, 40, $defaultWidth, $defaultHeight, $defaultImageHandler, false),
+            array($defaultImageDir, $defaultImageDirUrl, null, 50, 50, $defaultWidth, $defaultHeight, $defaultImageHandler, false),
+            array($defaultImageDir, $defaultImageDirUrl, $defaultImageName, 60, 60, $defaultWidth, $defaultHeight, null, $expectedOriginal),
 
-            array($sDefaultImageDir . "donotexist", $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
-            array($sDefaultImageDir, $sDefaultImageDirUrl, "donotexist.png", 60, 60, $iDefaultWidth, $iDefaultHeight, $oDefaultImageHandler, false),
-            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 60, 60, 2000, 1000, $oDefaultImageHandler, $sExpectedOriginal),
-            array($sDefaultImageDir, $sDefaultImageDirUrl, $sDefaultImageName, 2000, 1000, 60, 60, $oDefaultImageHandler, $sExpectedResized),
+            array($defaultImageDir . "donotexist", $defaultImageDirUrl, $defaultImageName, 60, 60, $defaultWidth, $defaultHeight, $defaultImageHandler, false),
+            array($defaultImageDir, $defaultImageDirUrl, "donotexist.png", 60, 60, $defaultWidth, $defaultHeight, $defaultImageHandler, false),
+            array($defaultImageDir, $defaultImageDirUrl, $defaultImageName, 60, 60, 2000, 1000, $defaultImageHandler, $expectedOriginal),
+            array($defaultImageDir, $defaultImageDirUrl, $defaultImageName, 2000, 1000, 60, 60, $defaultImageHandler, $expectedResized),
 
         );
     }
@@ -135,36 +135,36 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider getShopLogoUrlProvider
      */
-    public function testGetShopLogoUrl($sImageDir, $sImageDirUrl, $sImageName, $iImgWidth, $iImgHeight, $iWidth, $iHeight, $oImageHandler, $sResult)
+    public function testGetShopLogoUrl($imageDir, $imageDirUrl, $imageName, $imgWidth, $imgHeight, $width, $height, $imageHandler, $result)
     {
-        $oLogo = $this->getMock(\OxidEsales\PayPalModule\Core\ShopLogo::class, array('_resizeImage', '_getImageSize'));
-        $oLogo->expects($this->any())->method('_resizeImage')->will($this->returnValue(!empty($oImageHandler)));
-        $oLogo->expects($this->any())->method('_getImageSize')->will($this->returnValue(array('width' => $iImgWidth, 'height' => $iImgHeight)));
+        $logo = $this->getMock(\OxidEsales\PayPalModule\Core\ShopLogo::class, array('resizeImage', 'getImageSize'));
+        $logo->expects($this->any())->method('resizeImage')->will($this->returnValue(!empty($imageHandler)));
+        $logo->expects($this->any())->method('getImageSize')->will($this->returnValue(array('width' => $imgWidth, 'height' => $imgHeight)));
 
-        $oLogo->setImageDir($sImageDir);
-        $oLogo->setImageDirUrl($sImageDirUrl);
-        $oLogo->setImageName($sImageName);
-        $oLogo->setWidth($iWidth);
-        $oLogo->setHeight($iHeight);
-        $oLogo->setImageHandler($oImageHandler);
+        $logo->setImageDir($imageDir);
+        $logo->setImageDirUrl($imageDirUrl);
+        $logo->setImageName($imageName);
+        $logo->setWidth($width);
+        $logo->setHeight($height);
+        $logo->setImageHandler($imageHandler);
 
-        $this->assertEquals($sResult, $oLogo->getShopLogoUrl());
+        $this->assertEquals($result, $logo->getShopLogoUrl());
 
-        $this->_cleanUp($sImageName);
+        $this->cleanUp($imageName);
     }
 
     /**
      * Cleans out the images that are created before image tests
      */
-    protected function _cleanUp($sImageName)
+    protected function cleanUp($imageName)
     {
-        $sImgDir = $this->getConfig()->getImageDir();
+        $imgDir = $this->getConfig()->getImageDir();
 
-        $sLogoDir = $sImgDir . "resized_$sImageName";
-        if (!file_exists($sLogoDir)) {
+        $logoDir = $imgDir . "resized_$imageName";
+        if (!file_exists($logoDir)) {
             return;
         }
 
-        unlink($sLogoDir);
+        unlink($logoDir);
     }
 }

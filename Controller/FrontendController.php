@@ -19,6 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 namespace OxidEsales\PayPalModule\Controller;
+
 /**
  * Main PayPal controller
  */
@@ -27,17 +28,17 @@ class FrontendController extends \OxidEsales\Eshop\Application\Controller\Fronte
     /**
      * @var \OxidEsales\PayPalModule\Core\Request
      */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Core\Logger
      */
-    protected $_oLogger = null;
+    protected $logger = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Core\Config
      */
-    protected $_oPayPalConfig = null;
+    protected $payPalConfig = null;
 
     /**
      * Return request object
@@ -46,11 +47,11 @@ class FrontendController extends \OxidEsales\Eshop\Application\Controller\Fronte
      */
     public function getRequest()
     {
-        if (is_null($this->_oRequest)) {
-            $this->_oRequest = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+        if (is_null($this->request)) {
+            $this->request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
         }
 
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
@@ -60,12 +61,12 @@ class FrontendController extends \OxidEsales\Eshop\Application\Controller\Fronte
      */
     public function getLogger()
     {
-        if (is_null($this->_oLogger)) {
-            $this->_oLogger = oxNew(\OxidEsales\PayPalModule\Core\Logger::class);
-            $this->_oLogger->setLoggerSessionId($this->getSession()->getId());
+        if (is_null($this->logger)) {
+            $this->logger = oxNew(\OxidEsales\PayPalModule\Core\Logger::class);
+            $this->logger->setLoggerSessionId($this->getSession()->getId());
         }
 
-        return $this->_oLogger;
+        return $this->logger;
     }
 
     /**
@@ -75,33 +76,33 @@ class FrontendController extends \OxidEsales\Eshop\Application\Controller\Fronte
      */
     public function getPayPalConfig()
     {
-        if (is_null($this->_oPayPalConfig)) {
+        if (is_null($this->payPalConfig)) {
             $this->setPayPalConfig(oxNew(\OxidEsales\PayPalModule\Core\Config::class));
         }
 
-        return $this->_oPayPalConfig;
+        return $this->payPalConfig;
     }
 
     /**
      * Set PayPal config
      *
-     * @param \OxidEsales\PayPalModule\Core\Config $oPayPalConfig config
+     * @param \OxidEsales\PayPalModule\Core\Config $payPalConfig config
      */
-    public function setPayPalConfig($oPayPalConfig)
+    public function setPayPalConfig($payPalConfig)
     {
-        $this->_oPayPalConfig = $oPayPalConfig;
+        $this->payPalConfig = $payPalConfig;
     }
 
 
     /**
      * Logs passed value.
      *
-     * @param mixed $mValue
+     * @param mixed $value
      */
-    public function log($mValue)
+    public function log($value)
     {
         if ($this->getPayPalConfig()->isLoggingEnabled()) {
-            $this->getLogger()->log($mValue);
+            $this->getLogger()->log($value);
         }
     }
 }

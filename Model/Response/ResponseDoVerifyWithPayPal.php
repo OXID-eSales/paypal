@@ -82,9 +82,9 @@ class ResponseDoVerifyWithPayPal extends \OxidEsales\PayPalModule\Model\Response
      */
     public function isPayPalAck()
     {
-        $aResponse = $this->getData();
+        $response = $this->getData();
 
-        return isset($aResponse[self::PAYPAL_ACK]);
+        return isset($response[self::PAYPAL_ACK]);
     }
 
     /**
@@ -94,7 +94,7 @@ class ResponseDoVerifyWithPayPal extends \OxidEsales\PayPalModule\Model\Response
      */
     public function getReceiverEmail()
     {
-        return $this->_getValue(self::RECEIVER_EMAIL);
+        return $this->getValue(self::RECEIVER_EMAIL);
     }
 
     /**
@@ -104,7 +104,7 @@ class ResponseDoVerifyWithPayPal extends \OxidEsales\PayPalModule\Model\Response
      */
     public function getPaymentStatus()
     {
-        return $this->_getValue(self::PAYPAL_PAYMENT_STATUS);
+        return $this->getValue(self::PAYPAL_PAYMENT_STATUS);
     }
 
     /**
@@ -114,7 +114,7 @@ class ResponseDoVerifyWithPayPal extends \OxidEsales\PayPalModule\Model\Response
      */
     public function getTransactionId()
     {
-        return $this->_getValue(self::PAYPAL_TRANSACTION_ID);
+        return $this->getValue(self::PAYPAL_TRANSACTION_ID);
     }
 
     /**
@@ -124,7 +124,7 @@ class ResponseDoVerifyWithPayPal extends \OxidEsales\PayPalModule\Model\Response
      */
     public function getCurrency()
     {
-        return $this->_getValue(self::MC_CURRENCY);
+        return $this->getValue(self::MC_CURRENCY);
     }
 
     /**
@@ -134,6 +134,6 @@ class ResponseDoVerifyWithPayPal extends \OxidEsales\PayPalModule\Model\Response
      */
     public function getAmount()
     {
-        return $this->_getValue(self::MC_GROSS);
+        return $this->getValue(self::MC_GROSS);
     }
 }

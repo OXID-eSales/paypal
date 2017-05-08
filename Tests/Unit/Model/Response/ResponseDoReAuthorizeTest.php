@@ -31,15 +31,15 @@ class ResponseDoReAuthorizeTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return array
      */
-    protected function _getResponseData()
+    protected function getResponseData()
     {
-        $aData = array(
+        $data = array(
             'AUTHORIZATIONID' => 'authorizationId',
             'CORRELATIONID'   => 'correlationId',
             'PAYMENTSTATUS'   => 'completed'
         );
 
-        return $aData;
+        return $data;
     }
 
     /**
@@ -47,9 +47,9 @@ class ResponseDoReAuthorizeTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetAuthorizationId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoReAuthorize();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('authorizationId', $oResponse->getAuthorizationId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoReAuthorize();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('authorizationId', $response->getAuthorizationId());
     }
 
     /**
@@ -57,9 +57,9 @@ class ResponseDoReAuthorizeTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetCorrelationId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoCapture();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('correlationId', $oResponse->getCorrelationId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoCapture();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('correlationId', $response->getCorrelationId());
     }
 
     /**
@@ -67,8 +67,8 @@ class ResponseDoReAuthorizeTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPaymentStatus()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoReAuthorize();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('completed', $oResponse->getPaymentStatus());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoReAuthorize();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('completed', $response->getPaymentStatus());
     }
 }

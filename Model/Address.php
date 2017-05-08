@@ -31,27 +31,27 @@ class Address extends Address_parent
     /**
      * Creates user shipping address from PayPal data and set to session.
      *
-     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $oDetails PayPal data.
-     * @param string                                                                    $sUserId  user id.
+     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $details PayPal data.
+     * @param string                                                                    $userId  user id.
      */
-    public function createPayPalAddress($oDetails, $sUserId)
+    public function createPayPalAddress($details, $userId)
     {
-        $aAddressData = $this->_prepareDataPayPalAddress($oDetails);
+        $addressData = $this->prepareDataPayPalAddress($details);
 
-        if ($sAddressId = $this->_existPayPalAddress($aAddressData)) {
-            \OxidEsales\Eshop\Core\Registry::getSession()->setVariable("deladrid", $sAddressId);
+        if ($addressId = $this->existPayPalAddress($addressData)) {
+            \OxidEsales\Eshop\Core\Registry::getSession()->setVariable("deladrid", $addressId);
         } else {
-            $this->oxaddress__oxuserid = new \OxidEsales\Eshop\Core\Field($sUserId);
-            $this->oxaddress__oxfname = new \OxidEsales\Eshop\Core\Field($aAddressData['oxfname']);
-            $this->oxaddress__oxlname = new \OxidEsales\Eshop\Core\Field($aAddressData['oxlname']);
-            $this->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field($aAddressData['oxstreet']);
-            $this->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field($aAddressData['oxstreetnr']);
-            $this->oxaddress__oxaddinfo = new \OxidEsales\Eshop\Core\Field($aAddressData['oxaddinfo']);
-            $this->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field($aAddressData['oxcity']);
-            $this->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field($aAddressData['oxcountryid']);
-            $this->oxaddress__oxstateid = new \OxidEsales\Eshop\Core\Field($aAddressData['oxstateid']);
-            $this->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field($aAddressData['oxzip']);
-            $this->oxaddress__oxfon = new \OxidEsales\Eshop\Core\Field($aAddressData['oxfon']);
+            $this->oxaddress__oxuserid = new \OxidEsales\Eshop\Core\Field($userId);
+            $this->oxaddress__oxfname = new \OxidEsales\Eshop\Core\Field($addressData['oxfname']);
+            $this->oxaddress__oxlname = new \OxidEsales\Eshop\Core\Field($addressData['oxlname']);
+            $this->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field($addressData['oxstreet']);
+            $this->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field($addressData['oxstreetnr']);
+            $this->oxaddress__oxaddinfo = new \OxidEsales\Eshop\Core\Field($addressData['oxaddinfo']);
+            $this->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field($addressData['oxcity']);
+            $this->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field($addressData['oxcountryid']);
+            $this->oxaddress__oxstateid = new \OxidEsales\Eshop\Core\Field($addressData['oxstateid']);
+            $this->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field($addressData['oxzip']);
+            $this->oxaddress__oxfon = new \OxidEsales\Eshop\Core\Field($addressData['oxfon']);
             $this->save();
 
             \OxidEsales\Eshop\Core\Registry::getSession()->setVariable("deladrid", $this->getId());
@@ -61,88 +61,88 @@ class Address extends Address_parent
     /**
      * Prepare address data array from PayPal response data.
      *
-     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $oDetails - PayPal data
+     * @param \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails $details - PayPal data
      *
      * @return array
      */
-    protected function _prepareDataPayPalAddress($oDetails)
+    protected function prepareDataPayPalAddress($details)
     {
-        $aAddressData = array();
+        $addressData = array();
 
-        $oFullName = oxNew(\OxidEsales\PayPalModule\Core\FullName::class, $oDetails->getShipToName());
+        $fullName = oxNew(\OxidEsales\PayPalModule\Core\FullName::class, $details->getShipToName());
 
-        $aAddressData['oxfname'] = $oFullName->getFirstName();
-        $aAddressData['oxlname'] = $oFullName->getLastName();
+        $addressData['oxfname'] = $fullName->getFirstName();
+        $addressData['oxlname'] = $fullName->getLastName();
 
-        $aStreet = $this->splitShipToStreetPayPalAddress($oDetails->getShipToStreet());
-        $aAddressData['oxstreet'] = $aStreet['street'];
-        $aAddressData['oxstreetnr'] = $aStreet['streetnr'];
+        $street = $this->splitShipToStreetPayPalAddress($details->getShipToStreet());
+        $addressData['oxstreet'] = $street['street'];
+        $addressData['oxstreetnr'] = $street['streetnr'];
 
-        $aAddressData['oxcity'] = $oDetails->getShipToCity();
+        $addressData['oxcity'] = $details->getShipToCity();
 
-        $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
-        $sCountryId = $oCountry->getIdByCode($oDetails->getShipToCountryCode());
-        $aAddressData['oxcountryid'] = $sCountryId;
+        $country = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
+        $countryId = $country->getIdByCode($details->getShipToCountryCode());
+        $addressData['oxcountryid'] = $countryId;
 
-        if ($oDetails->getShipToState()) {
-            $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
-            $sStateId = $oState->getIdByCode($oDetails->getShipToState(), $sCountryId);
+        if ($details->getShipToState()) {
+            $state = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
+            $stateId = $state->getIdByCode($details->getShipToState(), $countryId);
         }
-        $aAddressData['oxstateid'] = $sStateId;
+        $addressData['oxstateid'] = $stateId;
 
-        $aAddressData['oxzip'] = $oDetails->getShipToZip();
-        $aAddressData['oxfon'] = $oDetails->getShipToPhoneNumber();
-        $aAddressData['oxaddinfo'] = $oDetails->getShipToStreet2();
+        $addressData['oxzip'] = $details->getShipToZip();
+        $addressData['oxfon'] = $details->getShipToPhoneNumber();
+        $addressData['oxaddinfo'] = $details->getShipToStreet2();
 
-        return $aAddressData;
+        return $addressData;
     }
 
     /**
      * Check required fields.
      *
-     * @param array $aAddressData - PayPal data.
+     * @param array $addressData - PayPal data.
      *
      * @return bool
      */
-    protected function _checkRequiredFieldsPayPalAddress($aAddressData)
+    protected function checkRequiredFieldsPayPalAddress($addressData)
     {
-        $aReqFields = $this->getConfig()->getConfigParam('aMustFillFields');
+        $reqFields = $this->getConfig()->getConfigParam('aMustFillFields');
 
-        $blResult = true;
+        $result = true;
 
-        foreach ($aReqFields as $sField) {
-            if (strpos($sField, 'oxaddress__') === 0 && empty($aAddressData[str_replace('oxaddress__', '', $sField)])) {
+        foreach ($reqFields as $field) {
+            if (strpos($field, 'oxaddress__') === 0 && empty($addressData[str_replace('oxaddress__', '', $field)])) {
                 return false;
             }
         }
 
-        return $blResult;
+        return $result;
     }
 
     /**
      * Checks if exists PayPal address.
      *
-     * @param array $aAddressData
+     * @param array $addressData
      *
      * @return bool|string
      */
-    protected function _existPayPalAddress($aAddressData)
+    protected function existPayPalAddress($addressData)
     {
-        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
 
-        $sQ = "SELECT `oxid` FROM `oxaddress` WHERE 1 ";
-        $sQ .= " AND `oxfname` = " . $oDb->quote($aAddressData['oxfname']);
-        $sQ .= " AND `oxlname` = " . $oDb->quote($aAddressData['oxlname']);
-        $sQ .= " AND `oxstreet` = " . $oDb->quote($aAddressData['oxstreet']);
-        $sQ .= " AND `oxstreetnr` = " . $oDb->quote($aAddressData['oxstreetnr']);
-        $sQ .= " AND `oxcity` = " . $oDb->quote($aAddressData['oxcity']);
-        $sQ .= " AND `oxcountryid` = " . $oDb->quote($aAddressData['oxcountryid']);
-        $sQ .= " AND `oxstateid` = " . $oDb->quote($aAddressData['oxstateid']);
-        $sQ .= " AND `oxzip` = " . $oDb->quote($aAddressData['oxzip']);
-        $sQ .= " AND `oxfon` = " . $oDb->quote($aAddressData['oxfon']);
+        $query = "SELECT `oxid` FROM `oxaddress` WHERE 1 ";
+        $query .= " AND `oxfname` = " . $db->quote($addressData['oxfname']);
+        $query .= " AND `oxlname` = " . $db->quote($addressData['oxlname']);
+        $query .= " AND `oxstreet` = " . $db->quote($addressData['oxstreet']);
+        $query .= " AND `oxstreetnr` = " . $db->quote($addressData['oxstreetnr']);
+        $query .= " AND `oxcity` = " . $db->quote($addressData['oxcity']);
+        $query .= " AND `oxcountryid` = " . $db->quote($addressData['oxcountryid']);
+        $query .= " AND `oxstateid` = " . $db->quote($addressData['oxstateid']);
+        $query .= " AND `oxzip` = " . $db->quote($addressData['oxzip']);
+        $query .= " AND `oxfon` = " . $db->quote($addressData['oxfon']);
 
-        if ($sAddressId = $oDb->getOne($sQ)) {
-            return $sAddressId;
+        if ($addressId = $db->getOne($query)) {
+            return $addressId;
         }
 
         return false;
@@ -151,41 +151,41 @@ class Address extends Address_parent
     /**
      *  Split street nr from address
      *
-     * @param string $sShipToStreet address string
+     * @param string $shipToStreet address string
      *
      * @return array
      */
-    public function splitShipToStreetPayPalAddress($sShipToStreet)
+    public function splitShipToStreetPayPalAddress($shipToStreet)
     {
-        $aAddress = array();
-        $sShipToStreet = trim($sShipToStreet);
+        $address = array();
+        $shipToStreet = trim($shipToStreet);
 
         // checking if street number is at the end of the address
-        preg_match("/(.*\S)\s+(\d+\s*\S*)$/", $sShipToStreet, $aAddress);
+        preg_match("/(.*\S)\s+(\d+\s*\S*)$/", $shipToStreet, $address);
 
         // checking if street name and number was found
-        if (!empty($aAddress[1]) && $aAddress[2]) {
-            $aAddress['street'] = $aAddress[1];
-            $aAddress['streetnr'] = $aAddress[2];
+        if (!empty($address[1]) && $address[2]) {
+            $address['street'] = $address[1];
+            $address['streetnr'] = $address[2];
 
-            return $aAddress;
+            return $address;
         }
 
         // checking if street number is at the begining of the address
-        preg_match("/(\d+\S*)\s+(.*)$/", $sShipToStreet, $aAddress);
+        preg_match("/(\d+\S*)\s+(.*)$/", $shipToStreet, $address);
 
         // checking if street name and number was found
-        if (!empty($aAddress[1]) && $aAddress[2]) {
-            $aAddress['street'] = $aAddress[2];
-            $aAddress['streetnr'] = $aAddress[1];
+        if (!empty($address[1]) && $address[2]) {
+            $address['street'] = $address[2];
+            $address['streetnr'] = $address[1];
 
-            return $aAddress;
+            return $address;
         }
 
         // it is not possible to resolve address, so assign it without any parsing
-        $aAddress['street'] = $sShipToStreet;
-        $aAddress['streetnr'] = "";
+        $address['street'] = $shipToStreet;
+        $address['streetnr'] = "";
 
-        return $aAddress;
+        return $address;
     }
 }

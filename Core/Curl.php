@@ -21,9 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Core;
 
-if (!defined('CURL_SSLVERSION_TLSv1_2'))
-{
-    define('CURL_SSLVERSION_TLSv1_2', 6);
+if (!defined('CURL_SSLVERSION_TLSV1_2')) {
+    define('CURL_SSLVERSION_TLSV1_2', 6);
 }
 
 /**
@@ -36,39 +35,39 @@ class Curl
      *
      * @var string
      */
-    protected $_sHost = null;
+    protected $host = null;
 
     /**
      * Curl instance.
      *
      * @var resource
      */
-    protected $_rCurl = null;
+    protected $curl = null;
 
     /**
      * Connection Charset.
      *
      * @var string
      */
-    protected $_sConnectionCharset = "UTF-8";
+    protected $connectionCharset = "UTF-8";
 
     /**
      * Data Charset.
      *
      * @var string
      */
-    protected $_sDataCharset = "UTF-8";
+    protected $dataCharset = "UTF-8";
 
     /**
      * Curl default parameters.
      *
      * @var array
      */
-    protected $_aEnvironmentParameters = array(
+    protected $environmentParameters = array(
         'CURLOPT_VERBOSE'        => 0,
         'CURLOPT_SSL_VERIFYPEER' => false,
         'CURLOPT_SSL_VERIFYHOST' => false,
-        'CURLOPT_SSLVERSION'     => CURL_SSLVERSION_TLSv1_2,
+        'CURLOPT_SSLVERSION'     => CURL_SSLVERSION_TLSV1_2,
         'CURLOPT_RETURNTRANSFER' => 1,
         'CURLOPT_POST'           => 1,
         'CURLOPT_HTTP_VERSION'   => CURL_HTTP_VERSION_1_1,
@@ -79,7 +78,7 @@ class Curl
      *
      * @var array | null
      */
-    protected $_aParameters = null;
+    protected $parameters = null;
 
 
     /**
@@ -87,30 +86,30 @@ class Curl
      *
      * @var string | null
      */
-    protected $_sUrlToCall = null;
+    protected $urlToCall = null;
 
     /**
      * Query like "param1=value1&param2=values2.."
      *
      * @return string
      */
-    protected $_sQuery = null;
+    protected $query = null;
 
     /**
      * Curl call header.
      *
      * @var array
      */
-    protected $_aHeader = null;
+    protected $header = null;
 
     /**
      * Sets host.
      *
-     * @param string $sHost
+     * @param string $host
      */
-    public function setHost($sHost)
+    public function setHost($host)
     {
-        $this->_sHost = $sHost;
+        $this->host = $host;
     }
 
     /**
@@ -120,17 +119,17 @@ class Curl
      */
     public function getHost()
     {
-        return $this->_sHost;
+        return $this->host;
     }
 
     /**
      * Set header.
      *
-     * @param array $aHeader
+     * @param array $header
      */
-    public function setHeader($aHeader)
+    public function setHeader($header)
     {
-        $this->_aHeader = $aHeader;
+        $this->header = $header;
     }
 
     /**
@@ -140,31 +139,31 @@ class Curl
      */
     public function getHeader()
     {
-        if (is_null($this->_aHeader)) {
-            $sHost = $this->getHost();
+        if (is_null($this->header)) {
+            $host = $this->getHost();
 
-            $aHeader = array();
-            $aHeader[] = 'POST /cgi-bin/webscr HTTP/1.1';
-            $aHeader[] = 'Content-Type: application/x-www-form-urlencoded';
-            if (isset($sHost)) {
-                $aHeader[] = 'Host: ' . $sHost;
+            $header = array();
+            $header[] = 'POST /cgi-bin/webscr HTTP/1.1';
+            $header[] = 'Content-Type: application/x-www-form-urlencoded';
+            if (isset($host)) {
+                $header[] = 'Host: ' . $host;
             }
-            $aHeader[] = 'Connection: close';
+            $header[] = 'Connection: close';
 
-            $this->setHeader($aHeader);
+            $this->setHeader($header);
         }
 
-        return $this->_aHeader;
+        return $this->header;
     }
 
     /**
      * Set connection charset
      *
-     * @param string $sCharset charset
+     * @param string $charset charset
      */
-    public function setConnectionCharset($sCharset)
+    public function setConnectionCharset($charset)
     {
-        $this->_sConnectionCharset = $sCharset;
+        $this->connectionCharset = $charset;
     }
 
     /**
@@ -174,17 +173,17 @@ class Curl
      */
     public function getConnectionCharset()
     {
-        return $this->_sConnectionCharset;
+        return $this->connectionCharset;
     }
 
     /**
      * Set data charset
      *
-     * @param string $sDataCharset
+     * @param string $dataCharset
      */
-    public function setDataCharset($sDataCharset)
+    public function setDataCharset($dataCharset)
     {
-        $this->_sDataCharset = $sDataCharset;
+        $this->dataCharset = $dataCharset;
     }
 
     /**
@@ -194,7 +193,7 @@ class Curl
      */
     public function getDataCharset()
     {
-        return $this->_sDataCharset;
+        return $this->dataCharset;
     }
 
     /**
@@ -204,28 +203,28 @@ class Curl
      */
     public function getEnvironmentParameters()
     {
-        return $this->_aEnvironmentParameters;
+        return $this->environmentParameters;
     }
 
     /**
      * Sets one of Curl parameter.
      *
-     * @param string $sName  Curl parameter name.
-     * @param mixed  $mValue Curl parameter value
+     * @param string $name  Curl parameter name.
+     * @param mixed  $value Curl parameter value
      */
-    public function setEnvironmentParameter($sName, $mValue)
+    public function setEnvironmentParameter($name, $value)
     {
-        $this->_aEnvironmentParameters[$sName] = $mValue;
+        $this->environmentParameters[$name] = $value;
     }
 
     /**
      * Sets parameters to be added to call url.
      *
-     * @param array $aParameters parameters
+     * @param array $parameters parameters
      */
-    public function setParameters($aParameters)
+    public function setParameters($parameters)
     {
-        $this->_aParameters = $aParameters;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -235,17 +234,17 @@ class Curl
      */
     public function getParameters()
     {
-        return $this->_aParameters;
+        return $this->parameters;
     }
 
     /**
      * Set query like "param1=value1&param2=values2.."
      *
-     * @param string $sQuery
+     * @param string $query
      */
-    public function setQuery($sQuery)
+    public function setQuery($query)
     {
-        $this->_sQuery = $sQuery;
+        $this->query = $query;
     }
 
     /**
@@ -255,34 +254,34 @@ class Curl
      */
     public function getQuery()
     {
-        if (is_null($this->_sQuery)) {
-            $aParams = $this->getParameters();
-            $aParams = array_map(array($this, '_htmlDecode'), $aParams);
-            $aParams = array_map(array($this, '_encode'), $aParams);
+        if (is_null($this->query)) {
+            $params = $this->getParameters();
+            $params = array_map(array($this, 'htmlDecode'), $params);
+            $params = array_map(array($this, 'encode'), $params);
 
-            $this->setQuery(http_build_query($aParams, "", "&"));
+            $this->setQuery(http_build_query($params, "", "&"));
         }
 
-        return $this->_sQuery;
+        return $this->query;
     }
 
     /**
      * Set PayPal URL to call.
      *
-     * @param string $sUrlToCall PayPal URL to call.
+     * @param string $urlToCall PayPal URL to call.
      *
      * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalException if url is not valid
      */
-    public function setUrlToCall($sUrlToCall)
+    public function setUrlToCall($urlToCall)
     {
-        if (false === filter_var($sUrlToCall, FILTER_VALIDATE_URL)) {
+        if (false === filter_var($urlToCall, FILTER_VALIDATE_URL)) {
             /**
-             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $oException
+             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $exception
              */
-            $oException = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class, 'URL to call is not valid.');
-            throw $oException;
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class, 'URL to call is not valid.');
+            throw $exception;
         }
-        $this->_sUrlToCall = $sUrlToCall;
+        $this->urlToCall = $urlToCall;
     }
 
     /**
@@ -292,17 +291,17 @@ class Curl
      */
     public function getUrlToCall()
     {
-        return $this->_sUrlToCall;
+        return $this->urlToCall;
     }
 
     /**
      * Sets resource
      *
-     * @param resource $rCurl curl.
+     * @param resource $curl curl.
      */
-    protected function _setResource($rCurl)
+    protected function setResource($curl)
     {
-        $this->_rCurl = $rCurl;
+        $this->curl = $curl;
     }
 
     /**
@@ -310,13 +309,13 @@ class Curl
      *
      * @return resource
      */
-    protected function _getResource()
+    protected function getResource()
     {
-        if (is_null($this->_rCurl)) {
-            $this->_setResource(curl_init());
+        if (is_null($this->curl)) {
+            $this->setResource(curl_init());
         }
 
-        return $this->_rCurl;
+        return $this->curl;
     }
 
     /**
@@ -326,38 +325,38 @@ class Curl
      */
     public function execute()
     {
-        $this->_setOptions();
+        $this->setOptions();
 
-        $aResponse = $this->_parseResponse($this->_execute());
+        $response = $this->parseResponse($this->curlExecute());
 
-        $this->_close();
+        $this->close();
 
-        return $aResponse;
+        return $response;
     }
 
     /**
      * Set Curl Parameters.
      */
-    protected function _setOptions()
+    protected function setOptions()
     {
-        foreach ($this->getEnvironmentParameters() as $sName => $mValue) {
-            $this->_setOption(constant($sName), $mValue);
+        foreach ($this->getEnvironmentParameters() as $name => $value) {
+            $this->setOption(constant($name), $value);
         }
 
-        $this->_setOption(CURLOPT_HTTPHEADER, $this->getHeader());
-        $this->_setOption(CURLOPT_URL, $this->getUrlToCall());
-        $this->_setOption(CURLOPT_POSTFIELDS, $this->getQuery());
+        $this->setOption(CURLOPT_HTTPHEADER, $this->getHeader());
+        $this->setOption(CURLOPT_URL, $this->getUrlToCall());
+        $this->setOption(CURLOPT_POSTFIELDS, $this->getQuery());
     }
 
     /**
      * Wrapper function to be mocked for testing.
      *
-     * @param string $sName  curl field name to set value to.
-     * @param string $sValue curl field value to set.
+     * @param string $name  curl field name to set value to.
+     * @param mixed  $value curl field value to set.
      */
-    protected function _setOption($sName, $sValue)
+    protected function setOption($name, $value)
     {
-        curl_setopt($this->_getResource(), $sName, $sValue);
+        curl_setopt($this->getResource(), $name, $value);
     }
 
     /**
@@ -367,47 +366,48 @@ class Curl
      *
      * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalException on curl errors
      */
-    protected function _execute()
+    protected function curlExecute()
     {
-        $sResponse = curl_exec($this->_getResource());
+        $response = curl_exec($this->getResource());
 
-        $iCurlErrorNumber = $this->_getErrorNumber();
-        if ($iCurlErrorNumber) {
+        $curlErrorNumber = $this->getErrorNumber();
+        if ($curlErrorNumber) {
             /**
-             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $oException
+             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $exception
              */
-            $oException = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class, 'Curl error: ' . $iCurlErrorNumber);
-            throw $oException;
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class, 'Curl error: ' . $curlErrorNumber);
+            throw $exception;
         }
 
-        return $sResponse;
+        return $response;
     }
 
     /**
      * Wrapper function to be mocked for testing.
      */
-    protected function _close()
+    protected function close()
     {
-        curl_close($this->_getResource());
+        curl_close($this->getResource());
     }
 
     /**
      * Parse curl response and strip it to safe form.
      *
-     * @param string $sResponse curl response.
+     * @param string $response curl response.
      *
      * @return array
      */
-    protected function _parseResponse($sResponse)
+    protected function parseResponse($response)
     {
+        $result = [];
+
         // processing results
-        $aResponse = array();
-        parse_str($sResponse, $aResponse);
+        parse_str($response, $result);
 
         // stripping slashes
-        $aResponse = array_map(array($this, '_decode'), $aResponse);
+        $result = array_map(array($this, 'decode'), $result);
 
-        return $aResponse;
+        return $result;
     }
 
     /**
@@ -415,59 +415,59 @@ class Curl
      *
      * @return int
      */
-    protected function _getErrorNumber()
+    protected function getErrorNumber()
     {
-        return curl_errno($this->_getResource());
+        return curl_errno($this->getResource());
     }
 
     /**
      * Decode (if needed) given query from UTF8
      *
-     * @param string $sString query
+     * @param string $string query
      *
      * @return string
      */
-    protected function _htmlDecode($sString)
+    protected function htmlDecode($string)
     {
-        $sString = html_entity_decode($sString, ENT_QUOTES, $this->getConnectionCharset());
+        $string = html_entity_decode($string, ENT_QUOTES, $this->getConnectionCharset());
 
-        return $sString;
+        return $string;
     }
 
     /**
      * Decode (if needed) given query from UTF8
      *
-     * @param string $sString query
+     * @param string $string query
      *
      * @return string
      */
-    protected function _decode($sString)
+    protected function decode($string)
     {
-        $sCharset = $this->getDataCharset();
-        if ($sCharset !== $this->getConnectionCharset()) {
-            $sString = iconv($this->getConnectionCharset(), $sCharset, $sString);
+        $charset = $this->getDataCharset();
+        if ($charset !== $this->getConnectionCharset()) {
+            $string = iconv($this->getConnectionCharset(), $charset, $string);
         }
         if (get_magic_quotes_gpc()) {
-            $sString = stripslashes($sString);
+            $string = stripslashes($string);
         }
 
-        return $sString;
+        return $string;
     }
 
     /**
      * Encodes (if needed) given query to UTF8
      *
-     * @param string $sString query
+     * @param string $string query
      *
      * @return string
      */
-    protected function _encode($sString)
+    protected function encode($string)
     {
-        $sCharset = $this->getDataCharset();
-        if ($sCharset !== $this->getConnectionCharset()) {
-            $sString = iconv($sCharset, $this->getConnectionCharset(), $sString);
+        $charset = $this->getDataCharset();
+        if ($charset !== $this->getConnectionCharset()) {
+            $string = iconv($charset, $this->getConnectionCharset(), $string);
         }
 
-        return $sString;
+        return $string;
     }
 }

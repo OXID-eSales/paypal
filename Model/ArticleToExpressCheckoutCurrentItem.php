@@ -31,37 +31,37 @@ class ArticleToExpressCheckoutCurrentItem
      *
      * @var string
      */
-    protected $_sArticleId;
+    protected $articleId;
 
     /**
      * Select list
      *
      * @var array
      */
-    protected $_aSelectList;
+    protected $selectList;
 
     /**
      * Persistent param
      *
      * @var array
      */
-    protected $_aPersistParam;
+    protected $persistParam;
 
     /**
      * Article amount
      *
      * @var integer
      */
-    protected $_iArticleAmount;
+    protected $articleAmount;
 
     /**
      * Method sets persistent param.
      *
-     * @param array $aPersistParam
+     * @param array $persistParam
      */
-    public function setPersistParam($aPersistParam)
+    public function setPersistParam($persistParam)
     {
-        $this->_aPersistParam = $aPersistParam;
+        $this->persistParam = $persistParam;
     }
 
     /**
@@ -71,17 +71,17 @@ class ArticleToExpressCheckoutCurrentItem
      */
     public function getPersistParam()
     {
-        return $this->_aPersistParam;
+        return $this->persistParam;
     }
 
     /**
      * Method sets select list.
      *
-     * @param array $aSelectList
+     * @param array $selectList
      */
-    public function setSelectList($aSelectList)
+    public function setSelectList($selectList)
     {
-        $this->_aSelectList = $aSelectList;
+        $this->selectList = $selectList;
     }
 
     /**
@@ -91,17 +91,17 @@ class ArticleToExpressCheckoutCurrentItem
      */
     public function getSelectList()
     {
-        return $this->_aSelectList;
+        return $this->selectList;
     }
 
     /**
      * Method sets article id.
      *
-     * @param string $sArticleId
+     * @param string $articleId
      */
-    public function setArticleId($sArticleId)
+    public function setArticleId($articleId)
     {
-        $this->_sArticleId = $sArticleId;
+        $this->articleId = $articleId;
     }
 
     /**
@@ -111,17 +111,17 @@ class ArticleToExpressCheckoutCurrentItem
      */
     public function getArticleId()
     {
-        return $this->_sArticleId;
+        return $this->articleId;
     }
 
     /**
      * Method sets article amount.
      *
-     * @param int $iArticleAmount
+     * @param int $articleAmount
      */
-    public function setArticleAmount($iArticleAmount)
+    public function setArticleAmount($articleAmount)
     {
-        $this->_iArticleAmount = $iArticleAmount;
+        $this->articleAmount = $articleAmount;
     }
 
     /**
@@ -131,6 +131,6 @@ class ArticleToExpressCheckoutCurrentItem
      */
     public function getArticleAmount()
     {
-        return ( int ) $this->_iArticleAmount;
+        return (int) $this->articleAmount;
     }
 }

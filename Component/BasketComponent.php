@@ -33,7 +33,7 @@ class BasketComponent extends BasketComponent_parent
      *
      * @var bool
      */
-    protected $_blShopPopUp = false;
+    protected $shopPopUp = false;
 
     /**
      * Method returns URL to checkout products OR to show popup.
@@ -42,23 +42,23 @@ class BasketComponent extends BasketComponent_parent
      */
     public function actionExpressCheckoutFromDetailsPage()
     {
-        $oValidator = $this->_getValidator();
-        $oCurrentArticle = $this->_getCurrentArticle();
-        $oValidator->setItemToValidate($oCurrentArticle);
-        $oValidator->setBasket($this->getSession()->getBasket());
-        if ($oValidator->isArticleValid()) {
+        $validator = $this->getValidator();
+        $currentArticle = $this->getCurrentArticle();
+        $validator->setItemToValidate($currentArticle);
+        $validator->setBasket($this->getSession()->getBasket());
+        if ($validator->isArticleValid()) {
             //Make express checkout
-            $sRes = $this->actionAddToBasketAndGoToCheckout();
+            $res = $this->actionAddToBasketAndGoToCheckout();
         } else {
-            $sRes = $this->_getRedirectUrl();
+            $res = $this->_getRedirectUrl();
             //if amount is more than 0, do not redirect, show ESC popup instead
-            if ($oCurrentArticle->getArticleAmount() > 0) {
-                $this->_blShopPopUp = true;
-                $sRes = null;
+            if ($currentArticle->getArticleAmount() > 0) {
+                $this->shopPopUp = true;
+                $res = null;
             }
         }
 
-        return $sRes;
+        return $res;
     }
 
     /**
@@ -68,7 +68,7 @@ class BasketComponent extends BasketComponent_parent
      */
     public function shopECSPopUp()
     {
-        return $this->_blShopPopUp;
+        return $this->shopPopUp;
     }
 
     /**
@@ -80,7 +80,7 @@ class BasketComponent extends BasketComponent_parent
     {
         parent::tobasket();
 
-        return $this->_getExpressCheckoutUrl();
+        return $this->getExpressCheckoutUrl();
     }
 
     /**
@@ -90,7 +90,7 @@ class BasketComponent extends BasketComponent_parent
      */
     public function actionNotAddToBasketAndGoToCheckout()
     {
-        return $this->_getExpressCheckoutUrl();
+        return $this->getExpressCheckoutUrl();
     }
 
     /**
@@ -98,9 +98,9 @@ class BasketComponent extends BasketComponent_parent
      *
      * @return string
      */
-    protected function _getExpressCheckoutUrl()
+    protected function getExpressCheckoutUrl()
     {
-        return 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=' . (int) $this->_getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
+        return 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=' . (int) $this->getRequest()->getPostParameter('displayCartInPayPal') . '&oePayPalCancelURL=' . $this->getPayPalCancelURL();
     }
 
     /**
@@ -110,14 +110,14 @@ class BasketComponent extends BasketComponent_parent
      */
     public function getCurrentArticleInfo()
     {
-        $aProducts = $this->_getItems();
-        $sCurrentArticleId = $this->getConfig()->getRequestParameter('aid');
-        $aParams = null;
-        if (!is_null($aProducts[$sCurrentArticleId])) {
-            $aParams = $aProducts[$sCurrentArticleId];
+        $products = $this->_getItems();
+        $currentArticleId = $this->getConfig()->getRequestParameter('aid');
+        $params = null;
+        if (!is_null($products[$currentArticleId])) {
+            $params = $products[$currentArticleId];
         }
 
-        return $aParams;
+        return $params;
     }
 
     /**
@@ -125,18 +125,18 @@ class BasketComponent extends BasketComponent_parent
      *
      * @return \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem
      */
-    protected function _getCurrentArticle()
+    protected function getCurrentArticle()
     {
-        $oCurrentItem = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class);
-        $sCurrentArticleId = $this->_getRequest()->getPostParameter('aid');
-        $aProducts = $this->_getItems();
-        $aProductInfo = $aProducts[$sCurrentArticleId];
-        $oCurrentItem->setArticleId($sCurrentArticleId);
-        $oCurrentItem->setSelectList($aProductInfo['sel']);
-        $oCurrentItem->setPersistParam($aProductInfo['persparam']);
-        $oCurrentItem->setArticleAmount($aProductInfo['am']);
+        $currentItem = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class);
+        $currentArticleId = $this->getRequest()->getPostParameter('aid');
+        $products = $this->_getItems();
+        $productInfo = $products[$currentArticleId];
+        $currentItem->setArticleId($currentArticleId);
+        $currentItem->setSelectList($productInfo['sel']);
+        $currentItem->setPersistParam($productInfo['persparam']);
+        $currentItem->setArticleAmount($productInfo['am']);
 
-        return $oCurrentItem;
+        return $currentItem;
     }
 
     /**
@@ -144,7 +144,7 @@ class BasketComponent extends BasketComponent_parent
      *
      * @return \OxidEsales\PayPalModule\Core\Request
      */
-    protected function _getRequest()
+    protected function getRequest()
     {
         return oxNew(\OxidEsales\PayPalModule\Core\Request::class);
     }
@@ -154,11 +154,11 @@ class BasketComponent extends BasketComponent_parent
      *
      * @return \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator
      */
-    protected function _getValidator()
+    protected function getValidator()
     {
-        $oValidator = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class);
+        $validator = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class);
 
-        return $oValidator;
+        return $validator;
     }
 
     /**
@@ -168,42 +168,42 @@ class BasketComponent extends BasketComponent_parent
      */
     public function getPayPalCancelURL()
     {
-        $sUrl = $this->_formatUrl($this->_getRedirectUrl());
-        $sReplacedURL = str_replace('showECSPopup=1', 'showECSPopup=0', $sUrl);
+        $url = $this->formatUrl($this->_getRedirectUrl());
+        $replacedURL = str_replace('showECSPopup=1', 'showECSPopup=0', $url);
 
-        return urlencode($sReplacedURL);
+        return urlencode($replacedURL);
     }
 
     /**
      * Formats Redirect URL to normal url
      *
-     * @param string $sUnformedUrl
+     * @param string $unformedUrl
      *
      * @return string
      */
-    protected function _formatUrl($sUnformedUrl)
+    protected function formatUrl($unformedUrl)
     {
         $myConfig = $this->getConfig();
-        $aParams = explode('?', $sUnformedUrl);
-        $sPageParams = isset($aParams[1]) ? $aParams[1] : null;
-        $aParams = explode('/', $aParams[0]);
-        $sClassName = $aParams[0];
+        $params = explode('?', $unformedUrl);
+        $pageParams = isset($params[1]) ? $params[1] : null;
+        $params = explode('/', $params[0]);
+        $className = $params[0];
 
-        $sHeader = ($sClassName) ? "cl=$sClassName&" : '';  // adding view name
-        $sHeader .= ($sPageParams) ? "$sPageParams&" : '';   // adding page params
-        $sHeader .= $this->getSession()->sid();            // adding session Id
+        $header = ($className) ? "cl=$className&" : '';  // adding view name
+        $header .= ($pageParams) ? "$pageParams&" : '';   // adding page params
+        $header .= $this->getSession()->sid();            // adding session Id
 
-        $sUrl = $myConfig->getCurrentShopUrl($this->isAdmin());
+        $url = $myConfig->getCurrentShopUrl($this->isAdmin());
 
-        $sUrl = "{$sUrl}index.php?{$sHeader}";
+        $url = "{$url}index.php?{$header}";
 
-        $sUrl = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsUrl::class)->processUrl($sUrl);
+        $url = \OxidEsales\Eshop\Core\Registry::getUtilsUrl()->processUrl($url);
 
         $seoIsActive = \OxidEsales\Eshop\Core\Registry::getUtils()->seoIsActive();
-        if ($seoIsActive && $sSeoUrl = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\SeoEncoder::class)->getStaticUrl($sUrl)) {
-            $sUrl = $sSeoUrl;
+        if ($seoIsActive && $seoUrl = \OxidEsales\Eshop\Core\Registry::getSeoEncoder()->getStaticUrl($url)) {
+            $url = $seoUrl;
         }
 
-        return $sUrl;
+        return $url;
     }
 }

@@ -41,11 +41,11 @@ class ShopConstruct
     /**
      * Sets constructor parameters
      *
-     * @param array $oParams
+     * @param array $params
      */
-    public function setParams($oParams)
+    public function setParams($params)
     {
-        $this->_oParams = $oParams;
+        $this->_oParams = $params;
         $this->setConfigParameters();
         $this->setSessionParameters();
         $this->setRequestParameters();
@@ -54,22 +54,26 @@ class ShopConstruct
 
     /**
      * Sets constructor parameters
+     *
+     * @param null $key
+     *
+     * @return \OxidEsales\Eshop\Application\Model\User
      */
-    public function getParams($sKey = null)
+    public function getParams($key = null)
     {
-        if (!is_null($sKey)) {
-            return $this->_oParams[$sKey];
+        if (!is_null($key)) {
+            return $this->_oParams[$key];
         }
 
         return $this->_oParams;
     }
 
     /**
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser
+     * @param \OxidEsales\Eshop\Application\Model\User $user
      */
-    public function setUser($oUser)
+    public function setUser($user)
     {
-        $this->_oUser = $oUser;
+        $this->user = $user;
     }
 
     /**
@@ -77,26 +81,26 @@ class ShopConstruct
      */
     public function getUser()
     {
-        if (is_null($this->_oUser)) {
-            $aUser = $this->getParams('user');
-            if ($aUser === false) {
+        if (is_null($this->user)) {
+            $user = $this->getParams('user');
+            if ($user === false) {
                 return null;
             }
-            if (!$aUser) {
-                $aUser = $this->_getDefaultUserData();
+            if (!$user) {
+                $user = $this->getDefaultUserData();
             }
-            $this->setUser($this->_createUser($aUser));
+            $this->setUser($this->createUser($user));
         }
 
-        return $this->_oUser;
+        return $this->user;
     }
 
     /**
-     * @param \OxidEsales\Eshop\Application\Model\User $oGroups
+     * @param \OxidEsales\Eshop\Application\Model\User $groups
      */
-    public function setGroups($oGroups)
+    public function setGroups($groups)
     {
-        $this->_oGroups = $oGroups;
+        $this->_oGroups = $groups;
     }
 
     /**
@@ -105,14 +109,14 @@ class ShopConstruct
     public function getGroups()
     {
         if (is_null($this->_oGroups)) {
-            $aGroups = $this->getParams('groups');
-            if ($aGroups === false) {
+            $groups = $this->getParams('groups');
+            if ($groups === false) {
                 return null;
             }
-            if (!$aGroups) {
-                $aGroups = $this->_getDefaultGroupsData();
+            if (!$groups) {
+                $groups = $this->getDefaultGroupsData();
             }
-            $this->setGroups($this->createGroups($aGroups));
+            $this->setGroups($this->createGroups($groups));
         }
 
         return $this->_oGroups;
@@ -123,11 +127,11 @@ class ShopConstruct
      */
     public function setConfigParameters()
     {
-        $oConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $aParams = $this->getParams('config');
-        if (!empty($aParams)) {
-            foreach ($aParams as $sKey => $sValue) {
-                $oConfig->setConfigParam($sKey, $sValue);
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $params = $this->getParams('config');
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $config->setConfigParam($key, $value);
             }
         }
     }
@@ -137,11 +141,11 @@ class ShopConstruct
      */
     public function setSessionParameters()
     {
-        $oSession = \OxidEsales\Eshop\Core\Registry::getSession();
-        $aParams = $this->getParams('session');
-        if (is_array($aParams)) {
-            foreach ($aParams as $sName => $sValue) {
-                $oSession->setVariable($sName, $sValue);
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
+        $params = $this->getParams('session');
+        if (is_array($params)) {
+            foreach ($params as $name => $value) {
+                $session->setVariable($name, $value);
             }
         }
     }
@@ -151,12 +155,12 @@ class ShopConstruct
      */
     public function setRequestParameters()
     {
-        $aParams = $this->getParams('requestToShop');
-        if (is_array($aParams)) {
-            $_POST = $aParams;
-            $_GET = $aParams;
-            $_COOKIE = $aParams;
-            $_REQUEST = $aParams;
+        $params = $this->getParams('requestToShop');
+        if (is_array($params)) {
+            $_POST = $params;
+            $_GET = $params;
+            $_COOKIE = $params;
+            $_REQUEST = $params;
         }
     }
 
@@ -166,8 +170,8 @@ class ShopConstruct
     public function setServerParameters()
     {
         if ($serverParams = $this->getParams('serverParams')) {
-            foreach ($serverParams as $sKey => $mValue) {
-                $_SERVER[$sKey] = $mValue;
+            foreach ($serverParams as $key => $value) {
+                $_SERVER[$key] = $value;
             }
         }
     }
@@ -175,144 +179,143 @@ class ShopConstruct
     /**
      * Returns prepared basket, user and config.
      *
-     * @param array $aParams test data to create mocks and what expect in return.
-     *
      * @return \OxidEsales\Eshop\Application\Model\Basket
      */
     public function getBasket()
     {
-        $this->_createCats($this->getParams('categories'));
-        $this->_setDiscounts($this->getParams('discounts'));
-        $sTSProductId = $this->_setTrustedShop($this->getParams('trustedshop'));
+        $this->createCats($this->getParams('categories'));
+        $this->setDiscounts($this->getParams('discounts'));
+        $tSProductId = $this->setTrustedShop($this->getParams('trustedshop'));
 
-        $aCosts = $this->getParams('costs');
-        $sDeliverySetId = $this->_setDeliveryCosts($aCosts['delivery']);
-        $aPayment = $this->_setPayments($aCosts['payment']);
-        $aVoucherIDs = $this->_setVouchers($aCosts['voucherserie']);
+        $costs = $this->getParams('costs');
+        $deliverySetId = $this->setDeliveryCosts($costs['delivery']);
+        $payment = $this->setPayments($costs['payment']);
+        $voucherIDs = $this->setVouchers($costs['voucherserie']);
 
-        $oBasket = new \OxidEsales\PayPalModule\Model\Basket();
+        $basket = new \OxidEsales\PayPalModule\Model\Basket();
 
-        $oBasket->setBasketUser($this->getUser());
+        $basket->setBasketUser($this->getUser());
 
         $this->getGroups();
 
-        $aArtsForBasket = $this->createArticles($this->getParams('articles'));
-        $aWrap = $this->_setWrappings($aCosts['wrapping']);
-        foreach ($aArtsForBasket as $aArt) {
-            if (!$aArt['amount']) {
+        $artsForBasket = $this->createArticles($this->getParams('articles'));
+        $wrap = $this->setWrappings($costs['wrapping']);
+        foreach ($artsForBasket as $art) {
+            if (!$art['amount']) {
                 continue;
             }
-            $oItem = $oBasket->addToBasket($aArt['id'], $aArt['amount']);
+            $item = $basket->addToBasket($art['id'], $art['amount']);
 
-            if (!empty($aWrap)) {
-                $oItem->setWrapping($aWrap[$aArt['id']]);
+            if (!empty($wrap)) {
+                $item->setWrapping($wrap[$art['id']]);
             }
         }
 
-        $aWrap['card'] ? $oBasket->setCardId($aWrap['card']) : '';
+        $wrap['card'] ? $basket->setCardId($wrap['card']) : '';
 
-        if (!empty($sDeliverySetId) && !$aCosts['delivery']['oxdeliveryset']['createOnly']) {
-            $oBasket->setShipping($sDeliverySetId);
+        if (!empty($deliverySetId) && !$costs['delivery']['oxdeliveryset']['createOnly']) {
+            $basket->setShipping($deliverySetId);
         }
 
-        if (!empty($aPayment)) {
-            $oBasket->setPayment($aPayment[0]);
+        if (!empty($payment)) {
+            $basket->setPayment($payment[0]);
         }
 
-        if (!empty($sTSProductId)) {
-            $oBasket->setTsProductId($sTSProductId);
+        if (!empty($tSProductId)) {
+            $basket->setTsProductId($tSProductId);
         }
 
-        $oBasket->setSkipVouchersChecking(true);
-        if (!empty($aVoucherIDs)) {
-            $iCount = count($aVoucherIDs);
-            for ($i = 0; $i < $iCount; $i++) {
-                $oBasket->addVoucher($aVoucherIDs[$i]);
+        $basket->setSkipVouchersChecking(true);
+        if (!empty($voucherIDs)) {
+            $count = count($voucherIDs);
+            for ($i = 0; $i < $count; $i++) {
+                $basket->addVoucher($voucherIDs[$i]);
             }
         }
 
-        $oBasket->calculateBasket();
+        $basket->calculateBasket();
 
-        return $oBasket;
+        return $basket;
     }
 
     /**
      * Creates articles from array
      *
-     * @param array $aArticles
+     * @param array $articleDataSet
      *
-     * @return array $aResult of id's and basket amounts of created articles
+     * @return array $result of id's and basket amounts of created articles
      */
-    public function createArticles($aArticles)
+    public function createArticles($articleDataSet)
     {
-        $aResult = array();
-        if (empty($aArticles)) {
-            return $aResult;
+        $result = array();
+        if (empty($articleDataSet)) {
+            return $result;
         }
-        foreach ($aArticles as $aArticle) {
-            $oArticle = new \OxidEsales\Eshop\Application\Model\Article();
-            $oArticle->setId($aArticle['oxid']);
-            foreach ($aArticle as $sKey => $sValue) {
-                if (strstr($sKey, "ox")) {
-                    $sField = "oxarticles__{$sKey}";
-                    $oArticle->$sField = new \OxidEsales\Eshop\Core\Field($aArticle[$sKey]);
+        foreach ($articleDataSet as $articleData) {
+            $article = new \OxidEsales\Eshop\Application\Model\Article();
+            $article->setId($articleData['oxid']);
+            foreach ($articleData as $key => $value) {
+                if (strstr($key, "ox")) {
+                    $field = "oxarticles__{$key}";
+                    $article->$field = new \OxidEsales\Eshop\Core\Field($articleData[$key]);
                 }
             }
-            $oArticle->save();
-            if ($aArticle['scaleprices']) {
-                $this->_createScalePrices(array($aArticle['scaleprices']));
+            $article->save();
+            if ($articleData['scaleprices']) {
+                $this->createScalePrices(array($articleData['scaleprices']));
             }
-            if ($aArticle['field2shop']) {
-                $this->_createField2Shop($oArticle, $aArticle['field2shop']);
+            if ($articleData['field2shop']) {
+                $this->createField2Shop($article, $articleData['field2shop']);
             }
-            $aResult[$aArticle['oxid']] = array(
-                'id'     => $aArticle['oxid'],
-                'amount' => $aArticle['amount'],
+            $result[$articleData['oxid']] = array(
+                'id'     => $articleData['oxid'],
+                'amount' => $articleData['amount'],
             );
         }
 
-        return $aResult;
+        return $result;
     }
 
 
     /**
      * Create user
      *
-     * @param array $aUser user data
+     * @param array $userData user data
      *
      * @return \OxidEsales\Eshop\Application\Model\User
      */
-    protected function _createUser($aUser)
+    protected function createUser($userData)
     {
-        $oUser = $this->createObj($aUser, \OxidEsales\Eshop\Application\Model\User::class, "oxuser");
-        if (isset($aUser['address'])) {
-            $aUser['address']['oxuserid'] = $oUser->getId();
-            $this->createObj($aUser['address'], \OxidEsales\Eshop\Application\Model\Address::class, "oxaddress");
+        /** @var \OxidEsales\Eshop\Application\Model\User $user */
+        $user = $this->createObj($userData, \OxidEsales\Eshop\Application\Model\User::class, "oxuser");
+        if (isset($userData['address'])) {
+            $userData['address']['oxuserid'] = $user->getId();
+            $this->createObj($userData['address'], \OxidEsales\Eshop\Application\Model\Address::class, "oxaddress");
         }
 
-        return $oUser;
+        return $user;
     }
 
     /**
      * Create categories with assigning articles
      *
-     * @param array $aCategories category data
+     * @param array $categories category data
      */
-    protected function _createCats($aCategories)
+    protected function createCats($categories)
     {
-        if (empty($aCategories)) {
+        if (empty($categories)) {
             return;
         }
-        foreach ($aCategories as $iKey => $aCat) {
-            $oCat = $this->createObj($aCat, \OxidEsales\Eshop\Application\Model\Category::class, ' oxcategories');
-            if (!empty($aCat['oxarticles'])) {
-                $iCnt = count($aCat['oxarticles']);
-                for ($i = 0; $i < $iCnt; $i++) {
-                    $aData = array(
-                        'oxcatnid'   => $oCat->getId(),
-                        'oxobjectid' => $aCat['oxarticles'][$i]
+        foreach ($categories as $key => $cat) {
+            $cat = $this->createObj($cat, \OxidEsales\Eshop\Application\Model\Category::class, ' oxcategories');
+            if (!empty($cat['oxarticles'])) {
+                $cnt = count($cat['oxarticles']);
+                for ($i = 0; $i < $cnt; $i++) {
+                    $data = array(
+                        'oxcatnid'   => $cat->getId(),
+                        'oxobjectid' => $cat['oxarticles'][$i]
                     );
-                    $this->createObj2Obj($aData, 'oxprice2article');
+                    $this->createObj2Obj($data, 'oxprice2article');
                 }
             }
         }
@@ -321,63 +324,65 @@ class ShopConstruct
     /**
      * Creates price 2 article connection needed for scale prices
      *
-     * @param array $aScalePrices of scale prices needed db fields
+     * @param array $scalePrices of scale prices needed db fields
      */
-    protected function _createScalePrices($aScalePrices)
+    protected function createScalePrices($scalePrices)
     {
-        $this->createObj2Obj($aScalePrices, "oxprice2article");
+        $this->createObj2Obj($scalePrices, "oxprice2article");
     }
 
     /**
      * Creates price 2 article connection needed for scale prices
      *
-     * @param array $aScalePrices of scale prices needed db fields
+     * @param \OxidEsales\Eshop\Application\Model\Article $art
+     * @param array                                       $options
      */
-    protected function _createField2Shop($oArt, $aOptions)
+    protected function createField2Shop($art, $options)
     {
-        $oField2Shop = oxNew(\OxidEsales\Eshop\Application\Model\Field2Shop::class);
-        $oField2Shop->setProductData($oArt);
-        if (!isset($aOptions['oxartid'])) {
-            $aOptions['oxartid'] = new \OxidEsales\Eshop\Core\Field($oArt->getId());
+        $field2Shop = oxNew(\OxidEsales\Eshop\Application\Model\Field2Shop::class);
+        $field2Shop->setProductData($art);
+        if (!isset($options['oxartid'])) {
+            $options['oxartid'] = new \OxidEsales\Eshop\Core\Field($art->getId());
         }
-        foreach ($aOptions as $sKey => $sValue) {
-            if (strstr($sKey, "ox")) {
-                $sField = "oxfield2shop__{$sKey}";
-                $oField2Shop->$sField = new \OxidEsales\Eshop\Core\Field($aOptions[$sKey]);
+        foreach ($options as $key => $value) {
+            if (strstr($key, "ox")) {
+                $field = "oxfield2shop__{$key}";
+                $field2Shop->$field = new \OxidEsales\Eshop\Core\Field($options[$key]);
             }
         }
-        $oField2Shop->save();
+        $field2Shop->save();
     }
 
     /**
-     * Creates discounts and assign them to according objects
+     * Apply discounts.
+     * Creates discounts and assign them to according objects.
      *
-     * @param array $aDiscounts discount data
+     * @param array $discountDataSet discount data
      */
-    protected function _setDiscounts($aDiscounts)
+    public function setDiscounts($discountDataSet)
     {
-        if (empty($aDiscounts)) {
+        if (empty($discountDataSet)) {
             return;
         }
-        foreach ($aDiscounts as $iKey => $aDiscount) {
+        foreach ($discountDataSet as $discountData) {
             // add discounts
-            $oDiscount = new \OxidEsales\Eshop\Application\Model\Discount();
-            $oDiscount->setId($aDiscount['oxid']);
-            foreach ($aDiscount as $sKey => $mxValue) {
-                if (!is_array($mxValue)) {
-                    $sField = "oxdiscount__" . $sKey;
-                    $oDiscount->$sField = new \OxidEsales\Eshop\Core\Field("{$mxValue}");
-                } // if $sValue is not empty array then create oxobject2discount
-                $oDiscount->save();
-                if (is_array($mxValue) && !empty($mxValue)) {
-                    foreach ($mxValue as $iArtId) {
-                        $aData = array(
-                            'oxid'         => $oDiscount->getId() . "_" . $iArtId,
-                            'oxdiscountid' => $oDiscount->getId(),
-                            'oxobjectid'   => $iArtId,
-                            'oxtype'       => $sKey
+            $discount = new \OxidEsales\Eshop\Application\Model\Discount();
+            $discount->setId($discountData['oxid']);
+            foreach ($discountData as $key => $value) {
+                if (!is_array($value)) {
+                    $field = "oxdiscount__" . $key;
+                    $discount->$field = new \OxidEsales\Eshop\Core\Field("{$value}");
+                } // if $value is not empty array then create oxobject2discount
+                $discount->save();
+                if (is_array($value) && !empty($value)) {
+                    foreach ($value as $artId) {
+                        $data = array(
+                            'oxid'         => $discount->getId() . "_" . $artId,
+                            'oxdiscountid' => $discount->getId(),
+                            'oxobjectid'   => $artId,
+                            'oxtype'       => $key
                         );
-                        $this->createObj2Obj($aData, "oxobject2discount");
+                        $this->createObj2Obj($data, "oxobject2discount");
                     }
                 }
             }
@@ -387,176 +392,177 @@ class ShopConstruct
     /**
      * Set up trusted shop
      *
-     * @param array $aTrustedShop of trusted shops data
+     * @param array $trustedShop of trusted shops data
      *
      * @return string selected product id
      */
-    protected function _setTrustedShop($aTrustedShop)
+    protected function setTrustedShop($trustedShop)
     {
-        if (empty($aTrustedShop)) {
+        if (empty($trustedShop)) {
             return null;
         }
-        if ($aTrustedShop['payments']) {
-            foreach ($aTrustedShop['payments'] as $sShopPayId => $sTsPayId) {
-                $aPayment = new \OxidEsales\Eshop\Application\Model\Payment();
-                if ($aPayment->load($sShopPayId)) {
-                    $aPayment->oxpayments__oxtspaymentid = new \OxidEsales\Eshop\Core\Field($sTsPayId);
-                    $aPayment->save();
+        if ($trustedShop['payments']) {
+            foreach ($trustedShop['payments'] as $shopPayId => $tsPayId) {
+                $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+                if ($payment->load($shopPayId)) {
+                    $payment->oxpayments__oxtspaymentid = new \OxidEsales\Eshop\Core\Field($tsPayId);
+                    $payment->save();
                 }
             }
         }
 
-        return $aTrustedShop['product_id'];
+        return $trustedShop['product_id'];
     }
 
     /**
      * Creates wrappings
      *
-     * @param array $aWrappings
+     * @param array $wrappings
      *
-     * @return array of wrapping id's
+     * @return false|array of wrapping id's
      */
-    protected function _setWrappings($aWrappings)
+    protected function setWrappings($wrappings)
     {
-        if (empty($aWrappings)) {
+        if (empty($wrappings)) {
             return false;
         }
-        $aWrap = array();
-        foreach ($aWrappings as $aWrapping) {
-            $oCard = oxNew(\OxidEsales\Eshop\Core\Model\BaseModel::class);
-            $oCard->init('oxwrapping');
-            foreach ($aWrapping as $sKey => $mxValue) {
+        $wrap = array();
+        foreach ($wrappings as $wrapping) {
+            $card = oxNew(\OxidEsales\Eshop\Core\Model\BaseModel::class);
+            $card->init('oxwrapping');
+            foreach ($wrapping as $key => $mxValue) {
                 if (!is_array($mxValue)) {
-                    $sField = "oxwrapping__" . $sKey;
-                    $oCard->$sField = new \OxidEsales\Eshop\Core\Field($mxValue, \OxidEsales\Eshop\Core\Field::T_RAW);
+                    $field = "oxwrapping__" . $key;
+                    $card->$field = new \OxidEsales\Eshop\Core\Field($mxValue, \OxidEsales\Eshop\Core\Field::T_RAW);
                 }
             }
-            $oCard->save();
-            if ($aWrapping['oxarticles']) {
-                foreach ($aWrapping['oxarticles'] as $sArtId) {
-                    $aWrap[$sArtId] = $oCard->getId();
+            $card->save();
+            if ($wrapping['oxarticles']) {
+                foreach ($wrapping['oxarticles'] as $artId) {
+                    $wrap[$artId] = $card->getId();
                 }
             } else {
-                $aWrap['card'] = $oCard->getId();
+                $wrap['card'] = $card->getId();
             }
         }
 
-        return $aWrap;
+        return $wrap;
     }
 
     /**
      * Creates deliveries
      *
-     * @param array $aDeliveryCosts
+     * @param array $deliveryCostDataSet
      *
-     * @return array of delivery id's
+     * @return null|array of delivery id's
      */
-    protected function _setDeliveryCosts($aDeliveryCosts)
+    protected function setDeliveryCosts($deliveryCostDataSet)
     {
-        if (empty($aDeliveryCosts)) {
+        if (empty($deliveryCostDataSet)) {
             return;
         }
 
-        if (!empty($aDeliveryCosts['oxdeliveryset'])) {
-            $aData = $aDeliveryCosts['oxdeliveryset'];
-            unset($aDeliveryCosts['oxdeliveryset']);
+        if (!empty($deliveryCostDataSet['oxdeliveryset'])) {
+            $data = $deliveryCostDataSet['oxdeliveryset'];
+            unset($deliveryCostDataSet['oxdeliveryset']);
         } else {
-            $aData = array(
+            $data = array(
                 'oxactive' => 1
             );
         }
-        $oDeliverySet = $this->createObj($aData, \OxidEsales\Eshop\Application\Model\DeliverySet::class, 'oxdeliveryset');
+        $deliverySet = $this->createObj($data, \OxidEsales\Eshop\Application\Model\DeliverySet::class, 'oxdeliveryset');
 
-        foreach ($aDeliveryCosts as $iKey => $aDelivery) {
-            $oDelivery = new \OxidEsales\Eshop\Application\Model\Delivery();
-            foreach ($aDelivery as $sKey => $mxValue) {
-                if (!is_array($mxValue)) {
-                    $sField = "oxdelivery__" . $sKey;
-                    $oDelivery->$sField = new \OxidEsales\Eshop\Core\Field("{$mxValue}");
+        foreach ($deliveryCostDataSet as $deliveryCostData) {
+            $delivery = new \OxidEsales\Eshop\Application\Model\Delivery();
+            foreach ($deliveryCostData as $key => $value) {
+                if (!is_array($value)) {
+                    $field = "oxdelivery__" . $key;
+                    $delivery->$field = new \OxidEsales\Eshop\Core\Field("{$value}");
                 }
             }
-            $oDelivery->save();
-            $aData = array(
-                'oxdelid'    => $oDelivery->getId(),
-                'oxdelsetid' => $oDeliverySet->getId(),
+            $delivery->save();
+            $data = array(
+                'oxdelid'    => $delivery->getId(),
+                'oxdelsetid' => $deliverySet->getId(),
             );
-            $this->createObj2Obj($aData, "oxdel2delset");
+            $this->createObj2Obj($data, "oxdel2delset");
         }
 
-        return $oDeliverySet->getId();
+        return $deliverySet->getId();
     }
 
     /**
      * Creates payments
      *
-     * @param array $aPayments
+     * @param array $paymentDataSet
      *
-     * @return array of payment id's
+     * @return false|array of payment id's
      */
-    protected function _setPayments($aPayments)
+    protected function setPayments($paymentDataSet)
     {
-        if (empty($aPayments)) {
+        $result = [];
+
+        if (empty($paymentDataSet)) {
             return false;
         }
-        $aPay = array();
-        foreach ($aPayments as $iKey => $aPayment) {
+        $payments = array();
+        foreach ($paymentDataSet as $paymentData) {
             // add discounts
-            $oPayment = new \OxidEsales\Eshop\Application\Model\Payment();
-            if (isset($aPayment['oxid'])) {
-                $oPayment->setId($aPayment['oxid']);
+            $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+            if (isset($paymentData['oxid'])) {
+                $payment->setId($paymentData['oxid']);
             }
-            foreach ($aPayment as $sKey => $mxValue) {
-                if (!is_array($mxValue)) {
-                    $sField = "oxpayments__" . $sKey;
-                    $oPayment->$sField = new \OxidEsales\Eshop\Core\Field("{$mxValue}");
+            foreach ($paymentData as $key => $value) {
+                if (!is_array($value)) {
+                    $field = "oxpayments__" . $key;
+                    $payment->$field = new \OxidEsales\Eshop\Core\Field("{$value}");
                 }
             }
-            $oPayment->save();
-            $aPay[] = $oPayment->getId();
+            $payment->save();
+            $result[] = $payment->getId();
         }
 
-        return $aPay;
+        return $result;
     }
 
     /**
      * Creates voucherserie and it's vouchers
      *
-     * @param array $aVoucherSeries voucherserie and voucher data
+     * @param array $voucherSeriesDataSet voucherserie and voucher data
      *
      * @return array of voucher id's
      */
-    protected function _setVouchers($aVoucherSeries)
+    protected function setVouchers($voucherSeriesDataSet)
     {
-        if (empty($aVoucherSeries)) {
-            return;
-        }
-        $aVoucherIDs = array();
-        foreach ($aVoucherSeries as $aVoucherSerie) {
-            $oVoucherSerie = oxNew(\OxidEsales\Eshop\Core\Model\BaseModel::class);
-            $oVoucherSerie->init('oxvoucherseries');
-            foreach ($aVoucherSerie as $sKey => $mxValue) {
-                $sField = "oxvoucherseries__" . $sKey;
-                $oVoucherSerie->$sField = new \OxidEsales\Eshop\Core\Field($mxValue, \OxidEsales\Eshop\Core\Field::T_RAW);
+        $voucherIDs = array();
+
+        $voucherSeriesDataSet = (array) $voucherSeriesDataSet;
+        foreach ($voucherSeriesDataSet as $voucherSeriesData) {
+            $voucherSeries = oxNew('oxBase');
+            $voucherSeries->init('oxvoucherseries');
+            foreach ($voucherSeriesData as $key => $value) {
+                $field = "oxvoucherseries__" . $key;
+                $voucherSeries->$field = new \oxField($value, \oxField::T_RAW);
             }
-            $oVoucherSerie->save();
+            $voucherSeries->save();
             // inserting vouchers
-            for ($i = 1; $i <= $aVoucherSerie['voucher_count']; $i++) {
-                $aData = array(
+            for ($i = 1; $i <= $voucherSeriesData['voucher_count']; $i++) {
+                $data = array(
                     'oxreserved'       => 0,
                     'oxvouchernr'      => md5(uniqid(rand(), true)),
-                    'oxvoucherserieid' => $oVoucherSerie->getId()
+                    'oxvoucherserieid' => $voucherSeries->getId()
                 );
-                $oVoucher = $this->createObj($aData, \OxidEsales\Eshop\Application\Model\Voucher::class, 'oxvouchers');
-                $aVoucherIDs[] = $oVoucher->getId();
+                $voucher = $this->createObj($data, 'oxvoucher', 'oxvouchers');
+                $voucherIDs[] = $voucher->getId();
             }
         }
 
-        return $aVoucherIDs;
+        return $voucherIDs;
     }
 
-    protected function _getDefaultUserData()
+    protected function getDefaultUserData()
     {
-        $aUser = array(
+        $user = array(
             'oxid'          => 'checkoutTestUser',
             'oxrights'      => 'malladmin',
             'oxactive'      => '1',
@@ -580,12 +586,12 @@ class ShopConstruct
             'oxustidstatus' => '0',
         );
 
-        return $aUser;
+        return $user;
     }
 
-    protected function _getDefaultGroupsData()
+    protected function getDefaultGroupsData()
     {
-        $aGroup = array(
+        $group = array(
             0 => array(
                 'oxid'           => 'checkoutTestGroup',
                 'oxactive'       => 1,
@@ -594,83 +600,83 @@ class ShopConstruct
             ),
         );
 
-        return $aGroup;
+        return $group;
     }
 
     /**
      * Getting articles
      *
-     * @param array $aArts of article objects
+     * @param array $arts of article objects
      *
      * @return created articles id's
      */
-    public function getArticles($aArts)
+    public function getArticles($arts)
     {
-        return $this->_getArticles($aArts);
+        return $this->_getArticles($arts);
     }
 
     /**
      * Apply discounts
      *
-     * @param array $aDiscounts of discount data
+     * @param array $discounts of discount data
      */
-    public function setDiscounts($aDiscounts)
+    public function DELETEsetDiscounts($discounts)
     {
-        $this->_setDiscounts($aDiscounts);
+        $this->setDiscounts($discounts);
     }
 
     /**
      * Create object 2 object connection in databse
      *
-     * @param array  $aData         db fields and values
-     * @param string $sObj2ObjTable table name
+     * @param array  $data         db fields and values
+     * @param string $obj2ObjTable table name
      */
-    public function createObj2Obj($aData, $sObj2ObjTable)
+    public function createObj2Obj($data, $obj2ObjTable)
     {
-        if (empty($aData)) {
+        if (empty($data)) {
             return;
         }
-        $iCnt = count($aData);
-        for ($i = 0; $i < $iCnt; $i++) {
-            if ($sObj2ObjTable === 'oxobject2group') {
-                $oObj = new \OxidEsales\Eshop\Application\Model\Object2Group();
+        $count = count($data);
+        for ($i = 0; $i < $count; $i++) {
+            if ($obj2ObjTable === 'oxobject2group') {
+                $object = new \OxidEsales\Eshop\Application\Model\Object2Group();
             } else {
-                $oObj = new \OxidEsales\Eshop\Core\Model\BaseModel();
+                $object = new \OxidEsales\Eshop\Core\Model\BaseModel();
             }
-            $oObj->init($sObj2ObjTable);
-            if ($iCnt < 2) {
-                $aObj = $aData[$i];
+            $object->init($obj2ObjTable);
+            if ($count < 2) {
+                $objectData = $data[$i];
             } else {
-                $aObj = $aData;
+                $objectData = $data;
             }
-            foreach ($aObj as $sKey => $sValue) {
-                $sField = $sObj2ObjTable . "__" . $sKey;
-                $oObj->$sField = new \OxidEsales\Eshop\Core\Field($sValue, \OxidEsales\Eshop\Core\Field::T_RAW);
+            foreach ($objectData as $key => $value) {
+                $field = $obj2ObjTable . "__" . $key;
+                $object->$field = new \OxidEsales\Eshop\Core\Field($value, \OxidEsales\Eshop\Core\Field::T_RAW);
             }
-            $oObj->save();
+            $object->save();
         }
     }
 
     /**
      * Create group and assign
      *
-     * @param array $aData
+     * @param array $data
      */
-    public function createGroups($aData)
+    public function createGroups($data)
     {
-        if (empty($aData)) {
+        if (empty($data)) {
             return;
         }
-        foreach ($aData as $iKey => $aGroup) {
-            $oGroup = $this->createObj($aGroup, \OxidEsales\Eshop\Application\Model\Groups::class, ' oxgroups');
-            if (!empty($aGroup['oxobject2group'])) {
-                $iCnt = count($aGroup['oxobject2group']);
-                for ($i = 0; $i < $iCnt; $i++) {
-                    $aCon = array(
-                        'oxgroupsid' => $oGroup->getId(),
-                        'oxobjectid' => $aGroup['oxobject2group'][$i]
+        foreach ($data as $key => $groupData) {
+            $group = $this->createObj($groupData, \OxidEsales\Eshop\Application\Model\Groups::class, ' oxgroups');
+            if (!empty($groupData['oxobject2group'])) {
+                $cnt = count($groupData['oxobject2group']);
+                for ($i = 0; $i < $cnt; $i++) {
+                    $con = array(
+                        'oxgroupsid' => $group->getId(),
+                        'oxobjectid' => $groupData['oxobject2group'][$i]
                     );
-                    $this->createObj2Obj($aCon, 'oxobject2group');
+                    $this->createObj2Obj($con, 'oxobject2group');
                 }
             }
         }
@@ -679,70 +685,70 @@ class ShopConstruct
     /**
      * Standard object creator
      *
-     * @param array  $aData   data
-     * @param string $sObject object name
-     * @param string $sTable  table name
+     * @param array  $data   data
+     * @param string $object object name
+     * @param string $table  table name
      *
-     * @return object $oObj
+     * @return null|object $obj
      */
-    public function createObj($aData, $sObject, $sTable)
+    public function createObj($data, $object, $table)
     {
-        if (empty($aData)) {
+        if (empty($data)) {
             return;
         }
-        $oObj = new $sObject();
-        if ($aData['oxid']) {
-            $oObj->setId($aData['oxid']);
+        $obj = new $object();
+        if ($data['oxid']) {
+            $obj->setId($data['oxid']);
         }
-        foreach ($aData as $sKey => $sValue) {
-            if (!is_array($sValue)) {
-                $sField = $sTable . "__" . $sKey;
-                $oObj->$sField = new \OxidEsales\Eshop\Core\Field($sValue, \OxidEsales\Eshop\Core\Field::T_RAW);
+        foreach ($data as $key => $value) {
+            if (!is_array($value)) {
+                $field = $table . "__" . $key;
+                $obj->$field = new \OxidEsales\Eshop\Core\Field($value, \OxidEsales\Eshop\Core\Field::T_RAW);
             }
         }
-        $oObj->save();
+        $obj->save();
 
-        return $oObj;
+        return $obj;
     }
 
     /**
      * Create shop.
      *
-     * @param array $aData
+     * @param array $data
      *
      * @return int
      */
-    public function createShop($aData)
+    public function createShop($data)
     {
-        $iActiveShopId = 1;
-        $iShopCnt = count($aData);
-        for ($i = 0; $i < $iShopCnt; $i++) {
-            $aParams = array();
-            foreach ($aData[$i] as $sKey => $sValue) {
-                $sField = "oxshops__" . $sKey;
-                $aParams[$sField] = $sValue;
+        $activeShopId = 1;
+        $shopCnt = count($data);
+        for ($i = 0; $i < $shopCnt; $i++) {
+            $params = array();
+            foreach ($data[$i] as $key => $value) {
+                $field = "oxshops__" . $key;
+                $params[$field] = $value;
             }
-            $oShop = oxNew(\OxidEsales\Eshop\Application\Model\Shop::class);
-            $oShop->assign($aParams);
-            $oShop->save();
-            $oShop->generateViews();
-            if ($aData[$i]['activeshop']) {
-                $iActiveShopId = $oShop->getId();
+            $shop = oxNew(\OxidEsales\Eshop\Application\Model\Shop::class);
+            $shop->assign($params);
+            $shop->save();
+            $shop->generateViews();
+            if ($data[$i]['activeshop']) {
+                $activeShopId = $shop->getId();
             }
         }
 
-        return $iActiveShopId;
+        return $activeShopId;
     }
 
     /**
      * Setting active shop
      *
-     * @param int $iShopId
+     * @param int $shopId
      */
-    public function setActiveShop($iShopId)
+    public function setActiveShop($shopId)
     {
-        if ($iShopId) {
-            \OxidEsales\Eshop\Core\Registry::getConfig()->setShopId($iShopId);
+        if ($shopId) {
+            \OxidEsales\Eshop\Core\Registry::getConfig()->setShopId($shopId);
         }
     }
 }

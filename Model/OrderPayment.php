@@ -29,11 +29,11 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
     /**
      * Set PayPal order comment Id.
      *
-     * @param string $sPaymentId
+     * @param string $paymentId
      */
-    public function setId($sPaymentId)
+    public function setId($paymentId)
     {
-        $this->setPaymentId($sPaymentId);
+        $this->setPaymentId($paymentId);
     }
 
     /**
@@ -51,24 +51,24 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      *
      * @var bool
      */
-    protected $_blIsValid = true;
+    protected $isValid = true;
 
     /**
      * Payment comments
      *
      * @var array
      */
-    protected $_oCommentList = null;
+    protected $commentList = null;
 
 
     /**
      * Set PayPal order comment Id.
      *
-     * @param string $sPaymentId
+     * @param string $paymentId
      */
-    public function setPaymentId($sPaymentId)
+    public function setPaymentId($paymentId)
     {
-        $this->_setValue('oepaypal_paymentid', $sPaymentId);
+        $this->setValue('oepaypal_paymentid', $paymentId);
     }
 
     /**
@@ -78,17 +78,17 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getPaymentId()
     {
-        return $this->_getValue('oepaypal_paymentid');
+        return $this->getValue('oepaypal_paymentid');
     }
 
     /**
      * Sets PayPal payment actions.
      *
-     * @param string $sValue
+     * @param string $value
      */
-    public function setAction($sValue)
+    public function setAction($value)
     {
-        $this->_setValue('oepaypal_action', $sValue);
+        $this->setValue('oepaypal_action', $value);
     }
 
     /**
@@ -98,17 +98,17 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getAction()
     {
-        return $this->_getValue('oepaypal_action');
+        return $this->getValue('oepaypal_action');
     }
 
     /**
      * Sets PayPal payment OrderId.
      *
-     * @param string $sValue
+     * @param string $value
      */
-    public function setOrderId($sValue)
+    public function setOrderId($value)
     {
-        $this->_setValue('oepaypal_orderid', $sValue);
+        $this->setValue('oepaypal_orderid', $value);
     }
 
     /**
@@ -118,17 +118,17 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getOrderId()
     {
-        return $this->_getValue('oepaypal_orderid');
+        return $this->getValue('oepaypal_orderid');
     }
 
     /**
      * Sets PayPal payment amount
      *
-     * @param float $flValue
+     * @param float $value
      */
-    public function setAmount($flValue)
+    public function setAmount($value)
     {
-        $this->_setValue('oepaypal_amount', $flValue);
+        $this->setValue('oepaypal_amount', $value);
     }
 
     /**
@@ -138,37 +138,37 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getAmount()
     {
-        return $this->_getValue('oepaypal_amount');
+        return $this->getValue('oepaypal_amount');
     }
 
     /**
      * Set PayPal refunded amount.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function setRefundedAmount($dAmount)
+    public function setRefundedAmount($amount)
     {
-        $this->_setValue('oepaypal_refundedamount', $dAmount);
+        $this->setValue('oepaypal_refundedamount', $amount);
     }
 
     /**
      * Adds given amount to PayPal refunded amount.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function addRefundedAmount($dAmount)
+    public function addRefundedAmount($amount)
     {
-        $this->setRefundedAmount($dAmount + $this->getRefundedAmount());
+        $this->setRefundedAmount($amount + $this->getRefundedAmount());
     }
 
     /**
      * Get PayPal refunded amount
      *
-     * @return string
+     * @return double
      */
     public function getRefundedAmount()
     {
-        return $this->_getValue('oepaypal_refundedamount');
+        return (double) $this->getValue('oepaypal_refundedamount');
     }
 
     /**
@@ -178,9 +178,9 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getRemainingRefundAmount()
     {
-        $dAmount = $this->getAmount() - $this->getRefundedAmount();
+        $amount = $this->getAmount() - $this->getRefundedAmount();
 
-        return sprintf("%.2f", round($dAmount, 2));
+        return sprintf("%.2f", round($amount, 2));
     }
 
     /**
@@ -190,27 +190,27 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getStatus()
     {
-        return $this->_getValue('oepaypal_status');
+        return $this->getValue('oepaypal_status');
     }
 
     /**
      * Returns PayPal payment status.
      *
-     * @param string $sValue status
+     * @param string $value status
      */
-    public function setStatus($sValue)
+    public function setStatus($value)
     {
-        $this->_setValue('oepaypal_status', $sValue);
+        $this->setValue('oepaypal_status', $value);
     }
 
     /**
      * Sets PayPal payment date.
      *
-     * @param string $sValue
+     * @param string $value
      */
-    public function setDate($sValue)
+    public function setDate($value)
     {
-        $this->_setValue('oepaypal_date', $sValue);
+        $this->setValue('oepaypal_date', $value);
     }
 
     /**
@@ -220,17 +220,17 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getDate()
     {
-        return $this->_getValue('oepaypal_date');
+        return $this->getValue('oepaypal_date');
     }
 
     /**
      * Returns PayPal payment currency.
      *
-     * @param string $sCurrency
+     * @param string $currency
      */
-    public function setCurrency($sCurrency)
+    public function setCurrency($currency)
     {
-        $this->_setValue('oepaypal_currency', $sCurrency);
+        $this->setValue('oepaypal_currency', $currency);
     }
 
     /**
@@ -240,17 +240,17 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getCurrency()
     {
-        return $this->_getValue('oepaypal_currency');
+        return $this->getValue('oepaypal_currency');
     }
 
     /**
      * Set PayPal payment transaction id.
      *
-     * @param string $sTransactionId
+     * @param string $transactionId
      */
-    public function setTransactionId($sTransactionId)
+    public function setTransactionId($transactionId)
     {
-        $this->_setValue('oepaypal_transactionid', $sTransactionId);
+        $this->setValue('oepaypal_transactionid', $transactionId);
     }
 
     /**
@@ -260,17 +260,17 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getTransactionId()
     {
-        return $this->_getValue('oepaypal_transactionid');
+        return $this->getValue('oepaypal_transactionid');
     }
 
     /**
      *  Set PayPal payment correlation id
      *
-     * @param string $sCorrelationId
+     * @param string $correlationId
      */
-    public function setCorrelationId($sCorrelationId)
+    public function setCorrelationId($correlationId)
     {
-        $this->_setValue('oepaypal_correlationid', $sCorrelationId);
+        $this->setValue('oepaypal_correlationid', $correlationId);
     }
 
     /**
@@ -280,36 +280,36 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getCorrelationId()
     {
-        return $this->_getValue('oepaypal_correlationid');
+        return $this->getValue('oepaypal_correlationid');
     }
 
     /**
      *  Load payment data by given transaction id
      *
-     * @param string $sTransactionId transaction id
+     * @param string $transactionId transaction id
      *
      * @return bool
      */
-    public function loadByTransactionId($sTransactionId)
+    public function loadByTransactionId($transactionId)
     {
-        $blResult = false;
-        $aData = $this->_getDbGateway()->loadByTransactionId($sTransactionId);
-        if ($aData) {
-            $this->setData($aData);
-            $blResult = true;
+        $result = false;
+        $data = $this->getDbGateway()->loadByTransactionId($transactionId);
+        if ($data) {
+            $this->setData($data);
+            $result = true;
         }
 
-        return $blResult;
+        return $result;
     }
 
     /**
      * Sets if payment is valid.
      *
-     * @param boolean $blIsValid payment is valid.
+     * @param boolean $isValid payment is valid.
      */
-    public function setIsValid($blIsValid)
+    public function setIsValid($isValid)
     {
-        $this->_blIsValid = (bool) $blIsValid;
+        $this->isValid = (bool) $isValid;
     }
 
     /**
@@ -319,7 +319,7 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getIsValid()
     {
-        return $this->_blIsValid;
+        return $this->isValid;
     }
 
     /**
@@ -329,46 +329,46 @@ class OrderPayment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getCommentList()
     {
-        if (is_null($this->_oCommentList)) {
-            $oComments = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentCommentList::class);
-            $oComments->load($this->getPaymentId());
-            $this->setCommentList($oComments);
+        if (is_null($this->commentList)) {
+            $comments = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentCommentList::class);
+            $comments->load($this->getPaymentId());
+            $this->setCommentList($comments);
         }
 
-        return $this->_oCommentList;
+        return $this->commentList;
     }
 
     /**
      * Set comments.
      *
-     * @param array $aComments
+     * @param array $comments
      */
-    public function setCommentList($aComments)
+    public function setCommentList($comments)
     {
-        $this->_oCommentList = $aComments;
+        $this->commentList = $comments;
     }
 
     /**
      * Add comment.
      *
-     * @param \oePaypalOrderPaymentComment $oComment comment
+     * @param \oePaypalOrderPaymentComment $comment comment
      */
-    public function addComment($oComment)
+    public function addComment($comment)
     {
-        $this->getCommentList()->addComment($oComment);
+        $this->getCommentList()->addComment($comment);
     }
 
     /**
      * Return database gateway.
      *
-     * @return \OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway
+     * @return \OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway|\OxidEsales\PayPalModule\Core\ModelDbGateway
      */
-    protected function _getDbGateway()
+    protected function getDbGateway()
     {
-        if (is_null($this->_oDbGateway)) {
-            $this->_setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class));
+        if (is_null($this->dbGateway)) {
+            $this->setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class));
         }
 
-        return $this->_oDbGateway;
+        return $this->dbGateway;
     }
 }

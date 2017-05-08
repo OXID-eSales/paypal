@@ -28,17 +28,20 @@ namespace OxidEsales\PayPalModule\Core;
  */
 class FullName
 {
-    private $_sFirstName = '';
-    private $_sLastName = '';
+    /** @var string  */
+    private $firstName = '';
+
+    /** @var string  */
+    private $lastName = '';
 
     /**
      * User first name and second name.
      *
-     * @param string $sFullName
+     * @param string $fullName
      */
-    public function __construct($sFullName)
+    public function __construct($fullName)
     {
-        $this->_split($sFullName);
+        $this->split($fullName);
     }
 
     /**
@@ -48,7 +51,7 @@ class FullName
      */
     public function getFirstName()
     {
-        return $this->_sFirstName;
+        return $this->firstName;
     }
 
     /**
@@ -58,19 +61,19 @@ class FullName
      */
     public function getLastName()
     {
-        return $this->_sLastName;
+        return $this->lastName;
     }
 
     /**
      * Split user full name to first name and second name.
      *
-     * @param string $sFullName
+     * @param string $fullName
      */
-    protected function _split($sFullName)
+    protected function split($fullName)
     {
-        $aNames = explode(" ", trim($sFullName), 2);
+        $names = explode(" ", trim($fullName), 2);
 
-        $this->_sFirstName = trim($aNames[0]);
-        $this->_sLastName = trim($aNames[1]);
+        $this->firstName = trim($names[0]);
+        $this->lastName = trim($names[1]);
     }
 }

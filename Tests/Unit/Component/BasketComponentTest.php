@@ -27,11 +27,11 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function providerActionExpressCheckoutFromDetailsPage()
     {
-        $sUrl = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
+        $url = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
 
         return array(
             // Article valid
-            array(true, 1, 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . urlencode($sUrl)),
+            array(true, 1, 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . urlencode($url)),
             // Article not valid
             array(false, 1, null),
             // Article not not valid- amount is zero
@@ -42,28 +42,28 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Checks if action returns correct url when article is valid and is not valid
      *
-     * @param $blIsArticleValid
-     * @param $sExpectedUrl
-     * @param $iArticleAmount
+     * @param $isArticleValid
+     * @param $expectedUrl
+     * @param $articleAmount
      *
      * @dataProvider providerActionExpressCheckoutFromDetailsPage
      */
-    public function testActionExpressCheckoutFromDetailsPage($blIsArticleValid, $iArticleAmount, $sExpectedUrl)
+    public function testActionExpressCheckoutFromDetailsPage($isArticleValid, $articleAmount, $expectedUrl)
     {
         $this->getConfig()->setConfigParam('blSeoMode', false);
 
-        $oValidator = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class, array('isArticleValid'));
-        $oValidator->expects($this->any())->method('isArticleValid')->will($this->returnValue($blIsArticleValid));
+        $validator = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class, array('isArticleValid'));
+        $validator->expects($this->any())->method('isArticleValid')->will($this->returnValue($isArticleValid));
 
-        $oCurrentItem = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class, array('getArticleAmount'));
-        $oCurrentItem->expects($this->any())->method('getArticleAmount')->will($this->returnValue($iArticleAmount));
+        $currentItem = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class, array('getArticleAmount'));
+        $currentItem->expects($this->any())->method('getArticleAmount')->will($this->returnValue($articleAmount));
 
-        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $oCmpBasket */
-        $oCmpBasket = $this->getMock(BasketComponent::class, array('_getValidator', '_getCurrentArticle'));
-        $oCmpBasket->expects($this->any())->method('_getValidator')->will($this->returnValue($oValidator));
-        $oCmpBasket->expects($this->any())->method('_getCurrentArticle')->will($this->returnValue($oCurrentItem));
+        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $cmpBasket */
+        $cmpBasket = $this->getMock(BasketComponent::class, array('getValidator', 'getCurrentArticle'));
+        $cmpBasket->expects($this->any())->method('getValidator')->will($this->returnValue($validator));
+        $cmpBasket->expects($this->any())->method('getCurrentArticle')->will($this->returnValue($currentItem));
 
-        $this->assertEquals($sExpectedUrl, $oCmpBasket->actionExpressCheckoutFromDetailsPage());
+        $this->assertEquals($expectedUrl, $cmpBasket->actionExpressCheckoutFromDetailsPage());
     }
 
     /**
@@ -73,18 +73,18 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blSeoMode', false);
 
-        $sUrl = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
-        $sCancelURL = urlencode($sUrl);
-        $sExpectedURL = 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . $sCancelURL;
+        $url = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
+        $cancelURL = urlencode($url);
+        $expectedURL = 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . $cancelURL;
 
-        $oValidator = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class, array('isArticleValid'));
-        $oValidator->expects($this->any())->method('isArticleValid')->will($this->returnValue(true));
+        $validator = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class, array('isArticleValid'));
+        $validator->expects($this->any())->method('isArticleValid')->will($this->returnValue(true));
 
-        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $oCmpBasket */
-        $oCmpBasket = $this->getMock(BasketComponent::class, array('_getValidator'));
-        $oCmpBasket->expects($this->any())->method('_getValidator')->will($this->returnValue($oValidator));
+        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $cmpBasket */
+        $cmpBasket = $this->getMock(BasketComponent::class, array('getValidator'));
+        $cmpBasket->expects($this->any())->method('getValidator')->will($this->returnValue($validator));
 
-        $this->assertEquals($sExpectedURL, $oCmpBasket->actionExpressCheckoutFromDetailsPage());
+        $this->assertEquals($expectedURL, $cmpBasket->actionExpressCheckoutFromDetailsPage());
     }
 
     /**
@@ -94,12 +94,12 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blSeoMode', false);
 
-        $sUrl = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
-        $sCancelURL = urlencode($sUrl);
-        $sExpectedUrl = 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . $sCancelURL;
+        $url = $this->getConfig()->getCurrentShopUrl(false) . 'index.php?cl=start';
+        $cancelURL = urlencode($url);
+        $expectedUrl = 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . $cancelURL;
 
-        $oCmpBasket = new BasketComponent();
+        $cmpBasket = new BasketComponent();
 
-        $this->assertEquals($sExpectedUrl, $oCmpBasket->actionNotAddToBasketAndGoToCheckout());
+        $this->assertEquals($expectedUrl, $cmpBasket->actionNotAddToBasketAndGoToCheckout());
     }
 }

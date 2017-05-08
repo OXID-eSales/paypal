@@ -150,9 +150,9 @@ class OrderPaymentListCalculator
     }
 
     /**
-     * @param $action PayPal order payment action type (e.g. cpture, refund, void)
-     * @param $status PayPal order payment status.
-     * @param $amount PayPal order payment amount.
+     * @param string $action PayPal order payment action type (e.g. cpture, refund, void)
+     * @param string $status PayPal order payment status.
+     * @param double $amount PayPal order payment amount.
      */
     private function aggregateAmounts($action, $status, $amount)
     {

@@ -53,19 +53,19 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
     public function processAction()
     {
         try {
-            /** @var \OxidEsales\PayPalModule\Core\Request $oRequest */
-            $oRequest = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
-            $sAction = $oRequest->getRequestParameter('action');
+            /** @var \OxidEsales\PayPalModule\Core\Request $request */
+            $request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+            $action = $request->getRequestParameter('action');
 
-            $oOrder = $this->getEditObject();
+            $order = $this->getEditObject();
 
-            /** @var \OxidEsales\PayPalModule\Model\Action\OrderActionFactory $oActionFactory */
-            $oActionFactory = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderActionFactory::class, $oRequest, $oOrder);
-            $oAction = $oActionFactory->createAction($sAction);
+            /** @var \OxidEsales\PayPalModule\Model\Action\OrderActionFactory $actionFactory */
+            $actionFactory = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderActionFactory::class, $request, $order);
+            $action = $actionFactory->createAction($action);
 
-            $oAction->process();
-        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oException) {
-            $this->_aViewData["error"] = $oException->getMessage();
+            $action->process();
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $exception) {
+            $this->_aViewData["error"] = $exception->getMessage();
         }
     }
 
@@ -76,11 +76,11 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
      */
     public function getOrderActionManager()
     {
-        /** @var \OxidEsales\PayPalModule\Model\OrderActionManager $oManager */
-        $oManager = oxNew(\OxidEsales\PayPalModule\Model\OrderActionManager::class);
-        $oManager->setOrder($this->getEditObject()->getPayPalOrder());
+        /** @var \OxidEsales\PayPalModule\Model\OrderActionManager $manager */
+        $manager = oxNew(\OxidEsales\PayPalModule\Model\OrderActionManager::class);
+        $manager->setOrder($this->getEditObject()->getPayPalOrder());
 
-        return $oManager;
+        return $manager;
     }
 
     /**
@@ -90,9 +90,9 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
      */
     public function getOrderPaymentActionManager()
     {
-        $oManager = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentActionManager::class);
+        $manager = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentActionManager::class);
 
-        return $oManager;
+        return $manager;
     }
 
     /**
@@ -102,11 +102,11 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
      */
     public function getOrderPaymentStatusCalculator()
     {
-        /** @var \OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator $oStatusCalculator */
-        $oStatusCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
-        $oStatusCalculator->setOrder($this->getEditObject()->getPayPalOrder());
+        /** @var \OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator $statusCalculator */
+        $statusCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
+        $statusCalculator->setOrder($this->getEditObject()->getPayPalOrder());
 
-        return $oStatusCalculator;
+        return $statusCalculator;
     }
 
     /**
@@ -116,9 +116,9 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
      */
     public function getOrderPaymentStatusList()
     {
-        $oList = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusList::class);
+        $list = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusList::class);
 
-        return $oList;
+        return $list;
     }
 
     /**
@@ -144,15 +144,15 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
      */
     public function isNewPayPalOrder()
     {
-        $blActive = false;
+        $active = false;
 
-        $oOrder = $this->getEditObject();
-        $oOrderPayPal = $oOrder->getPayPalOrder();
-        if ($this->isPayPalOrder() && $oOrderPayPal->isLoaded()) {
-            $blActive = true;
+        $order = $this->getEditObject();
+        $orderPayPal = $order->getPayPalOrder();
+        if ($this->isPayPalOrder() && $orderPayPal->isLoaded()) {
+            $active = true;
         }
 
-        return $blActive;
+        return $active;
     }
 
     /**
@@ -162,25 +162,25 @@ class OrderController extends \OxidEsales\Eshop\Application\Controller\Admin\Adm
      */
     public function isPayPalOrder()
     {
-        $blActive = false;
+        $active = false;
 
-        $oOrder = $this->getEditObject();
-        if ($oOrder && $oOrder->getFieldData('oxpaymenttype') == 'oxidpaypal') {
-            $blActive = true;
+        $order = $this->getEditObject();
+        if ($order && $order->getFieldData('oxpaymenttype') == 'oxidpaypal') {
+            $active = true;
         }
 
-        return $blActive;
+        return $active;
     }
 
     /**
      * Template getter for price formatting
      *
-     * @param double $dPrice price
+     * @param double $price price
      *
      * @return string
      */
-    public function formatPrice($dPrice)
+    public function formatPrice($price)
     {
-        return \OxidEsales\Eshop\Core\Registry::getLang()->formatCurrency($dPrice);
+        return \OxidEsales\Eshop\Core\Registry::getLang()->formatCurrency($price);
     }
 }

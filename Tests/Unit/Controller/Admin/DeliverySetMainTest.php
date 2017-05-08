@@ -48,19 +48,19 @@ class DeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider providerRender_DefaultShippingSet
      */
-    public function testRender_DefaultShippingSet($sMobileECDefaultShippingId, $blMarkAsDefaultPaymentExpected)
+    public function testRender_DefaultShippingSet($mobileECDefaultShippingId, $markAsDefaultPaymentExpected)
     {
-        $sDeliverySetId = 'standard';
+        $deliverySetId = 'standard';
 
-        $sPayPalModuleId = 'module:oepaypal';
-        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $sMobileECDefaultShippingId, null, $sPayPalModuleId);
+        $payPalModuleId = 'module:oepaypal';
+        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $mobileECDefaultShippingId, null, $payPalModuleId);
 
-        $oPayPalDeliverySet_Main = new \OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain();
-        $oPayPalDeliverySet_Main->setEditObjectId($sDeliverySetId);
-        $oPayPalDeliverySet_Main->render();
+        $payPalDeliverySet_Main = new \OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain();
+        $payPalDeliverySet_Main->setEditObjectId($deliverySetId);
+        $payPalDeliverySet_Main->render();
 
-        $aViewData = $oPayPalDeliverySet_Main->getViewData();
-        $this->assertEquals($blMarkAsDefaultPaymentExpected, $aViewData['blIsPayPalDefaultMobilePayment']);
+        $viewData = $payPalDeliverySet_Main->getViewData();
+        $this->assertEquals($markAsDefaultPaymentExpected, $viewData['isPayPalDefaultMobilePayment']);
     }
 
     /**
@@ -69,18 +69,18 @@ class DeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->setRequestParameter('isPayPalDefaultMobilePayment', true);
 
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet();
-        $sDeliverySetId1 = $oPayPalDeliverySet_Main->getEditObjectId();
+        $payPalDeliverySet_Main = $this->getDeliverySet();
+        $deliverySetId1 = $payPalDeliverySet_Main->getEditObjectId();
 
-        $sPayPalModuleId = 'module:oepaypal';
-        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $sDeliverySetId1, null, $sPayPalModuleId);
+        $payPalModuleId = 'module:oepaypal';
+        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $deliverySetId1, null, $payPalModuleId);
 
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet($sDeliverySetId1);
+        $payPalDeliverySet_Main = $this->getDeliverySet($deliverySetId1);
 
-        $oPayPalConfig = new \OxidEsales\PayPalModule\Core\Config();
-        $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
+        $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $mobileECDefaultShippingId = $payPalConfig->getMobileECDefaultShippingId();
 
-        $this->assertEquals($sDeliverySetId1, $sMobileECDefaultShippingId);
+        $this->assertEquals($deliverySetId1, $mobileECDefaultShippingId);
     }
 
     /**
@@ -89,16 +89,16 @@ class DeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->setRequestParameter('isPayPalDefaultMobilePayment', true);
 
-        $sPayPalModuleId = 'module:oepaypal';
-        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', 'standard', null, $sPayPalModuleId);
+        $payPalModuleId = 'module:oepaypal';
+        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', 'standard', null, $payPalModuleId);
 
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet();
-        $sDeliverySetId2 = $oPayPalDeliverySet_Main->getEditObjectId();
+        $payPalDeliverySet_Main = $this->getDeliverySet();
+        $deliverySetId2 = $payPalDeliverySet_Main->getEditObjectId();
 
-        $oPayPalConfig = new \OxidEsales\PayPalModule\Core\Config();
-        $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
+        $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $mobileECDefaultShippingId = $payPalConfig->getMobileECDefaultShippingId();
 
-        $this->assertEquals($sDeliverySetId2, $sMobileECDefaultShippingId);
+        $this->assertEquals($deliverySetId2, $mobileECDefaultShippingId);
     }
 
     /**
@@ -107,69 +107,69 @@ class DeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->setRequestParameter('isPayPalDefaultMobilePayment', true);
 
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet();
-        $sDeliverySetId2 = $oPayPalDeliverySet_Main->getEditObjectId();
+        $payPalDeliverySet_Main = $this->getDeliverySet();
+        $deliverySetId2 = $payPalDeliverySet_Main->getEditObjectId();
 
-        $oPayPalConfig = new \OxidEsales\PayPalModule\Core\Config();
-        $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
+        $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $mobileECDefaultShippingId = $payPalConfig->getMobileECDefaultShippingId();
 
-        $this->assertEquals($sDeliverySetId2, $sMobileECDefaultShippingId);
+        $this->assertEquals($deliverySetId2, $mobileECDefaultShippingId);
     }
 
     /**
      */
     public function testSave_SameShippingIdExistsDeliverySetNotMarkedAsSet_ShippingIdCleared()
     {
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet();
-        $sDeliverySetId1 = $oPayPalDeliverySet_Main->getEditObjectId();
+        $payPalDeliverySet_Main = $this->getDeliverySet();
+        $deliverySetId1 = $payPalDeliverySet_Main->getEditObjectId();
 
-        $sPayPalModuleId = 'module:oepaypal';
-        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $sDeliverySetId1, null, $sPayPalModuleId);
+        $payPalModuleId = 'module:oepaypal';
+        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $deliverySetId1, null, $payPalModuleId);
 
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet($sDeliverySetId1);
+        $payPalDeliverySet_Main = $this->getDeliverySet($deliverySetId1);
 
-        $oPayPalConfig = new \OxidEsales\PayPalModule\Core\Config();
-        $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
+        $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $mobileECDefaultShippingId = $payPalConfig->getMobileECDefaultShippingId();
 
-        $this->assertEquals('', $sMobileECDefaultShippingId);
+        $this->assertEquals('', $mobileECDefaultShippingId);
     }
 
     /**
      */
     public function testSave_NotSameShippingIdExistsDeliverySetNotMarkedAsSet_ShippingIdSame()
     {
-        $sPayPalModuleId = 'module:oepaypal';
-        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', 'standard', null, $sPayPalModuleId);
+        $payPalModuleId = 'module:oepaypal';
+        $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', 'standard', null, $payPalModuleId);
 
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet();
-        $sDeliverySetId2 = $oPayPalDeliverySet_Main->getEditObjectId();
+        $payPalDeliverySet_Main = $this->getDeliverySet();
+        $deliverySetId2 = $payPalDeliverySet_Main->getEditObjectId();
 
-        $oPayPalConfig = new \OxidEsales\PayPalModule\Core\Config();
-        $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
+        $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $mobileECDefaultShippingId = $payPalConfig->getMobileECDefaultShippingId();
 
-        $this->assertEquals('standard', $sMobileECDefaultShippingId);
+        $this->assertEquals('standard', $mobileECDefaultShippingId);
     }
 
     /**
      */
     public function testSave_ShippingIdDoNotExistsDeliverySetNotMarkedAsSet_ShippingIdEmpty()
     {
-        $oPayPalDeliverySet_Main = $this->_getDeliverySet();
+        $payPalDeliverySet_Main = $this->getDeliverySet();
 
-        $oPayPalConfig = new \OxidEsales\PayPalModule\Core\Config();
-        $sMobileECDefaultShippingId = $oPayPalConfig->getMobileECDefaultShippingId();
+        $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $mobileECDefaultShippingId = $payPalConfig->getMobileECDefaultShippingId();
 
-        $this->assertEquals('', $sMobileECDefaultShippingId);
+        $this->assertEquals('', $mobileECDefaultShippingId);
     }
 
     /**
      */
-    protected function _getDeliverySet($sDeliverySetid = -1)
+    protected function getDeliverySet($deliverySetid = -1)
     {
-        $oPayPalDeliverySet_Main = new \OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain();
-        $oPayPalDeliverySet_Main->setEditObjectId($sDeliverySetid);
-        $oPayPalDeliverySet_Main->save();
+        $payPalDeliverySet_Main = new \OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain();
+        $payPalDeliverySet_Main->setEditObjectId($deliverySetid);
+        $payPalDeliverySet_Main->save();
 
-        return $oPayPalDeliverySet_Main;
+        return $payPalDeliverySet_Main;
     }
 }

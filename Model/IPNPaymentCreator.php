@@ -47,16 +47,16 @@ class IPNPaymentCreator
     const PAYPAL_IPN_MEMO = 'memo';
 
     /** @var \OxidEsales\PayPalModule\Core\Request */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /**
      * Sets request object.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oRequest
+     * @param \OxidEsales\PayPalModule\Core\Request $request
      */
-    public function setRequest($oRequest)
+    public function setRequest($request)
     {
-        $this->_oRequest = $oRequest;
+        $this->request = $request;
     }
 
     /**
@@ -66,7 +66,7 @@ class IPNPaymentCreator
      */
     public function getRequest()
     {
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
@@ -92,12 +92,11 @@ class IPNPaymentCreator
         $transactionEntity   = $this->getRequest()->getRequestParameter(self::PAYPAL_IPN_TRANSACTION_ENTITY);
         $parentTransactionId = $this->getRequest()->getRequestParameter(self::PAYPAL_IPN_PARENT_TRANSACTION_ID);
 
-        $orderPaymentAuthorization = $this->_loadOrderPayment($authId);
-        $orderPaymentParent        = $this->_loadOrderPayment($parentTransactionId);
+        $orderPaymentAuthorization = $this->loadOrderPayment($authId);
+        $orderPaymentParent        = $this->loadOrderPayment($parentTransactionId);
         $orderId                   = $orderPaymentParent->getOrderId();
 
         if ((self::HANDLE_TRANSACTION_ENTITY == $transactionEntity) && $orderId) {
-
             $requestOrderPayment->setOrderId($orderId);
             $requestOrderPayment->save();
             $requestOrderPayment = $this->addRequestPaymentComment($requestOrderPayment);
@@ -132,7 +131,7 @@ class IPNPaymentCreator
      * The status of the related authorization transaction might have changed.
      * We need to update that transaction status as well if we got a value in IPN request data.
      *
-     * @param $orderPaymentAuthorization Authorization paypal order payment.
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPaymentAuthorization Authorization PayPal order payment
      */
     private function updateOrderPaymentAuthorizationStatus($orderPaymentAuthorization)
     {
@@ -147,17 +146,16 @@ class IPNPaymentCreator
     /**
      * Load order payment from transaction id.
      *
-     * @param string $sTransactionId transaction id to load object.
-     * @param string $sCorrelationId correlation id to load object.
+     * @param string $transactionId transaction id to load object.
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment|null
      */
-    private function _loadOrderPayment($sTransactionId)
+    private function loadOrderPayment($transactionId)
     {
-        $oOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oOrderPayment->loadByTransactionId($sTransactionId);
+        $orderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $orderPayment->loadByTransactionId($transactionId);
 
-        return $oOrderPayment;
+        return $orderPayment;
     }
 
     /**
@@ -185,5 +183,4 @@ class IPNPaymentCreator
         }
         return $paypalOrderPayment;
     }
-
 }

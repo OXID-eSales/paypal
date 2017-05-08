@@ -32,23 +32,23 @@ class OutOfStockValidator
      *
      * @var object
      */
-    private $_oBasket;
+    private $basket;
 
     /**
      * Level of empty stock level
      *
      * @var int
      */
-    private $_iEmptyStockLevel;
+    private $emptyStockLevel;
 
     /**
      * Sets empty stock level.
      *
-     * @param int $iEmptyStockLevel
+     * @param int $emptyStockLevel
      */
-    public function setEmptyStockLevel($iEmptyStockLevel)
+    public function setEmptyStockLevel($emptyStockLevel)
     {
-        $this->_iEmptyStockLevel = $iEmptyStockLevel;
+        $this->emptyStockLevel = $emptyStockLevel;
     }
 
     /**
@@ -58,17 +58,17 @@ class OutOfStockValidator
      */
     public function getEmptyStockLevel()
     {
-        return $this->_iEmptyStockLevel;
+        return $this->emptyStockLevel;
     }
 
     /**
      * Sets basket object.
      *
-     * @param object $oBasket
+     * @param object $basket
      */
-    public function setBasket($oBasket)
+    public function setBasket($basket)
     {
-        $this->_oBasket = $oBasket;
+        $this->basket = $basket;
     }
 
     /**
@@ -78,7 +78,7 @@ class OutOfStockValidator
      */
     public function getBasket()
     {
-        return $this->_oBasket;
+        return $this->basket;
     }
 
     /**
@@ -88,18 +88,18 @@ class OutOfStockValidator
      */
     public function hasOutOfStockArticles()
     {
-        $blResult = false;
+        $result = false;
 
-        $aBasketContents = $this->getBasket()->getContents();
+        $basketContents = $this->getBasket()->getContents();
 
-        foreach ($aBasketContents as $oBasketItem) {
-            $oArticle = $oBasketItem->getArticle();
-            if (($oArticle->getStockAmount() - $oBasketItem->getAmount()) < $this->getEmptyStockLevel()) {
-                $blResult = true;
+        foreach ($basketContents as $basketItem) {
+            $article = $basketItem->getArticle();
+            if (($article->getStockAmount() - $basketItem->getAmount()) < $this->getEmptyStockLevel()) {
+                $result = true;
                 break;
             }
         }
 
-        return $blResult;
+        return $result;
     }
 }

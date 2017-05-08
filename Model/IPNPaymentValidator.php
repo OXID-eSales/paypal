@@ -31,30 +31,30 @@ class IPNPaymentValidator
      *
      * @var object
      */
-    protected $_oLang = null;
+    protected $lang = null;
 
     /**
      * Payment created from PayPal request.
      *
      * @var \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected $_oRequestPayment = null;
+    protected $requestPayment = null;
 
     /**
      * Payment created by PayPal request id.
      *
      * @var \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected $_oOrderPayment = null;
+    protected $orderPayment = null;
 
     /**
      * Sets language object to get translations from.
      *
-     * @param object $oLang get translations from.
+     * @param object $lang get translations from.
      */
-    public function setLang($oLang)
+    public function setLang($lang)
     {
-        $this->_oLang = $oLang;
+        $this->lang = $lang;
     }
 
     /**
@@ -64,17 +64,17 @@ class IPNPaymentValidator
      */
     public function getLang()
     {
-        return $this->_oLang;
+        return $this->lang;
     }
 
     /**
      * Sets request object.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oRequestPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $requestPayment
      */
-    public function setRequestOrderPayment($oRequestPayment)
+    public function setRequestOrderPayment($requestPayment)
     {
-        $this->_oRequestPayment = $oRequestPayment;
+        $this->requestPayment = $requestPayment;
     }
 
     /**
@@ -84,17 +84,17 @@ class IPNPaymentValidator
      */
     public function getRequestOrderPayment()
     {
-        return $this->_oRequestPayment;
+        return $this->requestPayment;
     }
 
     /**
      * Sets order payment object.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $payment
      */
-    public function setOrderPayment($oPayment)
+    public function setOrderPayment($payment)
     {
-        $this->_oOrderPayment = $oPayment;
+        $this->orderPayment = $payment;
     }
 
     /**
@@ -104,7 +104,7 @@ class IPNPaymentValidator
      */
     public function getOrderPayment()
     {
-        return $this->_oOrderPayment;
+        return $this->orderPayment;
     }
 
     /**
@@ -114,19 +114,19 @@ class IPNPaymentValidator
      */
     public function getValidationFailureMessage()
     {
-        $oRequestPayment = $this->getRequestOrderPayment();
-        $oOrderPayment = $this->getOrderPayment();
+        $requestPayment = $this->getRequestOrderPayment();
+        $orderPayment = $this->getOrderPayment();
 
-        $sCurrencyPayPal = $oRequestPayment->getCurrency();
-        $dPricePayPal = $oRequestPayment->getAmount();
+        $currencyPayPal = $requestPayment->getCurrency();
+        $pricePayPal = $requestPayment->getAmount();
 
-        $sCurrencyPayment = $oOrderPayment->getCurrency();
-        $dAmountPayment = $oOrderPayment->getAmount();
+        $currencyPayment = $orderPayment->getCurrency();
+        $amountPayment = $orderPayment->getAmount();
 
-        $oLang = $this->getLang();
-        $sValidationMessage = $oLang->translateString('OEPAYPAL_PAYMENT_INFORMATION') . ': ' . $dAmountPayment . ' ' . $sCurrencyPayment . '. ' . $oLang->translateString('OEPAYPAL_INFORMATION') . ': ' . $dPricePayPal . ' ' . $sCurrencyPayPal . '.';
+        $lang = $this->getLang();
+        $validationMessage = $lang->translateString('OEPAYPAL_PAYMENT_INFORMATION') . ': ' . $amountPayment . ' ' . $currencyPayment . '. ' . $lang->translateString('OEPAYPAL_INFORMATION') . ': ' . $pricePayPal . ' ' . $currencyPayPal . '.';
 
-        return $sValidationMessage;
+        return $validationMessage;
     }
 
     /**
@@ -136,15 +136,15 @@ class IPNPaymentValidator
      */
     public function isValid()
     {
-        $oRequestPayment = $this->getRequestOrderPayment();
-        $oOrderPayment = $this->getOrderPayment();
+        $requestPayment = $this->getRequestOrderPayment();
+        $orderPayment = $this->getOrderPayment();
 
-        $sCurrencyPayPal = $oRequestPayment->getCurrency();
-        $dPricePayPal = $oRequestPayment->getAmount();
+        $currencyPayPal = $requestPayment->getCurrency();
+        $pricePayPal = $requestPayment->getAmount();
 
-        $sCurrencyPayment = $oOrderPayment->getCurrency();
-        $dAmountPayment = $oOrderPayment->getAmount();
+        $currencyPayment = $orderPayment->getCurrency();
+        $amountPayment = $orderPayment->getAmount();
 
-        return ($sCurrencyPayPal == $sCurrencyPayment && $dPricePayPal == $dAmountPayment);
+        return ($currencyPayPal == $currencyPayment && $pricePayPal == $amountPayment);
     }
 }

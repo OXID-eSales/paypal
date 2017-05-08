@@ -31,21 +31,21 @@ class OrderPaymentList extends \OxidEsales\PayPalModule\Core\PayPalList
      *
      * @var oePayPalPayPalDbGateway
      */
-    protected $_oDbGateway = null;
+    protected $dbGateway = null;
 
     /**
      * @var string|null
      */
-    protected $_sOrderId = null;
+    protected $orderId = null;
 
     /**
      * Sets order id.
      *
-     * @param string $sOrderId
+     * @param string $orderId
      */
-    public function setOrderId($sOrderId)
+    public function setOrderId($orderId)
     {
-        $this->_sOrderId = $sOrderId;
+        $this->orderId = $orderId;
     }
 
     /**
@@ -55,7 +55,7 @@ class OrderPaymentList extends \OxidEsales\PayPalModule\Core\PayPalList
      */
     public function getOrderId()
     {
-        return $this->_sOrderId;
+        return $this->orderId;
     }
 
     /**
@@ -63,68 +63,68 @@ class OrderPaymentList extends \OxidEsales\PayPalModule\Core\PayPalList
      *
      * @return oePayPalPayPalDbGateway
      */
-    protected function _getDbGateway()
+    protected function getDbGateway()
     {
-        if (is_null($this->_oDbGateway)) {
-            $this->_setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class));
+        if (is_null($this->dbGateway)) {
+            $this->setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class));
         }
 
-        return $this->_oDbGateway;
+        return $this->dbGateway;
     }
 
     /**
      * Set model database gateway.
      *
-     * @param object $oDbGateway
+     * @param object $dbGateway
      */
-    protected function _setDbGateway($oDbGateway)
+    protected function setDbGateway($dbGateway)
     {
-        $this->_oDbGateway = $oDbGateway;
+        $this->dbGateway = $dbGateway;
     }
 
     /**
      * Selects and loads order payment history.
      *
-     * @param string $sOrderId Order id.
+     * @param string $orderId Order id.
      */
-    public function load($sOrderId)
+    public function load($orderId)
     {
-        $this->setOrderId($sOrderId);
+        $this->setOrderId($orderId);
 
-        $aPayments = array();
-        $aPaymentsData = $this->_getDbGateway()->getList($this->getOrderId());
-        if (is_array($aPaymentsData) && count($aPaymentsData)) {
-            $aPayments = array();
-            foreach ($aPaymentsData as $aData) {
-                $oPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-                $oPayment->setData($aData);
-                $aPayments[] = $oPayment;
+        $payments = array();
+        $paymentsData = $this->getDbGateway()->getList($this->getOrderId());
+        if (is_array($paymentsData) && count($paymentsData)) {
+            $payments = array();
+            foreach ($paymentsData as $data) {
+                $payment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+                $payment->setData($data);
+                $payments[] = $payment;
             }
         }
 
-        $this->setArray($aPayments);
+        $this->setArray($payments);
     }
 
     /**
      * Check if list has payment with defined status.
      *
-     * @param string $sStatus Payment status.
+     * @param string $status Payment status.
      *
      * @return bool
      */
-    protected function _hasPaymentWithStatus($sStatus)
+    protected function hasPaymentWithStatus($status)
     {
-        $blHasStatus = false;
-        $aPayments = $this->getArray();
+        $hasStatus = false;
+        $payments = $this->getArray();
 
-        foreach ($aPayments as $oPayment) {
-            if ($sStatus == $oPayment->getStatus()) {
-                $blHasStatus = true;
+        foreach ($payments as $payment) {
+            if ($status == $payment->getStatus()) {
+                $hasStatus = true;
                 break;
             }
         }
 
-        return $blHasStatus;
+        return $hasStatus;
     }
 
     /**
@@ -134,7 +134,7 @@ class OrderPaymentList extends \OxidEsales\PayPalModule\Core\PayPalList
      */
     public function hasPendingPayment()
     {
-        return $this->_hasPaymentWithStatus('Pending');
+        return $this->hasPaymentWithStatus('Pending');
     }
 
     /**
@@ -144,26 +144,26 @@ class OrderPaymentList extends \OxidEsales\PayPalModule\Core\PayPalList
      */
     public function hasFailedPayment()
     {
-        return $this->_hasPaymentWithStatus('Failed');
+        return $this->hasPaymentWithStatus('Failed');
     }
 
     /**
      * Returns not yet captured (remaining) order sum.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oPayment order payment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $payment order payment
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    public function addPayment(\OxidEsales\PayPalModule\Model\OrderPayment $oPayment)
+    public function addPayment(\OxidEsales\PayPalModule\Model\OrderPayment $payment)
     {
         //order payment info
         if ($this->getOrderId()) {
-            $oPayment->setOrderId($this->getOrderId());
-            $oPayment->save();
+            $payment->setOrderId($this->getOrderId());
+            $payment->save();
         }
 
         $this->load($this->getOrderId());
 
-        return $oPayment;
+        return $payment;
     }
 }

@@ -31,30 +31,30 @@ class Caller
      *
      * @var array
      */
-    protected $_aParams = array();
+    protected $params = array();
 
     /**
      * PayPal logger.
      *
      * @var \OxidEsales\PayPalModule\Core\Logger
      */
-    protected $_oLogger = null;
+    protected $logger = null;
 
     /**
      * PayPal curl object.
      *
      * @var \OxidEsales\PayPalModule\Core\Curl
      */
-    protected $_oCurl = null;
+    protected $curl = null;
 
     /**
      * Setter for logger.
      *
-     * @param \OxidEsales\PayPalModule\Core\Logger $oLogger logger
+     * @param \OxidEsales\PayPalModule\Core\Logger $logger logger
      */
-    public function setLogger($oLogger)
+    public function setLogger($logger)
     {
-        $this->_oLogger = $oLogger;
+        $this->logger = $logger;
     }
 
     /**
@@ -64,17 +64,17 @@ class Caller
      */
     public function getLogger()
     {
-        return $this->_oLogger;
+        return $this->logger;
     }
 
     /**
      * Sets PayPal curl object.
      *
-     * @param \OxidEsales\PayPalModule\Core\Curl $oPayPalCurl PayPal curl object.
+     * @param \OxidEsales\PayPalModule\Core\Curl $payPalCurl PayPal curl object.
      */
-    public function setCurl($oPayPalCurl)
+    public function setCurl($payPalCurl)
     {
-        $this->_oCurl = $oPayPalCurl;
+        $this->curl = $payPalCurl;
     }
 
     /**
@@ -84,33 +84,33 @@ class Caller
      */
     public function getCurl()
     {
-        if (is_null($this->_oCurl)) {
-            $oCurl = oxNew(\OxidEsales\PayPalModule\Core\Curl::class);
-            $this->setCurl($oCurl);
+        if (is_null($this->curl)) {
+            $curl = oxNew(\OxidEsales\PayPalModule\Core\Curl::class);
+            $this->setCurl($curl);
         }
 
-        return $this->_oCurl;
+        return $this->curl;
     }
 
     /**
      * PayPal request parameters setter.
      *
-     * @param string $sParamName  parameter name
-     * @param mixed  $mParamValue parameter value
+     * @param string $paramName  parameter name
+     * @param mixed  $paramValue parameter value
      */
-    public function setParameter($sParamName, $mParamValue)
+    public function setParameter($paramName, $paramValue)
     {
-        $this->_aParams[$sParamName] = $mParamValue;
+        $this->params[$paramName] = $paramValue;
     }
 
     /**
      * PayPal request parameters setter.
      *
-     * @param array $aParameters parameters to use to build request.
+     * @param array $parameters parameters to use to build request.
      */
-    public function setParameters($aParameters)
+    public function setParameters($parameters)
     {
-        $this->_aParams = array_merge($this->_aParams, $aParameters);
+        $this->params = array_merge($this->params, $parameters);
     }
 
     /**
@@ -120,105 +120,105 @@ class Caller
      */
     public function getParameters()
     {
-        return $this->_aParams;
+        return $this->params;
     }
 
     /**
      * Calls given remote PayPal method.
      *
-     * @param string $sMethodName .
+     * @param string $methodName .
      *
      * @return array
      */
-    public function call($sMethodName = null)
+    public function call($methodName = null)
     {
-        $this->_setMethod($sMethodName);
+        $this->setMethod($methodName);
 
-        $oCurl = $this->getCurl();
-        $oCurl->setParameters($this->getParameters());
+        $curl = $this->getCurl();
+        $curl->setParameters($this->getParameters());
 
         $this->log($this->getParameters(), 'Request to PayPal');
 
-        $aResponse = $oCurl->execute();
+        $response = $curl->execute();
 
-        $this->log($aResponse, 'Response from PayPal');
+        $this->log($response, 'Response from PayPal');
 
-        $this->_validateResponse($aResponse);
+        $this->validateResponse($response);
 
-        return $aResponse;
+        return $response;
     }
 
     /**
      * Set method name to execute like DoExpressCheckoutPayment or GetExpressCheckoutDetails.
      *
-     * @param string $sName Name of a method
+     * @param string $name Name of a method
      */
-    protected function _setMethod($sName)
+    protected function setMethod($name)
     {
-        if (!is_null($sName)) {
-            $this->setParameter("METHOD", $sName);
+        if (!is_null($name)) {
+            $this->setParameter("METHOD", $name);
         }
     }
 
     /**
      * Validates response from PayPal errors.
      *
-     * @param array $aResponse
+     * @param array $response
      *
      * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalResponseException if response has error from PayPal
      */
-    protected function _validateResponse($aResponse)
+    protected function validateResponse($response)
     {
-        if ('Failure' == $aResponse['ACK']) {
+        if ('Failure' == $response['ACK']) {
             /**
-             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalResponseException $oException
+             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalResponseException $exception
              */
-            $oException = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class, $aResponse['L_LONGMESSAGE0'], $aResponse['L_ERRORCODE0']);
-            throw $oException;
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class, $response['L_LONGMESSAGE0'], $response['L_ERRORCODE0']);
+            throw $exception;
         }
     }
 
     /**
      * Outputs given request data.
      *
-     * @param string $sMethodName
+     * @param string $methodName
      *
      * @return string
      */
-    public function getCallBackResponse($sMethodName)
+    public function getCallBackResponse($methodName)
     {
-        $this->setParameter("METHOD", $sMethodName);
+        $this->setParameter("METHOD", $methodName);
 
-        $oCurl = $this->getCurl();
-        $oCurl->setParameters($this->getParameters());
-        $sRequest = $oCurl->getQuery();
+        $curl = $this->getCurl();
+        $curl->setParameters($this->getParameters());
+        $request = $curl->getQuery();
 
-        $this->log($sRequest, 'Callback response from eShop to PayPal');
+        $this->log($request, 'Callback response from eShop to PayPal');
 
-        return $sRequest;
+        return $request;
     }
 
     /**
      * Logs given request and responds parameters to log file.
      *
-     * @param array  $aValue request / response parameters
-     * @param string $sTitle section title in log file
+     * @param mixed  $value request / response parameters
+     * @param string $title section title in log file
      */
-    public function log($aValue, $sTitle = '')
+    public function log($value, $title = '')
     {
         if (!is_null($this->getLogger())) {
-            $this->getLogger()->setTitle($sTitle);
-            $this->getLogger()->log($aValue);
+            $this->getLogger()->setTitle($title);
+            $this->getLogger()->log($value);
         }
     }
 
     /**
      * Set parameter from request.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest request
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request request
      */
-    public function setRequest(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest)
+    public function setRequest(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request)
     {
-        $this->setParameters($oRequest->getData());
+        $this->setParameters($request->getData());
     }
 }

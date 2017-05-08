@@ -24,16 +24,16 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Component\Widget;
 class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
-    protected function _createDetailsMock($oArticleInfo, $blShowECSPopUp = 0)
+    protected function createDetailsMock($articleInfo, $showECSPopUp = 0)
     {
-        $oBasketComponent = $this->getMock(\OxidEsales\PayPalModule\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));
-        $oBasketComponent->expects($this->any())->method('getCurrentArticleInfo')->will($this->returnValue($oArticleInfo));
-        $oBasketComponent->expects($this->any())->method('shopECSPopUp')->will($this->returnValue($blShowECSPopUp));
+        $basketComponent = $this->getMock(\OxidEsales\PayPalModule\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));
+        $basketComponent->expects($this->any())->method('getCurrentArticleInfo')->will($this->returnValue($articleInfo));
+        $basketComponent->expects($this->any())->method('shopECSPopUp')->will($this->returnValue($showECSPopUp));
 
-        $oDetails = $this->getMock(\OxidEsales\PayPalModule\Component\Widget\ArticleDetails::class, array('_oePayPalGetRequest', 'getComponent'));
-        $oDetails->expects($this->any())->method('getComponent')->will($this->returnValue($oBasketComponent));
+        $details = $this->getMock(\OxidEsales\PayPalModule\Component\Widget\ArticleDetails::class, array('oePayPalGetRequest', 'getComponent'));
+        $details->expects($this->any())->method('getComponent')->will($this->returnValue($basketComponent));
 
-        return $oDetails;
+        return $details;
     }
 
     public function providerOePayPalGetArticleAmount()
@@ -49,16 +49,16 @@ class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Tests if returns correct amount
      *
-     * @param $oArticleInfo
-     * @param $blExpectedResult
+     * @param $articleInfo
+     * @param $expectedResult
      *
      * @dataProvider providerOePayPalGetArticleAmount
      */
-    public function testOePayPalGetArticleAmount($oArticleInfo, $blExpectedResult)
+    public function testOePayPalGetArticleAmount($articleInfo, $expectedResult)
     {
-        $oDetails = $this->_createDetailsMock($oArticleInfo);
+        $details = $this->createDetailsMock($articleInfo);
 
-        $this->assertEquals($blExpectedResult, $oDetails->oePayPalGetArticleAmount());
+        $this->assertEquals($expectedResult, $details->oePayPalGetArticleAmount());
     }
 
     public function providerOePayPalShowECSPopup()
@@ -73,16 +73,16 @@ class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Tests if function gets parameter and returns correct result
      *
-     * @param $blShowPopUp
-     * @param $blExpectedResult
+     * @param $showPopUp
+     * @param $expectedResult
      *
      * @dataProvider providerOePayPalShowECSPopup
      */
-    public function testOePayPalShowECSPopup($blShowPopUp, $blExpectedResult)
+    public function testOePayPalShowECSPopup($showPopUp, $expectedResult)
     {
-        $oDetails = $this->_createDetailsMock(array(), $blShowPopUp);
+        $details = $this->createDetailsMock(array(), $showPopUp);
 
-        $this->assertEquals($blExpectedResult, $oDetails->oePayPalShowECSPopup());
+        $this->assertEquals($expectedResult, $details->oePayPalShowECSPopup());
     }
 
     public function providerOePayPalGetPersistentParam()
@@ -96,16 +96,16 @@ class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Tests if function returns correct persistent param
      *
-     * @param $oArticleInfo
-     * @param $blExpectedResult
+     * @param $articleInfo
+     * @param $expectedResult
      *
      * @dataProvider providerOePayPalGetPersistentParam
      */
-    public function testOePayPalGetPersistentParam($oArticleInfo, $blExpectedResult)
+    public function testOePayPalGetPersistentParam($articleInfo, $expectedResult)
     {
-        $oDetails = $this->_createDetailsMock($oArticleInfo);
+        $details = $this->createDetailsMock($articleInfo);
 
-        $this->assertEquals($blExpectedResult, $oDetails->oePayPalGetPersistentParam());
+        $this->assertEquals($expectedResult, $details->oePayPalGetPersistentParam());
     }
 
     public function providerOePayPalGetSelection()
@@ -119,15 +119,15 @@ class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Tests if returns correct selection lists values
      *
-     * @param $oArticleInfo
-     * @param $blExpectedResult
+     * @param $articleInfo
+     * @param $expectedResult
      *
      * @dataProvider providerOePayPalGetSelection
      */
-    public function testOePayPalGetSelection($oArticleInfo, $blExpectedResult)
+    public function testOePayPalGetSelection($articleInfo, $expectedResult)
     {
-        $oDetails = $this->_createDetailsMock($oArticleInfo);
+        $details = $this->createDetailsMock($articleInfo);
 
-        $this->assertEquals($blExpectedResult, $oDetails->oePayPalGetSelection());
+        $this->assertEquals($expectedResult, $details->oePayPalGetSelection());
     }
 }

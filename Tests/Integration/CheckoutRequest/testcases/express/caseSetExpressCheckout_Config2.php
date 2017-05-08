@@ -19,7 +19,7 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-$aData = array(
+$data = array(
     'class'         => \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class,
     'action'        => 'setExpressCheckout',
     'articles'      => array(

@@ -44,9 +44,9 @@ class OrderCaptureActionData extends \OxidEsales\PayPalModule\Model\Action\Data\
      */
     public function getAmount()
     {
-        $dAmount = $this->getRequest()->getRequestParameter('capture_amount');
+        $amount = $this->getRequest()->getRequestParameter('capture_amount');
 
-        return $dAmount ? $dAmount : $this->getOrder()->getPayPalOrder()->getRemainingOrderSum();
+        return $amount ? $amount : $this->getOrder()->getPayPalOrder()->getRemainingOrderSum();
     }
 
     /**

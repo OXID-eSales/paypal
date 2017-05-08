@@ -33,13 +33,13 @@ class Request
      */
     public function getPost()
     {
-        $aPost = array();
+        $post = array();
 
         if (!empty($_POST)) {
-            $aPost = $_POST;
+            $post = $_POST;
         }
 
-        return $aPost;
+        return $post;
     }
 
     /**
@@ -49,94 +49,94 @@ class Request
      */
     public function getGet()
     {
-        $aGet = array();
+        $get = array();
 
         if (!empty($_GET)) {
-            $aGet = $_GET;
+            $get = $_GET;
         }
 
-        return $aGet;
+        return $get;
     }
 
     /**
      * Returns value of parameter stored in POST,GET.
      *
-     * @param string $sName Name of parameter
-     * @param bool   $blRaw mark to return not escaped parameter
+     * @param string $name Name of parameter
+     * @param bool   $raw  mark to return not escaped parameter
      *
      * @return mixed
      */
-    public function getRequestParameter($sName, $blRaw = false)
+    public function getRequestParameter($name, $raw = false)
     {
-        $sValue = null;
+        $value = null;
 
-        $sValue = $this->getPostParameter($sName, $blRaw);
-        if (!isset($sValue)) {
-            $sValue = $this->getGetParameter($sName, $blRaw);
+        $value = $this->getPostParameter($name, $raw);
+        if (!isset($value)) {
+            $value = $this->getGetParameter($name, $raw);
         }
 
-        return $sValue;
+        return $value;
     }
 
     /**
      * Returns value of parameter stored in POST.
      *
-     * @param string $sName Name of parameter
-     * @param bool   $blRaw mark to return not escaped parameter
+     * @param string $name Name of parameter
+     * @param bool   $raw  mark to return not escaped parameter
      *
      * @return mixed
      */
-    public function getPostParameter($sName, $blRaw = false)
+    public function getPostParameter($name, $raw = false)
     {
-        $sValue = null;
-        $aPost = $this->getPost();
+        $value = null;
+        $post = $this->getPost();
 
-        if (isset($aPost[$sName])) {
-            $sValue = $aPost[$sName];
+        if (isset($post[$name])) {
+            $value = $post[$name];
         }
 
-        if ($sValue !== null && !$blRaw) {
-            $sValue = $this->escapeSpecialChars($sValue);
+        if ($value !== null && !$raw) {
+            $value = $this->escapeSpecialChars($value);
         }
 
-        return $sValue;
+        return $value;
     }
 
     /**
      * Returns value of parameter stored in GET.
      *
-     * @param string $sName Name of parameter
-     * @param bool   $blRaw mark to return not escaped parameter
+     * @param string $name Name of parameter
+     * @param bool   $raw  mark to return not escaped parameter
      *
      * @return mixed
      */
-    public function getGetParameter($sName, $blRaw = false)
+    public function getGetParameter($name, $raw = false)
     {
-        $sValue = null;
-        $aGet = $this->getGet();
+        $value = null;
+        $get = $this->getGet();
 
-        if (isset($aGet[$sName])) {
-            $sValue = $aGet[$sName];
+        if (isset($get[$name])) {
+            $value = $get[$name];
         }
 
-        if ($sValue !== null && !$blRaw) {
-            $sValue = $this->escapeSpecialChars($sValue);
+        if ($value !== null && !$raw) {
+            $value = $this->escapeSpecialChars($value);
         }
 
-        return $sValue;
+        return $value;
     }
 
     /**
      * Wrapper for PayPal escape class.
      *
-     * @param mixed $sValue value to escape
+     * @param mixed $value value to escape
      *
      * @return mixed
      */
-    public function escapeSpecialChars($sValue)
+    public function escapeSpecialChars($value)
     {
-        $oPayPalEscape = oxNew(\OxidEsales\PayPalModule\Core\Escape::class);
+        $payPalEscape = oxNew(\OxidEsales\PayPalModule\Core\Escape::class);
 
-        return $oPayPalEscape->escapeSpecialChars($sValue);
+        return $payPalEscape->escapeSpecialChars($value);
     }
 }

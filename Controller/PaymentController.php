@@ -36,12 +36,11 @@ class PaymentController extends PaymentController_parent
      */
     public function validatePayment()
     {
-        $sPaymentId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('paymentid');
-        $oSession = $this->getSession();
-        $oBasket = $oSession->getBasket();
-        if ($sPaymentId === 'oxidpaypal' && !$this->isConfirmedByPayPal($oBasket)) {
-
-            $oSession->setVariable('paymentid', 'oxidpaypal');
+        $paymentId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('paymentid');
+        $session = $this->getSession();
+        $basket = $session->getBasket();
+        if ($paymentId === 'oxidpaypal' && !$this->isConfirmedByPayPal($basket)) {
+            $session->setVariable('paymentid', 'oxidpaypal');
 
             return 'oepaypalstandarddispatcher?fnc=setExpressCheckout'
                    . '&displayCartInPayPal=' . ((int) \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('displayCartInPayPal'));
@@ -53,21 +52,21 @@ class PaymentController extends PaymentController_parent
     /**
      * Detects if current payment was already successfully processed by PayPal
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket basket object
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket basket object
      *
      * @return bool
      */
-    public function isConfirmedByPayPal($oBasket)
+    public function isConfirmedByPayPal($basket)
     {
-        $dOldBasketAmount = $this->getSession()->getVariable("oepaypal-basketAmount");
-        if (!$dOldBasketAmount) {
+        $oldBasketAmount = $this->getSession()->getVariable("oepaypal-basketAmount");
+        if (!$oldBasketAmount) {
             return false;
         }
 
-        $oPayPalCheckValidator = oxNew(\OxidEsales\PayPalModule\Core\PayPalCheckValidator::class);
-        $oPayPalCheckValidator->setNewBasketAmount($oBasket->getPrice()->getBruttoPrice());
-        $oPayPalCheckValidator->setOldBasketAmount($dOldBasketAmount);
+        $payPalCheckValidator = oxNew(\OxidEsales\PayPalModule\Core\PayPalCheckValidator::class);
+        $payPalCheckValidator->setNewBasketAmount($basket->getPrice()->getBruttoPrice());
+        $payPalCheckValidator->setOldBasketAmount($oldBasketAmount);
 
-        return $oPayPalCheckValidator->isPayPalCheckValid();
+        return $payPalCheckValidator->isPayPalCheckValid();
     }
 }

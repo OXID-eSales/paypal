@@ -34,16 +34,16 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      *
      * @var \OxidEsales\PayPalModule\Model\OrderPaymentList
      */
-    protected $_oPaymentList = null;
+    protected $paymentList = null;
 
     /**
      * Sets order id.
      *
-     * @param string $sOrderId
+     * @param string $orderId
      */
-    public function setId($sOrderId)
+    public function setId($orderId)
     {
-        $this->setOrderId($sOrderId);
+        $this->setOrderId($orderId);
     }
 
     /**
@@ -59,11 +59,11 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
     /**
      * Set PayPal order Id.
      *
-     * @param string $sOrderId
+     * @param string $orderId
      */
-    public function setOrderId($sOrderId)
+    public function setOrderId($orderId)
     {
-        $this->_setValue('oepaypal_orderid', $sOrderId);
+        $this->setValue('oepaypal_orderid', $orderId);
     }
 
     /**
@@ -73,27 +73,27 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getOrderId()
     {
-        return $this->_getValue('oepaypal_orderid');
+        return $this->getValue('oepaypal_orderid');
     }
 
     /**
      * Set PayPal captured amount.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function setCapturedAmount($dAmount)
+    public function setCapturedAmount($amount)
     {
-        $this->_setValue('oepaypal_capturedamount', $dAmount);
+        $this->setValue('oepaypal_capturedamount', $amount);
     }
 
     /**
      * Adds given amount to PayPal captured amount.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function addCapturedAmount($dAmount)
+    public function addCapturedAmount($amount)
     {
-        $this->setCapturedAmount($dAmount + $this->getCapturedAmount());
+        $this->setCapturedAmount($amount + $this->getCapturedAmount());
     }
 
     /**
@@ -103,27 +103,27 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getCapturedAmount()
     {
-        return (double) $this->_getValue('oepaypal_capturedamount');
+        return (double) $this->getValue('oepaypal_capturedamount');
     }
 
     /**
      * Set PayPal refunded amount.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function setRefundedAmount($dAmount)
+    public function setRefundedAmount($amount)
     {
-        $this->_setValue('oepaypal_refundedamount', $dAmount);
+        $this->setValue('oepaypal_refundedamount', $amount);
     }
 
     /**
      * Adds given amount to PayPal refunded amount.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function addRefundedAmount($dAmount)
+    public function addRefundedAmount($amount)
     {
-        $this->setRefundedAmount($dAmount + $this->getRefundedAmount());
+        $this->setRefundedAmount($amount + $this->getRefundedAmount());
     }
 
     /**
@@ -133,7 +133,7 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getRefundedAmount()
     {
-        return (double) $this->_getValue('oepaypal_refundedamount');
+        return (double) $this->getValue('oepaypal_refundedamount');
     }
 
     /**
@@ -149,11 +149,11 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
     /**
      * Set PayPal refunded amount.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function setVoidedAmount($dAmount)
+    public function setVoidedAmount($amount)
     {
-        $this->_setValue('oepaypal_voidedamount', $dAmount);
+        $this->setValue('oepaypal_voidedamount', $amount);
     }
 
     /**
@@ -163,17 +163,17 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getVoidedAmount()
     {
-        return (double) $this->_getValue('oepaypal_voidedamount');
+        return (double) $this->getValue('oepaypal_voidedamount');
     }
 
     /**
      * Set transaction mode.
      *
-     * @param string $sMode
+     * @param string $mode
      */
-    public function setTransactionMode($sMode)
+    public function setTransactionMode($mode)
     {
-        $this->_setValue('oepaypal_transactionmode', $sMode);
+        $this->setValue('oepaypal_transactionmode', $mode);
     }
 
     /**
@@ -183,20 +183,20 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getTransactionMode()
     {
-        return $this->_getValue('oepaypal_transactionmode');
+        return $this->getValue('oepaypal_transactionmode');
     }
 
     /**
      * Set payment status.
      *
-     * @param string $sStatus
+     * @param string $status
      */
-    public function setPaymentStatus($sStatus)
+    public function setPaymentStatus($status)
     {
-        $this->_setValue('oepaypal_paymentstatus', $sStatus);
+        $this->setValue('oepaypal_paymentstatus', $status);
 
         // if payment completed, set order paid
-        if ($sStatus == \OxidEsales\PayPalModule\Model\PayPalOrder::PAYPAL_ORDER_STATE_COMPLETED) {
+        if ($status == \OxidEsales\PayPalModule\Model\PayPalOrder::PAYPAL_ORDER_STATE_COMPLETED) {
             $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             $order->load($this->getOrderId());
             $order->markOrderPaid();
@@ -210,22 +210,22 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getPaymentStatus()
     {
-        $sState = $this->_getValue('oepaypal_paymentstatus');
-        if (empty($sState)) {
-            $sState = self::PAYPAL_ORDER_STATE_COMPLETED;
+        $state = $this->getValue('oepaypal_paymentstatus');
+        if (empty($state)) {
+            $state = self::PAYPAL_ORDER_STATE_COMPLETED;
         }
 
-        return $sState;
+        return $state;
     }
 
     /**
      * Sets total order sum.
      *
-     * @param double $dAmount
+     * @param double $amount
      */
-    public function setTotalOrderSum($dAmount)
+    public function setTotalOrderSum($amount)
     {
-        $this->_setValue('oepaypal_totalordersum', $dAmount);
+        $this->setValue('oepaypal_totalordersum', $amount);
     }
 
     /**
@@ -235,7 +235,7 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getTotalOrderSum()
     {
-        return $this->_getValue('oepaypal_totalordersum');
+        return $this->getValue('oepaypal_totalordersum');
     }
 
     /**
@@ -251,11 +251,11 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
     /**
      * Set order currency.
      *
-     * @param string $sStatus
+     * @param string $status
      */
-    public function setCurrency($sStatus)
+    public function setCurrency($status)
     {
-        $this->_setValue('oepaypal_currency', $sStatus);
+        $this->setValue('oepaypal_currency', $status);
     }
 
     /**
@@ -265,33 +265,33 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getCurrency()
     {
-        return $this->_getValue('oepaypal_currency');
+        return $this->getValue('oepaypal_currency');
     }
 
     /**
      * Adds new payment.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oPayment order payment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $payment order payment
      */
-    public function addPayment(\OxidEsales\PayPalModule\Model\OrderPayment $oPayment)
+    public function addPayment(\OxidEsales\PayPalModule\Model\OrderPayment $payment)
     {
-        $oPaymentList = $this->getPaymentList();
-        $oPaymentList->addPayment($oPayment);
+        $paymentList = $this->getPaymentList();
+        $paymentList->addPayment($payment);
         $this->setPaymentList(null);
     }
 
     /**
      * Return database gateway.
      *
-     * @return \OxidEsales\PayPalModule\Model\DbGateways\PayPalOrderDbGateway
+     * @return \OxidEsales\PayPalModule\Model\DbGateways\PayPalOrderDbGateway|\OxidEsales\PayPalModule\Core\ModelDbGateway
      */
-    protected function _getDbGateway()
+    protected function getDbGateway()
     {
-        if (is_null($this->_oDbGateway)) {
-            $this->_setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\PayPalOrderDbGateway::class));
+        if (is_null($this->dbGateway)) {
+            $this->setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\PayPalOrderDbGateway::class));
         }
 
-        return $this->_oDbGateway;
+        return $this->dbGateway;
     }
 
     /**
@@ -301,22 +301,22 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getPaymentList()
     {
-        if (is_null($this->_oPaymentList)) {
-            $oPaymentList = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentList::class);
-            $oPaymentList->load($this->getOrderId());
-            $this->setPaymentList($oPaymentList);
+        if (is_null($this->paymentList)) {
+            $paymentList = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentList::class);
+            $paymentList->load($this->getOrderId());
+            $this->setPaymentList($paymentList);
         }
 
-        return $this->_oPaymentList;
+        return $this->paymentList;
     }
 
     /**
      * Return order payment list.
      *
-     * @param oePayPal $oPaymentList Payment list.
+     * @param oePayPal $paymentList Payment list.
      */
-    public function setPaymentList($oPaymentList)
+    public function setPaymentList($paymentList)
     {
-        $this->_oPaymentList = $oPaymentList;
+        $this->paymentList = $paymentList;
     }
 }

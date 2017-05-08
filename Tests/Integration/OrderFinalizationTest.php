@@ -47,22 +47,24 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
         $this->getSession()->setVariable('paymentid', 'oxidpaypal');
 
-        /** @var \OxidEsales\PayPalModule\Model\Basket $oBasket */
-        $oBasket = oxNew(\OxidEsales\PayPalModule\Model\Basket::class);
+        /** @var \OxidEsales\PayPalModule\Model\Basket $basket */
+        $basket = oxNew(\OxidEsales\PayPalModule\Model\Basket::class);
 
         $paymentGateway = $this->getPaymentGateway($payPalReturnStatus);
 
-        /** @var \OxidEsales\PayPalModule\Model\Order|\PHPUnit_Framework_MockObject_MockObject $oOrder */
-        $oOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getGateway', '_sendOrderByEmail', 'validateOrder'));
-        $oOrder->expects($this->any())->method('_getGateway')->will($this->returnValue($paymentGateway));
+        /** @var \OxidEsales\PayPalModule\Model\Order|\PHPUnit_Framework_MockObject_MockObject $order */
+        $order = $this->getMock(
+            \OxidEsales\PayPalModule\Model\Order::class,
+            array('_getGateway', '_sendOrderByEmail', 'validateOrder'));
+        $order->expects($this->any())->method('_getGateway')->will($this->returnValue($paymentGateway));
 
-        $oOrder->setId('_testOrderId');
-        $oOrder->finalizeOrder($oBasket, $this->getUser());
+        $order->setId('_testOrderId');
+        $order->finalizeOrder($basket, $this->getUser());
 
-        $oUpdatedOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        $oUpdatedOrder->load('_testOrderId');
-        $this->assertEquals($transactionStatus, $oUpdatedOrder->getFieldData('oxtransstatus'));
-        $oUpdatedOrder->delete();
+        $updatedOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $updatedOrder->load('_testOrderId');
+        $this->assertEquals($transactionStatus, $updatedOrder->getFieldData('oxtransstatus'));
+        $updatedOrder->delete();
     }
 
     /**
@@ -78,15 +80,15 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $result = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment::class);
         $result->setData(array('PAYMENTINFO_0_PAYMENTSTATUS' => $payPalReturnStatus));
 
-        /** @var \OxidEsales\PayPalModule\Core\PayPalService|\PHPUnit_Framework_MockObject_MockObject $oService */
-        $oService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doExpressCheckoutPayment'));
-        $oService->expects($this->any())->method('doExpressCheckoutPayment')->will($this->returnValue($result));
+        /** @var \OxidEsales\PayPalModule\Core\PayPalService|\PHPUnit_Framework_MockObject_MockObject $service */
+        $service = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doExpressCheckoutPayment'));
+        $service->expects($this->any())->method('doExpressCheckoutPayment')->will($this->returnValue($result));
 
-        /** @var \OxidEsales\PayPalModule\Model\PaymentGateway $oPayPalPaymentGateway */
-        $oPayPalPaymentGateway = oxNew(\OxidEsales\Eshop\Application\Model\PaymentGateway::class);
-        $oPayPalPaymentGateway->setPayPalCheckoutService($oService);
+        /** @var \OxidEsales\PayPalModule\Model\PaymentGateway $payPalPaymentGateway */
+        $payPalPaymentGateway = oxNew(\OxidEsales\Eshop\Application\Model\PaymentGateway::class);
+        $payPalPaymentGateway->setPayPalCheckoutService($service);
 
-        return $oPayPalPaymentGateway;
+        return $payPalPaymentGateway;
     }
 
     /**
@@ -94,10 +96,10 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getUser()
     {
-        /** @var \OxidEsales\PayPalModule\Model\User $oUser */
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->load('oxdefaultadmin');
+        /** @var \OxidEsales\PayPalModule\Model\User $user */
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $user->load('oxdefaultadmin');
 
-        return $oUser;
+        return $user;
     }
 }

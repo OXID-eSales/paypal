@@ -26,36 +26,36 @@ class CommunicationHelper extends \OxidEsales\PayPalModule\Tests\Integration\Lib
     /**
      * Returns loaded Caller object returning given parameters on call
      *
-     * @param array $aParams
+     * @param array $params
      *
      * @return \OxidEsales\PayPalModule\Core\PayPalService
      */
-    public function getCaller($aParams)
+    public function getCaller($params)
     {
         /**
-         * @var \OxidEsales\PayPalModule\Core\Caller $oCaller
+         * @var \OxidEsales\PayPalModule\Core\Caller $caller
          */
-        $oCaller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array('call'));
-        $oCaller->expects($this->any())->method('call')->will($this->returnValue($aParams));
+        $caller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array('call'));
+        $caller->expects($this->any())->method('call')->will($this->returnValue($params));
 
-        $oService = new \OxidEsales\PayPalModule\Core\PayPalService();
-        $oService->setCaller($oCaller);
+        $service = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $service->setCaller($caller);
 
-        return $oService;
+        return $service;
     }
 
     /**
      * Stub curl to return expected result.
      *
-     * @param array $aResult
+     * @param array $result
      *
      * @return \OxidEsales\PayPalModule\Core\Curl
      */
-    public function getCurl($aResult)
+    public function getCurl($result)
     {
-        $oCurl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, array('execute'));
-        $oCurl->expects($this->any())->method('execute')->will($this->returnValue($aResult));
+        $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, array('execute'));
+        $curl->expects($this->any())->method('execute')->will($this->returnValue($result));
 
-        return $oCurl;
+        return $curl;
     }
 }

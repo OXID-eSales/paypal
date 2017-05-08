@@ -35,9 +35,9 @@ class ArticleDetails extends ArticleDetails_parent
      */
     public function oePayPalGetArticleAmount()
     {
-        $aArticle = $this->_oePayPalGetECSArticle();
+        $article = $this->oePayPalGetECSArticle();
 
-        return isset($aArticle['am']) ? (int) $aArticle['am'] : 1;
+        return isset($article['am']) ? (int) $article['am'] : 1;
     }
 
     /**
@@ -47,9 +47,9 @@ class ArticleDetails extends ArticleDetails_parent
      */
     public function oePayPalGetPersistentParam()
     {
-        $aArticle = $this->_oePayPalGetECSArticle();
+        $article = $this->oePayPalGetECSArticle();
 
-        return $aArticle['persparam']['details'];
+        return $article['persparam']['details'];
     }
 
     /**
@@ -59,9 +59,9 @@ class ArticleDetails extends ArticleDetails_parent
      */
     public function oePayPalGetSelection()
     {
-        $aArticle = $this->_oePayPalGetECSArticle();
+        $article = $this->oePayPalGetECSArticle();
 
-        return $aArticle['sel'];
+        return $article['sel'];
     }
 
     /**
@@ -91,12 +91,12 @@ class ArticleDetails extends ArticleDetails_parent
      */
     public function oePayPalDisplayCartInPayPal()
     {
-        $blDisplayCartInPayPal = false;
-        if ($this->_oePayPalGetRequest()->getPostParameter('displayCartInPayPal')) {
-            $blDisplayCartInPayPal = true;
+        $displayCartInPayPal = false;
+        if ($this->oePayPalGetRequest()->getPostParameter('displayCartInPayPal')) {
+            $displayCartInPayPal = true;
         }
 
-        return $blDisplayCartInPayPal;
+        return $displayCartInPayPal;
     }
 
     /**
@@ -104,7 +104,7 @@ class ArticleDetails extends ArticleDetails_parent
      *
      * @return \OxidEsales\PayPalModule\Core\Request
      */
-    protected function _oePayPalGetRequest()
+    protected function oePayPalGetRequest()
     {
         return oxNew(\OxidEsales\PayPalModule\Core\Request::class);
     }
@@ -114,10 +114,10 @@ class ArticleDetails extends ArticleDetails_parent
      *
      * @return array
      */
-    protected function _oePayPalGetECSArticle()
+    protected function oePayPalGetECSArticle()
     {
-        $aProducts = $this->getComponent('oxcmp_basket')->getCurrentArticleInfo();
+        $products = $this->getComponent('oxcmp_basket')->getCurrentArticleInfo();
 
-        return $aProducts;
+        return $products;
     }
 }

@@ -31,9 +31,9 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetGetCheckCountry_default()
     {
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
 
-        $this->assertTrue($oValidator->getCheckCountry());
+        $this->assertTrue($validator->getCheckCountry());
     }
 
     /**
@@ -41,11 +41,11 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetGetCheckCountry_custom()
     {
-        $blCheckCountry = false;
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
-        $oValidator->setCheckCountry($blCheckCountry);
+        $checkCountry = false;
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator->setCheckCountry($checkCountry);
 
-        $this->assertFalse($oValidator->getCheckCountry());
+        $this->assertFalse($validator->getCheckCountry());
     }
 
     /**
@@ -53,14 +53,14 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentValid_paymentActive_true()
     {
-        $oPayment = new \OxidEsales\Eshop\Application\Model\Payment();
-        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+        $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
 
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
 
-        $oValidator->setPayment($oPayment);
+        $validator->setPayment($payment);
 
-        $this->assertTrue($oValidator->isPaymentValid());
+        $this->assertTrue($validator->isPaymentValid());
     }
 
     /**
@@ -68,9 +68,9 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentValid_checkCountryDefault_false()
     {
-        $oPaymentValidator = $this->_getPaymentValidator();
+        $paymentValidator = $this->getPaymentValidator();
 
-        $this->assertFalse($oPaymentValidator->isPaymentValid());
+        $this->assertFalse($paymentValidator->isPaymentValid());
     }
 
     /**
@@ -78,10 +78,10 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentValid_checkCountryCustom_true()
     {
-        $oPaymentValidator = $this->_getPaymentValidator();
-        $oPaymentValidator->setCheckCountry(false);
+        $paymentValidator = $this->getPaymentValidator();
+        $paymentValidator->setCheckCountry(false);
 
-        $this->assertTrue($oPaymentValidator->isPaymentValid());
+        $this->assertTrue($paymentValidator->isPaymentValid());
     }
 
     /**
@@ -89,60 +89,60 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentValid_paymentInActive_true()
     {
-        $oPayment = new \OxidEsales\Eshop\Application\Model\Payment();
-        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(0);
+        $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(0);
 
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
 
-        $oValidator->setPayment($oPayment);
+        $validator->setPayment($payment);
 
-        $this->assertFalse($oValidator->isPaymentValid());
+        $this->assertFalse($validator->isPaymentValid());
     }
 
     public function providerIsPaymentValid_allCases()
     {
-        $oGroup1 = $this->getMock(\OxidEsales\Eshop\Application\Model\Groups::class, array("getId"));
-        $oGroup1->expects($this->any())->method("getId")->will($this->returnValue("someGroup1"));
+        $group1 = $this->getMock(\OxidEsales\Eshop\Application\Model\Groups::class, array("getId"));
+        $group1->expects($this->any())->method("getId")->will($this->returnValue("someGroup1"));
 
-        $oGroup2 = $this->getMock(\OxidEsales\Eshop\Application\Model\Groups::class, array("getId"));
-        $oGroup2->expects($this->any())->method("getId")->will($this->returnValue("someGroup2"));
+        $group2 = $this->getMock(\OxidEsales\Eshop\Application\Model\Groups::class, array("getId"));
+        $group2->expects($this->any())->method("getId")->will($this->returnValue("someGroup2"));
 
-        $oListEmpty = new \OxidEsales\Eshop\Core\Model\ListModel();
+        $listEmpty = new \OxidEsales\Eshop\Core\Model\ListModel();
 
-        $oList1 = new \OxidEsales\Eshop\Core\Model\ListModel();
-        $oList1[] = $oGroup1;
+        $list1 = new \OxidEsales\Eshop\Core\Model\ListModel();
+        $list1[] = $group1;
 
-        $oList2 = new \OxidEsales\Eshop\Core\Model\ListModel();
-        $oList2[] = $oGroup1;
-        $oList2[] = $oGroup2;
+        $list2 = new \OxidEsales\Eshop\Core\Model\ListModel();
+        $list2[] = $group1;
+        $list2[] = $group2;
 
         return array(
             // price outside range, user has account, payment has no set countries, and no user groups set - expects false
-            array(1, 10, 100, 5, array(), null, "someCountry", true, $oListEmpty, array(), false),
+            array(1, 10, 100, 5, array(), null, "someCountry", true, $listEmpty, array(), false),
             // price outside range, user has account, payment has no set countries, but has user group set, user belongs to the same group - expects false
-            array(1, 10, 100, 110, array(), null, "someCountry", true, $oList1, array('someGroup1' => "data"), false),
+            array(1, 10, 100, 110, array(), null, "someCountry", true, $list1, array('someGroup1' => "data"), false),
             // price inside range, user has account, payment has no set countries, but has user group set, user belongs to the same group - expects true
-            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList1, array('someGroup1' => "data"), true),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $list1, array('someGroup1' => "data"), true),
             // paypal payment is not active - expects false
-            array(0, 10, 100, 10, array(), null, "someCountry", true, $oListEmpty, array(), false),
+            array(0, 10, 100, 10, array(), null, "someCountry", true, $listEmpty, array(), false),
             // Shipping country not equal to given countries
             // price inside range, user has account, payment has countries and groups set, but user is from other country, but belongs to the same group - expects false
-            array(1, 10, 100, 10, array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $oList1, array('someGroup1' => "data"), false),
+            array(1, 10, 100, 10, array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $list1, array('someGroup1' => "data"), false),
             // price inside range, user has account, payment has countries and groups set, but user is from the same country and belongs to the same group - expects true
-            array(1, 10, 100, 100, array("someOtherCountry", "someCountry", "andAnotherCountry"), null, "someCountry", true, $oList1, array('someGroup1' => "data"), true),
+            array(1, 10, 100, 100, array("someOtherCountry", "someCountry", "andAnotherCountry"), null, "someCountry", true, $list1, array('someGroup1' => "data"), true),
             // price inside range, user has account, payment does not have countries set, but has user groups set, user does not belong to any user group - expects false
-            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList2, array(), false),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $list2, array(), false),
             // price inside range, user has account, payment does not have countries set, but has user groups set, user belongs to one user group - expects true
-            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList2, array('someGroup1' => "data"), true),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $list2, array('someGroup1' => "data"), true),
             // price inside range, user has account, payment does not have countries set, but has user groups set, user belongs to different user group - expects false
-            array(1, 10, 100, 10, array(), null, "someCountry", true, $oList2, array('someGroup3' => "data"), false),
+            array(1, 10, 100, 10, array(), null, "someCountry", true, $list2, array('someGroup3' => "data"), false),
             // price inside range, user does not have account (anonymous), payment has groups set - expects true
-            array(1, 10, 100, 10, array(), null, "someCountry", false, $oList2, array(), true),
+            array(1, 10, 100, 10, array(), null, "someCountry", false, $list2, array(), true),
             // Shipping country not given, but user address is given
-            array(1, 10, 100, 10, array(), "someCountry", null, false, $oList2, array(), true),
-            array(1, 10, 100, 10, array("someOtherCountry", "someCountry", "andAnotherCountry"), "someCountry", null, false, $oList2, array(), true),
+            array(1, 10, 100, 10, array(), "someCountry", null, false, $list2, array(), true),
+            array(1, 10, 100, 10, array("someOtherCountry", "someCountry", "andAnotherCountry"), "someCountry", null, false, $list2, array(), true),
             // Shipping country not given and user address is not same as given countries
-            array(1, 10, 100, 10, array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $oList2, array(), false),
+            array(1, 10, 100, 10, array("someOtherCountry", "andAnotherCountry"), "someCountry", null, true, $list2, array(), false),
         );
     }
 
@@ -151,36 +151,36 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider providerIsPaymentValid_allCases
      */
-    public function testIsPaymentValid_allCases($isActivePayment, $dRangeFrom, $dRangeTo, $dPrice, $aPaymentCountries, $sUserCountryId, $sUserShippingCountryId, $blUserHasAccount, $aPaymentUserGroups, $aUserGroups, $blExpectedResult)
+    public function testIsPaymentValid_allCases($isActivePayment, $rangeFrom, $rangeTo, $price, $paymentCountries, $userCountryId, $userShippingCountryId, $userHasAccount, $paymentUserGroups, $userGroups, $expectedResult)
     {
-        $oPayment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("getCountries", "getGroups"));
-        $oPayment->expects($this->any())->method("getCountries")->will($this->returnValue($aPaymentCountries));
-        $oPayment->expects($this->any())->method("getGroups")->will($this->returnValue($aPaymentUserGroups));
+        $payment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("getCountries", "getGroups"));
+        $payment->expects($this->any())->method("getCountries")->will($this->returnValue($paymentCountries));
+        $payment->expects($this->any())->method("getGroups")->will($this->returnValue($paymentUserGroups));
 
-        $oPayment->load('oxidpaypal');
-        $oPayment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field($dRangeFrom);
-        $oPayment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field($dRangeTo);
-        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field($isActivePayment);
+        $payment->load('oxidpaypal');
+        $payment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field($rangeFrom);
+        $payment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field($rangeTo);
+        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field($isActivePayment);
 
-        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
-        $oAddress->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field($sUserShippingCountryId);
+        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field($userShippingCountryId);
 
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getUserGroups", "hasAccount", "getSelectedAddress", "getSelectedAddressId"));
-        $oUser->expects($this->any())->method("getUserGroups")->will($this->returnValue($aUserGroups));
-        $oUser->expects($this->any())->method("hasAccount")->will($this->returnValue($blUserHasAccount));
-        $oUser->expects($this->any())->method("getSelectedAddress")->will($this->returnValue($oAddress));
-        $oUser->expects($this->any())->method("getSelectedAddressId")->will($this->returnValue($sUserShippingCountryId));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getUserGroups", "hasAccount", "getSelectedAddress", "getSelectedAddressId"));
+        $user->expects($this->any())->method("getUserGroups")->will($this->returnValue($userGroups));
+        $user->expects($this->any())->method("hasAccount")->will($this->returnValue($userHasAccount));
+        $user->expects($this->any())->method("getSelectedAddress")->will($this->returnValue($address));
+        $user->expects($this->any())->method("getSelectedAddressId")->will($this->returnValue($userShippingCountryId));
 
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field($sUserCountryId);
+        $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field($userCountryId);
 
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
 
-        $oValidator->setConfig($this->getConfig());
-        $oValidator->setPayment($oPayment);
-        $oValidator->setUser($oUser);
-        $oValidator->setPrice($dPrice);
+        $validator->setConfig($this->getConfig());
+        $validator->setPayment($payment);
+        $validator->setUser($user);
+        $validator->setPrice($price);
 
-        $this->assertEquals($blExpectedResult, $oValidator->isPaymentValid());
+        $this->assertEquals($expectedResult, $validator->isPaymentValid());
     }
 
     /**
@@ -189,20 +189,20 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentValid_NoGroupsAssignedToPayment_True()
     {
-        $oPayment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("getCountries", "getGroups"));
-        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
-        $oPayment->expects($this->any())->method("getGroups")->will($this->returnValue(array()));
+        $payment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("getCountries", "getGroups"));
+        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+        $payment->expects($this->any())->method("getGroups")->will($this->returnValue(array()));
 
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("hasAccount"));
-        $oUser->expects($this->any())->method("hasAccount")->will($this->returnValue(1));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("hasAccount"));
+        $user->expects($this->any())->method("hasAccount")->will($this->returnValue(1));
 
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
 
-        $oValidator->setConfig($this->getConfig());
-        $oValidator->setPayment($oPayment);
-        $oValidator->setUser($oUser);
+        $validator->setConfig($this->getConfig());
+        $validator->setPayment($payment);
+        $validator->setUser($user);
 
-        $this->assertEquals(true, $oValidator->isPaymentValid());
+        $this->assertEquals(true, $validator->isPaymentValid());
     }
 
     /**
@@ -210,19 +210,19 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentActive_MinOrderPriceNotSet_True()
     {
-        $oPayment = new \OxidEsales\Eshop\Application\Model\Payment();
-        $oPayment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field(0);
-        $oPayment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field(0);
-        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+        $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+        $payment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field(0);
+        $payment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field(0);
+        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
 
         $this->getConfig()->setConfigParam('iMinOrderPrice', '');
 
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
-        $oValidator->setConfig($this->getConfig());
-        $oValidator->setPayment($oPayment);
-        $oValidator->setPrice(50);
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator->setConfig($this->getConfig());
+        $validator->setPayment($payment);
+        $validator->setPrice(50);
 
-        $this->assertEquals(true, $oValidator->isPaymentValid());
+        $this->assertEquals(true, $validator->isPaymentValid());
     }
 
     /**
@@ -230,19 +230,19 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentActive_MinOrderPriceSet_True()
     {
-        $oPayment = new \OxidEsales\Eshop\Application\Model\Payment();
-        $oPayment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field(0);
-        $oPayment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field(0);
-        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+        $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+        $payment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field(0);
+        $payment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field(0);
+        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
 
         $this->getConfig()->setConfigParam('iMinOrderPrice', 10);
 
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
-        $oValidator->setConfig($this->getConfig());
-        $oValidator->setPayment($oPayment);
-        $oValidator->setPrice(50);
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator->setConfig($this->getConfig());
+        $validator->setPayment($payment);
+        $validator->setPrice(50);
 
-        $this->assertEquals(true, $oValidator->isPaymentValid());
+        $this->assertEquals(true, $validator->isPaymentValid());
     }
 
     /**
@@ -250,41 +250,41 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentActive_MinOrderPriceSet_False()
     {
-        $oPayment = new \OxidEsales\Eshop\Application\Model\Payment();
-        $oPayment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field(0);
-        $oPayment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field(0);
-        $oPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+        $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+        $payment->oxpayments__oxfromamount = new \OxidEsales\Eshop\Core\Field(0);
+        $payment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field(0);
+        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
 
         $this->getConfig()->setConfigParam('iMinOrderPrice', 50);
 
-        $oValidator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
-        $oValidator->setConfig($this->getConfig());
-        $oValidator->setPayment($oPayment);
-        $oValidator->setPrice(10);
+        $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
+        $validator->setConfig($this->getConfig());
+        $validator->setPayment($payment);
+        $validator->setPrice(10);
 
-        $this->assertEquals(false, $oValidator->isPaymentValid());
+        $this->assertEquals(false, $validator->isPaymentValid());
     }
 
     /**
      * @return \OxidEsales\PayPalModule\Model\PaymentValidator
      */
-    protected function _getPaymentValidator()
+    protected function getPaymentValidator()
     {
-        $oUser = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array('hasAccount'));
-        $oUser->expects($this->any())->method('hasAccount')->will($this->returnValue(true));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array('hasAccount'));
+        $user->expects($this->any())->method('hasAccount')->will($this->returnValue(true));
 
-        $oPaymentValidator = $this->getMock(
+        $paymentValidator = $this->getMock(
             \OxidEsales\PayPalModule\Model\PaymentValidator::class,
-            array('isPaymentActive', 'getPrice', '_checkPriceRange', '_checkMinOrderPrice', 'getUser', '_checkUserGroup', '_checkUserCountry')
+            array('isPaymentActive', 'getPrice', 'checkPriceRange', 'checkMinOrderPrice', 'getUser', 'checkUserGroup', 'checkUserCountry')
         );
-        $oPaymentValidator->expects($this->any())->method('isPaymentActive')->will($this->returnValue(true));
-        $oPaymentValidator->expects($this->any())->method('getPrice')->will($this->returnValue(true));
-        $oPaymentValidator->expects($this->any())->method('_checkPriceRange')->will($this->returnValue(true));
-        $oPaymentValidator->expects($this->any())->method('_checkMinOrderPrice')->will($this->returnValue(true));
-        $oPaymentValidator->expects($this->any())->method('getUser')->will($this->returnValue($oUser));
-        $oPaymentValidator->expects($this->any())->method('_checkUserGroup')->will($this->returnValue(true));
-        $oPaymentValidator->expects($this->any())->method('_checkUserCountry')->will($this->returnValue(false));
+        $paymentValidator->expects($this->any())->method('isPaymentActive')->will($this->returnValue(true));
+        $paymentValidator->expects($this->any())->method('getPrice')->will($this->returnValue(true));
+        $paymentValidator->expects($this->any())->method('checkPriceRange')->will($this->returnValue(true));
+        $paymentValidator->expects($this->any())->method('checkMinOrderPrice')->will($this->returnValue(true));
+        $paymentValidator->expects($this->any())->method('getUser')->will($this->returnValue($user));
+        $paymentValidator->expects($this->any())->method('checkUserGroup')->will($this->returnValue(true));
+        $paymentValidator->expects($this->any())->method('checkUserCountry')->will($this->returnValue(false));
 
-        return $oPaymentValidator;
+        return $paymentValidator;
     }
 }

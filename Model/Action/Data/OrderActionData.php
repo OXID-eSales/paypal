@@ -32,25 +32,25 @@ class OrderActionData
      *
      * @var \OxidEsales\PayPalModule\Core\Request
      */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /**
      * Order object
      *
-     * @var \OxidEsales\PayPalModule\Model\PayPalOrder
+     * @var \OxidEsales\PayPalModule\Model\Order
      */
-    protected $_oOrder = null;
+    protected $order = null;
 
     /**
      * Sets dependencies.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request      $oRequest
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $oOrder
+     * @param \OxidEsales\PayPalModule\Core\Request      $request
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $order
      */
-    public function __construct($oRequest, $oOrder)
+    public function __construct($request, $order)
     {
-        $this->_oRequest = $oRequest;
-        $this->_oOrder = $oOrder;
+        $this->request = $request;
+        $this->order = $order;
     }
 
     /**
@@ -60,17 +60,17 @@ class OrderActionData
      */
     public function getRequest()
     {
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
      * Returns PayPal Order object
      *
-     * @return \OxidEsales\PayPalModule\Core\Request
+     * @return \OxidEsales\PayPalModule\Model\Order
      */
     public function getOrder()
     {
-        return $this->_oOrder;
+        return $this->order;
     }
 
     /**

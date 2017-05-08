@@ -29,28 +29,28 @@ abstract class OrderActionHandler
     /**
      * @var object
      */
-    protected $_oData = null;
+    protected $data = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Core\PayPalService
      */
-    protected $_oPayPalService = null;
+    protected $payPalService = null;
 
     /**
      * PayPal order
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected $_oPayPalRequestBuilder = null;
+    protected $payPalRequestBuilder = null;
 
     /**
      * Sets data object.
      *
-     * @param object $oData
+     * @param object $data
      */
-    public function __construct($oData)
+    public function __construct($data)
     {
-        $this->_oData = $oData;
+        $this->data = $data;
     }
 
     /**
@@ -60,17 +60,17 @@ abstract class OrderActionHandler
      */
     public function getData()
     {
-        return $this->_oData;
+        return $this->data;
     }
 
     /**
      * Sets PayPal request builder
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder $oBuilder
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder $builder
      */
-    public function setPayPalRequestBuilder($oBuilder)
+    public function setPayPalRequestBuilder($builder)
     {
-        $this->_oPayPalRequestBuilder = $oBuilder;
+        $this->payPalRequestBuilder = $builder;
     }
 
     /**
@@ -80,21 +80,21 @@ abstract class OrderActionHandler
      */
     public function getPayPalRequestBuilder()
     {
-        if ($this->_oPayPalRequestBuilder === null) {
-            $this->_oPayPalRequestBuilder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class);
+        if ($this->payPalRequestBuilder === null) {
+            $this->payPalRequestBuilder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class);
         }
 
-        return $this->_oPayPalRequestBuilder;
+        return $this->payPalRequestBuilder;
     }
 
     /**
      * Sets PayPal service
      *
-     * @param \OxidEsales\PayPalModule\Core\PayPalService $oService
+     * @param \OxidEsales\PayPalModule\Core\PayPalService $service
      */
-    public function setPayPalService($oService)
+    public function setPayPalService($service)
     {
-        $this->_oPayPalService = $oService;
+        $this->payPalService = $service;
     }
 
     /**
@@ -104,10 +104,10 @@ abstract class OrderActionHandler
      */
     public function getPayPalService()
     {
-        if ($this->_oPayPalService === null) {
-            $this->_oPayPalService = oxNew(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        if ($this->payPalService === null) {
+            $this->payPalService = oxNew(\OxidEsales\PayPalModule\Core\PayPalService::class);
         }
 
-        return $this->_oPayPalService;
+        return $this->payPalService;
     }
 }

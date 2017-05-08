@@ -32,11 +32,11 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetGetDependencies()
     {
-        $oOrder = new \stdClass();
-        $oHandler = new \stdClass();
-        $oAction = $this->getMock(\OxidEsales\PayPalModule\Model\Action\OrderAction::class, array('process'), array($oHandler, $oOrder));
+        $order = new \stdClass();
+        $handler = new \stdClass();
+        $action = $this->getMock(\OxidEsales\PayPalModule\Model\Action\OrderAction::class, array('process'), array($handler, $order));
 
-        $this->assertSame($oOrder, $oAction->getOrder());
-        $this->assertSame($oHandler, $oAction->getHandler());
+        $this->assertSame($order, $action->getOrder());
+        $this->assertSame($handler, $action->getHandler());
     }
 }

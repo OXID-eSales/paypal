@@ -46,7 +46,7 @@
  *  ...
  * Short description: bug entry / support case other info;
  */
-$aData = array(
+$data = array(
     'class'         => \OxidEsales\PayPalModule\Controller\StandardDispatcher::class,
     'action'        => 'setExpressCheckout',
     'articles'      => array(

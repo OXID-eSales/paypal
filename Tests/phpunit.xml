@@ -15,10 +15,10 @@
          verbose="false">
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../components</directory>
-            <directory suffix=".php">../controllers</directory>
-            <directory suffix=".php">../core</directory>
-            <directory suffix=".php">../models</directory>
+            <directory suffix=".php">../Component</directory>
+            <directory suffix=".php">../Controller</directory>
+            <directory suffix=".php">../Core</directory>
+            <directory suffix=".php">../Model</directory>
         </whitelist>
     </filter>
 </phpunit>

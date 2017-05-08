@@ -29,31 +29,31 @@ class OrderManager
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderPayment::class
      */
-    protected $_oOrderPayment = null;
+    protected $orderPayment = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected $_oOrder = null;
+    protected $order = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator
      */
-    protected $_oOrderPaymentStatusCalculator = null;
+    protected $orderPaymentStatusCalculator = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderPaymentListCalculator
      */
-    protected $_oOrderPaymentListCalculator = null;
+    protected $orderPaymentListCalculator = null;
 
     /**
      * Sets order payment.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment
      */
-    public function setOrderPayment($oOrderPayment)
+    public function setOrderPayment($orderPayment)
     {
-        $this->_oOrderPayment = $oOrderPayment;
+        $this->orderPayment = $orderPayment;
     }
 
     /**
@@ -63,44 +63,44 @@ class OrderManager
      */
     public function getOrderPayment()
     {
-        return $this->_oOrderPayment;
+        return $this->orderPayment;
     }
 
     /**
      * Sets order.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $oOrder
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $order
      */
-    public function setOrder($oOrder)
+    public function setOrder($order)
     {
-        $this->_oOrder = $oOrder;
+        $this->order = $order;
     }
 
     /**
      * Create object \OxidEsales\PayPalModule\Model\PayPalOrder.
      * If Order is not set, create order from Order Payment.
      *
-     * @return object
+     * @return \OxidEsales\PayPalModule\Model\PayPalOrder
      */
     public function getOrder()
     {
-        if ($this->_oOrder === null) {
-            $oOrderPayment = $this->getOrderPayment();
-            $oOrder = $this->_getOrderFromPayment($oOrderPayment);
-            $this->setOrder($oOrder);
+        if ($this->order === null) {
+            $orderPayment = $this->getOrderPayment();
+            $order = $this->getOrderFromPayment($orderPayment);
+            $this->setOrder($order);
         }
 
-        return $this->_oOrder;
+        return $this->order;
     }
 
     /**
      * Sets \OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator $oOrderPaymentStatusCalculator
+     * @param \OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator $orderPaymentStatusCalculator
      */
-    public function setOrderPaymentStatusCalculator($oOrderPaymentStatusCalculator)
+    public function setOrderPaymentStatusCalculator($orderPaymentStatusCalculator)
     {
-        $this->_oOrderPaymentStatusCalculator = $oOrderPaymentStatusCalculator;
+        $this->orderPaymentStatusCalculator = $orderPaymentStatusCalculator;
     }
 
     /**
@@ -110,22 +110,22 @@ class OrderManager
      */
     public function getOrderPaymentStatusCalculator()
     {
-        if (is_null($this->_oOrderPaymentStatusCalculator)) {
-            $oOrderPaymentStatusCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
-            $this->setOrderPaymentStatusCalculator($oOrderPaymentStatusCalculator);
+        if (is_null($this->orderPaymentStatusCalculator)) {
+            $orderPaymentStatusCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
+            $this->setOrderPaymentStatusCalculator($orderPaymentStatusCalculator);
         }
 
-        return $this->_oOrderPaymentStatusCalculator;
+        return $this->orderPaymentStatusCalculator;
     }
 
     /**
      * Sets \OxidEsales\PayPalModule\Model\OrderPaymentListCalculator.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPaymentListCalculator $oOrderPaymentListCalculator
+     * @param \OxidEsales\PayPalModule\Model\OrderPaymentListCalculator $orderPaymentListCalculator
      */
-    public function setOrderPaymentListCalculator($oOrderPaymentListCalculator)
+    public function setOrderPaymentListCalculator($orderPaymentListCalculator)
     {
-        $this->_oOrderPaymentListCalculator = $oOrderPaymentListCalculator;
+        $this->orderPaymentListCalculator = $orderPaymentListCalculator;
     }
 
     /**
@@ -135,12 +135,12 @@ class OrderManager
      */
     public function getOrderPaymentListCalculator()
     {
-        if (is_null($this->_oOrderPaymentListCalculator)) {
-            $oOrderPaymentListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-            $this->setOrderPaymentListCalculator($oOrderPaymentListCalculator);
+        if (is_null($this->orderPaymentListCalculator)) {
+            $orderPaymentListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+            $this->setOrderPaymentListCalculator($orderPaymentListCalculator);
         }
 
-        return $this->_oOrderPaymentListCalculator;
+        return $this->orderPaymentListCalculator;
     }
 
     /**
@@ -150,18 +150,18 @@ class OrderManager
      */
     public function updateOrderStatus()
     {
-        $blOrderUpdated = false;
-        $oOrder = $this->getOrder();
+        $orderUpdated = false;
+        $order = $this->getOrder();
 
-        if (!is_null($oOrder)) {
-            $oOrderPayment = $this->getOrderPayment();
-            $oOrder = $this->recalculateAmounts($oOrder);
-            $sNewOrderStatus = $this->_calculateOrderStatus($oOrderPayment, $oOrder);
-            $this->_updateOrderStatus($oOrder, $sNewOrderStatus);
-            $blOrderUpdated = true;
+        if (!is_null($order)) {
+            $orderPayment = $this->getOrderPayment();
+            $order = $this->recalculateAmounts($order);
+            $newOrderStatus = $this->calculateOrderStatus($orderPayment, $order);
+            $this->persistNewOrderStatus($order, $newOrderStatus);
+            $orderUpdated = true;
         }
 
-        return $blOrderUpdated;
+        return $orderUpdated;
     }
 
     /**
@@ -192,54 +192,54 @@ class OrderManager
     /**
      * Wrapper for order payment calculator.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment Order payment to set to calculator.
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder  $oOrder        Order to be set to validator.
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment Order payment to set to calculator.
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder  $order        Order to be set to validator.
      *
      * @return null|string
      */
-    protected function _calculateOrderStatus($oOrderPayment, $oOrder)
+    protected function calculateOrderStatus($orderPayment, $order)
     {
-        $oOrderPaymentStatusCalculator = $this->getOrderPaymentStatusCalculator();
-        $oOrderPaymentStatusCalculator->setOrderPayment($oOrderPayment);
-        $oOrderPaymentStatusCalculator->setOrder($oOrder);
+        $orderPaymentStatusCalculator = $this->getOrderPaymentStatusCalculator();
+        $orderPaymentStatusCalculator->setOrderPayment($orderPayment);
+        $orderPaymentStatusCalculator->setOrder($order);
 
-        $sNewOrderStatus = $oOrderPaymentStatusCalculator->getStatus();
+        $newOrderStatus = $orderPaymentStatusCalculator->getStatus();
 
-        return $sNewOrderStatus;
+        return $newOrderStatus;
     }
 
     /**
      * Update order to given status.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $oOrder          Order to be updated.
-     * @param string                                     $sNewOrderStatus New order status.
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $order          Order to be updated.
+     * @param string                                     $newOrderStatus New order status.
      */
-    protected function _updateOrderStatus($oOrder, $sNewOrderStatus)
+    protected function persistNewOrderStatus($order, $newOrderStatus)
     {
-        $oOrder->setPaymentStatus($sNewOrderStatus);
-        $oOrder->save();
+        $order->setPaymentStatus($newOrderStatus);
+        $order->save();
     }
 
     /**
      * Load order by order id from order payment.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment order payment to get order id.
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment order payment to get order id.
      *
      * @return \OxidEsales\PayPalModule\Model\PayPalOrder|null
      */
-    protected function _getOrderFromPayment($oOrderPayment)
+    protected function getOrderFromPayment($orderPayment)
     {
-        $sOrderId = null;
-        $oOrder = null;
-        if (!is_null($oOrderPayment)) {
-            $sOrderId = $oOrderPayment->getOrderId();
+        $orderId = null;
+        $order = null;
+        if (!is_null($orderPayment)) {
+            $orderId = $orderPayment->getOrderId();
         }
-        if (!is_null($sOrderId)) {
-            $oOrder = oxNew(\OxidEsales\PayPalModule\Model\PayPalOrder::class);
-            $oOrder->setOrderId($sOrderId);
-            $oOrder->load();
+        if (!is_null($orderId)) {
+            $order = oxNew(\OxidEsales\PayPalModule\Model\PayPalOrder::class);
+            $order->setOrderId($orderId);
+            $order->load();
         }
 
-        return $oOrder;
+        return $order;
     }
 }

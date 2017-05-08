@@ -32,35 +32,35 @@ class OrderCaptureActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetPayPalRequest_RequestIsNotSet_BuildsRequest()
     {
-        $sAuthId = '123456';
-        $dAmount = 59.67;
-        $sCurrency = "LTU";
-        $sType = 'Full';
-        $sComment = 'Comment';
+        $authId = '123456';
+        $amount = 59.67;
+        $currency = "LTU";
+        $type = 'Full';
+        $comment = 'Comment';
 
-        $oBuilder = $this->getMock(
+        $builder = $this->getMock(
             \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class,
             array('setAuthorizationId', 'setAmount', 'setCompleteType', 'setComment')
         );
-        $oBuilder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($sAuthId));
-        $oBuilder->expects($this->once())->method('setAmount')->with($this->equalTo($dAmount), $this->equalTo($sCurrency));
-        $oBuilder->expects($this->once())->method('setCompleteType')->with($this->equalTo($sType));
-        $oBuilder->expects($this->once())->method('setComment')->with($this->equalTo($sComment));
+        $builder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($authId));
+        $builder->expects($this->once())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
+        $builder->expects($this->once())->method('setCompleteType')->with($this->equalTo($type));
+        $builder->expects($this->once())->method('setComment')->with($this->equalTo($comment));
 
-        $oData = $this->_createStub(
+        $data = $this->_createStub(
             'Data', array(
-                'getAuthorizationId' => $sAuthId,
-                'getAmount'          => $dAmount,
-                'getType'            => $sType,
-                'getComment'         => $sComment,
-                'getCurrency'        => $sCurrency,
+                'getAuthorizationId' => $authId,
+                'getAmount'          => $amount,
+                'getType'            => $type,
+                'getComment'         => $comment,
+                'getCurrency'        => $currency,
             )
         );
 
-        $oActionHandler = $this->_getActionHandler($oData);
-        $oActionHandler->setPayPalRequestBuilder($oBuilder);
+        $actionHandler = $this->getActionHandler($data);
+        $actionHandler->setPayPalRequestBuilder($builder);
 
-        $oActionHandler->getPayPalResponse();
+        $actionHandler->getPayPalResponse();
     }
 
     /**
@@ -68,23 +68,23 @@ class OrderCaptureActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetPayPalResponse_SetsCorrectRequestToService()
     {
-        $oPayPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        $payPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
 
-        $oCheckoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doCapture'));
-        $oCheckoutService->expects($this->once())->method('doCapture')->with($this->equalTo($oPayPalRequest));
+        $checkoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doCapture'));
+        $checkoutService->expects($this->once())->method('doCapture')->with($this->equalTo($payPalRequest));
 
-        $oAction = $this->_getActionHandler();
-        $oAction->setPayPalService($oCheckoutService);
-        $oAction->setPayPalRequest($oPayPalRequest);
+        $action = $this->getActionHandler();
+        $action->setPayPalService($checkoutService);
+        $action->setPayPalRequest($payPalRequest);
 
-        $oAction->getPayPalResponse();
+        $action->getPayPalResponse();
     }
 
 
     /**
      * @return \OxidEsales\PayPalModule\Core\PayPalService|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getService()
+    protected function getService()
     {
         return $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class);
     }
@@ -92,16 +92,16 @@ class OrderCaptureActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestC
     /**
      * Returns capture action object
      *
-     * @param $oData
+     * @param $data
      *
      * @return \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler
      */
-    protected function _getActionHandler($oData = null)
+    protected function getActionHandler($data = null)
     {
-        $oAction = new \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler($oData);
+        $action = new \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler($data);
 
-        $oAction->setPayPalService($this->_getService());
+        $action->setPayPalService($this->getService());
 
-        return $oAction;
+        return $action;
     }
 }

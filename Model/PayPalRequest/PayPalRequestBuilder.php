@@ -31,71 +31,71 @@ class PayPalRequestBuilder
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest
      */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /**
      * Sets Authorization id
      *
-     * @param string $sAuthorizationId
+     * @param string $authorizationId
      */
-    public function setAuthorizationId($sAuthorizationId)
+    public function setAuthorizationId($authorizationId)
     {
-        $this->getRequest()->setParameter('AUTHORIZATIONID', $sAuthorizationId);
+        $this->getRequest()->setParameter('AUTHORIZATIONID', $authorizationId);
     }
 
     /**
      * Sets Transaction id
      *
-     * @param string $sTransactionId
+     * @param string $transactionId
      */
-    public function setTransactionId($sTransactionId)
+    public function setTransactionId($transactionId)
     {
-        $this->getRequest()->setParameter('TRANSACTIONID', $sTransactionId);
+        $this->getRequest()->setParameter('TRANSACTIONID', $transactionId);
     }
 
     /**
      * Set amount
      *
-     * @param double $dAmount
-     * @param string $sCurrencyCode
+     * @param double $amount
+     * @param string $currencyCode
      */
-    public function setAmount($dAmount, $sCurrencyCode = null)
+    public function setAmount($amount, $currencyCode = null)
     {
-        $this->getRequest()->setParameter('AMT', $dAmount);
-        if (!$sCurrencyCode) {
-            $sCurrencyCode = \OxidEsales\Eshop\Core\Registry::getConfig()->getActShopCurrencyObject()->name;
+        $this->getRequest()->setParameter('AMT', $amount);
+        if (!$currencyCode) {
+            $currencyCode = \OxidEsales\Eshop\Core\Registry::getConfig()->getActShopCurrencyObject()->name;
         }
-        $this->getRequest()->setParameter('CURRENCYCODE', $sCurrencyCode);
+        $this->getRequest()->setParameter('CURRENCYCODE', $currencyCode);
     }
 
     /**
      * Set Capture type
      *
-     * @param string $sType
+     * @param string $type
      */
-    public function setCompleteType($sType)
+    public function setCompleteType($type)
     {
-        $this->getRequest()->setParameter('COMPLETETYPE', $sType);
+        $this->getRequest()->setParameter('COMPLETETYPE', $type);
     }
 
     /**
      * Set Refund type
      *
-     * @param string $sType
+     * @param string $type
      */
-    public function setRefundType($sType)
+    public function setRefundType($type)
     {
-        $this->getRequest()->setParameter('REFUNDTYPE', $sType);
+        $this->getRequest()->setParameter('REFUNDTYPE', $type);
     }
 
     /**
      * Set Refund type
      *
-     * @param string $sComment
+     * @param string $comment
      */
-    public function setComment($sComment)
+    public function setComment($comment)
     {
-        $this->getRequest()->setParameter('NOTE', $sComment);
+        $this->getRequest()->setParameter('NOTE', $comment);
     }
 
 
@@ -106,20 +106,20 @@ class PayPalRequestBuilder
      */
     public function getRequest()
     {
-        if ($this->_oRequest === null) {
-            $this->_oRequest = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        if ($this->request === null) {
+            $this->request = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
         }
 
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
      * Sets Request object.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      */
-    public function setRequest($oRequest)
+    public function setRequest($request)
     {
-        $this->_oRequest = $oRequest;
+        $this->request = $request;
     }
 }

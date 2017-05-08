@@ -50,66 +50,71 @@ class IPNPaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * @dataProvider providerIsValid
+     *
+     * @param $isValidExpected
+     * @param $validationMessageExpected
+     * @param $currencyPayPal
+     * @param $pricePayPal
+     * @param $currencyPayment
+     * @param $amountPayment
      */
-    public function testIsValid($blIsValidExpected, $sValidationMessageExpected
-        , $sCurrencyPayPal, $dPricePayPal
-        , $sCurrencyPayment, $dAmountPayment)
+    public function testIsValid($isValidExpected, $validationMessageExpected, $currencyPayPal, $pricePayPal, $currencyPayment, $amountPayment)
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setCurrency($sCurrencyPayment);
-        $oOrderPayment->setAmount($dAmountPayment);
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setCurrency($currencyPayment);
+        $orderPayment->setAmount($amountPayment);
 
-        $oRequestOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oRequestOrderPayment->setCurrency($sCurrencyPayPal);
-        $oRequestOrderPayment->setAmount($dPricePayPal);
+        $requestOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $requestOrderPayment->setCurrency($currencyPayPal);
+        $requestOrderPayment->setAmount($pricePayPal);
 
-        $sValidationMessage = '';
-        $oPayPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
-        $oPayPalIPNRequestValidator->setLang(\OxidEsales\Eshop\Core\Registry::getLang());
-        $oPayPalIPNRequestValidator->setOrderPayment($oOrderPayment);
-        $oPayPalIPNRequestValidator->setRequestOrderPayment($oRequestOrderPayment);
+        $validationMessage = '';
+        $payPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
+        $payPalIPNRequestValidator->setLang(\OxidEsales\Eshop\Core\Registry::getLang());
+        $payPalIPNRequestValidator->setOrderPayment($orderPayment);
+        $payPalIPNRequestValidator->setRequestOrderPayment($requestOrderPayment);
 
-        $blIsValid = $oPayPalIPNRequestValidator->isValid();
-        if (!$blIsValidExpected) {
-            $sValidationMessage = $oPayPalIPNRequestValidator->getValidationFailureMessage();
+        $isValid = $payPalIPNRequestValidator->isValid();
+        if (!$isValidExpected) {
+            $validationMessage = $payPalIPNRequestValidator->getValidationFailureMessage();
         }
 
-        $this->assertEquals($blIsValidExpected, $blIsValid, 'IPN request validation state is not as expected. ');
-        $this->assertEquals($sValidationMessageExpected, $sValidationMessage, 'IPN request validation message is not as expected. ');
+        $this->assertEquals($isValidExpected, $isValid, 'IPN request validation state is not as expected. ');
+        $this->assertEquals($validationMessageExpected, $validationMessage, 'IPN request validation message is not as expected. ');
     }
 
     public function testSetGetOrderPayment()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setCurrency('EUR');
-        $oOrderPayment->setAmount('12.23');
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setCurrency('EUR');
+        $orderPayment->setAmount('12.23');
 
-        $oPayPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
-        $oPayPalIPNRequestValidator->setOrderPayment($oOrderPayment);
+        $payPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
+        $payPalIPNRequestValidator->setOrderPayment($orderPayment);
 
-        $this->assertEquals($oOrderPayment, $oPayPalIPNRequestValidator->getOrderPayment(), 'Getter should return same as set in setter.');
+        $this->assertEquals($orderPayment, $payPalIPNRequestValidator->getOrderPayment(), 'Getter should return same as set in setter.');
     }
 
     public function testSetGetRequestOrderPayment()
     {
-        $oOrderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oOrderPayment->setCurrency('EUR');
-        $oOrderPayment->setAmount('12.23');
+        $orderPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $orderPayment->setCurrency('EUR');
+        $orderPayment->setAmount('12.23');
 
-        $oPayPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
-        $oPayPalIPNRequestValidator->setRequestOrderPayment($oOrderPayment);
+        $payPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
+        $payPalIPNRequestValidator->setRequestOrderPayment($orderPayment);
 
-        $this->assertEquals($oOrderPayment, $oPayPalIPNRequestValidator->getRequestOrderPayment(), 'Getter should return same as set in setter.');
+        $this->assertEquals($orderPayment, $payPalIPNRequestValidator->getRequestOrderPayment(), 'Getter should return same as set in setter.');
     }
 
     public function testSetGetLang()
     {
-        $oLang = new \OxidEsales\Eshop\Core\Language();
-        $oLang->setBaseLanguage(0);
+        $lang = new \OxidEsales\Eshop\Core\Language();
+        $lang->setBaseLanguage(0);
 
-        $oPayPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
-        $oPayPalIPNRequestValidator->setLang($oLang);
+        $payPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();
+        $payPalIPNRequestValidator->setLang($lang);
 
-        $this->assertEquals($oLang, $oPayPalIPNRequestValidator->getLang(), 'Getter should return same as set in setter.');
+        $this->assertEquals($lang, $payPalIPNRequestValidator->getLang(), 'Getter should return same as set in setter.');
     }
 }

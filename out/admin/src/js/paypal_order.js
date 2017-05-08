@@ -60,7 +60,7 @@ var PayPalPopUp = (function ($) {
             popUpOverlay.hide();
             popUpBlock.hide();
         }
-    }
+    };
 
     function fixBlockPosition(oBlock) {
         var blockHeight = oBlock.outerHeight();
@@ -145,7 +145,7 @@ var PayPalActions = (function ($) {
             setAmountInputState($(this));
             showOrderStatusList(selected.data('statuslist'), selected.data('activestatus'));
         }
-    }
+    };
 
     /**
      *
@@ -166,7 +166,7 @@ var PayPalActions = (function ($) {
         var oPlaceholder = $('.paypalStatusListPlaceholder', popUpBlockContent).empty();
         if (oStatusList.length <= 1 || $.type(oStatusList) == 'string') {
             var sStatus = ($.type(oStatusList) == 'string') ? oStatusList : oStatusList[0];
-            appendStatusHiddenInput(sStatus, oPlaceholder)
+            appendStatusHiddenInput(sStatus, oPlaceholder);
             return;
         }
         oPlaceholder.html(statusList.html());

@@ -34,17 +34,17 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_CapturedAmountAddedToOrder()
     {
-        $dAmount = 59.67;
+        $amount = 59.67;
 
-        $oPayPalResponse = $this->_getPayPalResponse(array('getCapturedAmount'));
-        $oPayPalResponse->expects($this->any())->method('getCapturedAmount')->will($this->returnValue($dAmount));
+        $payPalResponse = $this->getPayPalResponse(array('getCapturedAmount'));
+        $payPalResponse->expects($this->any())->method('getCapturedAmount')->will($this->returnValue($amount));
 
-        $oOrder = $this->_getOrder(array('addCapturedAmount'));
-        $oOrder->expects($this->once())->method('addCapturedAmount')->with($this->equalTo($dAmount));
+        $order = $this->getOrder(array('addCapturedAmount'));
+        $order->expects($this->once())->method('addCapturedAmount')->with($this->equalTo($amount));
 
-        $oAction = $this->_getAction($oPayPalResponse, $oOrder);
+        $action = $this->getAction($payPalResponse, $order);
 
-        $oAction->process();
+        $action->process();
     }
 
     /**
@@ -52,45 +52,45 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_NewPaymentCreated_WithCorrectData()
     {
-        $sTransactionId = 'transactionId';
-        $sCorrelationId = 'correlationId';
-        $sStatus = 'Completed';
-        $dAmount = 59.67;
-        $sCurrency = 'EUR';
-        $sDate = 'date';
+        $transactionId = 'transactionId';
+        $correlationId = 'correlationId';
+        $status = 'Completed';
+        $amount = 59.67;
+        $currency = 'EUR';
+        $date = 'date';
 
-        $aPayPalResponseMethods = array(
-            'getTransactionId'  => $sTransactionId,
-            'getCorrelationId'  => $sCorrelationId,
-            'getPaymentStatus'  => $sStatus,
-            'getCapturedAmount' => $dAmount,
-            'getCurrency'       => $sCurrency,
+        $payPalResponseMethods = array(
+            'getTransactionId'  => $transactionId,
+            'getCorrelationId'  => $correlationId,
+            'getPaymentStatus'  => $status,
+            'getCapturedAmount' => $amount,
+            'getCurrency'       => $currency,
         );
-        $oPayPalResponse = $this->_createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class, $aPayPalResponseMethods);
+        $payPalResponse = $this->_createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class, $payPalResponseMethods);
 
-        $oPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oPayment->setDate($sDate);
-        $oPayment->setTransactionId($sTransactionId);
-        $oPayment->setCorrelationId($sCorrelationId);
-        $oPayment->setAction('capture');
-        $oPayment->setStatus($sStatus);
-        $oPayment->setAmount($dAmount);
-        $oPayment->setCurrency($sCurrency);
+        $payment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $payment->setDate($date);
+        $payment->setTransactionId($transactionId);
+        $payment->setCorrelationId($correlationId);
+        $payment->setAction('capture');
+        $payment->setStatus($status);
+        $payment->setAmount($amount);
+        $payment->setCurrency($currency);
 
-        $oPaymentList = $this->_getPaymentList(array('addPayment'));
-        $oPaymentList->expects($this->once())
+        $paymentList = $this->getPaymentList(array('addPayment'));
+        $paymentList->expects($this->once())
             ->method('addPayment')
-            ->with($oPayment)
-            ->will($this->returnValue($oPayment));
+            ->with($payment)
+            ->will($this->returnValue($payment));
 
-        $oOrder = $this->_getOrder(array('getPaymentList'));
-        $oOrder->expects($this->once())
+        $order = $this->getOrder(array('getPaymentList'));
+        $order->expects($this->once())
             ->method('getPaymentList')
-            ->will($this->returnValue($oPaymentList));
+            ->will($this->returnValue($paymentList));
 
-        $oAction = $this->_getAction($oPayPalResponse, $oOrder);
+        $action = $this->getAction($payPalResponse, $order);
 
-        $oAction->process();
+        $action->process();
     }
 
     /**
@@ -98,16 +98,16 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_ProcessingOfServiceResponse_OrderSaved()
     {
-        $oPayPalResponse = $this->_getPayPalResponse();
+        $payPalResponse = $this->getPayPalResponse();
 
-        $oOrder = $this->_getOrder(array('save'));
-        $oOrder->expects($this->atLeastOnce())
+        $order = $this->getOrder(array('save'));
+        $order->expects($this->atLeastOnce())
             ->method('save')
             ->will($this->returnValue(null));
 
-        $oAction = $this->_getAction($oPayPalResponse, $oOrder);
+        $action = $this->getAction($payPalResponse, $order);
 
-        $oAction->process();
+        $action->process();
     }
 
     /**
@@ -115,31 +115,31 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_ProcessingOfServiceResponse_CommentAdded()
     {
-        $oUtilsDate = $this->getMock(\OxidEsales\Eshop\Core\UtilsDate::class, array('getTime'));
-        $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
-        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $oUtilsDate);
+        $utilsDate = $this->getMock(\OxidEsales\Eshop\Core\UtilsDate::class, array('getTime'));
+        $utilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $utilsDate);
 
-        $sComment = 'testComment';
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setComment($sComment);
+        $comment = 'testComment';
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setComment($comment);
 
-        $oPayPalResponse = $this->_getPayPalResponse();
+        $payPalResponse = $this->getPayPalResponse();
 
-        $oPayment = $this->_getPayment();
-        $oPayment->expects($this->once())->method('addComment')->with($this->equalTo($oComment));
+        $payment = $this->getPayment();
+        $payment->expects($this->once())->method('addComment')->with($this->equalTo($comment));
 
-        $oPaymentList = $this->_getPaymentList(array('addPayment'));
-        $oPaymentList->expects($this->any())->method('addPayment')->will($this->returnValue($oPayment));
+        $paymentList = $this->getPaymentList(array('addPayment'));
+        $paymentList->expects($this->any())->method('addPayment')->will($this->returnValue($payment));
 
-        $oOrder = $this->_getOrder(array('getPaymentList'));
-        $oOrder->expects($this->any())->method('getPaymentList')->will($this->returnValue($oPaymentList));
+        $order = $this->getOrder(array('getPaymentList'));
+        $order->expects($this->any())->method('getPaymentList')->will($this->returnValue($paymentList));
 
-        $oData = $this->_getData();
-        $oData->expects($this->any())->method('getComment')->will($this->returnValue($sComment));
+        $data = $this->getData();
+        $data->expects($this->any())->method('getComment')->will($this->returnValue($comment));
 
-        $oAction = $this->_getAction($oPayPalResponse, $oOrder, $oData);
+        $action = $this->getAction($payPalResponse, $order, $data);
 
-        $oAction->process();
+        $action->process();
     }
 
     /**
@@ -147,19 +147,19 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_Reauthorizing_FirstCapture()
     {
-        $oPayPalResponse = $this->_getPayPalResponse();
+        $payPalResponse = $this->getPayPalResponse();
 
-        $oOrder = $this->_getOrder(array('getCapturedAmount'));
-        $oOrder->expects($this->any())->method('getCapturedAmount')->will($this->returnValue(0));
+        $order = $this->getOrder(array('getCapturedAmount'));
+        $order->expects($this->any())->method('getCapturedAmount')->will($this->returnValue(0));
 
-        $oReauthorizePayPalResponse = $this->_getPayPalResponse();
+        $reauthorizePayPalResponse = $this->getPayPalResponse();
 
-        $oReauthorizeHandler = $this->getMock(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, array('getPayPalResponse'), array(new stdClass()));
-        $oReauthorizeHandler->expects($this->never())->method('getPayPalResponse')->will($this->returnValue($oReauthorizePayPalResponse));
+        $reauthorizeHandler = $this->getMock(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, array('getPayPalResponse'), array(new stdClass()));
+        $reauthorizeHandler->expects($this->never())->method('getPayPalResponse')->will($this->returnValue($reauthorizePayPalResponse));
 
-        $oAction = $this->_getAction($oPayPalResponse, $oOrder, null, $oReauthorizeHandler);
+        $action = $this->getAction($payPalResponse, $order, null, $reauthorizeHandler);
 
-        $oAction->process();
+        $action->process();
     }
 
     /**
@@ -167,23 +167,23 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_Reauthorizing_AlreadyCaptured()
     {
-        $oPayPalResponse = $this->_getPayPalResponse();
+        $payPalResponse = $this->getPayPalResponse();
 
-        $oOrder = $this->_getOrder(array('getCapturedAmount'));
-        $oOrder->expects($this->any())->method('getCapturedAmount')->will($this->returnValue(0.01));
+        $order = $this->getOrder(array('getCapturedAmount'));
+        $order->expects($this->any())->method('getCapturedAmount')->will($this->returnValue(0.01));
 
-        $oReauthorizePayPalResponse = $this->_getPayPalResponse();
+        $reauthorizePayPalResponse = $this->getPayPalResponse();
 
-        $oReauthorizeHandler = $this->getMock(
+        $reauthorizeHandler = $this->getMock(
             \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class,
             array('getPayPalResponse'),
             array(new stdClass())
         );
-        $oReauthorizeHandler->expects($this->once())->method('getPayPalResponse')->will($this->returnValue($oReauthorizePayPalResponse));
+        $reauthorizeHandler->expects($this->once())->method('getPayPalResponse')->will($this->returnValue($reauthorizePayPalResponse));
 
-        $oAction = $this->_getAction($oPayPalResponse, $oOrder, null, $oReauthorizeHandler);
+        $action = $this->getAction($payPalResponse, $order, null, $reauthorizeHandler);
 
-        $oAction->process();
+        $action->process();
     }
 
     /**
@@ -191,21 +191,21 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_Reauthorizing_ExceptionThrown()
     {
-        $oPayPalResponse = $this->_getPayPalResponse();
+        $payPalResponse = $this->getPayPalResponse();
 
-        $oOrder = $this->_getOrder(array('getCapturedAmount'));
-        $oOrder->expects($this->any())->method('getCapturedAmount')->will($this->returnValue(0.01));
+        $order = $this->getOrder(array('getCapturedAmount'));
+        $order->expects($this->any())->method('getCapturedAmount')->will($this->returnValue(0.01));
 
-        $oReauthorizeHandler = $this->getMock(
+        $reauthorizeHandler = $this->getMock(
             \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class,
             array('getPayPalResponse'),
             array(new stdClass())
         );
-        $oReauthorizeHandler->expects($this->once())->method('getPayPalResponse')->will($this->throwException(new \OxidEsales\PayPalModule\Core\Exception\PayPalResponseException()));
+        $reauthorizeHandler->expects($this->once())->method('getPayPalResponse')->will($this->throwException(new \OxidEsales\PayPalModule\Core\Exception\PayPalResponseException()));
 
-        $oAction = $this->_getAction($oPayPalResponse, $oOrder, null, $oReauthorizeHandler);
+        $action = $this->getAction($payPalResponse, $order, null, $reauthorizeHandler);
 
-        $oAction->process();
+        $action->process();
     }
 
     /**
@@ -213,94 +213,94 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected function _getPayment()
+    protected function getPayment()
     {
-        $oPayment = $this->getMock(\OxidEsales\PayPalModule\Model\OrderPayment::class, array('addComment'));
+        $payment = $this->getMock(\OxidEsales\PayPalModule\Model\OrderPayment::class, array('addComment'));
 
-        return $oPayment;
+        return $payment;
     }
 
     /**
      * Returns payment list
      *
-     * @param array $aTestMethods
+     * @param array $testMethods
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPaymentList
      */
-    protected function _getPaymentList($aTestMethods = array())
+    protected function getPaymentList($testMethods = array())
     {
-        $aMethods = array('addPayment' => $this->_getPayment());
-        $oPaymentList = $this->_createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $aMethods, $aTestMethods);
+        $methods = array('addPayment' => $this->getPayment());
+        $paymentList = $this->_createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
 
-        return $oPaymentList;
+        return $paymentList;
     }
 
     /**
      * Returns order
      *
-     * @param array $aTestMethods
+     * @param array $testMethods
      *
      * @return \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected function _getOrder($aTestMethods = array())
+    protected function getOrder($testMethods = array())
     {
-        $aMethods = array('getPaymentList' => $this->_getPaymentList(), 'save' => true);
-        $oOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $aMethods, $aTestMethods);
+        $methods = array('getPaymentList' => $this->getPaymentList(), 'save' => true);
+        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
 
-        return $oOrder;
+        return $order;
     }
 
     /**
      * Retruns basic PayPal response object
      *
-     * @param array $aTestMethods
+     * @param array $testMethods
      *
      * @return \OxidEsales\PayPalModule\Model\Response\ResponseDoCapture
      */
-    protected function _getPayPalResponse($aTestMethods = array())
+    protected function getPayPalResponse($testMethods = array())
     {
-        $aMethods = array('getCapturedAmount', 'getPaymentStatus', 'getAuthorizationId', 'getCurrency');
-        $aMockedMethods = array_unique(array_merge($aMethods, $aTestMethods));
+        $methods = array('getCapturedAmount', 'getPaymentStatus', 'getAuthorizationId', 'getCurrency');
+        $mockedMethods = array_unique(array_merge($methods, $testMethods));
 
-        $oOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class, $aMockedMethods);
+        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class, $mockedMethods);
 
-        return $oOrder;
+        return $order;
     }
 
     /**
      * Returns capture action data object
      *
-     * @param $aMethods
+     * @param $methods
      *
      * @return \OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData
      */
-    protected function _getData($aMethods = array())
+    protected function getData($methods = array())
     {
-        $oData = $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData::class, $aMethods);
+        $data = $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData::class, $methods);
 
-        return $oData;
+        return $data;
     }
 
     /**
      * Returns capture action object
      *
-     * @param $oPayPalResponse
-     * @param $oOrder
-     * @param $oData
-     * @param $oReauthorizeHandler
+     * @param $payPalResponse
+     * @param $order
+     * @param $data
+     * @param $reauthorizeHandler
      *
      * @return \OxidEsales\PayPalModule\Model\Action\OrderCaptureAction
      */
-    protected function _getAction($oPayPalResponse, $oOrder, $oData = null, $oReauthorizeHandler = null)
+    protected function getAction($payPalResponse, $order, $data = null, $reauthorizeHandler = null)
     {
-        $oData = $oData ? $oData : $this->_getData();
-        $oHandler = $this->_createStub('CaptureActionHandler', array('getPayPalResponse' => $oPayPalResponse, 'getData' => $oData));
-        $oReauthorizeHandler = $oReauthorizeHandler ? $oReauthorizeHandler : $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, array());
+        $data = $data ? $data : $this->getData();
+        $handler = $this->_createStub('CaptureActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
+        $reauthorizeHandler = $reauthorizeHandler ? $reauthorizeHandler : $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, array());
 
-        $oAction = $this->getMock(\OxidEsales\PayPalModule\Model\Action\OrderCaptureAction::class, array('getDate'), array($oHandler, $oOrder, $oReauthorizeHandler));
+        $action = $this->getMock(\OxidEsales\PayPalModule\Model\Action\OrderCaptureAction::class, array('getDate'), array($handler, $order, $reauthorizeHandler));
 
-        $oAction->expects($this->any())->method('getDate')->will($this->returnValue('date'));
+        $action->expects($this->any())->method('getDate')->will($this->returnValue('date'));
 
-        return $oAction;
+        return $action;
     }
 }

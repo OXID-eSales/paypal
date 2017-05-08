@@ -30,39 +30,37 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
      *
      * @var int
      */
-    protected $_iServiceType = 1;
+    protected $serviceType = 1;
 
     /**
      * PayPal checkout service
      *
-     * @var oePayPalCheckoutService
+     * @var \OxidEsales\PayPalModule\Core\PayPalService
      */
-    protected $_oPayPalCheckoutService;
+    protected $payPalCheckoutService;
 
     /**
      * Default user action for checkout process
      *
      * @var string
      */
-    protected $_sUserAction = "continue";
+    protected $userAction = "continue";
 
     /**
      * Executes "GetExpressCheckoutDetails" and on SUCCESS response - saves
      * user information and redirects to order page, on failure - sets error
      * message and redirects to basket page
-     *
-     * @return string
      */
     abstract public function getExpressCheckoutDetails();
 
     /**
      * Sets PayPal checkout service.
      *
-     * @param \OxidEsales\PayPalModule\Core\PayPalService $oPayPalCheckoutService
+     * @param \OxidEsales\PayPalModule\Core\PayPalService $payPalCheckoutService
      */
-    public function setPayPalCheckoutService($oPayPalCheckoutService)
+    public function setPayPalCheckoutService($payPalCheckoutService)
     {
-        $this->_oPayPalCheckoutService = $oPayPalCheckoutService;
+        $this->payPalCheckoutService = $payPalCheckoutService;
     }
 
     /**
@@ -72,31 +70,31 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
      */
     public function getPayPalCheckoutService()
     {
-        if ($this->_oPayPalCheckoutService === null) {
-            $this->_oPayPalCheckoutService = oxNew(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        if ($this->payPalCheckoutService === null) {
+            $this->payPalCheckoutService = oxNew(\OxidEsales\PayPalModule\Core\PayPalService::class);
         }
 
-        return $this->_oPayPalCheckoutService;
+        return $this->payPalCheckoutService;
     }
 
     /**
      * @return  \OxidEsales\Eshop\Core\UtilsView
      */
-    protected function _getUtilsView()
+    protected function getUtilsView()
     {
-        return \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsView::class);
+        return \OxidEsales\Eshop\Core\Registry::getUtilsView();
     }
 
     /**
      * Formats given float/int value into PayPal friendly form
      *
-     * @param float $fIn value to format
+     * @param float $in value to format
      *
      * @return string
      */
-    protected function _formatFloat($fIn)
+    protected function formatFloat($in)
     {
-        return sprintf("%.2f", $fIn);
+        return sprintf("%.2f", $in);
     }
 
     /**
@@ -104,7 +102,7 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
      *
      * @return  \OxidEsales\Eshop\Core\Utils
      */
-    protected function _getUtils()
+    protected function getUtils()
     {
         return \OxidEsales\Eshop\Core\Registry::getUtils();
     }
@@ -114,40 +112,42 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
      *
      * @return string
      */
-    protected function _getBaseUrl()
+    protected function getBaseUrl()
     {
-        $oSession = $this->getSession();
-        $sUrl = $this->getConfig()->getSslShopUrl() . "index.php?lang=" . \OxidEsales\Eshop\Core\Registry::getLang()->getBaseLanguage() . "&sid=" . $oSession->getId() . "&rtoken=" . $oSession->getRemoteAccessToken();
-        $sUrl .= "&shp=" . $this->getConfig()->getShopId();
+        $session = $this->getSession();
+        $url = $this->getConfig()->getSslShopUrl() . "index.php?lang=" . \OxidEsales\Eshop\Core\Registry::getLang()->getBaseLanguage() . "&sid=" . $session->getId() . "&rtoken=" . $session->getRemoteAccessToken();
+        $url .= "&shp=" . $this->getConfig()->getShopId();
 
-        return $sUrl;
+        return $url;
     }
 
     /**
      * Returns PayPal order object
      *
-     * @return \OxidEsales\Eshop\Application\Model\Order|object
+     * @return \OxidEsales\Eshop\Application\Model\Order|null
      */
-    protected function _getPayPalOrder()
+    protected function getPayPalOrder()
     {
-        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        if ($oOrder->loadPayPalOrder()) {
-            return $oOrder;
+        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        if ($order->loadPayPalOrder()) {
+            return $order;
         }
     }
 
     /**
      * Returns PayPal payment object
      *
-     * @return \OxidEsales\Eshop\Application\Model\Payment|object
+     * @return \OxidEsales\Eshop\Application\Model\Payment|null
      */
-    protected function _getPayPalPayment()
+    protected function getPayPalPayment()
     {
-        if (($oOrder = $this->_getPayPalOrder())) {
-            $oUserPayment = oxNew(\OxidEsales\Eshop\Application\Model\UserPayment::class);
-            $oUserPayment->load($oOrder->oxorder__oxpaymentid->value);
+        $userPayment = null;
 
-            return $oUserPayment;
+        if (($order = $this->getPayPalOrder())) {
+            $userPayment = oxNew(\OxidEsales\Eshop\Application\Model\UserPayment::class);
+            $userPayment->load($order->oxorder__oxpaymentid->value);
         }
+
+        return $userPayment;
     }
 }

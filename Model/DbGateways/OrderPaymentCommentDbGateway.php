@@ -29,85 +29,85 @@ class OrderPaymentCommentDbGateway extends \OxidEsales\PayPalModule\Core\ModelDb
     /**
      * Save PayPal order payment comment data to database.
      *
-     * @param array $aData
+     * @param array $data
      *
      * @return bool
      */
-    public function save($aData)
+    public function save($data)
     {
-        $oDb = $this->_getDb();
+        $db = $this->getDb();
 
-        foreach ($aData as $sField => $sData) {
-            $aSql[] = '`' . $sField . '` = ' . $oDb->quote($sData);
+        foreach ($data as $field => $value) {
+            $fields[] = '`' . $field . '` = ' . $db->quote($value);
         }
 
-        $sSql = 'INSERT INTO `oepaypal_orderpaymentcomments` SET ';
-        $sSql .= implode(', ', $aSql);
-        $sSql .= ' ON DUPLICATE KEY UPDATE ';
-        $sSql .= ' `oepaypal_commentid`=LAST_INSERT_ID(`oepaypal_commentid`), ';
-        $sSql .= implode(', ', $aSql);
-        $oDb->execute($sSql);
+        $query = 'INSERT INTO `oepaypal_orderpaymentcomments` SET ';
+        $query .= implode(', ', $fields);
+        $query .= ' ON DUPLICATE KEY UPDATE ';
+        $query .= ' `oepaypal_commentid`=LAST_INSERT_ID(`oepaypal_commentid`), ';
+        $query .= implode(', ', $fields);
+        $db->execute($query);
 
-        $iCommentId = $aData['oepaypal_commentid'];
-        if (empty($iCommentId)) {
-            $iCommentId = $oDb->getOne('SELECT LAST_INSERT_ID()');
+        $commentId = $data['oepaypal_commentid'];
+        if (empty($commentId)) {
+            $commentId = $db->getOne('SELECT LAST_INSERT_ID()');
         }
 
-        return $iCommentId;
+        return $commentId;
     }
 
     /**
      * Load PayPal order payment comment data from Db.
      *
-     * @param string $sPaymentId order id
+     * @param string $paymentId order id
      *
      * @return array
      */
-    public function getList($sPaymentId)
+    public function getList($paymentId)
     {
-        $oDb = $this->_getDb();
-        $aData = $oDb->getAll('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $oDb->quote($sPaymentId) . ' ORDER BY `oepaypal_date` DESC');
+        $db = $this->getDb();
+        $data = $db->getAll('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_paymentid` = ' . $db->quote($paymentId) . ' ORDER BY `oepaypal_date` DESC');
 
-        return $aData;
+        return $data;
     }
 
     /**
      * Load PayPal order payment comment data from Db.
      *
-     * @param string $sCommentId Order id.
+     * @param string $commentId Order id.
      *
      * @return array
      */
-    public function load($sCommentId)
+    public function load($commentId)
     {
-        $oDb = $this->_getDb();
-        $aData = $oDb->getRow('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $oDb->quote($sCommentId));
+        $db = $this->getDb();
+        $data = $db->getRow('SELECT * FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $db->quote($commentId));
 
-        return $aData;
+        return $data;
     }
 
     /**
      * Delete PayPal order payment comment data from database.
      *
-     * @param string $sCommentId Order id.
+     * @param string $commentId Order id.
      *
      * @return bool
      */
-    public function delete($sCommentId)
+    public function delete($commentId)
     {
-        $oDb = $this->_getDb();
-        $oDb->startTransaction();
+        $db = $this->getDb();
+        $db->startTransaction();
 
-        $blDeleteResult = $oDb->execute('DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $oDb->quote($sCommentId));
+        $deleteResult = $db->execute('DELETE FROM `oepaypal_orderpaymentcomments` WHERE `oepaypal_commentid` = ' . $db->quote($commentId));
 
-        $blResult = ($blDeleteResult !== false);
+        $result = ($deleteResult !== false);
 
-        if ($blResult) {
-            $oDb->commitTransaction();
+        if ($result) {
+            $db->commitTransaction();
         } else {
-            $oDb->rollbackTransaction();
+            $db->rollbackTransaction();
         }
 
-        return $blResult;
+        return $result;
     }
 }

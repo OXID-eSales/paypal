@@ -44,9 +44,9 @@ class PayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetGet()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrder->setOrderId('123');
-        $this->assertEquals('123', $oOrder->getOrderId());
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order->setOrderId('123');
+        $this->assertEquals('123', $order->getOrderId());
     }
 
 
@@ -56,29 +56,29 @@ class PayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSavePayPalPayPalOrder_insert()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrder->setOrderId('123');
-        $oOrder->setPaymentStatus('pending');
-        $oOrder->setCapturedAmount(24.13);
-        $oOrder->setRefundedAmount(12.13);
-        $oOrder->setVoidedAmount(15.13);
-        $oOrder->setTotalOrderSum(299.99);
-        $oOrder->setCurrency('LTU');
-        $oOrder->setTransactionMode('Sale');
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order->setOrderId('123');
+        $order->setPaymentStatus('pending');
+        $order->setCapturedAmount(24.13);
+        $order->setRefundedAmount(12.13);
+        $order->setVoidedAmount(15.13);
+        $order->setTotalOrderSum(299.99);
+        $order->setCurrency('LTU');
+        $order->setTransactionMode('Sale');
 
-        $oOrder->save();
+        $order->save();
 
-        $oOrderLoaded = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrderLoaded->load($oOrder->getOrderId());
+        $orderLoaded = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $orderLoaded->load($order->getOrderId());
 
-        $this->assertEquals('123', $oOrderLoaded->getOrderId());
-        $this->assertEquals('pending', $oOrderLoaded->getPaymentStatus());
-        $this->assertEquals(24.13, $oOrderLoaded->getCapturedAmount());
-        $this->assertEquals(12.13, $oOrderLoaded->getRefundedAmount());
-        $this->assertEquals(15.13, $oOrderLoaded->getVoidedAmount());
-        $this->assertEquals(299.99, $oOrderLoaded->getTotalOrderSum());
-        $this->assertEquals('LTU', $oOrderLoaded->getCurrency());
-        $this->assertEquals('Sale', $oOrderLoaded->getTransactionMode());
+        $this->assertEquals('123', $orderLoaded->getOrderId());
+        $this->assertEquals('pending', $orderLoaded->getPaymentStatus());
+        $this->assertEquals(24.13, $orderLoaded->getCapturedAmount());
+        $this->assertEquals(12.13, $orderLoaded->getRefundedAmount());
+        $this->assertEquals(15.13, $orderLoaded->getVoidedAmount());
+        $this->assertEquals(299.99, $orderLoaded->getTotalOrderSum());
+        $this->assertEquals('LTU', $orderLoaded->getCurrency());
+        $this->assertEquals('Sale', $orderLoaded->getTransactionMode());
     }
 
     /**
@@ -87,31 +87,31 @@ class PayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSavePayPalPayPalOrder_update()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrder->setOrderId('123');
-        $oOrder->setPaymentStatus('pending');
-        $oOrder->setCapturedAmount(24.13);
-        $oOrder->setRefundedAmount(12.13);
-        $oOrder->setVoidedAmount(15.13);
-        $oOrder->setTotalOrderSum(299.99);
-        $oOrder->setCurrency('LTU');
-        $oOrder->setTransactionMode('Sale');
-        $oOrder->save();
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order->setOrderId('123');
+        $order->setPaymentStatus('pending');
+        $order->setCapturedAmount(24.13);
+        $order->setRefundedAmount(12.13);
+        $order->setVoidedAmount(15.13);
+        $order->setTotalOrderSum(299.99);
+        $order->setCurrency('LTU');
+        $order->setTransactionMode('Sale');
+        $order->save();
 
-        $oOrderLoaded = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrderLoaded->load('123');
-        $oOrderLoaded->setPaymentStatus('completed');
-        $oOrderLoaded->save();
+        $orderLoaded = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $orderLoaded->load('123');
+        $orderLoaded->setPaymentStatus('completed');
+        $orderLoaded->save();
 
-        $oOrderLoaded = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrderLoaded->load('123');
-        $this->assertEquals('completed', $oOrderLoaded->getPaymentStatus());
-        $this->assertEquals(24.13, $oOrderLoaded->getCapturedAmount());
-        $this->assertEquals(12.13, $oOrderLoaded->getRefundedAmount());
-        $this->assertEquals(15.13, $oOrderLoaded->getVoidedAmount());
-        $this->assertEquals(299.99, $oOrderLoaded->getTotalOrderSum());
-        $this->assertEquals('LTU', $oOrderLoaded->getCurrency());
-        $this->assertEquals('Sale', $oOrderLoaded->getTransactionMode());
+        $orderLoaded = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $orderLoaded->load('123');
+        $this->assertEquals('completed', $orderLoaded->getPaymentStatus());
+        $this->assertEquals(24.13, $orderLoaded->getCapturedAmount());
+        $this->assertEquals(12.13, $orderLoaded->getRefundedAmount());
+        $this->assertEquals(15.13, $orderLoaded->getVoidedAmount());
+        $this->assertEquals(299.99, $orderLoaded->getTotalOrderSum());
+        $this->assertEquals('LTU', $orderLoaded->getCurrency());
+        $this->assertEquals('Sale', $orderLoaded->getTransactionMode());
     }
 
 
@@ -121,11 +121,11 @@ class PayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testAddRefundedAmountWhenEmpty()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrder->addRefundedAmount(100.29);
-        $oOrder->addRefundedAmount(899.70);
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order->addRefundedAmount(100.29);
+        $order->addRefundedAmount(899.70);
 
-        $this->assertEquals(999.99, $oOrder->getRefundedAmount());
+        $this->assertEquals(999.99, $order->getRefundedAmount());
     }
 
     /**
@@ -134,11 +134,11 @@ class PayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testAddCapturedAmountWhenEmpty()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrder->addCapturedAmount(100.29);
-        $oOrder->addCapturedAmount(899.70);
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order->addCapturedAmount(100.29);
+        $order->addCapturedAmount(899.70);
 
-        $this->assertEquals(999.99, $oOrder->getCapturedAmount());
+        $this->assertEquals(999.99, $order->getCapturedAmount());
     }
 
     /**
@@ -147,7 +147,7 @@ class PayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalPaymentStatusWhenStatusEmpty()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $this->assertEquals("completed", $oOrder->getPaymentStatus());
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $this->assertEquals("completed", $order->getPaymentStatus());
     }
 }

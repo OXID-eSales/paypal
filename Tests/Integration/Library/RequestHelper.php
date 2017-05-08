@@ -26,17 +26,17 @@ class RequestHelper extends \OxidEsales\PayPalModule\Tests\Integration\Library\I
     /**
      * Returns loaded \OxidEsales\PayPalModule\Core\Request object with given parameters
      *
-     * @param array $aPostParams
-     * @param array $aGetParams
+     * @param array $postParams
+     * @param array $getParams
      *
      * @return \OxidEsales\PayPalModule\Core\Request
      */
-    public function getRequest($aPostParams = null, $aGetParams = null)
+    public function getRequest($postParams = null, $getParams = null)
     {
-        $oRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost', 'getGet'));
-        $oRequest->expects($this->any())->method('getPost')->will($this->returnValue($aPostParams));
-        $oRequest->expects($this->any())->method('getGet')->will($this->returnValue($aGetParams));
+        $request = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost', 'getGet'));
+        $request->expects($this->any())->method('getPost')->will($this->returnValue($postParams));
+        $request->expects($this->any())->method('getGet')->will($this->returnValue($getParams));
 
-        return $oRequest;
+        return $request;
     }
 }

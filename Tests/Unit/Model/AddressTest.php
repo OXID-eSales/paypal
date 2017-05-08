@@ -35,8 +35,8 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         parent::tearDown();
 
         $this->getSession()->setVariable('deladrid', null);
-        $sDelete = 'TRUNCATE TABLE `oxaddress`';
-        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sDelete);
+        $delete = 'TRUNCATE TABLE `oxaddress`';
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($delete);
     }
 
     /**
@@ -47,9 +47,9 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         parent::setUp();
 
         // fix for state ID compatability between editions
-        $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
+        $sqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                      "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
-        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSqlState);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sqlState);
     }
 
     /**
@@ -57,30 +57,30 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return array
      */
-    protected function _getPayPalData()
+    protected function getPayPalData()
     {
-        $aPayPalData = array();
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTONAME'] = 'testName testSurname';
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = 'testStreetName str. 12';
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET2'] = 'testStreeName2 str. 123';
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOCITY'] = 'testCity';
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE'] = 'US';
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTATE'] = 'SS';
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOZIP'] = 'testZip';
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOPHONENUM'] = 'testPhoneNum';
+        $payPalData = array();
+        $payPalData['PAYMENTREQUEST_0_SHIPTONAME'] = 'testName testSurname';
+        $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = 'testStreetName str. 12';
+        $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET2'] = 'testStreeName2 str. 123';
+        $payPalData['PAYMENTREQUEST_0_SHIPTOCITY'] = 'testCity';
+        $payPalData['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE'] = 'US';
+        $payPalData['PAYMENTREQUEST_0_SHIPTOSTATE'] = 'SS';
+        $payPalData['PAYMENTREQUEST_0_SHIPTOZIP'] = 'testZip';
+        $payPalData['PAYMENTREQUEST_0_SHIPTOPHONENUM'] = 'testPhoneNum';
 
-        /*        $oPayPalData = $this->getMock(\OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails::class, array( 'getShipToName', 'getShipToStreet',
+        /*        $payPalData = $this->getMock(\OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails::class, array( 'getShipToName', 'getShipToStreet',
                     'getShipToStreet2', 'getShipToCity', 'getShipToCountryCode', 'getShipToState', 'getShipToZip', 'getShipToPhoneNumber' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToName' )->will( $this->returnValue( 'testName testSurname' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToStreet' )->will( $this->returnValue( 'testStreetName str. 12' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToStreet2' )->will( $this->returnValue( 'testStreeName2 str. 123' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToCity' )->will( $this->returnValue( 'testCity' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToCountryCode' )->will( $this->returnValue( 'US' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToState' )->will( $this->returnValue( 'SS' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToZip' )->will( $this->returnValue( 'testZip' ) );
-                $oPayPalData->expects( $this->any() )->method( 'getShipToPhoneNumber' )->will( $this->returnValue( 'testPhoneNum' ) );*/
+                $payPalData->expects( $this->any() )->method( 'getShipToName' )->will( $this->returnValue( 'testName testSurname' ) );
+                $payPalData->expects( $this->any() )->method( 'getShipToStreet' )->will( $this->returnValue( 'testStreetName str. 12' ) );
+                $payPalData->expects( $this->any() )->method( 'getShipToStreet2' )->will( $this->returnValue( 'testStreeName2 str. 123' ) );
+                $payPalData->expects( $this->any() )->method( 'getShipToCity' )->will( $this->returnValue( 'testCity' ) );
+                $payPalData->expects( $this->any() )->method( 'getShipToCountryCode' )->will( $this->returnValue( 'US' ) );
+                $payPalData->expects( $this->any() )->method( 'getShipToState' )->will( $this->returnValue( 'SS' ) );
+                $payPalData->expects( $this->any() )->method( 'getShipToZip' )->will( $this->returnValue( 'testZip' ) );
+                $payPalData->expects( $this->any() )->method( 'getShipToPhoneNumber' )->will( $this->returnValue( 'testPhoneNum' ) );*/
 
-        return $aPayPalData;
+        return $payPalData;
     }
 
 
@@ -90,40 +90,40 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreatePayPalAddress()
     {
-        $aPayPalData = $this->_getPayPalData();
-        $oExpressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oExpressCheckoutResponse->setData($aPayPalData);
+        $payPalData = $this->getPayPalData();
+        $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $expressCheckoutResponse->setData($payPalData);
 
-        $oPayPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
-        $oPayPalOxAddress->createPayPalAddress($oExpressCheckoutResponse, 'testUserId');
-        //$sAddressId = $oPayPalOxAddress->getId();
-        $sAddressId = $this->getSession()->getVariable('deladrid');
+        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
+        //$addressId = $payPalOxAddress->getId();
+        $addressId = $this->getSession()->getVariable('deladrid');
 
-        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
-        $oAddress->load($sAddressId);
+        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address->load($addressId);
 
-        $this->assertEquals('testUserId', $oAddress->oxaddress__oxuserid->value);
-        $this->assertEquals('testName', $oAddress->oxaddress__oxfname->value);
-        $this->assertEquals('testSurname', $oAddress->oxaddress__oxlname->value);
-        $this->assertEquals('testStreetName str.', $oAddress->oxaddress__oxstreet->value);
-        $this->assertEquals('12', $oAddress->oxaddress__oxstreetnr->value);
-        $this->assertEquals('testStreeName2 str. 123', $oAddress->oxaddress__oxaddinfo->value);
-        $this->assertEquals('testCity', $oAddress->oxaddress__oxcity->value);
-        $this->assertEquals('8f241f11096877ac0.98748826', $oAddress->oxaddress__oxcountryid->value);
-        $this->assertEquals('333', $oAddress->oxaddress__oxstateid->value);
-        $this->assertEquals('testZip', $oAddress->oxaddress__oxzip->value);
-        $this->assertEquals('testPhoneNum', $oAddress->oxaddress__oxfon->value);
+        $this->assertEquals('testUserId', $address->oxaddress__oxuserid->value);
+        $this->assertEquals('testName', $address->oxaddress__oxfname->value);
+        $this->assertEquals('testSurname', $address->oxaddress__oxlname->value);
+        $this->assertEquals('testStreetName str.', $address->oxaddress__oxstreet->value);
+        $this->assertEquals('12', $address->oxaddress__oxstreetnr->value);
+        $this->assertEquals('testStreeName2 str. 123', $address->oxaddress__oxaddinfo->value);
+        $this->assertEquals('testCity', $address->oxaddress__oxcity->value);
+        $this->assertEquals('8f241f11096877ac0.98748826', $address->oxaddress__oxcountryid->value);
+        $this->assertEquals('333', $address->oxaddress__oxstateid->value);
+        $this->assertEquals('testZip', $address->oxaddress__oxzip->value);
+        $this->assertEquals('testPhoneNum', $address->oxaddress__oxfon->value);
 
-        $this->assertEquals($this->getSession()->getVariable('deladrid'), $sAddressId);
+        $this->assertEquals($this->getSession()->getVariable('deladrid'), $addressId);
 
         // street no in first position
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '12 testStreetNameNext str.';
-        $oExpressCheckoutResponse->setData($aPayPalData);
+        $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '12 testStreetNameNext str.';
+        $expressCheckoutResponse->setData($payPalData);
 
-        $oPayPalAddress = new \OxidEsales\PayPalModule\Model\Address();
-        $oPayPalAddress->createPayPalAddress($oExpressCheckoutResponse, 'testUserId');
-        $this->assertEquals('testStreetNameNext str.', $oPayPalAddress->oxaddress__oxstreet->value);
-        $this->assertEquals('12', $oPayPalAddress->oxaddress__oxstreetnr->value);
+        $payPalAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
+        $this->assertEquals('testStreetNameNext str.', $payPalAddress->oxaddress__oxstreet->value);
+        $this->assertEquals('12', $payPalAddress->oxaddress__oxstreetnr->value);
     }
 
     /**
@@ -133,23 +133,23 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreatePayPalAddressFail()
     {
-        $aPayPalData = $this->_getPayPalData();
-        $oPayPalData = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '';
-        $oPayPalData->setData($aPayPalData);
-        $oPayPalAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalData = $this->getPayPalData();
+        $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '';
+        $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $expressCheckoutResponse->setData($payPalData);
+        $payPalAddress = new \OxidEsales\PayPalModule\Model\Address();
 
         // checking if required field exists
-        $aReqFields = $oPayPalAddress->getConfig()->getConfigParam("aMustFillFields");
-        $this->assertTrue(in_array("oxaddress__oxstreet", $aReqFields));
+        $reqFields = $payPalAddress->getConfig()->getConfigParam("aMustFillFields");
+        $this->assertTrue(in_array("oxaddress__oxstreet", $reqFields));
 
-        $oPayPalAddress->createPayPalAddress($oPayPalData, 'testUserId');
+        $payPalAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
 
-        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
-        $oAddress->load($oPayPalAddress->getId());
+        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address->load($payPalAddress->getId());
 
-        $this->assertEquals('testName', $oAddress->oxaddress__oxfname->value);
-        $this->assertEquals("", $oAddress->oxaddress__oxstreet->value);
+        $this->assertEquals('testName', $address->oxaddress__oxfname->value);
+        $this->assertEquals("", $address->oxaddress__oxstreet->value);
     }
 
     /**
@@ -159,39 +159,39 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testCreatePayPalAddressIfExist()
     {
         //creating existing address
-        $oAddress = new \OxidEsales\PayPalModule\Model\Address();
-        $oAddress->oxaddress__oxuserid = new \OxidEsales\Eshop\Core\Field('testUserId');
-        $oAddress->oxaddress__oxfname = new \OxidEsales\Eshop\Core\Field('testName');
-        $oAddress->oxaddress__oxlname = new \OxidEsales\Eshop\Core\Field('testSurname');
-        $oAddress->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field('testStreetName str.');
-        $oAddress->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field('12');
-        $oAddress->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field('testCity');
-        $oAddress->oxaddress__oxstateid = new \OxidEsales\Eshop\Core\Field('333');
-        $oAddress->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field('testZip');
-        $oAddress->oxaddress__oxfon = new \OxidEsales\Eshop\Core\Field('testPhoneNum');
-        $oAddress->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field('8f241f11096877ac0.98748826');
-        $oAddress->save();
-        $sAddressId = $oAddress->getId();
+        $address = new \OxidEsales\PayPalModule\Model\Address();
+        $address->oxaddress__oxuserid = new \OxidEsales\Eshop\Core\Field('testUserId');
+        $address->oxaddress__oxfname = new \OxidEsales\Eshop\Core\Field('testName');
+        $address->oxaddress__oxlname = new \OxidEsales\Eshop\Core\Field('testSurname');
+        $address->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field('testStreetName str.');
+        $address->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field('12');
+        $address->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field('testCity');
+        $address->oxaddress__oxstateid = new \OxidEsales\Eshop\Core\Field('333');
+        $address->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field('testZip');
+        $address->oxaddress__oxfon = new \OxidEsales\Eshop\Core\Field('testPhoneNum');
+        $address->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field('8f241f11096877ac0.98748826');
+        $address->save();
+        $addressId = $address->getId();
 
         $this->getSession()->setVariable('deladrid', null);
 
         $sQ = "SELECT COUNT(*) FROM `oxaddress`";
-        $iAddressCount = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
+        $addressCount = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
 
         // preparing data fo new address - the same
-        $aPayPalData = $this->_getPayPalData();
-        $oPayPalData = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oPayPalData->setData($aPayPalData);
+        $payPalData = $this->getPayPalData();
+        $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $expressCheckoutResponse->setData($payPalData);
 
-        $oPayPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
-        $oPayPalOxAddress->createPayPalAddress($oPayPalData, 'testUserId');
+        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
 
-        $iAddressCountAfter = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
+        $addressCountAfter = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
         // skips the same address
-        $this->assertEquals($iAddressCount, $iAddressCountAfter);
+        $this->assertEquals($addressCount, $addressCountAfter);
 
         // sets existing address id
-        $this->assertEquals($this->getSession()->getVariable('deladrid'), $sAddressId);
+        $this->assertEquals($this->getSession()->getVariable('deladrid'), $addressId);
     }
 
     /**
@@ -201,35 +201,35 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function createPayPalAddress_splittingAddress_dataProvider()
     {
-        $aAddress["addr"][] = "4 Street Name ";
-        $aAddress["addr"][] = " 4a Street Name";
-        $aAddress["addr"][] = "4a-5    Street Name";
-        $aAddress["addr"][] = "4a-5 11 Street Name";
-        $aAddress["addr"][] = "Street Name 4";
-        $aAddress["addr"][] = "Street Name   4a";
-        $aAddress["addr"][] = "Street Name  4a-5  ";
-        $aAddress["addr"][] = "Street Name 11 4a-5";
-        $aAddress["addr"][] = " Street Name ";
-        $aAddress["addr"][] = "bertoldstr.48";
-        $aAddress["addr"][] = "Street Name   4 a";
+        $address["addr"][] = "4 Street Name ";
+        $address["addr"][] = " 4a Street Name";
+        $address["addr"][] = "4a-5    Street Name";
+        $address["addr"][] = "4a-5 11 Street Name";
+        $address["addr"][] = "Street Name 4";
+        $address["addr"][] = "Street Name   4a";
+        $address["addr"][] = "Street Name  4a-5  ";
+        $address["addr"][] = "Street Name 11 4a-5";
+        $address["addr"][] = " Street Name ";
+        $address["addr"][] = "bertoldstr.48";
+        $address["addr"][] = "Street Name   4 a";
 
-        $aAddress["ress"][] = array("Street Name", "4");
-        $aAddress["ress"][] = array("Street Name", "4a");
-        $aAddress["ress"][] = array("Street Name", "4a-5");
-        $aAddress["ress"][] = array("11 Street Name", "4a-5");
-        $aAddress["ress"][] = array("Street Name", "4");
-        $aAddress["ress"][] = array("Street Name", "4a");
-        $aAddress["ress"][] = array("Street Name", "4a-5");
-        $aAddress["ress"][] = array("Street Name 11", "4a-5");
-        $aAddress["ress"][] = array("Street Name", "");
-        $aAddress["ress"][] = array("bertoldstr.48", "");
-        $aAddress["ress"][] = array("Street Name", "4 a");
+        $address["ress"][] = array("Street Name", "4");
+        $address["ress"][] = array("Street Name", "4a");
+        $address["ress"][] = array("Street Name", "4a-5");
+        $address["ress"][] = array("11 Street Name", "4a-5");
+        $address["ress"][] = array("Street Name", "4");
+        $address["ress"][] = array("Street Name", "4a");
+        $address["ress"][] = array("Street Name", "4a-5");
+        $address["ress"][] = array("Street Name 11", "4a-5");
+        $address["ress"][] = array("Street Name", "");
+        $address["ress"][] = array("bertoldstr.48", "");
+        $address["ress"][] = array("Street Name", "4 a");
 
-        foreach ($aAddress["addr"] as $sKey => $sValue) {
-            $aRet[] = array($sValue, $aAddress["ress"][$sKey]);
+        foreach ($address["addr"] as $key => $value) {
+            $ret[] = array($value, $address["ress"][$key]);
         }
 
-        return $aRet;
+        return $ret;
     }
 
 
@@ -239,22 +239,22 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider createPayPalAddress_splittingAddress_dataProvider
      */
-    public function testCreatePayPalAddress_splittingAddress($sAddress, $aResult)
+    public function testCreatePayPalAddress_splittingAddress($address, $result)
     {
-        $aPayPalData = $this->_getPayPalData();
-        $oPayPalData = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = $sAddress;
-        $oPayPalData->setData($aPayPalData);
+        $payPalData = $this->getPayPalData();
+        $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = $address;
+        $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $expressCheckoutResponse->setData($payPalData);
 
-        $oPayPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
-        $oPayPalOxAddress->createPayPalAddress($oPayPalData, 'testUserId');
-        $sAddressId = $oPayPalOxAddress->getId();
+        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
+        $addressId = $payPalOxAddress->getId();
 
-        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
-        $oAddress->load($sAddressId);
+        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address->load($addressId);
 
-        $this->assertEquals($aResult[0], $oAddress->oxaddress__oxstreet->value);
-        $this->assertEquals($aResult[1], $oAddress->oxaddress__oxstreetnr->value);
+        $this->assertEquals($result[0], $address->oxaddress__oxstreet->value);
+        $this->assertEquals($result[1], $address->oxaddress__oxstreetnr->value);
     }
 
     /**
@@ -264,21 +264,21 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function createPayPalAddress_splittingUserName_dataProvider()
     {
-        $aAddress["name"][] = "Firstname Lastname";
-        $aAddress["name"][] = "Firstname Lastname Lastname2";
-        $aAddress["name"][] = "Firstname Lastname Lastname2 Lastname3";
-        $aAddress["name"][] = "Firstname";
+        $address["name"][] = "Firstname Lastname";
+        $address["name"][] = "Firstname Lastname Lastname2";
+        $address["name"][] = "Firstname Lastname Lastname2 Lastname3";
+        $address["name"][] = "Firstname";
 
-        $aAddress["res"][] = array("Firstname", "Lastname");
-        $aAddress["res"][] = array("Firstname", "Lastname Lastname2");
-        $aAddress["res"][] = array("Firstname", "Lastname Lastname2 Lastname3");
-        $aAddress["res"][] = array("Firstname", "");
+        $address["res"][] = array("Firstname", "Lastname");
+        $address["res"][] = array("Firstname", "Lastname Lastname2");
+        $address["res"][] = array("Firstname", "Lastname Lastname2 Lastname3");
+        $address["res"][] = array("Firstname", "");
 
-        foreach ($aAddress["name"] as $sKey => $sValue) {
-            $aRet[] = array($sValue, $aAddress["res"][$sKey]);
+        foreach ($address["name"] as $key => $value) {
+            $ret[] = array($value, $address["res"][$key]);
         }
 
-        return $aRet;
+        return $ret;
     }
 
 
@@ -288,21 +288,21 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider createPayPalAddress_splittingUserName_dataProvider
      */
-    public function testCreatePayPalAddress_splittingUserName($sName, $aResult)
+    public function testCreatePayPalAddress_splittingUserName($name, $result)
     {
-        $aPayPalData = $this->_getPayPalData();
-        $oPayPalData = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $aPayPalData['PAYMENTREQUEST_0_SHIPTONAME'] = $sName;
-        $oPayPalData->setData($aPayPalData);
+        $payPalData = $this->getPayPalData();
+        $payPalData['PAYMENTREQUEST_0_SHIPTONAME'] = $name;
+        $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $expressCheckoutResponse->setData($payPalData);
 
-        $oPayPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
-        $oPayPalOxAddress->createPayPalAddress($oPayPalData, 'testUserId');
-        $sAddressId = $oPayPalOxAddress->getId();
+        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
+        $addressId = $payPalOxAddress->getId();
 
-        $oAddress = new \OxidEsales\Eshop\Application\Model\Address();
-        $oAddress->load($sAddressId);
+        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address->load($addressId);
 
-        $this->assertEquals($aResult[0], $oAddress->oxaddress__oxfname->value);
-        $this->assertEquals($aResult[1], $oAddress->oxaddress__oxlname->value);
+        $this->assertEquals($result[0], $address->oxaddress__oxfname->value);
+        $this->assertEquals($result[1], $address->oxaddress__oxlname->value);
     }
 }

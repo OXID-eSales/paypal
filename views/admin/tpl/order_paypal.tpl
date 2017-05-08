@@ -94,13 +94,13 @@
 [{if $oOrder}]
 
 
-    [{assign var="oPayPalOrder" value=$oOrder->getPayPalOrder()}]
-    [{assign var="oOrderActionManager" value=$oView->getOrderActionManager()}]
-    [{assign var="oOrderPaymentActionManager" value=$oView->getOrderPaymentActionManager()}]
-    [{assign var="oOrderPaymentStatusCalculator" value=$oView->getOrderPaymentStatusCalculator()}]
-    [{assign var="oOrderPaymentStatusList" value=$oView->getOrderPaymentStatusList()}]
+    [{assign var="payPalOrder" value=$oOrder->getPayPalOrder()}]
+    [{assign var="orderActionManager" value=$oView->getOrderActionManager()}]
+    [{assign var="orderPaymentActionManager" value=$oView->getOrderPaymentActionManager()}]
+    [{assign var="orderPaymentStatusCalculator" value=$oView->getOrderPaymentStatusCalculator()}]
+    [{assign var="orderPaymentStatusList" value=$oView->getOrderPaymentStatusList()}]
 
-    [{assign var="currency" value=$oPayPalOrder->getCurrency()}]
+    [{assign var="currency" value=$payPalOrder->getCurrency()}]
 
     <table width="98%" cellspacing="0" cellpadding="0" border="0">
     <tbody>
@@ -117,37 +117,37 @@
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_SHOP_PAYMENT_STATUS"}]:</td>
                 <td class="edittext">
-                    <b>[{oxmultilang ident='OEPAYPAL_STATUS_'|cat:$oPayPalOrder->getPaymentStatus()}]</b>
+                    <b>[{oxmultilang ident='OEPAYPAL_STATUS_'|cat:$payPalOrder->getPaymentStatus()}]</b>
                 </td>
             </tr>
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_ORDER_PRICE"}]:</td>
                 <td class="edittext">
-                    <b>[{$oView->formatPrice($oPayPalOrder->getTotalOrderSum())}] [{$currency}]</b>
+                    <b>[{$oView->formatPrice($payPalOrder->getTotalOrderSum())}] [{$currency}]</b>
                 </td>
             </tr>
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_CAPTURED_AMOUNT"}]:</td>
                 <td class="edittext">
-                    <b>[{$oView->formatPrice($oPayPalOrder->getCapturedAmount())}] [{$currency}]</b>
+                    <b>[{$oView->formatPrice($payPalOrder->getCapturedAmount())}] [{$currency}]</b>
                 </td>
             </tr>
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_REFUNDED_AMOUNT"}]:</td>
                 <td class="edittext">
-                    <b>[{$oView->formatPrice($oPayPalOrder->getRefundedAmount())}] [{$currency}]</b>
+                    <b>[{$oView->formatPrice($payPalOrder->getRefundedAmount())}] [{$currency}]</b>
                 </td>
             </tr>
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_CAPTURED_NET"}]:</td>
                 <td class="edittext">
-                    <b>[{$oView->formatPrice($oPayPalOrder->getRemainingRefundAmount())}] [{$currency}]</b>
+                    <b>[{$oView->formatPrice($payPalOrder->getRemainingRefundAmount())}] [{$currency}]</b>
                 </td>
             </tr>
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_VOIDED_AMOUNT"}]:</td>
                 <td class="edittext">
-                    <b>[{$oView->formatPrice($oPayPalOrder->getVoidedAmount())}] [{$currency}]</b>
+                    <b>[{$oView->formatPrice($payPalOrder->getVoidedAmount())}] [{$currency}]</b>
                 </td>
             </tr>
             <tr>
@@ -156,16 +156,16 @@
                     <b>[{$oOrder->getAuthorizationId()}]</b>
                 </td>
             </tr>
-            [{if $oOrderActionManager->isActionAvailable('capture')}]
+            [{if $orderActionManager->isActionAvailable('capture')}]
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_MONEY_CAPTURE"}]:</td>
                 <td class="edittext">
                     <button id="captureButton" class="actionLink"
                             data-action="capture"
                             data-type="Complete"
-                            data-amount="[{$oPayPalOrder->getRemainingOrderSum()}]"
-                            data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('capture')|@json_encode}]'
-                            data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('capture')}]"
+                            data-amount="[{$payPalOrder->getRemainingOrderSum()}]"
+                            data-statuslist='[{$orderPaymentStatusList->getAvailableStatuses('capture')|@json_encode}]'
+                            data-activestatus="[{$orderPaymentStatusCalculator->getSuggestStatus('capture')}]"
                             href="#">
                         [{oxmultilang ident="OEPAYPAL_CAPTURE"}]
                     </button>
@@ -173,14 +173,14 @@
             </tr>
             </tr>
             [{/if}]
-            [{if $oOrderActionManager->isActionAvailable('void')}]
+            [{if $orderActionManager->isActionAvailable('void')}]
             <tr>
                 <td class="edittext">[{oxmultilang ident="OEPAYPAL_AUTHORIZATION"}]:</td>
                 <td class="edittext">
                     <button id="voidButton" class="actionLink"
                             data-action="void"
-                            data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('void')|@json_encode}]'
-                            data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('void')}]"
+                            data-statuslist='[{$orderPaymentStatusList->getAvailableStatuses('void')|@json_encode}]'
+                            data-activestatus="[{$orderPaymentStatusCalculator->getSuggestStatus('void')}]"
                             href="#">
                         [{oxmultilang ident="OEPAYPAL_CANCEL_AUTHORIZATION"}]
                     </button>
@@ -208,7 +208,7 @@
                 </td>
                 <td class="listheader">[{oxmultilang ident="OEPAYPAL_HISTORY_ACTIONS"}]</td>
             </tr>
-            [{foreach from=$oPayPalOrder->getPaymentList() item=listitem name=paypalHistory}]
+            [{foreach from=$payPalOrder->getPaymentList() item=listitem name=paypalHistory}]
             [{cycle values='listitem,listitem2' assign='class'}]
             <tr>
                 <td valign="top" class="[{$class}]">[{$listitem->getDate()}]</td>
@@ -253,28 +253,28 @@
                             <label>[{oxmultilang ident="OEPAYPAL_TRANSACTIONID"}]: </label><b>[{$listitem->getTransactionId()}]</b><br/>
                             <label>[{oxmultilang ident="OEPAYPAL_CORRELATIONID"}]: </label><b>[{$listitem->getCorrelationId()}]</b><br/>
                         </p>
-                        [{assign var="aComments" value=$listitem->getCommentList()}]
-                        [{if $aComments->getArray()}]
+                        [{assign var="comments" value=$listitem->getCommentList()}]
+                        [{if $comments->getArray()}]
                         <div class="paypalHistoryComments">
                             <span>[{oxmultilang ident="OEPAYPAL_COMMENT"}]: </span>
-                            [{foreach from=$aComments item=oComment}]
+                            [{foreach from=$comments item=comment}]
                             <p>
-                                <small>[{$oComment->getDate()}]</small>
+                                <small>[{$comment->getDate()}]</small>
                                 </br>
-                                [{$oComment->getComment()}]
+                                [{$comment->getComment()}]
                             </p>
                             [{/foreach}]
                         </div>
                         [{/if}]
                     </div>
-                    [{if $oOrderPaymentActionManager->isActionAvailable('refund', $listitem)}]
+                    [{if $orderPaymentActionManager->isActionAvailable('refund', $listitem)}]
                     <a id="refundButton[{$smarty.foreach.paypalHistory.index}]" class="actionLink"
                        data-action="refund"
                        data-type="[{if $listitem->getRefundedAmount() > 0}]Partial[{else}]Full[{/if}]"
                        data-amount="[{$listitem->getRemainingRefundAmount()}]"
                        data-transid="[{$listitem->getTransactionId()}]"
-                       data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('refund')|@json_encode}]'
-                       data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('refund')}]"
+                       data-statuslist='[{$orderPaymentStatusList->getAvailableStatuses('refund')|@json_encode}]'
+                       data-activestatus="[{$orderPaymentStatusCalculator->getSuggestStatus('refund')}]"
                        href="#">
                         <img src="[{$oViewConf->getModuleUrl('oepaypal','out/admin/src/bg/ico-refund.png')}]"
                              title="[{oxmultilang ident="OEPAYPAL_REFUND"}]"/>
@@ -369,14 +369,14 @@
                 <select class="amountSelect" name="capture_type" data-input="captureAmountInput">
                     <option value="Complete"
                             data-disabled="1"
-                            data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('capture')|@json_encode}]'
-                            data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('capture')}]">
+                            data-statuslist='[{$orderPaymentStatusList->getAvailableStatuses('capture')|@json_encode}]'
+                            data-activestatus="[{$orderPaymentStatusCalculator->getSuggestStatus('capture')}]">
                         [{oxmultilang ident="OEPAYPAL_MONEY_ACTION_FULL"}]
                     </option>
                     <option value="NotComplete"
                             data-disabled="0"
-                            data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('capture_partial')|@json_encode}]'
-                            data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('capture_partial')}]">
+                            data-statuslist='[{$orderPaymentStatusList->getAvailableStatuses('capture_partial')|@json_encode}]'
+                            data-activestatus="[{$orderPaymentStatusCalculator->getSuggestStatus('capture_partial')}]">
                         [{oxmultilang ident="OEPAYPAL_MONEY_ACTION_PARTIAL"}]
                     </option>
                 </select>
@@ -417,14 +417,14 @@
                 <select class="amountSelect" name="refund_type" data-input="refundAmountInput">
                     <option value="Full"
                             data-disabled="1"
-                            data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('refund')|@json_encode}]'
-                            data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('refund')}]">
+                            data-statuslist='[{$orderPaymentStatusList->getAvailableStatuses('refund')|@json_encode}]'
+                            data-activestatus="[{$orderPaymentStatusCalculator->getSuggestStatus('refund')}]">
                         [{oxmultilang ident="OEPAYPAL_MONEY_ACTION_FULL"}]
                     </option>
                     <option value="Partial"
                             data-disabled="0"
-                            data-statuslist='[{$oOrderPaymentStatusList->getAvailableStatuses('refund_partial')|@json_encode}]'
-                            data-activestatus="[{$oOrderPaymentStatusCalculator->getSuggestStatus('refund_partial')}]">
+                            data-statuslist='[{$orderPaymentStatusList->getAvailableStatuses('refund_partial')|@json_encode}]'
+                            data-activestatus="[{$orderPaymentStatusCalculator->getSuggestStatus('refund_partial')}]">
                         [{oxmultilang ident="OEPAYPAL_MONEY_ACTION_PARTIAL"}]
                     </option>
                 </select>
@@ -445,7 +445,7 @@
 
         <div id="paypalStatusList">
             [{oxmultilang ident="OEPAYPAL_SHOP_PAYMENT_STATUS"}]
-            [{foreach from=$oOrderPaymentStatusList item=status}]
+            [{foreach from=$orderPaymentStatusList item=status}]
                 <span id="[{$status}]Status">
                     <input id="[{$status}]StatusCheckbox" type="radio" name="order_status" value="[{$status}]">
                     <label for="[{$status}]StatusCheckbox">[{oxmultilang ident='OEPAYPAL_STATUS_'|cat:$status}]</label>

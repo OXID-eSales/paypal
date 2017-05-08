@@ -31,19 +31,20 @@ class EscapeTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCheckParamSpecialChars()
     {
-        $oVar = new \stdClass();
-        $oVar->xxx = 'yyy';
-        $aVar = array('&\\o<x>i"\'d' . chr(0));
-        $sVar = '&\\o<x>i"\'d' . chr(0);
-        $oPayPalRequest = new \OxidEsales\PayPalModule\Core\Request();
+        $object = new \stdClass();
+        $object->xxx = 'yyy';
+        $array = array('&\\o<x>i"\'d' . chr(0));
+        $string = '&\\o<x>i"\'d' . chr(0);
+        $payPalRequest = new \OxidEsales\PayPalModule\Core\Request();
+
         // object must came back the same
-        $this->assertEquals($oVar, $oPayPalRequest->escapeSpecialChars($oVar));
+        $this->assertEquals($object, $payPalRequest->escapeSpecialChars($object));
 
         // array items comes fixed
-        $this->assertEquals(array('&amp;&#092;o&lt;x&gt;i&quot;&#039;d'), $oPayPalRequest->escapeSpecialChars($aVar));
+        $this->assertEquals(array('&amp;&#092;o&lt;x&gt;i&quot;&#039;d'), $payPalRequest->escapeSpecialChars($array));
 
         // string comes fixed
-        $this->assertEquals('&amp;&#092;o&lt;x&gt;i&quot;&#039;d', $oPayPalRequest->escapeSpecialChars($sVar));
+        $this->assertEquals('&amp;&#092;o&lt;x&gt;i&quot;&#039;d', $payPalRequest->escapeSpecialChars($string));
     }
 
     /**
@@ -72,7 +73,7 @@ class EscapeTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCheckParamSpecialCharsAlsoFixesArrayKeys($checkData, $checkExpectedResult)
     {
-        $oPayPalRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $this->assertEquals($checkExpectedResult, $oPayPalRequest->escapeSpecialChars($checkData));
+        $payPalRequest = new \OxidEsales\PayPalModule\Core\Request();
+        $this->assertEquals($checkExpectedResult, $payPalRequest->escapeSpecialChars($checkData));
     }
 }

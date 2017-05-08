@@ -80,60 +80,60 @@ class ResponseDoVerifyWithPayPalTest extends \OxidEsales\TestingLibrary\UnitTest
     /**
      * @dataProvider providerResponseData
      */
-    public function testIsPayPalAck($aDataResponse, $aDataExpect)
+    public function testIsPayPalAck($dataResponse, $dataExpect)
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
-        $oResponse->setData($aDataResponse);
-        $this->assertEquals($aDataExpect['ack'], $oResponse->isPayPalAck());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
+        $response->setData($dataResponse);
+        $this->assertEquals($dataExpect['ack'], $response->isPayPalAck());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetReceiverEmail($aDataResponse, $aDataExpect)
+    public function testGetReceiverEmail($dataResponse, $dataExpect)
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
-        $oResponse->setData($aDataResponse);
-        $this->assertEquals($aDataExpect['receiver_email'], $oResponse->getReceiverEmail());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
+        $response->setData($dataResponse);
+        $this->assertEquals($dataExpect['receiver_email'], $response->getReceiverEmail());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetPaymentStatus($aDataResponse, $aDataExpect)
+    public function testGetPaymentStatus($dataResponse, $dataExpect)
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
-        $oResponse->setData($aDataResponse);
-        $this->assertEquals($aDataExpect['payment_status'], $oResponse->getPaymentStatus());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
+        $response->setData($dataResponse);
+        $this->assertEquals($dataExpect['payment_status'], $response->getPaymentStatus());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetTransactionId($aDataResponse, $aDataExpect)
+    public function testGetTransactionId($dataResponse, $dataExpect)
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
-        $oResponse->setData($aDataResponse);
-        $this->assertEquals($aDataExpect['transaction_id'], $oResponse->getTransactionId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
+        $response->setData($dataResponse);
+        $this->assertEquals($dataExpect['transaction_id'], $response->getTransactionId());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetCurrency($aDataResponse, $aDataExpect)
+    public function testGetCurrency($dataResponse, $dataExpect)
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
-        $oResponse->setData($aDataResponse);
-        $this->assertEquals($aDataExpect['currency'], $oResponse->getCurrency());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
+        $response->setData($dataResponse);
+        $this->assertEquals($dataExpect['currency'], $response->getCurrency());
     }
 
     /**
      * @dataProvider providerResponseData
      */
-    public function testGetAmount($aDataResponse, $aDataExpect)
+    public function testGetAmount($dataResponse, $dataExpect)
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
-        $oResponse->setData($aDataResponse);
-        $this->assertEquals($aDataExpect['amount'], $oResponse->getAmount());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
+        $response->setData($dataResponse);
+        $this->assertEquals($dataExpect['amount'], $response->getAmount());
     }
 }

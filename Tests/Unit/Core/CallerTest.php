@@ -31,10 +31,10 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetParameter_setParameter_addedToSetOfParameters()
     {
-        $oService = new \OxidEsales\PayPalModule\Core\Caller();
-        $oService->setParameter("testParam", "testValue");
-        $aParameters = array("testParam" => "testValue");
-        $this->assertEquals($aParameters, $oService->getParameters());
+        $service = new \OxidEsales\PayPalModule\Core\Caller();
+        $service->setParameter("testParam", "testValue");
+        $parameters = array("testParam" => "testValue");
+        $this->assertEquals($parameters, $service->getParameters());
     }
 
     /**
@@ -42,17 +42,17 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetParameters_setOneOrMoreParameters_addedToSetOfParameters()
     {
-        $oService = new \OxidEsales\PayPalModule\Core\Caller();
+        $service = new \OxidEsales\PayPalModule\Core\Caller();
 
-        $oService->setParameter("testParam", "testValue");
-        $oService->setParameters(array("testParam" => "testValue2", "testParam3" => "testValue3", "testParam4" => "testValue4"));
-        $oService->setParameter("testParam4", "testValue5");
+        $service->setParameter("testParam", "testValue");
+        $service->setParameters(array("testParam" => "testValue2", "testParam3" => "testValue3", "testParam4" => "testValue4"));
+        $service->setParameter("testParam4", "testValue5");
 
-        $aResult["testParam"] = "testValue2";
-        $aResult["testParam3"] = "testValue3";
-        $aResult["testParam4"] = "testValue5";
+        $result["testParam"] = "testValue2";
+        $result["testParam3"] = "testValue3";
+        $result["testParam4"] = "testValue5";
 
-        $this->assertEquals($aResult, $oService->getParameters());
+        $this->assertEquals($result, $service->getParameters());
     }
 
     /**
@@ -60,23 +60,23 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCall_withMethodSuccessful_returnResponseArray()
     {
-        $aParams = array();
-        $aParams["testParam"] = "testValue";
+        $params = array();
+        $params["testParam"] = "testValue";
 
-        $aCurlParams = $aParams;
-        $aCurlParams["METHOD"] = "testMethod";
+        $curlParams = $params;
+        $curlParams["METHOD"] = "testMethod";
 
-        $sUrl = 'http://url.com';
-        $sCharset = 'latin';
+        $url = 'http://url.com';
+        $charset = 'latin';
 
-        $aResponse = array('parameter', 'value');
+        $response = array('parameter', 'value');
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setParameters($aParams);
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setParameters($params);
 
-        $oCaller->setCurl($this->_prepareCurl($aResponse, $aCurlParams, $sUrl, $sCharset));
+        $caller->setCurl($this->prepareCurl($response, $curlParams, $url, $charset));
 
-        $this->assertEquals($aResponse, $oCaller->call("testMethod"));
+        $this->assertEquals($response, $caller->call("testMethod"));
     }
 
     /**
@@ -84,22 +84,22 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCall_withoutMethod_returnResponseArray()
     {
-        $aParams = array();
-        $aParams["testParam"] = "testValue";
+        $params = array();
+        $params["testParam"] = "testValue";
 
-        $aCurlParams = $aParams;
+        $curlParams = $params;
 
-        $sUrl = 'http://url.com';
-        $sCharset = 'latin';
+        $url = 'http://url.com';
+        $charset = 'latin';
 
-        $aResponse = array('parameter', 'value');
+        $response = array('parameter', 'value');
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setParameters($aParams);
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setParameters($params);
 
-        $oCaller->setCurl($this->_prepareCurl($aResponse, $aCurlParams, $sUrl, $sCharset));
+        $caller->setCurl($this->prepareCurl($response, $curlParams, $url, $charset));
 
-        $this->assertEquals($aResponse, $oCaller->call());
+        $this->assertEquals($response, $caller->call());
     }
 
     /**
@@ -109,21 +109,21 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->setExpectedException(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class);
 
-        $aParams = array();
-        $aParams["testParam"] = "testValue";
+        $params = array();
+        $params["testParam"] = "testValue";
 
-        $aCurlParams = $aParams;
+        $curlParams = $params;
 
-        $sUrl = 'http://url.com';
-        $sCharset = 'latin';
+        $url = 'http://url.com';
+        $charset = 'latin';
 
-        $aResponse = array('ACK' => 'Failure', 'L_LONGMESSAGE0' => 'message', 'L_ERRORCODE0' => 1);
+        $response = array('ACK' => 'Failure', 'L_LONGMESSAGE0' => 'message', 'L_ERRORCODE0' => 1);
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setParameters($aParams);
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setParameters($params);
 
-        $oCaller->setCurl($this->_prepareCurl($aResponse, $aCurlParams, $sUrl, $sCharset));
-        $this->assertEquals($aResponse, $oCaller->call());
+        $caller->setCurl($this->prepareCurl($response, $curlParams, $url, $charset));
+        $this->assertEquals($response, $caller->call());
     }
 
     /**
@@ -131,18 +131,18 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetCallBackResponse_setParameters_getResponse()
     {
-        $aParams = array(
+        $params = array(
             'param1' => 'value1',
             'param2' => 'value2',
         );
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setParameters($aParams);
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setParameters($params);
 
-        $aParams['METHOD'] = 'CallbackResponse';
-        $sParams = http_build_query($aParams);
+        $params['METHOD'] = 'CallbackResponse';
+        $params = http_build_query($params);
 
-        $this->assertEquals($sParams, $oCaller->getCallBackResponse('CallbackResponse'));
+        $this->assertEquals($params, $caller->getCallBackResponse('CallbackResponse'));
     }
 
     /**
@@ -150,9 +150,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetCurl_notSet_returnedNewCreated()
     {
-        $oPayPalCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oPayPalCurl = $oPayPalCaller->getCurl();
-        $this->assertTrue(is_a($oPayPalCurl, \OxidEsales\PayPalModule\Core\Curl::class), 'Getter should create PayPal Curl object on request.');
+        $payPalCaller = new \OxidEsales\PayPalModule\Core\Caller();
+        $payPalCurl = $payPalCaller->getCurl();
+        $this->assertTrue(is_a($payPalCurl, \OxidEsales\PayPalModule\Core\Curl::class), 'Getter should create PayPal Curl object on request.');
     }
 
     /**
@@ -160,14 +160,14 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetCurl_setCurl_returnedSet()
     {
-        $oCurl = new \OxidEsales\PayPalModule\Core\Curl();
-        $oCurl->setConnectionCharset('latin');
+        $curl = new \OxidEsales\PayPalModule\Core\Curl();
+        $curl->setConnectionCharset('latin');
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setCurl($oCurl);
-        $oCurl = $oCaller->getCurl();
-        $this->assertTrue($oCurl instanceof \OxidEsales\PayPalModule\Core\Curl);
-        $this->assertEquals('latin', $oCurl->getConnectionCharset());
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setCurl($curl);
+        $curl = $caller->getCurl();
+        $this->assertTrue($curl instanceof \OxidEsales\PayPalModule\Core\Curl);
+        $this->assertEquals('latin', $curl->getConnectionCharset());
     }
 
     /**
@@ -175,13 +175,13 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetRequest_RequestDataSetAsParameters()
     {
-        $oRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
-        $oRequest->setData(array('param' => 'data'));
+        $request = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
+        $request->setData(array('param' => 'data'));
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
 
-        $oCaller->setRequest($oRequest);
-        $this->assertEquals(array('param' => 'data'), $oCaller->getParameters());
+        $caller->setRequest($request);
+        $this->assertEquals(array('param' => 'data'), $caller->getParameters());
     }
 
     /**
@@ -189,8 +189,8 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetLogger_notSet_null()
     {
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $this->assertNull($oCaller->getLogger());
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $this->assertNull($caller->getLogger());
     }
 
     /**
@@ -198,9 +198,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetLogger_setLogger_Logger()
     {
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setLogger(new \OxidEsales\PayPalModule\Core\Logger());
-        $this->assertTrue($oCaller->getLogger() instanceof \OxidEsales\PayPalModule\Core\Logger);
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setLogger(new \OxidEsales\PayPalModule\Core\Logger());
+        $this->assertTrue($caller->getLogger() instanceof \OxidEsales\PayPalModule\Core\Logger);
     }
 
     /**
@@ -208,9 +208,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLog_notSetLogger_LoggerNotUsed()
     {
-        $oCaller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array('getLogger'));
-        $oCaller->expects($this->once())->method('getLogger')->will($this->returnValue(null));
-        $oCaller->log('logMassage');
+        $caller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array('getLogger'));
+        $caller->expects($this->once())->method('getLogger')->will($this->returnValue(null));
+        $caller->log('logMassage');
     }
 
     /**
@@ -218,12 +218,12 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLog_setLogger_LoggerUsed()
     {
-        $oLogger = $oCurl = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
-        $oLogger->expects($this->once())->method('log')->with($this->equalTo('logMassage'));
+        $logger = $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $logger->expects($this->once())->method('log')->with($this->equalTo('logMassage'));
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setLogger($oLogger);
-        $oCaller->log('logMassage');
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setLogger($logger);
+        $caller->log('logMassage');
     }
 
     /**
@@ -231,15 +231,15 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLogUsage_onCallMethod_atLeastOnce()
     {
-        $oLogger = $oCurl = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
-        $oLogger->expects($this->atLeastOnce())->method('log');
+        $logger = $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $logger->expects($this->atLeastOnce())->method('log');
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setLogger($oLogger);
-        $oCaller->setParameters(array('k' => 'val'));
-        $oCaller->setCurl($this->_prepareCurl(array(), array('k' => 'val'), 'http://url.com', 'utf8'));
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setLogger($logger);
+        $caller->setParameters(array('k' => 'val'));
+        $caller->setCurl($this->prepareCurl(array(), array('k' => 'val'), 'http://url.com', 'utf8'));
 
-        $oCaller->call();
+        $caller->call();
     }
 
     /**
@@ -247,35 +247,35 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLogUsage_onGetCallBackResponseMethod_atLeastOnce()
     {
-        $oLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
-        $oLogger->expects($this->atLeastOnce())->method('log');
+        $logger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $logger->expects($this->atLeastOnce())->method('log');
 
-        $oCaller = new \OxidEsales\PayPalModule\Core\Caller();
-        $oCaller->setLogger($oLogger);
-        $oCaller->setParameters(array('k' => 'val'));
-        $oCaller->setCurl($this->_prepareCurl(array(), array('k' => 'val'), 'http://url.com', 'utf8'));
-        $oCaller->call();
+        $caller = new \OxidEsales\PayPalModule\Core\Caller();
+        $caller->setLogger($logger);
+        $caller->setParameters(array('k' => 'val'));
+        $caller->setCurl($this->prepareCurl(array(), array('k' => 'val'), 'http://url.com', 'utf8'));
+        $caller->call();
     }
 
     /**
      * Prepare curl stub
      *
-     * @param array  $aResponse   response
-     * @param array  $aParamsCurl params
-     * @param string $sUrl        url
-     * @param string $sCharset    charset
+     * @param array  $response   response
+     * @param array  $paramsCurl params
+     * @param string $url        url
+     * @param string $charset    charset
      *
      * @return \OxidEsales\PayPalModule\Core\Curl
      */
-    protected function _prepareCurl($aResponse, $aParamsCurl, $sUrl, $sCharset)
+    protected function prepareCurl($response, $paramsCurl, $url, $charset)
     {
-        $oCurl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, array("execute", 'setUrlToCall', 'setParameters', 'setDataCharset'));
-        $oCurl->expects($this->once())->method("execute")->will($this->returnValue($aResponse));
-        $oCurl->setDataCharset($sCharset);
-        $oCurl->setParameters($aParamsCurl);
-        $oCurl->setUrlToCall($sUrl);
+        $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, array("execute", 'setUrlToCall', 'setParameters', 'setDataCharset'));
+        $curl->expects($this->once())->method("execute")->will($this->returnValue($response));
+        $curl->setDataCharset($charset);
+        $curl->setParameters($paramsCurl);
+        $curl->setUrlToCall($url);
 
-        return $oCurl;
+        return $curl;
     }
 }
 

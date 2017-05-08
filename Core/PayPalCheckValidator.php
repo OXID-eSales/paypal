@@ -32,14 +32,14 @@ class PayPalCheckValidator
      *
      * @var double
      */
-    protected $_dNewBasketAmount = null;
+    protected $newBasketAmount = null;
 
     /**
      * Basket old amount
      *
      * @var double
      */
-    protected $_dOldBasketAmount = null;
+    protected $oldBasketAmount = null;
 
     /**
      * Returns if order should be rechecked by PayPal
@@ -48,10 +48,10 @@ class PayPalCheckValidator
      */
     public function isPayPalCheckValid()
     {
-        $dNewBasketAmount = $this->getNewBasketAmount();
-        $dPrevBasketAmount = $this->getOldBasketAmount();
+        $newBasketAmount = $this->getNewBasketAmount();
+        $prevBasketAmount = $this->getOldBasketAmount();
         // check only if new price is different and bigger than old price
-        if ($dNewBasketAmount > $dPrevBasketAmount) {
+        if ($newBasketAmount > $prevBasketAmount) {
             return false;
         }
 
@@ -61,11 +61,11 @@ class PayPalCheckValidator
     /**
      * Sets new basket amount
      *
-     * @param double $dNewBasketAmount changed basket amount
+     * @param double $newBasketAmount changed basket amount
      */
-    public function setNewBasketAmount($dNewBasketAmount)
+    public function setNewBasketAmount($newBasketAmount)
     {
-        $this->_dNewBasketAmount = $dNewBasketAmount;
+        $this->newBasketAmount = $newBasketAmount;
     }
 
     /**
@@ -75,17 +75,17 @@ class PayPalCheckValidator
      */
     public function getNewBasketAmount()
     {
-        return (float) $this->_dNewBasketAmount;
+        return (float) $this->newBasketAmount;
     }
 
     /**
      * Sets old basket amount
      *
-     * @param double $dOldBasketAmount old basket amount
+     * @param double $oldBasketAmount old basket amount
      */
-    public function setOldBasketAmount($dOldBasketAmount)
+    public function setOldBasketAmount($oldBasketAmount)
     {
-        $this->_dOldBasketAmount = $dOldBasketAmount;
+        $this->oldBasketAmount = $oldBasketAmount;
     }
 
     /**
@@ -95,6 +95,6 @@ class PayPalCheckValidator
      */
     public function getOldBasketAmount()
     {
-        return (float) $this->_dOldBasketAmount;
+        return (float) $this->oldBasketAmount;
     }
 }

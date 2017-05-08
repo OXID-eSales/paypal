@@ -187,9 +187,9 @@ class IPNPaymentCreatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     private function prepareRequest($data)
     {
         $_POST = $data;
-        $oRequest = new \OxidEsales\PayPalModule\Core\Request();
+        $request = new \OxidEsales\PayPalModule\Core\Request();
 
-        return $oRequest;
+        return $request;
     }
 
     /**

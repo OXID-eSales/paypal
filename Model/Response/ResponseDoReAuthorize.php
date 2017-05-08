@@ -34,7 +34,7 @@ class ResponseDoReAuthorize extends \OxidEsales\PayPalModule\Model\Response\Resp
      */
     public function getAuthorizationId()
     {
-        return $this->_getValue('AUTHORIZATIONID');
+        return $this->getValue('AUTHORIZATIONID');
     }
 
     /**
@@ -44,7 +44,7 @@ class ResponseDoReAuthorize extends \OxidEsales\PayPalModule\Model\Response\Resp
      */
     public function getPaymentStatus()
     {
-        return $this->_getValue('PAYMENTSTATUS');
+        return $this->getValue('PAYMENTSTATUS');
     }
 
     /**
@@ -54,6 +54,6 @@ class ResponseDoReAuthorize extends \OxidEsales\PayPalModule\Model\Response\Resp
      */
     public function getCorrelationId()
     {
-        return $this->_getValue('CORRELATIONID');
+        return $this->getValue('CORRELATIONID');
     }
 }

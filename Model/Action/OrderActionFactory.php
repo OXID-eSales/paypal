@@ -35,18 +35,18 @@ class OrderActionFactory
     /**
      * @var \OxidEsales\PayPalModule\Model\Order
      */
-    protected $_oOrder = null;
+    protected $order = null;
 
     /**
      * Sets dependencies
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oRequest
-     * @param \OxidEsales\PayPalModule\Model\Order  $oOrder
+     * @param \OxidEsales\PayPalModule\Core\Request $request
+     * @param \OxidEsales\PayPalModule\Model\Order  $order
      */
-    public function __construct($oRequest, $oOrder)
+    public function __construct($request, $order)
     {
-        $this->_oRequest = $oRequest;
-        $this->_oOrder = $oOrder;
+        $this->request = $request;
+        $this->order = $order;
     }
 
     /**
@@ -56,7 +56,7 @@ class OrderActionFactory
      */
     public function getRequest()
     {
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
@@ -66,29 +66,29 @@ class OrderActionFactory
      */
     public function getOrder()
     {
-        return $this->_oOrder;
+        return $this->order;
     }
 
     /**
      * Creates action object by given action name.
      *
-     * @param string $sAction
+     * @param string $action
      *
      * @return object
      *
      * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException
      */
-    public function createAction($sAction)
+    public function createAction($action)
     {
-        $sMethod = "get" . ucfirst($sAction) . "Action";
+        $method = "get" . ucfirst($action) . "Action";
 
-        if (!method_exists($this, $sMethod)) {
-            /** @var \OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException $oException */
-            $oException = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException::class);
-            throw $oException;
+        if (!method_exists($this, $method)) {
+            /** @var \OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException $exception */
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException::class);
+            throw $exception;
         }
 
-        return $this->$sMethod();
+        return $this->$method();
     }
 
     /**
@@ -98,18 +98,18 @@ class OrderActionFactory
      */
     public function getCaptureAction()
     {
-        $oOrder = $this->getOrder();
-        $oRequest = $this->getRequest();
+        $order = $this->getOrder();
+        $request = $this->getRequest();
 
-        $oData = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData::class, $oRequest, $oOrder);
-        $oHandler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler::class, $oData);
+        $data = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData::class, $request, $order);
+        $handler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler::class, $data);
 
-        $oReauthorizeData = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderReauthorizeActionData::class, $oRequest, $oOrder);
-        $oReauthorizeHandler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, $oReauthorizeData);
+        $reauthorizeData = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderReauthorizeActionData::class, $request, $order);
+        $reauthorizeHandler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, $reauthorizeData);
 
-        $oAction = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderCaptureAction::class, $oHandler, $oOrder->getPayPalOrder(), $oReauthorizeHandler);
+        $action = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderCaptureAction::class, $handler, $order->getPayPalOrder(), $reauthorizeHandler);
 
-        return $oAction;
+        return $action;
     }
 
     /**
@@ -119,13 +119,13 @@ class OrderActionFactory
      */
     public function getRefundAction()
     {
-        $oOrder = $this->getOrder();
-        $oData = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class, $this->getRequest(), $oOrder);
-        $oHandler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderRefundActionHandler::class, $oData);
+        $order = $this->getOrder();
+        $data = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class, $this->getRequest(), $order);
+        $handler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderRefundActionHandler::class, $data);
 
-        $oAction = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderRefundAction::class, $oHandler, $oOrder->getPayPalOrder());
+        $action = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderRefundAction::class, $handler, $order->getPayPalOrder());
 
-        return $oAction;
+        return $action;
     }
 
     /**
@@ -135,12 +135,12 @@ class OrderActionFactory
      */
     public function getVoidAction()
     {
-        $oOrder = $this->getOrder();
-        $oData = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData::class, $this->getRequest(), $oOrder);
-        $oHandler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderVoidActionHandler::class, $oData);
+        $order = $this->getOrder();
+        $data = oxNew(\OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData::class, $this->getRequest(), $order);
+        $handler = oxNew(\OxidEsales\PayPalModule\Model\Action\Handler\OrderVoidActionHandler::class, $data);
 
-        $oAction = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderVoidAction::class, $oHandler, $oOrder->getPayPalOrder());
+        $action = oxNew(\OxidEsales\PayPalModule\Model\Action\OrderVoidAction::class, $handler, $order->getPayPalOrder());
 
-        return $oAction;
+        return $action;
     }
 }

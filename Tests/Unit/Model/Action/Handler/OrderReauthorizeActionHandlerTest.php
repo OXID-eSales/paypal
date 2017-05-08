@@ -32,29 +32,29 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
      */
     public function testGetPayPalRequest_RequestIsNotSet_BuildsRequest()
     {
-        $sAuthId = '123456';
-        $sCurrency = 'LTU';
-        $dAmount = 59.67;
+        $authId = '123456';
+        $currency = 'LTU';
+        $amount = 59.67;
 
-        $oData = $this->_createStub(
+        $data = $this->_createStub(
             'Data', array(
-                'getAuthorizationId' => $sAuthId,
-                'getAmount'          => $dAmount,
-                'getCurrency'        => $sCurrency,
+                'getAuthorizationId' => $authId,
+                'getAmount'          => $amount,
+                'getCurrency'        => $currency,
             )
         );
-        $oActionHandler = $this->_getActionHandler($oData);
+        $actionHandler = $this->getActionHandler($data);
 
-        $oBuilder = $this->getMock(
+        $builder = $this->getMock(
             \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class,
             array('setAuthorizationId', 'setAmount', 'setCompleteType')
         );
-        $oBuilder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($sAuthId));
-        $oBuilder->expects($this->once())->method('setAmount')->with($this->equalTo($dAmount), $this->equalTo($sCurrency));
+        $builder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($authId));
+        $builder->expects($this->once())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
 
-        $oActionHandler->setPayPalRequestBuilder($oBuilder);
+        $actionHandler->setPayPalRequestBuilder($builder);
 
-        $this->assertTrue($oActionHandler->getPayPalRequest() instanceof \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest);
+        $this->assertTrue($actionHandler->getPayPalRequest() instanceof \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest);
     }
 
     /**
@@ -62,22 +62,22 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
      */
     public function testGetPayPalResponse_SetsCorrectRequestToService()
     {
-        $oActionHandler = $this->_getActionHandler();
+        $actionHandler = $this->getActionHandler();
 
-        $oPayPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
-        $oActionHandler->setPayPalRequest($oPayPalRequest);
+        $payPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        $actionHandler->setPayPalRequest($payPalRequest);
 
-        $oCheckoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doReAuthorization'));
-        $oCheckoutService->expects($this->once())->method('doReAuthorization')->with($this->equalTo($oPayPalRequest));
-        $oActionHandler->setPayPalService($oCheckoutService);
+        $checkoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doReAuthorization'));
+        $checkoutService->expects($this->once())->method('doReAuthorization')->with($this->equalTo($payPalRequest));
+        $actionHandler->setPayPalService($checkoutService);
 
-        $oActionHandler->getPayPalResponse();
+        $actionHandler->getPayPalResponse();
     }
 
     /**
      * @return \OxidEsales\PayPalModule\Core\PayPalService|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getService()
+    protected function getService()
     {
         return $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class);
     }
@@ -85,16 +85,16 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
     /**
      * Returns reauthorize action object
      *
-     * @param $oData
+     * @param $data
      *
      * @return \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler
      */
-    protected function _getActionHandler($oData = null)
+    protected function getActionHandler($data = null)
     {
-        $oAction = new \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler($oData);
+        $action = new \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler($data);
 
-        $oAction->setPayPalService($this->_getService());
+        $action->setPayPalService($this->getService());
 
-        return $oAction;
+        return $action;
     }
 }

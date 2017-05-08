@@ -34,7 +34,7 @@ class ResponseDoVoid extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getAuthorizationId()
     {
-        return $this->_getValue('AUTHORIZATIONID');
+        return $this->getValue('AUTHORIZATIONID');
     }
 
     /**
@@ -44,6 +44,6 @@ class ResponseDoVoid extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getCorrelationId()
     {
-        return $this->_getValue('CORRELATIONID');
+        return $this->getValue('CORRELATIONID');
     }
 }

@@ -30,8 +30,8 @@ class FrontendControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetRequest()
     {
-        $oController = new \OxidEsales\PayPalModule\Controller\FrontendController();
-        $this->assertTrue($oController->getRequest() instanceof \OxidEsales\PayPalModule\Core\Request);
+        $controller = new \OxidEsales\PayPalModule\Controller\FrontendController();
+        $this->assertTrue($controller->getRequest() instanceof \OxidEsales\PayPalModule\Core\Request);
     }
 
     /**
@@ -39,8 +39,8 @@ class FrontendControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetLogger()
     {
-        $oController = new \OxidEsales\PayPalModule\Controller\FrontendController();
-        $this->assertTrue($oController->getLogger() instanceof \OxidEsales\PayPalModule\Core\Logger);
+        $controller = new \OxidEsales\PayPalModule\Controller\FrontendController();
+        $this->assertTrue($controller->getLogger() instanceof \OxidEsales\PayPalModule\Core\Logger);
     }
 
     /**
@@ -48,8 +48,8 @@ class FrontendControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalConfig()
     {
-        $oController = new \OxidEsales\PayPalModule\Controller\FrontendController();
-        $this->assertTrue($oController->getPayPalConfig() instanceof \OxidEsales\PayPalModule\Core\Config);
+        $controller = new \OxidEsales\PayPalModule\Controller\FrontendController();
+        $this->assertTrue($controller->getPayPalConfig() instanceof \OxidEsales\PayPalModule\Core\Config);
     }
 
     /**
@@ -59,13 +59,13 @@ class FrontendControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', true);
 
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
-        $oPayPalLogger->expects($this->once())->method('log');
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $payPalLogger->expects($this->once())->method('log');
 
-        $oController = $this->getMock(\OxidEsales\PayPalModule\Controller\FrontendController::class, array('getLogger'));
-        $oController->expects($this->once())->method('getLogger')->will($this->returnValue($oPayPalLogger));
+        $controller = $this->getMock(\OxidEsales\PayPalModule\Controller\FrontendController::class, array('getLogger'));
+        $controller->expects($this->once())->method('getLogger')->will($this->returnValue($payPalLogger));
 
-        $oController->log('logMessage');
+        $controller->log('logMessage');
     }
 
     /**
@@ -75,12 +75,12 @@ class FrontendControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blPayPalLoggerEnabled', false);
 
-        $oPayPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
-        $oPayPalLogger->expects($this->never())->method('log');
+        $payPalLogger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $payPalLogger->expects($this->never())->method('log');
 
-        $oController = $this->getMock(\OxidEsales\PayPalModule\Controller\FrontendController::class, array('getLogger'));
-        $oController->expects($this->never())->method('getLogger')->will($this->returnValue($oPayPalLogger));
+        $controller = $this->getMock(\OxidEsales\PayPalModule\Controller\FrontendController::class, array('getLogger'));
+        $controller->expects($this->never())->method('getLogger')->will($this->returnValue($payPalLogger));
 
-        $oController->log('logMessage');
+        $controller->log('logMessage');
     }
 }

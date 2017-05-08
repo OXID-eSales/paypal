@@ -34,87 +34,86 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      */
     public function setExpressCheckout()
     {
-        $oSession = $this->getSession();
-        $oSession->setVariable("oepaypal", "1");
+        $session = $this->getSession();
+        $session->setVariable("oepaypal", "1");
         try {
-            $oBuilder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder::class);
+            $builder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder::class);
 
-            $oBasket = $oSession->getBasket();
-            $oUser = $this->getUser();
+            $basket = $session->getBasket();
+            $user = $this->getUser();
 
-            $oBasket->setPayment("oxidpaypal");
-            $oBasket->onUpdate();
-            $oBasket->calculateBasket(true);
+            $basket->setPayment("oxidpaypal");
+            $basket->onUpdate();
+            $basket->calculateBasket(true);
 
-            $oValidator = oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
-            $oValidator->setUser($oUser);
-            $oValidator->setConfig($this->getConfig());
-            $oValidator->setPrice($oBasket->getPrice()->getPrice());
+            $validator = oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
+            $validator->setUser($user);
+            $validator->setConfig($this->getConfig());
+            $validator->setPrice($basket->getPrice()->getPrice());
 
-            if (!$oValidator->isPaymentValid()) {
+            if (!$validator->isPaymentValid()) {
                 /**
-                 * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $oEx
+                 * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $exception
                  */
-                $oEx = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
-                $oEx->setMessage(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
-                throw $oEx;
+                $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
+                $exception->setMessage(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
+                throw $exception;
             }
 
-            $oBuilder->setPayPalConfig($this->getPayPalConfig());
-            $oBuilder->setBasket($oBasket);
-            $oBuilder->setUser($this->getUser());
-            $oBuilder->setReturnUrl($this->_getReturnUrl());
-            $oBuilder->setCancelUrl($this->_getCancelUrl());
-            $blShowCartInPayPal = $this->getRequest()->getRequestParameter("displayCartInPayPal");
-            $blShowCartInPayPal = $blShowCartInPayPal && !$oBasket->isFractionQuantityItemsPresent();
-            $oBuilder->setShowCartInPayPal($blShowCartInPayPal);
-            $oBuilder->setTransactionMode($this->_getTransactionMode($oBasket));
+            $builder->setPayPalConfig($this->getPayPalConfig());
+            $builder->setBasket($basket);
+            $builder->setUser($this->getUser());
+            $builder->setReturnUrl($this->getReturnUrl());
+            $builder->setCancelUrl($this->getCancelUrl());
+            $showCartInPayPal = $this->getRequest()->getRequestParameter("displayCartInPayPal");
+            $showCartInPayPal = $showCartInPayPal && !$basket->isFractionQuantityItemsPresent();
+            $builder->setShowCartInPayPal($showCartInPayPal);
+            $builder->setTransactionMode($this->getTransactionMode($basket));
 
-            $oRequest = $oBuilder->buildStandardCheckoutRequest();
+            $request = $builder->buildStandardCheckoutRequest();
 
-            $oPayPalService = $this->getPayPalCheckoutService();
-            $oResult = $oPayPalService->setExpressCheckout($oRequest);
-        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
+            $payPalService = $this->getPayPalCheckoutService();
+            $result = $payPalService->setExpressCheckout($request);
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $excp) {
             // error - unable to set order info - display error message
-            $this->_getUtilsView()->addErrorToDisplay($oExcp);
+            $this->getUtilsView()->addErrorToDisplay($excp);
 
             // return to basket view
             return "basket";
         }
 
         // saving PayPal token into session
-        $this->getSession()->setVariable("oepaypal-token", $oResult->getToken());
+        $this->getSession()->setVariable("oepaypal-token", $result->getToken());
 
         // extracting token and building redirect url
-        $sUrl = $this->getPayPalConfig()->getPayPalCommunicationUrl($oResult->getToken(), $this->_sUserAction);
+        $url = $this->getPayPalConfig()->getPayPalCommunicationUrl($result->getToken(), $this->userAction);
 
         // redirecting to PayPal's login/registration page
-        $this->_getUtils()->redirect($sUrl, false);
+        $this->getUtils()->redirect($url, false);
     }
 
     /**
      * Returns transaction mode.
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket
      *
      * @return string
      */
-    protected function _getTransactionMode($oBasket)
+    protected function getTransactionMode($basket)
     {
-        $sTransactionMode = $this->getPayPalConfig()->getTransactionMode();
+        $transactionMode = $this->getPayPalConfig()->getTransactionMode();
 
-        if ($sTransactionMode == "Automatic") {
+        if ($transactionMode == "Automatic") {
+            $outOfStockValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
+            $outOfStockValidator->setBasket($basket);
+            $outOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
 
-            $oOutOfStockValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
-            $oOutOfStockValidator->setBasket($oBasket);
-            $oOutOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
+            $transactionMode = ($outOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
 
-            $sTransactionMode = ($oOutOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
-
-            return $sTransactionMode;
+            return $transactionMode;
         }
 
-        return $sTransactionMode;
+        return $transactionMode;
     }
 
     /**
@@ -127,34 +126,34 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
     public function getExpressCheckoutDetails()
     {
         try {
-            $oPayPalService = $this->getPayPalCheckoutService();
-            $oBuilder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::class);
-            $oBuilder->setSession($this->getSession());
+            $payPalService = $this->getPayPalCheckoutService();
+            $builder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::class);
+            $builder->setSession($this->getSession());
 
-            $oRequest = $oBuilder->buildRequest();
+            $request = $builder->buildRequest();
 
-            $oDetails = $oPayPalService->getExpressCheckoutDetails($oRequest);
-        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $oExcp) {
+            $details = $payPalService->getExpressCheckoutDetails($request);
+        } catch (\OxidEsales\Eshop\Core\Exception\StandardException $excp) {
             // display error message
-            $this->_getUtilsView()->addErrorToDisplay($oExcp);
+            $this->getUtilsView()->addErrorToDisplay($excp);
 
             // problems fetching user info - redirect to payment selection
             return 'payment';
         }
 
-        $this->getSession()->setVariable("oepaypal-payerId", $oDetails->getPayerId());
-        $this->getSession()->setVariable("oepaypal-basketAmount", $oDetails->getAmount());
+        $this->getSession()->setVariable("oepaypal-payerId", $details->getPayerId());
+        $this->getSession()->setVariable("oepaypal-basketAmount", $details->getAmount());
 
         // next step - order page
-        $sNext = 'order';
+        $next = 'order';
 
         // finalize order on paypal side?
         if ($this->getPayPalConfig()->finalizeOrderOnPayPalSide()) {
-            $sNext .= "?fnc=execute";
+            $next .= "?fnc=execute";
         }
 
         // everything is fine - redirect to order
-        return $sNext;
+        return $next;
     }
 
     /**
@@ -162,10 +161,10 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      *
      * @return string
      */
-    protected function _getReturnUrl()
+    protected function getReturnUrl()
     {
         $controllerKey = \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getIdByClassName(get_class());
-        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=" . $controllerKey . "&fnc=getExpressCheckoutDetails");
+        return $this->getSession()->processUrl($this->getBaseUrl() . "&cl=" . $controllerKey . "&fnc=getExpressCheckoutDetails");
     }
 
     /**
@@ -173,8 +172,8 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      *
      * @return string
      */
-    protected function _getCancelUrl()
+    protected function getCancelUrl()
     {
-        return $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=payment");
+        return $this->getSession()->processUrl($this->getBaseUrl() . "&cl=payment");
     }
 }

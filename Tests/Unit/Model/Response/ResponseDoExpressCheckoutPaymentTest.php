@@ -31,9 +31,9 @@ class ResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\Un
      *
      * @return array
      */
-    protected function _getResponseData()
+    protected function getResponseData()
     {
-        $aData = array(
+        $data = array(
             'PAYMENTINFO_0_TRANSACTIONID' => 'transactionID',
             'CORRELATIONID'               => 'correlationID',
             'PAYMENTINFO_0_PAYMENTSTATUS' => 'confirmed',
@@ -41,7 +41,7 @@ class ResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\Un
             'PAYMENTINFO_0_CURRENCYCODE'  => 'LTL'
         );
 
-        return $aData;
+        return $data;
     }
 
     /**
@@ -49,9 +49,9 @@ class ResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testGetTransactionId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('transactionID', $oResponse->getTransactionId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('transactionID', $response->getTransactionId());
     }
 
     /**
@@ -59,9 +59,9 @@ class ResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testGetCorrelationId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('correlationID', $oResponse->getCorrelationId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('correlationID', $response->getCorrelationId());
     }
 
     /**
@@ -69,9 +69,9 @@ class ResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testGetPaymentStatus()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('confirmed', $oResponse->getPaymentStatus());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('confirmed', $response->getPaymentStatus());
     }
 
     /**
@@ -79,9 +79,9 @@ class ResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testGetAmount()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals(1200, $oResponse->getAmount());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
+        $response->setData($this->getResponseData());
+        $this->assertEquals(1200, $response->getAmount());
     }
 
     /**
@@ -89,8 +89,8 @@ class ResponseDoExpressCheckoutPaymentTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testGetCurrencyCode()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('LTL', $oResponse->getCurrencyCode());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('LTL', $response->getCurrencyCode());
     }
 }

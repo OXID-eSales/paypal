@@ -45,19 +45,19 @@ class IPNRequestValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * @param bool   $blIsValidExpected
-     * @param string $sShopOwnerUserName
-     * @param array  $aPayPalRequest
-     * @param array  $aPayPalResponse
+     * @param bool   $isValidExpected
+     * @param string $shopOwnerUserName
+     * @param array  $payPalRequest
+     * @param array  $payPalResponseData
      *
      * @dataProvider providerIsValid
      */
-    public function testIsValid($blIsValidExpected, $sShopOwnerUserName, $aPayPalRequest, $aPayPalResponse)
+    public function testIsValid($isValidExpected, $shopOwnerUserName, $payPalRequest, $payPalResponseData)
     {
-        $oPayPalIPNRequestValidator = $this->getIPNRequestValidator($aPayPalRequest, $aPayPalResponse, $sShopOwnerUserName);
-        $blIsValid = $oPayPalIPNRequestValidator->isValid();
+        $payPalIPNRequestValidator = $this->getIPNRequestValidator($payPalRequest, $payPalResponseData, $shopOwnerUserName);
+        $isValid = $payPalIPNRequestValidator->isValid();
 
-        $this->assertEquals($blIsValidExpected, $blIsValid, 'IPN request validation state is not as expected.');
+        $this->assertEquals($isValidExpected, $isValid, 'IPN request validation state is not as expected.');
     }
 
     /**
@@ -67,68 +67,68 @@ class IPNRequestValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function providerGetValidationFailureMessage()
     {
-        $aCases = array();
-        $aMessages = array(
+        $cases = array();
+        $messages = array(
             'Shop owner'           => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'VERIFIED',
             'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
             'PayPal Full Response' => 'Array(    [VERIFIED] => )',
         );
-        $aCases[] = array($aMessages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('VERIFIED' => ''));
+        $cases[] = array($messages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('VERIFIED' => ''));
 
-        $aMessages = array(
+        $messages = array(
             'Shop owner'           => '', 'PayPal ID' => '', 'PayPal ACK' => 'NOT VERIFIED',
             'PayPal Full Request'  => '',
             'PayPal Full Response' => '',
         );
-        $aCases[] = array($aMessages, null, null, null);
+        $cases[] = array($messages, null, null, null);
 
-        $aMessages = array(
+        $messages = array(
             'Shop owner'           => 'none2@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
             'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
             'PayPal Full Response' => 'Array(    [NOT_VERIFIED] => )',
         );
-        $aCases[] = array($aMessages, 'none2@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('NOT_VERIFIED' => ''));
+        $cases[] = array($messages, 'none2@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('NOT_VERIFIED' => ''));
 
-        $aMessages = array(
+        $messages = array(
             'Shop owner'           => 'none@oxid-esales.com', 'PayPal ID' => 'none2@oxid-esales.com', 'PayPal ACK' => 'NOT VERIFIED',
             'PayPal Full Request'  => 'Array(    [receiver_email] => none2@oxid-esales.com)',
             'PayPal Full Response' => 'Array(    [someString] => )',
         );
-        $aCases[] = array($aMessages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('someString' => ''));
+        $cases[] = array($messages, 'none@oxid-esales.com', array('receiver_email' => 'none2@oxid-esales.com'), array('someString' => ''));
 
-        return $aCases;
+        return $cases;
     }
 
     /**
-     * @param bool   $aValidationMessageExpected
-     * @param string $sShopOwnerUserName
-     * @param array  $aPayPalRequest
-     * @param array  $aPayPalResponse
+     * @param bool   $validationMessageExpected
+     * @param string $shopOwnerUserName
+     * @param array  $payPalRequest
+     * @param array  $payPalResponseData
      *
      * @dataProvider providerGetValidationFailureMessage
      */
-    public function testGetValidationFailureMessage($aValidationMessageExpected, $sShopOwnerUserName, $aPayPalRequest, $aPayPalResponse)
+    public function testGetValidationFailureMessage($validationMessageExpected, $shopOwnerUserName, $payPalRequest, $payPalResponseData)
     {
-        $oPayPalIPNRequestValidator = $this->getIPNRequestValidator($aPayPalRequest, $aPayPalResponse, $sShopOwnerUserName);
-        $aValidationMessage = $oPayPalIPNRequestValidator->getValidationFailureMessage();
+        $payPalIPNRequestValidator = $this->getIPNRequestValidator($payPalRequest, $payPalResponseData, $shopOwnerUserName);
+        $validationMessage = $payPalIPNRequestValidator->getValidationFailureMessage();
 
-        foreach ($aValidationMessage as &$sValue) {
-            $sValue = str_replace("\n", '', $sValue);
+        foreach ($validationMessage as &$value) {
+            $value = str_replace("\n", '', $value);
         }
 
-        $this->assertEquals($aValidationMessageExpected, $aValidationMessage, 'IPN request validation message is not as expected.');
+        $this->assertEquals($validationMessageExpected, $validationMessage, 'IPN request validation message is not as expected.');
     }
 
-    protected function getIPNRequestValidator($aPayPalRequest, $aPayPalResponse, $sShopOwnerUserName)
+    protected function getIPNRequestValidator($payPalRequest, $payPalResponseData, $shopOwnerUserName)
     {
-        $oPayPalResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
-        $oPayPalResponse->setData($aPayPalResponse);
+        $payPalResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal();
+        $payPalResponse->setData($payPalResponseData);
 
-        $oPayPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNRequestValidator();
-        $oPayPalIPNRequestValidator->setPayPalRequest($aPayPalRequest);
-        $oPayPalIPNRequestValidator->setPayPalResponse($oPayPalResponse);
-        $oPayPalIPNRequestValidator->setShopOwnerUserName($sShopOwnerUserName);
+        $payPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNRequestValidator();
+        $payPalIPNRequestValidator->setPayPalRequest($payPalRequest);
+        $payPalIPNRequestValidator->setPayPalResponse($payPalResponse);
+        $payPalIPNRequestValidator->setShopOwnerUserName($shopOwnerUserName);
 
-        return $oPayPalIPNRequestValidator;
+        return $payPalIPNRequestValidator;
     }
 }

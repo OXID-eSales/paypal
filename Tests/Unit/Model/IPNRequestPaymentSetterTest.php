@@ -65,45 +65,45 @@ class IPNRequestPaymentSetterTest extends \OxidEsales\TestingLibrary\UnitTestCas
      * Test case for \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::getAction
      * Test case for \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::getAmount
      *
-     * @param array  $aParams        parameters for POST imitating PayPal.
+     * @param array  $params        parameters for POST imitating PayPal.
      * @param string $expectedAction Expected action for resulting payment.
      *
      * @dataProvider providerGetRequestOrderPayment
      */
-    public function testGetRequestOrderPayment($aParams, $expectedAction)
+    public function testGetRequestOrderPayment($params, $expectedAction)
     {
-        $oPayPalExpectedPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        if (!empty($aParams)) {
-            $oPayPalExpectedPayment->setStatus($aParams['payment_status']);
-            $oPayPalExpectedPayment->setTransactionId($aParams['txn_id']);
-            $oPayPalExpectedPayment->setCurrency($aParams['mc_currency']);
-            $oPayPalExpectedPayment->setAmount(abs($aParams['mc_gross']));
-            $oPayPalExpectedPayment->setAction($expectedAction);
+        $payPalExpectedPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        if (!empty($params)) {
+            $payPalExpectedPayment->setStatus($params['payment_status']);
+            $payPalExpectedPayment->setTransactionId($params['txn_id']);
+            $payPalExpectedPayment->setCurrency($params['mc_currency']);
+            $payPalExpectedPayment->setAmount(abs($params['mc_gross']));
+            $payPalExpectedPayment->setAction($expectedAction);
 
-            $correlationId = empty($aParams['correlation_id']) ? $aParams['ipn_track_id'] :$aParams['correlation_id'];
-            $oPayPalExpectedPayment->setCorrelationId($correlationId);
-            $oPayPalExpectedPayment->setDate(date('Y-m-d H:i:s', strtotime($aParams['payment_date'])));
+            $correlationId = empty($params['correlation_id']) ? $params['ipn_track_id'] :$params['correlation_id'];
+            $payPalExpectedPayment->setCorrelationId($correlationId);
+            $payPalExpectedPayment->setDate(date('Y-m-d H:i:s', strtotime($params['payment_date'])));
 
         } else {
-            $oPayPalExpectedPayment->setStatus(null);
-            $oPayPalExpectedPayment->setTransactionId(null);
-            $oPayPalExpectedPayment->setCurrency(null);
-            $oPayPalExpectedPayment->setAmount(null);
-            $oPayPalExpectedPayment->setCorrelationId(null);
-            $oPayPalExpectedPayment->setDate(null);
-            $oPayPalExpectedPayment->setAction('capture');
+            $payPalExpectedPayment->setStatus(null);
+            $payPalExpectedPayment->setTransactionId(null);
+            $payPalExpectedPayment->setCurrency(null);
+            $payPalExpectedPayment->setAmount(null);
+            $payPalExpectedPayment->setCorrelationId(null);
+            $payPalExpectedPayment->setDate(null);
+            $payPalExpectedPayment->setAction('capture');
         }
 
-        $_POST = $aParams;
-        $oRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $oPayPalPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $_POST = $params;
+        $request = new \OxidEsales\PayPalModule\Core\Request();
+        $payPalPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
 
-        $oPayPalIPNRequestSetter = new \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter();
-        $oPayPalIPNRequestSetter->setRequest($oRequest);
-        $oPayPalIPNRequestSetter->setRequestOrderPayment($oPayPalPayment);
-        $oRequestOrderPayment = $oPayPalIPNRequestSetter->getRequestOrderPayment();
+        $payPalIPNRequestSetter = new \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter();
+        $payPalIPNRequestSetter->setRequest($request);
+        $payPalIPNRequestSetter->setRequestOrderPayment($payPalPayment);
+        $requestOrderPayment = $payPalIPNRequestSetter->getRequestOrderPayment();
 
-        $this->assertEquals($oPayPalExpectedPayment, $oRequestOrderPayment, 'Payment object do not have request parameters.');
+        $this->assertEquals($payPalExpectedPayment, $requestOrderPayment, 'Payment object do not have request parameters.');
     }
 
 }

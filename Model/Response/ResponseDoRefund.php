@@ -34,7 +34,7 @@ class ResponseDoRefund extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getTransactionId()
     {
-        return $this->_getValue('REFUNDTRANSACTIONID');
+        return $this->getValue('REFUNDTRANSACTIONID');
     }
 
     /**
@@ -44,7 +44,7 @@ class ResponseDoRefund extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getCorrelationId()
     {
-        return $this->_getValue('CORRELATIONID');
+        return $this->getValue('CORRELATIONID');
     }
 
     /**
@@ -54,7 +54,7 @@ class ResponseDoRefund extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getPaymentStatus()
     {
-        return $this->_getValue('REFUNDSTATUS');
+        return $this->getValue('REFUNDSTATUS');
     }
 
     /**
@@ -64,7 +64,7 @@ class ResponseDoRefund extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getRefundAmount()
     {
-        return $this->_getValue('GROSSREFUNDAMT');
+        return $this->getValue('GROSSREFUNDAMT');
     }
 
     /**
@@ -74,6 +74,6 @@ class ResponseDoRefund extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getCurrency()
     {
-        return $this->_getValue('CURRENCYCODE');
+        return $this->getValue('CURRENCYCODE');
     }
 }

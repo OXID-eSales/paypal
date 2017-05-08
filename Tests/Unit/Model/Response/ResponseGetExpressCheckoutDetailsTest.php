@@ -31,9 +31,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      *
      * @return array
      */
-    protected function _getResponseData()
+    protected function getResponseData()
     {
-        $aData = array(
+        $data = array(
             'SHIPPINGOPTIONNAME'                 => 'Air',
             'PAYMENTREQUEST_0_AMT'               => 1200,
             'PAYERID'                            => 'payer',
@@ -52,7 +52,7 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
             'BUSINESS'                           => 'company'
         );
 
-        return $aData;
+        return $data;
     }
 
     /**
@@ -60,9 +60,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShippingOptionName()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('Air', $oResponse->getShippingOptionName());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('Air', $response->getShippingOptionName());
     }
 
     /**
@@ -70,9 +70,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetAmount()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals(1200, $oResponse->getAmount());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals(1200, $response->getAmount());
     }
 
     /**
@@ -80,9 +80,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetPayerId()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('payer', $oResponse->getPayerId());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('payer', $response->getPayerId());
     }
 
     /**
@@ -90,9 +90,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetEmail()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('oxid@oxid.com', $oResponse->getEmail());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('oxid@oxid.com', $response->getEmail());
     }
 
     /**
@@ -100,9 +100,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetFirstName()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('Name', $oResponse->getFirstName());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('Name', $response->getFirstName());
     }
 
     /**
@@ -110,9 +110,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetLastName()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('Surname', $oResponse->getLastName());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('Surname', $response->getLastName());
     }
 
     /**
@@ -120,9 +120,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToStreet()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('Street', $oResponse->getShipToStreet());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('Street', $response->getShipToStreet());
     }
 
     /**
@@ -130,9 +130,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToCity()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('City', $oResponse->getShipToCity());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('City', $response->getShipToCity());
     }
 
     /**
@@ -140,9 +140,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToName()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('First Last', $oResponse->getShipToName());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('First Last', $response->getShipToName());
     }
 
     /**
@@ -150,9 +150,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToCountryCode()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('CountryCode', $oResponse->getShipToCountryCode());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('CountryCode', $response->getShipToCountryCode());
     }
 
     /**
@@ -160,9 +160,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToState()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('State', $oResponse->getShipToState());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('State', $response->getShipToState());
     }
 
     /**
@@ -170,9 +170,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToZip()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('1121', $oResponse->getShipToZip());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('1121', $response->getShipToZip());
     }
 
     /**
@@ -180,9 +180,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToPhoneNumber()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('+37000000000', $oResponse->getShipToPhoneNumber());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('+37000000000', $response->getShipToPhoneNumber());
     }
 
     /**
@@ -190,9 +190,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetShipToStreet2()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('Street2', $oResponse->getShipToStreet2());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('Street2', $response->getShipToStreet2());
     }
 
     /**
@@ -200,9 +200,9 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetSalutation()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('this is salutation', $oResponse->getSalutation());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('this is salutation', $response->getSalutation());
     }
 
     /**
@@ -210,8 +210,8 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
      */
     public function testGetBusiness()
     {
-        $oResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oResponse->setData($this->_getResponseData());
-        $this->assertEquals('company', $oResponse->getBusiness());
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('company', $response->getBusiness());
     }
 }

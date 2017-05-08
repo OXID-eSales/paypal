@@ -45,13 +45,13 @@ class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider providerCreateAction
      */
-    public function testCreateAction($sAction, $sClass)
+    public function testCreateAction($action, $class)
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $oActionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($oRequest, $oOrder);
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $request = new \OxidEsales\PayPalModule\Core\Request();
+        $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
 
-        $this->assertTrue($oActionFactory->createAction($sAction) instanceof $sClass);
+        $this->assertTrue($actionFactory->createAction($action) instanceof $class);
     }
 
     /**
@@ -62,10 +62,10 @@ class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreateActionWithInvalidData()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $oActionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($oRequest, $oOrder);
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $request = new \OxidEsales\PayPalModule\Core\Request();
+        $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
 
-        $oActionFactory->createAction('some_non_existing_action');
+        $actionFactory->createAction('some_non_existing_action');
     }
 }

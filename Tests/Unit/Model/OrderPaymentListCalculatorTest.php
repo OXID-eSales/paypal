@@ -42,12 +42,12 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testCalculateNoPaymentList()
     {
-        $oListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-        $oListCalculator->calculate();
+        $listCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+        $listCalculator->calculate();
 
-        $this->assertEquals('0.0', $oListCalculator->getCapturedAmount());
-        $this->assertEquals('0.0', $oListCalculator->getVoidedAmount());
-        $this->assertEquals('0.0', $oListCalculator->getRefundedAmount());
+        $this->assertEquals('0.0', $listCalculator->getCapturedAmount());
+        $this->assertEquals('0.0', $listCalculator->getVoidedAmount());
+        $this->assertEquals('0.0', $listCalculator->getRefundedAmount());
     }
 
     /**
@@ -55,13 +55,14 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testCapturedAmountCalculateWithPaymentList()
     {
-        $oOrderPaymentList = $this->createOrderPaymentList();
+        $orderPaymentList = $this->createOrderPaymentList();
 
-        $oListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
+        /** @var \OxidEsales\PayPalModule\Model\OrderPaymentListCalculator $listCalculator */
+        $listCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+        $listCalculator->setPaymentList($orderPaymentList);
+        $listCalculator->calculate();
 
-        $this->assertEquals('11.22', $oListCalculator->getCapturedAmount());
+        $this->assertEquals('11.22', $listCalculator->getCapturedAmount());
     }
 
     /**
@@ -70,13 +71,13 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testVoidedAmountCalculateWithPaymentList()
     {
-        $oOrderPaymentList = $this->createOrderPaymentList();
+        $orderPaymentList = $this->createOrderPaymentList();
 
-        $oListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
+        $listCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+        $listCalculator->setPaymentList($orderPaymentList);
+        $listCalculator->calculate();
 
-        $this->assertEquals('44.33', $oListCalculator->getVoidedAmount());
+        $this->assertEquals('44.33', $listCalculator->getVoidedAmount());
     }
 
     /**
@@ -84,13 +85,13 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testRefundedAmountCalculateWithPaymentList()
     {
-        $oOrderPaymentList = $this->createOrderPaymentList();
+        $orderPaymentList = $this->createOrderPaymentList();
 
-        $oListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
+        $listCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+        $listCalculator->setPaymentList($orderPaymentList);
+        $listCalculator->calculate();
 
-        $this->assertEquals('6.78', $oListCalculator->getRefundedAmount());
+        $this->assertEquals('6.78', $listCalculator->getRefundedAmount());
     }
 
     /**
@@ -99,13 +100,13 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testCapturedAmountCalculateWithPaymentListAndVoidAction()
     {
-        $oOrderPaymentList = $this->createOrderPaymentListContainingVoidAction();
+        $orderPaymentList = $this->createOrderPaymentListContainingVoidAction();
 
-        $oListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
+        $listCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+        $listCalculator->setPaymentList($orderPaymentList);
+        $listCalculator->calculate();
 
-        $this->assertEquals('30.00', $oListCalculator->getCapturedAmount());
+        $this->assertEquals('30.00', $listCalculator->getCapturedAmount());
     }
 
     /**
@@ -114,13 +115,13 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testVoidedAmountCalculateWithPaymentListAndVoidAction()
     {
-        $oOrderPaymentList = $this->createOrderPaymentListContainingVoidAction();
+        $orderPaymentList = $this->createOrderPaymentListContainingVoidAction();
 
-        $oListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
+        $listCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+        $listCalculator->setPaymentList($orderPaymentList);
+        $listCalculator->calculate();
 
-        $this->assertEquals('11.00', $oListCalculator->getVoidedAmount());
+        $this->assertEquals('11.00', $listCalculator->getVoidedAmount());
     }
 
     /**
@@ -129,13 +130,13 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     public function testRefundedAmountCalculateWithPaymentListAndVoidAction()
     {
-        $oOrderPaymentList = $this->createOrderPaymentListContainingVoidAction();
+        $orderPaymentList = $this->createOrderPaymentListContainingVoidAction();
 
-        $oListCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
-        $oListCalculator->setPaymentList($oOrderPaymentList);
-        $oListCalculator->calculate();
+        $listCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentListCalculator::class);
+        $listCalculator->setPaymentList($orderPaymentList);
+        $listCalculator->calculate();
 
-        $this->assertEquals('10.00', $oListCalculator->getRefundedAmount());
+        $this->assertEquals('10.00', $listCalculator->getRefundedAmount());
     }
 
     /**
@@ -147,62 +148,62 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
     {
         $orderId = '123';
 
-        $oOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oOrderPayment->setPaymentId(1);
-        $oOrderPayment->setOrderId($orderId);
-        $oOrderPayment->setAmount(55.55);
-        $oOrderPayment->setAction('authorization');
-        $oOrderPayment->setStatus('Voided');
-        $oOrderPayment->setDate("2012-04-13 12:13:15");
-        $oOrderPayment->save();
+        $orderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $orderPayment->setPaymentId(1);
+        $orderPayment->setOrderId($orderId);
+        $orderPayment->setAmount(55.55);
+        $orderPayment->setAction('authorization');
+        $orderPayment->setStatus('Voided');
+        $orderPayment->setDate("2012-04-13 12:13:15");
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(2);
-        $oOrderPayment->setAction('capture');
-        $oOrderPayment->setAmount(11.11);
-        $oOrderPayment->setRefundedAmount(1.23);
-        $oOrderPayment->setStatus('Completed');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(2);
+        $orderPayment->setAction('capture');
+        $orderPayment->setAmount(11.11);
+        $orderPayment->setRefundedAmount(1.23);
+        $orderPayment->setStatus('Completed');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(3);
-        $oOrderPayment->setAction('capture');
-        $oOrderPayment->setAmount(0.11);
-        $oOrderPayment->setStatus('Completed');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(3);
+        $orderPayment->setAction('capture');
+        $orderPayment->setAmount(0.11);
+        $orderPayment->setStatus('Completed');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(4);
-        $oOrderPayment->setAction('capture');
-        $oOrderPayment->setAmount(22.22);
-        $oOrderPayment->setStatus('Pending');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(4);
+        $orderPayment->setAction('capture');
+        $orderPayment->setAmount(22.22);
+        $orderPayment->setStatus('Pending');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(5);
-        $oOrderPayment->setAction('refund');
-        $oOrderPayment->setAmount(5.55);
-        $oOrderPayment->setStatus('Refunded');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(5);
+        $orderPayment->setAction('refund');
+        $orderPayment->setAmount(5.55);
+        $orderPayment->setStatus('Refunded');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(6);
-        $oOrderPayment->setAction('refund');
-        $oOrderPayment->setAmount(15.55);
-        $oOrderPayment->setStatus('Instant');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(6);
+        $orderPayment->setAction('refund');
+        $orderPayment->setAmount(15.55);
+        $orderPayment->setStatus('Instant');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(7);
-        $oOrderPayment->setAction('void');
-        $oOrderPayment->setAmount(15.55);
-        $oOrderPayment->setStatus('Instant');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(7);
+        $orderPayment->setAction('void');
+        $orderPayment->setAmount(15.55);
+        $orderPayment->setStatus('Instant');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(8);
-        $oOrderPayment->setAction('refund');
-        $oOrderPayment->setAmount(1.23);
-        $oOrderPayment->setStatus('Refunded');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(8);
+        $orderPayment->setAction('refund');
+        $orderPayment->setAmount(1.23);
+        $orderPayment->setStatus('Refunded');
+        $orderPayment->save();
 
-        $oOrderPaymentList = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentList::class);
-        $oOrderPaymentList->load($orderId);
+        $orderPaymentList = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentList::class);
+        $orderPaymentList->load($orderId);
 
-        return $oOrderPaymentList;
+        return $orderPaymentList;
     }
 
     /**
@@ -215,37 +216,37 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
     {
         $orderId = '123';
 
-        $oOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oOrderPayment->setPaymentId(1);
-        $oOrderPayment->setOrderId($orderId);
-        $oOrderPayment->setAmount(50.00);
-        $oOrderPayment->setAction('authorization');
-        $oOrderPayment->setStatus('Voided');
-        $oOrderPayment->setDate("2012-04-13 12:13:15");
-        $oOrderPayment->save();
+        $orderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $orderPayment->setPaymentId(1);
+        $orderPayment->setOrderId($orderId);
+        $orderPayment->setAmount(50.00);
+        $orderPayment->setAction('authorization');
+        $orderPayment->setStatus('Voided');
+        $orderPayment->setDate("2012-04-13 12:13:15");
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(2);
-        $oOrderPayment->setAction('capture');
-        $oOrderPayment->setAmount(30.00);
-        $oOrderPayment->setRefundedAmount(20.00);
-        $oOrderPayment->setStatus('Completed');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(2);
+        $orderPayment->setAction('capture');
+        $orderPayment->setAmount(30.00);
+        $orderPayment->setRefundedAmount(20.00);
+        $orderPayment->setStatus('Completed');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(3);
-        $oOrderPayment->setAction('refund');
-        $oOrderPayment->setAmount(10.00);
-        $oOrderPayment->setStatus('Refunded');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(3);
+        $orderPayment->setAction('refund');
+        $orderPayment->setAmount(10.00);
+        $orderPayment->setStatus('Refunded');
+        $orderPayment->save();
 
-        $oOrderPayment->setPaymentId(4);
-        $oOrderPayment->setAction('void');
-        $oOrderPayment->setAmount(11.00);
-        $oOrderPayment->setStatus('Voided');
-        $oOrderPayment->save();
+        $orderPayment->setPaymentId(4);
+        $orderPayment->setAction('void');
+        $orderPayment->setAmount(11.00);
+        $orderPayment->setStatus('Voided');
+        $orderPayment->save();
 
-        $oOrderPaymentList = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentList::class);
-        $oOrderPaymentList->load($orderId);
+        $orderPaymentList = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentList::class);
+        $orderPaymentList->load($orderId);
 
-        return $oOrderPaymentList;
+        return $orderPaymentList;
     }
 }

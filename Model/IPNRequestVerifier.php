@@ -31,45 +31,45 @@ class IPNRequestVerifier
      *
      * @var \OxidEsales\PayPalModule\Core\Request
      */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /**
      * Shop owner email - PayPal ID.
      *
      * @var string
      */
-    protected $_sShopOwner = null;
+    protected $shopOwner = null;
 
     /**
      * PayPal Service
      *
      * @var \OxidEsales\PayPalModule\Core\PayPalService
      */
-    protected $_oCommunicationService = null;
+    protected $communicationService = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\IPNRequestValidator
      */
-    protected $_oIPNRequestValidator = null;
+    protected $ipnRequestValidator = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest
      */
-    protected $_oPayPalRequest = null;
+    protected $payPalRequest = null;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $_sFailureMessage = null;
+    protected $failureMessage = null;
 
     /**
      * Set object \OxidEsales\PayPalModule\Core\Request.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oRequest object to set.
+     * @param \OxidEsales\PayPalModule\Core\Request $request object to set.
      */
-    public function setRequest($oRequest)
+    public function setRequest($request)
     {
-        $this->_oRequest = $oRequest;
+        $this->request = $request;
     }
 
     /**
@@ -79,17 +79,17 @@ class IPNRequestVerifier
      */
     public function getRequest()
     {
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
      * Sets shop owner.
      *
-     * @param string $sShopOwner
+     * @param string $shopOwner
      */
-    public function setShopOwner($sShopOwner)
+    public function setShopOwner($shopOwner)
     {
-        $this->_sShopOwner = $sShopOwner;
+        $this->shopOwner = $shopOwner;
     }
 
     /**
@@ -99,17 +99,17 @@ class IPNRequestVerifier
      */
     public function getShopOwner()
     {
-        return $this->_sShopOwner;
+        return $this->shopOwner;
     }
 
     /**
      * Sets oeIPNCallerService.
      *
-     * @param \OxidEsales\PayPalModule\Core\PayPalService $oCallerService object to set..
+     * @param \OxidEsales\PayPalModule\Core\PayPalService $callerService object to set..
      */
-    public function setCommunicationService($oCallerService)
+    public function setCommunicationService($callerService)
     {
-        $this->_oCommunicationService = $oCallerService;
+        $this->communicationService = $callerService;
     }
 
     /**
@@ -119,21 +119,21 @@ class IPNRequestVerifier
      */
     public function getCommunicationService()
     {
-        if ($this->_oCommunicationService === null) {
-            $this->_oCommunicationService = oxNew(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        if ($this->communicationService === null) {
+            $this->communicationService = oxNew(\OxidEsales\PayPalModule\Core\PayPalService::class);
         }
 
-        return $this->_oCommunicationService;
+        return $this->communicationService;
     }
 
     /**
      * Sets IPN request validator.
      *
-     * @param \OxidEsales\PayPalModule\Model\IPNRequestValidator $oIPNRequestValidator
+     * @param \OxidEsales\PayPalModule\Model\IPNRequestValidator $ipnRequestValidator
      */
-    public function setIPNRequestValidator($oIPNRequestValidator)
+    public function setIPNRequestValidator($ipnRequestValidator)
     {
-        $this->_oIPNRequestValidator = $oIPNRequestValidator;
+        $this->ipnRequestValidator = $ipnRequestValidator;
     }
 
     /**
@@ -143,21 +143,21 @@ class IPNRequestVerifier
      */
     public function getIPNRequestValidator()
     {
-        if ($this->_oIPNRequestValidator === null) {
-            $this->_oIPNRequestValidator = oxNew(\OxidEsales\PayPalModule\Model\IPNRequestValidator::class);
+        if ($this->ipnRequestValidator === null) {
+            $this->ipnRequestValidator = oxNew(\OxidEsales\PayPalModule\Model\IPNRequestValidator::class);
         }
 
-        return $this->_oIPNRequestValidator;
+        return $this->ipnRequestValidator;
     }
 
     /**
      * Sets request object.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oPayPalRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $payPalRequest
      */
-    public function setPayPalRequest($oPayPalRequest)
+    public function setPayPalRequest($payPalRequest)
     {
-        $this->_oPayPalRequest = $oPayPalRequest;
+        $this->payPalRequest = $payPalRequest;
     }
 
     /**
@@ -167,31 +167,31 @@ class IPNRequestVerifier
      */
     public function getPayPalRequest()
     {
-        if (is_null($this->_oPayPalRequest)) {
-            $this->_oPayPalRequest = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        if (is_null($this->payPalRequest)) {
+            $this->payPalRequest = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
         }
 
-        return $this->_oPayPalRequest;
+        return $this->payPalRequest;
     }
 
     /**
      * Sets failure message.
      *
-     * @param string $sFailureMessage
+     * @param array $failureMessage
      */
-    public function setFailureMessage($sFailureMessage)
+    public function setFailureMessage($failureMessage)
     {
-        $this->_sFailureMessage = $sFailureMessage;
+        $this->failureMessage = $failureMessage;
     }
 
     /**
      * Returns failure message.
      *
-     * @return string
+     * @return array
      */
     public function getFailureMessage()
     {
-        return $this->_sFailureMessage;
+        return $this->failureMessage;
     }
 
     /**
@@ -202,41 +202,41 @@ class IPNRequestVerifier
      */
     public function requestCorrect()
     {
-        $oRequest = $this->getRequest();
-        $aRawRequestData = $oRequest->getPost();
+        $request = $this->getRequest();
+        $rawRequestData = $request->getPost();
 
-        $oResponseDoVerifyWithPayPal = $this->_doVerifyWithPayPal($aRawRequestData);
+        $responseDoVerifyWithPayPal = $this->doVerifyWithPayPal($rawRequestData);
 
-        $oIPNRequestValidator = $this->getIPNRequestValidator();
-        $oIPNRequestValidator->setPayPalRequest($aRawRequestData);
-        $oIPNRequestValidator->setPayPalResponse($oResponseDoVerifyWithPayPal);
-        $oIPNRequestValidator->setShopOwnerUserName($this->getShopOwner());
+        $ipnRequestValidator = $this->getIPNRequestValidator();
+        $ipnRequestValidator->setPayPalRequest($rawRequestData);
+        $ipnRequestValidator->setPayPalResponse($responseDoVerifyWithPayPal);
+        $ipnRequestValidator->setShopOwnerUserName($this->getShopOwner());
 
-        $blRequestCorrect = $oIPNRequestValidator->isValid();
-        if (!$blRequestCorrect) {
-            $sFailureMessage = $oIPNRequestValidator->getValidationFailureMessage();
-            $this->setFailureMessage($sFailureMessage);
+        $requestCorrect = $ipnRequestValidator->isValid();
+        if (!$requestCorrect) {
+            $failureMessage = $ipnRequestValidator->getValidationFailureMessage();
+            $this->setFailureMessage($failureMessage);
         }
 
-        return $blRequestCorrect;
+        return $requestCorrect;
     }
 
     /**
      * Call PayPal to check if IPN request originally from PayPal.
      *
-     * @param array $aRequestData data of request.
+     * @param array $requestData data of request.
      *
-     * @return \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal
+     * @return \OxidEsales\PayPalModule\Model\Response\Response
      */
-    protected function _doVerifyWithPayPal($aRequestData)
+    protected function doVerifyWithPayPal($requestData)
     {
-        $oCallerService = $this->getCommunicationService();
-        $oPayPalPayPalRequest = $this->getPayPalRequest();
-        foreach ($aRequestData as $sRequestParameterName => $sRequestParameterValue) {
-            $oPayPalPayPalRequest->setParameter($sRequestParameterName, $sRequestParameterValue);
+        $callerService = $this->getCommunicationService();
+        $payPalPayPalRequest = $this->getPayPalRequest();
+        foreach ($requestData as $requestParameterName => $requestParameterValue) {
+            $payPalPayPalRequest->setParameter($requestParameterName, $requestParameterValue);
         }
-        $oResponseDoVerifyWithPayPal = $oCallerService->doVerifyWithPayPal($oPayPalPayPalRequest, $aRequestData['charset']);
+        $responseDoVerifyWithPayPal = $callerService->doVerifyWithPayPal($payPalPayPalRequest, $requestData['charset']);
 
-        return $oResponseDoVerifyWithPayPal;
+        return $responseDoVerifyWithPayPal;
     }
 }

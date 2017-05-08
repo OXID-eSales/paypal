@@ -30,44 +30,44 @@ class Escape
      * Checks if passed parameter has special chars and replaces them.
      * Returns checked value.
      *
-     * @param mixed $sValue value to process escaping
+     * @param mixed $value value to process escaping
      *
      * @return mixed
      */
-    public function escapeSpecialChars($sValue)
+    public function escapeSpecialChars($value)
     {
-        if (is_object($sValue)) {
-            return $sValue;
+        if (is_object($value)) {
+            return $value;
         }
 
-        if (is_array($sValue)) {
-            $sValue = $this->_escapeArraySpecialChars($sValue);
-        } elseif (is_string($sValue)) {
-            $sValue = $this->_escapeStringSpecialChars($sValue);
+        if (is_array($value)) {
+            $value = $this->escapeArraySpecialChars($value);
+        } elseif (is_string($value)) {
+            $value = $this->escapeStringSpecialChars($value);
         }
 
-        return $sValue;
+        return $value;
     }
 
     /**
      * Checks if passed parameter has special chars and replaces them.
      * Returns checked value.
      *
-     * @param array $sValue value to process escaping
+     * @param array $value value to process escaping
      *
      * @return array
      */
-    private function _escapeArraySpecialChars($sValue)
+    private function escapeArraySpecialChars($value)
     {
         $newValue = array();
-        foreach ($sValue as $sKey => $sVal) {
-            $sValidKey = $sKey;
-            $sValidKey = $this->escapeSpecialChars($sValidKey);
-            $sVal = $this->escapeSpecialChars($sVal);
-            if ($sValidKey != $sKey) {
-                unset ($sValue[$sKey]);
+        foreach ($value as $key => $val) {
+            $validKey = $key;
+            $validKey = $this->escapeSpecialChars($validKey);
+            $val = $this->escapeSpecialChars($val);
+            if ($validKey != $key) {
+                unset($value[$key]);
             }
-            $newValue[$sValidKey] = $sVal;
+            $newValue[$validKey] = $val;
         }
 
         return $newValue;
@@ -77,18 +77,18 @@ class Escape
      * Checks if passed parameter has special chars and replaces them.
      * Returns checked value.
      *
-     * @param string $sValue value to process escaping
+     * @param string $value value to process escaping
      *
      * @return string
      */
-    private function _escapeStringSpecialChars($sValue)
+    private function escapeStringSpecialChars($value)
     {
-        $sValue = str_replace(
+        $value = str_replace(
             array('&', '<', '>', '"', "'", chr(0), '\\'),
             array('&amp;', '&lt;', '&gt;', '&quot;', '&#039;', '', '&#092;'),
-            $sValue
+            $value
         );
 
-        return $sValue;
+        return $value;
     }
 }

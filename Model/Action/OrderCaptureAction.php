@@ -30,20 +30,20 @@ class OrderCaptureAction extends \OxidEsales\PayPalModule\Model\Action\OrderActi
     /**
      * @var \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler
      */
-    protected $_oReauthorizeHandler = null;
+    protected $reauthorizeHandler = null;
 
     /**
      * Sets dependencies.
      *
-     * @param \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler     $oHandler
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder                                  $oOrder
-     * @param \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler $oReauthorizeHandler
+     * @param \OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler     $handler
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder                                  $order
+     * @param \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler $reauthorizeHandler
      */
-    public function __construct($oHandler, $oOrder, $oReauthorizeHandler)
+    public function __construct($handler, $order, $reauthorizeHandler)
     {
-        parent::__construct($oHandler, $oOrder);
+        parent::__construct($handler, $order);
 
-        $this->_oReauthorizeHandler = $oReauthorizeHandler;
+        $this->reauthorizeHandler = $reauthorizeHandler;
     }
 
     /**
@@ -53,7 +53,7 @@ class OrderCaptureAction extends \OxidEsales\PayPalModule\Model\Action\OrderActi
      */
     public function getReauthorizeHandler()
     {
-        return $this->_oReauthorizeHandler;
+        return $this->reauthorizeHandler;
     }
 
     /**
@@ -61,42 +61,42 @@ class OrderCaptureAction extends \OxidEsales\PayPalModule\Model\Action\OrderActi
      */
     public function process()
     {
-        $this->_reauthorize();
+        $this->reauthorize();
 
-        $oHandler = $this->getHandler();
+        $handler = $this->getHandler();
 
-        $oResponse = $oHandler->getPayPalResponse();
-        $oData = $oHandler->getData();
+        $response = $handler->getPayPalResponse();
+        $data = $handler->getData();
 
-        $this->_updateOrder($oResponse, $oData);
+        $this->updateOrder($response, $data);
 
-        $oPayment = $this->_createPayment($oResponse);
-        $oPaymentList = $this->getOrder()->getPaymentList();
-        $oPayment = $oPaymentList->addPayment($oPayment);
+        $payment = $this->createPayment($response);
+        $paymentList = $this->getOrder()->getPaymentList();
+        $payment = $paymentList->addPayment($payment);
 
-        $this->_addComment($oPayment, $oData->getComment());
+        $this->addComment($payment, $data->getComment());
     }
 
     /**
      * Reauthorizes payment if order was captured at least once.
      */
-    protected function _reauthorize()
+    protected function reauthorize()
     {
-        $oOrder = $this->getOrder();
+        $order = $this->getOrder();
 
-        if ($oOrder->getCapturedAmount() > 0) {
-            $oHandler = $this->getReauthorizeHandler();
+        if ($order->getCapturedAmount() > 0) {
+            $handler = $this->getReauthorizeHandler();
             try {
-                $oResponse = $oHandler->getPayPalResponse();
+                $response = $handler->getPayPalResponse();
 
-                $oPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-                $oPayment->setDate($this->getDate());
-                $oPayment->setTransactionId($oResponse->getAuthorizationId());
-                $oPayment->setCorrelationId($oResponse->getCorrelationId());
-                $oPayment->setAction('re-authorization');
-                $oPayment->setStatus($oResponse->getPaymentStatus());
+                $payment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+                $payment->setDate($this->getDate());
+                $payment->setTransactionId($response->getAuthorizationId());
+                $payment->setCorrelationId($response->getCorrelationId());
+                $payment->setAction('re-authorization');
+                $payment->setStatus($response->getPaymentStatus());
 
-                $oOrder->getPaymentList()->addPayment($oPayment);
+                $order->getPaymentList()->addPayment($payment);
             } catch (\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException $e) {
                 // Ignore PayPal response exceptions
             }
@@ -106,50 +106,50 @@ class OrderCaptureAction extends \OxidEsales\PayPalModule\Model\Action\OrderActi
     /**
      * Updates order with PayPal response info.
      *
-     * @param object $oResponse
-     * @param object $oData
+     * @param object $response
+     * @param object $data
      */
-    protected function _updateOrder($oResponse, $oData)
+    protected function updateOrder($response, $data)
     {
-        $oOrder = $this->getOrder();
-        $oOrder->addCapturedAmount($oResponse->getCapturedAmount());
-        $oOrder->setPaymentStatus($oData->getOrderStatus());
-        $oOrder->save();
+        $order = $this->getOrder();
+        $order->addCapturedAmount($response->getCapturedAmount());
+        $order->setPaymentStatus($data->getOrderStatus());
+        $order->save();
     }
 
     /**
      * Creates Payment object with PayPal response data.
      *
-     * @param object $oResponse
+     * @param object $response
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment::class
      */
-    protected function _createPayment($oResponse)
+    protected function createPayment($response)
     {
-        $oPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oPayment->setDate($this->getDate());
-        $oPayment->setTransactionId($oResponse->getTransactionId());
-        $oPayment->setCorrelationId($oResponse->getCorrelationId());
-        $oPayment->setAction('capture');
-        $oPayment->setStatus($oResponse->getPaymentStatus());
-        $oPayment->setAmount($oResponse->getCapturedAmount());
-        $oPayment->setCurrency($oResponse->getCurrency());
+        $payment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $payment->setDate($this->getDate());
+        $payment->setTransactionId($response->getTransactionId());
+        $payment->setCorrelationId($response->getCorrelationId());
+        $payment->setAction('capture');
+        $payment->setStatus($response->getPaymentStatus());
+        $payment->setAmount($response->getCapturedAmount());
+        $payment->setCurrency($response->getCurrency());
 
-        return $oPayment;
+        return $payment;
     }
 
     /**
      * Adds comment to given Payment object.
      *
-     * @param object $oPayment
-     * @param string $sComment
+     * @param object $payment
+     * @param string $comment
      */
-    protected function _addComment($oPayment, $sComment)
+    protected function addComment($payment, $comment)
     {
-        if ($sComment) {
-            $oComment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
-            $oComment->setComment($sComment);
-            $oPayment->addComment($oComment);
+        if ($comment) {
+            $comment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
+            $comment->setComment($comment);
+            $payment->addComment($comment);
         }
     }
 }

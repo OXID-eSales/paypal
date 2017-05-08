@@ -29,11 +29,11 @@ class PayPalException extends \OxidEsales\Eshop\Core\Exception\StandardException
     /**
      * Exception constructor.
      *
-     * @param string  $sMessage exception message
-     * @param integer $iCode    exception code
+     * @param string  $message exception message
+     * @param integer $code    exception code
      */
-    public function __construct($sMessage = "", $iCode = 0)
+    public function __construct($message = "", $code = 0)
     {
-        parent::__construct($sMessage, $iCode);
+        parent::__construct($message, $code);
     }
 }

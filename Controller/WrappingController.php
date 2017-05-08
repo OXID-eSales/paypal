@@ -46,19 +46,19 @@ class WrappingController extends WrappingController_parent
      */
     public function changeWrapping()
     {
-        $sReturn = parent::changeWrapping();
+        $return = parent::changeWrapping();
 
         // in case user adds wrapping, basket info must be resubmitted..
         if ($this->isPayPal()) {
-            $iPayPalType = (int) $this->getSession()->getVariable("oepaypal");
+            $payPalType = (int) $this->getSession()->getVariable("oepaypal");
 
-            if ($iPayPalType == 1) {
-                $sReturn = "payment";
+            if ($payPalType == 1) {
+                $return = "payment";
             } else {
-                $sReturn = "basket";
+                $return = "basket";
             }
         }
 
-        return $sReturn;
+        return $return;
     }
 }

@@ -31,23 +31,23 @@ class GetExpressCheckoutDetailsRequestBuilder
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest
      */
-    protected $_oPayPalRequest = null;
+    protected $payPalRequest = null;
 
     /**
      * Session object
      *
      * @var \OxidEsales\Eshop\Core\Session
      */
-    protected $_oSession = null;
+    protected $session = null;
 
     /**
      * Sets PayPal request object.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      */
-    public function setPayPalRequest($oRequest)
+    public function setPayPalRequest($request)
     {
-        $this->_oPayPalRequest = $oRequest;
+        $this->payPalRequest = $request;
     }
 
     /**
@@ -57,21 +57,21 @@ class GetExpressCheckoutDetailsRequestBuilder
      */
     public function getPayPalRequest()
     {
-        if ($this->_oPayPalRequest === null) {
-            $this->_oPayPalRequest = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        if ($this->payPalRequest === null) {
+            $this->payPalRequest = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
         }
 
-        return $this->_oPayPalRequest;
+        return $this->payPalRequest;
     }
 
     /**
      * Sets Session.
      *
-     * @param \OxidEsales\Eshop\Core\Session $oSession
+     * @param \OxidEsales\Eshop\Core\Session $session
      */
-    public function setSession($oSession)
+    public function setSession($session)
     {
-        $this->_oSession = $oSession;
+        $this->session = $session;
     }
 
     /**
@@ -83,15 +83,15 @@ class GetExpressCheckoutDetailsRequestBuilder
      */
     public function getSession()
     {
-        if (!$this->_oSession) {
+        if (!$this->session) {
             /**
-             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $oException
+             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $exception
              */
-            $oException = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
-            throw $oException;
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
+            throw $exception;
         }
 
-        return $this->_oSession;
+        return $this->session;
     }
 
     /**
@@ -101,9 +101,9 @@ class GetExpressCheckoutDetailsRequestBuilder
      */
     public function buildRequest()
     {
-        $oRequest = $this->getPayPalRequest();
-        $oRequest->setParameter('TOKEN', $this->getSession()->getVariable('oepaypal-token'));
+        $request = $this->getPayPalRequest();
+        $request->setParameter('TOKEN', $this->getSession()->getVariable('oepaypal-token'));
 
-        return $oRequest;
+        return $request;
     }
 }

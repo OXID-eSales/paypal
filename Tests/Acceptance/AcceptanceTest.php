@@ -48,13 +48,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     /**
      * Activates PayPal and adds configuration
      *
-     * @param string $sTestSuitePath
+     * @param string $testSuitePath
      *
      * @throws \Exception
      */
-    public function addTestData($sTestSuitePath)
+    public function addTestData($testSuitePath)
     {
-        parent::addTestData($sTestSuitePath);
+        parent::addTestData($testSuitePath);
 
         $this->callShopSC('oxConfig', null, null, array(
             'sOEPayPalTransactionMode' => array(
@@ -753,7 +753,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->waitForItemAppear("id=addShipAddress");
 
         //checking if there is already Belgium address
-        if (!$this->isTextPresent("Test address in Belgium 15, Antwerp, Belgien", "")) {
+        if (!$this->isTextPresent("Test address in Belgium 15, Antwerp, Belgien")) {
             // adding new address (Belgium) to address list
             $this->clickAndWait("id=addShipAddress");
             $this->select("country_code", "label=Belgien");
@@ -2240,43 +2240,43 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     /**
      * Login to PayPal sandbox.
      *
-     * @param string $sLoginEmail    email to login.
-     * @param string $sLoginPassword password to login.
+     * @param string $loginEmail    email to login.
+     * @param string $loginPassword password to login.
      *
      * @todo wait, check that it actually logged in.
      */
-    protected function loginToSandbox($sLoginEmail = null, $sLoginPassword = null)
+    protected function loginToSandbox($loginEmail = null, $loginPassword = null)
     {
-        if (!isset($sLoginEmail)) {
-            $sLoginEmail = $this->getLoginDataByName('sBuyerLogin');
+        if (!isset($loginEmail)) {
+            $loginEmail = $this->getLoginDataByName('sBuyerLogin');
         }
-        if (!isset($sLoginPassword)) {
-            $sLoginPassword = $this->getLoginDataByName('sBuyerPassword');
+        if (!isset($loginPassword)) {
+            $loginPassword = $this->getLoginDataByName('sBuyerPassword');
         }
 
         if ($this->newPayPalUserInterface) {
-            $this->loginToNewSandbox($sLoginEmail, $sLoginPassword);
+            $this->loginToNewSandbox($loginEmail, $loginPassword);
         } else {
-            $this->loginToOldSandbox($sLoginEmail, $sLoginPassword);
+            $this->loginToOldSandbox($loginEmail, $loginPassword);
         }
     }
 
-    private function loginToNewSandbox($sLoginEmail, $sLoginPassword)
+    private function loginToNewSandbox($loginEmail, $loginPassword)
     {
         $this->selectCorrectLoginFrame();
 
-        $this->type("login_email", $sLoginEmail);
-        $this->type("login_password", $sLoginPassword);
+        $this->type("login_email", $loginEmail);
+        $this->type("login_password", $loginPassword);
         $this->click(self::PAYPAL_LOGIN_BUTTON_ID_NEW);
 
         $this->selectWindow(null);
         $this->waitForElement("id=sliding-area");
     }
 
-    private function loginToOldSandbox($sLoginEmail, $sLoginPassword)
+    private function loginToOldSandbox($loginEmail, $loginPassword)
     {
-        $this->type("login_email", $sLoginEmail);
-        $this->type("login_password", $sLoginPassword);
+        $this->type("login_email", $loginEmail);
+        $this->type("login_password", $loginPassword);
         $this->clickAndWait(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
         $this->waitForItemAppear("id=continue");
     }
@@ -2296,22 +2296,22 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     /**
      * Returns PayPal login data by variable name
      *
-     * @param $sVarName
+     * @param $varName
      *
      * @return mixed|null|string
      * @throws \Exception
      */
-    protected function getLoginDataByName($sVarName)
+    protected function getLoginDataByName($varName)
     {
-        if (!$sVarValue = getenv($sVarName)) {
-            $sVarValue = $this->getArrayValueFromFile($sVarName, __DIR__ .'/oepaypalData.php');
+        if (!$varValue = getenv($varName)) {
+            $varValue = $this->getArrayValueFromFile($varName, __DIR__ .'/oepaypalData.php');
         }
 
-        if (!$sVarValue) {
-            throw new \Exception('Undefined variable: ' . $sVarName);
+        if (!$varValue) {
+            throw new \Exception('Undefined variable: ' . $varName);
         }
 
-        return $sVarValue;
+        return $varValue;
     }
 
     /**

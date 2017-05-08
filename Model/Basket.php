@@ -36,17 +36,17 @@ class Basket extends Basket_parent
      */
     public function isVirtualPayPalBasket()
     {
-        $blVirtual = true;
+        $isVirtual = true;
 
-        $aProducts = $this->getBasketArticles();
-        foreach ($aProducts as $oProduct) {
-            if (!$oProduct->isVirtualPayPalArticle()) {
-                $blVirtual = false;
+        $products = $this->getBasketArticles();
+        foreach ($products as $product) {
+            if (!$product->isVirtualPayPalArticle()) {
+                $isVirtual = false;
                 break;
             }
         }
 
-        return $blVirtual;
+        return $isVirtual;
     }
 
     /**
@@ -56,17 +56,17 @@ class Basket extends Basket_parent
      */
     public function isFractionQuantityItemsPresent()
     {
-        $blFractionItemsPresent = false;
+        $fractionItemsPresent = false;
 
-        foreach ($this->getContents() as $oBasketItem) {
-            $dAmount = $oBasketItem->getAmount();
-            if ((int) $dAmount != $dAmount) {
-                $blFractionItemsPresent = true;
+        foreach ($this->getContents() as $basketItem) {
+            $amount = $basketItem->getAmount();
+            if ((int) $amount != $amount) {
+                $fractionItemsPresent = true;
                 break;
             }
         }
 
-        return $blFractionItemsPresent;
+        return $fractionItemsPresent;
     }
 
     /**
@@ -76,14 +76,14 @@ class Basket extends Basket_parent
      */
     public function getPayPalWrappingCosts()
     {
-        $dWrappingPrice = 0;
+        $amount = 0.0;
 
-        $oWrappingCost = $this->getCosts('oxwrapping');
-        if ($oWrappingCost) {
-            $dWrappingPrice = $this->isCalculationModeNetto() ? $oWrappingCost->getNettoPrice() : $oWrappingCost->getBruttoPrice();
+        $wrappingCost = $this->getCosts('oxwrapping');
+        if ($wrappingCost) {
+            $amount = $this->isCalculationModeNetto() ? $wrappingCost->getNettoPrice() : $wrappingCost->getBruttoPrice();
         }
 
-        return $dWrappingPrice;
+        return $amount;
     }
 
     /**
@@ -93,14 +93,14 @@ class Basket extends Basket_parent
      */
     public function getPayPalGiftCardCosts()
     {
-        $dGiftCardPrice = 0;
+        $amount = 0.0;
 
-        $oGiftCardCost = $this->getCosts('oxgiftcard');
-        if ($oGiftCardCost) {
-            $dGiftCardPrice = $this->isCalculationModeNetto() ? $oGiftCardCost->getNettoPrice() : $oGiftCardCost->getBruttoPrice();
+        $giftCardCost = $this->getCosts('oxgiftcard');
+        if ($giftCardCost) {
+            $amount = $this->isCalculationModeNetto() ? $giftCardCost->getNettoPrice() : $giftCardCost->getBruttoPrice();
         }
 
-        return $dGiftCardPrice;
+        return $amount;
     }
 
     /**
@@ -110,14 +110,14 @@ class Basket extends Basket_parent
      */
     public function getPayPalPaymentCosts()
     {
-        $dPaymentCost = 0;
+        $amount = 0.0;
 
-        $oPaymentCost = $this->getCosts('oxpayment');
-        if ($oPaymentCost) {
-            $dPaymentCost = $this->isCalculationModeNetto() ? $oPaymentCost->getNettoPrice() : $oPaymentCost->getBruttoPrice();
+        $paymentCost = $this->getCosts('oxpayment');
+        if ($paymentCost) {
+            $amount = $this->isCalculationModeNetto() ? $paymentCost->getNettoPrice() : $paymentCost->getBruttoPrice();
         }
 
-        return $dPaymentCost;
+        return $amount;
     }
 
     /**
@@ -127,14 +127,14 @@ class Basket extends Basket_parent
      */
     public function getPayPalTsProtectionCosts()
     {
-        $dTsPaymentCost = 0;
+        $amount = 0.0;
 
-        $oTsPaymentCost = $this->getCosts('oxtsprotection');
-        if ($oTsPaymentCost) {
-            $dTsPaymentCost = $this->isCalculationModeNetto() ? $oTsPaymentCost->getNettoPrice() : $oTsPaymentCost->getBruttoPrice();
+        $tsPaymentCost = $this->getCosts('oxtsprotection');
+        if ($tsPaymentCost) {
+            $amount = $this->isCalculationModeNetto() ? $tsPaymentCost->getNettoPrice() : $tsPaymentCost->getBruttoPrice();
         }
 
-        return $dTsPaymentCost;
+        return $amount;
     }
 
     /**
@@ -146,26 +146,26 @@ class Basket extends Basket_parent
     public function getDiscountSumPayPalBasket()
     {
         // collect discounts
-        $dDiscount = 0;
+        $discount = 0.0;
 
-        $oTotalDiscount = $this->getTotalDiscount();
+        $totalDiscount = $this->getTotalDiscount();
 
-        if ($oTotalDiscount) {
-            $dDiscount += $oTotalDiscount->getBruttoPrice();
+        if ($totalDiscount) {
+            $discount += $totalDiscount->getBruttoPrice();
         }
 
         //if payment costs are negative, adding them to discount
-        if (($dCosts = $this->getPaymentCosts()) < 0) {
-            $dDiscount += ($dCosts * -1);
+        if (($costs = $this->getPaymentCosts()) < 0) {
+            $discount += ($costs * -1);
         }
 
         // vouchers..
-        $aVouchers = (array) $this->getVouchers();
-        foreach ($aVouchers as $oVoucher) {
-            $dDiscount += round($oVoucher->dVoucherdiscount, 2);
+        $vouchers = (array) $this->getVouchers();
+        foreach ($vouchers as $voucher) {
+            $discount += round($voucher->dVoucherdiscount, 2);
         }
 
-        return $dDiscount;
+        return $discount;
     }
 
     /**
@@ -177,23 +177,23 @@ class Basket extends Basket_parent
     public function getSumOfCostOfAllItemsPayPalBasket()
     {
         // basket items sum
-        $dAllCosts = $this->getProductsPrice()->getSum($this->isCalculationModeNetto());
+        $allCosts = $this->getProductsPrice()->getSum($this->isCalculationModeNetto());
 
         //adding to additional costs only if payment is > 0
-        if (($dCosts = $this->getPayPalPaymentCosts()) > 0) {
-            $dAllCosts += $dCosts;
+        if (($costs = $this->getPayPalPaymentCosts()) > 0) {
+            $allCosts += $costs;
         }
 
         // wrapping costs
-        $dAllCosts += $this->getPayPalWrappingCosts();
+        $allCosts += $this->getPayPalWrappingCosts();
 
         // greeting card costs
-        $dAllCosts += $this->getPayPalGiftCardCosts();
+        $allCosts += $this->getPayPalGiftCardCosts();
 
         // Trusted shops protection cost
-        $dAllCosts += $this->getPayPalTsProtectionCosts();
+        $allCosts += $this->getPayPalTsProtectionCosts();
 
-        return $dAllCosts;
+        return $allCosts;
     }
 
     /**
@@ -203,18 +203,18 @@ class Basket extends Basket_parent
      */
     public function getPayPalBasketVatValue()
     {
-        $flBasketVatValue = 0;
-        $flBasketVatValue += $this->getPayPalProductVat();
-        $flBasketVatValue += $this->getPayPalWrappingVat();
-        $flBasketVatValue += $this->getPayPalGiftCardVat();
-        $flBasketVatValue += $this->getPayPalPayCostVat();
-        $flBasketVatValue += $this->getPayPalTsProtectionCostVat();
+        $basketVatValue = 0;
+        $basketVatValue += $this->getPayPalProductVat();
+        $basketVatValue += $this->getPayPalWrappingVat();
+        $basketVatValue += $this->getPayPalGiftCardVat();
+        $basketVatValue += $this->getPayPalPayCostVat();
+        $basketVatValue += $this->getPayPalTsProtectionCostVat();
 
         if ($this->getDeliveryCosts() < round($this->getDeliveryCosts(), 2)) {
-            return floor($flBasketVatValue * 100) / 100;
+            return floor($basketVatValue * 100) / 100;
         }
 
-        return $flBasketVatValue;
+        return $basketVatValue;
     }
 
     /**
@@ -224,10 +224,10 @@ class Basket extends Basket_parent
      */
     public function getPayPalProductVat()
     {
-        $aProductVatValue = $this->getProductVats(false);
-        $dProductVatValue = array_sum($aProductVatValue);
+        $productVatList = $this->getProductVats(false);
+        $productVatSum = array_sum($productVatList);
 
-        return $dProductVatValue;
+        return $productVatSum;
     }
 
     /**
@@ -237,14 +237,14 @@ class Basket extends Basket_parent
      */
     public function getPayPalWrappingVat()
     {
-        $dWrappingVat = 0;
+        $wrappingVat = 0.0;
 
-        $oWrapping = $this->getCosts('oxwrapping');
-        if ($oWrapping && $oWrapping->getVatValue()) {
-            $dWrappingVat = $oWrapping->getVatValue();
+        $wrapping = $this->getCosts('oxwrapping');
+        if ($wrapping && $wrapping->getVatValue()) {
+            $wrappingVat = $wrapping->getVatValue();
         }
 
-        return $dWrappingVat;
+        return $wrappingVat;
     }
 
     /**
@@ -254,14 +254,14 @@ class Basket extends Basket_parent
      */
     public function getPayPalGiftCardVat()
     {
-        $dGiftCardVat = 0;
+        $giftCardVat = 0.0;
 
-        $oGiftCard = $this->getCosts('oxgiftcard');
-        if ($oGiftCard && $oGiftCard->getVatValue()) {
-            $dGiftCardVat = $oGiftCard->getVatValue();
+        $giftCard = $this->getCosts('oxgiftcard');
+        if ($giftCard && $giftCard->getVatValue()) {
+            $giftCardVat = $giftCard->getVatValue();
         }
 
-        return $dGiftCardVat;
+        return $giftCardVat;
     }
 
     /**
@@ -271,14 +271,14 @@ class Basket extends Basket_parent
      */
     public function getPayPalPayCostVat()
     {
-        $dPayVAT = 0;
+        $paymentVAT = 0.0;
 
-        $oPaymentCost = $this->getCosts('oxpayment');
-        if ($oPaymentCost && $oPaymentCost->getVatValue()) {
-            $dPayVAT = $oPaymentCost->getVatValue();
+        $paymentCost = $this->getCosts('oxpayment');
+        if ($paymentCost && $paymentCost->getVatValue()) {
+            $paymentVAT = $paymentCost->getVatValue();
         }
 
-        return $dPayVAT;
+        return $paymentVAT;
     }
 
     /**
@@ -288,12 +288,12 @@ class Basket extends Basket_parent
      */
     public function getPayPalTsProtectionCostVat()
     {
-        $dVAT = 0;
-        $oCost = $this->getCosts('oxtsprotection');
-        if ($oCost && $oCost->getVatValue()) {
-            $dVAT = $oCost->getVatValue();
+        $tsProtectionCostVat = 0.0;
+        $cost = $this->getCosts('oxtsprotection');
+        if ($cost && $cost->getVatValue()) {
+            $tsProtectionCostVat = $cost->getVatValue();
         }
 
-        return $dVAT;
+        return $tsProtectionCostVat;
     }
 }

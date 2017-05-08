@@ -32,19 +32,19 @@ class OrderPaymentComment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function __construct()
     {
-        $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
+        $utilsDate = \OxidEsales\Eshop\Core\Registry::getUtilsDate();
 
-        $this->_setValue('oepaypal_date', date('Y-m-d H:i:s', $utilsDate->getTime()));
+        $this->setValue('oepaypal_date', date('Y-m-d H:i:s', $utilsDate->getTime()));
     }
 
     /**
      * Sets comment id.
      *
-     * @param string $sCommentId
+     * @param string $commentId
      */
-    public function setId($sCommentId)
+    public function setId($commentId)
     {
-        $this->setCommentId($sCommentId);
+        $this->setCommentId($commentId);
     }
 
     /**
@@ -60,11 +60,11 @@ class OrderPaymentComment extends \OxidEsales\PayPalModule\Core\Model
     /**
      * Set PayPal order comment Id
      *
-     * @param string $sCommentId
+     * @param string $commentId
      */
-    public function setCommentId($sCommentId)
+    public function setCommentId($commentId)
     {
-        $this->_setValue('oepaypal_commentid', $sCommentId);
+        $this->setValue('oepaypal_commentid', $commentId);
     }
 
     /**
@@ -74,17 +74,17 @@ class OrderPaymentComment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getCommentId()
     {
-        return $this->_getValue('oepaypal_commentid');
+        return $this->getValue('oepaypal_commentid');
     }
 
     /**
      * Set PayPal order payment Id
      *
-     * @param string $sPaymentId
+     * @param string $paymentId
      */
-    public function setPaymentId($sPaymentId)
+    public function setPaymentId($paymentId)
     {
-        $this->_setValue('oepaypal_paymentid', $sPaymentId);
+        $this->setValue('oepaypal_paymentid', $paymentId);
     }
 
     /**
@@ -94,17 +94,17 @@ class OrderPaymentComment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getPaymentId()
     {
-        return $this->_getValue('oepaypal_paymentid');
+        return $this->getValue('oepaypal_paymentid');
     }
 
     /**
      * Set date
      *
-     * @param string $sDate
+     * @param string $date
      */
-    public function setDate($sDate)
+    public function setDate($date)
     {
-        $this->_setValue('oepaypal_date', $sDate);
+        $this->setValue('oepaypal_date', $date);
     }
 
     /**
@@ -114,17 +114,17 @@ class OrderPaymentComment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getDate()
     {
-        return $this->_getValue('oepaypal_date');
+        return $this->getValue('oepaypal_date');
     }
 
     /**
      * Set comment
      *
-     * @param string $sComment
+     * @param string $comment
      */
-    public function setComment($sComment)
+    public function setComment($comment)
     {
-        $this->_setValue('oepaypal_comment', $sComment);
+        $this->setValue('oepaypal_comment', $comment);
     }
 
     /**
@@ -134,20 +134,20 @@ class OrderPaymentComment extends \OxidEsales\PayPalModule\Core\Model
      */
     public function getComment()
     {
-        return $this->_getValue('oepaypal_comment');
+        return $this->getValue('oepaypal_comment');
     }
 
     /**
      * Return database gateway
      *
-     * @return \OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentCommentDbGateway
+     * @return \OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentCommentDbGateway|\OxidEsales\PayPalModule\Core\ModelDbGateway
      */
-    protected function _getDbGateway()
+    protected function getDbGateway()
     {
-        if (is_null($this->_oDbGateway)) {
-            $this->_setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentCommentDbGateway::class));
+        if (is_null($this->dbGateway)) {
+            $this->setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentCommentDbGateway::class));
         }
 
-        return $this->_oDbGateway;
+        return $this->dbGateway;
     }
 }

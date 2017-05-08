@@ -31,87 +31,87 @@ class SetExpressCheckoutRequestBuilder
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest
      */
-    protected $_oPayPalRequest = null;
+    protected $payPalRequest = null;
 
     /**
      * PayPal Config.
      *
      * @var \OxidEsales\PayPalModule\Core\Config
      */
-    protected $_oPayPalConfig = null;
+    protected $payPalConfig = null;
 
     /**
      * Basket object.
      *
      * @var \OxidEsales\PayPalModule\Model\Basket
      */
-    protected $_oBasket = null;
+    protected $basket = null;
 
     /**
      * User object.
      *
      * @var \OxidEsales\PayPalModule\Model\User
      */
-    protected $_oUser = null;
+    protected $user = null;
 
     /**
      * Language object.
      *
      * @var \OxidEsales\Eshop\Core\Language
      */
-    protected $_oLang = null;
+    protected $lang = null;
 
     /**
      * Url to return to after PayPal payment is done.
      *
      * @var string
      */
-    protected $_sReturnUrl = null;
+    protected $returnUrl = null;
 
     /**
      * Url to return to if PayPal payment was canceled.
      *
      * @var string
      */
-    protected $_sCancelUrl = null;
+    protected $cancelUrl = null;
 
     /**
      * Url for PayPal CallBack.
      *
      * @var string
      */
-    protected $_sCallBackUrl = null;
+    protected $callBackUrl = null;
 
     /**
      * Show basket items in PayPal.
      *
      * @var bool
      */
-    protected $_blShowCartInPayPal = false;
+    protected $showCartInPayPal = false;
 
     /**
      * Transaction mode: Sale|Authorization.
      *
      * @var string
      */
-    protected $_sTransactionMode;
+    protected $transactionMode;
 
     /**
      * Maximum possible delivery costs value.
      *
      * @var double
      */
-    protected $_dMaxDeliveryAmount = 0;
+    protected $maxDeliveryAmount = 0;
 
 
     /**
      * Sets max delivery amount.
      *
-     * @param double $dMaxDeliveryAmount
+     * @param double $maxDeliveryAmount
      */
-    public function setMaxDeliveryAmount($dMaxDeliveryAmount)
+    public function setMaxDeliveryAmount($maxDeliveryAmount)
     {
-        $this->_dMaxDeliveryAmount = $dMaxDeliveryAmount;
+        $this->maxDeliveryAmount = $maxDeliveryAmount;
     }
 
     /**
@@ -121,17 +121,17 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getMaxDeliveryAmount()
     {
-        return $this->_dMaxDeliveryAmount;
+        return $this->maxDeliveryAmount;
     }
 
     /**
      * Sets PayPal request object.
      *
-     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $oRequest
+     * @param \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest $request
      */
-    public function setPayPalRequest($oRequest)
+    public function setPayPalRequest($request)
     {
-        $this->_oPayPalRequest = $oRequest;
+        $this->payPalRequest = $request;
     }
 
     /**
@@ -141,21 +141,21 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getPayPalRequest()
     {
-        if ($this->_oPayPalRequest === null) {
-            $this->_oPayPalRequest = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        if ($this->payPalRequest === null) {
+            $this->payPalRequest = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
         }
 
-        return $this->_oPayPalRequest;
+        return $this->payPalRequest;
     }
 
     /**
      * Returns config object.
      *
-     * @param \OxidEsales\PayPalModule\Core\Config $oConfig
+     * @param \OxidEsales\PayPalModule\Core\Config $config
      */
-    public function setPayPalConfig($oConfig)
+    public function setPayPalConfig($config)
     {
-        $this->_oPayPalConfig = $oConfig;
+        $this->payPalConfig = $config;
     }
 
     /**
@@ -167,23 +167,23 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getPayPalConfig()
     {
-        if (!$this->_oPayPalConfig) {
-            /** @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $oException */
-            $oException = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
-            throw $oException;
+        if (!$this->payPalConfig) {
+            /** @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $exception */
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
+            throw $exception;
         }
 
-        return $this->_oPayPalConfig;
+        return $this->payPalConfig;
     }
 
     /**
      * Sets Basket object.
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket
      */
-    public function setBasket($oBasket)
+    public function setBasket($basket)
     {
-        $this->_oBasket = $oBasket;
+        $this->basket = $basket;
     }
 
     /**
@@ -195,23 +195,23 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getBasket()
     {
-        if (is_null($this->_oBasket)) {
-            /** @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $oException */
-            $oException = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
-            throw $oException;
+        if (is_null($this->basket)) {
+            /** @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $exception */
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
+            throw $exception;
         }
 
-        return $this->_oBasket;
+        return $this->basket;
     }
 
     /**
      * Sets User object
      *
-     * @param \OxidEsales\PayPalModule\Model\User $oUser
+     * @param \OxidEsales\Eshop\Application\Model\User $user
      */
-    public function setUser($oUser)
+    public function setUser($user)
     {
-        $this->_oUser = $oUser;
+        $this->user = $user;
     }
 
     /**
@@ -221,17 +221,17 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getUser()
     {
-        return $this->_oUser;
+        return $this->user;
     }
 
     /**
      * Sets Language object
      *
-     * @param \OxidEsales\Eshop\Core\Language $oLang
+     * @param \OxidEsales\Eshop\Core\Language $lang
      */
-    public function setLang($oLang)
+    public function setLang($lang)
     {
-        $this->_oLang = $oLang;
+        $this->lang = $lang;
     }
 
     /**
@@ -241,21 +241,21 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getLang()
     {
-        if (is_null($this->_oLang)) {
-            $this->_oLang = $this->getPayPalConfig()->getLang();
+        if (is_null($this->lang)) {
+            $this->lang = $this->getPayPalConfig()->getLang();
         }
 
-        return $this->_oLang;
+        return $this->lang;
     }
 
     /**
      * Sets CallBack url.
      *
-     * @param string $sCallBackUrl
+     * @param string $callBackUrl
      */
-    public function setCallBackUrl($sCallBackUrl)
+    public function setCallBackUrl($callBackUrl)
     {
-        $this->_sCallBackUrl = $sCallBackUrl;
+        $this->callBackUrl = $callBackUrl;
     }
 
     /**
@@ -265,17 +265,17 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getCallBackUrl()
     {
-        return $this->_sCallBackUrl;
+        return $this->callBackUrl;
     }
 
     /**
      * Sets Cancel Url.
      *
-     * @param string $sCancelUrl
+     * @param string $cancelUrl
      */
-    public function setCancelUrl($sCancelUrl)
+    public function setCancelUrl($cancelUrl)
     {
-        $this->_sCancelUrl = $sCancelUrl;
+        $this->cancelUrl = $cancelUrl;
     }
 
     /**
@@ -285,17 +285,17 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getCancelUrl()
     {
-        return $this->_sCancelUrl;
+        return $this->cancelUrl;
     }
 
     /**
      * Sets Return Url.
      *
-     * @param string $sReturnUrl
+     * @param string $returnUrl
      */
-    public function setReturnUrl($sReturnUrl)
+    public function setReturnUrl($returnUrl)
     {
-        $this->_sReturnUrl = $sReturnUrl;
+        $this->returnUrl = $returnUrl;
     }
 
     /**
@@ -305,17 +305,17 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getReturnUrl()
     {
-        return $this->_sReturnUrl;
+        return $this->returnUrl;
     }
 
     /**
      * Sets whether to show basket in PayPal.
      *
-     * @param string $blShowCartInPayPal
+     * @param string $showCartInPayPal
      */
-    public function setShowCartInPayPal($blShowCartInPayPal)
+    public function setShowCartInPayPal($showCartInPayPal)
     {
-        $this->_blShowCartInPayPal = $blShowCartInPayPal;
+        $this->showCartInPayPal = $showCartInPayPal;
     }
 
     /**
@@ -325,27 +325,27 @@ class SetExpressCheckoutRequestBuilder
      */
     public function getShowCartInPayPal()
     {
-        return $this->_blShowCartInPayPal;
+        return $this->showCartInPayPal;
     }
 
     /**
      * Sets Transaction mode.
      *
-     * @param string $sTransactionMode
+     * @param string $transactionMode
      */
-    public function setTransactionMode($sTransactionMode)
+    public function setTransactionMode($transactionMode)
     {
-        $this->_sTransactionMode = $sTransactionMode;
+        $this->transactionMode = $transactionMode;
     }
 
     /**
      * Returns Transaction mode.
      *
-     * @return string $sTransactionMode
+     * @return string $transactionMode
      */
     public function getTransactionMode()
     {
-        return $this->_sTransactionMode;
+        return $this->transactionMode;
     }
 
     /**
@@ -400,24 +400,24 @@ class SetExpressCheckoutRequestBuilder
      */
     public function addBaseParams()
     {
-        $oRequest = $this->getPayPalRequest();
-        $oPayPalConfig = $this->getPayPalConfig();
+        $request = $this->getPayPalRequest();
+        $payPalConfig = $this->getPayPalConfig();
 
-        $oRequest->setParameter("CALLBACKVERSION", "84.0");
-        $oRequest->setParameter("LOCALECODE", $this->getLang()->translateString("OEPAYPAL_LOCALE"));
+        $request->setParameter("CALLBACKVERSION", "84.0");
+        $request->setParameter("LOCALECODE", $this->getLang()->translateString("OEPAYPAL_LOCALE"));
         // enabled guest buy (Buyer does not need to create a PayPal account to check out)
-        $oRequest->setParameter("SOLUTIONTYPE", ($oPayPalConfig->isGuestBuyEnabled() ? "Sole" : "Mark"));
-        $oRequest->setParameter("BRANDNAME", $oPayPalConfig->getBrandName());
-        $oRequest->setParameter("CARTBORDERCOLOR", $oPayPalConfig->getBorderColor());
+        $request->setParameter("SOLUTIONTYPE", ($payPalConfig->isGuestBuyEnabled() ? "Sole" : "Mark"));
+        $request->setParameter("BRANDNAME", $payPalConfig->getBrandName());
+        $request->setParameter("CARTBORDERCOLOR", $payPalConfig->getBorderColor());
 
-        $oRequest->setParameter("RETURNURL", $this->getReturnUrl());
-        $oRequest->setParameter("CANCELURL", $this->getCancelUrl());
+        $request->setParameter("RETURNURL", $this->getReturnUrl());
+        $request->setParameter("CANCELURL", $this->getCancelUrl());
 
-        if ($sLogoImage = $oPayPalConfig->getLogoUrl()) {
-            $oRequest->setParameter("LOGOIMG", $sLogoImage);
+        if ($logoImage = $payPalConfig->getLogoUrl()) {
+            $request->setParameter("LOGOIMG", $logoImage);
         }
 
-        $oRequest->setParameter("PAYMENTREQUEST_0_PAYMENTACTION", $this->getTransactionMode());
+        $request->setParameter("PAYMENTREQUEST_0_PAYMENTACTION", $this->getTransactionMode());
     }
 
     /**
@@ -425,10 +425,10 @@ class SetExpressCheckoutRequestBuilder
      */
     public function addCallBackUrl()
     {
-        $oRequest = $this->getPayPalRequest();
+        $request = $this->getPayPalRequest();
 
-        $oRequest->setParameter("CALLBACK", $this->getCallbackUrl());
-        $oRequest->setParameter("CALLBACKTIMEOUT", 6);
+        $request->setParameter("CALLBACK", $this->getCallbackUrl());
+        $request->setParameter("CALLBACKTIMEOUT", 6);
     }
 
     /**
@@ -454,10 +454,10 @@ class SetExpressCheckoutRequestBuilder
      */
     public function setMaximumOrderAmount()
     {
-        $oBasket = $this->getBasket();
-        $oRequest = $this->getPayPalRequest();
+        $basket = $this->getBasket();
+        $request = $this->getPayPalRequest();
 
-        $oRequest->setParameter("MAXAMT", $this->_formatFloat(($oBasket->getPrice()->getBruttoPrice() + $oBasket->getDiscountSumPayPalBasket() + $this->getMaxDeliveryAmount() + 1)));
+        $request->setParameter("MAXAMT", $this->formatFloat(($basket->getPrice()->getBruttoPrice() + $basket->getDiscountSumPayPalBasket() + $this->getMaxDeliveryAmount() + 1)));
     }
 
     /**
@@ -465,35 +465,35 @@ class SetExpressCheckoutRequestBuilder
      */
     public function addBasketParams()
     {
-        $oRequest = $this->getPayPalRequest();
-        $oBasket = $this->getBasket();
+        $request = $this->getPayPalRequest();
+        $basket = $this->getBasket();
 
-        $blVirtualBasket = $oBasket->isVirtualPayPalBasket();
+        $virtualBasket = $basket->isVirtualPayPalBasket();
 
         // only downloadable products? missing getter on oxBasket yet
-        $oRequest->setParameter("NOSHIPPING", $blVirtualBasket ? "1" : "0");
+        $request->setParameter("NOSHIPPING", $virtualBasket ? "1" : "0");
 
-        if ($blVirtualBasket) {
-            $oRequest->setParameter("REQCONFIRMSHIPPING", "0");
+        if ($virtualBasket) {
+            $request->setParameter("REQCONFIRMSHIPPING", "0");
         }
         // passing basket VAT (tax) value. It is required as in Net mode articles are without VAT, but basket is with VAT.
         // PayPal need this value to check if all articles sum match basket sum.
-        if ($oBasket->isCalculationModeNetto()) {
-            $oRequest->setParameter("PAYMENTREQUEST_0_TAXAMT", $this->_formatFloat($oBasket->getPayPalBasketVatValue()));
+        if ($basket->isCalculationModeNetto()) {
+            $request->setParameter("PAYMENTREQUEST_0_TAXAMT", $this->formatFloat($basket->getPayPalBasketVatValue()));
         }
 
-        $oRequest->setParameter("PAYMENTREQUEST_0_AMT", $this->_formatFloat($oBasket->getPrice()->getBruttoPrice()));
-        $oRequest->setParameter("PAYMENTREQUEST_0_CURRENCYCODE", $oBasket->getBasketCurrency()->name);
-        $oRequest->setParameter("PAYMENTREQUEST_0_ITEMAMT", $this->_formatFloat($oBasket->getSumOfCostOfAllItemsPayPalBasket()));
-        $oRequest->setParameter("PAYMENTREQUEST_0_SHIPPINGAMT", $this->_formatFloat($oBasket->getDeliveryCosts()));
-        $oRequest->setParameter("PAYMENTREQUEST_0_SHIPDISCAMT", $this->_formatFloat($oBasket->getDiscountSumPayPalBasket() * -1));
+        $request->setParameter("PAYMENTREQUEST_0_AMT", $this->formatFloat($basket->getPrice()->getBruttoPrice()));
+        $request->setParameter("PAYMENTREQUEST_0_CURRENCYCODE", $basket->getBasketCurrency()->name);
+        $request->setParameter("PAYMENTREQUEST_0_ITEMAMT", $this->formatFloat($basket->getSumOfCostOfAllItemsPayPalBasket()));
+        $request->setParameter("PAYMENTREQUEST_0_SHIPPINGAMT", $this->formatFloat($basket->getDeliveryCosts()));
+        $request->setParameter("PAYMENTREQUEST_0_SHIPDISCAMT", $this->formatFloat($basket->getDiscountSumPayPalBasket() * -1));
 
-        $oDelivery = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySet::class);
-        $sDeliveryName = ($oDelivery->load($oBasket->getShippingId())) ? $oDelivery->oxdeliveryset__oxtitle->value : "#1";
+        $delivery = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySet::class);
+        $deliveryName = ($delivery->load($basket->getShippingId())) ? $delivery->oxdeliveryset__oxtitle->value : "#1";
 
-        $oRequest->setParameter("L_SHIPPINGOPTIONISDEFAULT0", "true");
-        $oRequest->setParameter("L_SHIPPINGOPTIONNAME0", $sDeliveryName);
-        $oRequest->setParameter("L_SHIPPINGOPTIONAMOUNT0", $this->_formatFloat($oBasket->getDeliveryCosts()));
+        $request->setParameter("L_SHIPPINGOPTIONISDEFAULT0", "true");
+        $request->setParameter("L_SHIPPINGOPTIONNAME0", $deliveryName);
+        $request->setParameter("L_SHIPPINGOPTIONAMOUNT0", $this->formatFloat($basket->getDeliveryCosts()));
     }
 
     /**
@@ -501,20 +501,20 @@ class SetExpressCheckoutRequestBuilder
      */
     public function addDescriptionParams()
     {
-        $oBasket = $this->getBasket();
-        $oConfig = $this->getPayPalConfig();
-        $oRequest = $this->getPayPalRequest();
+        $basket = $this->getBasket();
+        $config = $this->getPayPalConfig();
+        $request = $this->getPayPalRequest();
 
         // description
-        $sShopNameFull = $oConfig->getBrandName();
-        $sShopName = substr($sShopNameFull, 0, 70);
-        if ($sShopNameFull != $sShopName) {
-            $sShopName .= "...";
+        $shopNameFull = $config->getBrandName();
+        $shopName = substr($shopNameFull, 0, 70);
+        if ($shopNameFull != $shopName) {
+            $shopName .= "...";
         }
 
-        $sSubj = sprintf($this->getLang()->translateString("OEPAYPAL_ORDER_SUBJECT"), $sShopName, $oBasket->getFPrice(), $oBasket->getBasketCurrency()->name);
-        $oRequest->setParameter("PAYMENTREQUEST_0_DESC", $sSubj);
-        $oRequest->setParameter("PAYMENTREQUEST_0_CUSTOM", $sSubj);
+        $subj = sprintf($this->getLang()->translateString("OEPAYPAL_ORDER_SUBJECT"), $shopName, $basket->getFPrice(), $basket->getBasketCurrency()->name);
+        $request->setParameter("PAYMENTREQUEST_0_DESC", $subj);
+        $request->setParameter("PAYMENTREQUEST_0_CUSTOM", $subj);
     }
 
     /**
@@ -522,56 +522,56 @@ class SetExpressCheckoutRequestBuilder
      */
     public function addBasketItemParams()
     {
-        $oBasket = $this->getBasket();
-        $oLang = $this->getLang();
-        $oRequest = $this->getPayPalRequest();
+        $basket = $this->getBasket();
+        $lang = $this->getLang();
+        $request = $this->getPayPalRequest();
 
-        $iPos = 0;
-        foreach ($oBasket->getContents() as $oBasketItem) {
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_NAME{$iPos}", getStr()->html_entity_decode($oBasketItem->getTitle()));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_AMT{$iPos}", $this->_formatFloat($oBasketItem->getUnitPrice()->getPrice()));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY{$iPos}", (int) $oBasketItem->getAmount());
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_ITEMURL{$iPos}", $oBasketItem->getLink());
+        $pos = 0;
+        foreach ($basket->getContents() as $basketItem) {
+            $request->setParameter("L_PAYMENTREQUEST_0_NAME{$pos}", \OxidEsales\Eshop\Core\Str::getStr()->html_entity_decode($basketItem->getTitle()));
+            $request->setParameter("L_PAYMENTREQUEST_0_AMT{$pos}", $this->formatFloat($basketItem->getUnitPrice()->getPrice()));
+            $request->setParameter("L_PAYMENTREQUEST_0_QTY{$pos}", (int) $basketItem->getAmount());
+            $request->setParameter("L_PAYMENTREQUEST_0_ITEMURL{$pos}", $basketItem->getLink());
 
-            $oBasketProduct = $oBasketItem->getArticle();
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_NUMBER{$iPos}", $oBasketProduct->oxarticles__oxartnum->value);
+            $basketProduct = $basketItem->getArticle();
+            $request->setParameter("L_PAYMENTREQUEST_0_NUMBER{$pos}", $basketProduct->oxarticles__oxartnum->value);
 
-            $iPos++;
+            $pos++;
         }
 
         //adding payment costs as product
-        if ($oBasket->getPayPalPaymentCosts() > 0) {
-            $sPaymentTitle = $oLang->translateString("OEPAYPAL_SURCHARGE") . " " . $oLang->translateString("OEPAYPAL_TYPE_OF_PAYMENT");
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_NAME{$iPos}", $sPaymentTitle);
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_AMT{$iPos}", $this->_formatFloat($oBasket->getPayPalPaymentCosts()));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY{$iPos}", 1);
+        if ($basket->getPayPalPaymentCosts() > 0) {
+            $paymentTitle = $lang->translateString("OEPAYPAL_SURCHARGE") . " " . $lang->translateString("OEPAYPAL_TYPE_OF_PAYMENT");
+            $request->setParameter("L_PAYMENTREQUEST_0_NAME{$pos}", $paymentTitle);
+            $request->setParameter("L_PAYMENTREQUEST_0_AMT{$pos}", $this->formatFloat($basket->getPayPalPaymentCosts()));
+            $request->setParameter("L_PAYMENTREQUEST_0_QTY{$pos}", 1);
 
-            $iPos++;
+            $pos++;
         }
 
         //adding wrapping as product
-        if ($oBasket->getPayPalWrappingCosts() > 0) {
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_NAME{$iPos}", $oLang->translateString("OEPAYPAL_GIFTWRAPPER"));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_AMT{$iPos}", $this->_formatFloat($oBasket->getPayPalWrappingCosts()));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY{$iPos}", 1);
+        if ($basket->getPayPalWrappingCosts() > 0) {
+            $request->setParameter("L_PAYMENTREQUEST_0_NAME{$pos}", $lang->translateString("OEPAYPAL_GIFTWRAPPER"));
+            $request->setParameter("L_PAYMENTREQUEST_0_AMT{$pos}", $this->formatFloat($basket->getPayPalWrappingCosts()));
+            $request->setParameter("L_PAYMENTREQUEST_0_QTY{$pos}", 1);
 
-            $iPos++;
+            $pos++;
         }
 
         //adding greeting card as product
-        if ($oBasket->getPayPalGiftCardCosts() > 0) {
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_NAME{$iPos}", $oLang->translateString("OEPAYPAL_GREETING_CARD"));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_AMT{$iPos}", $this->_formatFloat($oBasket->getPayPalGiftCardCosts()));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY{$iPos}", 1);
+        if ($basket->getPayPalGiftCardCosts() > 0) {
+            $request->setParameter("L_PAYMENTREQUEST_0_NAME{$pos}", $lang->translateString("OEPAYPAL_GREETING_CARD"));
+            $request->setParameter("L_PAYMENTREQUEST_0_AMT{$pos}", $this->formatFloat($basket->getPayPalGiftCardCosts()));
+            $request->setParameter("L_PAYMENTREQUEST_0_QTY{$pos}", 1);
 
-            $iPos++;
+            $pos++;
         }
 
         //adding trusted shops protection as product
-        if ($oBasket->getPayPalTsProtectionCosts() > 0) {
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_NAME{$iPos}", $oLang->translateString("OEPAYPAL_TRUSTED_SHOP_PROTECTION"));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_AMT{$iPos}", $this->_formatFloat($oBasket->getPayPalTsProtectionCosts()));
-            $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY{$iPos}", 1);
+        if ($basket->getPayPalTsProtectionCosts() > 0) {
+            $request->setParameter("L_PAYMENTREQUEST_0_NAME{$pos}", $lang->translateString("OEPAYPAL_TRUSTED_SHOP_PROTECTION"));
+            $request->setParameter("L_PAYMENTREQUEST_0_AMT{$pos}", $this->formatFloat($basket->getPayPalTsProtectionCosts()));
+            $request->setParameter("L_PAYMENTREQUEST_0_QTY{$pos}", 1);
         }
     }
 
@@ -580,62 +580,64 @@ class SetExpressCheckoutRequestBuilder
      */
     public function addBasketGrandTotalParams()
     {
-        $oBasket = $this->getBasket();
-        $oRequest = $this->getPayPalRequest();
+        $basket = $this->getBasket();
+        $request = $this->getPayPalRequest();
 
-        $oRequest->setParameter("L_PAYMENTREQUEST_0_NAME0", $this->getLang()->translateString("OEPAYPAL_GRAND_TOTAL"));
-        $oRequest->setParameter("L_PAYMENTREQUEST_0_AMT0", $this->_formatFloat($oBasket->getSumOfCostOfAllItemsPayPalBasket()));
-        $oRequest->setParameter("L_PAYMENTREQUEST_0_QTY0", 1);
+        $request->setParameter("L_PAYMENTREQUEST_0_NAME0", $this->getLang()->translateString("OEPAYPAL_GRAND_TOTAL"));
+        $request->setParameter("L_PAYMENTREQUEST_0_AMT0", $this->formatFloat($basket->getSumOfCostOfAllItemsPayPalBasket()));
+        $request->setParameter("L_PAYMENTREQUEST_0_QTY0", 1);
     }
 
     /**
      * Sets Address parameters to request.
+     *
+     * @return null
      */
     public function addAddressParams()
     {
-        $oUser = $this->getUser();
-        if (!$oUser) {
+        $user = $this->getUser();
+        if (!$user) {
             return;
         }
-        $oRequest = $this->getPayPalRequest();
+        $request = $this->getPayPalRequest();
 
-        $oRequest->setParameter("EMAIL", $oUser->oxuser__oxusername->value);
+        $request->setParameter("EMAIL", $user->oxuser__oxusername->value);
 
-        $sAddressId = $oUser->getSelectedAddressId();
-        if ($sAddressId) {
-            $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
-            $oAddress->load($sAddressId);
+        $addressId = $user->getSelectedAddressId();
+        if ($addressId) {
+            $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
+            $address->load($addressId);
 
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTONAME", getStr()->html_entity_decode($oAddress->oxaddress__oxfname->value . " " . $oAddress->oxaddress__oxlname->value));
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTREET", getStr()->html_entity_decode($oAddress->oxaddress__oxstreet->value . " " . $oAddress->oxaddress__oxstreetnr->value));
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCITY", $oAddress->oxaddress__oxcity->value);
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $oAddress->oxaddress__oxzip->value);
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $oAddress->oxaddress__oxfon->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTONAME", \OxidEsales\Eshop\Core\Str::getStr()->html_entity_decode($address->oxaddress__oxfname->value . " " . $address->oxaddress__oxlname->value));
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOSTREET", \OxidEsales\Eshop\Core\Str::getStr()->html_entity_decode($address->oxaddress__oxstreet->value . " " . $address->oxaddress__oxstreetnr->value));
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOCITY", $address->oxaddress__oxcity->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $address->oxaddress__oxzip->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $address->oxaddress__oxfon->value);
 
-            $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
-            $oCountry->load($oAddress->oxaddress__oxcountryid->value);
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $oCountry->oxcountry__oxisoalpha2->value);
+            $country = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
+            $country->load($address->oxaddress__oxcountryid->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $country->oxcountry__oxisoalpha2->value);
 
-            if ($oAddress->oxaddress__oxstateid->value) {
-                $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
-                $oState->load($oAddress->oxaddress__oxstateid->value);
-                $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $oState->oxstates__oxisoalpha2->value);
+            if ($address->oxaddress__oxstateid->value) {
+                $state = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
+                $state->load($address->oxaddress__oxstateid->value);
+                $request->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $state->oxstates__oxisoalpha2->value);
             }
         } else {
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTONAME", getStr()->html_entity_decode($oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value));
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTREET", getStr()->html_entity_decode($oUser->oxuser__oxstreet->value . " " . $oUser->oxuser__oxstreetnr->value));
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCITY", $oUser->oxuser__oxcity->value);
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $oUser->oxuser__oxzip->value);
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $oUser->oxuser__oxfon->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTONAME", \OxidEsales\Eshop\Core\Str::getStr()->html_entity_decode($user->oxuser__oxfname->value . " " . $user->oxuser__oxlname->value));
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOSTREET", \OxidEsales\Eshop\Core\Str::getStr()->html_entity_decode($user->oxuser__oxstreet->value . " " . $user->oxuser__oxstreetnr->value));
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOCITY", $user->oxuser__oxcity->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOZIP", $user->oxuser__oxzip->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOPHONENUM", $user->oxuser__oxfon->value);
 
-            $oCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
-            $oCountry->load($oUser->oxuser__oxcountryid->value);
-            $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $oCountry->oxcountry__oxisoalpha2->value);
+            $country = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
+            $country->load($user->oxuser__oxcountryid->value);
+            $request->setParameter("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", $country->oxcountry__oxisoalpha2->value);
 
-            if ($oUser->oxuser__oxstateid->value) {
-                $oState = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
-                $oState->load($oUser->oxuser__oxstateid->value);
-                $oRequest->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $oState->oxstates__oxisoalpha2->value);
+            if ($user->oxuser__oxstateid->value) {
+                $state = oxNew(\OxidEsales\Eshop\Application\Model\State::class);
+                $state->load($user->oxuser__oxstateid->value);
+                $request->setParameter("PAYMENTREQUEST_0_SHIPTOSTATE", $state->oxstates__oxisoalpha2->value);
             }
         }
     }
@@ -643,12 +645,12 @@ class SetExpressCheckoutRequestBuilder
     /**
      * Formats given float/int value into PayPal friendly form
      *
-     * @param float $fIn value to format
+     * @param float $in value to format
      *
      * @return string
      */
-    protected function _formatFloat($fIn)
+    protected function formatFloat($in)
     {
-        return sprintf("%.2f", $fIn);
+        return sprintf("%.2f", $in);
     }
 }

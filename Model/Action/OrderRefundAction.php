@@ -32,34 +32,34 @@ class OrderRefundAction extends \OxidEsales\PayPalModule\Model\Action\OrderActio
      */
     public function process()
     {
-        $oHandler = $this->getHandler();
-        $oResponse = $oHandler->getPayPalResponse();
-        $oData = $oHandler->getData();
+        $handler = $this->getHandler();
+        $response = $handler->getPayPalResponse();
+        $data = $handler->getData();
 
-        $oOrder = $this->getOrder();
-        $oOrder->addRefundedAmount($oResponse->getRefundAmount());
-        $oOrder->setPaymentStatus($oData->getOrderStatus());
-        $oOrder->save();
+        $order = $this->getOrder();
+        $order->addRefundedAmount($response->getRefundAmount());
+        $order->setPaymentStatus($data->getOrderStatus());
+        $order->save();
 
-        $oPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oPayment->setDate($this->getDate());
-        $oPayment->setTransactionId($oResponse->getTransactionId());
-        $oPayment->setCorrelationId($oResponse->getCorrelationId());
-        $oPayment->setAction('refund');
-        $oPayment->setStatus($oResponse->getPaymentStatus());
-        $oPayment->setAmount($oResponse->getRefundAmount());
-        $oPayment->setCurrency($oResponse->getCurrency());
+        $payment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $payment->setDate($this->getDate());
+        $payment->setTransactionId($response->getTransactionId());
+        $payment->setCorrelationId($response->getCorrelationId());
+        $payment->setAction('refund');
+        $payment->setStatus($response->getPaymentStatus());
+        $payment->setAmount($response->getRefundAmount());
+        $payment->setCurrency($response->getCurrency());
 
-        $oRefundedPayment = $oData->getPaymentBeingRefunded();
-        $oRefundedPayment->addRefundedAmount($oResponse->getRefundAmount());
-        $oRefundedPayment->save();
+        $refundedPayment = $data->getPaymentBeingRefunded();
+        $refundedPayment->addRefundedAmount($response->getRefundAmount());
+        $refundedPayment->save();
 
-        $oPayment = $oOrder->getPaymentList()->addPayment($oPayment);
+        $payment = $order->getPaymentList()->addPayment($payment);
 
-        if ($oData->getComment()) {
-            $oComment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
-            $oComment->setComment($oData->getComment());
-            $oPayment->addComment($oComment);
+        if ($data->getComment()) {
+            $comment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
+            $comment->setComment($data->getComment());
+            $payment->addComment($comment);
         }
     }
 }

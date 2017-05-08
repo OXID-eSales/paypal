@@ -39,7 +39,7 @@ class Order extends Order_parent
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected $_oPayPalOrder = null;
+    protected $payPalOrder = null;
 
     /**
      * Loads order associated with current PayPal order
@@ -48,17 +48,17 @@ class Order extends Order_parent
      */
     public function loadPayPalOrder()
     {
-        $sOrderId = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable("sess_challenge");
+        $orderId = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable("sess_challenge");
 
         // if order is not created yet - generating it
-        if ($sOrderId === null) {
-            $sOrderId = \OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUID();
-            $this->setId($sOrderId);
+        if ($orderId === null) {
+            $orderId = \OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUID();
+            $this->setId($orderId);
             $this->save();
-            \OxidEsales\Eshop\Core\Registry::getSession()->setVariable("sess_challenge", $sOrderId);
+            \OxidEsales\Eshop\Core\Registry::getSession()->setVariable("sess_challenge", $orderId);
         }
 
-        return $this->load($sOrderId);
+        return $this->load($orderId);
     }
 
     /**
@@ -69,12 +69,12 @@ class Order extends Order_parent
     public function oePayPalUpdateOrderNumber()
     {
         if ($this->oxorder__oxordernr->value) {
-            $blUpdated = (bool) oxNew(\OxidEsales\Eshop\Core\Counter::class)->update($this->_getCounterIdent(), $this->oxorder__oxordernr->value);
+            $updated = (bool) oxNew(\OxidEsales\Eshop\Core\Counter::class)->update($this->_getCounterIdent(), $this->oxorder__oxordernr->value);
         } else {
-            $blUpdated = $this->_setNumber();
+            $updated = $this->_setNumber();
         }
 
-        return $blUpdated;
+        return $updated;
     }
 
     /**
@@ -84,91 +84,96 @@ class Order extends Order_parent
      */
     public function deletePayPalOrder()
     {
+        $result = false;
         if ($this->loadPayPalOrder()) {
             $this->getPayPalOrder()->delete();
 
-            return $this->delete();
+            $result = $this->delete();
         }
+
+        return $result;
     }
 
     /**
      * Delete order together with PayPal order data.
      *
-     * @param string $sOxId
+     * @param string $oxId
+     *
+     * @return bool
      */
-    public function delete($sOxId = null)
+    public function delete($oxId = null)
     {
-        $this->getPayPalOrder($sOxId)->delete();
+        $this->getPayPalOrder($oxId)->delete();
 
-        return parent::delete($sOxId);
+        return parent::delete($oxId);
     }
 
     /**
      * Updates order transaction status, ID and date.
      *
-     * @param string $sTransactionId Order transaction ID
+     * @param string $transactionId Order transaction ID
      */
-    protected function _setPaymentInfoPayPalOrder($sTransactionId)
+    protected function setPaymentInfoPayPalOrder($transactionId)
     {
         // set transaction ID and payment date to order
-        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
 
-        $sQ = 'update oxorder set oxtransid=' . $oDb->quote($sTransactionId) . ' where oxid=' . $oDb->quote($this->getId());
-        $oDb->execute($sQ);
+        $query = 'update oxorder set oxtransid=' . $db->quote($transactionId) . ' where oxid=' . $db->quote($this->getId());
+        $db->execute($query);
 
         //updating order object
-        $this->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field($sTransactionId);
+        $this->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field($transactionId);
     }
 
     /**
      * Finalizes PayPal order.
      *
-     * @param \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment $oResult          PayPal results array.
-     * @param \OxidEsales\Eshop\Application\Model\Basket                               $oBasket          Basket object.
-     * @param string                                                                   $sTransactionMode Transaction mode Sale|Authorization.
+     * @param \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment $result          PayPal results array.
+     * @param \OxidEsales\Eshop\Application\Model\Basket                               $basket          Basket object.
+     * @param string                                                                   $transactionMode Transaction mode Sale|Authorization.
      */
-    public function finalizePayPalOrder($oResult, $oBasket, $sTransactionMode)
+    public function finalizePayPalOrder($result, $basket, $transactionMode)
     {
-        $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
-        $sDate = date('Y-m-d H:i:s', $utilsDate->getTime());
+        $utilsDate = \OxidEsales\Eshop\Core\Registry::getUtilsDate();
+        $date = date('Y-m-d H:i:s', $utilsDate->getTime());
 
         // set order status, transaction ID and payment date to order
-        $this->_setPaymentInfoPayPalOrder($oResult->getTransactionId());
+        $this->setPaymentInfoPayPalOrder($result->getTransactionId());
 
-        $sCurrency = $oResult->getCurrencyCode();
-        if (!$sCurrency) {
-            $sCurrency = $this->getOrderCurrency()->name;
+        $currency = $result->getCurrencyCode();
+        if (!$currency) {
+            $currency = $this->getOrderCurrency()->name;
         }
 
         // PayPal order info
-        $oPayPalOrder = $this->getPayPalOrder();
-        $oPayPalOrder->setOrderId($this->getId());
-        $oPayPalOrder->setPaymentStatus('pending');
-        $oPayPalOrder->setTransactionMode($sTransactionMode);
-        $oPayPalOrder->setCurrency($sCurrency);
-        $oPayPalOrder->setTotalOrderSum($oBasket->getPrice()->getBruttoPrice());
-        if ($sTransactionMode == 'Sale') {
-            $oPayPalOrder->setCapturedAmount($oBasket->getPrice()->getBruttoPrice());
+        $payPalOrder = $this->getPayPalOrder();
+        $payPalOrder->setOrderId($this->getId());
+        $payPalOrder->setPaymentStatus('pending');
+        $payPalOrder->setTransactionMode($transactionMode);
+        $payPalOrder->setCurrency($currency);
+        $payPalOrder->setTotalOrderSum($basket->getPrice()->getBruttoPrice());
+        if ($transactionMode == 'Sale') {
+            $payPalOrder->setCapturedAmount($basket->getPrice()->getBruttoPrice());
         }
-        $oPayPalOrder->save();
+        $payPalOrder->save();
 
-        $oOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oOrderPayment->setTransactionId($oResult->getTransactionId());
-        $oOrderPayment->setCorrelationId($oResult->getCorrelationId());
-        $oOrderPayment->setDate($sDate);
-        $oOrderPayment->setAction(($sTransactionMode == 'Sale') ? 'capture' : 'authorization');
-        $oOrderPayment->setStatus($oResult->getPaymentStatus());
-        $oOrderPayment->setAmount($oResult->getAmount());
-        $oOrderPayment->setCurrency($oResult->getCurrencyCode());
+        $orderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $orderPayment->setTransactionId($result->getTransactionId());
+        $orderPayment->setCorrelationId($result->getCorrelationId());
+        $orderPayment->setDate($date);
+        $orderPayment->setAction(($transactionMode == 'Sale') ? 'capture' : 'authorization');
+        $orderPayment->setStatus($result->getPaymentStatus());
+        $orderPayment->setAmount($result->getAmount());
+        $orderPayment->setCurrency($result->getCurrencyCode());
 
         //Adding payment information
-        $oPaymentList = $this->getPayPalOrder()->getPaymentList();
-        $oPaymentList->addPayment($oOrderPayment);
+        $paymentList = $this->getPayPalOrder()->getPaymentList();
+        $paymentList->addPayment($orderPayment);
 
         //setting order payment status after
-        $oPaymentStatusCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
-        $oPaymentStatusCalculator->setOrder($this->getPayPalOrder());
-        $this->getPayPalOrder()->setPaymentStatus($oPaymentStatusCalculator->getStatus());
+        $paymentStatusCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
+        $paymentStatusCalculator->setOrder($this->getPayPalOrder());
+        $this->getPayPalOrder()->setPaymentStatus($paymentStatusCalculator->getStatus());
         $this->getPayPalOrder()->save();
 
         //clear PayPal identification
@@ -184,14 +189,14 @@ class Order extends Order_parent
      * If status comes as OK, lets check real paypal payment state,
      * and if really ok, so lets set it, otherwise dont change status.
      *
-     * @param string $sStatus order transaction status
+     * @param string $status order transaction status
      */
-    protected function _setOrderStatus($sStatus)
+    protected function _setOrderStatus($status)
     {
         $paymentTypeObject = $this->getPaymentType();
         $paymentType = $paymentTypeObject ? $paymentTypeObject->getFieldData('oxpaymentsid') : null;
-        if ($paymentType != 'oxidpaypal' || $sStatus != self::OEPAYPAL_TRANSACTION_STATUS_OK) {
-            parent::_setOrderStatus($sStatus);
+        if ($paymentType != 'oxidpaypal' || $status != self::OEPAYPAL_TRANSACTION_STATUS_OK) {
+            parent::_setOrderStatus($status);
         }
     }
 
@@ -202,63 +207,63 @@ class Order extends Order_parent
     {
         parent::_setOrderStatus(self::OEPAYPAL_TRANSACTION_STATUS_OK);
 
-        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
-        $utilsDate = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsDate::class);
-        $sDate = date('Y-m-d H:i:s', $utilsDate->getTime());
+        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $utilsDate = \OxidEsales\Eshop\Core\Registry::getUtilsDate();
+        $date = date('Y-m-d H:i:s', $utilsDate->getTime());
 
-        $sQ = 'update oxorder set oxpaid=? where oxid=?';
-        $oDb->execute($sQ, array($sDate, $this->getId()));
+        $query = 'update oxorder set oxpaid=? where oxid=?';
+        $db->execute($query, array($date, $this->getId()));
 
         //updating order object
-        $this->oxorder__oxpaid = new \OxidEsales\Eshop\Core\Field($sDate);
+        $this->oxorder__oxpaid = new \OxidEsales\Eshop\Core\Field($date);
     }
 
     /**
      * Checks if delivery set used for current order is available and active.
      * Throws exception if not available
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket basket object
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket basket object
      *
      * @return int
      */
-    public function validateDelivery($oBasket)
+    public function validateDelivery($basket)
     {
-        if ($oBasket->getPaymentId() == 'oxidpaypal') {
-            $sShippingId = $oBasket->getShippingId();
-            $dBasketPrice = $oBasket->getPrice()->getBruttoPrice();
-            $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-            if (!$oUser->loadUserPayPalUser()) {
-                $oUser = $this->getUser();
+        if ($basket->getPaymentId() == 'oxidpaypal') {
+            $shippingId = $basket->getShippingId();
+            $basketPrice = $basket->getPrice()->getBruttoPrice();
+            $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+            if (!$user->loadUserPayPalUser()) {
+                $user = $this->getUser();
             }
 
-            $iValidState = null;
-            if (!$this->_isPayPalPaymentValid($oUser, $dBasketPrice, $sShippingId)) {
-                $iValidState = self::ORDER_STATE_INVALIDDELIVERY;
+            $validState = null;
+            if (!$this->isPayPalPaymentValid($user, $basketPrice, $shippingId)) {
+                $validState = self::ORDER_STATE_INVALIDDELIVERY;
             }
         } else {
-            $iValidState = parent::validateDelivery($oBasket);
+            $validState = parent::validateDelivery($basket);
         }
 
-        return $iValidState;
+        return $validState;
     }
 
     /**
      * Returns PayPal order object.
      *
-     * @param string $sOxId
+     * @param string $oxId
      *
-     * @return Order|null
+     * @return \OxidEsales\PayPalModule\Model\PayPalOrder|null
      */
-    public function getPayPalOrder($sOxId = null)
+    public function getPayPalOrder($oxId = null)
     {
-        if (is_null($this->_oPayPalOrder)) {
-            $sOrderId = is_null($sOxId) ? $this->getId() : $sOxId;
-            $oOrder = oxNew(\OxidEsales\PayPalModule\Model\PayPalOrder::class);
-            $oOrder->load($sOrderId);
-            $this->_oPayPalOrder = $oOrder;
+        if (is_null($this->payPalOrder)) {
+            $orderId = is_null($oxId) ? $this->getId() : $oxId;
+            $order = oxNew(\OxidEsales\PayPalModule\Model\PayPalOrder::class);
+            $order->load($orderId);
+            $this->payPalOrder = $order;
         }
 
-        return $this->_oPayPalOrder;
+        return $this->payPalOrder;
     }
 
     /**
@@ -284,44 +289,44 @@ class Order extends Order_parent
     /**
      * Checks whether PayPal payment is available.
      *
-     * @param object $oUser
-     * @param double $dBasketPrice
-     * @param string $sShippingId
+     * @param object $user
+     * @param double $basketPrice
+     * @param string $shippingId
      *
      * @return bool
      */
-    protected function _isPayPalPaymentValid($oUser, $dBasketPrice, $sShippingId)
+    protected function isPayPalPaymentValid($user, $basketPrice, $shippingId)
     {
-        $blValid = true;
+        $valid = true;
 
-        $oPayPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-        $oPayPalPayment->load('oxidpaypal');
-        if (!$oPayPalPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
-            $blValid = $this->_isEmptyPaymentValid($oUser, $dBasketPrice, $sShippingId);
+        $payPalPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $payPalPayment->load('oxidpaypal');
+        if (!$payPalPayment->isValidPayment(null, null, $user, $basketPrice, $shippingId)) {
+            $valid = $this->isEmptyPaymentValid($user, $basketPrice, $shippingId);
         }
 
-        return $blValid;
+        return $valid;
     }
 
     /**
      * Checks whether Empty payment is available.
      *
-     * @param object $oUser
-     * @param double $dBasketPrice
-     * @param string $sShippingId
+     * @param object $user
+     * @param double $basketPrice
+     * @param string $shippingId
      *
      * @return bool
      */
-    protected function _isEmptyPaymentValid($oUser, $dBasketPrice, $sShippingId)
+    protected function isEmptyPaymentValid($user, $basketPrice, $shippingId)
     {
-        $blValid = true;
+        $valid = true;
 
-        $oEmptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-        $oEmptyPayment->load('oxempty');
-        if (!$oEmptyPayment->isValidPayment(null, null, $oUser, $dBasketPrice, $sShippingId)) {
-            $blValid = false;
+        $emptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $emptyPayment->load('oxempty');
+        if (!$emptyPayment->isValidPayment(null, null, $user, $basketPrice, $shippingId)) {
+            $valid = false;
         }
 
-        return $blValid;
+        return $valid;
     }
 }

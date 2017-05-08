@@ -34,7 +34,7 @@ class ResponseDoCapture extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getTransactionId()
     {
-        return $this->_getValue('TRANSACTIONID');
+        return $this->getValue('TRANSACTIONID');
     }
 
     /**
@@ -44,7 +44,7 @@ class ResponseDoCapture extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getCorrelationId()
     {
-        return $this->_getValue('CORRELATIONID');
+        return $this->getValue('CORRELATIONID');
     }
 
     /**
@@ -54,7 +54,7 @@ class ResponseDoCapture extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getPaymentStatus()
     {
-        return $this->_getValue('PAYMENTSTATUS');
+        return $this->getValue('PAYMENTSTATUS');
     }
 
     /**
@@ -64,7 +64,7 @@ class ResponseDoCapture extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getCapturedAmount()
     {
-        return $this->_getValue('AMT');
+        return $this->getValue('AMT');
     }
 
     /**
@@ -74,6 +74,6 @@ class ResponseDoCapture extends \OxidEsales\PayPalModule\Model\Response\Response
      */
     public function getCurrency()
     {
-        return $this->_getValue('CURRENCYCODE');
+        return $this->getValue('CURRENCYCODE');
     }
 }

@@ -34,7 +34,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShippingOptionName()
     {
-        return $this->_getValue('SHIPPINGOPTIONNAME');
+        return $this->getValue('SHIPPINGOPTIONNAME');
     }
 
     /**
@@ -44,7 +44,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getAmount()
     {
-        return ( float ) $this->_getValue('PAYMENTREQUEST_0_AMT');
+        return ( float ) $this->getValue('PAYMENTREQUEST_0_AMT');
     }
 
     /**
@@ -54,7 +54,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getPayerId()
     {
-        return $this->_getValue('PAYERID');
+        return $this->getValue('PAYERID');
     }
 
     /**
@@ -64,7 +64,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getEmail()
     {
-        return $this->_getValue('EMAIL');
+        return $this->getValue('EMAIL');
     }
 
     /**
@@ -74,7 +74,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getFirstName()
     {
-        return $this->_getValue('FIRSTNAME');
+        return $this->getValue('FIRSTNAME');
     }
 
     /**
@@ -84,7 +84,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getLastName()
     {
-        return $this->_getValue('LASTNAME');
+        return $this->getValue('LASTNAME');
     }
 
     /**
@@ -94,7 +94,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToStreet()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOSTREET');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTOSTREET');
     }
 
     /**
@@ -104,7 +104,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToCity()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOCITY');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTOCITY');
     }
 
     /**
@@ -114,7 +114,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToName()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTONAME');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTONAME');
     }
 
     /**
@@ -124,7 +124,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToCountryCode()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE');
     }
 
     /**
@@ -134,7 +134,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToState()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOSTATE');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTOSTATE');
     }
 
     /**
@@ -144,7 +144,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToZip()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOZIP');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTOZIP');
     }
 
     /**
@@ -154,7 +154,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToPhoneNumber()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOPHONENUM');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTOPHONENUM');
     }
 
     /**
@@ -164,7 +164,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getShipToStreet2()
     {
-        return $this->_getValue('PAYMENTREQUEST_0_SHIPTOSTREET2');
+        return $this->getValue('PAYMENTREQUEST_0_SHIPTOSTREET2');
     }
 
     /**
@@ -174,7 +174,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getSalutation()
     {
-        return $this->_getValue('SALUTATION');
+        return $this->getValue('SALUTATION');
     }
 
     /**
@@ -184,6 +184,6 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getBusiness()
     {
-        return $this->_getValue('BUSINESS');
+        return $this->getValue('BUSINESS');
     }
 }

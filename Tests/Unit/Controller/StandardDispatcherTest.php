@@ -29,27 +29,27 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         parent::setUp();
         // fix for state ID compatability between editions
-        $sSqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
+        $sqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                      "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
-        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSqlState);
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sqlState);
     }
 
     public function testSetGetPayPalCheckoutService()
     {
-        $oPayPalCheckoutService = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $payPalCheckoutService = new \OxidEsales\PayPalModule\Core\PayPalService();
 
-        $oPayPalStandardDispatcher = new \OxidEsales\PayPalModule\Controller\StandardDispatcher();
-        $oPayPalStandardDispatcher->setPayPalCheckoutService($oPayPalCheckoutService);
+        $payPalStandardDispatcher = new \OxidEsales\PayPalModule\Controller\StandardDispatcher();
+        $payPalStandardDispatcher->setPayPalCheckoutService($payPalCheckoutService);
 
-        $this->assertEquals($oPayPalCheckoutService, $oPayPalStandardDispatcher->getPayPalCheckoutService(), 'Getter should return what is set in setter.');
+        $this->assertEquals($payPalCheckoutService, $payPalStandardDispatcher->getPayPalCheckoutService(), 'Getter should return what is set in setter.');
     }
 
     public function testGetPayPalCheckoutService()
     {
-        $oPayPalStandardDispatcher = new \OxidEsales\PayPalModule\Controller\StandardDispatcher();
+        $payPalStandardDispatcher = new \OxidEsales\PayPalModule\Controller\StandardDispatcher();
 
         $this->assertTrue(
-            $oPayPalStandardDispatcher->getPayPalCheckoutService() instanceof \OxidEsales\PayPalModule\Core\PayPalService,
+            $payPalStandardDispatcher->getPayPalCheckoutService() instanceof \OxidEsales\PayPalModule\Core\PayPalService,
                 'Getter should create correct type of object.'
         );
     }
@@ -61,25 +61,25 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         // preparing session, inputs etc.
         $this->getSession()->setVariable("oepaypal-token", "111");
-        $aDetails["PAYERID"] = "111";
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
-        $oDetails->setData($aDetails);
+        $detailsData = ["PAYERID" => "111"];
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($detailsData);
 
         // preparing config
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array('finalizeOrderOnPayPalSide'));
-        $oPayPalConfig->expects($this->once())->method('finalizeOrderOnPayPalSide')->will($this->returnValue(true));
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array('finalizeOrderOnPayPalSide'));
+        $payPalConfig->expects($this->once())->method('finalizeOrderOnPayPalSide')->will($this->returnValue(true));
 
         // preparing service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
-        $oPayPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($oDetails));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
+        $payPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($details));
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($oPayPalConfig));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
 
         // testing
-        $this->assertEquals("order?fnc=execute", $oDispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("order?fnc=execute", $dispatcher->getExpressCheckoutDetails());
         $this->assertEquals("111", $this->getSession()->getVariable("oepaypal-payerId"));
     }
 
@@ -88,28 +88,28 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetExpressCheckoutDetailsError()
     {
-        $oExcp = new \OxidEsales\Eshop\Core\Exception\StandardException();
+        $excp = new \OxidEsales\Eshop\Core\Exception\StandardException();
 
         // preparing config
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array('finalizeOrderOnPayPalSide'));
-        $oPayPalConfig->expects($this->never())->method('finalizeOrderOnPayPalSide');
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array('finalizeOrderOnPayPalSide'));
+        $payPalConfig->expects($this->never())->method('finalizeOrderOnPayPalSide');
 
         // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
-        $oPayPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->throwException($oExcp));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
+        $payPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->throwException($excp));
 
         // preparing utils view
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
-        $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($oExcp));
+        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
+        $utilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($excp));
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig", "_getUtilsView"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("_getUtilsView")->will($this->returnValue($oUtilsView));
-        $oDispatcher->expects($this->never())->method("getPayPalConfig");
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig", "getUtilsView"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("getUtilsView")->will($this->returnValue($utilsView));
+        $dispatcher->expects($this->never())->method("getPayPalConfig");
 
         // testing
-        $this->assertEquals("payment", $oDispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("payment", $dispatcher->getExpressCheckoutDetails());
     }
 
     /**
@@ -118,35 +118,35 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetExpressCheckout_onSuccess()
     {
-        $oResult = new \OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout();
-        $oResult->setData(array('TOKEN' => 'token'));
+        $result = new \OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout();
+        $result->setData(array('TOKEN' => 'token'));
 
-        $sUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=token";
+        $url = "https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token=token";
 
         //utils
-        $oUtils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array("redirect"));
-        $oUtils->expects($this->once())->method("redirect")->with($this->equalTo($sUrl), $this->equalTo(false));
+        $utils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array("redirect"));
+        $utils->expects($this->once())->method("redirect")->with($this->equalTo($url), $this->equalTo(false));
 
         //config
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPayPalCommunicationUrl"));
-        $oPayPalConfig->expects($this->once())->method("getPayPalCommunicationUrl")->with($this->equalTo($oResult->getToken()))->will($this->returnValue($sUrl));
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPayPalCommunicationUrl"));
+        $payPalConfig->expects($this->once())->method("getPayPalCommunicationUrl")->with($this->equalTo($result->getToken()))->will($this->returnValue($url));
 
         // preparing service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout", "setParameter"));
-        $oPayPalService->expects($this->once())->method("setExpressCheckout")->will($this->returnValue($oResult));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout", "setParameter"));
+        $payPalService->expects($this->once())->method("setExpressCheckout")->will($this->returnValue($result));
 
         // preparing
-        $oDispatcher = $this->getMock(
-            \OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService"
-                                                , '_getUtils', 'getPayPalConfig')
+        $dispatcher = $this->getMock(
+            \OxidEsales\PayPalModule\Controller\StandardDispatcher::class,
+            array('getPayPalCheckoutService', 'getUtils', 'getPayPalConfig')
         );
 
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($oPayPalConfig));
-        $oDispatcher->expects($this->once())->method("_getUtils")->will($this->returnValue($oUtils));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
+        $dispatcher->expects($this->once())->method("getUtils")->will($this->returnValue($utils));
 
         // testing
-        $oDispatcher->setExpressCheckout();
+        $dispatcher->setExpressCheckout();
     }
 
     /**
@@ -155,25 +155,25 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetExpressCheckout_onError()
     {
-        $oExcp = new \OxidEsales\Eshop\Core\Exception\StandardException();
+        $excp = new \OxidEsales\Eshop\Core\Exception\StandardException();
 
-        $oPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPaypalUrl"));
-        $oPayPalConfig->expects($this->never())->method("getPaypalUrl");
+        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPaypalUrl"));
+        $payPalConfig->expects($this->never())->method("getPaypalUrl");
 
         // preparing paypal service
-        $oPayPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout"));
-        $oPayPalService->expects($this->once())->method("setExpressCheckout")->will($this->throwException($oExcp));
+        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setExpressCheckout"));
+        $payPalService->expects($this->once())->method("setExpressCheckout")->will($this->throwException($excp));
 
         // preparing utils view
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
-        $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($oExcp));
+        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("addErrorToDisplay"));
+        $utilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($excp));
 
         // preparing
-        $oDispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "_getUtilsView"));
-        $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
-        $oDispatcher->expects($this->once())->method("_getUtilsView")->will($this->returnValue($oUtilsView));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "getUtilsView"));
+        $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
+        $dispatcher->expects($this->once())->method("getUtilsView")->will($this->returnValue($utilsView));
 
         // testing
-        $this->assertEquals("basket", $oDispatcher->setExpressCheckout());
+        $this->assertEquals("basket", $dispatcher->setExpressCheckout());
     }
 }

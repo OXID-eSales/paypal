@@ -32,17 +32,17 @@ class GetExpressCheckoutDetailsRequestBuilderTest extends \OxidEsales\TestingLib
      */
     public function testBuildRequest()
     {
-        $aExpectedParams = array(
+        $expectedParams = array(
             'TOKEN' => '111',
         );
-        $oSession = new \OxidEsales\Eshop\Core\Session();
-        $oSession->setVariable("oepaypal-token", "111");
+        $session = new \OxidEsales\Eshop\Core\Session();
+        $session->setVariable("oepaypal-token", "111");
 
-        $oBuilder = $this->_getPayPalRequestBuilder();
-        $oBuilder->setSession($oSession);
-        $oBuilder->buildRequest();
+        $builder = $this->getPayPalRequestBuilder();
+        $builder->setSession($session);
+        $builder->buildRequest();
 
-        $this->_assertArraysEqual($aExpectedParams, $oBuilder->getPayPalRequest()->getData());
+        $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
     /**
@@ -50,36 +50,36 @@ class GetExpressCheckoutDetailsRequestBuilderTest extends \OxidEsales\TestingLib
      *
      * @return \OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder
      */
-    protected function _getPayPalRequestBuilder()
+    protected function getPayPalRequestBuilder()
     {
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder();
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder();
 
-        return $oBuilder;
+        return $builder;
     }
 
     /**
      * Checks whether array length are equal and array keys and values are equal independent on keys position
      *
-     * @param $aExpected
-     * @param $aResult
+     * @param $expected
+     * @param $result
      */
-    protected function _assertArraysEqual($aExpected, $aResult)
+    protected function assertArraysEqual($expected, $result)
     {
-        $this->_assertArraysContains($aExpected, $aResult);
-        $this->assertEquals(count($aExpected), count($aResult));
+        $this->assertArraysContains($expected, $result);
+        $this->assertEquals(count($expected), count($result));
     }
 
     /**
      * Checks whether array array keys and values are equal independent on keys position
      *
-     * @param $aExpected
-     * @param $aResult
+     * @param $expected
+     * @param $result
      */
-    protected function _assertArraysContains($aExpected, $aResult)
+    protected function assertArraysContains($expected, $result)
     {
-        foreach ($aExpected as $sKey => $sValue) {
-            $this->assertArrayHasKey($sKey, $aResult, "Key not found: $sKey");
-            $this->assertEquals($sValue, $aResult[$sKey], "Key '$sKey' value is not equal to '$sValue'");
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $result, "Key not found: $key");
+            $this->assertEquals($value, $result[$key], "Key '$key' value is not equal to '$value'");
         }
     }
 }

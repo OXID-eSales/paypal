@@ -43,36 +43,36 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testActionCapture()
     {
-        $aRequestParams = array(
+        $requestParams = array(
             'capture_amount' => '200.99',
             'capture_type'   => 'Complete'
         );
-        $aResponseParams = array(
+        $responseParams = array(
             'TRANSACTIONID' => 'TransactionId',
             'PAYMENTSTATUS' => 'Pending',
             'AMT'           => '99.87',
             'CURRENCYCODE'  => 'EUR',
         );
 
-        $oAction = $this->_createAction('capture', 'testOrderId', $aRequestParams, $aResponseParams);
+        $action = $this->createAction('capture', 'testOrderId', $requestParams, $responseParams);
 
-        $oAction->process();
+        $action->process();
 
-        $oOrder = $this->_getOrder('testOrderId');
-        $this->assertEquals('99.87', $oOrder->getCapturedAmount());
+        $order = $this->getOrder('testOrderId');
+        $this->assertEquals('99.87', $order->getCapturedAmount());
 
-        $aPaymentList = $oOrder->getPaymentList()->getArray();
-        $this->assertEquals(1, count($aPaymentList));
+        $paymentList = $order->getPaymentList()->getArray();
+        $this->assertEquals(1, count($paymentList));
 
-        $oPayment = array_shift($aPaymentList);
-        $this->assertEquals('capture', $oPayment->getAction());
-        $this->assertEquals('testOrderId', $oPayment->getOrderId());
-        $this->assertEquals('99.87', $oPayment->getAmount());
-        $this->assertEquals('Pending', $oPayment->getStatus());
-        $this->assertEquals('EUR', $oPayment->getCurrency());
+        $payment = array_shift($paymentList);
+        $this->assertEquals('capture', $payment->getAction());
+        $this->assertEquals('testOrderId', $payment->getOrderId());
+        $this->assertEquals('99.87', $payment->getAmount());
+        $this->assertEquals('Pending', $payment->getStatus());
+        $this->assertEquals('EUR', $payment->getCurrency());
 
-        $oPayment->delete();
-        $oOrder->delete();
+        $payment->delete();
+        $order->delete();
     }
 
     /**
@@ -84,46 +84,46 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testActionRefund()
     {
-        $aRequestParams = array(
+        $requestParams = array(
             'refund_amount'  => '10',
             'refund_type'    => 'Complete',
             'transaction_id' => 'capturedTransaction'
         );
-        $aResponseParams = array(
+        $responseParams = array(
             'REFUNDTRANSACTIONID' => 'TransactionId',
             'REFUNDSTATUS'        => 'Pending',
             'GROSSREFUNDAMT'      => '9.01',
             'CURRENCYCODE'        => 'EUR',
         );
 
-        $oCapturedPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
-        $oCapturedPayment->setOrderId('testOrderId');
-        $oCapturedPayment->setTransactionId('capturedTransaction');
-        $oCapturedPayment->save();
+        $capturedPayment = new \OxidEsales\PayPalModule\Model\OrderPayment();
+        $capturedPayment->setOrderId('testOrderId');
+        $capturedPayment->setTransactionId('capturedTransaction');
+        $capturedPayment->save();
 
-        $oAction = $this->_createAction('refund', 'testOrderId', $aRequestParams, $aResponseParams);
+        $action = $this->createAction('refund', 'testOrderId', $requestParams, $responseParams);
 
-        $oAction->process();
+        $action->process();
 
-        $oOrder = $this->_getOrder('testOrderId');
-        $this->assertEquals('9.01', $oOrder->getRefundedAmount());
+        $order = $this->getOrder('testOrderId');
+        $this->assertEquals('9.01', $order->getRefundedAmount());
 
-        $aPaymentList = $oOrder->getPaymentList()->getArray();
-        $this->assertEquals(2, count($aPaymentList));
+        $paymentList = $order->getPaymentList()->getArray();
+        $this->assertEquals(2, count($paymentList));
 
-        $oPayment = array_shift($aPaymentList);
-        $this->assertEquals('refund', $oPayment->getAction());
-        $this->assertEquals('testOrderId', $oPayment->getOrderId());
-        $this->assertEquals('9.01', $oPayment->getAmount());
-        $this->assertEquals('Pending', $oPayment->getStatus());
-        $this->assertEquals('EUR', $oPayment->getCurrency());
+        $payment = array_shift($paymentList);
+        $this->assertEquals('refund', $payment->getAction());
+        $this->assertEquals('testOrderId', $payment->getOrderId());
+        $this->assertEquals('9.01', $payment->getAmount());
+        $this->assertEquals('Pending', $payment->getStatus());
+        $this->assertEquals('EUR', $payment->getCurrency());
 
-        $oCapturedPayment = array_shift($aPaymentList);
-        $this->assertEquals('9.01', $oCapturedPayment->getRefundedAmount());
+        $capturedPayment = array_shift($paymentList);
+        $this->assertEquals('9.01', $capturedPayment->getRefundedAmount());
 
-        $oPayment->delete();
-        $oCapturedPayment->delete();
-        $oOrder->delete();
+        $payment->delete();
+        $capturedPayment->delete();
+        $order->delete();
     }
 
     /**
@@ -133,27 +133,27 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function ___testActionReauthorize()
     {
-        $aResponseParams = array(
+        $responseParams = array(
             'AUTHORIZATIONID' => 'AuthorizationId',
             'PAYMENTSTATUS'   => 'Complete',
         );
 
-        $oAction = $this->_createAction('reauthorize', 'testOrderId', array(), $aResponseParams);
-        $oAction->process();
+        $action = $this->createAction('reauthorize', 'testOrderId', array(), $responseParams);
+        $action->process();
 
-        $oOrder = $this->_getOrder('testOrderId');
+        $order = $this->getOrder('testOrderId');
 
-        $aPaymentList = $oOrder->getPaymentList()->getArray();
-        $this->assertEquals(1, count($aPaymentList));
+        $paymentList = $order->getPaymentList()->getArray();
+        $this->assertEquals(1, count($paymentList));
 
-        $oPayment = array_shift($aPaymentList);
-        $this->assertEquals('re-authorization', $oPayment->getAction());
-        $this->assertEquals('testOrderId', $oPayment->getOrderId());
-        $this->assertEquals('0.00', $oPayment->getAmount());
-        $this->assertEquals('Complete', $oPayment->getStatus());
+        $payment = array_shift($paymentList);
+        $this->assertEquals('re-authorization', $payment->getAction());
+        $this->assertEquals('testOrderId', $payment->getOrderId());
+        $this->assertEquals('0.00', $payment->getAmount());
+        $this->assertEquals('Complete', $payment->getStatus());
 
-        $oPayment->delete();
-        $oOrder->delete();
+        $payment->delete();
+        $order->delete();
     }
 
     /**
@@ -163,57 +163,57 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testActionVoid()
     {
-        $aResponseParams = array(
+        $responseParams = array(
             'AUTHORIZATIONID' => 'AuthorizationId',
         );
 
-        $oAction = $this->_createAction('void', 'testOrderId', array(), $aResponseParams);
-        $oAction->process();
+        $action = $this->createAction('void', 'testOrderId', array(), $responseParams);
+        $action->process();
 
-        $oOrder = $this->_getOrder('testOrderId');
+        $order = $this->getOrder('testOrderId');
 
-        $aPaymentList = $oOrder->getPaymentList()->getArray();
-        $this->assertEquals(1, count($aPaymentList));
+        $paymentList = $order->getPaymentList()->getArray();
+        $this->assertEquals(1, count($paymentList));
 
-        $oPayment = array_shift($aPaymentList);
-        $this->assertEquals('void', $oPayment->getAction());
-        $this->assertEquals('testOrderId', $oPayment->getOrderId());
-        $this->assertEquals('0.00', $oPayment->getAmount());
-        $this->assertEquals('Voided', $oPayment->getStatus());
+        $payment = array_shift($paymentList);
+        $this->assertEquals('void', $payment->getAction());
+        $this->assertEquals('testOrderId', $payment->getOrderId());
+        $this->assertEquals('0.00', $payment->getAmount());
+        $this->assertEquals('Voided', $payment->getStatus());
 
-        $oPayment->delete();
-        $oOrder->delete();
+        $payment->delete();
+        $order->delete();
     }
 
     /**
      * Returns loaded \OxidEsales\PayPalModule\Model\Action\OrderAction object
      *
-     * @param string $sAction
-     * @param string $sOrderId
-     * @param array  $aRequestParams
-     * @param array  $aResponseParams
+     * @param string $action
+     * @param string $orderId
+     * @param array  $requestParams
+     * @param array  $responseParams
      *
      * @return \OxidEsales\PayPalModule\Model\Action\OrderAction
      */
-    protected function _createAction($sAction, $sOrderId, $aRequestParams, $aResponseParams)
+    protected function createAction($action, $orderId, $requestParams, $responseParams)
     {
-        $oOrder = $this->_getOrder($sOrderId);
-        $oRequest = $this->_getRequestHelper()->getRequest($aRequestParams);
+        $order = $this->getOrder($orderId);
+        $request = $this->getRequestHelper()->getRequest($requestParams);
 
-        $oActionFactory = $this->_getActionFactory($oRequest, $oOrder);
-        $oAction = $oActionFactory->createAction($sAction);
+        $actionFactory = $this->getActionFactory($request, $order);
+        $action = $actionFactory->createAction($action);
 
-        $oService = $this->_getPayPalCommunicationHelper()->getCaller($aResponseParams);
-        $oCaptureHandler = $oAction->getHandler();
-        $oCaptureHandler->setPayPalService($oService);
+        $service = $this->getPayPalCommunicationHelper()->getCaller($responseParams);
+        $captureHandler = $action->getHandler();
+        $captureHandler->setPayPalService($service);
 
-        return $oAction;
+        return $action;
     }
 
     /**
      * @return \OxidEsales\PayPalModule\Tests\Integration\Library\RequestHelper
      */
-    protected function _getRequestHelper()
+    protected function getRequestHelper()
     {
         return new \OxidEsales\PayPalModule\Tests\Integration\Library\RequestHelper();
     }
@@ -221,7 +221,7 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * @return \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper
      */
-    protected function _getPayPalCommunicationHelper()
+    protected function getPayPalCommunicationHelper()
     {
         return new \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper();
     }
@@ -229,31 +229,31 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Returns loaded \OxidEsales\PayPalModule\Model\PayPalOrder object with given id
      *
-     * @param string $sOrderId
+     * @param string $orderId
      *
      * @return \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected function _getOrder($sOrderId)
+    protected function getOrder($orderId)
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\PayPalOrder();
-        $oOrder->setOrderId($sOrderId);
-        $oOrder->load();
+        $order = new \OxidEsales\PayPalModule\Model\PayPalOrder();
+        $order->setOrderId($orderId);
+        $order->load();
 
-        return $oOrder;
+        return $order;
     }
 
     /**
-     * @param \OxidEsales\PayPalModule\Core\Request      $oRequest
-     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $oPayPalOrder
+     * @param \OxidEsales\PayPalModule\Core\Request      $request
+     * @param \OxidEsales\PayPalModule\Model\PayPalOrder $payPalOrder
      *
      * @return \OxidEsales\PayPalModule\Model\Action\OrderActionFactory
      */
-    protected function _getActionFactory($oRequest, $oPayPalOrder)
+    protected function getActionFactory($request, $payPalOrder)
     {
-        $oOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $oPayPalOrder));
+        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
 
-        $oActionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($oRequest, $oOrder);
+        $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
 
-        return $oActionFactory;
+        return $actionFactory;
     }
 }

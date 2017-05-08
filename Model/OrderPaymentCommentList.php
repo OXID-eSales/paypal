@@ -31,21 +31,21 @@ class OrderPaymentCommentList extends \OxidEsales\PayPalModule\Core\PayPalList
      *
      * @var oePayPalPayPalDbGateway
      */
-    protected $_oDbGateway = null;
+    protected $dbGateway = null;
 
     /**
      * @var string|null
      */
-    protected $_sPaymentId = null;
+    protected $paymentId = null;
 
     /**
      * Sets payment id.
      *
-     * @param string $sPaymentId
+     * @param string $paymentId
      */
-    public function setPaymentId($sPaymentId)
+    public function setPaymentId($paymentId)
     {
-        $this->_sPaymentId = $sPaymentId;
+        $this->paymentId = $paymentId;
     }
 
     /**
@@ -55,7 +55,7 @@ class OrderPaymentCommentList extends \OxidEsales\PayPalModule\Core\PayPalList
      */
     public function getPaymentId()
     {
-        return $this->_sPaymentId;
+        return $this->paymentId;
     }
 
     /**
@@ -63,62 +63,62 @@ class OrderPaymentCommentList extends \OxidEsales\PayPalModule\Core\PayPalList
      *
      * @return oePayPalPayPalDbGateway
      */
-    protected function _getDbGateway()
+    protected function getDbGateway()
     {
-        if (is_null($this->_oDbGateway)) {
-            $this->_setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentCommentDbGateway::class));
+        if (is_null($this->dbGateway)) {
+            $this->setDbGateway(oxNew(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentCommentDbGateway::class));
         }
 
-        return $this->_oDbGateway;
+        return $this->dbGateway;
     }
 
     /**
      * Set model database gateway.
      *
-     * @param object $oDbGateway
+     * @param object $dbGateway
      */
-    protected function _setDbGateway($oDbGateway)
+    protected function setDbGateway($dbGateway)
     {
-        $this->_oDbGateway = $oDbGateway;
+        $this->dbGateway = $dbGateway;
     }
 
     /**
      * Selects and loads order payment history.
      *
-     * @param string $sPaymentId Order id.
+     * @param string $paymentId Order id.
      */
-    public function load($sPaymentId)
+    public function load($paymentId)
     {
-        $this->setPaymentId($sPaymentId);
+        $this->setPaymentId($paymentId);
 
-        $aComments = array();
-        $aCommentsData = $this->_getDbGateway()->getList($this->getPaymentId());
-        if (is_array($aCommentsData) && count($aCommentsData)) {
-            $aComments = array();
-            foreach ($aCommentsData as $aData) {
-                $oComment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
-                $oComment->setData($aData);
-                $aComments[] = $oComment;
+        $comments = array();
+        $commentsData = $this->getDbGateway()->getList($this->getPaymentId());
+        if (is_array($commentsData) && count($commentsData)) {
+            $comments = array();
+            foreach ($commentsData as $data) {
+                $comment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
+                $comment->setData($data);
+                $comments[] = $comment;
             }
         }
 
-        $this->setArray($aComments);
+        $this->setArray($comments);
     }
 
     /**
      * Add comment.
      *
-     * @param object $oComment
+     * @param object $comment
      *
      * @return mixed
      */
-    public function addComment($oComment)
+    public function addComment($comment)
     {
-        $oComment->setPaymentId($this->getPaymentId());
-        $oComment->save();
+        $comment->setPaymentId($this->getPaymentId());
+        $comment->save();
 
         $this->load($this->getPaymentId());
 
-        return $oComment;
+        return $comment;
     }
 }

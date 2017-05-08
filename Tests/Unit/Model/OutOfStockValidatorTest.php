@@ -28,35 +28,35 @@ class OutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function providerSetGetBasket()
     {
-        $oOxBasket = new \OxidEsales\PayPalModule\Model\Basket();
+        $oxBasket = new \OxidEsales\PayPalModule\Model\Basket();
 
         return array(
-            array($oOxBasket),
+            array($oxBasket),
             array(null)
         );
     }
 
     /**
-     * @param $oBasket
+     * @param $basket
      *
      * @dataProvider providerSetGetBasket
      */
-    public function testSetGetBasket($oBasket)
+    public function testSetGetBasket($basket)
     {
-        $oBasketValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
-        $oBasketValidator->setBasket($oBasket);
+        $basketValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
+        $basketValidator->setBasket($basket);
 
-        $this->assertEquals($oBasket, $oBasketValidator->getBasket());
+        $this->assertEquals($basket, $basketValidator->getBasket());
     }
 
     /**
      */
     public function testSetGetEmptyStockLevel()
     {
-        $oBasketValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
-        $oBasketValidator->setEmptyStockLevel(10);
+        $basketValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
+        $basketValidator->setEmptyStockLevel(10);
 
-        $this->assertEquals(10, $oBasketValidator->getEmptyStockLevel());
+        $this->assertEquals(10, $basketValidator->getEmptyStockLevel());
     }
 
 
@@ -79,45 +79,45 @@ class OutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * @dataProvider providerHasOutOfStockItems
      */
-    public function testHasOutOfStockArticles($sProductId, $iBasketItemAmount, $iStockAmount, $iStockEmptyLevel, $blExpectedResult)
+    public function testHasOutOfStockArticles($productId, $basketItemAmount, $stockAmount, $stockEmptyLevel, $expectedResult)
     {
-        $oBasket = $this->_createBasket($sProductId, $iBasketItemAmount, $iStockAmount);
+        $basket = $this->createBasket($productId, $basketItemAmount, $stockAmount);
 
-        $oBasketValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
+        $basketValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
 
-        $oBasketValidator->setBasket($oBasket);
-        $oBasketValidator->setEmptyStockLevel($iStockEmptyLevel);
+        $basketValidator->setBasket($basket);
+        $basketValidator->setEmptyStockLevel($stockEmptyLevel);
 
-        $this->assertEquals($blExpectedResult, $oBasketValidator->hasOutOfStockArticles());
+        $this->assertEquals($expectedResult, $basketValidator->hasOutOfStockArticles());
     }
 
 
     /**
      * Function creates mocked basket
      *
-     * @param $sProductId
-     * @param $iBasketAmount
-     * @param $iStockAmount
+     * @param $productId
+     * @param $basketAmount
+     * @param $stockAmount
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _createBasket($sProductId, $iBasketAmount, $iStockAmount)
+    protected function createBasket($productId, $basketAmount, $stockAmount)
     {
-        $oArticle = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getStockAmount'));
-        $oArticle->expects($this->any())->method('getStockAmount')->will($this->returnValue($iStockAmount));
+        $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getStockAmount'));
+        $article->expects($this->any())->method('getStockAmount')->will($this->returnValue($stockAmount));
 
-        $oBasketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getAmount', 'getArticle'));
-        $oBasketItem->expects($this->any())->method('getProductId')->will($this->returnValue($sProductId));
-        $oBasketItem->expects($this->any())->method('getAmount')->will($this->returnValue($iBasketAmount));
-        $oBasketItem->expects($this->any())->method('getArticle')->will($this->returnValue($oArticle));
+        $basketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getAmount', 'getArticle'));
+        $basketItem->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
+        $basketItem->expects($this->any())->method('getAmount')->will($this->returnValue($basketAmount));
+        $basketItem->expects($this->any())->method('getArticle')->will($this->returnValue($article));
 
-        $aBasketItemsList = array(
-            $sProductId => $oBasketItem
+        $basketItemsList = array(
+            $productId => $basketItem
         );
 
-        $oBasket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
-        $oBasket->expects($this->any())->method('getContents')->will($this->returnValue($aBasketItemsList));
+        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket->expects($this->any())->method('getContents')->will($this->returnValue($basketItemsList));
 
-        return $oBasket;
+        return $basket;
     }
 }

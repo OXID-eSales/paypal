@@ -42,36 +42,36 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
      */
     public function testGetPayPalRequest_RequestIsNotSet_BuildsRequest()
     {
-        $sTransId = '123456';
-        $sCurrency = 'LTU';
-        $dAmount = 59.67;
-        $sType = 'Full';
-        $sComment = 'Comment';
+        $transId = '123456';
+        $currency = 'LTU';
+        $amount = 59.67;
+        $type = 'Full';
+        $comment = 'Comment';
 
-        $oBuilder = $this->getMock(
+        $builder = $this->getMock(
             \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class,
             array('setTransactionId', 'setAmount', 'setRefundType', 'getRequest', 'setComment')
         );
-        $oBuilder->expects($this->atLeastOnce())->method('setTransactionId')->with($this->equalTo($sTransId));
-        $oBuilder->expects($this->atLeastOnce())->method('setAmount')->with($this->equalTo($dAmount), $this->equalTo($sCurrency));
-        $oBuilder->expects($this->atLeastOnce())->method('setRefundType')->with($this->equalTo($sType));
-        $oBuilder->expects($this->atLeastOnce())->method('setComment')->with($this->equalTo($sComment));
-        $oBuilder->expects($this->any())->method('getRequest')->will($this->returnValue(new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest()));
+        $builder->expects($this->atLeastOnce())->method('setTransactionId')->with($this->equalTo($transId));
+        $builder->expects($this->atLeastOnce())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
+        $builder->expects($this->atLeastOnce())->method('setRefundType')->with($this->equalTo($type));
+        $builder->expects($this->atLeastOnce())->method('setComment')->with($this->equalTo($comment));
+        $builder->expects($this->any())->method('getRequest')->will($this->returnValue(new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest()));
 
-        $oData = $this->_createStub(
+        $data = $this->_createStub(
             'Data', array(
-                'getTransactionId' => $sTransId,
-                'getAmount'        => $dAmount,
-                'getType'          => $sType,
-                'getComment'       => $sComment,
-                'getCurrency'      => $sCurrency,
+                'getTransactionId' => $transId,
+                'getAmount'        => $amount,
+                'getType'          => $type,
+                'getComment'       => $comment,
+                'getCurrency'      => $currency,
             )
         );
 
-        $oActionHandler = $this->_getActionHandler($oData);
-        $oActionHandler->setPayPalRequestBuilder($oBuilder);
+        $actionHandler = $this->getActionHandler($data);
+        $actionHandler->setPayPalRequestBuilder($builder);
 
-        $oActionHandler->getPayPalResponse();
+        $actionHandler->getPayPalResponse();
     }
 
     /**
@@ -79,19 +79,19 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
      */
     public function testGetPayPalResponse_SetsCorrectRequestToService()
     {
-        $oPayPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        $payPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
 
-        $oCheckoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('refundTransaction'));
-        $oCheckoutService->expects($this->once())
+        $checkoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('refundTransaction'));
+        $checkoutService->expects($this->once())
             ->method('refundTransaction')
-            ->with($this->equalTo($oPayPalRequest))
+            ->with($this->equalTo($payPalRequest))
             ->will($this->returnValue(null));
 
-        $oAction = $this->_getActionHandler();
-        $oAction->setPayPalService($oCheckoutService);
-        $oAction->setPayPalRequest($oPayPalRequest);
+        $action = $this->getActionHandler();
+        $action->setPayPalService($checkoutService);
+        $action->setPayPalRequest($payPalRequest);
 
-        $oAction->getPayPalResponse();
+        $action->getPayPalResponse();
     }
 
     /**
@@ -99,25 +99,25 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
      */
     public function testGetResponse_ReturnsResponseFromService()
     {
-        $oPayPalRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
-        $oPayPalResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
+        $payPalRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
+        $payPalResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
 
-        $oCheckoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('refundTransaction'));
-        $oCheckoutService->expects($this->once())
+        $checkoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('refundTransaction'));
+        $checkoutService->expects($this->once())
             ->method('refundTransaction')
-            ->will($this->returnValue($oPayPalResponse));
+            ->will($this->returnValue($payPalResponse));
 
-        $oAction = $this->_getActionHandler();
-        $oAction->setPayPalService($oCheckoutService);
-        $oAction->setPayPalRequest($oPayPalRequest);
+        $action = $this->getActionHandler();
+        $action->setPayPalService($checkoutService);
+        $action->setPayPalRequest($payPalRequest);
 
-        $this->assertEquals($oPayPalResponse, $oAction->getPayPalResponse());
+        $this->assertEquals($payPalResponse, $action->getPayPalResponse());
     }
 
     /**
      * @return \OxidEsales\PayPalModule\Core\PayPalService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getService()
+    protected function getService()
     {
         return $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class);
     }
@@ -125,16 +125,16 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
     /**
      * Returns capture action object
      *
-     * @param $oData
+     * @param $data
      *
      * @return \OxidEsales\PayPalModule\Model\Action\Handler\OrderRefundActionHandler
      */
-    protected function _getActionHandler($oData = null)
+    protected function getActionHandler($data = null)
     {
-        $oAction = new \OxidEsales\PayPalModule\Model\Action\Handler\OrderRefundActionHandler($oData);
+        $action = new \OxidEsales\PayPalModule\Model\Action\Handler\OrderRefundActionHandler($data);
 
-        $oAction->setPayPalService($this->_getService());
+        $action->setPayPalService($this->getService());
 
-        return $oAction;
+        return $action;
     }
 }

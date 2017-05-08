@@ -51,11 +51,11 @@ class TestCaseParser
     /**
      * Sets directory to search for test cases
      *
-     * @param string $sDirectory
+     * @param string $directory
      */
-    public function setDirectory($sDirectory)
+    public function setDirectory($directory)
     {
-        $this->_sDirectory = $sDirectory;
+        $this->_sDirectory = $directory;
     }
 
     /**
@@ -71,11 +71,11 @@ class TestCaseParser
     /**
      * Sets test cases to be run
      *
-     * @param array $aTestCases
+     * @param array $testCases
      */
-    public function setTestCases($aTestCases)
+    public function setTestCases($testCases)
     {
-        $this->_aTestCases = $aTestCases;
+        $this->_aTestCases = $testCases;
     }
 
     /**
@@ -91,11 +91,11 @@ class TestCaseParser
     /**
      * Sets Replacement
      *
-     * @param array $aReplacements
+     * @param array $replacements
      */
-    public function setReplacements($aReplacements)
+    public function setReplacements($replacements)
     {
-        $this->_aReplacements = $aReplacements;
+        $this->_aReplacements = $replacements;
     }
 
     /**
@@ -115,115 +115,115 @@ class TestCaseParser
      */
     public function getData()
     {
-        $aTestCasesData = array();
-        $sDirectory = $this->getDirectory();
-        $aTestCases = $this->getTestCases();
+        $testCasesData = array();
+        $directory = $this->getDirectory();
+        $testCases = $this->getTestCases();
 
-        $aFiles = $this->_getDirectoryTestCasesFiles($sDirectory, $aTestCases);
-        print(count($aFiles) . " test files found\r\n");
-        foreach ($aFiles as $sFilename) {
-            $aData = $this->_getDataFromFile($sFilename);
-            $aData = $this->_parseTestData($aData);
-            $aTestCasesData[$sFilename] = array($aData);
+        $files = $this->getDirectoryTestCasesFiles($directory, $testCases);
+        print(count($files) . " test files found\r\n");
+        foreach ($files as $filename) {
+            $data = $this->getDataFromFile($filename);
+            $data = $this->parseTestData($data);
+            $testCasesData[$filename] = array($data);
         }
 
-        return $aTestCasesData;
+        return $testCasesData;
     }
 
     /**
      * Returns directory files. If test cases is passed - only those files is checked in given directory
      *
-     * @param $sDir
-     * @param $aTestCases
+     * @param $dir
+     * @param $testCases
      *
      * @return array
      */
-    protected function _getDirectoryTestCasesFiles($sDir, $aTestCases)
+    protected function getDirectoryTestCasesFiles($dir, $testCases)
     {
-        $sPath = $this->_sTestCasesPath . $sDir . "/";
-        print("Scanning dir {$sPath}\r\n");
-        $aFiles = array();
-        if (empty($aTestCases)) {
-            $aFiles = $this->_getFilesInDirectory($sPath);
+        $path = $this->_sTestCasesPath . $dir . "/";
+        print("Scanning dir {$path}\r\n");
+        $files = array();
+        if (empty($testCases)) {
+            $files = $this->getFilesInDirectory($path);
         } else {
-            foreach ($aTestCases as $sTestCase) {
-                $aFiles[] = $sPath . $sTestCase;
+            foreach ($testCases as $testCase) {
+                $files[] = $path . $testCase;
             }
         }
 
-        return $aFiles;
+        return $files;
     }
 
     /**
      * Returns php files list from given directory and all subdirectories
      *
-     * @param string $sPath
+     * @param string $path
      *
      * @return array
      */
-    private function _getFilesInDirectory($sPath)
+    private function getFilesInDirectory($path)
     {
-        $aFiles = array();
-        foreach (new \DirectoryIterator($sPath) as $oFile) {
-            if ($oFile->isDir() && !$oFile->isDot()) {
-                $aFiles = array_merge($aFiles, $this->_getFilesInDirectory($oFile->getPathname()));
+        $files = array();
+        foreach (new \DirectoryIterator($path) as $file) {
+            if ($file->isDir() && !$file->isDot()) {
+                $files = array_merge($files, $this->getFilesInDirectory($file->getPathname()));
             }
-            if ($oFile->isFile() && preg_match('/\.php$/', $oFile->getFilename())) {
-                $aFiles[] = $oFile->getPathname();
+            if ($file->isFile() && preg_match('/\.php$/', $file->getFilename())) {
+                $files[] = $file->getPathname();
             }
         }
 
-        return $aFiles;
+        return $files;
     }
 
     /**
      * Loads data from file
      *
-     * @param string $sFilename
+     * @param string $filename
      *
      * @return array
      */
-    protected function _getDataFromFile($sFilename)
+    protected function getDataFromFile($filename)
     {
-        $aData = array();
-        include($sFilename);
+        $data = array();
+        include($filename);
 
-        return $aData;
+        return $data;
     }
 
     /**
      * Parses given data
      *
-     * @param array $aData
+     * @param array $data
      *
      * @return array
      */
-    protected function _parseTestData($aData)
+    protected function parseTestData($data)
     {
-        foreach ($aData as &$mValue) {
-            $mValue = $this->_parseTestValue($mValue);
+        foreach ($data as &$value) {
+            $value = $this->parseTestValue($value);
         }
 
-        return $aData;
+        return $data;
     }
 
     /**
      * Parses given test case value
      *
-     * @param $mValue
+     * @param $value
      *
      * @return array
      */
-    protected function _parseTestValue($mValue)
+    protected function parseTestValue($value)
     {
-        if (is_array($mValue)) {
-            return $this->_parseTestData($mValue);
+        if (is_array($value)) {
+            return $this->parseTestData($value);
         }
-        if (is_string($mValue)) {
-            $aReplacements = $this->getReplacements();
-            $mValue = str_replace(array_keys($aReplacements), $aReplacements, $mValue);
+        if (is_string($value)) {
+            $replacements = $this->getReplacements();
+            $value = str_replace(array_keys($replacements), $replacements, $value);
         }
 
-        return $mValue;
+        return $value;
     }
 }

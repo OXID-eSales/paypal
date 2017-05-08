@@ -48,17 +48,17 @@ class RequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Test if return POST.
      *
-     * @param array $aPost
-     * @param array $aPostExpected
+     * @param array $post
+     * @param array $postExpected
      *
      * @dataProvider providerGetPost
      */
-    public function testGetPost($aPost, $aPostExpected)
+    public function testGetPost($post, $postExpected)
     {
-        $_POST = $aPost;
+        $_POST = $post;
         $_GET = array('zzz' => 'yyyy');
-        $oPayPalRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $this->assertEquals($aPostExpected, $oPayPalRequest->getPost());
+        $payPalRequest = new \OxidEsales\PayPalModule\Core\Request();
+        $this->assertEquals($postExpected, $payPalRequest->getPost());
     }
 
     /**
@@ -83,17 +83,17 @@ class RequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Test if return Get.
      *
-     * @param array $aGet
-     * @param array $aGetExpected
+     * @param array $get
+     * @param array $getExpected
      *
      * @dataProvider providerGetGet
      */
-    public function testGetGet($aGet, $aGetExpected)
+    public function testGetGet($get, $getExpected)
     {
-        $_GET = $aGet;
+        $_GET = $get;
         $_POST = array('zzz' => 'yyyy');
-        $oPayPalRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $this->assertEquals($aGetExpected, $oPayPalRequest->getGet());
+        $payPalRequest = new \OxidEsales\PayPalModule\Core\Request();
+        $this->assertEquals($getExpected, $payPalRequest->getGet());
     }
 
     /**
@@ -121,11 +121,11 @@ class RequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider providerGetRequestParameter
      */
-    public function testGetRequestParameter($aPost, $aGet, $sParameterName, $blRaw, $mExpectedRequestParameter)
+    public function testGetRequestParameter($post, $get, $parameterName, $raw, $expectedRequestParameter)
     {
-        $_POST = $aPost;
-        $_GET = $aGet;
-        $oPayPalRequest = new \OxidEsales\PayPalModule\Core\Request();
-        $this->assertEquals($mExpectedRequestParameter, $oPayPalRequest->getRequestParameter($sParameterName, $blRaw));
+        $_POST = $post;
+        $_GET = $get;
+        $payPalRequest = new \OxidEsales\PayPalModule\Core\Request();
+        $this->assertEquals($expectedRequestParameter, $payPalRequest->getRequestParameter($parameterName, $raw));
     }
 }

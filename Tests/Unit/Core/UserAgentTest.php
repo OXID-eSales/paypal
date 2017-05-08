@@ -44,12 +44,12 @@ class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider providerIsMobile
      */
-    public function testDeviceType_Detect($sUserAgent, $sType)
+    public function testDeviceType_Detect($userAgent, $type)
     {
-        $_SERVER['HTTP_USER_AGENT'] = $sUserAgent;
-        $oUserAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
+        $_SERVER['HTTP_USER_AGENT'] = $userAgent;
+        $userAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
 
-        $this->assertEquals($sType, $oUserAgent->getDeviceType());
+        $this->assertEquals($type, $userAgent->getDeviceType());
     }
 
     /**
@@ -57,9 +57,9 @@ class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetMobileDevicesTypes_NotNullAndWithSeparators()
     {
-        $oUserAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
-        $sMobileDevicesTypes = $oUserAgent->getMobileDeviceTypes();
-        $this->assertContains('iphone|', $sMobileDevicesTypes);
+        $userAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
+        $mobileDevicesTypes = $userAgent->getMobileDeviceTypes();
+        $this->assertContains('iphone|', $mobileDevicesTypes);
     }
 
     /**
@@ -67,9 +67,9 @@ class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetMobileDevicesTypes_SetAndGet()
     {
-        $oUserAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
-        $oUserAgent->setMobileDeviceTypes('testDevice1|testDevice2');
-        $this->assertEquals('testDevice1|testDevice2', $oUserAgent->getMobileDeviceTypes());
+        $userAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
+        $userAgent->setMobileDeviceTypes('testDevice1|testDevice2');
+        $this->assertEquals('testDevice1|testDevice2', $userAgent->getMobileDeviceTypes());
     }
 
     /**
@@ -77,8 +77,8 @@ class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetDeviceType_SetAndGet()
     {
-        $oUserAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
-        $oUserAgent->setDeviceType('mobile');
-        $this->assertEquals('mobile', $oUserAgent->getDeviceType());
+        $userAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
+        $userAgent->setDeviceType('mobile');
+        $this->assertEquals('mobile', $userAgent->getDeviceType());
     }
 }

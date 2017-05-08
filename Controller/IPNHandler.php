@@ -35,33 +35,33 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
      *
      * @var string
      */
-    protected $_sThisTemplate = 'ipnhandler.tpl';
+    protected $thisTemplate = 'ipnhandler.tpl';
 
     /**
      * PayPal request handler.
      *
      * @var \OxidEsales\PayPalModule\Core\Request
      */
-    protected $_oPayPalRequest = null;
+    protected $payPalRequest = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\IPNRequestVerifier
      */
-    protected $_oIPNRequestVerifier = null;
+    protected $ipnRequestVerifier = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\IPNProcessor
      */
-    protected $_oProcessor = null;
+    protected $processor = null;
 
     /**
      * Set object to handle request.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oPayPalRequest object to set.
+     * @param \OxidEsales\PayPalModule\Core\Request $payPalRequest object to set.
      */
-    public function setPayPalRequest($oPayPalRequest)
+    public function setPayPalRequest($payPalRequest)
     {
-        $this->_oPayPalRequest = $oPayPalRequest;
+        $this->payPalRequest = $payPalRequest;
     }
 
     /**
@@ -71,21 +71,21 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
      */
     public function getPayPalRequest()
     {
-        if ($this->_oPayPalRequest === null) {
-            $this->_oPayPalRequest = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+        if ($this->payPalRequest === null) {
+            $this->payPalRequest = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
         }
 
-        return $this->_oPayPalRequest;
+        return $this->payPalRequest;
     }
 
     /**
      * Sets IPN request verifier.
      *
-     * @param \OxidEsales\PayPalModule\Model\IPNRequestVerifier $oIPNRequestVerifier
+     * @param \OxidEsales\PayPalModule\Model\IPNRequestVerifier $ipnRequestVerifier
      */
-    public function setIPNRequestVerifier($oIPNRequestVerifier)
+    public function setIPNRequestVerifier($ipnRequestVerifier)
     {
-        $this->_oIPNRequestVerifier = $oIPNRequestVerifier;
+        $this->ipnRequestVerifier = $ipnRequestVerifier;
     }
 
     /**
@@ -95,22 +95,22 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
      */
     public function getIPNRequestVerifier()
     {
-        if (is_null($this->_oIPNRequestVerifier)) {
-            $oIPNRequestVerifier = oxNew(\OxidEsales\PayPalModule\Model\IPNRequestVerifier::class);
-            $this->setIPNRequestVerifier($oIPNRequestVerifier);
+        if (is_null($this->ipnRequestVerifier)) {
+            $ipnRequestVerifier = oxNew(\OxidEsales\PayPalModule\Model\IPNRequestVerifier::class);
+            $this->setIPNRequestVerifier($ipnRequestVerifier);
         }
 
-        return $this->_oIPNRequestVerifier;
+        return $this->ipnRequestVerifier;
     }
 
     /**
      * \OxidEsales\PayPalModule\Model\IPNProcessor setter.
      *
-     * @param \OxidEsales\PayPalModule\Model\IPNProcessor $oProcessor
+     * @param \OxidEsales\PayPalModule\Model\IPNProcessor $processor
      */
-    public function setProcessor($oProcessor)
+    public function setProcessor($processor)
     {
-        $this->_oProcessor = $oProcessor;
+        $this->processor = $processor;
     }
 
     /**
@@ -120,36 +120,38 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
      */
     public function getProcessor()
     {
-        if (is_null($this->_oProcessor)) {
-            $oProcessor = oxNew(\OxidEsales\PayPalModule\Model\IPNProcessor::class);
-            $this->setProcessor($oProcessor);
+        if (is_null($this->processor)) {
+            $processor = oxNew(\OxidEsales\PayPalModule\Model\IPNProcessor::class);
+            $this->setProcessor($processor);
         }
 
-        return $this->_oProcessor;
+        return $this->processor;
     }
 
     /**
      * IPN handling function.
      *  - Call to check if request is valid (from PayPal and to correct shop).
      *  - Initiate payment status changes according to IPN information.
+     *
+     * @return bool
      */
     public function handleRequest()
     {
-        $blRequestHandled = false;
-        $blRequestValid = $this->requestValid();
+        $requestHandled = false;
+        $requestValid = $this->requestValid();
 
-        if ($blRequestValid) {
-            $oRequest = $this->getPayPalRequest();
-            $oLang = $this->getPayPalConfig()->getLang();
+        if ($requestValid) {
+            $request = $this->getPayPalRequest();
+            $lang = $this->getPayPalConfig()->getLang();
 
-            $oProcessor = $this->getProcessor();
-            $oProcessor->setRequest($oRequest);
-            $oProcessor->setLang($oLang);
+            $processor = $this->getProcessor();
+            $processor->setRequest($request);
+            $processor->setLang($lang);
 
-            $blRequestHandled = $oProcessor->process();
+            $requestHandled = $processor->process();
         }
 
-        return $blRequestHandled;
+        return $requestHandled;
     }
 
     /**
@@ -160,23 +162,23 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
      */
     public function requestValid()
     {
-        $blRequestValid = true;
+        $requestValid = true;
 
-        $oRequest = $this->getRequest();
+        $request = $this->getRequest();
 
-        $oIPNRequestVerifier = $this->getIPNRequestVerifier();
-        $oIPNRequestVerifier->setRequest($oRequest);
-        $oIPNRequestVerifier->setShopOwner($this->getPayPalConfig()->getUserEmail());
-        $blRequestCorrect = $oIPNRequestVerifier->requestCorrect();
+        $ipnRequestVerifier = $this->getIPNRequestVerifier();
+        $ipnRequestVerifier->setRequest($request);
+        $ipnRequestVerifier->setShopOwner($this->getPayPalConfig()->getUserEmail());
+        $requestCorrect = $ipnRequestVerifier->requestCorrect();
 
-        if (!$blRequestCorrect) {
-            $blRequestValid = false;
+        if (!$requestCorrect) {
+            $requestValid = false;
 
-            $oLogger = $this->getLogger();
-            $oLogger->setTitle("IPN VERIFICATION FAILURE BY PAYPAL");
-            $oLogger->log($oIPNRequestVerifier->getFailureMessage());
+            $logger = $this->getLogger();
+            $logger->setTitle("IPN VERIFICATION FAILURE BY PAYPAL");
+            $logger->log($ipnRequestVerifier->getFailureMessage());
         }
 
-        return $blRequestValid;
+        return $requestValid;
     }
 }

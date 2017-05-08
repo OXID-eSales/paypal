@@ -31,7 +31,7 @@ class OrderPaymentStatusList extends \OxidEsales\PayPalModule\Core\PayPalList
      *
      * @return array
      */
-    protected $_aArray = array(
+    protected $array = array(
         'completed',
         'pending',
         'canceled',
@@ -43,7 +43,7 @@ class OrderPaymentStatusList extends \OxidEsales\PayPalModule\Core\PayPalList
      *
      * @var array
      */
-    protected $_aAvailableStatuses = array(
+    protected $availableStatuses = array(
         'capture'         => array('completed'),
         'capture_partial' => array('completed', 'pending'),
         'refund'          => array('completed', 'pending', 'canceled'),
@@ -54,14 +54,14 @@ class OrderPaymentStatusList extends \OxidEsales\PayPalModule\Core\PayPalList
     /**
      * Returns the list of available statuses to choose from for admin
      *
-     * @param string $sAction
+     * @param string $action
      *
      * @return array
      */
-    public function getAvailableStatuses($sAction)
+    public function getAvailableStatuses($action)
     {
-        $aList = $this->_aAvailableStatuses[$sAction];
+        $list = $this->availableStatuses[$action];
 
-        return $aList ? $aList : array();
+        return $list ? $list : array();
     }
 }

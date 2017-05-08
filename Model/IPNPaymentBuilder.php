@@ -27,31 +27,31 @@ namespace OxidEsales\PayPalModule\Model;
 class IPNPaymentBuilder
 {
     /** @var \OxidEsales\PayPalModule\Core\Request */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /** @var \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter */
-    protected $_oPayPalIPNPaymentSetter = null;
+    protected $payPalIPNPaymentSetter = null;
 
     /** @var \OxidEsales\PayPalModule\Model\OrderPayment */
-    protected $_oOrderPayment = null;
+    protected $orderPayment = null;
 
     /** @var \OxidEsales\PayPalModule\Model\IPNPaymentValidator */
-    protected $_oPayPalIPNPaymentValidator = null;
+    protected $payPalIPNPaymentValidator = null;
 
     /** @var \OxidEsales\PayPalModule\Model\IPNPaymentCreator */
-    protected $_oPayPalIPNPaymentCreator = null;
+    protected $payPalIPNPaymentCreator = null;
 
     /** @var \OxidEsales\Eshop\Core\Language */
-    protected $_oLang = null;
+    protected $lang = null;
 
     /**
      * Sets \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter.
      *
-     * @param \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter $oPayPalIPNPaymentSetter
+     * @param \OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter $payPalIPNPaymentSetter
      */
-    public function setOrderPaymentSetter($oPayPalIPNPaymentSetter)
+    public function setOrderPaymentSetter($payPalIPNPaymentSetter)
     {
-        $this->_oPayPalIPNPaymentSetter = $oPayPalIPNPaymentSetter;
+        $this->payPalIPNPaymentSetter = $payPalIPNPaymentSetter;
     }
 
     /**
@@ -61,22 +61,22 @@ class IPNPaymentBuilder
      */
     public function getOrderPaymentSetter()
     {
-        if (is_null($this->_oPayPalIPNPaymentSetter)) {
-            $oPayPalIPNPaymentSetter = oxNew(\OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::class);
-            $this->setOrderPaymentSetter($oPayPalIPNPaymentSetter);
+        if (is_null($this->payPalIPNPaymentSetter)) {
+            $payPalIPNPaymentSetter = oxNew(\OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::class);
+            $this->setOrderPaymentSetter($payPalIPNPaymentSetter);
         }
 
-        return $this->_oPayPalIPNPaymentSetter;
+        return $this->payPalIPNPaymentSetter;
     }
 
     /**
      * Sets \OxidEsales\PayPalModule\Model\IPNPaymentValidator object.
      *
-     * @param \OxidEsales\PayPalModule\Model\IPNPaymentValidator $oPayPalIPNPaymentValidator
+     * @param \OxidEsales\PayPalModule\Model\IPNPaymentValidator $payPalIPNPaymentValidator
      */
-    public function setOrderPaymentValidator($oPayPalIPNPaymentValidator)
+    public function setOrderPaymentValidator($payPalIPNPaymentValidator)
     {
-        $this->_oPayPalIPNPaymentValidator = $oPayPalIPNPaymentValidator;
+        $this->payPalIPNPaymentValidator = $payPalIPNPaymentValidator;
     }
 
     /**
@@ -86,12 +86,12 @@ class IPNPaymentBuilder
      */
     public function getOrderPaymentValidator()
     {
-        if (is_null($this->_oPayPalIPNPaymentValidator)) {
-            $oPayPalIPNPaymentValidator = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentValidator::class);
-            $this->setOrderPaymentValidator($oPayPalIPNPaymentValidator);
+        if (is_null($this->payPalIPNPaymentValidator)) {
+            $payPalIPNPaymentValidator = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentValidator::class);
+            $this->setOrderPaymentValidator($payPalIPNPaymentValidator);
         }
 
-        return $this->_oPayPalIPNPaymentValidator;
+        return $this->payPalIPNPaymentValidator;
     }
 
     /**
@@ -101,7 +101,7 @@ class IPNPaymentBuilder
      */
     public function setPaymentCreator($oePayPalIPNPaymentCreator)
     {
-        $this->_oPayPalIPNPaymentCreator = $oePayPalIPNPaymentCreator;
+        $this->payPalIPNPaymentCreator = $oePayPalIPNPaymentCreator;
     }
 
     /**
@@ -111,23 +111,23 @@ class IPNPaymentBuilder
      */
     public function getPaymentCreator()
     {
-        if (is_null($this->_oPayPalIPNPaymentCreator)) {
-            $oPayPalIPNPaymentCreator = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentCreator::class);
-            $oPayPalIPNPaymentCreator->setRequest($this->getRequest());
-            $this->setPaymentCreator($oPayPalIPNPaymentCreator);
+        if (is_null($this->payPalIPNPaymentCreator)) {
+            $payPalIPNPaymentCreator = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentCreator::class);
+            $payPalIPNPaymentCreator->setRequest($this->getRequest());
+            $this->setPaymentCreator($payPalIPNPaymentCreator);
         }
 
-        return $this->_oPayPalIPNPaymentCreator;
+        return $this->payPalIPNPaymentCreator;
     }
 
     /**
      * Sets request object.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oRequest
+     * @param \OxidEsales\PayPalModule\Core\Request $request
      */
-    public function setRequest($oRequest)
+    public function setRequest($request)
     {
-        $this->_oRequest = $oRequest;
+        $this->request = $request;
     }
 
     /**
@@ -137,17 +137,17 @@ class IPNPaymentBuilder
      */
     public function getRequest()
     {
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
      * Sets oxLang object
      *
-     * @param \OxidEsales\Eshop\Core\Language $oLang
+     * @param \OxidEsales\Eshop\Core\Language $lang
      */
-    public function setLang($oLang)
+    public function setLang($lang)
     {
-        $this->_oLang = $oLang;
+        $this->lang = $lang;
     }
 
     /**
@@ -157,7 +157,7 @@ class IPNPaymentBuilder
      */
     public function getLang()
     {
-        return $this->_oLang;
+        return $this->lang;
     }
 
     /**
@@ -167,45 +167,44 @@ class IPNPaymentBuilder
      */
     public function buildPayment()
     {
-        $oReturn = null;
+        $return = null;
 
         // Setter forms request payment from request parameters.
-        $oRequestOrderPayment = $this->_prepareRequestOrderPayment();
+        $requestOrderPayment = $this->prepareRequestOrderPayment();
 
         // Create order payment from database to check if it match created from request.
-        $oOrderPayment = $this->_loadOrderPayment($oRequestOrderPayment->getTransactionId());
+        $orderPayment = $this->loadOrderPayment($requestOrderPayment->getTransactionId());
 
         // Only need validate if there is order in database.
         // If request payment do not have matching payment with order return null.
-        if ($oOrderPayment->getOrderId()) {
+        if ($orderPayment->getOrderId()) {
             // Validator change request payment by adding information if it is valid.
-            $oOrderPayment = $this->_addPaymentValidationInformation($oRequestOrderPayment, $oOrderPayment);
-            $oOrderPayment = $this->_changePaymentStatusInfo($oRequestOrderPayment, $oOrderPayment);
-            $oOrderPayment->save();
-            $oReturn = $oOrderPayment;
+            $orderPayment = $this->addPaymentValidationInformation($requestOrderPayment, $orderPayment);
+            $orderPayment = $this->changePaymentStatusInfo($requestOrderPayment, $orderPayment);
+            $orderPayment->save();
+            $return = $orderPayment;
         } else {
             //IPN request might be for a transaction that does not yet exist in the shop database.
-            $oPaymentCreator = $this->getPaymentCreator();
-            $oReturn = $oPaymentCreator->handleOrderPayment($oRequestOrderPayment);
+            $paymentCreator = $this->getPaymentCreator();
+            $return = $paymentCreator->handleOrderPayment($requestOrderPayment);
         }
 
-        return $oReturn;
+        return $return;
     }
 
     /**
      * Load order payment from transaction id.
      *
-     * @param string $sTransactionId transaction id to load object.
-     * @param string $sCorrelationId correlation id to load object.
+     * @param string $transactionId transaction id to load object.
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment|null
      */
-    protected function _loadOrderPayment($sTransactionId)
+    protected function loadOrderPayment($transactionId)
     {
-        $oOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oOrderPayment->loadByTransactionId($sTransactionId);
+        $orderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $orderPayment->loadByTransactionId($transactionId);
 
-        return $oOrderPayment;
+        return $orderPayment;
     }
 
     /**
@@ -213,60 +212,60 @@ class IPNPaymentBuilder
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected function _prepareRequestOrderPayment()
+    protected function prepareRequestOrderPayment()
     {
-        $oRequestOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $oRequest = $this->getRequest();
+        $requestOrderPayment = oxNew(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $request = $this->getRequest();
 
-        $oRequestPaymentSetter = $this->getOrderPaymentSetter();
-        $oRequestPaymentSetter->setRequest($oRequest);
-        $oRequestPaymentSetter->setRequestOrderPayment($oRequestOrderPayment);
+        $requestPaymentSetter = $this->getOrderPaymentSetter();
+        $requestPaymentSetter->setRequest($request);
+        $requestPaymentSetter->setRequestOrderPayment($requestOrderPayment);
 
-        $oRequestOrderPayment = $oRequestPaymentSetter->getRequestOrderPayment();
+        $requestOrderPayment = $requestPaymentSetter->getRequestOrderPayment();
 
-        return $oRequestOrderPayment;
+        return $requestOrderPayment;
     }
 
     /**
      * Adds payment validation information.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oRequestOrderPayment
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $requestOrderPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected function _addPaymentValidationInformation($oRequestOrderPayment, $oOrderPayment)
+    protected function addPaymentValidationInformation($requestOrderPayment, $orderPayment)
     {
-        $oLang = $this->getLang();
+        $lang = $this->getLang();
 
-        $oPaymentValidator = $this->getOrderPaymentValidator();
-        $oPaymentValidator->setRequestOrderPayment($oRequestOrderPayment);
-        $oPaymentValidator->setOrderPayment($oOrderPayment);
-        $oPaymentValidator->setLang($oLang);
+        $paymentValidator = $this->getOrderPaymentValidator();
+        $paymentValidator->setRequestOrderPayment($requestOrderPayment);
+        $paymentValidator->setOrderPayment($orderPayment);
+        $paymentValidator->setLang($lang);
 
-        $blPaymentIsValid = $oPaymentValidator->isValid();
-        if (!$blPaymentIsValid) {
-            $oOrderPayment->setIsValid($blPaymentIsValid);
-            $oComment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
-            $oComment->setComment($oPaymentValidator->getValidationFailureMessage());
-            $oOrderPayment->addComment($oComment);
+        $paymentIsValid = $paymentValidator->isValid();
+        if (!$paymentIsValid) {
+            $orderPayment->setIsValid($paymentIsValid);
+            $comment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
+            $comment->setComment($paymentValidator->getValidationFailureMessage());
+            $orderPayment->addComment($comment);
         }
 
-        return $oOrderPayment;
+        return $orderPayment;
     }
 
     /**
      * Add Payment Status information to object from database from object created from from PayPal request.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oRequestOrderPayment
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $requestOrderPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment
      *
      * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected function _changePaymentStatusInfo($oRequestOrderPayment, $oOrderPayment)
+    protected function changePaymentStatusInfo($requestOrderPayment, $orderPayment)
     {
-        $oOrderPayment->setStatus($oRequestOrderPayment->getStatus());
+        $orderPayment->setStatus($requestOrderPayment->getStatus());
 
-        return $oOrderPayment;
+        return $orderPayment;
     }
 }

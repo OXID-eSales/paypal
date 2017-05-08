@@ -29,13 +29,13 @@ class PayPalResponseException extends \OxidEsales\PayPalModule\Core\Exception\Pa
     /**
      * Exception constructor. Adds additional prefix string to error message.
      *
-     * @param string  $sMessage exception message
-     * @param integer $iCode    exception code
+     * @param string  $message exception message
+     * @param integer $code    exception code
      */
-    public function __construct($sMessage = "", $iCode = 0)
+    public function __construct($message = "", $code = 0)
     {
-        $sPrefix = \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_RESPONSE_FROM_PAYPAL");
+        $prefix = \OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_RESPONSE_FROM_PAYPAL");
 
-        parent::__construct($sPrefix . $sMessage, $iCode);
+        parent::__construct($prefix . $message, $code);
     }
 }

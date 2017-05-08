@@ -49,13 +49,13 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPal()
     {
-        $oView = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $view = new \OxidEsales\PayPalModule\Controller\OrderController();
 
         $this->getSession()->setVariable("paymentid", "oxidpaypal");
-        $this->assertTrue($oView->isPayPal());
+        $this->assertTrue($view->isPayPal());
 
         $this->getSession()->setVariable("paymentid", "testPayment");
-        $this->assertFalse($oView->isPayPal());
+        $this->assertFalse($view->isPayPal());
     }
 
     /**
@@ -77,21 +77,21 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @dataProvider providerGetUser
      */
-    public function testGetUser($sPaymentId, $sPayPalUserId, $sDefaultUserId, $sExpectedUserId)
+    public function testGetUser($paymentId, $payPalUserId, $defaultUserId, $expectedUserId)
     {
-        $oUser = new \OxidEsales\Eshop\Application\Model\User();
-        $oUser->setId($sPayPalUserId);
-        $oUser->save();
+        $user = new \OxidEsales\Eshop\Application\Model\User();
+        $user->setId($payPalUserId);
+        $user->save();
 
-        $this->getSession()->setVariable("paymentid", $sPaymentId);
-        $this->getSession()->setVariable("oepaypal-userId", $sPayPalUserId);
-        $this->getSession()->setVariable('usr', $sDefaultUserId);
+        $this->getSession()->setVariable("paymentid", $paymentId);
+        $this->getSession()->setVariable("oepaypal-userId", $payPalUserId);
+        $this->getSession()->setVariable('usr', $defaultUserId);
 
-        $oOrder = new \OxidEsales\PayPalModule\Controller\OrderController();
-        $oOrder->setUser(null);
-        $oUser = $oOrder->getUser();
+        $order = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $order->setUser(null);
+        $user = $order->getUser();
 
-        $this->assertEquals($sExpectedUserId, $oUser->oxuser__oxid->value);
+        $this->assertEquals($expectedUserId, $user->oxuser__oxid->value);
     }
 
     /**
@@ -105,10 +105,10 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getSession()->setVariable("oepaypal-userId", 'nonExistingUser');
         $this->getSession()->setVariable('usr', 'oxdefaultadmin');
 
-        $oOrder = new \OxidEsales\PayPalModule\Controller\OrderController();
-        $oUser = $oOrder->getUser();
+        $order = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $user = $order->getUser();
 
-        $this->assertEquals('oxdefaultadmin', $oUser->oxuser__oxid->value);
+        $this->assertEquals('oxdefaultadmin', $user->oxuser__oxid->value);
     }
 
     /**
@@ -118,19 +118,19 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getSession()->setVariable("oepaypal", "0");
 
-        $oView = new \OxidEsales\PayPalModule\Controller\OrderController();
-        $oPayment = $oView->getPayment();
-        $this->assertFalse($oPayment);
+        $view = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $payment = $view->getPayment();
+        $this->assertFalse($payment);
 
         $this->getSession()->setVariable("paymentid", "oxidpaypal");
 
-        $sSql = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`) VALUES ('oxidpaypal', 1, 'PayPal')";
-        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sSql);
+        $query = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`) VALUES ('oxidpaypal', 1, 'PayPal')";
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
 
-        $oView = new \OxidEsales\PayPalModule\Controller\OrderController();
-        $oPayment = $oView->getPayment();
+        $view = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $payment = $view->getPayment();
 
-        $this->assertNotNull($oPayment);
-        $this->assertEquals("oxidpaypal", $oPayment->getId());
+        $this->assertNotNull($payment);
+        $this->assertEquals("oxidpaypal", $payment->getId());
     }
 }

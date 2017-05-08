@@ -31,8 +31,8 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function tearDown()
     {
-        $sDelete = 'TRUNCATE TABLE `oxorder`';
-        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sDelete);
+        $delete = 'TRUNCATE TABLE `oxorder`';
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($delete);
 
         $this->getSession()->setVariable('sess_challenge', null);
     }
@@ -43,21 +43,21 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testLoadPayPalOrder()
     {
         // creating order
-        $oOrder = new \OxidEsales\Eshop\Application\Model\Order();
-        $oOrder->setId('_testOrderId');
-        $oOrder->save();
+        $order = new \OxidEsales\Eshop\Application\Model\Order();
+        $order->setId('_testOrderId');
+        $order->save();
 
         // checking load from session
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oOrder->loadPayPalOrder();
-        $this->assertEquals('_testOrderId', $oOrder->oxorder__oxid->value);
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order->loadPayPalOrder();
+        $this->assertEquals('_testOrderId', $order->oxorder__oxid->value);
 
         // checking order creation if not exist in session order id
         $this->getSession()->setVariable('sess_challenge', null);
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oOrder->loadPayPalOrder();
-        $this->assertTrue((bool) $oOrder->oxorder__oxid->value);
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order->loadPayPalOrder();
+        $this->assertTrue((bool) $order->oxorder__oxid->value);
     }
 
     /**
@@ -66,31 +66,31 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testFinalizePayPalOrder()
     {
         // creating order
-        $oOrder = new \OxidEsales\Eshop\Application\Model\Order();
-        $oOrder->setId('_testOrderId');
-        $oOrder->oxorder__oxtransstatus = new \OxidEsales\Eshop\Core\Field('NOT_FINISHED');
-        $oOrder->save();
+        $order = new \OxidEsales\Eshop\Application\Model\Order();
+        $order->setId('_testOrderId');
+        $order->oxorder__oxtransstatus = new \OxidEsales\Eshop\Core\Field('NOT_FINISHED');
+        $order->save();
 
-        /** @var \OxidEsales\Eshop\Application\Model\Basket $oBasket */
-        $oBasket = oxNew(\OxidEsales\Eshop\Application\Model\Basket::class);
+        /** @var \OxidEsales\Eshop\Application\Model\Basket $basket */
+        $basket = oxNew(\OxidEsales\Eshop\Application\Model\Basket::class);
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oOrder->loadPayPalOrder();
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order->loadPayPalOrder();
 
-        $aResult = array(
+        $result = array(
             'PAYMENTINFO_0_TRANSACTIONID' => '_testTranzactionId'
         );
-        $oDetails = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
-        $oDetails->setData($aResult);
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
+        $details->setData($result);
 
-        $oOrder->finalizePayPalOrder($oDetails, $oBasket, 'Sale');
+        $order->finalizePayPalOrder($details, $basket, 'Sale');
 
-        $this->assertEquals('NOT_FINISHED', $oOrder->oxorder__oxtransstatus->value);
-        $this->assertEquals('_testTranzactionId', $oOrder->oxorder__oxtransid->value);
+        $this->assertEquals('NOT_FINISHED', $order->oxorder__oxtransstatus->value);
+        $this->assertEquals('_testTranzactionId', $order->oxorder__oxtransid->value);
 
-        $this->assertEquals('0000-00-00', substr($oOrder->oxorder__oxpaid->value, 0, 10));
+        $this->assertEquals('0000-00-00', substr($order->oxorder__oxpaid->value, 0, 10));
     }
 
     /**
@@ -99,28 +99,28 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testFinalizeOrder_notPayPalPayment()
     {
-        $oTestOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        $oTestOrder->setId('_testOrderId');
-        $oTestOrder->oxorder__oxtransstatus = new \OxidEsales\Eshop\Core\Field("OK");
-        $oTestOrder->save();
+        $testOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $testOrder->setId('_testOrderId');
+        $testOrder->oxorder__oxtransstatus = new \OxidEsales\Eshop\Core\Field("OK");
+        $testOrder->save();
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
-        /** @var \OxidEsales\Eshop\Application\Model\Basket|\PHPUnit_Framework_MockObject_MockObject $oBasket */
-        $oBasket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPaymentId'));
-        $oBasket->expects($this->any())->method('getPaymentId')->will($this->returnValue("anotherPayment"));
+        /** @var \OxidEsales\Eshop\Application\Model\Basket|\PHPUnit_Framework_MockObject_MockObject $basket */
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPaymentId'));
+        $basket->expects($this->any())->method('getPaymentId')->will($this->returnValue("anotherPayment"));
 
-        /** @var \OxidEsales\Eshop\Application\Model\User $oUser */
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        /** @var \OxidEsales\Eshop\Application\Model\User $user */
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
 
-        /** @var \OxidEsales\Eshop\Application\Model\Order $oOrder */
-        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        $oOrder->setId('_testOrderId');
-        $oOrder->finalizeOrder($oBasket, $oUser);
+        /** @var \OxidEsales\Eshop\Application\Model\Order $order */
+        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order->setId('_testOrderId');
+        $order->finalizeOrder($basket, $user);
 
-        $oUpdatedOrder = new \OxidEsales\Eshop\Application\Model\Order();
-        $oUpdatedOrder->load('_testOrderId');
-        $this->assertEquals("OK", $oUpdatedOrder->oxorder__oxtransstatus->value);
+        $updatedOrder = new \OxidEsales\Eshop\Application\Model\Order();
+        $updatedOrder->load('_testOrderId');
+        $this->assertEquals("OK", $updatedOrder->oxorder__oxtransstatus->value);
     }
 
     /**
@@ -128,17 +128,17 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testDeletePayPalOrder()
     {
-        $oTestOrder = new \OxidEsales\Eshop\Application\Model\Order();
-        $oTestOrder->setId('_testOrderId');
-        $oTestOrder->save();
+        $testOrder = new \OxidEsales\Eshop\Application\Model\Order();
+        $testOrder->setId('_testOrderId');
+        $testOrder->save();
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oOrder->deletePayPalOrder();
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order->deletePayPalOrder();
 
-        $oUpdatedOrder = new \OxidEsales\Eshop\Application\Model\Order();
-        $this->assertFalse($oUpdatedOrder->load('_testOrderId'));
+        $updatedOrder = new \OxidEsales\Eshop\Application\Model\Order();
+        $this->assertFalse($updatedOrder->load('_testOrderId'));
     }
 
     /**
@@ -146,10 +146,10 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetAuthorizationId()
     {
-        $oTestOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oTestOrder->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field('testAuthorizationId');
+        $testOrder = new \OxidEsales\PayPalModule\Model\Order();
+        $testOrder->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field('testAuthorizationId');
 
-        $this->assertEquals('testAuthorizationId', $oTestOrder->getAuthorizationId());
+        $this->assertEquals('testAuthorizationId', $testOrder->getAuthorizationId());
     }
 
     /**
@@ -157,28 +157,28 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testValidateDelivery_EmptyPaymentValid_PaymentValid()
     {
-        $aBasketMethods = array(
+        $basketMethods = array(
             'getPaymentId'  => 'oxidpaypal',
             'getShippingId' => 'oxidstandard',
         );
-        $oBasket = $this->createStub(\OxidEsales\PayPalModule\Model\Basket::class, $aBasketMethods);
+        $basket = $this->createStub(\OxidEsales\PayPalModule\Model\Basket::class, $basketMethods);
 
-        $oEmptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-        $oEmptyPayment->load('oxempty');
-        $oEmptyPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
-        $oEmptyPayment->save();
+        $emptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $emptyPayment->load('oxempty');
+        $emptyPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
+        $emptyPayment->save();
 
         $deliverySetList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, array('getDeliverySetList'));
         $deliverySetList->expects($this->any())->method('getDeliveryList')->will($this->returnValue(array()));
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, $deliverySetList);
 
-        /** @var \OxidEsales\PayPalModule\Model\User $oUser */
-        $oUser = oxNew(\OxidEsales\PayPalModule\Model\User::class);
+        /** @var \OxidEsales\PayPalModule\Model\User $user */
+        $user = oxNew(\OxidEsales\PayPalModule\Model\User::class);
 
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oOrder->setUser($oUser);
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order->setUser($user);
 
-        $this->assertNull($oOrder->validateDelivery($oBasket));
+        $this->assertNull($order->validateDelivery($basket));
     }
 
     /**
@@ -187,10 +187,10 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testUpdateOrderNumber()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
-        $oOrder->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
-        $oOrder->save();
-        $this->assertTrue($oOrder->oePayPalUpdateOrderNumber());
+        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
+        $order->save();
+        $this->assertTrue($order->oePayPalUpdateOrderNumber());
     }
 
     /**
@@ -198,18 +198,18 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testUpdateOrderNumber_OrderNumberNotSet()
     {
-        $sCounterIdent = 'orderTestCounter';
-        $oOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getCounterIdent'));
-        $oOrder->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($sCounterIdent));
-        $oOrder->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
-        $oOrder->save();
+        $counterIdent = 'orderTestCounter';
+        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getCounterIdent'));
+        $order->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($counterIdent));
+        $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
+        $order->save();
 
-        $oCounter = new \OxidEsales\Eshop\Core\Counter();
-        $iOrderNumber = $oCounter->getNext($sCounterIdent);
+        $counter = new \OxidEsales\Eshop\Core\Counter();
+        $orderNumber = $counter->getNext($counterIdent);
 
-        $oOrder->oePayPalUpdateOrderNumber();
+        $order->oePayPalUpdateOrderNumber();
 
-        $this->assertEquals($iOrderNumber + 1, $oOrder->oxorder__oxordernr->value);
+        $this->assertEquals($orderNumber + 1, $order->oxorder__oxordernr->value);
     }
 
     /**
@@ -217,16 +217,16 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testUpdateOrderNumber_OrderNumberSet()
     {
-        $sCounterIdent = 'orderTestCounter';
-        $oOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getCounterIdent'));
-        $oOrder->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($sCounterIdent));
+        $counterIdent = 'orderTestCounter';
+        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getCounterIdent'));
+        $order->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($counterIdent));
 
-        $oCounter = new \OxidEsales\Eshop\Core\Counter();
-        $oCounter->getNext($sCounterIdent);
+        $counter = new \OxidEsales\Eshop\Core\Counter();
+        $counter->getNext($counterIdent);
 
-        $oOrder->oxorder__oxordernr = new \OxidEsales\Eshop\Core\Field(5);
-        $oOrder->oePayPalUpdateOrderNumber();
+        $order->oxorder__oxordernr = new \OxidEsales\Eshop\Core\Field(5);
+        $order->oePayPalUpdateOrderNumber();
 
-        $this->assertEquals(5, $oOrder->oxorder__oxordernr->value);
+        $this->assertEquals(5, $order->oxorder__oxordernr->value);
     }
 }

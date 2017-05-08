@@ -29,81 +29,81 @@ class PayPalRequestBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testSetGetRequest()
     {
-        $aData = array('DATA' => 'data');
-        $oRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
-        $oRequest->setData($aData);
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
-        $oBuilder->setRequest($oRequest);
+        $data = array('DATA' => 'data');
+        $request = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
+        $request->setData($data);
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
+        $builder->setRequest($request);
 
-        $this->assertEquals($oRequest, $oBuilder->getRequest());
+        $this->assertEquals($request, $builder->getRequest());
     }
 
     public function testSetAuthorizationId()
     {
-        $sAuthorizationId = 'AuthorizationId';
-        $aExpected = array('AUTHORIZATIONID' => $sAuthorizationId);
+        $authorizationId = 'AuthorizationId';
+        $expected = array('AUTHORIZATIONID' => $authorizationId);
 
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
-        $oBuilder->setAuthorizationId($sAuthorizationId);
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
+        $builder->setAuthorizationId($authorizationId);
 
-        $oRequest = $oBuilder->getRequest();
+        $request = $builder->getRequest();
 
-        $this->assertEquals($aExpected, $oRequest->getData());
+        $this->assertEquals($expected, $request->getData());
     }
 
     public function testSetAmount()
     {
-        $dAmount = 99.99;
-        $sCurrency = 'EUR';
-        $aExpected = array(
-            'AMT'          => $dAmount,
-            'CURRENCYCODE' => $sCurrency
+        $amount = 99.99;
+        $currency = 'EUR';
+        $expected = array(
+            'AMT'          => $amount,
+            'CURRENCYCODE' => $currency
         );
 
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
-        $oBuilder->setAmount($dAmount);
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
+        $builder->setAmount($amount);
 
-        $oRequest = $oBuilder->getRequest();
+        $request = $builder->getRequest();
 
-        $this->assertEquals($aExpected, $oRequest->getData());
+        $this->assertEquals($expected, $request->getData());
     }
 
     public function testSetCompleteType()
     {
-        $sCompleteType = 'Full';
-        $aExpected = array('COMPLETETYPE' => $sCompleteType);
+        $completeType = 'Full';
+        $expected = array('COMPLETETYPE' => $completeType);
 
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
-        $oBuilder->setCompleteType($sCompleteType);
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
+        $builder->setCompleteType($completeType);
 
-        $oRequest = $oBuilder->getRequest();
+        $request = $builder->getRequest();
 
-        $this->assertEquals($aExpected, $oRequest->getData());
+        $this->assertEquals($expected, $request->getData());
     }
 
     public function testSetRefundType()
     {
-        $sRefundType = 'Complete';
-        $aExpected = array('REFUNDTYPE' => $sRefundType);
+        $refundType = 'Complete';
+        $expected = array('REFUNDTYPE' => $refundType);
 
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
-        $oBuilder->setRefundType($sRefundType);
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
+        $builder->setRefundType($refundType);
 
-        $oRequest = $oBuilder->getRequest();
+        $request = $builder->getRequest();
 
-        $this->assertEquals($aExpected, $oRequest->getData());
+        $this->assertEquals($expected, $request->getData());
     }
 
     public function testSetComment()
     {
-        $sComment = 'Comment';
-        $aExpected = array('NOTE' => $sComment);
+        $comment = 'Comment';
+        $expected = array('NOTE' => $comment);
 
-        $oBuilder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
-        $oBuilder->setComment($sComment);
+        $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder();
+        $builder->setComment($comment);
 
-        $oRequest = $oBuilder->getRequest();
+        $request = $builder->getRequest();
 
-        $this->assertEquals($aExpected, $oRequest->getData());
+        $this->assertEquals($expected, $request->getData());
     }
 }

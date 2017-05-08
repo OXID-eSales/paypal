@@ -33,14 +33,14 @@ class UserAgent
      *
      * @var string
      */
-    protected $_sDeviceType = null;
+    protected $deviceType = null;
 
     /**
      * Mobile device types.
      *
      * @var string
      */
-    protected $_sMobileDevicesTypes = 'iphone|ipod|android|webos|htc|fennec|iemobile|blackberry|symbianos|opera mobi';
+    protected $mobileDevicesTypes = 'iphone|ipod|android|webos|htc|fennec|iemobile|blackberry|symbianos|opera mobi';
 
     /**
      * Function returns all supported mobile devices types.
@@ -49,7 +49,7 @@ class UserAgent
      */
     public function getMobileDeviceTypes()
     {
-        return $this->_sMobileDevicesTypes;
+        return $this->mobileDevicesTypes;
     }
 
     /**
@@ -59,31 +59,31 @@ class UserAgent
      */
     public function getDeviceType()
     {
-        if ($this->_sDeviceType === null) {
-            $this->setDeviceType($this->_detectDeviceType());
+        if ($this->deviceType === null) {
+            $this->setDeviceType($this->detectDeviceType());
         }
 
-        return $this->_sDeviceType;
+        return $this->deviceType;
     }
 
     /**
      * Set device type.
      *
-     * @param string $sDeviceType
+     * @param string $deviceType
      */
-    public function setDeviceType($sDeviceType)
+    public function setDeviceType($deviceType)
     {
-        $this->_sDeviceType = $sDeviceType;
+        $this->deviceType = $deviceType;
     }
 
     /**
      * Set mobile device types.
      *
-     * @param string $sMobileDeviceTypes
+     * @param string $mobileDeviceTypes
      */
-    public function setMobileDeviceTypes($sMobileDeviceTypes)
+    public function setMobileDeviceTypes($mobileDeviceTypes)
     {
-        $this->_sMobileDevicesTypes = $sMobileDeviceTypes;
+        $this->mobileDevicesTypes = $mobileDeviceTypes;
     }
 
     /**
@@ -91,13 +91,13 @@ class UserAgent
      *
      * @return string
      */
-    protected function _detectDeviceType()
+    protected function detectDeviceType()
     {
-        $sDeviceType = 'desktop';
+        $deviceType = 'desktop';
         if (preg_match('/(' . $this->getMobileDeviceTypes() . ')/is', $_SERVER['HTTP_USER_AGENT'])) {
-            $sDeviceType = 'mobile';
+            $deviceType = 'mobile';
         }
 
-        return $sDeviceType;
+        return $deviceType;
     }
 }

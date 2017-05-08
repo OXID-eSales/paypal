@@ -31,26 +31,26 @@ class IPNProcessor
      *
      * @var \OxidEsales\PayPalModule\Core\Request
      */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\IPNPaymentBuilder
      */
-    protected $_oPaymentBuilder = null;
+    protected $paymentBuilder = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderManager
      */
-    protected $_oOrderManager = null;
+    protected $orderManager = null;
 
     /**
      * Set object \OxidEsales\PayPalModule\Core\Request.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oRequest object to set.
+     * @param \OxidEsales\PayPalModule\Core\Request $request object to set.
      */
-    public function setRequest($oRequest)
+    public function setRequest($request)
     {
-        $this->_oRequest = $oRequest;
+        $this->request = $request;
     }
 
     /**
@@ -60,17 +60,17 @@ class IPNProcessor
      */
     public function getRequest()
     {
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
      * Sets language object.
      *
-     * @param \OxidEsales\Eshop\Core\Language $oLang
+     * @param \OxidEsales\Eshop\Core\Language $lang
      */
-    public function setLang($oLang)
+    public function setLang($lang)
     {
-        $this->_oLang = $oLang;
+        $this->lang = $lang;
     }
 
     /**
@@ -80,17 +80,17 @@ class IPNProcessor
      */
     public function getLang()
     {
-        return $this->_oLang;
+        return $this->lang;
     }
 
     /**
      * Sets payment builder.
      *
-     * @param \OxidEsales\PayPalModule\Model\IPNPaymentBuilder $oPaymentBuilder
+     * @param \OxidEsales\PayPalModule\Model\IPNPaymentBuilder $paymentBuilder
      */
-    public function setPaymentBuilder($oPaymentBuilder)
+    public function setPaymentBuilder($paymentBuilder)
     {
-        $this->_oPaymentBuilder = $oPaymentBuilder;
+        $this->paymentBuilder = $paymentBuilder;
     }
 
     /**
@@ -100,21 +100,21 @@ class IPNProcessor
      */
     public function getPaymentBuilder()
     {
-        if (is_null($this->_oPaymentBuilder)) {
-            $this->_oPaymentBuilder = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class);
+        if (is_null($this->paymentBuilder)) {
+            $this->paymentBuilder = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class);
         }
 
-        return $this->_oPaymentBuilder;
+        return $this->paymentBuilder;
     }
 
     /**
      * Sets order manager.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderManager $oPayPalOrderManager
+     * @param \OxidEsales\PayPalModule\Model\OrderManager $payPalOrderManager
      */
-    public function setOrderManager($oPayPalOrderManager)
+    public function setOrderManager($payPalOrderManager)
     {
-        $this->_oOrderManager = $oPayPalOrderManager;
+        $this->orderManager = $payPalOrderManager;
     }
 
     /**
@@ -124,31 +124,33 @@ class IPNProcessor
      */
     public function getOrderManager()
     {
-        if (is_null($this->_oOrderManager)) {
-            $this->_oOrderManager = oxNew(\OxidEsales\PayPalModule\Model\OrderManager::class);
+        if (is_null($this->orderManager)) {
+            $this->orderManager = oxNew(\OxidEsales\PayPalModule\Model\OrderManager::class);
         }
 
-        return $this->_oOrderManager;
+        return $this->orderManager;
     }
 
     /**
      * Initiate payment status changes according to IPN information.
+     *
+     * @return bool
      */
     public function process()
     {
-        $oLang = $this->getLang();
-        $oRequest = $this->getRequest();
-        $oPaymentBuilder = $this->getPaymentBuilder();
-        $oPayPalOrderManager = $this->getOrderManager();
+        $lang = $this->getLang();
+        $request = $this->getRequest();
+        $paymentBuilder = $this->getPaymentBuilder();
+        $payPalOrderManager = $this->getOrderManager();
 
         // Create Payment from Request.
-        $oPaymentBuilder->setLang($oLang);
-        $oPaymentBuilder->setRequest($oRequest);
-        $oOrderPayment = $oPaymentBuilder->buildPayment();
+        $paymentBuilder->setLang($lang);
+        $paymentBuilder->setRequest($request);
+        $orderPayment = $paymentBuilder->buildPayment();
 
-        $oPayPalOrderManager->setOrderPayment($oOrderPayment);
-        $blProcessSuccess = $oPayPalOrderManager->updateOrderStatus();
+        $payPalOrderManager->setOrderPayment($orderPayment);
+        $processSuccess = $payPalOrderManager->updateOrderStatus();
 
-        return $blProcessSuccess;
+        return $processSuccess;
     }
 }

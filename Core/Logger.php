@@ -31,21 +31,21 @@ class Logger
      *
      * @var string
      */
-    protected $_sLoggerSessionId;
+    protected $loggerSessionId;
 
     /**
      * Log title
      */
-    protected $_sLogTitle = '';
+    protected $logTitle = '';
 
     /**
      * Sets logger session id.
      *
-     * @param string $sId session id
+     * @param string $id session id
      */
-    public function setLoggerSessionId($sId)
+    public function setLoggerSessionId($id)
     {
-        $this->_sLoggerSessionId = $sId;
+        $this->loggerSessionId = $id;
     }
 
     /**
@@ -55,7 +55,7 @@ class Logger
      */
     public function getLoggerSessionId()
     {
-        return $this->_sLoggerSessionId;
+        return $this->loggerSessionId;
     }
 
     /**
@@ -63,7 +63,7 @@ class Logger
      *
      * @return string
      */
-    protected function _getLogFilePath()
+    protected function getLogFilePath()
     {
         return getShopBasePath() . 'modules/oe/oepaypal/logs/log.txt';
     }
@@ -71,11 +71,11 @@ class Logger
     /**
      * Set log title.
      *
-     * @param string $sTitle Log title
+     * @param string $title Log title
      */
-    public function setTitle($sTitle)
+    public function setTitle($title)
     {
-        $this->_sLogTitle = $sTitle;
+        $this->logTitle = $title;
     }
 
     /**
@@ -85,33 +85,33 @@ class Logger
      */
     public function getTitle()
     {
-        return $this->_sLogTitle;
+        return $this->logTitle;
     }
 
     /**
      * Writes log message.
      *
-     * @param mixed $mLogData logger data
+     * @param mixed $logData logger data
      */
-    public function log($mLogData)
+    public function log($logData)
     {
-        $oH = @fopen($this->_getLogFilePath(), "a+");
+        $oH = @fopen($this->getLogFilePath(), "a+");
         if ($oH !== false) {
-            if (is_string($mLogData)) {
-                parse_str($mLogData, $aResult);
+            if (is_string($logData)) {
+                parse_str($logData, $result);
             } else {
-                $aResult = $mLogData;
+                $result = $logData;
             }
 
-            if (is_array($aResult)) {
-                foreach ($aResult as $sKey => $sValue) {
-                    $aResult[$sKey] = urldecode($sValue);
+            if (is_array($result)) {
+                foreach ($result as $key => $value) {
+                    $result[$key] = urldecode($value);
                 }
             }
 
             fwrite($oH, "======================= " . $this->getTitle() . " [" . date("Y-m-d H:i:s") . "] ======================= #\n\n");
             fwrite($oH, "SESS ID: " . $this->getLoggerSessionId() . "\n");
-            fwrite($oH, trim(var_export($aResult, true)) . "\n\n");
+            fwrite($oH, trim(var_export($result, true)) . "\n\n");
             @fclose($oH);
         }
 

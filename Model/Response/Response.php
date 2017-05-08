@@ -31,16 +31,16 @@ abstract class Response
      *
      * @var array
      */
-    protected $_aData = null;
+    protected $data = null;
 
     /**
      * Set response data
      *
-     * @param array $aResponseData Response data from PayPal
+     * @param array $responseData Response data from PayPal
      */
-    public function setData($aResponseData)
+    public function setData($responseData)
     {
-        $this->_aData = $aResponseData;
+        $this->data = $responseData;
     }
 
     /**
@@ -50,20 +50,20 @@ abstract class Response
      */
     public function getData()
     {
-        return $this->_aData;
+        return $this->data;
     }
 
     /**
      * Return value from data by given key
      *
-     * @param string $sKey key of data value
+     * @param string $key key of data value
      *
      * @return string
      */
-    protected function _getValue($sKey)
+    protected function getValue($key)
     {
-        $aData = $this->getData();
+        $data = $this->getData();
 
-        return $aData[$sKey];
+        return $data[$key];
     }
 }

@@ -31,43 +31,43 @@ class ArticleToExpressCheckoutValidator
      *
      * @var object
      */
-    protected $_oItemToValidate;
+    protected $itemToValidate;
 
     /**
      * User basket
      *
-     * @var object
+     * @var \OxidEsales\Eshop\Application\Model\Basket
      */
-    protected $_oBasket;
+    protected $basket;
 
     /**
      *Sets current item of details page.
      *
-     * @param object $oItemToValidate
+     * @param object $itemToValidate
      */
-    public function setItemToValidate($oItemToValidate)
+    public function setItemToValidate($itemToValidate)
     {
-        $this->_oItemToValidate = $oItemToValidate;
+        $this->itemToValidate = $itemToValidate;
     }
 
     /**
      * Returns details page current item.
      *
-     * @return \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem
+     * @return \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem|object
      */
     public function getItemToValidate()
     {
-        return $this->_oItemToValidate;
+        return $this->itemToValidate;
     }
 
     /**
      * Method sets basket object.
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket
      */
-    public function setBasket($oBasket)
+    public function setBasket($basket)
     {
-        $this->_oBasket = $oBasket;
+        $this->basket = $basket;
     }
 
     /**
@@ -77,7 +77,7 @@ class ArticleToExpressCheckoutValidator
      */
     public function getBasket()
     {
-        return $this->_oBasket;
+        return $this->basket;
     }
 
     /**
@@ -87,12 +87,12 @@ class ArticleToExpressCheckoutValidator
      */
     public function isArticleValid()
     {
-        $blValid = true;
-        if ($this->_isArticleAmountZero() || $this->_isSameItemInBasket()) {
-            $blValid = false;
+        $valid = true;
+        if ($this->isArticleAmountZero() || $this->isSameItemInBasket()) {
+            $valid = false;
         }
 
-        return $blValid;
+        return $valid;
     }
 
     /**
@@ -100,11 +100,11 @@ class ArticleToExpressCheckoutValidator
      *
      * @return bool
      */
-    protected function _isSameItemInBasket()
+    protected function isSameItemInBasket()
     {
-        $aBasketContents = $this->getBasket()->getContents();
-        foreach ($aBasketContents as $oBasketItem) {
-            if ($this->_isArticleParamsEqual($oBasketItem)) {
+        $basketContents = $this->getBasket()->getContents();
+        foreach ($basketContents as $basketItem) {
+            if ($this->isArticleParamsEqual($basketItem)) {
                 return true;
             }
         }
@@ -115,15 +115,15 @@ class ArticleToExpressCheckoutValidator
     /**
      * Checks if Article params equals with current items params.
      *
-     * @param \OxidEsales\Eshop\Application\Model\BasketItem $oBasketItem
+     * @param \OxidEsales\Eshop\Application\Model\BasketItem $basketItem
      *
      * @return bool
      */
-    protected function _isArticleParamsEqual($oBasketItem)
+    protected function isArticleParamsEqual($basketItem)
     {
-        return ($oBasketItem->getProductId() == $this->getItemToValidate()->getArticleId() &&
-                $oBasketItem->getPersParams() == $this->getItemToValidate()->getPersistParam() &&
-                $oBasketItem->getSelList() == $this->getItemToValidate()->getSelectList());
+        return ($basketItem->getProductId() == $this->getItemToValidate()->getArticleId() &&
+                $basketItem->getPersParams() == $this->getItemToValidate()->getPersistParam() &&
+                $basketItem->getSelList() == $this->getItemToValidate()->getSelectList());
     }
 
     /**
@@ -131,10 +131,10 @@ class ArticleToExpressCheckoutValidator
      *
      * @return bool
      */
-    protected function _isArticleAmountZero()
+    protected function isArticleAmountZero()
     {
-        $iArticleAmount = $this->getItemToValidate()->getArticleAmount();
+        $articleAmount = $this->getItemToValidate()->getArticleAmount();
 
-        return 0 == $iArticleAmount;
+        return 0 == $articleAmount;
     }
 }

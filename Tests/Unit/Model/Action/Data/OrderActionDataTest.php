@@ -31,48 +31,48 @@ class OrderActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetAuthorizationId()
     {
-        $oRequest = $this->_getRequest(array());
-        $oOrder = $this->_getOrder();
-        $oOrder->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field('authorizationId');
+        $request = $this->getRequest(array());
+        $order = $this->getOrder();
+        $order->oxorder__oxtransid = new \OxidEsales\Eshop\Core\Field('authorizationId');
 
-        $oActionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData($oRequest, $oOrder);
+        $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData($request, $order);
 
-        $this->assertEquals('authorizationId', $oActionData->getAuthorizationId());
+        $this->assertEquals('authorizationId', $actionData->getAuthorizationId());
     }
 
     /**
      */
     public function testGetAmount()
     {
-        $oRequest = $this->_getRequest(array('action_comment' => 'comment'));
-        $oOrder = $this->_getOrder();
+        $request = $this->getRequest(array('action_comment' => 'comment'));
+        $order = $this->getOrder();
 
-        $oActionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData($oRequest, $oOrder);
+        $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData($request, $order);
 
-        $this->assertEquals('comment', $oActionData->getComment());
+        $this->assertEquals('comment', $actionData->getComment());
     }
 
     /**
      *  Returns Request object with given parameters
      *
-     * @param $aParams
+     * @param $params
      *
      * @return mixed
      */
-    protected function _getRequest($aParams)
+    protected function getRequest($params)
     {
-        $oRequest = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $aParams));
+        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
 
-        return $oRequest;
+        return $request;
     }
 
     /**
      *
      */
-    protected function _getOrder()
+    protected function getOrder()
     {
-        $oOrder = new \OxidEsales\PayPalModule\Model\Order();
+        $order = new \OxidEsales\PayPalModule\Model\Order();
 
-        return $oOrder;
+        return $order;
     }
 }

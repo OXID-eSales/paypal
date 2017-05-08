@@ -41,22 +41,22 @@ class OrderPaymentCommentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSavePayPalPayPalOrder_insertIdSet()
     {
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setCommentId(1);
-        $oComment->setDate('2013-02-03 12:12:12');
-        $oComment->setComment('comment');
-        $oComment->setPaymentId(2);
-        $id = $oComment->save();
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setCommentId(1);
+        $comment->setDate('2013-02-03 12:12:12');
+        $comment->setComment('comment');
+        $comment->setPaymentId(2);
+        $id = $comment->save();
 
         $this->assertEquals(1, $id);
 
-        $oCommentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oCommentLoaded->load($oComment->getCommentId());
+        $commentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $commentLoaded->load($comment->getCommentId());
 
-        $this->assertEquals(1, $oCommentLoaded->getCommentId());
-        $this->assertEquals('comment', $oCommentLoaded->getComment());
-        $this->assertEquals(2, $oCommentLoaded->getPaymentId());
-        $this->assertEquals('2013-02-03 12:12:12', $oCommentLoaded->getDate());
+        $this->assertEquals(1, $commentLoaded->getCommentId());
+        $this->assertEquals('comment', $commentLoaded->getComment());
+        $this->assertEquals(2, $commentLoaded->getPaymentId());
+        $this->assertEquals('2013-02-03 12:12:12', $commentLoaded->getDate());
     }
 
     /**
@@ -65,16 +65,16 @@ class OrderPaymentCommentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSavePayPalPayPalOrder_withoutDate_dateSetNow()
     {
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setComment('comment');
-        $oComment->setPaymentId(2);
-        $oComment->save();
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setComment('comment');
+        $comment->setPaymentId(2);
+        $comment->save();
 
-        $oCommentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oCommentLoaded->load($oComment->getCommentId());
+        $commentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $commentLoaded->load($comment->getCommentId());
 
-        $this->assertEquals('comment', $oCommentLoaded->getComment());
-        $this->assertEquals(date('Y-m-d'), substr($oCommentLoaded->getDate(), 0, 10));
+        $this->assertEquals('comment', $commentLoaded->getComment());
+        $this->assertEquals(date('Y-m-d'), substr($commentLoaded->getDate(), 0, 10));
     }
 
 
@@ -84,19 +84,19 @@ class OrderPaymentCommentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSavePayPalPayPalOrder_insertIdNotSet()
     {
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setDate('2013-02-03 12:12:12');
-        $oComment->setComment('comment');
-        $oComment->setPaymentId(2);
-        $iCommentId = $oComment->save();
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setDate('2013-02-03 12:12:12');
+        $comment->setComment('comment');
+        $comment->setPaymentId(2);
+        $commentId = $comment->save();
 
-        $oCommentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oCommentLoaded->load($iCommentId);
+        $commentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $commentLoaded->load($commentId);
 
-        $this->assertEquals($iCommentId, $oCommentLoaded->getCommentId());
-        $this->assertEquals('comment', $oCommentLoaded->getComment());
-        $this->assertEquals(2, $oCommentLoaded->getPaymentId());
-        $this->assertEquals('2013-02-03 12:12:12', $oCommentLoaded->getDate());
+        $this->assertEquals($commentId, $commentLoaded->getCommentId());
+        $this->assertEquals('comment', $commentLoaded->getComment());
+        $this->assertEquals(2, $commentLoaded->getPaymentId());
+        $this->assertEquals('2013-02-03 12:12:12', $commentLoaded->getDate());
     }
 
     /**
@@ -105,25 +105,25 @@ class OrderPaymentCommentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSavePayPalPayPalOrder_update()
     {
-        $oComment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oComment->setCommentId(10);
-        $oComment->setDate('2013-02-03 12:12:12');
-        $oComment->setComment('comment');
-        $oComment->setPaymentId(2);
-        $oComment->save();
+        $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $comment->setCommentId(10);
+        $comment->setDate('2013-02-03 12:12:12');
+        $comment->setComment('comment');
+        $comment->setPaymentId(2);
+        $comment->save();
 
-        $oCommentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oCommentLoaded->load(10);
-        $oCommentLoaded->setComment('comment comment');
-        $id = $oCommentLoaded->save();
+        $commentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $commentLoaded->load(10);
+        $commentLoaded->setComment('comment comment');
+        $id = $commentLoaded->save();
 
         $this->assertEquals(10, $id);
 
-        $oCommentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $oCommentLoaded->load(10);
-        $this->assertEquals(10, $oCommentLoaded->getCommentId());
-        $this->assertEquals('comment comment', $oCommentLoaded->getComment());
-        $this->assertEquals(2, $oCommentLoaded->getPaymentId());
-        $this->assertEquals('2013-02-03 12:12:12', $oCommentLoaded->getDate());
+        $commentLoaded = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
+        $commentLoaded->load(10);
+        $this->assertEquals(10, $commentLoaded->getCommentId());
+        $this->assertEquals('comment comment', $commentLoaded->getComment());
+        $this->assertEquals(2, $commentLoaded->getPaymentId());
+        $this->assertEquals('2013-02-03 12:12:12', $commentLoaded->getDate());
     }
 }

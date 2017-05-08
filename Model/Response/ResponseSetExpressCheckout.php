@@ -34,6 +34,6 @@ class ResponseSetExpressCheckout extends \OxidEsales\PayPalModule\Model\Response
      */
     public function getToken()
     {
-        return $this->_getValue('TOKEN');
+        return $this->getValue('TOKEN');
     }
 }

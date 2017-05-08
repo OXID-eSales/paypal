@@ -61,21 +61,21 @@ class IPNRequestPaymentSetter
     /**
      * @var \OxidEsales\PayPalModule\Core\Request
      */
-    protected $_oRequest = null;
+    protected $request = null;
 
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderPayment
      */
-    protected $_oRequestOrderPayment = null;
+    protected $requestOrderPayment = null;
 
     /**
      * Sets request object to get params for IPN request.
      *
-     * @param \OxidEsales\PayPalModule\Core\Request $oRequest
+     * @param \OxidEsales\PayPalModule\Core\Request $request
      */
-    public function setRequest($oRequest)
+    public function setRequest($request)
     {
-        $this->_oRequest = $oRequest;
+        $this->request = $request;
     }
 
     /**
@@ -85,17 +85,17 @@ class IPNRequestPaymentSetter
      */
     public function getRequest()
     {
-        return $this->_oRequest;
+        return $this->request;
     }
 
     /**
      * Sets request order payment object.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oOrderPayment
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $orderPayment
      */
-    public function setRequestOrderPayment($oOrderPayment)
+    public function setRequestOrderPayment($orderPayment)
     {
-        $this->_oRequestOrderPayment = $oOrderPayment;
+        $this->requestOrderPayment = $orderPayment;
     }
 
     /**
@@ -105,35 +105,35 @@ class IPNRequestPaymentSetter
      */
     public function getRequestOrderPayment()
     {
-        $this->_prepareOrderPayment($this->_oRequestOrderPayment);
+        $this->prepareOrderPayment($this->requestOrderPayment);
 
-        return $this->_oRequestOrderPayment;
+        return $this->requestOrderPayment;
     }
 
     /**
      * Prepare PayPal payment. Fill up with request values.
      *
-     * @param \OxidEsales\PayPalModule\Model\OrderPayment $oRequestOrderPayment order to set params.
+     * @param \OxidEsales\PayPalModule\Model\OrderPayment $requestOrderPayment order to set params.
      */
-    protected function _prepareOrderPayment($oRequestOrderPayment)
+    protected function prepareOrderPayment($requestOrderPayment)
     {
-        $oRequest = $this->getRequest();
+        $request = $this->getRequest();
 
-        $oRequestOrderPayment->setStatus($oRequest->getRequestParameter(self::PAYPAL_PAYMENT_STATUS));
-        $oRequestOrderPayment->setTransactionId($oRequest->getRequestParameter(self::PAYPAL_TRANSACTION_ID));
-        $oRequestOrderPayment->setCurrency($oRequest->getRequestParameter(self::MC_CURRENCY));
-        $oRequestOrderPayment->setAmount($this->getAmount());
-        $oRequestOrderPayment->setAction($this->getAction());
+        $requestOrderPayment->setStatus($request->getRequestParameter(self::PAYPAL_PAYMENT_STATUS));
+        $requestOrderPayment->setTransactionId($request->getRequestParameter(self::PAYPAL_TRANSACTION_ID));
+        $requestOrderPayment->setCurrency($request->getRequestParameter(self::MC_CURRENCY));
+        $requestOrderPayment->setAmount($this->getAmount());
+        $requestOrderPayment->setAction($this->getAction());
 
-        $correlationId = $oRequest->getRequestParameter(self::CORRELATION_ID);
+        $correlationId = $request->getRequestParameter(self::CORRELATION_ID);
         if (!$correlationId) {
-            $correlationId = $oRequest->getRequestParameter(self::IPN_TRACK_ID);
+            $correlationId = $request->getRequestParameter(self::IPN_TRACK_ID);
         }
-        $oRequestOrderPayment->setCorrelationId($correlationId);
+        $requestOrderPayment->setCorrelationId($correlationId);
 
-        $date = 0 < strlen($oRequest->getRequestParameter(self::PAYMENT_DATE)) ?
-                date('Y-m-d H:i:s', strtotime($oRequest->getRequestParameter(self::PAYMENT_DATE))) : null;
-        $oRequestOrderPayment->setDate($date);
+        $date = 0 < strlen($request->getRequestParameter(self::PAYMENT_DATE)) ?
+                date('Y-m-d H:i:s', strtotime($request->getRequestParameter(self::PAYMENT_DATE))) : null;
+        $requestOrderPayment->setDate($date);
     }
 
     /**
@@ -148,7 +148,7 @@ class IPNRequestPaymentSetter
         $rawAmount = $request->getRequestParameter(self::MC_GROSS);
         $status    = $request->getRequestParameter(self::PAYPAL_PAYMENT_STATUS);
 
-        if ( (0 > $rawAmount) && (self::PAYPAL_STATUS_REFUND_DONE == $status) ) {
+        if ((0 > $rawAmount) && (self::PAYPAL_STATUS_REFUND_DONE == $status)) {
             $action = self::REFUND_ACTION;
         }
 
@@ -165,5 +165,4 @@ class IPNRequestPaymentSetter
         $request = $this->getRequest();
         return !is_null($request->getRequestParameter(self::MC_GROSS)) ? abs($request->getRequestParameter(self::MC_GROSS)) : null;
     }
-
 }

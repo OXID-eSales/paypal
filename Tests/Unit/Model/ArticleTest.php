@@ -42,24 +42,24 @@ class ArticleTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testIsVirtualPayPalArticle($blIsMaterial, $blIsDownloadable, $blResult)
+    public function testIsVirtualPayPalArticle($isMaterial, $isDownloadable, $result)
     {
-        $oArticle = oxNew(\OxidEsales\PayPalModule\Model\Article::class);
+        $article = oxNew(\OxidEsales\PayPalModule\Model\Article::class);
 
-        $oArticle->oxarticles__oxnonmaterial = new \OxidEsales\Eshop\Core\Field($blIsMaterial);
-        $oArticle->oxarticles__oxisdownloadable = new \OxidEsales\Eshop\Core\Field($blIsDownloadable);
+        $article->oxarticles__oxnonmaterial = new \OxidEsales\Eshop\Core\Field($isMaterial);
+        $article->oxarticles__oxisdownloadable = new \OxidEsales\Eshop\Core\Field($isDownloadable);
 
-        $this->assertEquals($blResult, $oArticle->isVirtualPayPalArticle());
+        $this->assertEquals($result, $article->isVirtualPayPalArticle());
     }
 
     /**
      */
     public function testGetStockAmount()
     {
-        $oArticle = oxNew(\OxidEsales\PayPalModule\Model\Article::class);
+        $article = oxNew(\OxidEsales\PayPalModule\Model\Article::class);
 
-        $oArticle->oxarticles__oxstock = new \OxidEsales\Eshop\Core\Field(321);
+        $article->oxarticles__oxstock = new \OxidEsales\Eshop\Core\Field(321);
 
-        $this->assertEquals(321, $oArticle->getStockAmount());
+        $this->assertEquals(321, $article->getStockAmount());
     }
 }

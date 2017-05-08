@@ -31,12 +31,12 @@ class FullNameTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * @dataProvider providerSplitNames
      */
-    public function testSplitName($sFullName, $sFirstName, $sLastName)
+    public function testSplitName($fullName, $firstName, $lastName)
     {
-        $oPayPalFullName = new \OxidEsales\PayPalModule\Core\FullName($sFullName);
+        $payPalFullName = new \OxidEsales\PayPalModule\Core\FullName($fullName);
 
-        $this->assertEquals($sFirstName, $oPayPalFullName->getFirstName());
-        $this->assertEquals($sLastName, $oPayPalFullName->getLastName());
+        $this->assertEquals($firstName, $payPalFullName->getFirstName());
+        $this->assertEquals($lastName, $payPalFullName->getLastName());
     }
 
     public function providerSplitNames()

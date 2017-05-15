@@ -65,7 +65,9 @@ class Logger
      */
     protected function getLogFilePath()
     {
-        return getShopBasePath() . 'modules/oe/oepaypal/logs/log.txt';
+        $logDirectoryPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir();
+
+        return $logDirectoryPath . 'oepaypal.log';
     }
 
     /**
@@ -95,8 +97,8 @@ class Logger
      */
     public function log($logData)
     {
-        $oH = @fopen($this->getLogFilePath(), "a+");
-        if ($oH !== false) {
+        $handle = fopen($this->getLogFilePath(), "a+");
+        if ($handle !== false) {
             if (is_string($logData)) {
                 parse_str($logData, $result);
             } else {
@@ -105,14 +107,16 @@ class Logger
 
             if (is_array($result)) {
                 foreach ($result as $key => $value) {
-                    $result[$key] = urldecode($value);
+                    if (is_string($value)) {
+                        $result[$key] = urldecode($value);
+                    }
                 }
             }
 
-            fwrite($oH, "======================= " . $this->getTitle() . " [" . date("Y-m-d H:i:s") . "] ======================= #\n\n");
-            fwrite($oH, "SESS ID: " . $this->getLoggerSessionId() . "\n");
-            fwrite($oH, trim(var_export($result, true)) . "\n\n");
-            @fclose($oH);
+            fwrite($handle, "======================= " . $this->getTitle() . " [" . date("Y-m-d H:i:s") . "] ======================= #\n\n");
+            fwrite($handle, "SESS ID: " . $this->getLoggerSessionId() . "\n");
+            fwrite($handle, trim(var_export($result, true)) . "\n\n");
+            fclose($handle);
         }
 
         //resetting log title

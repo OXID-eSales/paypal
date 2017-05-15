@@ -138,10 +138,18 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
     public function handleRequest()
     {
         $requestHandled = false;
+
+        $request = $this->getPayPalRequest();
+        $logger = $this->getLogger();
+        $logger->setTitle("IPN Request by PayPal");
+        $logger->log([
+            'GET parameters' => $request->getGet(),
+            'POST parameters' => $request->getPost()
+        ]);
+
         $requestValid = $this->requestValid();
 
         if ($requestValid) {
-            $request = $this->getPayPalRequest();
             $lang = $this->getPayPalConfig()->getLang();
 
             $processor = $this->getProcessor();

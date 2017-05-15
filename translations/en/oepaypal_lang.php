@@ -45,7 +45,6 @@ $aLang = array(
     'OEPAYPAL_TYPE_OF_PAYMENT'                   => 'Type of Payment',
     'OEPAYPAL_GIFTWRAPPER'                       => 'Giftwrapper',
     'OEPAYPAL_GREETING_CARD'                     => 'Greeting Card',
-    'OEPAYPAL_TRUSTED_SHOP_PROTECTION'           => 'Trusted Shops buyer protection',
     'OEPAYPAL_GRAND_TOTAL'                       => 'Grand Total:',
     'OEPAYPAL_INFORMATION'                       => 'PayPal',
     'OEPAYPAL_SAME_ITEM_QUESTION'                => 'The same item is already in the cart.<br> Do you want to add %s additional item?',

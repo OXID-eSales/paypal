@@ -566,13 +566,6 @@ class SetExpressCheckoutRequestBuilder
 
             $pos++;
         }
-
-        //adding trusted shops protection as product
-        if ($basket->getPayPalTsProtectionCosts() > 0) {
-            $request->setParameter("L_PAYMENTREQUEST_0_NAME{$pos}", $lang->translateString("OEPAYPAL_TRUSTED_SHOP_PROTECTION"));
-            $request->setParameter("L_PAYMENTREQUEST_0_AMT{$pos}", $this->formatFloat($basket->getPayPalTsProtectionCosts()));
-            $request->setParameter("L_PAYMENTREQUEST_0_QTY{$pos}", 1);
-        }
     }
 
     /**

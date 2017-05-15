@@ -119,24 +119,7 @@ class Basket extends Basket_parent
 
         return $amount;
     }
-
-    /**
-     * Returns Trusted shops costs netto or brutto value.
-     *
-     * @return double
-     */
-    public function getPayPalTsProtectionCosts()
-    {
-        $amount = 0.0;
-
-        $tsPaymentCost = $this->getCosts('oxtsprotection');
-        if ($tsPaymentCost) {
-            $amount = $this->isCalculationModeNetto() ? $tsPaymentCost->getNettoPrice() : $tsPaymentCost->getBruttoPrice();
-        }
-
-        return $amount;
-    }
-
+    
     /**
      * Collects all basket discounts (basket, payment and vouchers)
      * and returns sum of collected discounts.
@@ -190,9 +173,6 @@ class Basket extends Basket_parent
         // greeting card costs
         $allCosts += $this->getPayPalGiftCardCosts();
 
-        // Trusted shops protection cost
-        $allCosts += $this->getPayPalTsProtectionCosts();
-
         return $allCosts;
     }
 
@@ -208,7 +188,6 @@ class Basket extends Basket_parent
         $basketVatValue += $this->getPayPalWrappingVat();
         $basketVatValue += $this->getPayPalGiftCardVat();
         $basketVatValue += $this->getPayPalPayCostVat();
-        $basketVatValue += $this->getPayPalTsProtectionCostVat();
 
         if ($this->getDeliveryCosts() < round($this->getDeliveryCosts(), 2)) {
             return floor($basketVatValue * 100) / 100;
@@ -279,21 +258,5 @@ class Basket extends Basket_parent
         }
 
         return $paymentVAT;
-    }
-
-    /**
-     * Return payment VAT.
-     *
-     * @return double
-     */
-    public function getPayPalTsProtectionCostVat()
-    {
-        $tsProtectionCostVat = 0.0;
-        $cost = $this->getCosts('oxtsprotection');
-        if ($cost && $cost->getVatValue()) {
-            $tsProtectionCostVat = $cost->getVatValue();
-        }
-
-        return $tsProtectionCostVat;
     }
 }

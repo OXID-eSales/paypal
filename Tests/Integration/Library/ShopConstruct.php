@@ -185,7 +185,6 @@ class ShopConstruct
     {
         $this->createCats($this->getParams('categories'));
         $this->setDiscounts($this->getParams('discounts'));
-        $tSProductId = $this->setTrustedShop($this->getParams('trustedshop'));
 
         $costs = $this->getParams('costs');
         $deliverySetId = $this->setDeliveryCosts($costs['delivery']);
@@ -220,11 +219,7 @@ class ShopConstruct
         if (!empty($payment)) {
             $basket->setPayment($payment[0]);
         }
-
-        if (!empty($tSProductId)) {
-            $basket->setTsProductId($tSProductId);
-        }
-
+        
         $basket->setSkipVouchersChecking(true);
         if (!empty($voucherIDs)) {
             $count = count($voucherIDs);
@@ -388,32 +383,7 @@ class ShopConstruct
             }
         }
     }
-
-    /**
-     * Set up trusted shop
-     *
-     * @param array $trustedShop of trusted shops data
-     *
-     * @return string selected product id
-     */
-    protected function setTrustedShop($trustedShop)
-    {
-        if (empty($trustedShop)) {
-            return null;
-        }
-        if ($trustedShop['payments']) {
-            foreach ($trustedShop['payments'] as $shopPayId => $tsPayId) {
-                $payment = new \OxidEsales\Eshop\Application\Model\Payment();
-                if ($payment->load($shopPayId)) {
-                    $payment->oxpayments__oxtspaymentid = new \OxidEsales\Eshop\Core\Field($tsPayId);
-                    $payment->save();
-                }
-            }
-        }
-
-        return $trustedShop['product_id'];
-    }
-
+    
     /**
      * Creates wrappings
      *

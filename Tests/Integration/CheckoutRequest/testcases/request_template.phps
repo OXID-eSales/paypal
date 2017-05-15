@@ -74,7 +74,7 @@ $aData = array(
                     'oxactive' => 1,
                     'oxtitle'  => 'Bar-Equipment',
                     'articles' => ( 1126 )
-            ),   
+            ),
     ),
     // User
     'user' => array(
@@ -125,17 +125,6 @@ $aData = array(
         1 => array (
 
         ),
-    ),
-    'trustedshop' => array (
-        'product_id'     => 'TS080501_500_30_EUR',           // trusted shop product id (TS080501_1500_30_EUR, TS080501_2500_30_EUR, TS080501_5000_30_EUR, TS080501_10000_30_EUR, TS080501_20000_30_EUR)
-        'payments'    => array(                              // paymentids
-            'oxidcashondel'  => 'DIRECT_DEBIT',              // available payments ('DIRECT_DEBIT','CREDIT_CARD','INVOICE','CASH_ON_DELIVERY','PREPAYMENT','CHEQUE','PAYBOX','PAYPAL','CASH_ON_PICKUP','FINANCING','LEASING','T_PAY','CLICKANDBUY','GIROPAY','GOOGLE_CHECKOUT','SHOP_CARD','DIRECT_E_BANKING','OTHER')
-            'oxidcreditcard' => 'DIRECT_DEBIT',
-            'oxiddebitnote'  => 'DIRECT_DEBIT',
-            'oxidpayadvance' => 'DIRECT_DEBIT',
-            'oxidinvoice'    => 'DIRECT_DEBIT',
-            'oxempty'        => 'DIRECT_DEBIT',
-        )
     ),
     // Additional costs
     'costs' => array(

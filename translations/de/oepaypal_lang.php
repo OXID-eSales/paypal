@@ -45,7 +45,6 @@ $aLang = array(
     'OEPAYPAL_TYPE_OF_PAYMENT'                   => 'Zahlungsart',
     'OEPAYPAL_GIFTWRAPPER'                       => 'Geschenkverpackung',
     'OEPAYPAL_GREETING_CARD'                     => 'Grußkarte',
-    'OEPAYPAL_TRUSTED_SHOP_PROTECTION'           => 'Trusted Shops Käuferschutz',
     'OEPAYPAL_GRAND_TOTAL'                       => 'Gesamtsumme:',
     'OEPAYPAL_INFORMATION'                       => 'PayPal-Information',
     'OEPAYPAL_SAME_ITEM_QUESTION'                => 'Dieser Artikel ist bereits im Warenkorb.<br> Möchten Sie %s Artikel zusätzlich hinzufügen?',

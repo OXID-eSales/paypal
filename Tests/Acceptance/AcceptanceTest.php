@@ -41,7 +41,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     const IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE = 2;
 
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
-    protected $_iWaitTimeMultiplier = 9;
+    protected $_iWaitTimeMultiplier = 3;
 
     protected $retryTimes = 0;
 
@@ -97,7 +97,35 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
                 'value' => $this->getLoginDataByName('sOEPayPalSandboxSignature'),
                 'module' => 'module:oepaypal'
             ),
+            'blPayPalLoggerEnabled' => array(
+                'type' => 'str',
+                'value' => true,
+                'module' => 'module:oepaypal'
+            )
         ));
+
+        $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
+    }
+
+    /**
+     * Set up fixture.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->clearCache();
+        $this->clearCookies();
+        $this->clearTemp();
+
+        $this->callShopSC('oxConfig', null, null, [
+            'sOEPayPalTransactionMode' => [
+                'type' => 'select',
+                'value' => 'Sale',
+                'module' => 'module:oepaypal'
+            ]]);
+
+        $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
     }
 
     // ------------------------ PayPal module ----------------------------------
@@ -107,10 +135,18 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalRegularCheckoutPayment()
     {
+        //Set transaction mode to Authorization because we want to capture manually via shop admin
+        $this->callShopSC('oxConfig', null, null, [
+            'sOEPayPalTransactionMode' => [
+                'type' => 'select',
+                'value' => 'Authorization',
+                'module' => 'module:oepaypal'
+            ]]);
+
         // Startup/configure shop
         $this->openShop();
         $this->switchLanguage("Deutsch");
@@ -136,12 +172,10 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
 
         $this->standardCheckoutWillBeUsed();
-        $this->waitForPayPalPage();
-        $this->loginToSandbox();
-        $this->clickPayPalContinue();
+        $this->payWithPayPal();
 
         // returned to basket step 4 (verify)
-        $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
+        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
         $this->assertEquals("0,99 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
         $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
         $this->assertEquals("Versandart Ändern Test S&H set", $this->clearString($this->getText("orderShipping")));
@@ -227,13 +261,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("Pending", $this->getText("//table[@id='historyTable']/tbody/tr[4]/td[4]"), "Money status is not displayed in admin PayPal tab");
     }
 
-
     /**
      * Checkout a single product and change the quantity of the product to 5 afterards.
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalRegularCheckoutAndChangeQuantityAfterwardsViaAdmin()
     {
@@ -258,13 +291,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
 
         $this->standardCheckoutWillBeUsed();
-        $this->waitForPayPalPage();
-        $this->loginToSandbox();
-        $this->clickPayPalContinue();
+        $this->payWithPayPal();
 
-        $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
+        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "The order not finished successful");
+        sleep(5);
 
         //Go to an admin and check this order nr
         $this->loginAdminForModule("Administer Orders", "Orders");
@@ -302,7 +334,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testECS()
     {
@@ -332,17 +364,21 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         // Select add to basket and go to checkout
         $this->selectPayPalExpressCheckout("id=actionAddToBasketAndGoToCheckout");
 
-        $this->assertTextPresent("Item price: €0.99");
-        $this->assertTextPresent("Quantity: 2");
+        //Check what was communicated with PayPal
+        $assertRequest = ['L_PAYMENTREQUEST_0_AMT0' => 0.99,
+                          'PAYMENTREQUEST_0_AMT' => 1.98,
+                          'L_PAYMENTREQUEST_0_QTY0' => 2,
+                          'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR'];
+        $assertResponse = ['ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         // Cancel order
         $this->clickAndWait("cancel_return");
         // Go to checkout with PayPal  with same amount in basket
         $this->clickAndWait("id=paypalExpressCheckoutDetailsButton");
         $this->clickAndWait("id=actionNotAddToBasketAndGoToCheckout");
-        $this->assertTextPresent("Item price: €0.99", "Item price doesn't mach ot didn't displayed");
-        $this->assertTextPresent("€1.98", "Item price doesn't mach ot didn't displayed");
-        $this->assertTextPresent("Quantity: 2", "Item quantity doesn't mach ot didn't displayed");
+        //Check what was communicated with PayPal
+        $this->assertLogData($assertRequest, $assertResponse);
 
         // Cancel order
         $this->clickAndWait("cancel_return");
@@ -354,22 +390,21 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertElementPresent("id=paypalExpressCheckoutMiniBasketBox");
         $this->assertElementPresent("displayCartInPayPal");
         $this->clickAndWait("id=paypalExpressCheckoutMiniBasketImage");
+        $this->assertLogData($assertRequest, $assertResponse);
 
-        $this->assertTextPresent("€1.98", "Item price doesn't mach ot didn't displayed");
-        $this->assertTextPresent("Quantity: 2", "Item quantity doesn't mach ot didn't displayed");
+        $this->payWithPayPal();
 
-        $this->waitForPayPalPage();
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=shipping_method");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_QTY0' => '2',
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'L_PAYMENTREQUEST_0_QTY0' => '2',
+                           'ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
-        $this->assertTextPresent("€1,98", "Item price doesn't mach ot didn't displayed");
-        $this->assertTextPresent("Anzahl: 2", "Item quantity doesn't mach ot didn't displayed");
-        $this->clickPayPalContinue();
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
         $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
-        // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
         $this->assertEquals("1,98 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
@@ -381,7 +416,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalExpress2()
     {
@@ -399,12 +434,17 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
         //Go to PayPal express
-        $this->selectPayPalExpressCheckout();
-        $this->loginToSandbox();
-        $this->clickPayPalContinue();
+        $this->payWithPayPalExpressCheckout();
 
-        $this->assertEquals("0,99 €", $this->getText("name=basketGrandTotal"), "Grand total price changed or didn't displayed");
-        $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: testing_account@oxid-esales.dev SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland", $this->clearString($this->getText("orderAddress")));
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['PAYMENTREQUEST_0_AMT' => '0.99',
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                           'PAYMENTREQUEST_0_SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'PAYMENTREQUEST_0_SHIPTOSTREET' => "Musterstr. Äß\\'ü 1",
+                           'ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Testing when user is not logged in
         $this->clearCache();
@@ -418,17 +458,18 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
         //Go to PayPal express
-        $this->selectPayPalExpressCheckout();
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=shipping_method");
+        $this->payWithPayPalExpressCheckout();
 
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
-        $this->assertTextPresent("€0,99");
-
-        $this->clickPayPalContinue();
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['PAYMENTREQUEST_0_AMT' => '0.99',
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                           'ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //User is on the 4th page
-        $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
+        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
         $this->assertEquals("Gesamtbetrag: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")));
         $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
         $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: {$this->getLoginDataByName('sBuyerLogin')} {$this->getLoginDataByName('sBuyerFirstName')} {$this->getLoginDataByName('sBuyerLastName')} ESpachstr. 1 79111 Freiburg Deutschland", $this->clearString($this->getText("orderAddress")));
@@ -486,442 +527,17 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clearCache();
     }
 
-    /**
-     * testing when payment method has unassigned country Germany, user is not login to the shop, and purchase as PayPal user from Germany
-     *
-     * @group paypal_standalone
-     * @group paypal_external
-     * @group quarantine
-     */
-    public function testPayPalPaymentForGermany()
-    {
-        //Separate Germany from PayPal payment method and assign United States
-        $this->importSql(__DIR__ . '/testSql/unasignCountryFromPayPal.sql');
-
-        ///Go to make an order but do not finish it
-        $this->clearCache();
-        $this->openShop();
-
-        //Check if PayPal logo in frontend is active in both languages
-        $this->assertElementPresent("paypalPartnerLogo", "PayPal logo not shown in frontend page");
-        $this->switchLanguage("Deutsch");
-        $this->assertElementPresent("paypalPartnerLogo", "PayPal logo not shown in frontend page");
-        $this->switchLanguage("English");
-
-        //Search for the product and add to cart
-        $this->searchFor("1001");
-        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
-        $this->openBasket("English");
-        $this->waitForElement("paypalExpressCheckoutButton");
-        $this->assertElementPresent("link=Test product 1", "Product:Test product 1 is not shown in 1st order step ");
-        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]", "There product:Test product 1 is not shown in 1st order step");
-        //  $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle(), "Tittle of the page is incorrect" );
-        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Grand Total is not displayed correctly");
-        $this->assertFalse($this->isTextPresent("Shipping costs:"), "Shipping costs should not be displayed");
-        $this->assertTextPresent("?");
-        $this->assertTrue($this->isChecked("//input[@name='displayCartInPayPal' and @value='1']"));
-        $this->assertTextPresent("Display cart in PayPal", "An option text:Display cart in PayPal is not displayed");
-        $this->assertElementPresent("name=displayCartInPayPal","An option Display cart in PayPal is not displayed");
-
-        //Go to PayPal express to make an order
-        $this->selectPayPalExpressCheckout();
-
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-
-        //Login to PayPal as US user
-        $this->loginToSandbox($this->getLoginDataByName('sBuyerUSLogin'));
-        //After login to PayPal check does all necessary element displayed correctly
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-        $this->assertElementPresent("id=showname0", "Purchased product is not displayed in basket in PayPal");
-        $this->assertFalse($this->isTextPresent("Shipping method: Stadard Price:€6.90 EUR"), "Standard Price:€6.90 EUR Shipping costs for this user should not be displayed in PayPal");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerUSLogin'), "User login name is not displayed in PayPal ");
-        $this->assertElementPresent("id=showname0", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Item number: 1001", "Product number is not displayed in PayPal ");
-        $this->assertTextPresent("Quantity: 1", "Product quantities is not displayed in PayPal");
-        $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
-
-        //Go to shop
-        $this->waitForText("Total €7.89 EUR");
-        $this->clickPayPalContinue();
-        $this->waitForItemAppear("id=breadCrumb");
-
-        //Now user is on the 1st "cart" step with an error message:
-        $this->assertTextPresent("Based on your choice in PayPal Express Checkout, order total has changed. Please check your shopping cart and continue. Hint: for continuing with Express Checkout press Express Checkout button again.", "An error message is not dispayed in shop 1st order step");
-        $this->assertElementPresent("id=basketRemoveAll", "an option Remove is not displayed in 1st cart step");
-        $this->assertElementPresent("id=basketRemove", "an option All is not displayed in 1st cart step");
-        $this->assertElementPresent("id=basketUpdate", "an option Update is not displayed in 1st cart step");
-        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
-        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]", "There product:Test product 1 is not shown in 1st order step");
-        //  $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle(), " Title in 1st order step is incorrect" );
-        $this->assertEquals("Grand total: 7,73 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
-        $this->assertEquals("Shipping costs: 6,90 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
-
-        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
-        $this->assertElementPresent("name=displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed in cart" );
-        $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
-
-        //Go to next step and change country to Germany
-        $this->clickAndWait("css=.nextStep");
-        $this->click("//button[@id='userChangeAddress']");
-        $this->click("id=invCountrySelect");
-        $this->select("invCountrySelect", "label=Germany");
-        $this->click("id=userNextStepTop");
-        $this->waitForPageToLoad("30000");
-
-        //Check if PayPal is not displayed for Germany
-        $this->assertElementNotPresent("//select[@name='sShipSet']/option[text()='Paypal']", "Paypal is displayed for Germany, but must be not shown");
-
-        $this->assertEquals("COD (Cash on Delivery) (7,50 €)", $this->getText("//form[@id='payment']/dl[5]/dt/label/b"), "Wrong payment method is shown");
-        $this->assertTextPresent("COD (Cash on Delivery) (7,50 €)", "Wrong payment method is shown");
-        $this->assertFalse($this->isTextPresent("PayPal (0,00 €)"), "PayPal should not be displayed as payment method");
-
-        //Also check if PayPal not displayed in the 1st cart step
-        $this->click("link=1. Cart");
-        $this->waitForPageToLoad("30000");
-        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
-        $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed in cart");
-        $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
-
-        ///Go to admin and check previous order status and check if new order didn't appear in admin and it didn't overwritten on previous order.
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
-        $this->openListItem("2");
-
-        $this->assertTextPresent("Internal Status: OK");
-        $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");
-
-        //Check user's order nr 2 information in admin
-        $this->assertEquals("5 *", $this->getText("//table[2]/tbody/tr/td[1]"), "Product quantities are incorrect in admin");
-        $this->assertEquals("Test product 1", $this->getText("//td[3]"), "Product name is incorrect in admin");
-        $this->assertEquals("4,95 EUR", $this->getText("//td[5]"));
-        $this->assertEquals("4,95", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"), "Product total displayed ");
-
-        $this->openTab("Products");
-        $this->assertEquals("5", $this->getValue("//tr[@id='art.1']/td[1]/input"), "Product quantities are incorrect in admin");
-        $this->assertEquals("0,99 EUR", $this->getText("//tr[@id='art.1']/td[7]"), "Product price is incorrect in admin");
-        $this->assertEquals("4,95 EUR", $this->getText("//tr[@id='art.1']/td[8]"), "Product total is incorrect in admin");
-        $this->assertEquals("4,95", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"), "Product total is incorrect in admin");
-
-        $this->openTab("Main");
-        $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"), "Shipping method is incorrect in admin");
-
-        //Go to basket and make an order,
-        $this->clearCache();
-        $this->openShop();
-        $this->searchFor("1001");
-        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
-        $this->openBasket("English");
-
-        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Grand total is not displayed correctly");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
-        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
-        $this->assertElementPresent("id=showShipAddress", "Shipping address is not displayed in 2nd order step");
-        $this->click("id=userNextStepBottom");
-        $this->waitForElement("paymentNextStepBottom");
-        $this->assertElementPresent("name=sShipSet", "Shipping method drop down is not shown");
-        $this->assertEquals("Test S&H set", $this->getSelectedLabel("sShipSet"), "Wrong shipping method is selected, should be:Test S&H set ");
-        $this->click("id=paymentNextStepBottom");
-
-        //go to last order step, check if payment method is not PayPal
-        $this->waitForElement("orderAddress");
-        $this->assertElementPresent("link=Test product 1", "Product name is not displayed in last order step");
-        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
-        $this->assertEquals("Shipping costs: 0,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
-        //   $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle(), "Page tittle is incorect in last order step" );
-        $this->assertEquals("Surcharge Payment method: 7,50 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Payment price is not displayed in carts");
-        $this->assertEquals("Grand total: 8,49 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")), "Grand total is not displayed correctly");
-        $this->assertTextPresent("Test S&H set");
-        // $this->assertFalse($this->isTextPresent("PayPal"));
-        $this->assertTextPresent("COD");
-        $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
-
-        // After successful purchase, go to admin and check order status
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.2']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.2']/td[7]"), "Wrong user last name is displayed in order");
-        $this->assertEquals("0000-00-00 00:00:00", $this->getText("//tr[@id='row.1']/td[4]"));
-        $this->openListItem("3", "setfolder");
-        $this->assertTextPresent("Internal Status: OK");
-        $this->assertTextPresent("Order No.: 3", "Order number is not displayed in admin");
-        $this->assertEquals("1 *", $this->getText("//table[2]/tbody/tr/td[1]"));
-        $this->assertEquals("Test product 1", $this->getText("//td[3]"), "Purchased product name is not displayed in Admin");
-        $this->assertEquals("8,49", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"));
-
-        $this->openTab("Products");
-        $this->assertEquals("7,50", $this->getText("//table[@id='order.info']/tbody/tr[6]/td[2]"), "charges of payment method is not displayed");
-        $this->assertEquals("0,16", $this->getText("//table[@id='order.info']/tbody/tr[4]/td[2]"), "VAT is not displayed");
-        $this->assertEquals("0,83", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"), "Product Net price is not displayed");
-
-        $this->openTab("Main");
-        $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"), "Shipping method is not displayed in admin");
-        $this->assertEquals("COD (Cash on Delivery)", $this->getSelectedLabel("setPayment"), "Payment method is not displayed in admin");
-    }
 
 
     /**
-     * testing different countries with shipping rules assigned to this countries
+     * Testing ability to change country in standard PayPal.
+     * NOTE: this test originally asserted data on PayPal page.
+     * ($this->assertFalse($this->isElementPresent("id=changeAddressButton"), "In standard PayPal there should be not possibility to change address");)
+
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
-     */
-    public function testPayPalPaymentForLoginUser()
-    {
-        $this->openShop();
-
-        //Search for the product and add to cart
-        $this->searchFor("1001");
-        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
-        $this->openBasket("English");
-
-        //Login to shop and go to the basket
-        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
-        $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
-        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
-        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
-        // $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle() );
-        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
-        $this->assertTextPresent("Shipping costs:", "Shipping costs is not displayed correctly");
-        $this->assertTextPresent("?");
-        $this->assertTrue($this->isChecked("//input[@name='displayCartInPayPal' and @value='1']"));
-        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
-        $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
-
-        //Go to PayPal via PayPal Express with "Display cart in PayPal"
-        $this->selectPayPalExpressCheckout();
-
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Item number: 1001", "Product number not displayed in paypal ");
-        $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:", "Shipping costs is not calculated in PayPal");
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Test S&H set Price: €0,00 EUR", "Shipping method is not shown in PayPal");
-        // $this->assertEquals("Testing user acc Äß&amp;#039;ü PayPal Äß&amp;#039;ü Musterstr. Äß&#039;ü 1 79098 Musterstadt Äß&#039;ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString($this->getText("//div[@class='inset confidential']")));
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertElementPresent("id=shippingHandling", "Shipping costs: is not calculated in PayPal");
-        $this->assertTextPresent("Gesamtbetrag €0,99 EUR", "Total price is not displayed in PayPal");
-
-        //Cancel order and go back to the shop with uncecked option
-        $this->click("name=cancel_return");
-        $this->waitForElement("paypalExpressCheckoutButton");
-        $this->uncheck("//input[@name='displayCartInPayPal']");
-
-        //Go to PayPal via PayPal Express without  "Display cart in PayPal"
-        $this->selectPayPalExpressCheckout();
-
-        $this->assertFalse($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
-        $this->assertfalse($this->isTextPresent("Item number: 1001"), "Item number should not be displayed in PayPal");
-        $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed in PayPal");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-
-        $this->assertFalse($this->isTextPresent("Test product 1"), "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:", "Shipping costs: is not calculated in PayPal");
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Test S&H set Price: €0,00 EUR");
-        // $this->assertEquals("Testing user acc Äß&amp;#039;ü PayPal Äß&amp;#039;ü Musterstr. Äß&#039;ü 1 79098 Musterstadt Äß&#039;ü Deutschland Versandmethode: Test S&H set: €0,00 EUR", $this->clearString($this->getText("//div[@class='inset confidential']")));
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        //$this->assertTextPresent("Artikelnummer: 1001");
-        $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertElementPresent("id=shippingHandling", "Shipping costs: is not calculated in PayPal");
-        $this->assertTextPresent("Gesamtbetrag €0,99 EUR", "Total price is not displayed in PayPal");
-
-        //Change delivery address with country which has not PayPal assigned as payment method inside Paypal
-
-        $this->click("id=changeAddressButton");
-        $this->waitForItemAppear("id=addShipAddress");
-
-        //checking if there is already Belgium address
-        if (!$this->isTextPresent("Test address in Belgium 15, Antwerp, Belgien")) {
-            // adding new address (Belgium) to address list
-            $this->clickAndWait("id=addShipAddress");
-            $this->select("country_code", "label=Belgien");
-            $this->type("id=shipping_address1", "Test address in Belgium 15");
-            $this->type("id=shipping_city", "Antwerp");
-            //returning to address list
-            $this->click("//input[@id='continueBabySlider']");
-        }
-        // selecting Belgium address
-        $this->click("//label[@class='radio' and contains(.,'Test address in Belgium 15, Antwerp, Belgien')]/input");
-
-        $this->click("//input[@id='continueBabySlider']");
-
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=messageBox");
-        $this->waitForText("Gesamtbetrag €0,99 EUR");
-
-        $this->waitForText("PayPal Testshop versendet nicht an diesen Ort. Verwenden Sie eine andere Adresse.");
-
-        //Cancel paying with PayPal and back to the shop
-        $this->click("name=cancel_return");
-        $this->waitForElement("paypalExpressCheckoutButton");
-        $this->assertFalse($this->isTextPresent("Continue to the next step"), "Unexpected return to basket, should be returned to home page.");
-        $this->openBasket("English");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
-
-        //Check exist user address
-        $this->assertEquals("E-mail: testing_account@oxid-esales.dev SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany", $this->clearString($this->getText("//ul[@id='addressText']//li")), "User address is incorect");
-
-        //Change to new one which has not PayPal assigned as payment method inside PayPal
-        $this->click("userChangeAddress");
-        $this->waitForElement("//select[@id='invCountrySelect']/option[text()='United States']");
-
-        $this->select("//select[@id='invCountrySelect']", "label=United States");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
-        $this->clickAndWait("link=1. Cart");
-        $this->assertFalse($this->isElementPresent("paypalPartnerLogo"), "PayPal logo should not be displayed fot US");
-
-        //Created additional 3 shipping methods with Shipping costs rules for Austria
-        $this->importSql(__DIR__ . '/testSql/newDeliveryMethod_'. SHOP_EDITION .'.sql');
-
-        $this->openBasket("English");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
-
-        //Change country to Austria
-        $this->click("userChangeAddress");
-        $this->waitForItemAppear("invCountrySelect");
-        $this->select("invCountrySelect", "label=Austria");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
-
-        //Check all available shipping methods
-        $this->assertTextPresent("PayPal");
-        // Test Paypal:6 hour Price: €0.50 EUR
-        $this->selectAndWait("sShipSet", "label=Test Paypal:6 hour");
-
-        $this->assertTextPresent("Charges: 0,50 €");
-        $this->assertTextPresent("Test Paypal:6 hour", "Not all available shipping methods is displayed");
-        $this->assertTextPresent("Test Paypal:12 hour", "Not all available shipping methods is displayed");
-        $this->assertTextPresent("Standard", "Not all available shipping methods is displayed");
-        $this->assertTextPresent("Example Set1: UPS 48 hours", "Not all available shipping methods is displayed");
-        $this->assertTextPresent("Example Set2: UPS Express 24 hours", "Not all available shipping methods is displayed");
-
-        //Go to 1st step and make an order via PayPal express
-        $this->clickAndWait("link=1. Cart");
-        $this->selectPayPalExpressCheckout();
-
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Item number: 1001", "Product number not displayed in the 1st order step ");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-
-        $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:€0,50", "Shipping costs is not calculated in PayPal");
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
-        $this->waitForText("Gesamtbetrag €1,49 EUR");
-        $this->selectPayPalShippingMethod('Test Paypal:12 hour Price: €0,90 EUR');
-        $this->waitForText("Gesamtbetrag €1,89 EUR");
-
-        $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:€0,90", "Shipping costs is not displayed in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-        $this->assertTextPresent("Gesamtbetrag €1,89 EUR", "Total price is not displayed in PayPal");
-
-        //Go to shop
-        $this->clickPayPalContinue();
-        $this->clickPayPalContinue();
-        $this->waitForItemAppear("id=breadCrumb");
-
-        //Check are all info in the last order step correct
-        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
-        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
-        $this->assertEquals("Shipping costs: 0,90 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
-        // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
-        $this->assertEquals("Grand total: 1,89 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
-        $this->assertTextPresent("Test Paypal:12 hour", "Shipping method not displayed in order ");
-        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
-        $this->assertFalse($this->isTextPresent("COD"), "Wrong payment method displayed in last order step");
-
-        //Go back to 1st order step and change product quantities to 20
-        $this->clickAndWait("link=1. Cart");
-
-        $this->assertEquals("Total products (incl. tax): 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[3]")), "Total price not displayed in basket");
-        $this->assertEquals("Total products (excl. tax): 0,83 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[1]")), "Total price not displayed in basket");
-        $this->assertEquals("Grand total: 1,89 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
-        $this->type("id=am_1", "20");
-        $this->click("id=basketUpdate");
-        sleep(3);
-        $this->assertEquals("Total products (incl. tax): 19,80 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[3]")), "Total price not displayed in basket");
-        $this->assertEquals("Total products (excl. tax): 16,64 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[1]")), "Total price not displayed in basket");
-        $this->assertEquals("Grand total: 20,60 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
-
-        //Go to PayPal to make an order
-        $this->selectPayPalExpressCheckout();
-
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Item number: 1001", "Product number not displayed in the PayPal");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-
-        $this->assertTextPresent("Warenwert€19,80", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:€0,80", "Shipping costs is not calculated in PayPal");
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertElementPresent("id=showname0", "Product name is not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 20", "Product quantity is not shown in PayPal");
-        $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
-        $this->waitForText("Gesamtbetrag €19,80 EUR");
-        $this->selectPayPalShippingMethod('Test Paypal:6 hour Price: €0,40 EUR');
-
-        $this->waitForText("Gesamtbetrag €20,20 EUR");
-
-        $this->assertTextPresent("Warenwert€19,80", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:€0,40", "Shipping costs is not calculated in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-
-        //Go to shop
-        $this->clickPayPalContinue();
-        $this->clickPayPalContinue();
-        $this->waitForItemAppear("id=breadCrumb");
-
-        //Check are all info in the last order step correct
-        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
-        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
-        $this->assertEquals("Shipping costs: 0,40 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
-        // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
-        $this->assertEquals("Grand total: 20,20 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
-        $this->assertTextPresent("Test Paypal:6 hour", "Shipping costs is not calculated in PayPal");
-        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
-        $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
-    }
-
-    /**
-     * testing ability to change country in standard PayPal
      *
-     * @group paypal_standalone
-     * @group paypal_external
-     * @group quarantine
      */
     public function testPayPalStandard()
     {
@@ -939,13 +555,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->click("payment_oxidpaypal");
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
-        $this->waitForPayPalPage();
-
-        //Login to standard PayPal and check ability to change country
-        $this->loginToSandbox();
-
-        $this->assertFalse($this->isElementPresent("id=changeAddressButton"), "In standard PayPal there should be not possibility to change address");
-        $this->clickPayPalContinue();
+        $this->payWithPayPal();
 
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
@@ -961,7 +571,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     public function testPayPalActive()
     {
         // Set PayPal payment inactive.
-        $this->importSql(__DIR__ .'/testSql/setPayPalPaymentInactive.sql');
+        $this->importSql(__DIR__ . '/testSql/setPayPalPaymentInactive.sql');
 
         //Go to shop to check is PayPal not visible in front end
         $this->openShop();
@@ -987,12 +597,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalDiscountsCategory()
     {
         // Add vouchers to shop
-        $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ . '/testSql/newDiscounts_' . SHOP_EDITION . '.sql');
+
         //Go to shop and add product
         $this->openShop();
         $this->switchLanguage("English");
@@ -1016,34 +627,25 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->click("id=payment_oxidpaypal");
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
-        $this->waitForPayPalPage();
+        $this->payWithPayPal();
 
-        $this->assertPayPalTitleVisible();
-        $this->assertTextPresent("5.00 EUR");
-
-        $this->loginToSandbox();
-//        $this->clickPayPalContinue();
-
-        $this->assertTextPresent('Testing user acc Äß\'ü PayPal Äß\'ü');
-        $this->assertTextPresent("5,00 EUR");
-
-//        $this->assertTextPresent("Ihr Warenkorb");
-//        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-//        $this->assertTextPresent("Artikelpreis: 5,00 EUR", "Product price not shown in PayPal");
-//        $this->assertTextPresent("Artikelnummer: 1000", "Product number not shown in PayPal");
-//        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-//        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-//        $this->assertEquals("Artikelpreis: €0,00", $this->getText("//li[@id='multiitem1']/ul[2]/li[3]"), "Product price not shown in PayPal");
-//        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[2]/li[4]"), "Product quantity is not shown in PayPal");
-//        $this->assertTextPresent("€5,00");
-//        $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
-//        $this->click("id=confirmButtonTop");
-
-        $this->clickPayPalContinue();
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'AMT' => '5.00',
+                           'L_NAME0' => 'Test product 0',
+                           'L_NAME1' => 'Test product 1',
+                           'L_NUMBER0' => '1000',
+                           'L_NUMBER1' => '1001',
+                           'L_QTY0' => '1',
+                           'L_QTY1' => '1',
+                           'L_AMT0' => '5.00',
+                           'L_AMT1' => '0.00'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Go to shop to finish the order
-        // $this->_clickPayPalContinue(); CHECK THIS<-
-        $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 0", "Purchased product name is not displayed in last order step");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in last order step");
         $this->assertEquals("Item #: 1001", $this->getText("//tr[@id='cartItem_2']/td[2]/div[2]"), "Product number not displayed in last order step");
@@ -1085,12 +687,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalDiscountsFromTill()
     {
-        // Add vouchers to shopf
-        $this->importSql(__DIR__ .'/testSql/newDiscounts_'. SHOP_EDITION .'.sql');
+        // Add vouchers to shop
+        $this->importSql(__DIR__ . '/testSql/newDiscounts_' . SHOP_EDITION . '.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1117,36 +719,28 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
         //Go to PayPal
-        $this->waitForPayPalPage();
+        $this->payWithPayPal();
 
-        $this->assertPayPalTitleVisible();
-        // @todo replace , to . when not logged in to PayPal
-        // There are much less visible in new PayPal login page.
-        // There might be other places written like this.
-        $this->assertTextPresent("€15,00");
-        $this->assertTextPresent("€0,00");
-        $this->assertEquals("-€0,30", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
-        $this->assertEquals("Total €14,70 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-        $this->assertTextPresent("Artikelnummer: 1004", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €15,00", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,00", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("Warenwert€15,00");
-        $this->assertTextPresent("Rabatt -€0,30", "//div[@id='miniCart']");
-        $this->assertTextPresent("Gesamtbetrag €14,70 EUR", "//div[@id='miniCart']");
-        $this->click("id=continue_abovefold");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'AMT' => '14.70',
+                           'ITEMAMT' => '15.00',
+                           'TAXAMT' => '0.00',
+                           'SHIPDISCAMT' => '-0.30',
+                           'L_NAME0' => 'Test product 4',
+                           'L_NAME1' => 'Test product 1',
+                           'L_NUMBER0' => '1004',
+                           'L_NUMBER1' => '1001',
+                           'L_QTY0' => '1',
+                           'L_QTY1' => '1',
+                           'L_AMT0' => '15.00',
+                           'L_AMT1' => '0.00'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Go to last step to check the order
-        //$this->clickAndWait("id=continue");
-        $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 4", "Purchased product name is not displayed");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
         $this->assertEquals("Item #: 1004", $this->getText("//tr[@id='cartItem_1']/td[2]/div[2]"), "Product number not displayed in last order step");
@@ -1178,35 +772,27 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->click("id=payment_oxidpaypal");
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
-        $this->waitForPayPalPage();
+        $this->payWithPayPal();
 
-        $this->assertPayPalTitleVisible();
-        $this->assertTextPresent("Test product 4€45,00");
-        $this->assertTextPresent("Test product 1€0,00");
-        $this->assertTextPresent("Item total €45,00");
-        $this->assertTextPresent("Shipping discount -€2,25");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-
-        $this->assertTextPresent("Test product 4€45,00", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelnummer: 1004", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €15,00", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 3", "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("Test product 1€0,00", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,00", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("Rabatt -€2,25");
-        $this->assertTextPresent("Gesamtbetrag €42,75 EUR");
-        $this->click("id=continue_abovefold");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'PAYMENTREQUEST_0_AMT' => '42.75',
+                           'PAYMENTREQUEST_0_ITEMAMT' => '45.00',
+                           'PAYMENTREQUEST_0_SHIPDISCAMT' => '-2.25',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 4',
+                           'L_PAYMENTREQUEST_0_NAME1' => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1004',
+                           'L_PAYMENTREQUEST_0_NUMBER1' => '1001',
+                           'L_PAYMENTREQUEST_0_QTY0' => '3',
+                           'L_PAYMENTREQUEST_0_QTY1' => '1',
+                           'L_PAYMENTREQUEST_0_AMT0' => '15.00',
+                           'L_PAYMENTREQUEST_0_AMT1' => '0.00',];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Go to shop to finish the order
-        //$this->clickAndWait("id=continue");
-        $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 4", "Purchased product name is not displayed");
         $this->assertTextPresent("Test product 1", "Purchased product name is not displayed");
         $this->assertEquals("Item #: 1004", $this->getText("//tr[@id='cartItem_1']/td[2]/div[2]"), "Product number not displayed in last order step");
@@ -1251,11 +837,11 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalVouchers()
     {
-        $this->importSql(__DIR__ .'/testSql/newVouchers_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ . '/testSql/newVouchers_' . SHOP_EDITION . '.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1284,30 +870,25 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->click("id=payment_oxidpaypal");
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
-        $this->waitForPayPalPage();
+        $this->payWithPayPal();
 
-        $this->assertPayPalTitleVisible();
-        $this->assertTextPresent("€15,00");
-        $this->assertEquals("-€10,00", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
-        $this->assertEquals("Total €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-        $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €15,00", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-        $this->assertTextPresent("€10,00");
-        //$this->assertEquals("-€10,00", $this->getText("//div[@id='miniCart']/div[2]/ul/li[2]/span"));
-        $this->assertTextPresent("-€10,00");
-        $this->assertEquals("Gesamtbetrag €5,00 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
-        $this->click("id=continue_abovefold");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'AMT' => '5.00',
+                           'ITEMAMT' => '15.00',
+                           'SHIPPINGAMT' => '0.00',
+                           'SHIPDISCAMT' => '-10.00',
+                           'L_NAME0' => 'Test product 3',
+                           'L_NUMBER0' => '1003',
+                           'L_QTY0' => '1',
+                           'L_TAXAMT0' => '0.00',
+                           'L_AMT0' => '15.00',];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Go to shop to finish the order
-        $this->clickAndWait("id=continue");
-        $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Item #: 1003", $this->getText("//tr[@id='cartItem_1']/td[2]/div[2]"), "Product number not displayed in last order step");
 
@@ -1350,13 +931,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalVAT()
     {
         // Change price for PayPal payment methode
-        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
-        $this->importSql(__DIR__ .'/testSql/testPaypaVAT_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ . '/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ . '/testSql/testPaypaVAT_' . SHOP_EDITION . '.sql');
 
         //Go to shop and add product
         $this->openShop();
@@ -1395,46 +976,32 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->click("id=payment_oxidpaypal");
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
-        $this->waitForPayPalPage();
+        $this->payWithPayPal();
 
-        $this->assertPayPalTitleVisible();
-        $this->assertTextPresent("€17,85");
-        $this->assertTextPresent("€12,50");
-        $this->assertTextPresent("€3,51");
-        $this->assertTextPresent("€3,57");
-        $this->assertEquals("Total €52,90 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTextPresent("Item total €37,43");
-        $this->assertTextPresent("Shipping and handling:");
-        $this->assertTextPresent("€15,47");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-
-        $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €17,85", $this->getText("//li[@id='multiitem1']/ul/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Surcharge Type of Payment");
-        $this->assertEquals("Artikelpreis: €12,50", $this->getText("//li[@id='multiitem1']/ul[2]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[2]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Giftwrapper");
-        $this->assertEquals("Artikelpreis: €3,51", $this->getText("//li[@id='multiitem1']/ul[3]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[3]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Greeting Card");
-        $this->assertEquals("Artikelpreis: €3,57", $this->getText("//li[@id='multiitem1']/ul[4]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[4]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Warenwert€37,43", "Product price is not displayed in PayPal");
-        $this->assertEquals("Gesamtbetrag €52,90 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-        $this->click("id=continue_abovefold");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'AMT' => '52.90',
+                           'ITEMAMT' => '37.43',
+                           'SHIPPINGAMT' => '15.47',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 3',
+                           'L_PAYMENTREQUEST_0_NAME1' => 'Surcharge Type of Payment',
+                           'L_PAYMENTREQUEST_0_NAME2' => 'Giftwrapper',
+                           'L_PAYMENTREQUEST_0_NAME3' => 'Greeting Card',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1003',
+                           'L_PAYMENTREQUEST_0_QTY0' => '1',
+                           'L_PAYMENTREQUEST_0_QTY1' => '1',
+                           'L_PAYMENTREQUEST_0_QTY2' => '1',
+                           'L_PAYMENTREQUEST_0_QTY3' => '1',
+                           'L_PAYMENTREQUEST_0_AMT0' => '17.85',
+                           'L_PAYMENTREQUEST_0_AMT1' => '12.50',
+                           'L_PAYMENTREQUEST_0_AMT2' => '3.51',
+                           'L_PAYMENTREQUEST_0_AMT3' => '3.57',];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Go to shop to finish the order
-        //$this->clickAndWait("id=continue");
-        $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Item #: 1003", $this->getText("//tr[@id='cartItem_1']/td[2]/div[2]"), "Product number not displayed in last order step");
         $this->assertTextPresent("Greeting card");
@@ -1484,12 +1051,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalShippingCostNotLoginUser()
     {
         // Change price for PayPal payment method
-        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ . '/testSql/vatOptions.sql');
 
         // Go to admin and set on "Calculate default Shipping costs when User is not logged in yet "
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -1524,41 +1091,28 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("24,85 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         //Go to PayPal express
-        $this->selectPayPalExpressCheckout();
+        $this->payWithPayPalExpressCheckout();
 
-        $this->assertTextPresent("€15.00");
-        $this->assertTextPresent("€10.50");
-        $this->assertTextPresent("€2.95");
-        $this->assertTextPresent("€3.00");
-        $this->assertTextPresent("Item total €31.45");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue_abovefold");
-
-        $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €15,00", $this->getText("//li[@id='multiitem1']/ul/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Surcharge Type of Payment");
-        $this->assertEquals("Artikelpreis: €10,50", $this->getText("//li[@id='multiitem1']/ul[2]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[2]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Giftwrapper");
-        $this->assertEquals("Artikelpreis: €2,95", $this->getText("//li[@id='multiitem1']/ul[3]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[3]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Greeting Card");
-        $this->assertEquals("Artikelpreis: €3,00", $this->getText("//li[@id='multiitem1']/ul[4]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[4]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Warenwert€31,45", "Product total is not displayed in PayPal");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-        $this->waitForText("Gesamtbetrag €44,45 EUR");
-
-        $this->click("id=continue_abovefold");
-        $this->clickPayPalContinue();
-        $this->waitForItemAppear("id=breadCrumb");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'AMT' => '44.45',
+                           'ITEMAMT' => '31.45',
+                           'L_NAME0' => 'Test product 3',
+                           'L_NAME1' => 'Surcharge Type of Payment',
+                           'L_NAME2' => 'Giftwrapper',
+                           'L_NAME3' => 'Greeting Card',
+                           'L_NUMBER0' => '1003',
+                           'L_QTY0' => '1',
+                           'L_QTY1' => '1',
+                           'L_QTY2' => '1',
+                           'L_QTY3' => '1',
+                           'L_AMT0' => '15.00',
+                           'L_AMT1' => '10.50',
+                           'L_AMT2' => '2.95',
+                           'L_AMT3' => '3.00'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         $this->assertTextPresent("Test product 3");
         $this->assertEquals("Item #: 1003", $this->getText("//tr[@id='cartItem_1']/td[2]/div[2]"), "Product number not displayed in last order step");
@@ -1601,17 +1155,16 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("Test S&H set", $this->getText("//table[4]/tbody/tr[2]/td[2]"), "Shipping method is not displayed in admin");
     }
 
-
     /**
      * test if PayPal works correct when last product ir purchased.
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
-    public function testPayPalStockOne()
+    public function testPayPalStockOneSale()
     {
-        $this->importSql(__DIR__ .'/testSql/changeStock.sql');
+        $this->importSql(__DIR__ . '/testSql/changeStock.sql');
 
         $this->openShop();
         $this->searchFor("1001");
@@ -1623,7 +1176,6 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
         $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
-        //   $this->assertEquals( "OXID Surf and Kite Shop | Cart | purchase online", $this->getTitle() );
         $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
         $this->assertTextPresent("Shipping costs:", "Shipping costs is not displayed correctly");
         $this->assertTextPresent("?");
@@ -1632,45 +1184,22 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
 
         //Go to PayPal via PayPal Express with "Display cart in PayPal"
-        $this->selectPayPalExpressCheckout();
+        $this->payWithPayPalExpressCheckout();
 
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Item number: 1001", "Product number not displayed in PayPal ");
-        $this->assertFalse($this->isTextPresent("Grand total: €0,99"), "Grand total should not be displayed");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-        $this->waitForText("Gesamtbetrag €0,99 EUR");
-
-        $this->assertTextPresent("Test product 1", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Warenwert€0,99", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:", "Shipping costs is not calculated in PayPal");
-        $this->assertTextPresent("Test product 1", "Product name is not shown in PayPal");
-
-        $this->assertTextPresent("Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-        $this->assertTextPresent("Artikelpreis: €0,99", "Product price not shown in PayPal");
-        $this->assertTextPresent("Anzahl: 1", "Product quantity is not shown in PayPal");
-
-        $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
-
-        $this->assertTextPresent("Gesamtbetrag €0,99 EUR", "Total price is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:€0,00", "Total price is not displayed in PayPal");
-
-        $this->waitForText("Gesamtbetrag €0,99 EUR");
-        $this->waitForText("Versandkosten:€0,00");
-        $this->assertTextPresent("Versandkosten:€0,00", "Shipping costs is not calculated in PayPal");
-        $this->waitForItemAppear("id=shippingHandling");
-        $this->assertElementPresent("id=shippingHandling", "Shipping costs is not calculated in PayPal");
-
-        $this->waitForItemAppear("id=continue");
-
-        // adding sleep to wait while "continue" button will be active
-        sleep(1);
-        $this->clickPayPalContinue();
-        $this->waitForItemAppear("id=breadCrumb");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'PAYMENTREQUEST_0_SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'AMT' => '0.99',
+                           'ITEMAMT' => '0.99',
+                           'SHIPPINGAMT' => '0.00',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1001',
+                           'L_PAYMENTREQUEST_0_QTY0' => '1',
+                           'L_PAYMENTREQUEST_0_TAXAMT0' => '0.00',
+                           'L_PAYMENTREQUEST_0_AMT0' => '0.99'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Check are all info in the last order step correct
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
@@ -1681,6 +1210,164 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
+
+        //Go to admin and check the order
+        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->openListItem("link=2");
+        $this->assertTextPresent("Internal Status: OK");
+    }
+
+    /**
+     * test if PayPal works correct when last product is purchased.
+     * In transaction mode 'automatic' transaction mode 'authorization' is used when stock level drops below specified value.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     *
+     */
+    public function testPayPalStockOneAutomatic()
+    {
+        $this->importSql(__DIR__ . '/testSql/changeStock.sql');
+
+        $this->callShopSC('oxConfig', null, null, [
+            'sOEPayPalTransactionMode' => [
+                'type' => 'select',
+                'value' => 'Automatic',
+                'module' => 'module:oepaypal'
+            ]]);
+
+        $this->callShopSC('oxConfig', null, null, [
+            'sOEPayPalEmptyStockLevel' => [
+                'type' => 'select',
+                'value' => '10',
+                'module' => 'module:oepaypal'
+            ]]);
+
+        $this->openShop();
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("English");
+
+        //Login to shop and go to the basket
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
+        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
+        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
+        $this->assertTextPresent("Shipping costs:", "Shipping costs is not displayed correctly");
+        $this->assertTextPresent("?");
+        $this->assertTrue($this->isChecked("//input[@name='displayCartInPayPal' and @value='1']"));
+        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
+        $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
+
+        //Go to PayPal via PayPal Express with "Display cart in PayPal"
+        $this->payWithPayPalExpressCheckout();
+
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'PAYMENTREQUEST_0_SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'AMT' => '0.99',
+                           'ITEMAMT' => '0.99',
+                           'SHIPPINGAMT' => '0.00',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1001',
+                           'L_PAYMENTREQUEST_0_QTY0' => '1',
+                           'L_PAYMENTREQUEST_0_TAXAMT0' => '0.00',
+                           'L_PAYMENTREQUEST_0_AMT0' => '0.99'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        //Check are all info in the last order step correct
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
+        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
+        $this->assertEquals("Shipping costs: 0,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
+        // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
+        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
+        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
+        $this->clickAndWait("//button[text()='Order now']");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
+
+        //Go to admin and check the order
+        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->openListItem("link=2");
+        $this->assertTextPresent("Internal Status: NOT_FINISHED"); //means capture has to be done manually with these settings
+    }
+
+    /**
+     * Test if PayPal works correct when last product is purchased.
+     * In transaction mode 'automatic' transaction mode 'authorization' is used when stock level drops below specified value.
+     *
+     * @group paypal_standalone
+     * @group paypal_external*
+     */
+    public function testPayPalStockSufficientAutomatic()
+    {
+        $this->importSql(__DIR__ . '/testSql/changeStockTo100.sql');
+
+        $this->callShopSC('oxConfig', null, null, [
+            'sOEPayPalTransactionMode' => [
+                'type' => 'select',
+                'value' => 'Automatic',
+                'module' => 'module:oepaypal'
+            ]]);
+
+        $this->callShopSC('oxConfig', null, null, [
+            'sOEPayPalEmptyStockLevel' => [
+                'type' => 'select',
+                'value' => '1',
+                'module' => 'module:oepaypal'
+            ]]);
+
+        $this->openShop();
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("English");
+
+        //Login to shop and go to the basket
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
+        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
+        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
+        $this->assertTextPresent("Shipping costs:", "Shipping costs is not displayed correctly");
+        $this->assertTextPresent("?");
+        $this->assertTrue($this->isChecked("//input[@name='displayCartInPayPal' and @value='1']"));
+        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
+        $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
+
+        //Go to PayPal via PayPal Express with "Display cart in PayPal"
+        $this->payWithPayPalExpressCheckout();
+
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'PAYMENTREQUEST_0_SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'AMT' => '0.99',
+                           'ITEMAMT' => '0.99',
+                           'SHIPPINGAMT' => '0.00',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1001',
+                           'L_PAYMENTREQUEST_0_QTY0' => '1',
+                           'L_PAYMENTREQUEST_0_TAXAMT0' => '0.00',
+                           'L_PAYMENTREQUEST_0_AMT0' => '0.99'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        //Check are all info in the last order step correct
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
+        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
+        $this->assertEquals("Shipping costs: 0,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
+        // $this->assertEquals( "OXID Surf and Kite Shop | Order | purchase online", $this->getTitle() );
+        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
+        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
+        $this->clickAndWait("//button[text()='Order now']");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
+
+        //Go to admin and check the order
+        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->openListItem("link=2");
+        $this->assertTextPresent("Internal Status: OK");
     }
 
     /**
@@ -1688,12 +1375,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalProportional()
     {
         // Change price for PayPal payment method
-        $this->importSql(__DIR__ .'/testSql/newVAT.sql');
+        $this->importSql(__DIR__ . '/testSql/newVAT.sql');
 
         // Go to admin and set on all VAT options
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -1756,53 +1443,43 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
         //Go to PayPal
-        $this->waitForPayPalPage();
+        $this->payWithPayPal();
 
-        $this->assertPayPalTitleVisible();
-        $this->assertTextPresent("€10,00");
-        $this->assertTextPresent("€0,99");
-        $this->assertTextPresent("€15,00");
-        $this->assertTextPresent("€2,95");
-        $this->assertTextPresent("€3,00");
-        $this->assertEquals("Total €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTextPresent("Item total €46,94");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-
-        $this->assertTextPresent("Artikelnummer: 1000", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €10,00", $this->getText("//li[@id='multiitem1']/ul/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €0,99", $this->getText("//li[@id='multiitem1']/ul[2]/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[2]/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €15,00", $this->getText("//li[@id='multiitem1']/ul[3]/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[3]/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Artikelnummer: 1004", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €15,00", $this->getText("//li[@id='multiitem1']/ul[4]/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[4]/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Giftwrapper");
-        $this->assertEquals("Artikelpreis: €2,95", $this->getText("//li[@id='multiitem1']/ul[5]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[5]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Greeting Card");
-        $this->assertEquals("Artikelpreis: €3,00", $this->getText("//li[@id='multiitem1']/ul[6]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[6]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Warenwert€46,94", "Product price is not displayed in Paypal");
-        $this->assertEquals("Gesamtbetrag €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-        $this->click("id=continue_abovefold");
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'PAYMENTREQUEST_0_SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'PAYMENTREQUEST_0_AMT' => '46.94',
+                           'PAYMENTREQUEST_0_ITEMAMT' => '46.94',
+                           'PAYMENTREQUEST_0_SHIPPINGAMT' => '0.00',
+                           'PAYMENTREQUEST_0_HANDLINGAMT' => '0.00',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 0',
+                           'L_PAYMENTREQUEST_0_NAME1' => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_NAME2' => 'Test product 3',
+                           'L_PAYMENTREQUEST_0_NAME3' => 'Test product 4',
+                           'L_PAYMENTREQUEST_0_NAME4' => 'Giftwrapper',
+                           'L_PAYMENTREQUEST_0_NAME5' => 'Greeting Card',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1000',
+                           'L_PAYMENTREQUEST_0_NUMBER1' => '1001',
+                           'L_PAYMENTREQUEST_0_NUMBER2' => '1003',
+                           'L_PAYMENTREQUEST_0_NUMBER3' => '1004',
+                           'L_PAYMENTREQUEST_0_QTY0' => '1',
+                           'L_PAYMENTREQUEST_0_QTY1' => '1',
+                           'L_PAYMENTREQUEST_0_QTY2' => '1',
+                           'L_PAYMENTREQUEST_0_QTY3' => '1',
+                           'L_PAYMENTREQUEST_0_QTY4' => '1',
+                           'L_PAYMENTREQUEST_0_QTY5' => '1',
+                           'L_PAYMENTREQUEST_0_AMT0' => '10.00',
+                           'L_PAYMENTREQUEST_0_AMT1' => '0.99',
+                           'L_PAYMENTREQUEST_0_AMT2' => '15.00',
+                           'L_PAYMENTREQUEST_0_AMT3' => '15.00',
+                           'L_PAYMENTREQUEST_0_AMT4' => '2.95',
+                           'L_PAYMENTREQUEST_0_AMT5' => '3.00'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Go to shop to finish the order
-        //$this->clickAndWait("id=continue");
-        $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 0");
         $this->assertEquals("Item #: 1000", $this->getText("//tr[@id='cartItem_1']/td[2]/div[2]"), "Product number not displayed in last order step");
         $this->assertTextPresent("Test product 1");
@@ -1871,7 +1548,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
 
         $this->assertEquals("Total products (incl. tax): 40,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")));
         $this->assertEquals("Shipping (excl. tax): 0,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[7]")));
-        $this->assertEquals("Gift Wrapping (net): 2,89 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[8]")));
+        $this->assertEquals("Gift wrapping (excl. tax): 2,89 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[8]")));
         $this->assertEquals("2,89 €", $this->getText("basketWrappingNetto"), "Wrapping price changed or didn't displayed");
         $this->assertEquals("0,06 €", $this->getText("basketWrappingVat"), "Wrapping vat changed or didn't displayed");
         $this->assertEquals("2,66 €", $this->getText("basketGiftCardNetto"), "Card price changed or didn't displayed");
@@ -1887,54 +1564,38 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->click("id=payment_oxidpaypal");
         $this->clickAndWait("//button[text()='Continue to the next step']");
 
-        //Go to PayPal
-        $this->waitForPayPalPage();
+        //Going to PayPal
+        $this->payWithPayPal();
 
-        $this->assertPayPalTitleVisible();
-        $this->assertTextPresent("€10,00");
-        $this->assertTextPresent("€0,99");
-        $this->assertTextPresent("€15,00");
-        $this->assertTextPresent("€2,95");
-        $this->assertTextPresent("€3,00");
-        $this->assertEquals("Total €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"));
-        $this->assertTextPresent("Item total €46,94");
-
-        $this->loginToSandbox();
-        $this->waitForItemAppear("id=continue");
-
-        $this->assertTextPresent("Artikelnummer: 1000", "Product number not shown in Paypal");
-        $this->assertEquals("Artikelpreis: €10,00", $this->getText("//li[@id='multiitem1']/ul/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Artikelnummer: 1001", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €0,99", $this->getText("//li[@id='multiitem1']/ul[2]/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[2]/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Artikelnummer: 1003", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €15,00", $this->getText("//li[@id='multiitem1']/ul[3]/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[3]/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Artikelnummer: 1004", "Product number not shown in PayPal");
-        $this->assertEquals("Artikelpreis: €15,00", $this->getText("//li[@id='multiitem1']/ul[4]/li[3]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[4]/li[4]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Giftwrapper");
-        $this->assertEquals("Artikelpreis: €2,95", $this->getText("//li[@id='multiitem1']/ul[5]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[5]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Greeting Card");
-        $this->assertEquals("Artikelpreis: €3,00", $this->getText("//li[@id='multiitem1']/ul[6]/li[2]"), "Product price not shown in PayPal");
-        $this->assertEquals("Anzahl: 1", $this->getText("//li[@id='multiitem1']/ul[6]/li[3]"), "Product quantity is not shown in PayPal");
-
-        $this->assertTextPresent("Warenwert€46,94", "Product price is not displayed in PayPal");
-        $this->assertEquals("Gesamtbetrag €46,94 EUR", $this->getText("//div[@id='miniCart']/div[3]/ul/li/span"), "Total price is not displayed in PayPal");
-        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
-        $this->assertTextPresent("Ihr Warenkorb");
-        $this->click("id=continue_abovefold");
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK'                           => 'Success',
+                           'PAYMENTREQUEST_0_AMT'          => '46.94',
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'L_PAYMENTREQUEST_0_NAME0'      => 'Test product 0',
+                           'L_PAYMENTREQUEST_0_AMT0'       => '10.00',
+                           'L_PAYMENTREQUEST_0_QTY0'       => '1',
+                           'L_PAYMENTREQUEST_0_NUMBER0'    => '1000',
+                           'L_PAYMENTREQUEST_0_NAME1'      => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_AMT1'       => '0.99',
+                           'L_PAYMENTREQUEST_0_QTY1'       => '1',
+                           'L_PAYMENTREQUEST_0_NUMBER1'    => '1001',
+                           'L_PAYMENTREQUEST_0_NAME2'      => 'Test product 3',
+                           'L_PAYMENTREQUEST_0_AMT2'       => '15.00',
+                           'L_PAYMENTREQUEST_0_QTY2'       => '1',
+                           'L_PAYMENTREQUEST_0_NUMBER2'    => '1003',
+                           'L_PAYMENTREQUEST_0_NAME3'      => 'Test product 4',
+                           'L_PAYMENTREQUEST_0_AMT3'       => '15.00',
+                           'L_PAYMENTREQUEST_0_QTY3'       => '1',
+                           'L_PAYMENTREQUEST_0_NUMBER3'    => '1004',
+                           'L_PAYMENTREQUEST_0_NAME4'      => 'Giftwrapper',
+                           'L_PAYMENTREQUEST_0_AMT4'       => '2.95',
+                           'L_PAYMENTREQUEST_0_QTY4'       => '1',
+                           'L_PAYMENTREQUEST_0_NAME5'      => 'Greeting Card',
+                           'L_PAYMENTREQUEST_0_AMT5'       => '3.00',
+                           'L_PAYMENTREQUEST_0_QTY5'       => '1'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         //Go to shop to finish the order
-        //$this->clickAndWait("id=continue");
-        $this->waitForItemAppear("id=breadCrumb");
         $this->assertTextPresent("Test product 0");
         $this->assertEquals("Item #: 1000", $this->getText("//tr[@id='cartItem_1']/td[2]/div[2]"), "Product number not displayed in last order step");
         $this->assertTextPresent("Test product 1");
@@ -1993,12 +1654,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalExpressNettoMode()
     {
         // Activate the necessary options Neto mode
-        $this->importSql(__DIR__ .'/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ . '/testSql/NettoModeTurnOn_' . SHOP_EDITION . '.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2006,7 +1667,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
 
         // Change price for PayPal payment method
-        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ . '/testSql/vatOptions.sql');
 
         $this->openBasket("English");
 
@@ -2029,34 +1690,34 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertElementPresent("paypalExpressCheckoutButton");
         $this->selectPayPalExpressCheckout();
 
-        // Check if article is correct shown in login page.
-        $this->assertTextPresent("Harness SOL KITE", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Item number: 1401", "Product number not displayed in PayPal ");
-        $this->assertTextPresent("Item price: €108.40", "Article price is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Item price: €8.82", "Surcharge is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Item price: €2.48", "Gift wrapping is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Item price: €2.52", "Gift card is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Item total €122.22", "Total items sum should be displayed");
+        //Check what was communicated with PayPal
+        $assertRequest = ['PAYMENTREQUEST_0_AMT' => '145.45',
+                          'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                          'PAYMENTREQUEST_0_ITEMAMT' => '122.22',
+                          'L_PAYMENTREQUEST_0_NAME0' => 'Harness SOL KITE',
+                          'L_PAYMENTREQUEST_0_AMT0' => '108.40',
+                          'L_PAYMENTREQUEST_0_NUMBER0' => '1401',
+                          'L_PAYMENTREQUEST_0_AMT1' => '8.82',
+                          'L_PAYMENTREQUEST_0_AMT2' => '2.48',
+                          'L_PAYMENTREQUEST_0_AMT3' => '2.52'];
+        $assertResponse = ['ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
         $this->loginToSandbox();
-        // Check if article sum and VAT is shown correctly after login to PayPal.
-        // Continue button is visible before PayPal does callback.
-        // Then it becomes invisible while PayPal does callback.
-        // Button appears when PayPal gets callback result.
-        // Need to ensure that call back is returned otherwise total sum would be shown wrongly.
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
-        sleep(10);
-        $this->waitForEditable('id=continue_abovefold');
-        $this->waitForText("Steuer");
-
-        $this->assertTextPresent("Harness SOL KITE", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Warenwert€122,22", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Steuer:€23,23", "Product VAT is not displayed in PayPal");
-        $this->waitForItemAppear("id=displayShippingAmount");
-        $this->assertTextPresent("Gesamtbetrag €158,45 EUR", "Total price is not displayed in PayPal");
-
         $this->clickPayPalContinue();
+
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Harness SOL KITE',
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'PAYMENTREQUEST_0_AMT' => '158.45',
+                           'PAYMENTREQUEST_0_ITEMAMT' => '122.22',
+                           'PAYMENTREQUEST_0_SHIPPINGAMT' => '13.00',
+                           'PAYMENTREQUEST_0_TAXAMT' => '23.23'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
         $this->waitForText("Please check all data on this overview before submitting your order!");
     }
 
@@ -2065,14 +1726,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group quarantine
+     *
      */
     public function testPayPalStandardNettoMode()
     {
-        // Activate the necessary options Neto mode
-        // Turn Trusted Shops functionality on
-        $this->importSql(__DIR__ .'/testSql/NettoModeTurnOn_'. SHOP_EDITION .'.sql');
-        $this->importSql(__DIR__ .'/testSql/trustedShopsOxConfig_'. SHOP_EDITION .'.sql');
+        // Activate the necessary options netto mode
+        $this->importSql(__DIR__ . '/testSql/NettoModeTurnOn_' . SHOP_EDITION . '.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2080,7 +1739,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
 
         // Change price for PayPal payment method
-        $this->importSql(__DIR__ .'/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ . '/testSql/vatOptions.sql');
 
         // Need to wait after switching language as basket layout might not appear if JavaScript is not loaded.
         $this->switchLanguage("Deutsch");
@@ -2102,7 +1761,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("108,40 €", $this->getText("basketTotalProductsNetto"), "Net price changed or didn't display");
         $this->assertEquals("134,95 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't display");
 
-        // Add more articles so sum would be more than 500eur. 500eur would turn on Trusted Shop payment.
+        // Add more articles so sum would be more than 500eur.
         // Without sleep basket update do not make update before checking actual prices.
         $this->type("am_1", "10");
         sleep(1);
@@ -2124,40 +1783,180 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
         $this->waitForText("Bitte wählen Sie Ihre Versandart");
 
-        // Check trusted shop protection
-//        $this->check("//input[@name='bltsprotection'and @value='1']");
-
         // Go to PayPal
         $this->click("payment_oxidpaypal");
         $this->click(self::SELECTOR_BASKET_NEXTSTEP);
+        $this->payWithPayPal();
 
-        $this->waitForPayPalPage();
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['ACK' => 'Success',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerLogin'),
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Trapez ION SOL KITE 2011',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1401',
+                           'L_PAYMENTREQUEST_0_AMT0' => '108.40',
+                           'L_PAYMENTREQUEST_0_AMT1' => '8.82',
+                           'L_PAYMENTREQUEST_0_AMT2' => '24.79',
+                           'L_PAYMENTREQUEST_0_AMT3' => '2.52',
+                           'PAYMENTREQUEST_0_TAXAMT' => '212.83',
+                           'PAYMENTREQUEST_0_AMT' => '1345.96',
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'PAYMENTREQUEST_0_ITEMAMT' => '1120.13',
+                           'PAYMENTREQUEST_0_SHIPPINGAMT' => '13.00'];
+        $this->assertLogData($assertRequest, $assertResponse);
 
-        // Check if article is correct shown in login page.
-        $this->assertTextPresent("Trapez ION SOL KITE 2011", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Artikelnummer: 1401", "Product number not displayed in PayPal ");
-        $this->assertTextPresent("Artikelpreis: €108,40", "Article price is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Artikelpreis: €8,82", "Surcharge is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Artikelpreis: €24,79", "Gift wrapping is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Artikelpreis: €2,52", "Gift card is not correct. Should be in Net mode.");
-        $this->assertTextPresent("Warenwert€1.120,95", "Total items sum should be displayed");
-        $this->assertTextPresent("Steuer:€212,99", "Product VAT is not displayed in PayPal");
-        $this->assertTextPresent("Versandkosten:€13,00", "Product Shipping costs is not displayed in PayPal");
-        $this->assertTextPresent("Gesamtbetrag €1.346,94 EUR", "Total price is not displayed in PayPal");
+        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
+    }
 
-        $this->loginToSandbox();
-        // Check if article sum and VAT is shown correctly after login to PayPal.
-        $this->waitForItemAppear("id=continue");
-        $this->waitForItemAppear("id=displayShippingAmount");
+    /**
+     * testing when payment method has unassigned country Germany, user is not login to the shop, and purchase as PayPal user from Germany
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     *
+     */
+    public function testPayPalPaymentForGermany()
+    {
+        //Separate Germany from PayPal payment method and assign United States
+        $this->importSql(__DIR__ . '/testSql/unasignCountryFromPayPal.sql');
 
-        $this->assertTextPresent("Trapez ION SOL KITE 2011", "Purchased product name is not displayed in PayPal");
-        $this->assertTextPresent("Warenwert€1.120,95", "Product price is not displayed in PayPal");
-        $this->assertTextPresent("Steuer:€212,99", "Product VAT is not displayed in PayPal");
-        $this->assertTextPresent("Gesamtbetrag €1.346,94 EUR", "Total price is not displayed in PayPal");
+        ///Go to make an order but do not finish it
+        $this->clearCache();
+        $this->openShop();
 
-        $this->clickPayPalContinue();
+        //Check if PayPal logo in frontend is active in both languages
+        $this->assertElementPresent("paypalPartnerLogo", "PayPal logo not shown in frontend page");
+        $this->switchLanguage("Deutsch");
+        $this->assertElementPresent("paypalPartnerLogo", "PayPal logo not shown in frontend page");
+        $this->switchLanguage("English");
 
-        $this->waitForText("Bitte prüfen Sie alle Daten, bevor Sie Ihre Bestellung abschließen!");
+        //Search for the product and add to cart
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("English");
+        $this->waitForElement("paypalExpressCheckoutButton");
+        $this->assertElementPresent("link=Test product 1", "Product:Test product 1 is not shown in 1st order step ");
+        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]", "There product:Test product 1 is not shown in 1st order step");
+        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Grand Total is not displayed correctly");
+        $this->assertFalse($this->isTextPresent("Shipping costs:"), "Shipping costs should not be displayed");
+        $this->assertTextPresent("?");
+        $this->assertTrue($this->isChecked("//input[@name='displayCartInPayPal' and @value='1']"));
+        $this->assertTextPresent("Display cart in PayPal", "An option text:Display cart in PayPal is not displayed");
+        $this->assertElementPresent("name=displayCartInPayPal", "An option Display cart in PayPal is not displayed");
+
+        //Go to PayPal express to make an order
+        $this->payWithPayPalExpressCheckout('paypalExpressCheckoutButton', true);
+
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['PAYMENTREQUEST_0_AMT' => '7.89',
+                           'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                           'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                           'L_PAYMENTREQUEST_0_NUMBER0' => '1001',
+                           'L_PAYMENTREQUEST_0_QTY0' => '1',
+                           'L_PAYMENTREQUEST_0_AMT0' => '0.99',
+                           'EMAIL' => $this->getLoginDataByName('sBuyerUSLogin'),
+                           'AMT' => '7.89',
+                           'ITEMAMT' => '0.99',
+                           'SHIPPINGAMT' => '6.90',
+                           'SHIPPINGCALCULATIONMODE' => 'Callback',
+                           'ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        //Now user is on the 1st "cart" step with an error message:
+        $this->assertTextPresent("Based on your choice in PayPal Express Checkout, order total has changed. Please check your shopping cart and continue. Hint: for continuing with Express Checkout press Express Checkout button again.", "An error message is not dispayed in shop 1st order step");
+        $this->assertElementPresent("id=basketRemoveAll", "an option Remove is not displayed in 1st cart step");
+        $this->assertElementPresent("id=basketRemove", "an option All is not displayed in 1st cart step");
+        $this->assertElementPresent("id=basketUpdate", "an option Update is not displayed in 1st cart step");
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
+        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]", "There product:Test product 1 is not shown in 1st order step");
+        $this->assertEquals("Grand total: 7,73 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
+        $this->assertEquals("Shipping costs: 6,90 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
+
+        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
+        $this->assertElementPresent("name=displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed in cart");
+        $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
+
+        //Go to next step and change country to Germany
+        $this->clickAndWait("css=.nextStep");
+        $this->click("//button[@id='userChangeAddress']");
+        $this->click("id=invCountrySelect");
+        $this->select("invCountrySelect", "label=Germany");
+        $this->click("id=userNextStepTop");
+        $this->waitForPageToLoad("30000");
+
+        //Check if PayPal is not displayed for Germany
+        $this->assertElementNotPresent("//select[@name='sShipSet']/option[text()='Paypal']", "Paypal is displayed for Germany, but must be not shown");
+
+        $this->assertEquals("COD (Cash on Delivery) (7,50 €)", $this->getText("//form[@id='payment']/dl[5]/dt/label/b"), "Wrong payment method is shown");
+        $this->assertTextPresent("COD (Cash on Delivery) (7,50 €)", "Wrong payment method is shown");
+        $this->assertFalse($this->isTextPresent("PayPal (0,00 €)"), "PayPal should not be displayed as payment method");
+
+        //Also check if PayPal not displayed in the 1st cart step
+        $this->click("link=1. Cart");
+        $this->waitForPageToLoad("30000");
+        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
+        $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed in cart");
+        $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
+
+        //Go to admin and check previous order status and check if new order didn't appear in admin.
+        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->selectMenu("Administer Orders", "Orders");
+        $this->assertElementNotPresent("link=2");
+
+        //Go to basket and make an order,
+        $this->clearCache();
+        $this->openShop();
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("English");
+
+        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Grand total is not displayed correctly");
+        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->assertElementPresent("id=showShipAddress", "Shipping address is not displayed in 2nd order step");
+        $this->click("id=userNextStepBottom");
+        $this->waitForElement("paymentNextStepBottom");
+        $this->assertElementPresent("name=sShipSet", "Shipping method drop down is not shown");
+        $this->assertEquals("Test S&H set", $this->getSelectedLabel("sShipSet"), "Wrong shipping method is selected, should be:Test S&H set ");
+        $this->click("id=paymentNextStepBottom");
+
+        //go to last order step, check if payment method is not PayPal
+        $this->waitForElement("orderAddress");
+        $this->assertElementPresent("link=Test product 1", "Product name is not displayed in last order step");
+        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
+        $this->assertEquals("Shipping costs: 0,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
+        $this->assertEquals("Surcharge Payment method: 7,50 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Payment price is not displayed in carts");
+        $this->assertEquals("Grand total: 8,49 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")), "Grand total is not displayed correctly");
+        $this->assertTextPresent("Test S&H set");
+        $this->assertTextPresent("COD");
+        $this->clickAndWait("//button[text()='Order now']");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
+
+        // After successful purchase, go to admin and check order status
+        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->click("link=Order No.");
+        $this->waitForPageToLoad("30000");
+
+        $this->clickandWait("link=2");
+        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
+        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assertEquals("0000-00-00 00:00:00", $this->getText("//tr[@id='row.1']/td[4]"));
+        $this->openListItem("2", "setfolder");
+        $this->assertTextPresent("Internal Status: OK");
+        $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");
+        $this->assertEquals("1 *", $this->getText("//table[2]/tbody/tr/td[1]"));
+        $this->assertEquals("Test product 1", $this->getText("//td[3]"), "Purchased product name is not displayed in Admin");
+        $this->assertEquals("8,49", $this->getText("//table[@id='order.info']/tbody/tr[7]/td[2]"));
+
+        $this->openTab("Products");
+        $this->assertEquals("7,50", $this->getText("//table[@id='order.info']/tbody/tr[6]/td[2]"), "charges of payment method is not displayed");
+        $this->assertEquals("0,16", $this->getText("//table[@id='order.info']/tbody/tr[4]/td[2]"), "VAT is not displayed");
+        $this->assertEquals("0,83", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"), "Product Net price is not displayed");
+
+        $this->openTab("Main");
+        $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"), "Shipping method is not displayed in admin");
+        $this->assertEquals("COD (Cash on Delivery)", $this->getSelectedLabel("setPayment"), "Payment method is not displayed in admin");
     }
 
     /**
@@ -2168,7 +1967,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     public function testPayPalShortcut()
     {
         // Turn Off all PayPal shortcut in frontend
-        $this->importSql(__DIR__ .'/testSql/testPayPalShortcut_'. SHOP_EDITION .'.sql');
+        $this->importSql(__DIR__ . '/testSql/testPayPalShortcut_' . SHOP_EDITION . '.sql');
 
         // Add articles to basket.
         $this->openShop();
@@ -2261,6 +2060,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         }
     }
 
+    /**
+     * New sandbox login.
+     *
+     * @param string $loginEmail
+     * @param string $loginPassword
+     */
     private function loginToNewSandbox($loginEmail, $loginPassword)
     {
         $this->selectCorrectLoginFrame();
@@ -2270,9 +2075,16 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->click(self::PAYPAL_LOGIN_BUTTON_ID_NEW);
 
         $this->selectWindow(null);
-        $this->waitForElement("id=sliding-area");
+        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 3, true);
+        $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 10, true);
     }
 
+    /**
+     * Old sandbox login.
+     *
+     * @param string $loginEmail
+     * @param string $loginPassword
+     */
     private function loginToOldSandbox($loginEmail, $loginPassword)
     {
         $this->type("login_email", $loginEmail);
@@ -2339,6 +2151,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      */
     private function selectPayPalExpressCheckout($expressCheckoutButtonIdentification = "paypalExpressCheckoutButton")
     {
+        $this->waitForItemAppear("//input[@id='{$expressCheckoutButtonIdentification}']", 10, true);
         $this->expressCheckoutWillBeUsed();
         $this->click($expressCheckoutButtonIdentification);
         $this->waitForPayPalPage();
@@ -2357,12 +2170,14 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      */
     protected function clickPayPalContinue()
     {
-        sleep(5);
         if ($this->newPayPalUserInterface) {
             $this->clickPayPalContinueNewPage();
         } else {
             $this->clickPayPalContinueOldPage();
         }
+
+        //we should be redirected back to shop at this point
+        $this->_waitForAppear('isElementPresent', "id=breadCrumb", 10, true);
     }
 
     /**
@@ -2372,9 +2187,9 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      */
     protected function clickPayPalContinueNewPage()
     {
-        $this->waitForItemAppear( "//input[@id='confirmButtonTop']", 10, true );
-        $this->waitForEditable( "id=confirmButtonTop" );
-        $this->clickAndWait( "id=confirmButtonTop" );
+        $this->waitForItemAppear("//input[@id='confirmButtonTop']", 10, true);
+        $this->waitForEditable("id=confirmButtonTop");
+        $this->clickAndWait("id=confirmButtonTop");
     }
 
     /**
@@ -2384,9 +2199,9 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      */
     protected function clickPayPalContinueOldPage()
     {
-        $this->waitForItemAppear( "//input[@id='continue']", 10, true );
-        $this->waitForEditable( "id=continue" );
-        $this->clickAndWait( "id=continue" );
+        $this->waitForItemAppear("//input[@id='continue']", 10, true);
+        $this->waitForEditable("id=continue");
+        $this->clickAndWait("id=continue");
     }
 
     /**
@@ -2427,11 +2242,6 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->waitForElement(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
     }
 
-    protected function assertPayPalTitleVisible()
-    {
-        $this->assertEquals("PayPal Checkout - Log in", $this->getTitle());
-    }
-
     /**
      * @param string $basketPrice
      * @param string $capturedPrice
@@ -2458,7 +2268,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      */
     private function getOrderPayPalTabPrice($row, $column)
     {
-        return $this->getText("//table[@class='paypalActionsTable']/tbody/tr[".$row."]/td[".$column."]/b");
+        return $this->getText("//table[@class='paypalActionsTable']/tbody/tr[" . $row . "]/td[" . $column . "]/b");
     }
 
     /**
@@ -2489,5 +2299,86 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("{$productGrossPrice} EUR", $this->getText("//tr[@id='art.1']/td[4]"));
         $this->assertEquals("{$productTotalPrice} EUR", $this->getText("//tr[@id='art.1']/td[5]"));
         $this->assertEquals($productVat, $this->getText("//tr[@id='art.1']/td[6]"));
+    }
+
+    /**
+     * Validate last request/response pair in log.
+     *
+     * @param array $assertRequest  Values to assert.
+     * @param array $assertResponse Values to assert.
+     * @param bool  $cleanLog       Clean log after check.
+     *
+     */
+    private function assertLogData($assertRequest, $assertResponse, $cleanLog = true)
+    {
+        $data = $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'getLogData');
+
+        //last thing in log has to be the response from PayPal
+        $response = array_pop($data);
+        $sessionId = $response->sid;
+        $this->assertEquals('response', $response->type);
+        $this->assertLogValues($response->data, $assertResponse);
+
+        //following last element has to be the related request
+        $request = array_pop($data);
+        $this->assertEquals('request', $request->type);
+        $this->assertEquals($sessionId, $response->sid);
+        $this->assertLogValues($request->data, $assertRequest);
+
+        if ($cleanLog) {
+            $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
+        }
+    }
+
+    /**
+     * Validate log data.
+     *
+     * @param array $logData
+     * @param array $expected
+     */
+    private function assertLogValues($logData, $expected)
+    {
+        foreach ($expected as $key => $value) {
+            $this->assertEquals($value, $logData[$key]);
+        }
+    }
+
+    /**
+     * Finish payment process part that's to be done on PayPal page.
+     *
+     * @param bool $expressCheckout
+     * @param bool $usBuyer
+     */
+    private function payWithPayPal($expressCheckout = false, $usBuyer = false)
+    {
+        $loginMail = $this->getLoginDataByName('sBuyerLogin');
+
+        //we might be automatically get logged in by PayPal, check before trying to log in again
+        $this->selectWindow(null);
+        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 10, true);
+        if (!$this->isElementPresent("//input[@id='confirmButtonTop']") && !$this->isElementPresent("//input[@id='continue']")) {
+            if (!$expressCheckout) {
+                $this->waitForPayPalPage();
+            }
+            if ($usBuyer) {
+                $loginMail = $this->getLoginDataByName('sBuyerUSLogin');
+            }
+            $this->loginToSandbox($loginMail);
+        }
+        $this->clickPayPalContinue();
+    }
+
+    /**
+     * Handle express checkout on PayPal page.
+     *
+     * @param string $expressCheckoutButtonIdentification
+     * @param bool   $usBuyer
+     */
+    private function payWithPayPalExpressCheckout($expressCheckoutButtonIdentification = 'paypalExpressCheckoutButton', $usBuyer = false)
+    {
+        $this->_waitForAppear('isElementPresent', "//input[@id='{$expressCheckoutButtonIdentification}']", 3, true);
+        $this->expressCheckoutWillBeUsed();
+        $this->click($expressCheckoutButtonIdentification);
+        $this->payWithPayPal(true, $usBuyer);
     }
 }

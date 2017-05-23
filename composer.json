@@ -10,6 +10,9 @@
     ],
     "extra": {
         "oxideshop": {
+            "blacklist-filter": [
+                "documentation/**/*.*"
+            ],
             "target-directory": "oe/oepaypal"
         }
     },

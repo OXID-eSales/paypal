@@ -46,6 +46,15 @@ class PayPalLogHelper
     }
 
     /**
+     * Make sure log is writable.
+     */
+    public function setLogPermissions()
+    {
+        $spathToLog = $this->getPathToPayPalLog();
+        \OxidEsales\TestingLibrary\Services\Library\CliExecutor::executeCommand("sudo chmod 777 -R $spathToLog");
+    }
+
+    /**
      * Test helper, cleans PayPal log.
      */
     public function cleanPayPalLog()
@@ -53,6 +62,17 @@ class PayPalLogHelper
         $pathToLog = $this->getPathToPayPalLog();
         if (file_exists($pathToLog)) {
             unlink($pathToLog);
+        }
+    }
+
+    /**
+     * Move PayPal log to different name for test debugging.
+     */
+    public function renamePayPalLog()
+    {
+        $pathToLog = $this->getPathToPayPalLog();
+        if (file_exists($pathToLog)) {
+            rename($pathToLog, $pathToLog . ('_' . microtime(true)));
         }
     }
 
@@ -73,7 +93,10 @@ class PayPalLogHelper
      */
     private function parsePayPalLog()
     {
-        $handle = fopen($this->getPathToPayPalLog(), 'r');
+        $handle = null;
+        if (file_exists($this->getPathToPayPalLog())) {
+            $handle = fopen($this->getPathToPayPalLog(), 'r');
+        }
 
         if ($handle) {
             while (($line = fgets($handle)) !== false) {

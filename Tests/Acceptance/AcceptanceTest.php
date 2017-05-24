@@ -41,9 +41,9 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     const IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE = 2;
 
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
-    protected $_iWaitTimeMultiplier = 3;
+    protected $_iWaitTimeMultiplier = 7;
 
-    protected $retryTimes = 0;
+    protected $retryTimes = 1;
 
     /**
      * Activates PayPal and adds configuration
@@ -108,6 +108,23 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     }
 
     /**
+     * Before we retry a PayPal test log the page source.
+     * Log it in PayPal log.
+     * Move log under different name.
+     *
+     * @param string $message
+     */
+    public function retryTest($message = '')
+    {
+        if (false !== stripos($message, 'Timeout')) {
+            $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'setLogPermissions');
+            $this->callShopSC(\OxidEsales\PayPalModule\Core\Logger::class, 'log', null, null, [$this->getHtmlSource()]);
+            $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'renamePayPalLog');
+        }
+        parent::retryTest($message);
+    }
+
+    /**
      * Set up fixture.
      */
     protected function setUp()
@@ -128,7 +145,41 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
     }
 
+    /**
+     * Tear down fixture.
+     */
+    protected function tearDown()
+    {
+        $this->newPayPalUserInterface = true;
+
+        parent::tearDown();
+    }
+
     // ------------------------ PayPal module ----------------------------------
+
+    /**
+     * testing different countries with shipping rules assigned to this countries
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testForLoginUserChangeUserCountryToUnassignedPaymentMethod()
+    {
+        $this->addToBasket('1001');
+        $this->loginToShopFrontend();
+
+        $this->waitForElement('paypalExpressCheckoutButton');
+        $this->clickNextStepInShopBasket();
+
+        // Check that the user mail address exists and is the expected.
+        $this->assertEquals("E-mail: testing_account@oxid-esales.dev SeleniumTestCase Äß'ü Testing acc for Selenium Mr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Germany", $this->clearString($this->getText("//ul[@id='addressText']//li")), "User address is incorect");
+
+        // Change to new one which has not PayPal assigned as payment method inside PayPal
+        $this->changeCountryInBasketStepTwo('United States');
+        $this->clickFirstStepInShopBasket();
+
+        $this->assertFalse($this->isElementPresent('paypalPartnerLogo'), 'PayPal logo should not be displayed for US');
+    }
 
     /**
      * testing PayPal payment selection
@@ -397,7 +448,6 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         //Check what was communicated with PayPal
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
         $assertResponse = ['L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
-                           'L_PAYMENTREQUEST_0_QTY0' => '2',
                            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
                            'L_PAYMENTREQUEST_0_QTY0' => '2',
                            'ACK' => 'Success'];
@@ -527,8 +577,6 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clearCache();
     }
 
-
-
     /**
      * Testing ability to change country in standard PayPal.
      * NOTE: this test originally asserted data on PayPal page.
@@ -548,12 +596,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
         $this->openBasket("English");
         $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->assertTextPresent("Germany", "Users country should be Germany");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->assertElementPresent("//input[@value='oxidpaypal']");
         $this->click("payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         $this->payWithPayPal();
 
@@ -619,13 +667,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("5,00 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
         $this->assertEquals("5,00 € \n10,00 €", $this->getText("//tr[@id='cartItem_1']/td[6]"), "price with discount not shown in basket");
         // Go to 2nd step
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to 3rd step and select PayPal as payment method
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->waitForItemAppear("id=payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         $this->payWithPayPal();
 
@@ -710,13 +758,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("Grand total: 14,70 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")), "Grand total is not displayed correctly");
 
         // Go to 2nd step
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to 3rd step and select PayPal as payment method
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->waitForItemAppear("id=payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to PayPal
         $this->payWithPayPal();
@@ -756,7 +804,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("Grand total: 14,70 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")), "Grand total is not displayed correctly");
 
         //Go back to 1st order step and change product quantities to 3
-        $this->clickAndWait("link=1. Cart");
+        $this->clickFirstStepInShopBasket();
         $this->type("id=am_1", "3");
         $this->click("id=basketUpdate");
         sleep(5);
@@ -764,14 +812,15 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("Discount discount from 20 till 50", $this->getText("//div[@id='basketSummary']/table/tbody/tr[2]/th"));
         $this->assertEquals("-2,25 €", $this->getText("//div[@id='basketSummary']/table/tbody/tr[2]/td"));
         // Go to 2nd step
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to 3rd step and select PayPal as payment method
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->waitForItemAppear("id=payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
+        $this->standardCheckoutWillBeUsed();
         $this->payWithPayPal();
 
         //Check what was communicated with PayPal
@@ -862,13 +911,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("Grand total: 5,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[6]")), "Grand total is not displayed correctly");
 
         // Go to 2nd step
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to 3rd step and select paypla as payment method
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->waitForItemAppear("id=payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         $this->payWithPayPal();
 
@@ -968,13 +1017,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("40,40 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         // Go to 2nd step
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to 3rd step and select PayPal as payment method
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->waitForItemAppear("id=payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         $this->payWithPayPal();
 
@@ -1434,13 +1483,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("46,94 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         // Go to 2nd step
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to 3rd step and select PayPal as payment method
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->waitForItemAppear("id=payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
         //Go to PayPal
         $this->payWithPayPal();
@@ -1556,15 +1605,16 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->assertEquals("46,94 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         // Go to 2nd step
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
-        //Go to 3rd step and select PayPal as payment method
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        // Go to 3rd step and select PayPal as payment method
+        $this->clickNextStepInShopBasket();
         $this->waitForItemAppear("id=payment_oxidpaypal");
         $this->click("id=payment_oxidpaypal");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
 
-        //Going to PayPal
+        // Going to PayPal
+        $this->standardCheckoutWillBeUsed();
         $this->payWithPayPal();
 
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
@@ -1763,15 +1813,15 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
 
         // Add more articles so sum would be more than 500eur.
         // Without sleep basket update do not make update before checking actual prices.
-        $this->type("am_1", "10");
+        $this->type("am_1", "5");
         sleep(1);
         $this->clickAndWait("basketUpdate");
         sleep(1);
 
         // Check basket prices.
-        $this->assertEquals("1.084,00 €", $this->getText("basketTotalProductsNetto"), "Net price changed or didn't display");
-        $this->assertTextPresent("205,96 €", "Articles VAT changed or didn't display");
-        $this->assertEquals("1.322,46 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't display");
+        $this->assertEquals("542,00 €", $this->getText("basketTotalProductsNetto"), "Net price changed or didn't display");
+        $this->assertTextPresent("102,98 €", "Articles VAT changed or didn't display");
+        $this->assertEquals("662,73 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't display");
 
         $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
 
@@ -1796,12 +1846,12 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
                            'L_PAYMENTREQUEST_0_NUMBER0' => '1401',
                            'L_PAYMENTREQUEST_0_AMT0' => '108.40',
                            'L_PAYMENTREQUEST_0_AMT1' => '8.82',
-                           'L_PAYMENTREQUEST_0_AMT2' => '24.79',
+                           'L_PAYMENTREQUEST_0_AMT2' => '12.39',
                            'L_PAYMENTREQUEST_0_AMT3' => '2.52',
-                           'PAYMENTREQUEST_0_TAXAMT' => '212.83',
-                           'PAYMENTREQUEST_0_AMT' => '1345.96',
+                           'PAYMENTREQUEST_0_TAXAMT' => '107.50',
+                           'PAYMENTREQUEST_0_AMT' => '686.23',
                            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
-                           'PAYMENTREQUEST_0_ITEMAMT' => '1120.13',
+                           'PAYMENTREQUEST_0_ITEMAMT' => '565.73',
                            'PAYMENTREQUEST_0_SHIPPINGAMT' => '13.00'];
         $this->assertLogData($assertRequest, $assertResponse);
 
@@ -1960,6 +2010,84 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     }
 
     /**
+     * Testing different countries with shipping rules assigned to this countries
+     * NOTE: test selects payment method on PayPal page.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testPayPalPaymentForLoginUser()
+    {
+        $this->addToBasket('1001');
+        $this->loginToShopFrontend();
+
+        // Created additional 3 shipping methods with Shipping costs rules for Austria
+        $this->importSql(__DIR__ . '/testSql/newDeliveryMethod_' . SHOP_EDITION . '.sql');
+
+        $this->openBasket();
+        $this->clickNextStepInShopBasket();
+
+        // Change country to Austria
+        $this->changeCountryInBasketStepTwo('Austria');
+
+        // Check all available shipping methods
+        $this->assertTextPresent('PayPal');
+        // Test Paypal:6 hour Price: €0.50 EUR
+        $this->selectAndWait('sShipSet', 'label=Test Paypal:6 hour');
+
+        $this->assertTextPresent('Charges: 0,50 €');
+        $this->assertAllAvailableShippingMethodsAreDisplayed();
+
+        // Go to 1st step and make an order via PayPal express
+        $this->clickFirstStepInShopBasket();
+        $this->selectPayPalExpressCheckout();
+
+        $this->loginToSandbox();
+        $this->waitForLoggedInToPayPalSandbox();
+
+        //NOTE: isn't running locally (callback is not accessible from PayPal):
+        $this->selectPayPalShippingMethod('Test Paypal:12 hour Price: €0,90 EUR');
+
+        // Check, that the communication with PayPal was as expected
+        $expectedRequest = ['METHOD' => 'SetExpressCheckout',
+                            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+                            'NOSHIPPING' => '2',
+                            'PAYMENTREQUEST_0_AMT' => '1.49',
+                            'PAYMENTREQUEST_0_ITEMAMT' => '0.99',
+                            'PAYMENTREQUEST_0_SHIPPINGAMT' => '0.50',
+                            'PAYMENTREQUEST_0_SHIPDISCAMT' => '0.00',
+                            'L_SHIPPINGOPTIONISDEFAULT0' => 'true',
+                            'L_SHIPPINGOPTIONNAME0' => 'Test Paypal:6 hour',
+                            'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => 'AT',
+                            'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+                            'L_PAYMENTREQUEST_0_NUMBER0' => '1001'
+            ];
+        $expectedResponse = ['ACK' => 'Success'];
+        $this->assertLogData($expectedRequest, $expectedResponse);
+
+        // Go to shop
+        // NOTE: somehow in this case we need to click continue twice
+        $this->expressCheckoutWillBeUsed();
+        $this->clickPayPalContinue();
+        $this->clickPayPalContinue();
+
+        // Make sure we are back in shop
+        $this->assertTrue($this->isElementPresent("id=breadCrumb"));
+
+        //Check are all info in the last order step correct
+        $this->assertElementPresent('link=Test product 1', 'Purchased product name is not displayed in last order step');
+        $this->assertTextPresent('Item #: 1001', 'Product number not displayed in last order step');
+        // next four lines aren't running locally (callback is not accessible from PayPal):
+        $this->assertEquals('Shipping costs: 0,90 €', $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), 'Shipping costs is not displayed correctly');
+        $this->assertEquals('OXID Surf and Kite Shop | Order | purchase online', $this->getTitle());
+        $this->assertEquals('Grand total: 1,89 €', $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), 'Grand total is not displayed correctly');
+        $this->assertTextPresent('Test Paypal:12 hour', 'Shipping method not displayed in order ');
+
+        $this->assertTextPresent('PayPal', 'Payment method not displayed in last order step');
+        $this->assertFalse($this->isTextPresent('COD'), 'Wrong payment method displayed in last order step');
+    }
+
+    /**
      * test if PayPal is not shown in frontend after configs is set in admin
      *
      * @group paypal_standalone
@@ -1982,11 +2110,11 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->clickAndWait("link=Display cart");
         $this->assertFalse($this->isElementPresent("//input[name='paypalExpressCheckoutButton']"));
         $this->clickAndWait("id=basketUpdate");
-        $this->clickAndWait("//button[text()='Continue to the next step']");
+        $this->clickNextStepInShopBasket();
         $this->clickAndWait("id=userNextStepTop");
         $this->assertFalse($this->isElementPresent("id=payment_oxidpaypal"));
         $this->clickAndWait("id=paymentNextStepBottom");
-        $this->waitForItemAppear("id=breadCrumb");
+        $this->waitForShop();
         $this->clickAndWait("//button[text()='Order now']");
 
         $this->assertTextPresent("Thank you for ordering at OXID eShop", "Order is not finished successful");
@@ -2044,7 +2172,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @todo wait, check that it actually logged in.
      */
-    protected function loginToSandbox($loginEmail = null, $loginPassword = null)
+    private function loginToSandbox($loginEmail = null, $loginPassword = null)
     {
         if (!isset($loginEmail)) {
             $loginEmail = $this->getLoginDataByName('sBuyerLogin');
@@ -2098,7 +2226,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      *
      * @param string $method Method label
      */
-    protected function selectPayPalShippingMethod($method)
+    private function selectPayPalShippingMethod($method)
     {
         $this->waitForItemAppear("id=shipping_method");
         $this->select("id=shipping_method", "label=$method");
@@ -2113,7 +2241,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      * @return mixed|null|string
      * @throws \Exception
      */
-    protected function getLoginDataByName($varName)
+    private function getLoginDataByName($varName)
     {
         if (!$varValue = getenv($varName)) {
             $varValue = $this->getArrayValueFromFile($varName, __DIR__ .'/oepaypalData.php');
@@ -2137,7 +2265,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     /**
      * New PayPal interface uses iframe for user login.
      */
-    protected function selectCorrectLoginFrame()
+    private function selectCorrectLoginFrame()
     {
         if ($this->newPayPalUserInterface) {
             $this->frame(self::PAYPAL_FRAME_NAME);
@@ -2168,7 +2296,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
     /**
      * PayPal has two pages with different layout.
      */
-    protected function clickPayPalContinue()
+    private function clickPayPalContinue()
     {
         if ($this->newPayPalUserInterface) {
             $this->clickPayPalContinueNewPage();
@@ -2185,7 +2313,7 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      * Then it becomes invisible while PayPal does callback.
      * Button appears when PayPal gets callback result.
      */
-    protected function clickPayPalContinueNewPage()
+    private function clickPayPalContinueNewPage()
     {
         $this->waitForItemAppear("//input[@id='confirmButtonTop']", 10, true);
         $this->waitForEditable("id=confirmButtonTop");
@@ -2197,11 +2325,16 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      * Then it becomes invisible while PayPal does callback.
      * Button appears when PayPal gets callback result.
      */
-    protected function clickPayPalContinueOldPage()
+    private function clickPayPalContinueOldPage()
     {
-        $this->waitForItemAppear("//input[@id='continue']", 10, true);
-        $this->waitForEditable("id=continue");
-        $this->clickAndWait("id=continue");
+         $this->waitForItemAppear("//input[@id='continue']", 10, false);
+         $this->waitForItemAppear("//input[@id='continue_abovefold']", 3, false);
+         $this->waitForEditable("id=continue");
+         if ($this->isElementPresent("id=continue_abovefold") && $this->isEditable("id=continue_abovefold")) {
+           $this->clickAndWait("id=continue_abovefold");
+         } else {
+            $this->clickAndWait("id=continue");
+         }
     }
 
     /**
@@ -2224,7 +2357,13 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      */
     private function waitForPayPalNewPage()
     {
-        $this->waitForElement("id=injectedUnifiedLogin");
+        $this->waitForElement("id=injectedUnifiedLogin", 10, true);
+
+        // We sometimes end up on the old PayPal login page
+        if (!$this->isElementPresent("id=injectedUnifiedLogin") && $this->isElementPresent(self::PAYPAL_LOGIN_BUTTON_ID_OLD)) {
+            $this->newPayPalUserInterface = false;
+            return;
+        }
 
         $this->selectCorrectLoginFrame();
 
@@ -2366,6 +2505,89 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
             $this->loginToSandbox($loginMail);
         }
         $this->clickPayPalContinue();
+    }
+
+    /**
+     * Wait, till the login to the PayPal sandbox is completed.
+     */
+    private function waitForLoggedInToPayPalSandbox()
+    {
+        $this->waitForItemAppear("id=continue");
+        $this->waitForItemAppear("id=displayShippingAmount");
+    }
+
+    /**
+     * Click on the link to go to the first step in the OXID eShop basket.
+     */
+    private function clickFirstStepInShopBasket()
+    {
+        $this->clickAndWait("link=1. Cart");
+    }
+
+    /**
+     * Click on the link to go to the next step in the OXID eShop basket.
+     */
+    private function clickNextStepInShopBasket()
+    {
+        $this->clickAndWait("//button[text()='Continue to the next step']");
+    }
+
+    private function loginToShopFrontend()
+    {
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
+        $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
+        $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");
+        $this->assertTextPresent("Shipping costs:", "Shipping costs is not displayed correctly");
+        $this->assertTextPresent("?");
+        $this->assertTrue($this->isChecked("//input[@name='displayCartInPayPal' and @value='1']"));
+        $this->assertTextPresent("Display cart in PayPal", "Text:Display cart in PayPal for checkbox not displayed");
+        $this->assertElementPresent("displayCartInPayPal", "Checkbox:Display cart in PayPal not displayed");
+    }
+
+    private function assertAllAvailableShippingMethodsAreDisplayed()
+    {
+        $this->assertTextPresent("Test Paypal:6 hour", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Test Paypal:12 hour", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Standard", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Example Set1: UPS 48 hours", "Not all available shipping methods is displayed");
+        $this->assertTextPresent("Example Set2: UPS Express 24 hours", "Not all available shipping methods is displayed");
+    }
+
+    private function waitForShop()
+    {
+        $this->waitForItemAppear("id=breadCrumb");
+    }
+
+    /**
+     * Select Belgium as the delivery address, if it not already is.
+     */
+    private function selectDeliveryAddressBelgium()
+    {
+        // @todo: introduce language independant if!
+        if (!$this->isTextPresent("Test address in Belgium 15, Antwerp, Belgium")) {
+            // adding new address (Belgium) to address list
+            $this->clickAndWait("id=addShipAddress");
+            $this->select("country_code", "label=Belgium");
+            $this->type("id=shipping_address1", "Test address in Belgium 15");
+            $this->type("id=shipping_city", "Antwerp");
+
+            //returning to address list
+            $this->click("//input[@id='continueBabySlider']");
+        }
+
+        $this->click("//label[@class='radio' and contains(.,'Test address in Belgium 15, Antwerp, Belgium')]/input");
+    }
+
+    private function changeCountryInBasketStepTwo($country)
+    {
+        $this->click('userChangeAddress');
+
+        $this->waitForElement("//select[@id='invCountrySelect']/option[text()='$country']");
+        $this->select("//select[@id='invCountrySelect']", "label=$country");
+
+        $this->clickNextStepInShopBasket();
     }
 
     /**

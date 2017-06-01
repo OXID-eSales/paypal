@@ -20,6 +20,14 @@ PayPal - The OXID eFire extension
 For installation instructions please see /documentation/UserManual_en.pdf in this package.
 
 
+### Module installation via composer
+
+In order to install the module via composer run one of the following commands in commandline in your shop base directory 
+(where the shop's composer.json file resides).
+* **composer require oxid-esales/paypal-module:4.0.0** to install the released version compatible with OXID eShop RC1
+* **composer require oxid-esales/paypal-module:5.0.0** to install the released version compatible with OXID eShop RC2
+* **composer require oxid-esales/paypal-module:dev-master** to install the latest unreleased version from github
+
 ### License
 
 Licensing of the software product depends on the shop edition used.

@@ -18,6 +18,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Integration\IPNProcessing;
 
+use OxidEsales\Eshop\Application\Model\Order;
+
 /**
  * Integration tests for IPN processing.
  */
@@ -587,8 +589,13 @@ class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return \OxidEsales\Eshop\Application\Model\Order
      */
-    private function createOrder($status = \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED)
+    private function createOrder($status = null)
     {
+        if (is_null($status)) {
+            $order = oxNew(Order::class);
+            $status = $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED;
+        }
+
         if (empty($this->testUserId)) {
             $this->fail('please create related oxuser first');
         }

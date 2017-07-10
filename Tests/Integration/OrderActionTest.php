@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Integration;
 
+use OxidEsales\Eshop\Application\Model\Order;
+
 class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function setUp()
@@ -250,7 +252,7 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getActionFactory($request, $payPalOrder)
     {
-        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
+        $order = $this->_createStub(Order::class, array('getPayPalOrder' => $payPalOrder));
 
         $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
 

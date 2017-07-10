@@ -22,6 +22,7 @@
 namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 
 use OxidEsales\Eshop\Application\Model\Payment;
+use OxidEsales\Eshop\Core\ViewConfig;
 
 /**
  * Testing \OxidEsales\PayPalModule\Core\ViewConfig class.
@@ -46,7 +47,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("isStandardCheckoutEnabled"));
         $payPalConfig->expects($this->once())->method("isStandardCheckoutEnabled")->will($this->returnValue(true));
 
-        $view = $this->getMock(\OxidEsales\PayPalModule\Core\ViewConfig::class, array("getPayPalConfig"), array($payPalConfig, null, null));
+        $view = $this->getMock(ViewConfig::class, array("getPayPalConfig"), array($payPalConfig, null, null));
         $view->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
         $this->assertTrue($view->isStandardCheckoutEnabled());
     }

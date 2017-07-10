@@ -19,17 +19,21 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-namespace OxidEsales\PayPalModule\Tests\Integration;
+namespace OxidEsales\Eshop\PayPalModule\Tests\Integration;
+
+use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\Order;
 
 class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
     public function providerFinalizeOrder_TransStatusNotChange()
     {
+        $order = oxNew(Order::class);
         return array(
-            array('Pending', \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
-            array('Failed', \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
-            array('Complete', \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_OK)
+            array('Pending', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
+            array('Failed', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
+            array('Complete', $order::OEPAYPAL_TRANSACTION_STATUS_OK)
         );
     }
 
@@ -48,20 +52,20 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getSession()->setVariable('paymentid', 'oxidpaypal');
 
         /** @var \OxidEsales\PayPalModule\Model\Basket $basket */
-        $basket = oxNew(\OxidEsales\PayPalModule\Model\Basket::class);
+        $basket = oxNew(Basket::class);
 
         $paymentGateway = $this->getPaymentGateway($payPalReturnStatus);
 
         /** @var \OxidEsales\PayPalModule\Model\Order|\PHPUnit_Framework_MockObject_MockObject $order */
         $order = $this->getMock(
-            \OxidEsales\PayPalModule\Model\Order::class,
+            Order::class,
             array('_getGateway', '_sendOrderByEmail', 'validateOrder'));
         $order->expects($this->any())->method('_getGateway')->will($this->returnValue($paymentGateway));
 
         $order->setId('_testOrderId');
         $order->finalizeOrder($basket, $this->getUser());
 
-        $updatedOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $updatedOrder = oxNew(Order::class);
         $updatedOrder->load('_testOrderId');
         $this->assertEquals($transactionStatus, $updatedOrder->getFieldData('oxtransstatus'));
         $updatedOrder->delete();

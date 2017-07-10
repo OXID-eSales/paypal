@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Integration\IPNRequestHandler;
 
+use OxidEsales\Eshop\Application\Model\Order;
+
 class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
@@ -118,10 +120,11 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function providerHandlingPendingRequest()
     {
+        $order = oxNew(Order::class);
         return array(
-            array('Completed', \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_OK),
-            array('Pending', \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
-            array('Failed', \OxidEsales\PayPalModule\Model\Order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
+            array('Completed', $order::OEPAYPAL_TRANSACTION_STATUS_OK),
+            array('Pending', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
+            array('Failed', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
         );
     }
 

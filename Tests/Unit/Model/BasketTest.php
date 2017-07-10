@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 
+use OxidEsales\Eshop\Application\Model\Basket;
+
 /**
  * Testing oxAccessRightException class.
  */
@@ -54,7 +56,7 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $products = array($product1, $product2);
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getBasketArticles'));
+        $basket = $this->getMock(Basket::class, array('getBasketArticles'));
         $basket->expects($this->once())->method('getBasketArticles')->will($this->returnValue($products));
 
         $this->assertEquals($result, $basket->isVirtualPayPalBasket());

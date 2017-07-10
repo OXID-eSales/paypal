@@ -21,7 +21,7 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Component;
 
-use OxidEsales\PayPalModule\Component\BasketComponent;
+use OxidEsales\Eshop\Application\Component\BasketComponent;
 
 class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
@@ -98,7 +98,7 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $cancelURL = urlencode($url);
         $expectedUrl = 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . $cancelURL;
 
-        $cmpBasket = new BasketComponent();
+        $cmpBasket = oxNew(BasketComponent::class);
 
         $this->assertEquals($expectedUrl, $cmpBasket->actionNotAddToBasketAndGoToCheckout());
     }

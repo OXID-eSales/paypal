@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 
+use OxidEsales\Eshop\Application\Model\User;
+
 /**
  * Testing oxAccessRightException class.
  */
@@ -84,7 +86,7 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $details->setData($payPalData);
         $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new \OxidEsales\PayPalModule\Model\Address());
 
-        $payPalUser = $this->getMock(\OxidEsales\PayPalModule\Model\User::class, array('_setAutoGroups'));
+        $payPalUser = $this->getMock(User::class, array('_setAutoGroups'));
         $payPalUser->expects($this->once())->method('_setAutoGroups')->with($this->equalTo("8f241f11096877ac0.98748826"));
         $payPalUser->createPayPalUser($details);
         $userId = $payPalUser->getId();

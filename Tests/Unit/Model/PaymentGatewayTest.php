@@ -21,6 +21,10 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\PaymentGateway;
+
 /**
  * Testing oxAccessRightException class.
  */
@@ -28,7 +32,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testGetPayPalConfig_notSet_config()
     {
-        $paymentGateway = new \OxidEsales\PayPalModule\Model\PaymentGateway();
+        $paymentGateway = oxNew(PaymentGateway::class);
         $config = $paymentGateway->getPayPalConfig();
 
         $this->assertTrue($config instanceof \OxidEsales\PayPalModule\Core\Config);
@@ -49,7 +53,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $price->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(123));
 
         // preparing basket
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("getPrice"));
+        $basket = $this->getMock(Basket::class, array("getPrice"));
         $basket->expects($this->once())->method("getPrice")->will($this->returnValue($price));
 
         // preparing session
@@ -61,7 +65,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalConfig->expects($this->any())->method("getTransactionMode")->will($this->returnValue("Sale"));
 
         // preparing order
-        $payPalOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array("finalizePayPalOrder"));
+        $payPalOrder = $this->getMock(Order::class, array("finalizePayPalOrder"));
         $payPalOrder->expects($this->once())->method("finalizePayPalOrder")->with($this->equalTo('Result'));
 
         // preparing service
@@ -69,7 +73,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalService->expects($this->any())->method("doExpressCheckoutPayment")->will($this->returnValue('Result'));
 
         // preparing
-        $paymentGateway = $this->getMock(\OxidEsales\PayPalModule\Model\PaymentGateway::class, array("getPayPalCheckoutService", "getPayPalConfig", "getPayPalOrder", "getSession", 'getPayPalUser'));
+        $paymentGateway = $this->getMock(PaymentGateway::class, array("getPayPalCheckoutService", "getPayPalConfig", "getPayPalOrder", "getSession", 'getPayPalUser'));
         $paymentGateway->expects($this->any())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
         $paymentGateway->expects($this->any())->method("getPayPalOrder")->will($this->returnValue($payPalOrder));
         $paymentGateway->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));

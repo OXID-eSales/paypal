@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 
+use OxidEsales\Eshop\Application\Model\Basket;
+
 /**
  * Testing oePayPalBasketValidator class.
  */
@@ -28,7 +30,7 @@ class OutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function providerSetGetBasket()
     {
-        $oxBasket = new \OxidEsales\PayPalModule\Model\Basket();
+        $oxBasket = oxNew(Basket::class);
 
         return array(
             array($oxBasket),
@@ -115,7 +117,7 @@ class OutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $productId => $basketItem
         );
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket = $this->getMock(Basket::class, array('getContents'));
         $basket->expects($this->any())->method('getContents')->will($this->returnValue($basketItemsList));
 
         return $basket;

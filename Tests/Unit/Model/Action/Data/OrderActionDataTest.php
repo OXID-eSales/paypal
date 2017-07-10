@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Data;
 
+use OxidEsales\Eshop\Application\Model\Order;
+
 /**
  * Testing \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData class.
  */
@@ -71,7 +73,7 @@ class OrderActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getOrder()
     {
-        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order = oxNew(Order::class);
 
         return $order;
     }

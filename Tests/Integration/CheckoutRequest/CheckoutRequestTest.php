@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Integration\CheckoutRequest;
 
+use OxidEsales\Eshop\Application\Model\Order;
+
 class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
@@ -159,7 +161,7 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getOrder()
     {
         /** @var \OxidEsales\Eshop\Application\Model\Order $order */
-        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('finalizePayPalOrder'));
+        $order = $this->getMock(Order::class, array('finalizePayPalOrder'));
         $order->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
         $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $order->save();

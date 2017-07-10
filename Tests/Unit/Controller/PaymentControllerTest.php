@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
 
+use OxidEsales\Eshop\Application\Controller\PaymentController;
+
 /**
  * Testing PaymentController class.
  */
@@ -35,7 +37,7 @@ class PaymentControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         // forcing payment id
         $this->setRequestParameter("paymentid", null);
 
-        $view = new \OxidEsales\PayPalModule\Controller\PaymentController();
+        $view = oxNew(PaymentController::class);
         $this->assertNull($view->validatePayment());
 
         // forcing payment id

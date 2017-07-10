@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 
+use OxidEsales\Eshop\Application\Model\Order;
+
 /**
  * Testing oxAccessRightException class.
  */
@@ -43,7 +45,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testLoadPayPalOrder()
     {
         // creating order
-        $order = new \OxidEsales\Eshop\Application\Model\Order();
+        $order = oxNew(Order::class);
         $order->setId('_testOrderId');
         $order->save();
 

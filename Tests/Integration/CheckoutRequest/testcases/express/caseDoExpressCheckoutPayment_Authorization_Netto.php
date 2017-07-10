@@ -46,8 +46,10 @@
  *  ...
  * Short description: bug entry / support case other info;
  */
+use OxidEsales\Eshop\Application\Model\PaymentGateway;
+
 $data = array(
-    'class'     => \OxidEsales\PayPalModule\Model\PaymentGateway::class,
+    'class'     => PaymentGateway::class,
     'action'    => 'doExpressCheckoutPayment',
     'articles'  => array(
         0 => array(

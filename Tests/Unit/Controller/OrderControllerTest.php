@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
 
+use OxidEsales\Eshop\Application\Controller\OrderController;
+
 if (!class_exists('oePayPalOrder_parent')) {
     class oePayPalOrder_parent extends \OxidEsales\Eshop\Application\Controller\OrderController
     {
@@ -49,7 +51,7 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPal()
     {
-        $view = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $view = oxNew(OrderController::class);
 
         $this->getSession()->setVariable("paymentid", "oxidpaypal");
         $this->assertTrue($view->isPayPal());

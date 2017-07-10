@@ -21,6 +21,9 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\PayPalRequest;
 
+use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\User;
+
 /**
  * Testing \OxidEsales\PayPalModule\Model\PayPalRequest\DoExpressCheckoutPaymentRequestBuilder class.
  */
@@ -39,7 +42,7 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
         $price->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(123));
 
         // preparing basket
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array("getPrice"));
+        $basket = $this->getMock(Basket::class, array("getPrice"));
         $basket->expects($this->once())->method("getPrice")->will($this->returnValue($price));
 
         // preparing session
@@ -55,7 +58,7 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
         $payPalOrder = new \OxidEsales\Eshop\Application\Model\Order();
         $payPalOrder->oxorder__oxordernr = new \OxidEsales\Eshop\Core\Field("123");
 
-        $user = new \OxidEsales\PayPalModule\Model\User();
+        $user = oxNew(User::class);
         $user->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('firstname');
         $user->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('lastname');
         $user->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field('some street');

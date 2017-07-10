@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 
+use OxidEsales\Eshop\Application\Model\Basket;
+
 class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
@@ -51,7 +53,7 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
 
     public function providerSetGetBasket()
     {
-        $oxBasket = new \OxidEsales\PayPalModule\Model\Basket();
+        $oxBasket = oxNew(Basket::class);
 
         return array(
             array($oxBasket),

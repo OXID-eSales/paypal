@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller\Admin;
 
+use OxidEsales\Eshop\Application\Model\Order;
+
 class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
@@ -46,7 +48,7 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $payPalOrderModel->load();
 
-        $payPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
+        $payPalOxOrder = $this->getMock(Order::class, array('getPayPalOrder'));
         $payPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($payPalOrderModel));
 
         $payPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));

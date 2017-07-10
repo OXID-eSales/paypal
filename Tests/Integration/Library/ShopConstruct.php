@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Integration\Library;
 
+use OxidEsales\Eshop\Application\Model\Basket;
+
 class ShopConstruct
 {
     /**
@@ -191,7 +193,7 @@ class ShopConstruct
         $payment = $this->setPayments($costs['payment']);
         $voucherIDs = $this->setVouchers($costs['voucherserie']);
 
-        $basket = new \OxidEsales\PayPalModule\Model\Basket();
+        $basket = oxNew(Basket::class);
 
         $basket->setBasketUser($this->getUser());
 

@@ -2343,6 +2343,8 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      */
     private function waitForPayPalPage()
     {
+        $this->checkForFailedToOpenPayPalPageError();
+
         if ($this->newPayPalUserInterface) {
             $this->waitForPayPalNewPage();
         } else {
@@ -2602,5 +2604,15 @@ class AcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
         $this->expressCheckoutWillBeUsed();
         $this->click($expressCheckoutButtonIdentification);
         $this->payWithPayPal(true, $usBuyer);
+    }
+
+    /**
+     * PayPal page might refuse connection and redirect back to the Shop with an error message.
+     * This might happen for example when credentials are wrong.
+     */
+    private function checkForFailedToOpenPayPalPageError()
+    {
+        $this->assertTextNotPresent("Security header is not valid", "Did not succeed to open PayPal page.");
+        $this->assertTextNotPresent("ehlermeldung von PayPal", "Did not succeed to open PayPal page.");
     }
 }

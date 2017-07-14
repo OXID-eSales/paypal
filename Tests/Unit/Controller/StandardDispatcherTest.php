@@ -88,7 +88,7 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetExpressCheckoutDetailsError()
     {
-        $excp = new \OxidEsales\Eshop\Core\Exception\StandardException();
+        $excp = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
 
         // preparing config
         $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array('finalizeOrderOnPayPalSide'));
@@ -155,7 +155,7 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSetExpressCheckout_onError()
     {
-        $excp = new \OxidEsales\Eshop\Core\Exception\StandardException();
+        $excp = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
 
         $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPaypalUrl"));
         $payPalConfig->expects($this->never())->method("getPaypalUrl");

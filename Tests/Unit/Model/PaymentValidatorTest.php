@@ -107,12 +107,12 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $group2 = $this->getMock(\OxidEsales\Eshop\Application\Model\Groups::class, array("getId"));
         $group2->expects($this->any())->method("getId")->will($this->returnValue("someGroup2"));
 
-        $listEmpty = new \OxidEsales\Eshop\Core\Model\ListModel();
+        $listEmpty = oxNew(\OxidEsales\Eshop\Core\Model\ListModel::class);
 
-        $list1 = new \OxidEsales\Eshop\Core\Model\ListModel();
+        $list1 = oxNew(\OxidEsales\Eshop\Core\Model\ListModel::class);
         $list1[] = $group1;
 
-        $list2 = new \OxidEsales\Eshop\Core\Model\ListModel();
+        $list2 = oxNew(\OxidEsales\Eshop\Core\Model\ListModel::class);
         $list2[] = $group1;
         $list2[] = $group2;
 
@@ -162,7 +162,7 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payment->oxpayments__oxtoamount = new \OxidEsales\Eshop\Core\Field($rangeTo);
         $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field($isActivePayment);
 
-        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $address->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field($userShippingCountryId);
 
         $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getUserGroups", "hasAccount", "getSelectedAddress", "getSelectedAddressId"));

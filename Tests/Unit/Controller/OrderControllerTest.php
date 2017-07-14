@@ -81,7 +81,7 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetUser($paymentId, $payPalUserId, $defaultUserId, $expectedUserId)
     {
-        $user = new \OxidEsales\Eshop\Application\Model\User();
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $user->setId($payPalUserId);
         $user->save();
 
@@ -89,7 +89,7 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getSession()->setVariable("oepaypal-userId", $payPalUserId);
         $this->getSession()->setVariable('usr', $defaultUserId);
 
-        $order = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $order = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class);
         $order->setUser(null);
         $user = $order->getUser();
 
@@ -107,7 +107,7 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getSession()->setVariable("oepaypal-userId", 'nonExistingUser');
         $this->getSession()->setVariable('usr', 'oxdefaultadmin');
 
-        $order = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $order = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class);
         $user = $order->getUser();
 
         $this->assertEquals('oxdefaultadmin', $user->oxuser__oxid->value);
@@ -120,7 +120,7 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getSession()->setVariable("oepaypal", "0");
 
-        $view = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $view = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class);
         $payment = $view->getPayment();
         $this->assertFalse($payment);
 
@@ -129,7 +129,7 @@ class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $query = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`) VALUES ('oxidpaypal', 1, 'PayPal')";
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
 
-        $view = new \OxidEsales\PayPalModule\Controller\OrderController();
+        $view = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class);
         $payment = $view->getPayment();
 
         $this->assertNotNull($payment);

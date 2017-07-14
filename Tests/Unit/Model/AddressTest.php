@@ -94,12 +94,12 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
         $expressCheckoutResponse->setData($payPalData);
 
-        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
         //$addressId = $payPalOxAddress->getId();
         $addressId = $this->getSession()->getVariable('deladrid');
 
-        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $address->load($addressId);
 
         $this->assertEquals('testUserId', $address->oxaddress__oxuserid->value);
@@ -120,7 +120,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '12 testStreetNameNext str.';
         $expressCheckoutResponse->setData($payPalData);
 
-        $payPalAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $payPalAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
         $this->assertEquals('testStreetNameNext str.', $payPalAddress->oxaddress__oxstreet->value);
         $this->assertEquals('12', $payPalAddress->oxaddress__oxstreetnr->value);
@@ -137,7 +137,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '';
         $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
         $expressCheckoutResponse->setData($payPalData);
-        $payPalAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
 
         // checking if required field exists
         $reqFields = $payPalAddress->getConfig()->getConfigParam("aMustFillFields");
@@ -145,7 +145,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $payPalAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
 
-        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $address->load($payPalAddress->getId());
 
         $this->assertEquals('testName', $address->oxaddress__oxfname->value);
@@ -159,7 +159,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testCreatePayPalAddressIfExist()
     {
         //creating existing address
-        $address = new \OxidEsales\PayPalModule\Model\Address();
+        $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $address->oxaddress__oxuserid = new \OxidEsales\Eshop\Core\Field('testUserId');
         $address->oxaddress__oxfname = new \OxidEsales\Eshop\Core\Field('testName');
         $address->oxaddress__oxlname = new \OxidEsales\Eshop\Core\Field('testSurname');
@@ -183,7 +183,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
         $expressCheckoutResponse->setData($payPalData);
 
-        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
 
         $addressCountAfter = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getOne($sQ);
@@ -246,11 +246,11 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
         $expressCheckoutResponse->setData($payPalData);
 
-        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
         $addressId = $payPalOxAddress->getId();
 
-        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $address->load($addressId);
 
         $this->assertEquals($result[0], $address->oxaddress__oxstreet->value);
@@ -295,11 +295,11 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $expressCheckoutResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
         $expressCheckoutResponse->setData($payPalData);
 
-        $payPalOxAddress = new \OxidEsales\PayPalModule\Model\Address();
+        $payPalOxAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
         $addressId = $payPalOxAddress->getId();
 
-        $address = new \OxidEsales\Eshop\Application\Model\Address();
+        $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $address->load($addressId);
 
         $this->assertEquals($result[0], $address->oxaddress__oxfname->value);

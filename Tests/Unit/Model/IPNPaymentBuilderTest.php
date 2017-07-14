@@ -109,7 +109,7 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testSetGetLang()
     {
-        $lang = new \OxidEsales\Eshop\Core\Language();
+        $lang = oxNew(\OxidEsales\Eshop\Core\Language::class);
         $paymentBuilder = new \OxidEsales\PayPalModule\Model\IPNPaymentBuilder();
         $paymentBuilder->setLang($lang);
 
@@ -192,7 +192,7 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function prepareLang()
     {
-        $lang = new \OxidEsales\Eshop\Core\Language();
+        $lang = oxNew(\OxidEsales\Eshop\Core\Language::class);
 
         return $lang;
     }

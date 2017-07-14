@@ -58,7 +58,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testIsExpressCheckoutEnabledCheckoutIsEnabledTrue()
     {
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
 
         $validator = $this->_createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
         $view->setPaymentValidator($validator);
@@ -72,7 +72,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testIsExpressCheckoutEnabledWhenCheckoutIsDisabled()
     {
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', false);
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
 
         $validator = $this->_createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
         $view->setPaymentValidator($validator);
@@ -86,7 +86,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testIsExpressCheckoutEnabledWhenPaymentNotValid()
     {
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\PayPalModule\Core\ViewConfig::class);
 
         $validator = $this->_createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => false));
         $view->setPaymentValidator($validator);
@@ -166,7 +166,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $query = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXLONGDESC`) VALUES ('oxidpaypal', 1, 'PayPal', 'testLongDesc')";
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
 
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
         $this->assertEquals('testLongDesc', $view->getPayPalPaymentDescription());
     }
 
@@ -178,7 +178,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $query = "INSERT INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXLONGDESC`) VALUES ('oxidpaypal', 1, 'PayPal', 'testLongDesc')";
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
 
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
         $payment = $view->getPayPalPayment();
 
         $this->assertTrue($payment instanceof Payment);
@@ -208,12 +208,12 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
         $article->expects($this->any())->method('getAmount')->will($this->returnValue(5.6));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array($article)));
 
         $this->getSession()->setBasket($basket);
 
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
         $this->assertFalse($view->sendOrderInfoToPayPal());
     }
 
@@ -227,12 +227,12 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
         $article->expects($this->any())->method('getAmount')->will($this->returnValue(5));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array($article)));
 
         $this->getSession()->setBasket($basket);
 
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
         $this->assertTrue($view->sendOrderInfoToPayPal());
     }
 
@@ -243,12 +243,12 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array()));
 
         $this->getSession()->setBasket($basket);
 
-        $view = new \OxidEsales\PayPalModule\Core\ViewConfig();
+        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
         $this->assertTrue($view->sendOrderInfoToPayPal());
     }
 

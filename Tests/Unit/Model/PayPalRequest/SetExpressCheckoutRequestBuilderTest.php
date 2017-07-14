@@ -120,7 +120,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
     {
         $basketMethodValues = array(
             'isVirtualPayPalBasket'              => true,
-            'getPrice'                           => new \OxidEsales\Eshop\Core\Price(),
+            'getPrice'                           => oxNew(\OxidEsales\Eshop\Core\Price::class),
             'getPayPalBasketVatValue'            => '88.88',
             'isCalculationModeNetto'             => true,
             'getTransactionMode'                 => '88.88',
@@ -271,7 +271,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'L_PAYMENTREQUEST_0_NUMBER1'  => 'BasketItemArtNum',
         );
 
-        $article = new \OxidEsales\Eshop\Application\Model\Article();
+        $article = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
         $article->oxarticles__oxartnum = new \OxidEsales\Eshop\Core\Field('BasketItemArtNum');
 
         $priceMethodValues = array(

@@ -138,14 +138,14 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function getDiscountSumPayPalBasketDataProvider()
     {
-        $basketDiscount1 = new \OxidEsales\Eshop\Core\Price();
+        $basketDiscount1 = oxNew(\OxidEsales\Eshop\Core\Price::class);
         $basketDiscount1->setPrice(2);
 
-        $basketDiscount2 = new \OxidEsales\Eshop\Core\Price();
+        $basketDiscount2 = oxNew(\OxidEsales\Eshop\Core\Price::class);
         $basketDiscount2->setPrice(4);
 
         // vouchers
-        $voucher = new \OxidEsales\Eshop\Application\Model\Voucher();
+        $voucher = oxNew(\OxidEsales\Eshop\Application\Model\Voucher::class);
 
         $VoucherDiscount1 = $voucher->getSimpleVoucher();
         $VoucherDiscount1->dVoucherdiscount = 6;
@@ -171,7 +171,7 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetDiscountSumPayPalBasket($discount, $vouchers, $paymentCost, $result)
     {
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getTotalDiscount', 'getPaymentCosts', 'getVouchers'));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getTotalDiscount', 'getPaymentCosts', 'getVouchers'));
         $basket->expects($this->once())->method('getTotalDiscount')->will($this->returnValue($discount));
         $basket->expects($this->once())->method('getVouchers')->will($this->returnValue($vouchers));
         $basket->expects($this->once())->method('getPaymentCosts')->will($this->returnValue($paymentCost));
@@ -188,8 +188,8 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function getSumOfCostOfAllItemsPayPalBasketDataProvider()
     {
         // discounts
-        $productsPrice = new \OxidEsales\Eshop\Core\PriceList();
-        $productsPrice->addToPriceList(new \OxidEsales\Eshop\Core\Price(15));
+        $productsPrice = oxNew(\OxidEsales\Eshop\Core\PriceList::class);
+        $productsPrice->addToPriceList(oxNew(\OxidEsales\Eshop\Core\Price::class, 15));
         $paymentCost = 3;
         $wrappingCost = 5;
 

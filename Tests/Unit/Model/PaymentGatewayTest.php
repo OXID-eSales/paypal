@@ -78,7 +78,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $paymentGateway->expects($this->any())->method("getPayPalOrder")->will($this->returnValue($payPalOrder));
         $paymentGateway->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
         $paymentGateway->expects($this->any())->method("getSession")->will($this->returnValue($session));
-        $paymentGateway->expects($this->any())->method("getPayPalUser")->will($this->returnValue(new \OxidEsales\Eshop\Application\Model\User()));
+        $paymentGateway->expects($this->any())->method("getPayPalUser")->will($this->returnValue(oxNew(\OxidEsales\Eshop\Application\Model\User::class)));
 
         // testing
         $this->assertTrue($paymentGateway->doExpressCheckoutPayment());
@@ -118,7 +118,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $paymentGateway->expects($this->any())->method("getPayPalOrder")->will($this->returnValue($payPalOrder));
         $paymentGateway->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
         $paymentGateway->expects($this->any())->method("getSession")->will($this->returnValue($session));
-        $paymentGateway->expects($this->any())->method("getPayPalUser")->will($this->returnValue(new \OxidEsales\Eshop\Application\Model\User()));
+        $paymentGateway->expects($this->any())->method("getPayPalUser")->will($this->returnValue(oxNew(\OxidEsales\Eshop\Application\Model\User::class)));
 
         // testing
         $this->assertFalse($paymentGateway->doExpressCheckoutPayment());

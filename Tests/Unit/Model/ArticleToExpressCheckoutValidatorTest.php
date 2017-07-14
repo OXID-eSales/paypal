@@ -181,7 +181,7 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
             );
         }
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
         $basket->expects($this->any())->method('getContents')->will($this->returnValue($basketItemsList));
 
         return $basket;

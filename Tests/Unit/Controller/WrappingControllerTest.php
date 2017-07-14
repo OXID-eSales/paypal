@@ -31,7 +31,7 @@ class WrappingControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPayPal()
     {
-        $view = new \OxidEsales\PayPalModule\Controller\WrappingController();
+        $view = oxNew(\OxidEsales\Eshop\Application\Controller\WrappingController::class);
 
         $this->getSession()->setVariable("paymentid", "oxidpaypal");
         $this->assertTrue($view->isPayPal());

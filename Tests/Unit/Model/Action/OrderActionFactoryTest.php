@@ -47,7 +47,7 @@ class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreateAction($action, $class)
     {
-        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $request = new \OxidEsales\PayPalModule\Core\Request();
         $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
 
@@ -62,7 +62,7 @@ class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreateActionWithInvalidData()
     {
-        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $request = new \OxidEsales\PayPalModule\Core\Request();
         $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
 

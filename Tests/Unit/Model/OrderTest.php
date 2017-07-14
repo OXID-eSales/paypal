@@ -177,7 +177,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /** @var \OxidEsales\PayPalModule\Model\User $user */
         $user = oxNew(\OxidEsales\PayPalModule\Model\User::class);
 
-        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $order->setUser($user);
 
         $this->assertNull($order->validateDelivery($basket));
@@ -189,7 +189,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testUpdateOrderNumber()
     {
-        $order = new \OxidEsales\PayPalModule\Model\Order();
+        $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $order->save();
         $this->assertTrue($order->oePayPalUpdateOrderNumber());
@@ -206,7 +206,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $order->save();
 
-        $counter = new \OxidEsales\Eshop\Core\Counter();
+        $counter = oxNew(\OxidEsales\Eshop\Core\Counter::class);
         $orderNumber = $counter->getNext($counterIdent);
 
         $order->oePayPalUpdateOrderNumber();
@@ -223,7 +223,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $order = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getCounterIdent'));
         $order->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($counterIdent));
 
-        $counter = new \OxidEsales\Eshop\Core\Counter();
+        $counter = oxNew(\OxidEsales\Eshop\Core\Counter::class);
         $counter->getNext($counterIdent);
 
         $order->oxorder__oxordernr = new \OxidEsales\Eshop\Core\Field(5);

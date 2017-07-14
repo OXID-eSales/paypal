@@ -55,7 +55,7 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
         $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
 
         // preparing order
-        $payPalOrder = new \OxidEsales\Eshop\Application\Model\Order();
+        $payPalOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $payPalOrder->oxorder__oxordernr = new \OxidEsales\Eshop\Core\Field("123");
 
         $user = oxNew(User::class);

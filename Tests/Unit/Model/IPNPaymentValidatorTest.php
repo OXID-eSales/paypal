@@ -109,7 +109,7 @@ class IPNPaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testSetGetLang()
     {
-        $lang = new \OxidEsales\Eshop\Core\Language();
+        $lang = oxNew(\OxidEsales\Eshop\Core\Language::class);
         $lang->setBaseLanguage(0);
 
         $payPalIPNRequestValidator = new \OxidEsales\PayPalModule\Model\IPNPaymentValidator();

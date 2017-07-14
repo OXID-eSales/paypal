@@ -119,9 +119,9 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $utilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $utilsDate);
 
-        $comment = 'testComment';
+        $commentContent = 'testComment';
         $comment = new \OxidEsales\PayPalModule\Model\OrderPaymentComment();
-        $comment->setComment($comment);
+        $comment->setComment($commentContent);
 
         $payPalResponse = $this->getPayPalResponse();
 

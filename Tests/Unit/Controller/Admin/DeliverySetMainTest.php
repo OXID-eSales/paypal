@@ -55,7 +55,7 @@ class DeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalModuleId = 'module:oepaypal';
         $this->getConfig()->saveShopConfVar('string', 'sOEPayPalMECDefaultShippingId', $mobileECDefaultShippingId, null, $payPalModuleId);
 
-        $payPalDeliverySet_Main = new \OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain();
+        $payPalDeliverySet_Main = oxNew(\OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain::class);
         $payPalDeliverySet_Main->setEditObjectId($deliverySetId);
         $payPalDeliverySet_Main->render();
 
@@ -166,7 +166,7 @@ class DeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getDeliverySet($deliverySetid = -1)
     {
-        $payPalDeliverySet_Main = new \OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain();
+        $payPalDeliverySet_Main = oxNew(\OxidEsales\PayPalModule\Controller\Admin\DeliverySetMain::class);
         $payPalDeliverySet_Main->setEditObjectId($deliverySetid);
         $payPalDeliverySet_Main->save();
 

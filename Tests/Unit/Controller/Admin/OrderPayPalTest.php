@@ -89,10 +89,10 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
         $soxId = '_testOrderId';
 
-        $session = new \OxidEsales\Eshop\Core\Session();
+        $session = oxNew(\OxidEsales\Eshop\Core\Session::class);
         $session->setVariable('saved_oxid', $soxId);
 
-        $order = new \OxidEsales\Eshop\Application\Model\Order;
+        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $order->setId($soxId);
         $order->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('oxidpaypal');
         $order->save();
@@ -109,10 +109,10 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalOrder = new \OxidEsales\PayPalModule\Controller\Admin\OrderController();
         $soxId = '_testOrderId';
 
-        $session = new \OxidEsales\Eshop\Core\Session();
+        $session = oxNew(\OxidEsales\Eshop\Core\Session::class);
         $session->setVariable('saved_oxid', $soxId);
 
-        $order = new \OxidEsales\Eshop\Application\Model\Order();
+        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $order->setId($soxId);
         $order->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('other');
         $order->save();

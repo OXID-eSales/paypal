@@ -249,7 +249,7 @@ class ShopConstruct
             return $result;
         }
         foreach ($articleDataSet as $articleData) {
-            $article = new \OxidEsales\Eshop\Application\Model\Article();
+            $article = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
             $article->setId($articleData['oxid']);
             foreach ($articleData as $key => $value) {
                 if (strstr($key, "ox")) {
@@ -363,7 +363,7 @@ class ShopConstruct
         }
         foreach ($discountDataSet as $discountData) {
             // add discounts
-            $discount = new \OxidEsales\Eshop\Application\Model\Discount();
+            $discount = oxNew(\OxidEsales\Eshop\Application\Model\Discount::class);
             $discount->setId($discountData['oxid']);
             foreach ($discountData as $key => $value) {
                 if (!is_array($value)) {
@@ -445,7 +445,7 @@ class ShopConstruct
         $deliverySet = $this->createObj($data, \OxidEsales\Eshop\Application\Model\DeliverySet::class, 'oxdeliveryset');
 
         foreach ($deliveryCostDataSet as $deliveryCostData) {
-            $delivery = new \OxidEsales\Eshop\Application\Model\Delivery();
+            $delivery = oxNew(\OxidEsales\Eshop\Application\Model\Delivery::class);
             foreach ($deliveryCostData as $key => $value) {
                 if (!is_array($value)) {
                     $field = "oxdelivery__" . $key;
@@ -480,7 +480,7 @@ class ShopConstruct
         $payments = array();
         foreach ($paymentDataSet as $paymentData) {
             // add discounts
-            $payment = new \OxidEsales\Eshop\Application\Model\Payment();
+            $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
             if (isset($paymentData['oxid'])) {
                 $payment->setId($paymentData['oxid']);
             }
@@ -611,9 +611,9 @@ class ShopConstruct
         $count = count($data);
         for ($i = 0; $i < $count; $i++) {
             if ($obj2ObjTable === 'oxobject2group') {
-                $object = new \OxidEsales\Eshop\Application\Model\Object2Group();
+                $object = oxNew(\OxidEsales\Eshop\Application\Model\Object2Group::class);
             } else {
-                $object = new \OxidEsales\Eshop\Core\Model\BaseModel();
+                $object = oxNew(\OxidEsales\Eshop\Core\Model\BaseModel::class);
             }
             $object->init($obj2ObjTable);
             if ($count < 2) {

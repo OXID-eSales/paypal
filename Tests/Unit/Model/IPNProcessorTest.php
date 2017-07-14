@@ -38,7 +38,7 @@ class IPNProcessorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testSetGetLang()
     {
-        $lang = new \OxidEsales\Eshop\Core\Language();
+        $lang = oxNew(\OxidEsales\Eshop\Core\Language::class);
         $processor = new \OxidEsales\PayPalModule\Model\IPNProcessor();
         $processor->setLang($lang);
 
@@ -82,7 +82,7 @@ class IPNProcessorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testProcess()
     {
         $orderUpdated = true;
-        $lang = new \OxidEsales\Eshop\Core\Language();
+        $lang = oxNew(\OxidEsales\Eshop\Core\Language::class);
         $request = new \OxidEsales\PayPalModule\Core\Request();
         $payment = new \OxidEsales\PayPalModule\Model\OrderPayment();
         // Call Payment Builder with defined lang and defined request. Will return mocked payment.

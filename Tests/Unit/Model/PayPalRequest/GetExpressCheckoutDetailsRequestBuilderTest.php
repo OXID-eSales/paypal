@@ -35,7 +35,7 @@ class GetExpressCheckoutDetailsRequestBuilderTest extends \OxidEsales\TestingLib
         $expectedParams = array(
             'TOKEN' => '111',
         );
-        $session = new \OxidEsales\Eshop\Core\Session();
+        $session = oxNew(\OxidEsales\Eshop\Core\Session::class);
         $session->setVariable("oepaypal-token", "111");
 
         $builder = $this->getPayPalRequestBuilder();

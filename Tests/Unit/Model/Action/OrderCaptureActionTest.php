@@ -135,7 +135,7 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $order->expects($this->any())->method('getPaymentList')->will($this->returnValue($paymentList));
 
         $data = $this->getData();
-        $data->expects($this->any())->method('getComment')->will($this->returnValue($comment));
+        $data->expects($this->any())->method('getComment')->will($this->returnValue($commentContent));
 
         $action = $this->getAction($payPalResponse, $order, $data);
 

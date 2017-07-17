@@ -144,11 +144,12 @@ class OrderCaptureAction extends \OxidEsales\PayPalModule\Model\Action\OrderActi
      * @param object $payment
      * @param string $comment
      */
-    protected function addComment($payment, $comment)
+    protected function addComment($payment, $commentContent)
     {
-        if ($comment) {
+        if ($commentContent) {
             $comment = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentComment::class);
-            $comment->setComment($comment);
+            $comment->setComment($commentContent);
+
             $payment->addComment($comment);
         }
     }

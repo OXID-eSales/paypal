@@ -21,6 +21,11 @@
 
 namespace OxidEsales\PayPalModule\Tests\Acceptance;
 
+/**
+ * This test class contains acceptance tests, which check the things, which work with the old PayPal GUI.
+ *
+ * @package OxidEsales\PayPalModule\Tests\Acceptance
+ */
 class AcceptanceOldGuiTest extends BaseAcceptanceTest
 {
     /**
@@ -646,6 +651,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTest
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_not_running_locally
      */
     public function testPayPalPaymentForLoginUser()
     {

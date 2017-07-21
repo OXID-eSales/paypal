@@ -21,6 +21,12 @@
 
 namespace OxidEsales\PayPalModule\Tests\Acceptance;
 
+/**
+ * This test class contains acceptance tests for the PayPal Module, which are not checking any of the PayPal GUI parts and
+ * only OXID eShop GUI parts.
+ *
+ * @package OxidEsales\PayPalModule\Tests\Acceptance
+ */
 class WithoutPayPalGuiTest extends BaseAcceptanceTest
 {
     /**

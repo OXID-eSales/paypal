@@ -21,6 +21,11 @@
 
 namespace OxidEsales\PayPalModule\Tests\Acceptance;
 
+/**
+ * This test class contains acceptance tests, which check the things, which work with the new PayPal GUI.
+ *
+ * @package OxidEsales\PayPalModule\Tests\Acceptance
+ */
 class AcceptanceNewGuiTest extends BaseAcceptanceTest
 {
     /**
@@ -58,11 +63,11 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
         $this->type("order_remark", "Testing paypal");
 
         $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
-        $this->click("payment_oxidpaypal");
+        $this->selectPaymentPayPal();
 
         // go to PayPal page
         $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
-
+        $this->checkForFailedToOpenPayPalPageError();
         $this->standardCheckoutWillBeUsed();
         $this->payWithPayPal();
 
@@ -1012,7 +1017,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
         $this->waitForText("Bitte wählen Sie Ihre Versandart");
 
         // Go to PayPal
-        $this->click("payment_oxidpaypal");
+        $this->selectPaymentPayPal();
         $this->click(self::SELECTOR_BASKET_NEXTSTEP);
         $this->payWithPayPal();
 
@@ -1034,5 +1039,13 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
         $this->assertLogData($assertRequest, $assertResponse);
 
         $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
+    }
+
+    /**
+     * Select the payment "PayPal" in the order process.
+     */
+    protected function selectPaymentPayPal()
+    {
+        return $this->click("payment_oxidpaypal");
     }
 }

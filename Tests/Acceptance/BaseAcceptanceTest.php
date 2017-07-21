@@ -604,7 +604,7 @@ class BaseAcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
      * PayPal page might refuse connection and redirect back to the Shop with an error message.
      * This might happen for example when credentials are wrong.
      */
-    private function checkForFailedToOpenPayPalPageError()
+    protected function checkForFailedToOpenPayPalPageError()
     {
         $this->assertTextNotPresent("Security header is not valid", "Did not succeed to open PayPal page.");
         $this->assertTextNotPresent("ehlermeldung von PayPal", "Did not succeed to open PayPal page.");

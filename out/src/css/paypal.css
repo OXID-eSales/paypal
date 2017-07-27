@@ -104,14 +104,29 @@
     margin-left: 20px;
 }
 
+/*Express checkout in checkout user step page*/
+.oePayPalECSForm {
+    padding: 10px;
+    position: relative;
+}
+
+.lineBox.paypalExpressCheckoutBoxUser {
+    height: auto;
+    background-color: #f2f4f5;
+}
+
+.paypalExpressCheckoutBoxUser .paypalExpressCheckoutMsg {
+    margin-left: 0px;
+}
+
 /*Express checkout in details page*/
 .paypalExpressCheckoutDetailsBox {
     border: none;
     float: left;
     height: auto;
-    margin: 0 0 0 117px;
+    margin: 0;
     padding: 0;
-    width: 150px;
+    width: 100%;
 }
 
 .paypalExpressCheckoutDetailsBox .paypalExpressCheckoutMsg {

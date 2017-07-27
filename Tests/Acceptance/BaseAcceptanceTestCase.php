@@ -105,6 +105,9 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         ));
 
         $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
+
+        $language = oxNew(\OxidEsales\Eshop\Core\Language::class);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Language::class, $language);
     }
 
     /**
@@ -142,9 +145,18 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
                 'type' => 'select',
                 'value' => 'Sale',
                 'module' => 'module:oepaypal'
-            ]]);
+            ],
+            'sOEPayPalSandboxSignature' => [
+                'type' => 'str',
+                'value' => $this->getLoginDataByName('sOEPayPalSandboxSignature'),
+                'module' => 'module:oepaypal'
+            ],
+        ]);
 
         $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
+
+        $language = oxNew(\OxidEsales\Eshop\Core\Language::class);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Language::class, $language);
     }
 
     /**

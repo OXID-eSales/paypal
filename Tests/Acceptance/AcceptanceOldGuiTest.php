@@ -721,4 +721,168 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent('PayPal', 'Payment method not displayed in last order step');
         $this->assertFalse($this->isTextPresent('COD'), 'Wrong payment method displayed in last order step');
     }
+
+    /**
+     * Testing paypal express button.
+     * When user is not logged in he should be able to accces PP express checkout
+     * from second checkout step (cl=user).
+     * Ensure that in case of clicking 'cancel' we end up on the page we started from.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testNoPayPalExpressInUserStepForLoggedInUser()
+    {
+        $this->openShop();
+        $this->switchLanguage("Deutsch");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("Deutsch");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
+        $this->assertTextNotPresent(self::translate( "%PURCHASE_WITHOUT_REGISTRATION%"));
+        $this->assertElementNotPresent("paypalExpressCheckoutButtonECS", "PayPal ECS button must not be displayd in user step for logged in user.");
+    }
+
+    /**
+     * Testing paypal express button.
+     * When user is not logged in he should be able to accces PP express checkout
+     * from second checkout step (cl=user).
+     * Ensure that in case of clicking 'cancel' we end up on the page we started from.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testPayPalExpressInUserStepForNotLoggedInUserCancel()
+    {
+        $this->openShop();
+        $this->switchLanguage("Deutsch");
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("Deutsch");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
+        $this->assertTextPresent(self::translate( "%PURCHASE_WITHOUT_REGISTRATION%"));
+
+        $this->waitForElement("paypalExpressCheckoutButtonECS");
+        $this->assertElementPresent("paypalExpressCheckoutButtonECS", "PayPal ECS button must be displayd in user step for not logged in user.");
+        $this->clickAndWait("paypalExpressCheckoutButtonECS");
+        $this->waitForElement("cancel_return");
+
+        $this->clickAndWait("cancel_return");
+        $this->assertTextPresent(self::translate( "%PURCHASE_WITHOUT_REGISTRATION%"));
+    }
+
+    /**
+     * Testing paypal express button.
+     * When user is not logged in he should be able to accces PP express checkout
+     * from second checkout step (cl=user).
+     * Ensure that in case of error redirecting to PayPal we end up on the page we started from.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testPayPalExpressInUserStepForNotLoggedInUserError()
+    {
+        $this->callShopSC('oxConfig', null, null, [
+            'sOEPayPalSandboxSignature' => [
+                'type' => 'str',
+                'value' => 'this_is_invalid',
+                'module' => 'module:oepaypal'
+            ],
+        ]);
+
+        $this->openShop();
+        $this->switchLanguage("Deutsch");
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("Deutsch");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
+        $this->assertTextPresent(self::translate("%PURCHASE_WITHOUT_REGISTRATION%"));
+
+        $this->waitForElement("paypalExpressCheckoutButtonECS");
+        $this->assertElementPresent("paypalExpressCheckoutButtonECS", "PayPal ECS button must be displayed in user step for not logged in user.");
+        $this->clickAndWait("paypalExpressCheckoutButtonECS");
+
+        $this->assertTextPresent(self::translate("%OEPAYPAL_RESPONSE_FROM_PAYPAL%"));
+        $this->assertTextPresent(self::translate("%PURCHASE_WITHOUT_REGISTRATION%"));
+    }
+
+    /**
+     * Testing paypal express button.
+     * When user is not logged in he should be able to accces PP express checkout
+     * from second checkout step (cl=user).
+     * Ensure that in case of clicking 'cancel' we end up on the page we started from.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testPayPalExpressInUserStepForNotLoggedInUserCannotPayWithPP()
+    {
+        //NOTE: test runs locally when callback is not available.
+        // On publicly available shop, we see the following message on PayPal side:
+        // 'PayPal Testshop versendet nicht an diesen Ort. Verwenden Sie eine andere Adresse.'
+        // and we have no possibility to continue woth checkout on PP side.
+        $this->markTestSkipped('Use this only manually for not publicly available shop for now.');
+
+        //Separate Germany from PayPal payment method and assign United States
+        $this->importSql(__DIR__ . '/testSql/unasignCountryFromPayPal.sql');
+
+        $this->openShop();
+        $this->switchLanguage("Deutsch");
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("Deutsch");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
+        $this->assertTextPresent(self::translate( "%PURCHASE_WITHOUT_REGISTRATION%"));
+
+        $this->waitForElement("paypalExpressCheckoutButtonECS");
+        $this->assertElementPresent("paypalExpressCheckoutButtonECS", "PayPal ECS button must be displayed in user step for not logged in user.");
+        $this->payWithPayPalExpressCheckout("paypalExpressCheckoutButtonECS");
+
+        $this->assertTextPresent(self::translate( "%MESSAGE_PAYMENT_SELECT_ANOTHER_PAYMENT%"));
+        $this->assertTextPresent(self::translate( "%PAY%"));
+    }
+
+    /**
+     * Testing paypal express button.
+     * When user is not logged in he should be able to accces PP express checkout
+     * from second checkout step (cl=user).
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     *
+     */
+    public function testPayWithPayPalExpressInUserStepForNotLoggedInUserOk()
+    {
+        $this->importSql(__DIR__ . '/testSql/assignPayPalToGermanyStandardShippingMethod.sql');
+
+        //Testing when user is NOT logged in
+        $this->openShop();
+        $this->switchLanguage("Deutsch");
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("Deutsch");
+        $this->clickAndWait(self::SELECTOR_BASKET_NEXTSTEP);
+        $this->assertTextPresent(self::translate( "%PURCHASE_WITHOUT_REGISTRATION%"));
+
+        $this->waitForElement("paypalExpressCheckoutButtonECS");
+        $this->assertElementPresent("paypalExpressCheckoutButtonECS", "PayPal ECS button must be displayd in user step for not logged in user.");
+        $this->payWithPayPalExpressCheckout("paypalExpressCheckoutButtonECS");
+
+        //Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = ['L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+            'L_PAYMENTREQUEST_0_QTY0' => '1',
+            'ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
+        $this->assertTextPresent("Art. Nr.: 1001", "Product number not displayed in last order step");
+        $this->assertEquals("81,00 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
+        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
+        $this->clickAndWait("//button[text()='". self::translate("%SUBMIT_ORDER%") . "']");
+        $this->assertTextPresent(self::translate("%THANK_YOU%"), "Order is not finished successful");
+    }
+
 }

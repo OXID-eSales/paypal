@@ -41,6 +41,8 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $sqlState = "REPLACE INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `OXTITLE`, `OXISOALPHA2`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXTIMESTAMP`) " .
                     "VALUES ('333', '8f241f11096877ac0.98748826', 'USA last state', 'SS', 'USA last state', '', '', CURRENT_TIMESTAMP);";
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sqlState);
+
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Routing\ControllerClassNameResolver::class, null);
     }
 
     /**
@@ -48,6 +50,9 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     protected function tearDown()
     {
+        $_POST = [];
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Routing\ControllerClassNameResolver::class, null);
+
         \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("DELETE FROM oxaddress WHERE OXID = '_testUserAddressId' ");
 
         $this->resetTestDataDeliveryCostRule();
@@ -251,11 +256,40 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     }
 
     /**
-     * Test case for \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::setExpressCheckout()
+     * @return array
      */
-    public function testSetExpressCheckout_Error()
+    public function providerTestSetExpressCheckout_Error()
+    {
+        $data = [];
+
+        $data['basket'] = ['post'     => ['oePayPalRequestedControllerKey' => 'basket'],
+                           'resolved' => \OxidEsales\Eshop\Application\Controller\BasketController::class,
+                           'expected' => 'basket'];
+
+        $data['user'] = ['post'     => ['oePayPalRequestedControllerKey' => 'user'],
+                         'resolved' => \OxidEsales\Eshop\Application\Controller\UserController::class,
+                         'expected' => 'user'];
+
+        return $data;
+    }
+
+    /**
+     * Test case for \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::setExpressCheckout()
+     *
+     * @dataProvider providerTestSetExpressCheckout_Error
+     *
+     * @param array  $post
+     * @param string $resolvedClass
+     * @param string $expected
+     */
+    public function testSetExpressCheckout_Error($post, $resolvedClass, $expected)
     {
         $excp = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
+
+        $_POST = $post;
+        $classNameResolverMock = $this->getMock(\OxidEsales\Eshop\Core\Routing\ControllerClassNameResolver::class, ['getClassNameById']);
+        $classNameResolverMock->expects($this->any())->method('getClassNameById')->will($this->returnValue($resolvedClass));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Routing\ControllerClassNameResolver::class, $classNameResolverMock);
 
         $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getPayPalCommunicationUrl"));
         $payPalConfig->expects($this->never())->method("getPayPalCommunicationUrl");
@@ -274,7 +308,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $dispatcher->expects($this->once())->method("getUtilsView")->will($this->returnValue($utilsView));
 
         // testing
-        $this->assertEquals("basket", $dispatcher->setExpressCheckout());
+        $this->assertEquals($expected, $dispatcher->setExpressCheckout());
     }
 
     /**

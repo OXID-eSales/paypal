@@ -52,8 +52,8 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
 
     /**
      * Executes "SetExpressCheckout" and on SUCCESS response - redirects to PayPal
-     * login/registration page, on error - returns "basket", which means - redirect
-     * to basket view and display error message
+     * login/registration page, on error - returns to configured view (default is "basket"),
+     * which means - redirect to configured view (default basket) and display error message
      *
      * @return string
      */
@@ -122,8 +122,10 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
             // error - unable to set order info - display error message
             $this->getUtilsView()->addErrorToDisplay($excp);
 
-            // return to basket view
-            return "basket";
+            // return to requested view
+            $returnTo = $this->getRequestedControllerKey();
+            $returnTo = !empty($returnTo) ? $returnTo : 'basket';
+            return $returnTo;
         }
 
         // saving PayPal token into session
@@ -259,12 +261,33 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     protected function getCancelUrl()
     {
+        $cancelURLFromRequest = $this->getRequest()->getRequestParameter('oePayPalCancelURL');
         $cancelUrl = $this->getSession()->processUrl($this->getBaseUrl() . "&cl=basket");
-        if ($cancelURLFromRequest = $this->getRequest()->getRequestParameter('oePayPalCancelURL')) {
+
+        if ($cancelURLFromRequest) {
             $cancelUrl = html_entity_decode(urldecode($cancelURLFromRequest));
+        } elseif ($requestedControllerKey = $this->getRequestedControllerKey()) {
+            $cancelUrl = $this->getSession()->processUrl($this->getBaseUrl() . '&cl=' . $requestedControllerKey);
         }
 
         return $cancelUrl;
+    }
+
+    /**
+     * Extract requested controller key.
+     * In case the key makes sense (we find a matching class) it will be returned.
+     *
+     * @return mixed|null
+     */
+    protected function getRequestedControllerKey()
+    {
+        $return = null;
+        $requestedControllerKey = $this->getRequest()->getRequestParameter('oePayPalRequestedControllerKey');
+        if (!empty($requestedControllerKey) &&
+            \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getClassNameById($requestedControllerKey)) {
+            $return = $requestedControllerKey;
+        }
+        return $return;
     }
 
     /**

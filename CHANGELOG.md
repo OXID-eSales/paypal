@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 ### Changed
 

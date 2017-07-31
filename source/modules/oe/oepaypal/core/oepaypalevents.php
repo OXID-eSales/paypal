@@ -77,7 +77,7 @@ class oePayPalEvents
                 $iLanguageId = array_search($sLanguageAbbreviation, $aLanguages);
                 if ($iLanguageId !== false) {
                     $oPayment->setLanguage($iLanguageId);
-                    $oPayment->oxpayments__oxlongdesc = new oxField($sDescription);
+                    $oPayment->oxpayments__oxlongdesc = new oxField(html_entity_decode($sDescription), oxField::T_RAW);
                     $oPayment->save();
                 }
             }

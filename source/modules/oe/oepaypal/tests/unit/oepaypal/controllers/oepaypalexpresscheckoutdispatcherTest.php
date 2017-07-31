@@ -249,11 +249,27 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
     }
 
     /**
+     * @return array
+     */
+    public function providerTestSetExpressCheckout_Error()
+    {
+        $data = array();
+        $data['basket'] = array('controller' => 'basket');
+        $data['user'] = array('controller' => 'user');
+
+        return $data;
+    }
+
+    /**
      * Test case for oepaypalexpresscheckoutdispatcher::setExpressCheckout()
+     *
+     * @dataProvider providerTestSetExpressCheckout_Error
+     *
+     * @param string $sController
      *
      * @return null
      */
-    public function testSetExpressCheckout_Error()
+    public function testSetExpressCheckout_Error($sController)
     {
         $oExcp = new oxException();
 
@@ -268,13 +284,19 @@ class Unit_oePayPal_Controllers_oePayPalExpressCheckoutDispatcherTest extends Ox
         $oUtilsView = $this->getMock("oxUtilsView", array("addErrorToDisplay"));
         $oUtilsView->expects($this->once())->method("addErrorToDisplay")->with($this->equalTo($oExcp));
 
+        //preparing request
+        $aPost = array('oePayPalRequestedControllerKey' => $sController);
+        $oPayPalRequest = $this->getMock('oePayPalRequest', array('getPost'));
+        $oPayPalRequest->expects($this->any())->method('getPost')->will($this->returnValue($aPost));
+
         // preparing
-        $oDispatcher = $this->getMock("oepaypalexpresscheckoutdispatcher", array("getPayPalCheckoutService", "_getUtilsView"));
+        $oDispatcher = $this->getMock("oepaypalexpresscheckoutdispatcher", array("getPayPalCheckoutService", "_getUtilsView", "getRequest"));
         $oDispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($oPayPalService));
         $oDispatcher->expects($this->once())->method("_getUtilsView")->will($this->returnValue($oUtilsView));
+        $oDispatcher->expects($this->any())->method("getRequest")->will($this->returnValue($oPayPalRequest));
 
         // testing
-        $this->assertEquals("basket", $oDispatcher->setExpressCheckout());
+        $this->assertEquals($sController, $oDispatcher->setExpressCheckout());
     }
 
     /**

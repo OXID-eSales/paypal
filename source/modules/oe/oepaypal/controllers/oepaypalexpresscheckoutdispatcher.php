@@ -53,8 +53,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
 
     /**
      * Executes "SetExpressCheckout" and on SUCCESS response - redirects to PayPal
-     * login/registration page, on error - returns "basket", which means - redirect
-     * to basket view and display error message
+     * login/registration page, on error - returns to configured view (default is "basket"),
+     * which means - redirect to configured view (default basket) and display error message
      *
      * @return string
      */
@@ -123,8 +123,10 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
             // error - unable to set order info - display error message
             $this->_getUtilsView()->addErrorToDisplay($oExcp);
 
-            // return to basket view
-            return "basket";
+            // return to requested view
+            $returnTo = $this->getRequest()->getRequestParameter('oePayPalRequestedControllerKey');
+            $returnTo = !empty($returnTo) ? $returnTo : 'basket';
+            return $returnTo;
         }
 
         // saving PayPal token into session
@@ -264,6 +266,8 @@ class oePayPalExpressCheckoutDispatcher extends oePayPalDispatcher
         $sCancelUrl = $this->getSession()->processUrl($this->_getBaseUrl() . "&cl=basket");
         if ($sCancelURLFromRequest = $this->getRequest()->getRequestParameter('oePayPalCancelURL')) {
             $sCancelUrl = html_entity_decode(urldecode($sCancelURLFromRequest));
+        } elseif ($sRequestedControllerKey = $this->getRequest()->getRequestParameter('oePayPalRequestedControllerKey')) {
+            $sCancelUrl = $this->getSession()->processUrl($this->_getBaseUrl() . '&cl=' . $sRequestedControllerKey);
         }
 
         return $sCancelUrl;

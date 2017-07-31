@@ -15,7 +15,7 @@
  * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2014
+ * @copyright (C) OXID eSales AG 2003-2017
  */
 .paypalExpressCheckoutBox {
     min-width: 145px;
@@ -102,6 +102,21 @@
 
 #paypalExpressCheckoutMiniBasketBox .paypalExpressCheckoutMsg {
     margin-left: 20px;
+}
+
+/*Express checkout in checkout user step page*/
+.oePayPalECSForm {
+    padding: 10px;
+    position: relative;
+}
+
+.lineBox.paypalExpressCheckoutBoxUser {
+    height: auto;
+    background-color: #f2f4f5;
+}
+
+.paypalExpressCheckoutBoxUser .paypalExpressCheckoutMsg {
+    margin-left: 0px;
 }
 
 /*Express checkout in details page*/

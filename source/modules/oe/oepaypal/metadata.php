@@ -168,6 +168,7 @@ $aModule = array(
         array('template' => 'page/checkout/payment.tpl',        'block'=>'mb_select_payment',                   'file'=>'/views/blocks/mobile/oepaypalpaymentselector.tpl'),
         array('template' => 'page/details/inc/productmain.tpl', 'block'=>'mb_details_productmain_tobasket',     'file'=>'/views/blocks/mobile/oepaypalexpresscheckoutdetailspage.tpl'),
         array('template' => 'page/details/inc/productmain.tpl', 'block'=>'mb_details_productmain_morepics',     'file'=>'/views/blocks/mobile/oepaypalexpresscheckoutdetailspagepopup.tpl'),
+        array('template' => 'page/checkout/user.tpl',           'block'=>'checkout_user_main',                   'file'=>'/views/blocks/page/checkout/oepaypalexpresscheckout.tpl'),
     ),
     'settings' => array(
         // functionality is currently not available

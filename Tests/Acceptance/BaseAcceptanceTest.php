@@ -662,8 +662,6 @@ abstract class BaseAcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceT
      */
     protected function moveTemplateBlockToEnd()
     {
-        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
-
-        $db->execute('update oxtplblocks set OXPOS=2 where OXMODULE="oepaypal"');
+        $this->executeSql('UPDATE oxtplblocks SET OXPOS=2 WHERE OXMODULE="oepaypal"');
     }
 }

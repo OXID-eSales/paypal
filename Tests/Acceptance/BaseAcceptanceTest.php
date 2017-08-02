@@ -135,6 +135,8 @@ abstract class BaseAcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceT
         $this->clearCookies();
         $this->clearTemp();
 
+        $this->moveTemplateBlockToEnd();
+
         $this->callShopSC('oxConfig', null, null, [
             'sOEPayPalTransactionMode' => [
                 'type' => 'select',
@@ -608,5 +610,60 @@ abstract class BaseAcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceT
     {
         $this->assertTextNotPresent("Security header is not valid", "Did not succeed to open PayPal page.");
         $this->assertTextNotPresent("ehlermeldung von PayPal", "Did not succeed to open PayPal page.");
+    }
+
+    /**
+     * Assert, that the first name and the last name are correct on the admin order page.
+     */
+    protected function assureAdminOrderNameIsPresent()
+    {
+        $indexFirstName = $this->getFirstNameColumnIndex();
+        $indexLastName = 1 + $indexFirstName;
+
+        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[$indexFirstName]"), "Wrong user name is displayed in order");
+        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[$indexLastName]"), "Wrong user last name is displayed in order");
+    }
+
+    /**
+     * Get the column index of the first name in the admin order page table.
+     *
+     * @return int The column index of the first name in the admin order page table.
+     */
+    protected function getFirstNameColumnIndex()
+    {
+        $headers = $this->extractAdminOrderTableTitles();
+
+        return 1 + array_search('First Name', $headers);
+    }
+
+    /**
+     * Extract the title row pure texts of the admin orders list page.
+     *
+     * @return array The plain texts of the admin order list page table headline.
+     */
+    protected function extractAdminOrderTableTitles()
+    {
+        $tableBodyElement = $this->getElement("//tr[@id='row.1']/parent::tbody");
+        $tableHeaderElements = $tableBodyElement->findAll("xpath", "//tr[not(@*)]//td//a");
+
+        $headers = [];
+        foreach ($tableHeaderElements as $tableHeaderElement) {
+            /**
+             * @var \Behat\Mink\Element\NodeElement $tableHeaderElement
+             */
+            $headers[] = trim($tableHeaderElement->getHtml());
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Move the PayPal template blocks to the end in the block chain.
+     */
+    protected function moveTemplateBlockToEnd()
+    {
+        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+
+        $db->execute('update oxtplblocks set OXPOS=2 where OXMODULE="oepaypal"');
     }
 }

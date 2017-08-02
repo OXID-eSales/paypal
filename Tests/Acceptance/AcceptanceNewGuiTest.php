@@ -42,17 +42,13 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
                 'type' => 'select',
                 'value' => 'Authorization',
                 'module' => 'module:oepaypal'
-            ]]);
+            ]
+        ]);
 
-        // Startup/configure shop
-        $this->openShop();
+        $this->moveTemplateBlockToEnd();
+
+        $this->addToBasket('1001');
         $this->switchLanguage("Deutsch");
-        $this->searchFor("1001");
-
-        // add found article to basket
-        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
-
-        $this->openBasket("Deutsch");
         $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
 
         // advance to next step (choose address/Adresse wählen)
@@ -81,11 +77,9 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
 
         // Admin
-
         // Checking if order is saved in Admin
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"));
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->openListItem("2");
 
         // Go to PayPal tab to check all order info
@@ -196,8 +190,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
 
         // Go to an admin and check this order nr
         $this->loginAdminForModule("Administer Orders", "Orders");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");
@@ -295,8 +288,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
 
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->openListItem("2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("5,00 EUR", $this->getText("//td[5]"));
@@ -323,7 +315,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
      */
     public function testPayPalDiscountsFromTill()
     {
-        $this->markTestIncomplete('This test is very unstable, when running in the compilation. Sometimes it passes and sometimes it fails at four different places!');
+        // $this->markTestIncomplete('This test is very unstable, when running in the compilation. Sometimes it passes and sometimes it fails at four different places!');
 
         // Add vouchers to shop
         $this->importSql(__DIR__ . '/testSql/newDiscounts_' . SHOP_EDITION . '.sql');
@@ -448,8 +440,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders");
         $this->waitForElement("//[@id='row.1']", 5, true);
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[4]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[5]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("0,00 EUR", $this->getText("//td[5]"));
@@ -538,8 +529,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
 
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("15,00 EUR", $this->getText("//td[5]"));
@@ -657,8 +647,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
 
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("17,85 EUR", $this->getText("//td[5]"));
@@ -688,7 +677,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
      */
     public function testPayPalProportional()
     {
-        $this->markTestIncomplete('This test is very unstable, when running in the compilation. Sometimes it passes and sometimes it fails at at least three different places!');
+        // $this->markTestIncomplete('This test is very unstable, when running in the compilation. Sometimes it passes and sometimes it fails at at least three different places!');
 
         // Change price for PayPal payment method
         $this->importSql(__DIR__ . '/testSql/newVAT.sql');
@@ -937,8 +926,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTest
 
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.2']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.2']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("10,00 EUR", $this->getText("//td[5]"));

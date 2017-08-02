@@ -499,7 +499,6 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTest
      *
      * @group paypal_standalone
      * @group paypal_external
-     *
      */
     public function testPayPalPaymentForGermany()
     {
@@ -625,8 +624,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTest
         $this->waitForPageToLoad("30000");
 
         $this->clickandWait("link=2");
-        $this->assertEquals("Testing user acc Äß'ü", $this->getText("//tr[@id='row.1']/td[6]"), "Wrong user name is displayed in order");
-        $this->assertEquals("PayPal Äß'ü", $this->getText("//tr[@id='row.1']/td[7]"), "Wrong user last name is displayed in order");
+        $this->assureAdminOrderNameIsPresent();
         $this->assertEquals("0000-00-00 00:00:00", $this->getText("//tr[@id='row.1']/td[4]"));
         $this->openListItem("2", "setfolder");
         $this->assertTextPresent("Internal Status: OK");

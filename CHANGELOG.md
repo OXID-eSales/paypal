@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
-- Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 ### Changed
 
@@ -21,5 +20,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 
-[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v3.2.5...HEAD
-[v3.2.5]: https://github.com/OXID-eSales/paypal/compare/v3.2.4...v3.2.5
+
+## [3.3.0] - 2017-08-0?
+
+### Added
+- Additional PayPal express checkout button in user checkout step in case no user is logged in.
+
+[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v3.2.4...HEAD
+[v3.3.0]: https://github.com/OXID-eSales/paypal/compare/v3.2.4...v3.3.0

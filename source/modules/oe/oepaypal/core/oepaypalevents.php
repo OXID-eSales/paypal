@@ -74,10 +74,12 @@ class oePayPalEvents
             $oLanguage = oxRegistry::get('oxLang');
             $aLanguages = $oLanguage->getLanguageIds();
             foreach ($aPaymentDescriptions as $sLanguageAbbreviation => $sDescription) {
+                $charset = oxRegistry::getConfig()->isUtf() ? 'UTF-8' : $oLanguage->translateString('charset');
+                $sDescription = html_entity_decode($sDescription, ENT_COMPAT | ENT_HTML401, $charset);
                 $iLanguageId = array_search($sLanguageAbbreviation, $aLanguages);
                 if ($iLanguageId !== false) {
                     $oPayment->setLanguage($iLanguageId);
-                    $oPayment->oxpayments__oxlongdesc = new oxField(html_entity_decode($sDescription), oxField::T_RAW);
+                    $oPayment->oxpayments__oxlongdesc = new oxField($sDescription, oxField::T_RAW);
                     $oPayment->save();
                 }
             }

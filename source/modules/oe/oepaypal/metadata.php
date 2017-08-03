@@ -31,7 +31,7 @@ $aModule = array(
     'id'           => 'oepaypal',
     'title'        => 'PayPal',
     'description'  => array(
-        'de' => 'Modul für die Zahlung mit PayPal.',
+        'de' => 'Modul f&uuml;r die Zahlung mit PayPal.',
         'en' => 'Module for PayPal payment.',
     ),
     'thumbnail'    => 'logo.jpg',

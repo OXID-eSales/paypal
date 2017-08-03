@@ -26,7 +26,7 @@ namespace OxidEsales\PayPalModule\Tests\Acceptance;
  *
  * @package OxidEsales\PayPalModule\Tests\Acceptance
  */
-class AcceptanceNewGuiTest extends BaseAcceptanceTest
+class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
 {
     /**
      * testing PayPal payment selection

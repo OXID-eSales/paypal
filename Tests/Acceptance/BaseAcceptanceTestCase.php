@@ -24,7 +24,7 @@ namespace OxidEsales\PayPalModule\Tests\Acceptance;
 /**
  * @todo add dependency between external tests. If one fails next should not start.
  */
-abstract class BaseAcceptanceTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
+abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\AcceptanceTestCase
 {
     const PAYPAL_LOGIN_BUTTON_ID_OLD = "id=submitLogin";
     const PAYPAL_LOGIN_BUTTON_ID_NEW = "id=btnLogin";

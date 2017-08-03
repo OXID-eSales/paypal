@@ -26,7 +26,7 @@ namespace OxidEsales\PayPalModule\Tests\Acceptance;
  *
  * @package OxidEsales\PayPalModule\Tests\Acceptance
  */
-class AcceptanceOldGuiTest extends BaseAcceptanceTest
+class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 {
     /**
      * testing paypal express button

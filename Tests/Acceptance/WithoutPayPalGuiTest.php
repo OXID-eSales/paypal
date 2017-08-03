@@ -27,7 +27,7 @@ namespace OxidEsales\PayPalModule\Tests\Acceptance;
  *
  * @package OxidEsales\PayPalModule\Tests\Acceptance
  */
-class WithoutPayPalGuiTest extends BaseAcceptanceTest
+class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
 {
     /**
      * testing different countries with shipping rules assigned to this countries

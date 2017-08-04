@@ -261,7 +261,15 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     private function selectCorrectLoginFrame()
     {
         if ($this->newPayPalUserInterface) {
-            $this->frame(self::PAYPAL_FRAME_NAME);
+            $frameSelector = "//iframe[@name='injectedUl']";
+
+            $this->_waitForAppear('isElementPresent', $frameSelector, 5, true);
+
+            if ($this->isElementPresent($frameSelector)) {
+                $this->frame(self::PAYPAL_FRAME_NAME);
+            } else {
+                $this->markTestIncomplete('PayPal is not giving us the normal page, we miss the iframe...');
+            }
         }
     }
 

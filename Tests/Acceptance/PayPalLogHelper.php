@@ -50,9 +50,9 @@ class PayPalLogHelper
      */
     public function setLogPermissions()
     {
-        $spathToLog = $this->getPathToPayPalLog();
-        if (file_exists($spathToLog) && !is_writable($spathToLog)){
-            \OxidEsales\TestingLibrary\Services\Library\CliExecutor::executeCommand("chmod 777 $spathToLog");
+        $pathToLog = $this->getPathToPayPalLog();
+        if (file_exists($pathToLog) && !is_writable($pathToLog)){
+            \OxidEsales\TestingLibrary\Services\Library\CliExecutor::executeCommand("sudo chmod 777 $pathToLog");
         }
     }
 

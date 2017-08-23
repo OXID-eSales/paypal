@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 
 
-## [5.1.0] - 2017-08-0?
+## [5.1.0] - 2017-08-14
 
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.

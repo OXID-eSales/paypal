@@ -186,8 +186,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals($this->getLoginDataByName('sBuyerFirstName'), $this->getText("//tr[@id='row.1']/td[6]"));
-        $this->assertEquals($this->getLoginDataByName('sBuyerLastName'), $this->getText("//tr[@id='row.1']/td[7]"));
+        $this->assertEquals($this->getLoginDataByName('sBuyerFirstName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'first_name')][1]"));
+        $this->assertEquals($this->getLoginDataByName('sBuyerLastName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'last_name')][1]"));
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("15,00 EUR", $this->getText("//td[5]"));
@@ -625,7 +625,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 
         $this->clickandWait("link=2");
         $this->assureAdminOrderNameIsPresent();
-        $this->assertEquals("0000-00-00 00:00:00", $this->getText("//tr[@id='row.1']/td[4]"));
+        $this->assertEquals("0000-00-00 00:00:00", $this->getText("//tr[@id='row.1']/td[contains(@class, 'payment_date')][1]"));
         $this->openListItem("2", "setfolder");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertTextPresent("Order No.: 2", "Order number is not displayed in admin");

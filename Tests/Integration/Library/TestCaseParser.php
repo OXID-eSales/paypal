@@ -23,7 +23,6 @@ namespace OxidEsales\PayPalModule\Tests\Integration\Library;
 
 class TestCaseParser
 {
-
     /**
      * Directory where to search for test cases
      *

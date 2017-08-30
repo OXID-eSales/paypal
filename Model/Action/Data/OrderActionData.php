@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action\Data;
  */
 class OrderActionData
 {
-
     /**
      * Request object
      *

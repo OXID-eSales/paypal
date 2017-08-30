@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
  */
 class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Set up
      */
@@ -1347,7 +1346,6 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
 
 class modOxVatSelector extends \OxidEsales\Eshop\Application\Model\VatSelector
 {
-
     public static function cleanInstanceCache()
     {
         self::$_aUserVatCache = array();

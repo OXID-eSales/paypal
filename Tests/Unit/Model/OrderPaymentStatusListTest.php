@@ -27,7 +27,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 class OrderPaymentStatusListTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
-
     /**
      * Data provider for testIsActionValidCapture()
      *

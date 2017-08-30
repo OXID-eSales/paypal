@@ -25,7 +25,6 @@ use OxidEsales\Eshop\Application\Model\Order;
 
 class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      *  Setup: Prepare data - create need tables
      */

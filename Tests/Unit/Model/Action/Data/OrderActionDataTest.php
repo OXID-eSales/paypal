@@ -28,7 +28,6 @@ use OxidEsales\Eshop\Application\Model\Order;
  */
 class OrderActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      */
     public function testGetAuthorizationId()

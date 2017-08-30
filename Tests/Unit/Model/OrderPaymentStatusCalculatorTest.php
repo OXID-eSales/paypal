@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model;
  */
 class OrderPaymentStatusCalculatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      *  Setup: Prepare data - create need tables
      */

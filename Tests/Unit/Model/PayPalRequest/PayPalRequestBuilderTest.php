@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\PayPalRequest;
  */
 class PayPalRequestBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     public function testSetGetRequest()
     {
         $data = array('DATA' => 'data');

@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model;
  */
 class PaymentValidator
 {
-
     /**
      * Basket price
      *

@@ -25,7 +25,6 @@ use OxidEsales\Eshop\Application\Model\Basket;
 
 class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     public function providerSetGetItemToValidate()
     {
         $item = new \OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem();

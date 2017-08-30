@@ -23,7 +23,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Component\Widget;
 
 class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     protected function createDetailsMock($articleInfo, $showECSPopUp = 0)
     {
         $basketComponent = $this->getMock(\OxidEsales\PayPalModule\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));

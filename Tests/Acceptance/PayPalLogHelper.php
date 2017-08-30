@@ -27,7 +27,6 @@ use OxidEsales\TestingLibrary\Services\Library\ServiceConfig;
 
 class PayPalLogHelper
 {
-
     /**
      * Holds the parsed log information.
      *

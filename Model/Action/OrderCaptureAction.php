@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action;
  */
 class OrderCaptureAction extends \OxidEsales\PayPalModule\Model\Action\OrderAction
 {
-
     /**
      * @var \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler
      */

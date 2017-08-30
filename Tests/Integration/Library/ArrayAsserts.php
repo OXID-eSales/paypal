@@ -23,7 +23,6 @@ namespace OxidEsales\PayPalModule\Tests\Integration\Library;
 
 class ArrayAsserts extends \OxidEsales\PayPalModule\Tests\Integration\Library\IntegrationTestHelper
 {
-
     /**
      * Checks whether array length are equal and array keys and values are equal independent on keys position
      *

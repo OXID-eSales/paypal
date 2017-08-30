@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Response;
  */
 class ResponseDoRefund extends \OxidEsales\PayPalModule\Model\Response\Response
 {
-
     /**
      * Return transaction id.
      *

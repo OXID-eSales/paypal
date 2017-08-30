@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action\Data;
  */
 class OrderReauthorizeActionData extends \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData
 {
-
     /**
      * Returns action amount.
      *

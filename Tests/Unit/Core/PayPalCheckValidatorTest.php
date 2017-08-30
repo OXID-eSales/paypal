@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
  */
 class PayPalCheckValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Data provider for testIsPayPalCheckValid()
      *

@@ -27,7 +27,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 class FullNameTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
 
-
     /**
      * @dataProvider providerSplitNames
      */

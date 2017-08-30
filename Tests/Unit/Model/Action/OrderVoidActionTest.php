@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action;
  */
 class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Testing addition of voided amount to order
      */

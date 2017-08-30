@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action;
  */
 class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Tests setting and getting of request object
      */

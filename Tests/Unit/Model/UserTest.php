@@ -28,7 +28,6 @@ use OxidEsales\Eshop\Application\Model\User;
  */
 class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Tear down the fixture.
      */

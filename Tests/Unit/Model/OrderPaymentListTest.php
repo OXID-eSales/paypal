@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model;
  */
 class OrderPaymentListTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      *  Setup: Prepare data - create need tables
      */

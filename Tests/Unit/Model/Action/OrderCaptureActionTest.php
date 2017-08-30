@@ -28,7 +28,6 @@ use stdClass;
  */
 class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Testing addition of captured amount to order
      */

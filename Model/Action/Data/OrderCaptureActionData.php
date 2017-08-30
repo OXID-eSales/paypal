@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action\Data;
  */
 class OrderCaptureActionData extends \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData
 {
-
     /**
      * returns action type
      *

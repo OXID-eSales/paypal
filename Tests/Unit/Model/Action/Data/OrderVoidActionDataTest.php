@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Data;
  */
 class OrderVoidActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Tests getting amount when amount is not set and no amount is passed with request. Should be taken from order
      */

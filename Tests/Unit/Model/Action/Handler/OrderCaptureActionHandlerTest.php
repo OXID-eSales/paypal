@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Handler;
  */
 class OrderCaptureActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Testing building of PayPal request when request is not set
      */

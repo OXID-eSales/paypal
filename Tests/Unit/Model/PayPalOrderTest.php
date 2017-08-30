@@ -26,7 +26,6 @@
  */
 class PayPalOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      *  Setup: Prepare data - create need tables
      */

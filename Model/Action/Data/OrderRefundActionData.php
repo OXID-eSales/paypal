@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action\Data;
  */
 class OrderRefundActionData extends \OxidEsales\PayPalModule\Model\Action\Data\OrderActionData
 {
-
     /**
      * @var \OxidEsales\PayPalModule\Model\OrderPayment::class
      */

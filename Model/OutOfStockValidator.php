@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model;
  */
 class OutOfStockValidator
 {
-
     /**
      * Basket object
      *

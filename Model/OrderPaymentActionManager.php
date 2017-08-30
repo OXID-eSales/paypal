@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model;
  */
 class OrderPaymentActionManager
 {
-
     /**
      * Array of available actions for payment action.
      *

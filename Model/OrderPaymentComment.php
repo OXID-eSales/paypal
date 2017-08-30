@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model;
  */
 class OrderPaymentComment extends \OxidEsales\PayPalModule\Core\Model
 {
-
     /**
      * Sets date value.
      */

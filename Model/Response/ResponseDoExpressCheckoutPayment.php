@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Response;
  */
 class ResponseDoExpressCheckoutPayment extends \OxidEsales\PayPalModule\Model\Response\Response
 {
-
     /**
      * Return transaction id.
      *

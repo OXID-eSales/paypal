@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Handler;
  */
 class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      *  Setup: Prepare data - create need tables
      */

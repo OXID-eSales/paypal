@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Response;
  */
 class ResponseDoReAuthorize extends \OxidEsales\PayPalModule\Model\Response\Response
 {
-
     /**
      * Return authorization id.
      *

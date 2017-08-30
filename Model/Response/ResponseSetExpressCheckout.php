@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Response;
  */
 class ResponseSetExpressCheckout extends \OxidEsales\PayPalModule\Model\Response\Response
 {
-
     /**
      * Return token.
      *

@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\PayPalRequest;
  */
 class GetExpressCheckoutDetailsRequestBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Test building PayPal request object
      */

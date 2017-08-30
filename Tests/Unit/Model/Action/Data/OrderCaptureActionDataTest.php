@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Data;
  */
 class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Tests setting parameters from request
      */

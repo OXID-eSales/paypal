@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action;
  */
 class OrderRefundAction extends \OxidEsales\PayPalModule\Model\Action\OrderAction
 {
-
     /**
      * Processes PayPal response
      */

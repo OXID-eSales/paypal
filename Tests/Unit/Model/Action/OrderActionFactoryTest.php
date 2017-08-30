@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action;
  */
 class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Data provider for testCreateAction
      */

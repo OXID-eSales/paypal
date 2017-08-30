@@ -26,7 +26,6 @@ use OxidEsales\Eshop\Application\Model\Order;
 
 class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     public function providerFinalizeOrder_TransStatusNotChange()
     {
         $order = oxNew(Order::class);

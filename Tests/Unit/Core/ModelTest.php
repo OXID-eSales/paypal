@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
  */
 class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-
     /**
      * Loading of data by id, returned by getId method
      */

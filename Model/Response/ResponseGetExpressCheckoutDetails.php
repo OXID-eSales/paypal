@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Response;
  */
 class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\Response\Response
 {
-
     /**
      * Return internal/system name of a shipping option.
      *

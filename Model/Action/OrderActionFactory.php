@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action;
  */
 class OrderActionFactory
 {
-
     /**
      * @var \OxidEsales\PayPalModule\Core\Request
      */

@@ -28,7 +28,6 @@ namespace OxidEsales\PayPalModule\Controller\Admin;
  */
 class OrderList extends OrderList_parent
 {
-
     /**
      * Executes parent method parent::render() and returns name of template
      * file "order_list.tpl".

@@ -26,7 +26,6 @@ namespace OxidEsales\PayPalModule\Model\Action\Handler;
  */
 class OrderReauthorizeActionHandler extends \OxidEsales\PayPalModule\Model\Action\Handler\OrderActionHandler
 {
-
     /**
      * PayPal Request.
      *

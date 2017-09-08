@@ -43,7 +43,7 @@ class CallbackFromPayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCa
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
     protected $_iWaitTimeMultiplier = 3;
 
-    protected $retryTimes = 0;
+    protected $retryTimes = 1;
 
     /**
      * Activates PayPal and adds configuration

@@ -45,6 +45,54 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
 
     protected $retryTimes = 1;
 
+    protected static $doStopMink = true;
+
+    /**
+     * Known test failure messages and some identifiers.
+     * If they match, the tests are broken because of external issues with PayPal sandbox
+     * and can safely be skipped for this run.
+     *
+     * @var array
+     */
+    protected $knownExceptions = [
+        "Element 'login_email' was not found" ,
+        "Element 'id=submitLogin' was not found!",
+        "Element 'id=paypalExpressCheckoutDetailsButton' was not found!",
+        "Timeout waiting for 'id=continue'" ,
+        "Timeout waiting for 'id=submitLogin'",
+        "Timeout waiting for 'Bestellen ohne Registrierung'",
+        "Timeout waiting for 'cancel_return'",
+        "Timeout waiting for '2 x Test product 1'"
+    ];
+
+    /**
+     * If in case of known error message any of these identifier groups
+     * can be found, the test failure was ver likely caused by PayPal sandbox.
+     *
+     * @var array
+     */
+    protected $failIdentifiersGroups = [
+        'internal_error'             => [['isTextPresent', 'internal'],
+                                         ['isTextPresent', 'error'],
+                                         ['isTextPresent', 'webmaster@paypal.com']],
+        'dispatch_error_en'          => [['isTextPresent', 'your last action could not be completed'],
+                                         ['isTextPresent', 'Dispatch Error'],
+                                         ['isTextPresent', 'PayPal']],
+        'dispatch_error_de'          => [['isTextPresent', 'letzte Aktion konnte leider nicht abgeschlossen werden'],
+                                         ['isTextPresent', 'Dispatch Error'],
+                                         ['isTextPresent', 'PayPal']],
+        'internal_error_sandbox_com' => [['isTextPresent', 'sandbox.paypal.com']],
+        'internal_error_sandbox'     => [['isTextPresent', 'internal'],
+                                         ['isTextPresent', 'error']],
+        'internal_error_sandbox_all' => [['isTextPresent', 'internal'],
+                                         ['isTextPresent', 'error'],
+                                         ['isTextPresent', 'sandbox.paypal.com']],
+        'redirect_to_PP_failed_de'   => [['isTextPresent', 'Warenkorb'],
+                                         ['isElementPresent', 'paypalExpressCheckoutButton']],
+        'redirect_to_PP_failed_en'   => [['isTextPresent', 'Cart'],
+                                         ['isElementPresent', 'paypalExpressCheckoutButton']]
+    ];
+
     /**
      * Activates PayPal and adds configuration
      *
@@ -119,12 +167,99 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     public function retryTest($message = '')
     {
-        if (false !== stripos($message, 'Timeout')) {
+        if (false !== stripos($message, '  Timeout')) {
             $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'setLogPermissions');
             $this->callShopSC(\OxidEsales\PayPalModule\Core\Logger::class, 'log', null, null, [$this->getHtmlSource()]);
             $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'renamePayPalLog');
         }
         parent::retryTest($message);
+    }
+
+    /**
+     * Fix for showing stack trace with phpunit 3.6 and later
+     *
+     * @param Exception $exception
+     *
+     * @throws Exception
+     */
+    protected function onNotSuccessfulTest(\Exception $exception)
+    {
+        try {
+            self::$doStopMink = false;
+            parent::onNotSuccessfulTest($exception);
+        } catch (\Exception $exception) {
+            $message = $exception->getMessage();
+            $skipExplanation = $this->canTestBeSkipped($message);
+            if (!is_null($skipExplanation)) {
+                writeToLog($skipExplanation);
+                $exception = new \PHPUnit_Framework_SkippedTestError($skipExplanation);
+            } else {
+                writeToLog(__FUNCTION__ . ' ' . get_class($exception) . ' ' . $message);
+            }
+
+            self::$doStopMink = true;
+            self::stopMinkSession();
+            throw $exception;
+        }
+        //if we reached this point, we still have a budget of open test repeats.
+    }
+
+    /**
+     * Check if failure is likely to be caused by PayPal sandbox.
+     * Not null return value means we can skip the failing test for this run.
+     *
+     * @param string $message
+     *
+     * @return string|null
+     */
+    protected function canTestBeSkipped($message)
+    {
+        $skipInfo = null;
+        foreach ($this->knownExceptions as $known) {
+            if (false !== strpos($message, $known)) {
+                $identified = $this->identifyFailure();
+                if (!is_null($identified)) {
+                    $skipInfo = $known . ' - Skipped automatically due to external issue with PayPal sandbox: ' . $identified;
+                }
+            }
+        }
+        return $skipInfo;
+    }
+
+    /**
+     * Check if any group of failure cause identifiers can be found on page.
+     *
+     * @return null|string
+     */
+    protected function identifyFailure()
+    {
+        $identified = null;
+        $this->selectWindow(null);
+        foreach ($this->failIdentifiersGroups as $key => $group) {
+            $verified = true;
+            foreach ($group as $checkFor) {
+                $method = $checkFor[0];
+                $argument = $checkFor[1];
+
+                $verified &= $this->$method($argument);
+            }
+            if ($verified) {
+                $identified = $key;
+
+                continue;
+            }
+        }
+        return $identified;
+    }
+
+    /**
+     * Stops Mink session if it is started.
+     */
+    public static function stopMinkSession()
+    {
+        if (self::$doStopMink) {
+            parent::stopMinkSession();
+        }
     }
 
     /**

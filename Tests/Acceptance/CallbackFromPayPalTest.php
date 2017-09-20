@@ -22,110 +22,18 @@
 namespace OxidEsales\PayPalModule\Tests\Acceptance;
 
 /**
- * @todo add dependency between external tests. If one fails next should not start.
+ * Class CallbackFromPayPalTest
+ *
+ * @package OxidEsales\PayPalModule\Tests\Acceptance
  */
-class CallbackFromPayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCase
+class CallbackFromPayPalTest extends BaseAcceptanceTestCase
 {
-    const PAYPAL_LOGIN_BUTTON_ID_OLD = "id=submitLogin";
-    const PAYPAL_LOGIN_BUTTON_ID_NEW = "id=btnLogin";
-
-    const SELECTOR_ADD_TO_BASKET = "//form[@name='tobasketsearchList_1']//button";
-    const SELECTOR_BASKET_NEXTSTEP = "//button[text()='Weiter zum nächsten Schritt']";
-
-    const LOGIN_USERNAME = "testing_account@oxid-esales.dev";
-    const LOGIN_USERPASS = "useruser";
-
-    private $newPayPalUserInterface = true;
-    const PAYPAL_FRAME_NAME = "injectedUl";
-    const THANK_YOU_PAGE_IDENTIFIER = "Thank you";
-    const IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE = 2;
-
-    /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
-    protected $_iWaitTimeMultiplier = 3;
-
-    protected $retryTimes = 1;
-
-    /**
-     * Activates PayPal and adds configuration
-     *
-     * @param string $testSuitePath
-     *
-     * @throws \Exception
-     */
-    public function addTestData($testSuitePath)
-    {
-        parent::addTestData($testSuitePath);
-
-        $this->callShopSC('oxConfig', null, null, array(
-            'sOEPayPalTransactionMode' => array(
-                'type' => 'select',
-                'value' => 'Authorization',
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalUsername' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalUsername'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalPassword' => array(
-                'type' => 'password',
-                'value' => $this->getLoginDataByName('sOEPayPalPassword'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSignature' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalSignature'),
-                'module' => 'module:oepaypal'
-            ),
-            'blOEPayPalSandboxMode' => array(
-                'type' => 'bool',
-                'value' => 1,
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSandboxUsername' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalSandboxUsername'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSandboxPassword' => array(
-                'type' => 'password',
-                'value' => $this->getLoginDataByName('sOEPayPalSandboxPassword'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSandboxSignature' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalSandboxSignature'),
-                'module' => 'module:oepaypal'
-            ),
-            'blPayPalLoggerEnabled' => array(
-                'type' => 'str',
-                'value' => true,
-                'module' => 'module:oepaypal'
-            )
-        ));
-
-        $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
-    }
-
     /**
      * Set up fixture.
      */
     protected function setUp()
     {
         parent::setUp();
-
-        $this->clearCache();
-        $this->clearCookies();
-        $this->clearTemp();
-
-        $this->callShopSC('oxConfig', null, null, [
-            'sOEPayPalTransactionMode' => [
-                'type' => 'select',
-                'value' => 'Sale',
-                'module' => 'module:oepaypal'
-            ]]);
-
-        $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
 
         //Add delivery methods
         $this->importSql(__DIR__ . '/testSql/newDeliveryMethod_' . SHOP_EDITION . '.sql');
@@ -360,96 +268,6 @@ class CallbackFromPayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCa
     }
 
     /**
-     * Returns PayPal login data by variable name
-     *
-     * @param $varName
-     *
-     * @return mixed|null|string
-     * @throws \Exception
-     */
-    protected function getLoginDataByName($varName)
-    {
-        if (!$varValue = getenv($varName)) {
-            $varValue = $this->getArrayValueFromFile($varName, __DIR__ .'/oepaypalData.php');
-        }
-
-        if (!$varValue) {
-            throw new \Exception('Undefined variable: ' . $varName);
-        }
-
-        return $varValue;
-    }
-
-    /**
-     * New PayPal interface uses iframe for user login.
-     */
-    protected function selectCorrectLoginFrame()
-    {
-        if ($this->newPayPalUserInterface) {
-            $this->frame(self::PAYPAL_FRAME_NAME);
-        }
-    }
-
-    /**
-     * Go to PayPal page by clicking Express Checkout button.
-     *
-     * @param string $expressCheckoutButtonIdentification PayPal Express Checkout button identification.
-     */
-    private function selectPayPalExpressCheckout($expressCheckoutButtonIdentification = "paypalExpressCheckoutButton")
-    {
-        $this->waitForItemAppear("//input[@id='{$expressCheckoutButtonIdentification}']", 10, true);
-        $this->expressCheckoutWillBeUsed();
-        $this->click($expressCheckoutButtonIdentification);
-        $this->waitForPayPalPage();
-    }
-
-    /**
-     * Express Checkout uses old User Interface.
-     */
-    private function expressCheckoutWillBeUsed()
-    {
-        $this->newPayPalUserInterface = false;
-    }
-
-    /**
-     * Waits until PayPal page is loaded.
-     * Decides if try to wait by new or old user interface.
-     */
-    private function waitForPayPalPage()
-    {
-        if ($this->newPayPalUserInterface) {
-            $this->waitForPayPalNewPage();
-        } else {
-            $this->waitForPayPalOldPage();
-        }
-    }
-
-    /**
-     * Waits until PayPal page is loaded.
-     * PayPal page is external and not Shop related.
-     * New user interface has iFrame which must be selected.
-     */
-    private function waitForPayPalNewPage()
-    {
-        $this->waitForElement("id=injectedUnifiedLogin");
-
-        $this->selectCorrectLoginFrame();
-
-        $this->waitForElement(self::PAYPAL_LOGIN_BUTTON_ID_NEW);
-
-        $this->selectWindow(null);
-    }
-
-    /**
-     * Waits until PayPal page is loaded.
-     * PayPal page is external and not Shop related.
-     */
-    private function waitForPayPalOldPage()
-    {
-        $this->waitForElement(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
-    }
-
-    /**
      * Get browser session id that was sent to PayPal.
      *
      * @return string
@@ -589,37 +407,6 @@ class CallbackFromPayPalTest extends \OxidEsales\TestingLibrary\AcceptanceTestCa
         $tmp = explode('rtoken=', $url);
         $tmp = explode('&', $tmp[1]);
         return $tmp[0];
-    }
-
-    /**
-     * Click on the link to go to the first step in the OXID eShop basket.
-     */
-    private function clickFirstStepInShopBasket()
-    {
-        $this->clickAndWait("link=1. Cart");
-    }
-
-    /**
-     * Click on the link to go to the next step in the OXID eShop basket.
-     */
-    private function clickNextStepInShopBasket()
-    {
-        $this->clickAndWait("//button[text()='Continue to the next step']");
-    }
-
-    /**
-     * Change invoice country.
-     *
-     * @param string $country
-     */
-    protected function changeCountryInBasketStepTwo($country)
-    {
-        $this->click('userChangeAddress');
-
-        $this->waitForElement("//select[@id='invCountrySelect']/option[text()='$country']");
-        $this->select("//select[@id='invCountrySelect']", "label=$country");
-
-        $this->clickNextStepInShopBasket();
     }
 
     /**

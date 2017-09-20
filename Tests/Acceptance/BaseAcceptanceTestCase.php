@@ -81,16 +81,15 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         'dispatch_error_de'          => [['isTextPresent', 'letzte Aktion konnte leider nicht abgeschlossen werden'],
                                          ['isTextPresent', 'Dispatch Error'],
                                          ['isTextPresent', 'PayPal']],
-        'internal_error_sandbox_com' => [['isTextPresent', 'sandbox.paypal.com']],
         'internal_error_sandbox'     => [['isTextPresent', 'internal'],
-                                         ['isTextPresent', 'error']],
-        'internal_error_sandbox_all' => [['isTextPresent', 'internal'],
                                          ['isTextPresent', 'error'],
                                          ['isTextPresent', 'sandbox.paypal.com']],
         'redirect_to_PP_failed_de'   => [['isTextPresent', 'Warenkorb'],
                                          ['isElementPresent', 'paypalExpressCheckoutButton']],
         'redirect_to_PP_failed_en'   => [['isTextPresent', 'Cart'],
-                                         ['isElementPresent', 'paypalExpressCheckoutButton']]
+                                         ['isElementPresent', 'paypalExpressCheckoutButton']],
+        'not_logged_in_redirect_to_PP_failed_de'   => [['isTextPresent', 'Bestellen ohne Registrierung'],
+                                                       ['isElementPresent', 'paypalExpressCheckoutButton']]
     ];
 
     /**
@@ -732,6 +731,11 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         $this->click("//label[@class='radio' and contains(.,'Test address in Belgium 15, Antwerp, Belgium')]/input");
     }
 
+    /**
+     * Change invoice country.
+     *
+     * @param string $country
+     */
     protected function changeCountryInBasketStepTwo($country)
     {
         $this->click('userChangeAddress');

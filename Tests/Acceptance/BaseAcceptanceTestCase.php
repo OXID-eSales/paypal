@@ -642,10 +642,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         $loginMail = $this->getLoginDataByName('sBuyerLogin');
 
         //we might be automatically get logged in by PayPal, check before trying to log in again
-        $this->selectWindow(null);
-        // Commented cause it didn't run:
-        // $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 10, true);
-        if (!$this->isElementPresent("//input[@id='confirmButtonTop']") && !$this->isElementPresent("//input[@id='continue']")) {
+        if (!$this->isStillLoggedInToPP()) {
             if (!$expressCheckout) {
                 // Commented cause it didn't run:
                 // $this->waitForPayPalPage();
@@ -822,5 +819,24 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     protected function moveTemplateBlockToEnd()
     {
         $this->executeSql('UPDATE oxtplblocks SET OXPOS=2 WHERE OXMODULE="oepaypal"');
+    }
+
+    /**
+     * Test helper.
+     * Depending in time passed since last log in and on surviving cookies,
+     * we might still be logged in to PP. Method checks current state.
+     *
+     * @return bool
+     */
+    private function isStillLoggedInToPP()
+    {
+        $this->selectWindow(null);
+        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 2, true);
+
+        $isStillLoggedIn = true;
+        $isStillLoggedIn &= $this->isTextPresent($this->getLoginDataByName('sBuyerFirstName'));
+        $isStillLoggedIn &= $this->isElementPresent("//input[@id='confirmButtonTop']");
+
+        return $isStillLoggedIn;
     }
 }

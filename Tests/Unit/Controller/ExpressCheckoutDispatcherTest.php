@@ -96,7 +96,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $user->expects($this->any())->method("getId")->will($this->returnValue("321"));
 
         $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
-        $price->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(129.00));
+        $price->expects($this->any())->method("getBruttoPrice")->will($this->returnValue(129.00));
 
         // preparing basket
         $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("setPayment", "setShipping", "calculateBasket", "getAdditionalServicesVatPercent", "getPrice"));
@@ -104,7 +104,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $basket->expects($this->once())->method("setShipping")->with($this->equalTo("123"));
         $basket->expects($this->once())->method("calculateBasket")->with($this->equalTo(true));
         $basket->expects($this->any())->method("getAdditionalServicesVatPercent")->will($this->returnValue(0));
-        $basket->expects($this->once())->method("getPrice")->will($this->returnValue($price));
+        $basket->expects($this->any())->method("getPrice")->will($this->returnValue($price));
 
         // preparing config
         $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("finalizeOrderOnPayPalSide"));

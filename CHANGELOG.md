@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 
+## [5.1.2] - 2017-11-02
+
+### Fixed
+- Stabilize Acceptance tests by automatically skipping tests if issues with PayPal Sandbox are detected.
 
 ## [5.1.1] - 2017-09-07
 
@@ -32,7 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
-[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.1.1...HEAD
+[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.1.2...HEAD
+[v5.1.2]: https://github.com/OXID-eSales/paypal/compare/v5.1.1...v5.1.2
 [v5.1.1]: https://github.com/OXID-eSales/paypal/compare/v5.1.0...v5.1.1
 [v5.1.0]: https://github.com/OXID-eSales/paypal/compare/v5.0.5...v5.1.0
 [v5.0.5]: https://github.com/OXID-eSales/paypal/compare/v5.0.4...v5.0.5

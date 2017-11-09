@@ -134,10 +134,10 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS `oepaypal_transactions` (
     `oepaypal_id` int(11) NOT NULL auto_increment,
-    `oepaypal_transactiondata` text collate latin1_general_ci NOT NULL,
+    `oepaypal_transactiondata` text NOT NULL,
     PRIMARY KEY (`oepaypal_id`))
-ENGINE=MYISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-CREATE TABLE IF NOT EXISTS `efi_paypal_cfg` ( `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY , `paypal_1` VARCHAR( 255 ) NOT NULL , `paypal_2` VARCHAR( 255 ) NOT NULL , `paypal_3` VARCHAR( 255 ) NOT NULL , `paypal_4` VARCHAR( 255 ) NOT NULL , `paypal_5` VARCHAR( 255 ) NOT NULL , `paypal_6` VARCHAR( 255 ) NOT NULL ) ENGINE = MYISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+CREATE TABLE IF NOT EXISTS `efi_paypal_cfg` ( `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY , `paypal_1` VARCHAR( 255 ) NOT NULL , `paypal_2` VARCHAR( 255 ) NOT NULL , `paypal_3` VARCHAR( 255 ) NOT NULL , `paypal_4` VARCHAR( 255 ) NOT NULL , `paypal_5` VARCHAR( 255 ) NOT NULL , `paypal_6` VARCHAR( 255 ) NOT NULL ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 INSERT INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) VALUES ('6604d679fpaypal11518196d95f45fd3', 'oxidpaypal', 'a7c40f631fc920687.20179984', 'oxcountry');
 INSERT INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) VALUES ('660b8f058paypal6ada9ee7586d946ef', 'oxidpaypal', 'a7c40f6320aeb2ec2.72885259', 'oxcountry');
 INSERT INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`) VALUES ('66024d636paypalbb5638b1e80a4e62c', 'oxidpaypal', 'a7c40f6321c6f6109.43859248', 'oxcountry');

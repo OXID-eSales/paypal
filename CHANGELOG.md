@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 
+## [5.1.3] - 2017-11-13
+
+### Changed
+- Change tables encoding to utf8.
+
 ## [5.1.2] - 2017-11-02
 
 ### Fixed

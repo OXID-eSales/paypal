@@ -43,7 +43,7 @@ class Events
               `OEPAYPAL_TIMESTAMP` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
               PRIMARY KEY (`OEPAYPAL_ORDERID`),
               KEY `OEPAYPAL_PAYMENTSTATUS` (`OEPAYPAL_PAYMENTSTATUS`)
-            ) ENGINE=InnoDB;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
     }
@@ -139,7 +139,7 @@ class Events
         $query = "CREATE TABLE IF NOT EXISTS `oepaypal_orderpayments` (
               `OEPAYPAL_PAYMENTID` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `OEPAYPAL_ACTION` enum('capture', 'authorization', 're-authorization', 'refund', 'void') NOT NULL DEFAULT 'capture',
-              `OEPAYPAL_ORDERID` char(32) NOT NULL,
+              `OEPAYPAL_ORDERID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
               `OEPAYPAL_TRANSACTIONID` varchar(32) NOT NULL,
               `OEPAYPAL_CORRELATIONID` varchar(32) NOT NULL,
               `OEPAYPAL_AMOUNT` decimal(9,2) NOT NULL,
@@ -151,7 +151,7 @@ class Events
               PRIMARY KEY (`OEPAYPAL_PAYMENTID`),
               KEY `OEPAYPAL_ORDERID` (`OEPAYPAL_ORDERID`),
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
     }
@@ -170,7 +170,7 @@ class Events
               PRIMARY KEY (`OEPAYPAL_COMMENTID`),
               KEY `OEPAYPAL_ORDERID` (`OEPAYPAL_PAYMENTID`),
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
     }
@@ -225,6 +225,42 @@ class Events
     }
 
     /**
+     * Update tables and its fields encoding/collation if activated on old DB
+     */
+    public static function ensureCorrectFieldsEncodingOnUpdate()
+    {
+        $dbMetaDataHandler = oxNew(\OxidEsales\Eshop\Core\DbMetaDataHandler::class);
+        if ($dbMetaDataHandler->tableExists("oepaypal_order")) {
+            $query = "ALTER TABLE `oepaypal_order` DEFAULT CHARACTER SET utf8 collate utf8_general_ci;";
+            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
+
+            $query = "ALTER TABLE `oepaypal_orderpaymentcomments` DEFAULT CHARACTER SET utf8 collate utf8_general_ci;";
+            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
+
+            $query = "ALTER TABLE `oepaypal_orderpayments`  DEFAULT CHARACTER SET utf8 collate utf8_general_ci;";
+            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
+
+            $query = "ALTER TABLE `oepaypal_order` 
+              MODIFY `OEPAYPAL_CURRENCY` varchar(32) character set utf8 collate utf8_general_ci NOT NULL,
+              MODIFY `OEPAYPAL_PAYMENTSTATUS` enum('pending','completed','failed','canceled') CHARACTER SET utf8 collate utf8_general_ci NOT NULL DEFAULT 'pending',
+              MODIFY `OEPAYPAL_TRANSACTIONMODE` enum('Sale','Authorization') CHARACTER SET utf8 collate utf8_general_ci NOT NULL DEFAULT 'Sale';";
+            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
+
+            $query = "ALTER TABLE `oepaypal_orderpaymentcomments` 
+              MODIFY `OEPAYPAL_COMMENT` varchar(256) character set utf8 collate utf8_general_ci NOT NULL;";
+            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
+
+            $query = "ALTER TABLE `oepaypal_orderpayments` 
+                MODIFY `OEPAYPAL_ACTION` enum('capture','authorization','re-authorization','refund','void') CHARACTER SET utf8 collate utf8_general_ci NOT NULL DEFAULT 'capture',
+                MODIFY `OEPAYPAL_TRANSACTIONID` varchar(32) character set utf8 collate utf8_general_ci NOT NULL,
+                MODIFY `OEPAYPAL_CORRELATIONID` varchar(32) character set utf8 collate utf8_general_ci NOT NULL,
+                MODIFY `OEPAYPAL_CURRENCY` varchar(3) character set utf8 collate utf8_general_ci NOT NULL,
+                MODIFY `OEPAYPAL_STATUS` varchar(20) character set utf8 collate utf8_general_ci NOT NULL;";
+            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
+        }
+    }
+
+    /**
      * Execute action on activate event
      */
     public static function onActivate()
@@ -239,6 +275,7 @@ class Events
         self::addOrderPaymentsCommentsTable();
 
         self::addMissingFieldsOnUpdate();
+        self::ensureCorrectFieldsEncodingOnUpdate();
 
         // adding record to oxPayment table
         self::addPaymentMethod();

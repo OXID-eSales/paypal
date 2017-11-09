@@ -145,7 +145,7 @@ class EventsTest extends \OxidEsales\TestingLibrary\UnitTestCase
               PRIMARY KEY (`OEPAYPAL_PAYMENTID`),
               KEY `OEPAYPAL_ORDERID` (`OEPAYPAL_ORDERID`),
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
 
@@ -157,7 +157,7 @@ class EventsTest extends \OxidEsales\TestingLibrary\UnitTestCase
               PRIMARY KEY (`OEPAYPAL_COMMENTID`),
               KEY `OEPAYPAL_ORDERID` (`OEPAYPAL_PAYMENTID`),
               KEY `OEPAYPAL_DATE` (`OEPAYPAL_DATE`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
 
@@ -172,7 +172,7 @@ class EventsTest extends \OxidEsales\TestingLibrary\UnitTestCase
               `OEPAYPAL_TRANSACTIONMODE` enum('Sale','Authorization') NOT NULL DEFAULT 'Sale',
               PRIMARY KEY (`OEPAYPAL_ORDERID`),
               KEY `OEPAYPAL_PAYMENTSTATUS` (`OEPAYPAL_PAYMENTSTATUS`)
-            ) ENGINE=InnoDB;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($query);
     }

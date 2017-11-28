@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
-- Update PayPal button pictures.
 
 ### Deprecated
 
@@ -21,11 +20,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 
+## [3.3.1] - 2017-11-28
+
+### Changed
+- Update PayPal button pictures.
 
 ## [3.3.0] - 2017-08-04
 
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
-[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v3.3.1...HEAD
+[v3.3.1]: https://github.com/OXID-eSales/paypal/compare/3.3.0...v3.3.1
 [v3.3.0]: https://github.com/OXID-eSales/paypal/compare/v3.2.4...v3.3.0

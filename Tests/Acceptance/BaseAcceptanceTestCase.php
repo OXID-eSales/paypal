@@ -150,7 +150,12 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
                 'type' => 'str',
                 'value' => true,
                 'module' => 'module:oepaypal'
-            )
+            ),
+            'OEPayPalDisableIPN' => array(
+                'type' => 'str',
+                'value' => true,
+                'module' => 'module:oepaypal'
+            ),
         ));
 
         $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');

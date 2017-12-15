@@ -346,7 +346,9 @@ class DoExpressCheckoutPaymentRequestBuilder
         $request->setParameter("PAYMENTREQUEST_0_AMT", $this->formatFloat($basket->getPrice()->getBruttoPrice()));
         $request->setParameter("PAYMENTREQUEST_0_CURRENCYCODE", $basket->getBasketCurrency()->name);
         // IPN notify URL for PayPal
-        $request->setParameter("PAYMENTREQUEST_0_NOTIFYURL", $config->getIPNCallbackUrl());
+        if (!$config->suppressIPNCallbackUrl()) {
+            $request->setParameter("PAYMENTREQUEST_0_NOTIFYURL", $config->getIPNCallbackUrl());
+        }   
 
         // payment description
         $subj = sprintf($lang->translateString("OEPAYPAL_ORDER_CONF_SUBJECT"), $order->oxorder__oxordernr->value);

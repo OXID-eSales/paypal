@@ -579,6 +579,17 @@ class Config
     }
 
     /**
+     * Methods checks if sending of IPN callback url to PayPal is supressed by configuration.
+     *
+     * @return bool
+     */
+    public function suppressIPNCallbackUrl()
+    {
+        return (bool) $this->getConfig()->getConfigParam('OEPayPalDisableIPN');
+    }
+
+
+    /**
      * Returns SSL or non SSL shop URL without index.php depending on Mall
      * affecting environment is admin mode and current ssl usage status
      *

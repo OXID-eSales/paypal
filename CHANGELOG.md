@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Add hidden configuration parameter OEPayPalDisableIPN and method 
+  \OxidEsales\PayPalModule\CoreConfig::suppressIPNCallbackUrl() to be able to suppress 
+  sending PAYMENTREQUEST_0_NOTIFYURL optional request parameter to paypal. 
+  At the moment used for acceptance tests as they do not test IPN.
 
 ### Changed
 - Log Acceptance test debug information into log/oepaypal_acceptance_log.txt instead of log/EXCEPTION_LOG.txt.

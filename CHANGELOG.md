@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- Log Acceptance test debug information into log/oepaypal_acceptance_log.txt instead of log/EXCEPTION_LOG.txt.
 
 ### Deprecated
 

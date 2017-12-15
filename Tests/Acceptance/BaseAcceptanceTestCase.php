@@ -26,6 +26,8 @@ namespace OxidEsales\PayPalModule\Tests\Acceptance;
  */
 abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\AcceptanceTestCase
 {
+    const TEST_LOGFILE_NAME = 'oepaypal_acceptance_log.txt';
+
     const PAYPAL_LOGIN_BUTTON_ID_OLD = "id=submitLogin";
     const PAYPAL_LOGIN_BUTTON_ID_NEW = "id=btnLogin";
 
@@ -190,10 +192,10 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $message = $exception->getMessage();
             $skipExplanation = $this->canTestBeSkipped($message);
             if (!is_null($skipExplanation)) {
-                writeToLog($skipExplanation);
+                $this->logTestDebugMessage($skipExplanation);
                 $exception = new \PHPUnit_Framework_SkippedTestError($skipExplanation);
             } else {
-                writeToLog(__FUNCTION__ . ' ' . get_class($exception) . ' ' . $message);
+                $this->logTestDebugMessage(__FUNCTION__ . ' ' . get_class($exception) . ' ' . $message);
             }
 
             self::$doStopMink = true;
@@ -819,6 +821,25 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     protected function moveTemplateBlockToEnd()
     {
         $this->executeSql('UPDATE oxtplblocks SET OXPOS=2 WHERE OXMODULE="oepaypal"');
+    }
+
+    /**
+     * Write test debug messages to separate log instead of EXCEPTION_LOG.txt.
+     *
+     * @param string $message
+     */
+    protected function logTestDebugMessage($message)
+    {
+        $logFile = \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . DIRECTORY_SEPARATOR . self::TEST_LOGFILE_NAME;
+
+        $time = microtime(true);
+        $micro = sprintf("%06d", ($time - floor($time)) * 1000000);
+        $date = new \DateTime(date('Y-m-d H:i:s.' . $micro, $time));
+        $timestamp = $date->format('d M H:i:s.u Y');
+
+        $message = "[$timestamp] " . $message . PHP_EOL;
+
+        file_put_contents($logFile, $message, FILE_APPEND);
     }
 
     /**

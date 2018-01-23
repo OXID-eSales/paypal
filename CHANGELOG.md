@@ -5,8 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-
 ## [Unreleased]
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+
+## [5.1.5] - 2018-01-23
 
 ### Added
 - Add hidden configuration parameter OEPayPalDisableIPN and method 
@@ -16,14 +30,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Log Acceptance test debug information into log/oepaypal_acceptance_log.txt instead of log/EXCEPTION_LOG.txt.
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [5.1.4] - 2017-11-28
 
@@ -51,7 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
-[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.1.4...HEAD
+[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.1.5...HEAD
+[v5.1.5]: https://github.com/OXID-eSales/paypal/compare/v5.1.4...v5.1.5
 [v5.1.4]: https://github.com/OXID-eSales/paypal/compare/v5.1.3...v5.1.4
 [v5.1.3]: https://github.com/OXID-eSales/paypal/compare/v5.1.2...v5.1.3
 [v5.1.2]: https://github.com/OXID-eSales/paypal/compare/v5.1.1...v5.1.2

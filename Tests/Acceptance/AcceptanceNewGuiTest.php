@@ -76,6 +76,12 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']", 90);
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
 
+        $assertRequest = ['METHOD' => 'DoExpressCheckoutPayment',
+                          'BUTTONSOURCE' => $this->getButtonSource(),
+                          'PAYMENTREQUEST_0_PAYMENTACTION' => 'Authorization'];
+        $assertResponse = ['ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
         // Admin
         // Checking if order is saved in Admin
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
@@ -1042,5 +1048,25 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
     protected function selectPaymentPayPal()
     {
         return $this->click("payment_oxidpaypal");
+    }
+
+    /**
+     * Get standard checkout BUTTONSOURCE parameter according to shop edition.
+     *
+     * @return string
+     */
+    private function getButtonSource()
+    {
+        $facts = new \OxidEsales\Facts\Facts();
+        $buttonSource = 'OXID_Cart_CommunityECS';
+
+        if ('EE' == $facts->getEdition()) {
+            $buttonSource = 'OXID_Cart_EnterpriseECS';
+        }
+        if ('PE' == $facts->getEdition()) {
+            $buttonSource = 'OXID_Cart_ProfessionalECS';
+        }
+
+        return $buttonSource;
     }
 }

@@ -883,6 +883,12 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='". self::translate("%SUBMIT_ORDER%") . "']");
         $this->assertTextPresent(self::translate("%THANK_YOU%"), "Order is not finished successful");
+
+        $assertRequest = ['METHOD' => 'DoExpressCheckoutPayment',
+                          'BUTTONSOURCE' => 'Oxid_Cart_ECS_Shortcut',
+                          'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale'];
+        $assertResponse = ['ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
     }
 
 }

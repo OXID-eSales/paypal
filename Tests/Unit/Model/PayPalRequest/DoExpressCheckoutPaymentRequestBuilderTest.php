@@ -29,10 +29,36 @@ use OxidEsales\Eshop\Application\Model\User;
  */
 class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+
+    public function providerDoExpressCheckoutPayment()
+    {
+        $facts = new \OxidEsales\Facts\Facts();
+        $buttonSource = 'OXID_Cart_CommunityECS';
+
+        if ('EE' == $facts->getEdition()) {
+            $buttonSource = 'OXID_Cart_EnterpriseECS';
+        }
+        if ('PE' == $facts->getEdition()) {
+            $buttonSource = 'OXID_Cart_ProfessionalECS';
+        }
+
+        $data = [
+            'standard_checkout' => [\OxidEsales\PayPalModule\Core\Config::OEPAYPAL_ECS, $buttonSource],
+            'shortcut'          => [\OxidEsales\PayPalModule\Core\Config::OEPAYPAL_SHORTCUT, 'Oxid_Cart_ECS_Shortcut']
+        ];
+
+        return $data;
+    }
+
     /**
-     * Test case for oepaypalstandarddispatcher::doExpressCheckoutPayment()
+     * Test case for \OxidEsales\PayPalModule\Model\PayPalRequest\DoExpressCheckoutPaymentRequestBuilder::buildRequest.
+     *
+     * @dataProvider providerDoExpressCheckoutPayment
+     *
+     * @param int    $trigger      Mark if payment triggered by shortcut or by standard checkout.
+     * @param string $buttonSource Expected partnercode/BUTTONSOURCE
      */
-    public function testDoExpressCheckoutPayment()
+    public function testDoExpressCheckoutPayment($trigger, $buttonSource)
     {
         // preparing session, inputs etc.
         $result["PAYMENTINFO_0_TRANSACTIONID"] = "321";
@@ -50,6 +76,7 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
         $session->expects($this->any())->method("getBasket")->will($this->returnValue($basket));
         $session->setVariable("oepaypal-token", "111");
         $session->setVariable("oepaypal-payerId", "222");
+        $session->setVariable(\OxidEsales\PayPalModule\Core\Config::OEPAYPAL_TRIGGER_NAME, $trigger);
 
         // preparing config
         $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
@@ -86,17 +113,8 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
             'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => '',
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => '',
         );
-        if ($config->getEdition() == 'EE') {
-            $expectedResult['BUTTONSOURCE'] = 'OXID_Cart_EnterpriseECS';
-        } else {
-            if ($config->getEdition() == 'PE') {
-                $expectedResult['BUTTONSOURCE'] = 'OXID_Cart_ProfessionalECS';
-            } else {
-                if ($config->getEdition() == 'CE') {
-                    $expectedResult['BUTTONSOURCE'] = 'OXID_Cart_CommunityECS';
-                }
-            }
-        }
+
+        $expectedResult['BUTTONSOURCE'] = $buttonSource;
 
         // testing
         $builder = new \OxidEsales\PayPalModule\Model\PayPalRequest\DoExpressCheckoutPaymentRequestBuilder();

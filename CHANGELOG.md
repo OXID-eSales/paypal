@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- New partnercode Oxid_Cart_ECS_Shortcut is used for BUTTONSOURCE parameter in 
+  PayPal's DoExpressCheckoutPayment API Operation (NVP) when PayPal payment was triggered 
+  via shortcut button.
 
 ### Deprecated
 

@@ -76,6 +76,7 @@ $data = array(
         'sOEPayPalTransactionMode'  => 'Sale',
         'sOEPayPalEmptyStockLevel'  => 10,
     ),
+    'session' => ['oepaypal' => 1],
     'expected'  => array(
         'requestToPayPal' => array(
             'VERSION'                            => '84.0',

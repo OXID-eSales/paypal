@@ -95,6 +95,7 @@ $data = array(
     ),
     'session'   => array(
         'deladrid' => 'TestUserAddressId',
+        'oepaypal' => 1,
     ),
     'expected'  => array(
         'requestToPayPal' => array(

@@ -26,6 +26,35 @@ namespace OxidEsales\PayPalModule\Core;
  */
 class Config
 {
+
+    /**
+     * PayPal payment was triggered via standard checkout by selecting PP as the payment method.
+     *
+     * @var int
+     */
+    const OEPAYPAL_ECS = 1;
+
+    /**
+     * PayPal payment was triggered by shortcut button in basket step.
+     *
+     * @var int
+     */
+    const OEPAYPAL_SHORTCUT = 2;
+
+    /**
+     * Name of session variable that marks how payment was triggered.
+     *
+     * @var string
+     */
+    const OEPAYPAL_TRIGGER_NAME = 'oepaypal';
+
+    /**
+     * Name of partnercode array key in case payment was triggered by shortcut button.
+     *
+     * @var string
+     */
+    const PARTNERCODE_SHORTCUT_KEY = 'SHORTCUT';
+
     /**
      * PayPal module id.
      *
@@ -93,6 +122,7 @@ class Config
         'EE' => 'OXID_Cart_EnterpriseECS',
         'PE' => 'OXID_Cart_ProfessionalECS',
         'CE' => 'OXID_Cart_CommunityECS',
+        'SHORTCUT' => 'Oxid_Cart_ECS_Shortcut'
     );
 
     /**
@@ -688,7 +718,10 @@ class Config
      */
     public function getPartnerCode()
     {
-        return $this->partnerCodes[$this->getConfig()->getEdition()];
+        $facts = new \OxidEsales\Facts\Facts();
+        $key = $this->isShortcutPayment() ? self::PARTNERCODE_SHORTCUT_KEY : $facts->getEdition();
+
+        return $this->partnerCodes[$key];
     }
 
     /**
@@ -756,5 +789,16 @@ class Config
     protected function getConfig()
     {
         return \OxidEsales\Eshop\Core\Registry::getConfig();
+    }
+
+    /**
+     * Was the payment triggered by shortcut button or not?
+     *
+     * @return bool
+     */
+    protected function isShortcutPayment()
+    {
+        $trigger = (int) \OxidEsales\Eshop\Core\Registry::getSession()->getVariable(self::OEPAYPAL_TRIGGER_NAME);
+        return (bool) ($trigger == self::OEPAYPAL_SHORTCUT);
     }
 }

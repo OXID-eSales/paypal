@@ -701,7 +701,8 @@ class ConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * Tests if partner code is returned correct
+     * Tests if partner code is returned correct.
+     * Testing non-shortcut partner codes here.
      */
     public function testGetPartnerCode()
     {
@@ -719,6 +720,19 @@ class ConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         }
         $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
         $this->assertEquals($result, $payPalConfig->getPartnerCode());
+    }
+
+    /**
+     * Tests if partner code is returned correct in case the shortcut was used.
+     */
+    public function testGetShortcutPartnerCode()
+    {
+        \OxidEsales\Eshop\Core\Registry::getSession()->setVariable(\OxidEsales\PayPalModule\Core\Config::OEPAYPAL_TRIGGER_NAME,
+            \OxidEsales\PayPalModule\Core\Config::OEPAYPAL_SHORTCUT);
+        $expected = 'Oxid_Cart_ECS_Shortcut';
+
+        $payPalConfig = new \OxidEsales\PayPalModule\Core\Config();
+        $this->assertEquals($expected, $payPalConfig->getPartnerCode());
     }
 
     public function testGetMobileECDefaultShippingId_notSet_null()

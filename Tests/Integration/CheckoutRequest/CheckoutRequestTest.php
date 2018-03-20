@@ -73,6 +73,12 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
             return;
         }
 
+        if (isset($testCase['session'])) {
+            foreach ($testCase['session'] as $key=> $value) {
+                \OxidEsales\Eshop\Core\Registry::getSession()->setVariable($key, $value);
+            }
+        }
+
         $communicationHelper = new \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper();
         $curl = $communicationHelper->getCurl(array());
 
@@ -186,22 +192,21 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getReplacements()
     {
-        $config = $this->getConfig();
-        if ($config->getEdition() == 'EE') {
-            $result = 'OXID_Cart_EnterpriseECS';
-        } else {
-            if ($config->getEdition() == 'PE') {
-                $result = 'OXID_Cart_ProfessionalECS';
-            } else {
-                if ($config->getEdition() == 'CE') {
-                    $result = 'OXID_Cart_CommunityECS';
-                }
-            }
+        $facts = new \OxidEsales\Facts\Facts();
+        $buttonSource = 'OXID_Cart_CommunityECS';
+
+        if ('EE' == $facts->getEdition()) {
+            $buttonSource = 'OXID_Cart_EnterpriseECS';
         }
+        if ('PE' == $facts->getEdition()) {
+            $buttonSource = 'OXID_Cart_ProfessionalECS';
+        }
+
         $replacements = array(
             '{SHOP_URL}' => $this->getConfig()->getShopUrl(),
             '{SHOP_ID}'  => $this->getConfig()->getShopId(),
-            '{BN_ID}'    => $result,
+            '{BN_ID}'    => $buttonSource,
+            '{BN_ID_SHORTCUT}' => 'Oxid_Cart_ECS_Shortcut'
         );
 
         return $replacements;

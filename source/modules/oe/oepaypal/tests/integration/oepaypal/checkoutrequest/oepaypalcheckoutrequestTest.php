@@ -74,6 +74,12 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
             return;
         }
 
+        if (isset($aTestCase['session'])) {
+            foreach ($aTestCase['session'] as $key=> $value) {
+                oxRegistry::getSession()->setVariable($key, $value);
+            }
+        }
+
         $oCommunicationHelper = new oePayPalCommunicationHelper();
         $oCurl = $oCommunicationHelper->getCurl(array());
 
@@ -200,6 +206,7 @@ class Integration_oePayPal_CheckoutRequest_oePayPalCheckoutRequestTest extends O
             '{SHOP_URL}' => $this->getConfig()->getShopUrl(),
             '{SHOP_ID}'  => $this->getConfig()->getShopId(),
             '{BN_ID}'    => $sResult,
+            '{BN_ID_SHORTCUT}' => 'Oxid_Cart_ECS_Shortcut'
         );
 
         return $aReplacements;

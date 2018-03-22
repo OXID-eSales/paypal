@@ -128,6 +128,7 @@ $aData = array(
         'sOEPayPalTransactionMode'  => 'Automatic',
         'blShowNetPrice'            => true,
     ),
+    'session' => array('oepaypal' => 2),
     'expected'  => array(
         'requestToPayPal' => array(
             'VERSION'                            => '84.0',
@@ -142,7 +143,7 @@ $aData = array(
             'PAYMENTREQUEST_0_NOTIFYURL'         => '{SHOP_URL}index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp={SHOP_ID}',
             'PAYMENTREQUEST_0_DESC'              => 'Bestellnummer 1',
             'PAYMENTREQUEST_0_CUSTOM'            => 'Bestellnummer 1',
-            'BUTTONSOURCE'                       => '{BN_ID}',
+            'BUTTONSOURCE'                       => '{BN_ID_SHORTCUT}',
             'METHOD'                             => 'DoExpressCheckoutPayment',
             'PAYMENTREQUEST_0_SHIPTONAME'        => 'John Doe',
             'PAYMENTREQUEST_0_SHIPTOSTREET'      => 'Maple Street 10',

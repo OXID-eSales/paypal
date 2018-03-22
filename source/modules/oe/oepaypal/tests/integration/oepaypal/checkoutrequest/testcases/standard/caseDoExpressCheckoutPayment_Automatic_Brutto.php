@@ -128,6 +128,7 @@ $aData = array(
         'sOEPayPalTransactionMode'  => 'Automatic',
         'sOEPayPalEmptyStockLevel'  => 1,
     ),
+    'session' => array('oepaypal' => 1),
     'expected'  => array(
         'requestToPayPal' => array(
             'VERSION'                            => '84.0',

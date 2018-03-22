@@ -74,6 +74,7 @@ $aData = array(
         'sOEPayPalTransactionMode'  => 'Authorization',
         'blShowNetPrice'            => true,
     ),
+    'session' => array('oepaypal' => 1),
     'expected'  => array(
         'requestToPayPal' => array(
             'VERSION'                            => '84.0',

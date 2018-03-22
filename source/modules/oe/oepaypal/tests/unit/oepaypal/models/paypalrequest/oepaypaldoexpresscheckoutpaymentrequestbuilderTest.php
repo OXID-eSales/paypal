@@ -37,12 +37,35 @@ if (!class_exists('oePayPalOxUser_parent')) {
  */
 class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequestBuilderTest extends OxidTestCase
 {
+
+    public function providerDoExpressCheckoutPayment()
+    {
+        $buttonSource = 'OXID_Cart_CommunityECS';
+
+        if ('EE' == $this->getConfig()->getEdition()) {
+            $buttonSource = 'OXID_Cart_EnterpriseECS';
+        }
+        if ('PE' == $this->getConfig()->getEdition()) {
+            $buttonSource = 'OXID_Cart_ProfessionalECS';
+        }
+
+        $data = array(
+            'standard_checkout' => array(oePayPalConfig::OEPAYPAL_ECS, $buttonSource),
+            'shortcut'          => array(oePayPalConfig::OEPAYPAL_SHORTCUT, 'Oxid_Cart_ECS_Shortcut')
+        );
+
+        return $data;
+    }
+
     /**
-     * Test case for oepaypalstandarddispatcher::doExpressCheckoutPayment()
+     * Test case for  oePayPalDoExpressCheckoutPaymentRequestBuilder::buildRequest.
      *
-     * @return null
+     * @dataProvider providerDoExpressCheckoutPayment
+     *
+     * @param int    $trigger      Mark if payment triggered by shortcut or by standard checkout.
+     * @param string $buttonSource Expected partnercode/BUTTONSOURCE
      */
-    public function testDoExpressCheckoutPayment()
+    public function testDoExpressCheckoutPayment($trigger, $buttonSource)
     {
         // preparing session, inputs etc.
         $aResult["PAYMENTINFO_0_TRANSACTIONID"] = "321";
@@ -60,6 +83,8 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
         $oSession->expects($this->any())->method("getBasket")->will($this->returnValue($oBasket));
         $oSession->setVariable("oepaypal-token", "111");
         $oSession->setVariable("oepaypal-payerId", "222");
+        $oSession->setVariable(oePayPalConfig::OEPAYPAL_TRIGGER_NAME, $trigger);
+
 
         // preparing config
         $oPayPalConfig = new oePayPalConfig();
@@ -96,17 +121,8 @@ class Unit_oePayPal_Models_PayPalRequest_oePayPalDoExpressCheckoutPaymentRequest
             'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => '',
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => '',
         );
-        if ($oConfig->getEdition() == 'EE') {
-            $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_EnterpriseECS';
-        } else {
-            if ($oConfig->getEdition() == 'PE') {
-                $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_ProfessionalECS';
-            } else {
-                if ($oConfig->getEdition() == 'CE') {
-                    $aExpectedResult['BUTTONSOURCE'] = 'OXID_Cart_CommunityECS';
-                }
-            }
-        }
+
+        $aExpectedResult['BUTTONSOURCE'] = $buttonSource;
 
         // testing
         $oBuilder = new oePayPalDoExpressCheckoutPaymentRequestBuilder();

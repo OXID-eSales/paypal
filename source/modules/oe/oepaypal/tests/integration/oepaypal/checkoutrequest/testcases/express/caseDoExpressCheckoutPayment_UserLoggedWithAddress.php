@@ -92,6 +92,7 @@ $aData = array(
     ),
     'session'   => array(
         'deladrid' => 'TestUserAddressId',
+        'oepaypal' => 2
     ),
     'expected'  => array(
         'requestToPayPal' => array(
@@ -107,7 +108,7 @@ $aData = array(
             'PAYMENTREQUEST_0_NOTIFYURL'         => '{SHOP_URL}index.php?cl=oePayPalIPNHandler&fnc=handleRequest&shp={SHOP_ID}',
             'PAYMENTREQUEST_0_DESC'              => 'Bestellnummer 1',
             'PAYMENTREQUEST_0_CUSTOM'            => 'Bestellnummer 1',
-            'BUTTONSOURCE'                       => '{BN_ID}',
+            'BUTTONSOURCE'                       => '{BN_ID_SHORTCUT}',
             'METHOD'                             => 'DoExpressCheckoutPayment',
             'PAYMENTREQUEST_0_SHIPTONAME'        => 'AddressName AddressLName',
             'PAYMENTREQUEST_0_SHIPTOSTREET'      => 'AddressStreet AddressStreetNr',

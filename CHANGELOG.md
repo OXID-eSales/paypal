@@ -10,9 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
-- New partnercode Oxid_Cart_ECS_Shortcut is used for BUTTONSOURCE parameter in 
-  PayPal's DoExpressCheckoutPayment API Operation (NVP) when PayPal payment was triggered 
-  via shortcut button.
 
 ### Deprecated
 
@@ -22,6 +19,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 
+## [5.1.6] - 2018-03-26
+
+### Changed
+- New partnercode Oxid_Cart_ECS_Shortcut is used for BUTTONSOURCE parameter in 
+  PayPal's DoExpressCheckoutPayment API Operation (NVP) when PayPal payment was triggered 
+  via shortcut button.
+- Updated pictures in documentation.  
+  
+### Removed
+- Unused log directory. Log is written into shop's default log directory. 
 
 ## [5.1.5] - 2018-01-23
 
@@ -60,7 +67,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
-[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.1.5...HEAD
+[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.1.6...HEAD
+[v5.1.6]: https://github.com/OXID-eSales/paypal/compare/v5.1.5...v5.1.6
 [v5.1.5]: https://github.com/OXID-eSales/paypal/compare/v5.1.4...v5.1.5
 [v5.1.4]: https://github.com/OXID-eSales/paypal/compare/v5.1.3...v5.1.4
 [v5.1.3]: https://github.com/OXID-eSales/paypal/compare/v5.1.2...v5.1.3

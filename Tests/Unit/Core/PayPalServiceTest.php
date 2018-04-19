@@ -226,6 +226,34 @@ class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\
     }
 
     /**
+     * Test url and header of IPN postback call.
+     */
+    public function testDoVerifyWithPayPalCurl()
+    {
+        //switch on sandbox more
+        $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
+
+        $mockedCurl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, ['setHost', 'setUrlToCall']);
+        $mockedCurl->expects($this->once())
+            ->method('setHost')
+            ->with($this->equalTo(\OxidEsales\PayPalModule\Core\IpnConfig::OEPAYPAL_IPN_SANDBOX_HOST));
+        $mockedCurl->expects($this->once())
+            ->method('setUrlToCall')
+            ->with($this->equalTo(\OxidEsales\PayPalModule\Core\IpnConfig::OEPAYPAL_SANDBOX_IPN_CALLBACK_URL . '&cmd=_notify-validate'));
+
+        $mockedCaller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, ['call', 'getCurl']);
+        $mockedCaller->expects($this->once())
+                     ->method('getCurl')
+                     ->will($this->returnValue($mockedCurl));
+
+        $service = new \OxidEsales\PayPalModule\Core\PayPalService();
+        $service->setCaller($mockedCaller);
+
+        $response = $service->doVerifyWithPayPal($this->prepareRequest(), 'UTF-8');
+        $this->assertTrue($response instanceof \OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal);
+    }
+
+    /**
      * data provider
      *
      * @return array

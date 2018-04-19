@@ -665,6 +665,8 @@ class Config
     }
 
     /**
+     * @deprecated in dev-master (2018-04-27); Use OxidEsales\PayPalModule\Core\IPnConfig::getIPNResponseUrl()
+     *
      * Returns Url for IPN response call to notify PayPal
      *
      * @return string

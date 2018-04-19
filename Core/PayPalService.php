@@ -41,6 +41,13 @@ class PayPalService
     protected $payPalConfig = null;
 
     /**
+     * PayPal IPN config.
+     *
+     * @var \OxidEsales\PayPalModule\Core\IpnConfig
+     */
+    protected $payPalIpnConfig = null;
+
+    /**
      * PayPal config setter.
      *
      * @param \OxidEsales\PayPalModule\Core\Config $payPalConfig
@@ -58,6 +65,44 @@ class PayPalService
     public function getPayPalConfig()
     {
         if (is_null($this->payPalConfig)) {
+            $this->setPayPalConfig(oxNew(\OxidEsales\PayPalModule\Core\Config::class));
+        }
+
+        return $this->payPalConfig;
+    }
+
+    /**
+     * PayPal Ipn config setter.
+     *
+     * @param \OxidEsales\PayPalModule\Core\IpnConfig $payPalIpnConfig
+     */
+    public function setPayPalIpnConfig($payPalIpnConfig)
+    {
+        $this->payPalIpnConfig = $payPalIpnConfig;
+    }
+
+    /**
+     * PayPal config getter.
+     *
+     * @return \OxidEsales\PayPalModule\Core\IpnConfig
+     */
+    public function getPayPalIpnConfig()
+    {
+        if (is_null($this->payPalIpnConfig)) {
+            $this->setPayPalIPnConfig(oxNew(\OxidEsales\PayPalModule\Core\IpnConfig::class));
+        }
+
+        return $this->payPalIpnConfig;
+    }
+
+    /**
+     * PayPal IPN config getter.
+     *
+     * @return \OxidEsales\PayPalModule\Core\Config
+     */
+    public function getPayPalpnConfig()
+    {
+        if (is_null($this->payPalIpnConfig)) {
             $this->setPayPalConfig(oxNew(\OxidEsales\PayPalModule\Core\Config::class));
         }
 
@@ -273,7 +318,8 @@ class PayPalService
         $curl = $caller->getCurl();
         $curl->setConnectionCharset($charset);
         $curl->setDataCharset($charset);
-        $curl->setUrlToCall($this->getPayPalConfig()->getIPNResponseUrl());
+        $curl->setHost($this->getPayPalIpnConfig()->getIpnHost());
+        $curl->setUrlToCall($this->getPayPalIpnConfig()->getIPNResponseUrl());
 
         $response = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoVerifyWithPayPal::class);
         $response->setData($caller->call());

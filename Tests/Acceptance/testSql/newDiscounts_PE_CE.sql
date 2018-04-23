@@ -1,5 +1,5 @@
 # Discount demo data
-INSERT INTO `oxdiscount` (`OXID`,           `OXSHOPID`, `OXACTIVE`, `OXTITLE`,                 `OXTITLE_1`,                         `OXAMOUNT`, `OXAMOUNTTO`, `OXPRICETO`, `OXPRICE`, `OXADDSUMTYPE`, `OXADDSUM`, `OXITMARTID`, `OXITMAMOUNT`, `OXITMMULTIPLE`, `OXSORT`) VALUES
+INSERT IGNORE INTO `oxdiscount` (`OXID`,           `OXSHOPID`, `OXACTIVE`, `OXTITLE`,                 `OXTITLE_1`,                         `OXAMOUNT`, `OXAMOUNTTO`, `OXPRICETO`, `OXPRICE`, `OXADDSUMTYPE`, `OXADDSUM`, `OXITMARTID`, `OXITMAMOUNT`, `OXITMMULTIPLE`, `OXSORT`) VALUES
                          ('testcatdiscount', 1,           1,         'discount for category', 	'discount for category',            1,            999999,       999999,      1,       'abs',   	      5,        '',             0,             0, 1),
                          ('discount1',	   1, 1,         'discount for product',     'discount from 10 till 20', 		 1,            999999,       20,          15,      '%',              2,        '',             0,             0, 2),
                          ('diskount2',      1, 1,         '1 DE test discount',       'discount from 20 till 50',   	 1,            999999,       50,          20,      '%',              5,         '',            0,             0, 3),
@@ -9,5 +9,5 @@ INSERT INTO `oxdiscount` (`OXID`,           `OXSHOPID`, `OXACTIVE`, `OXTITLE`,  
 
 
 # object2discount
-INSERT INTO `oxobject2discount` (`OXID`,                       `OXDISCOUNTID`,    `OXOBJECTID`,                 `OXTYPE`) VALUES
+INSERT IGNORE INTO `oxobject2discount` (`OXID`,                       `OXDISCOUNTID`,    `OXOBJECTID`,                 `OXTYPE`) VALUES
                                 ('bde47a823db7d82f5.99715633', 'testcatdiscount', 'testcategory0',              'oxcategories');

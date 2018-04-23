@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 ### Fixed
+- Compatibility of tests with MySQL 5.7.
 
 ### Security
 

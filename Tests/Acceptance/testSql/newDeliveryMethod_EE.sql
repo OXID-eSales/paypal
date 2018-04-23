@@ -1,5 +1,5 @@
 # add 3 new shipping methods
-INSERT INTO `oxdeliveryset` (`OXID`,       `OXMAPID`, `OXSHOPID`, `OXACTIVE`, `OXTITLE`,      		   `OXTITLE_1`,  		 `OXPOS`) VALUES
+INSERT IGNORE INTO `oxdeliveryset` (`OXID`,       `OXMAPID`, `OXSHOPID`, `OXACTIVE`, `OXTITLE`,      		   `OXTITLE_1`,  		 `OXPOS`) VALUES
                             ('testdelset1', 101,       1,          1,          'Test Paypal:6hour', 	   'Test Paypal:6 hour', 	  0),
                             ('testdelset2', 102,       1,          1,          'Test Paypal:12hour', 	   'Test Paypal:12 hour', 	  0),
                             ('testdelset3', 103,       1,          1,          'Test Paypal:specproduct', 'Test Paypal:specproduct', 0);
@@ -8,7 +8,7 @@ REPLACE INTO `oxdeliveryset2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
   (1, 101), (1, 102), (1, 103);
 							
 # assigned PayPal to these shipping methods
-INSERT INTO `oxobject2payment` (`OXID`,            `OXPAYMENTID`,    `OXOBJECTID`,      `OXTYPE`) VALUES
+INSERT IGNORE INTO `oxobject2payment` (`OXID`,            `OXPAYMENTID`,    `OXOBJECTID`,      `OXTYPE`) VALUES
 				   ('paymentmethode1', 'oxidpaypal',    'testdelset1',     'oxdelset'),
 				   ('paymentmethode2', 'oxidpaypal',    'testdelset2',     'oxdelset'),
 				   ('paymentmethode3', 'oxidpaypal',    'testdelset3',     'oxdelset');
@@ -16,13 +16,13 @@ INSERT INTO `oxobject2payment` (`OXID`,            `OXPAYMENTID`,    `OXOBJECTID
 								
 
 # assigned country Austria
-INSERT INTO `oxobject2delivery` (`OXID`,      `OXDELIVERYID`,    `OXOBJECTID`,                `OXTYPE`) VALUES
+INSERT IGNORE INTO `oxobject2delivery` (`OXID`,      `OXDELIVERYID`,    `OXOBJECTID`,                `OXTYPE`) VALUES
                                 ('country1', 'testdelset1',      'a7c40f6320aeb2ec2.72885259', 'oxdelset'),
 				    ('country2', 'testdelset2',      'a7c40f6320aeb2ec2.72885259', 'oxdelset'),
 				    ('country3', 'testdelset3',      'a7c40f6320aeb2ec2.72885259', 'oxdelset');
    
 # added shipping cost rules
-INSERT INTO `oxdelivery` (`OXID`,  `OXMAPID`, `OXSHOPID`, `OXACTIVE`, `OXTITLE`,       				 `OXTITLE_1`,    				`OXADDSUMTYPE`, `OXADDSUM`, `OXDELTYPE`, `OXPARAM`, `OXPARAMEND`, `OXFIXED`, `OXSORT`, `OXFINALIZE`) VALUES
+INSERT IGNORE INTO `oxdelivery` (`OXID`,  `OXMAPID`, `OXSHOPID`, `OXACTIVE`, `OXTITLE`,       				 `OXTITLE_1`,    				`OXADDSUMTYPE`, `OXADDSUM`, `OXDELTYPE`, `OXPARAM`, `OXPARAMEND`, `OXFIXED`, `OXSORT`, `OXFINALIZE`) VALUES
 		                     ('rules1', 101,       1,          1,         'test paypal from 0  till 10:6hours',    'test paypal from 0  till 10:6hours',  'abs',           0.5,         'p',          0,        10,        0,         9999,     0),
 			                   ('rules2', 102,       1,          1,         'test paypal from 10 till 20:6hours',    'test paypal from 10 till 20:6hours',  'abs',    	  0.4,         'p',         10,        20,        0,         9999,     0),
 			                   ('rules3', 103,       1,          1,         'test paypal from 20 till 99:6hours',    'test paypal from 20 till 99:6hours',  'abs',      	  0.3,         'p',         20,        99,        0,         9999,     0),
@@ -35,7 +35,7 @@ REPLACE INTO `oxdelivery2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
   (1, 101), (1, 102), (1, 103), (1, 104), (1, 105), (1, 106), (1, 107);
 						
 # assigned Austria to these shipping cost rules
-INSERT INTO `oxobject2delivery`     (`OXID`,    	`OXDELIVERYID`,   `OXOBJECTID`,                 `OXTYPE`)   VALUES
+INSERT IGNORE INTO `oxobject2delivery`     (`OXID`,    	`OXDELIVERYID`,   `OXOBJECTID`,                 `OXTYPE`)   VALUES
                                    ('rulescountry1', 'rules1',      'a7c40f6320aeb2ec2.72885259', 'oxcountry'),
 					('rulescountry2', 'rules2',      'a7c40f6320aeb2ec2.72885259', 'oxcountry'),
 					('rulescountry3', 'rules3',      'a7c40f6320aeb2ec2.72885259', 'oxcountry'),
@@ -49,13 +49,13 @@ INSERT INTO `oxobject2delivery`     (`OXID`,    	`OXDELIVERYID`,   `OXOBJECTID`,
 								
 								
 # assigned product to shipping cost
-INSERT INTO `oxobject2delivery` (`OXID`,          `OXDELIVERYID`, 	`OXOBJECTID`,   `OXTYPE`) VALUES
+INSERT IGNORE INTO `oxobject2delivery` (`OXID`,          `OXDELIVERYID`, 	`OXOBJECTID`,   `OXTYPE`) VALUES
                                 ('rulesproduct1', 'rules7',      '1000', 		'oxarticles');
 								
 								
 
 # to shipping method "Test PayPal" assign 7 shipping cost rules
-INSERT INTO `oxdel2delset` (`OXID`,     		`OXDELID`, `OXDELSETID`) VALUES
+INSERT IGNORE INTO `oxdel2delset` (`OXID`,     		`OXDELID`, `OXDELSETID`) VALUES
                            ('shipingtopayment1', 'rules1', 'testdelset1'),
 			      ('shipingtopayment2', 'rules2', 'testdelset1'),
 			      ('shipingtopayment3', 'rules3', 'testdelset1'),		

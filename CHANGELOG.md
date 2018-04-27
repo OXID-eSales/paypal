@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- Added class \OxidEsales\PayPalModule\Core\IpnConfig.
+- Added methods
+  * \OxidEsales\PayPalModule\Core\PayPalService::setPayPalIpnConfig()
+  * \OxidEsales\PayPalModule\Core\PayPalService::getPayPalIpnConfig()
 
 ### Deprecated
 - Deprecated the following methods: \OxidEsales\PayPalModule\Core\Config::getIPNResponseUrl()

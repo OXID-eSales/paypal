@@ -94,21 +94,7 @@ class PayPalService
 
         return $this->payPalIpnConfig;
     }
-
-    /**
-     * PayPal IPN config getter.
-     *
-     * @return \OxidEsales\PayPalModule\Core\Config
-     */
-    public function getPayPalpnConfig()
-    {
-        if (is_null($this->payPalIpnConfig)) {
-            $this->setPayPalConfig(oxNew(\OxidEsales\PayPalModule\Core\Config::class));
-        }
-
-        return $this->payPalConfig;
-    }
-
+    
     /**
      * PayPal caller setter.
      *

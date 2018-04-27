@@ -665,6 +665,8 @@ class oePayPalConfig
     }
 
     /**
+     * @deprecated in b-3.3 (2018-04-27); oePayPalIpnConfig::getIPNResponseUrl()
+     *
      * Returns Url for IPN response call to notify PayPal
      *
      * @return string

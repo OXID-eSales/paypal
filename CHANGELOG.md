@@ -9,14 +9,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Added class oePayPalIpnConfig.
+- Added methods
+  * oePayPalService::setPayPalIpnConfig()
+  * oePayPalService::getPayPalIpnConfig()
 
 ### Changed
 
 ### Deprecated
+- Deprecated the following methods: oePayPalConfig::getIPNResponseUrl().
 
 ### Removed
 
 ### Fixed
+- Fixed 0006122 IPN postback DNS issue. Introduced \OxidEsales\PayPalModule\Core\IpnConfig class to 
+  provide the necessary IPN parameters for host and url.  
 
 ### Security
 

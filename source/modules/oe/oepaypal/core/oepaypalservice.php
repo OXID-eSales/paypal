@@ -39,6 +39,13 @@ class oePayPalService
     protected $_oPayPalConfig = null;
 
     /**
+     * PayPal IPN config.
+     *
+     * @var oePayPalIpnConfig
+     */
+    protected $payPalIpnConfig = null;
+
+    /**
      * PayPal config setter.
      *
      * @param oePayPalConfig $oPayPalConfig
@@ -60,6 +67,30 @@ class oePayPalService
         }
 
         return $this->_oPayPalConfig;
+    }
+
+    /**
+     * PayPal Ipn config setter.
+     *
+     * @param oePayPalIpnConfig $payPalIpnConfig
+     */
+    public function setPayPalIpnConfig($payPalIpnConfig)
+    {
+        $this->payPalIpnConfig = $payPalIpnConfig;
+    }
+
+    /**
+     * PayPal config getter.
+     *
+     * @return oePayPalIpnConfig
+     */
+    public function getPayPalIpnConfig()
+    {
+        if (is_null($this->payPalIpnConfig)) {
+            $this->setPayPalIPnConfig(oxNew('oePayPalIpnConfig'));
+        }
+
+        return $this->payPalIpnConfig;
     }
 
     /**
@@ -271,7 +302,8 @@ class oePayPalService
         $oCurl = $oCaller->getCurl();
         $oCurl->setConnectionCharset($sCharset);
         $oCurl->setDataCharset($sCharset);
-        $oCurl->setUrlToCall($this->getPayPalConfig()->getIPNResponseUrl());
+        $oCurl->setHost($this->getPayPalIpnConfig()->getIpnHost());
+        $oCurl->setUrlToCall($this->getPayPalIpnConfig()->getIPNResponseUrl());
 
         $oResponse = oxNew('oePayPalResponseDoVerifyWithPayPal');
         $oResponse->setData($oCaller->call());

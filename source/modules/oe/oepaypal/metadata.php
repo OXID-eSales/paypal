@@ -65,6 +65,7 @@ $aModule = array(
         'oePayPalCheckValidator'            => 'oe/oepaypal/core/oepaypalcheckvalidator.php',
         'oePayPalLogger'                    => 'oe/oepaypal/core/oepaypallogger.php',
         'oePayPalConfig'                    => 'oe/oepaypal/core/oepaypalconfig.php',
+        'oePayPalIpnConfig'                 => 'oe/oepaypal/core/oepaypalipnconfig.php',
         'oePayPalShopLogo'                  => 'oe/oepaypal/core/oepaypalshoplogo.php',
         'oePayPalCaller'                    => 'oe/oepaypal/core/oepaypalcaller.php',
         'oePayPalExtensionChecker'          => 'oe/oepaypal/core/oepaypalextensionchecker.php',

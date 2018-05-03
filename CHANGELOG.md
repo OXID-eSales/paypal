@@ -10,6 +10,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [5.2.0] - 2018-05-03
+
+### Changed
 - Added class \OxidEsales\PayPalModule\Core\IpnConfig.
 - Added methods
   * \OxidEsales\PayPalModule\Core\PayPalService::setPayPalIpnConfig()
@@ -18,14 +30,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Deprecated
 - Deprecated the following methods: \OxidEsales\PayPalModule\Core\Config::getIPNResponseUrl()
 
-### Removed
-
 ### Fixed
 - Compatibility of tests with MySQL 5.7.
 - Fixed 0006122 IPN postback DNS issue. Introduced \OxidEsales\PayPalModule\Core\IpnConfig class to 
   provide the necessary IPN parameters for host and url.  
-
-### Security
 
 ## [5.1.6] - 2018-03-26
 
@@ -75,7 +83,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
-[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.1.6...HEAD
+[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v5.2.0...HEAD
+[v5.2.0]: https://github.com/OXID-eSales/paypal/compare/v5.1.6...v5.2.0
 [v5.1.6]: https://github.com/OXID-eSales/paypal/compare/v5.1.5...v5.1.6
 [v5.1.5]: https://github.com/OXID-eSales/paypal/compare/v5.1.4...v5.1.5
 [v5.1.4]: https://github.com/OXID-eSales/paypal/compare/v5.1.3...v5.1.4

@@ -11,7 +11,11 @@
     "extra": {
         "oxideshop": {
             "blacklist-filter": [
-                "documentation/**/*.*"
+                "documentation/**/*.*",
+                "CHANGELOG.md",
+                "composer.json",
+                "CONTRIBUTING.md",
+                "README.md"
             ],
             "target-directory": "oe/oepaypal"
         }

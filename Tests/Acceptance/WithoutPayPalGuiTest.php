@@ -61,6 +61,9 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
      */
     public function testECS()
     {
+        //Assign PayPal to standard shipping method.
+        $this->importSql(__DIR__ . '/testSql/assignPayPalToGermanyStandardShippingMethod.sql');
+
         // Open shop and add product to the basket
         $this->openShop();
         $this->searchFor("1001");
@@ -88,15 +91,16 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
         $this->selectPayPalExpressCheckout("id=actionAddToBasketAndGoToCheckout");
 
         // Check what was communicated with PayPal
-        $assertRequest = ['L_PAYMENTREQUEST_0_AMT0' => 0.99,
-            'PAYMENTREQUEST_0_AMT' => 1.98,
+        $assertRequest = [
+            'L_PAYMENTREQUEST_0_AMT0' => 81.00,
+            'PAYMENTREQUEST_0_AMT' => 162.00,
             'L_PAYMENTREQUEST_0_QTY0' => 2,
             'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR'];
         $assertResponse = ['ACK' => 'Success'];
         $this->assertLogData($assertRequest, $assertResponse);
 
         // Cancel order
-        $this->clickAndWait("cancel_return");
+        $this->cancelPayPal();
         // Go to checkout with PayPal  with same amount in basket
         $this->clickAndWait("id=paypalExpressCheckoutDetailsButton");
         $this->clickAndWait("id=actionNotAddToBasketAndGoToCheckout");
@@ -104,11 +108,11 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
         $this->assertLogData($assertRequest, $assertResponse);
 
         // Cancel order
-        $this->clickAndWait("cancel_return");
+        $this->cancelPayPal();
 
         // Go to home page and purchase via PayPal
         $this->assertTextPresent("2 x Test product 1", "Item quantity doesn't mach ot didn't displayed");
-        $this->assertTextPresent("1,98 €", "Item price doesn't mach ot didn't displayed");
+        $this->assertTextPresent("162,00 €", "Item price doesn't mach ot didn't displayed");
         $this->assertElementPresent("id=paypalHelpIconMiniBasket");
         $this->assertElementPresent("id=paypalExpressCheckoutMiniBasketBox");
         $this->assertElementPresent("displayCartInPayPal");
@@ -119,7 +123,8 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
 
         // Check what was communicated with PayPal
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
-        $assertResponse = ['L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+        $assertResponse = [
+            'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
             'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
             'L_PAYMENTREQUEST_0_QTY0' => '2',
             'ACK' => 'Success'];
@@ -127,7 +132,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
 
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
         $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
-        $this->assertEquals("1,98 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
+        $this->assertEquals("162,00 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
         $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
         $this->clickAndWait("//button[text()='Order now']");
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");

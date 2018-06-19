@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 ### Fixed
+- Adapt acceptance tests to latest changes in PayPal GUI. 
 
 ### Security
 

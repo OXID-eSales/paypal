@@ -1022,6 +1022,8 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->click(self::SELECTOR_BASKET_NEXTSTEP);
         $this->payWithPayPal();
 
+        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
+
         // Check what was communicated with PayPal
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
         $assertResponse = ['ACK' => 'Success',
@@ -1038,8 +1040,6 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
             'PAYMENTREQUEST_0_ITEMAMT' => '565.73',
             'PAYMENTREQUEST_0_SHIPPINGAMT' => '13.00'];
         $this->assertLogData($assertRequest, $assertResponse);
-
-        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
     }
 
     /**

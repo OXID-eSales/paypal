@@ -34,7 +34,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      */
-    public function testPayPalExpress()
+    public function testPayPalExpressForLoggedInUser()
     {
         // Testing when user is logged in
         $this->openShop();
@@ -54,16 +54,44 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 
         // Check what was communicated with PayPal
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
-        $assertResponse = ['PAYMENTREQUEST_0_AMT' => '0.99',
+        $assertResponse = [
+            'PAYMENTREQUEST_0_AMT'          => '0.99',
             'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
-            'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
-            'PAYMENTREQUEST_0_SHIPTONAME' => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
+            'L_PAYMENTREQUEST_0_NAME0'      => 'Test product 1',
+            'PAYMENTREQUEST_0_SHIPTONAME'   => "Testing user acc Äß\\'ü PayPal Äß\\'ü",
             'PAYMENTREQUEST_0_SHIPTOSTREET' => "Musterstr. Äß\\'ü 1",
-            'ACK' => 'Success'];
+            'ACK'                           => 'Success'
+        ];
         $this->assertLogData($assertRequest, $assertResponse);
 
+        // User is on the 4th page
+        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
+        $this->assertEquals("Gesamtbetrag: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")));
+        $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
+        $this->assertTextPresent("E-Mail: " . self::LOGIN_USERNAME);
+        $this->assertEquals("Versandart Ändern Test S&H set", $this->clearString($this->getText("orderShipping")));
+        $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
+        $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
+
+        // Checking if order is saved in Admin
+        $this->loginAdminForModule("Administer Orders", "Orders");
+        $this->openListItem("2");
+
+        $this->openTab("Main");
+        $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"));
+    }
+
+    /**
+     * testing paypal express button
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testPayPalExpressForNotLoggedInUser()
+    {
+        $this->importSql(__DIR__ . '/testSql/assignPayPalToGermanyStandardShippingMethod.sql');
+
         // Testing when user is not logged in
-        $this->clearCache();
         $this->openShop();
         $this->switchLanguage("Deutsch");
         $this->searchFor("1001");
@@ -78,31 +106,34 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 
         // Check what was communicated with PayPal
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
-        $assertResponse = ['PAYMENTREQUEST_0_AMT' => '0.99',
+        $assertResponse = [
+            'PAYMENTREQUEST_0_AMT'          => '81.0',
             'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
-            'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
-            'ACK' => 'Success'];
+            'L_PAYMENTREQUEST_0_NAME0'      => 'Test product 1',
+            'ACK'                           => 'Success'
+        ];
         $this->assertLogData($assertRequest, $assertResponse);
 
         // User is on the 4th page
         $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
-        $this->assertEquals("Gesamtbetrag: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")));
+        $this->assertEquals("Gesamtbetrag: 81,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")));
         $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
-        $this->assertEquals("Adressen Ändern Rechnungsadresse E-Mail: {$this->getLoginDataByName('sBuyerLogin')} {$this->getLoginDataByName('sBuyerFirstName')} {$this->getLoginDataByName('sBuyerLastName')} ESpachstr. 1 79111 Freiburg Deutschland", $this->clearString($this->getText("orderAddress")));
-        $this->assertEquals("Versandart Ändern Test S&H set", $this->clearString($this->getText("orderShipping")));
+        $this->assertTextPresent("E-Mail: " . $this->getLoginDataByName('sBuyerLogin'));
+        $this->assertEquals("Versandart Ändern Standard", $this->clearString($this->getText("orderShipping")));
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
-
-        // Checking if order is saved in Admin
-        $this->loginAdminForModule("Administer Orders", "Orders");
-        $this->openListItem("2");
-
-        $this->openTab("Main");
-        $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"));
     }
 
     /**
      * test if option "Calculate default Shipping costs when User is not logged in yet" is working correct in PayPal
+     *
+     * NOTE: User is not logged in to shop yet and no delivery set id stored in shop session at this point.
+     * Means if option blCalculateDelCostIfNotLoggedIn is set in shop, pre-calculated delivery costs will be sent to PP.
+     * By default the shop takes the oxidstandard delivery set (3.90 EUR but no PayPal assigned)..
+     * Usually PP would use the callback to check for default PayPal delivery set (testdelset, 130 EUR) and send this
+     * info back in GetExpressCheckoutDetails in field SHIPPINGOPTIONNAME. Atm PP sandbox does no give us this
+     * information for causes unknown. So or now we assign PayPal to oxidstandard.
+     * We will restore the test back to it's former behaviour at some later point.
      *
      * @group paypal_standalone
      * @group paypal_external
@@ -111,6 +142,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
     {
         // Change price for PayPal payment method
         $this->importSql(__DIR__ . '/testSql/vatOptions.sql');
+        $this->importSql(__DIR__ . '/testSql/assignPayPalToGermanyStandardShippingMethod.sql');
 
         // Go to admin and set on "Calculate default Shipping costs when User is not logged in yet "
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -140,12 +172,12 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertEquals("Total products (excl. tax): 12,61 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[1]")));
         $this->assertEquals("plus 19% tax, amount: 2,39 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[2]")));
         $this->assertEquals("Total products (incl. tax): 15,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[3]")));
-        $this->assertEquals("Shipping costs: 3,90 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
+        $this->assertEquals("Shipping costs: 13,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), "Shipping costs is not displayed correctly");
         $this->assertEquals("2,95 €", $this->getText("basketWrappingGross"), "Wrapping price changed or didn't displayed");
-        $this->assertEquals("24,85 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
+        $this->assertEquals("33,95 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
 
         // Go to PayPal express
-        $this->payWithPayPalExpressCheckout();
+        $this->payWithPayPalExpressCheckout('paypalExpressCheckoutButton');
 
         //Check what was communicated with PayPal
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
@@ -206,6 +238,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertElementPresent("//table[@id='order.info']/tbody/tr[2]/td[1]", "line with discount info is not displayed");
         $this->assertElementPresent("//table[@id='order.info']/tbody/tr[2]/td[2]", "line with discount info is not displayed");
         $this->assertEquals("PayPal", $this->getText("//table[4]/tbody/tr[1]/td[2]"), "Payment method not displayed in admin");
+
+        $this->markTestIncomplete('Change back when PP sandbox issues are fixed.');
         $this->assertEquals("Test S&H set", $this->getText("//table[4]/tbody/tr[2]/td[2]"), "Shipping method is not displayed in admin");
     }
 
@@ -495,6 +529,25 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
     }
 
     /**
+     * Verify that we can log in to PayPal Sandbox, cancel and return to shop and then
+     * can log in to Sandbox again.
+     */
+    public function testPayPalLoginCancelLoginPay()
+    {
+        $loginMail = $this->getLoginDataByName('sBuyerLogin');
+        $loginPassword = $this->getLoginDataByName('sBuyerPassword');
+
+        $this->addToBasket('1001');
+        $this->openBasket();
+        $this->clickAndWait('paypalExpressCheckoutButton');
+        $this->logMeIntoSandbox($loginMail, $loginPassword);
+        $this->cancelPayPal(); //cancel logs us out of PayPal
+        $this->clickAndWait('paypalExpressCheckoutButton'); //we end up in the new PayPal GUI now
+        $this->logMeIntoSandbox($loginMail, $loginPassword);
+        $this->clickPayPalContinue();
+    }
+
+    /**
      * testing when payment method has unassigned country Germany, user is not login to the shop, and purchase as PayPal user from Germany
      *
      * @group paypal_standalone
@@ -530,7 +583,14 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertElementPresent("name=displayCartInPayPal", "An option Display cart in PayPal is not displayed");
 
         // Go to PayPal express to make an order
-        $this->payWithPayPalExpressCheckout('paypalExpressCheckoutButton', true);
+        $loginMail = $this->getLoginDataByName('sBuyerUSLogin');
+        $loginPassword = $this->getLoginDataByName('sBuyerPassword');
+        $this->clickAndWait('paypalExpressCheckoutButton');
+        $this->doPayPalLogOut();
+        $this->cancelPayPal();
+        $this->clickAndWait('paypalExpressCheckoutButton');
+        $this->logMeIntoSandbox($loginMail, $loginPassword);
+        $this->clickPayPalContinue();
 
         // Check what was communicated with PayPal
         $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
@@ -544,7 +604,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
             'AMT' => '7.89',
             'ITEMAMT' => '0.99',
             'SHIPPINGAMT' => '6.90',
-            'SHIPPINGCALCULATIONMODE' => 'Callback',
+            //'SHIPPINGCALCULATIONMODE' => 'Callback', //uncomment when PP fixed Sandbox issue with "User Selected Options Type Fields"
             'ACK' => 'Success'];
         $this->assertLogData($assertRequest, $assertResponse);
 
@@ -641,6 +701,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->openTab("Main");
         $this->assertEquals("Test S&H set", $this->getSelectedLabel("setDelSet"), "Shipping method is not displayed in admin");
         $this->assertEquals("COD (Cash on Delivery)", $this->getSelectedLabel("setPayment"), "Payment method is not displayed in admin");
+
     }
 
     /**
@@ -678,10 +739,10 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->selectPayPalExpressCheckout();
 
         $this->loginToSandbox();
-        $this->waitForLoggedInToPayPalSandbox();
 
         // NOTE: isn't running locally (callback is not accessible from PayPal):
-        $this->selectPayPalShippingMethod('Test Paypal:12 hour Price: €0,90 EUR');
+        //NOTE: PayPal GUI changed for selecting shipping methods
+        //$this->selectPayPalShippingMethod('Test Paypal:12 hour Price: €0,90 EUR');
 
         // Check, that the communication with PayPal was as expected
         $expectedRequest = ['METHOD' => 'SetExpressCheckout',
@@ -701,9 +762,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertLogData($expectedRequest, $expectedResponse);
 
         // Go to shop
-        // NOTE: somehow in this case we need to click continue twice
         $this->expressCheckoutWillBeUsed();
-        $this->clickPayPalContinue();
         $this->clickPayPalContinue();
 
         // Make sure we are back in shop
@@ -712,14 +771,13 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         // Check are all info in the last order step correct
         $this->assertElementPresent('link=Test product 1', 'Purchased product name is not displayed in last order step');
         $this->assertTextPresent('Item #: 1001', 'Product number not displayed in last order step');
-        // next four lines aren't running locally (callback is not accessible from PayPal):
-        $this->assertEquals('Shipping costs: 0,90 €', $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), 'Shipping costs is not displayed correctly');
-        $this->assertEquals('OXID Surf and Kite Shop | Order | purchase online', $this->getTitle());
-        $this->assertEquals('Grand total: 1,89 €', $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), 'Grand total is not displayed correctly');
-        $this->assertTextPresent('Test Paypal:12 hour', 'Shipping method not displayed in order ');
-
         $this->assertTextPresent('PayPal', 'Payment method not displayed in last order step');
         $this->assertFalse($this->isTextPresent('COD'), 'Wrong payment method displayed in last order step');
+        $this->assertEquals('OXID Surf and Kite Shop | Order | purchase online', $this->getTitle());
+
+        $this->assertEquals('Shipping costs: 0,50 €', $this->clearString($this->getText("//div[@id='basketSummary']//tr[4]")), 'Shipping costs is not displayed correctly');
+        $this->assertEquals('Grand total: 1,49 €', $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), 'Grand total is not displayed correctly');
+        $this->assertTextPresent('Test Paypal:6 hour', 'Shipping method not displayed in order ');
     }
 
     /**
@@ -766,9 +824,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->waitForElement("paypalExpressCheckoutButtonECS");
         $this->assertElementPresent("paypalExpressCheckoutButtonECS", "PayPal ECS button must be displayd in user step for not logged in user.");
         $this->clickAndWait("paypalExpressCheckoutButtonECS");
-        $this->waitForElement("cancel_return");
+        $this->cancelPayPal();
 
-        $this->clickAndWait("cancel_return");
         $this->assertTextPresent(self::translate( "%PURCHASE_WITHOUT_REGISTRATION%"));
     }
 

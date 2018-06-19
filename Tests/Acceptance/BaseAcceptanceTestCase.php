@@ -43,7 +43,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     const IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE = 2;
 
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
-    protected $_iWaitTimeMultiplier = 7;
+    protected $_iWaitTimeMultiplier = 3;
 
     protected $retryTimes = 1;
 
@@ -64,7 +64,9 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         "Timeout waiting for 'id=submitLogin'",
         "Timeout waiting for 'Bestellen ohne Registrierung'",
         "Timeout waiting for 'cancel_return'",
-        "Timeout waiting for '2 x Test product 1'"
+        "Timeout waiting for '2 x Test product 1'",
+        "Entschuldigung",
+        "Leider ist ein Fehler aufgetreten"
     ];
 
     /**
@@ -315,10 +317,10 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      *
      * @param string $loginEmail    email to login.
      * @param string $loginPassword password to login.
+     * @param bool   $isRetry       Retry login
      *
-     * @todo wait, check that it actually logged in.
      */
-    protected function loginToSandbox($loginEmail = null, $loginPassword = null)
+    protected function loginToSandbox($loginEmail = null, $loginPassword = null, $isRetry = false)
     {
         if (!isset($loginEmail)) {
             $loginEmail = $this->getLoginDataByName('sBuyerLogin');
@@ -332,6 +334,11 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         } else {
             $this->loginToOldSandbox($loginEmail, $loginPassword);
         }
+
+        // try again
+        if (!$this->isLoggedInToPP() && !$isRetry) {
+            $this->loginToSandbox($loginEmail, $loginPassword, true);
+        }
     }
 
     /**
@@ -344,13 +351,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     {
         $this->selectCorrectLoginFrame();
 
-        $this->type("email", $loginEmail);
-        $this->type("password", $loginPassword);
-        $this->click(self::PAYPAL_LOGIN_BUTTON_ID_NEW);
-
-        $this->selectWindow(null);
-        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 3, true);
-        $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 10, true);
+        $this->loginToOldSandbox($loginEmail, $loginPassword);
     }
 
     /**
@@ -359,12 +360,56 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      * @param string $loginEmail
      * @param string $loginPassword
      */
-    private function loginToOldSandbox($loginEmail, $loginPassword)
+    protected function loginToOldSandbox($loginEmail, $loginPassword)
     {
-        $this->type("login_email", $loginEmail);
-        $this->type("login_password", $loginPassword);
-        $this->clickAndWait(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
-        $this->waitForItemAppear("id=continue");
+        $debug = '';
+
+        $element = $this->getElementLazy('login_email', false);
+        if ($element) {
+            $element->setValue($loginEmail);
+            $debug .= 'login_email--';
+        }
+        $element = $this->getElementLazy('email', false);
+        if ($element) {
+            $element->setValue($loginEmail);
+            $debug .= 'email--';
+        }
+        $element = $this->getElementLazy('login_password', false);
+        if ($element) {
+            $element->setValue($loginPassword);
+            $debug .= 'login_password--';
+        }
+        $element = $this->getElementLazy('password', false);
+        if ($element) {
+            $element->setValue($loginPassword);
+            $debug .= 'password--';
+        }
+
+        $loginFound = false;
+        $element = $this->getElementLazy(self::PAYPAL_LOGIN_BUTTON_ID_NEW, false);
+        if ($element) {
+            $loginFound = true;
+            $element->click();
+        } else {
+            $element = $this->getElementLazy(self::PAYPAL_LOGIN_BUTTON_ID_OLD, false);
+            if ($element) {
+                $loginFound = true;
+                $element->click();
+            }
+        }
+
+        $this->selectWindow(null);
+        $this->_waitForAppear('isElementPresent', "//input[@id='continue']", 5, true);
+        $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 5, true);
+        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 5, true);
+        $this->_waitForAppear('isTextPresent', $loginEmail, 5, true);
+
+        if ((false == $loginFound)
+             && !$this->isTextPresent($this->getLoginDataByName('sBuyerFirstName'))
+             && !$this->isTextPresent($loginEmail)
+        ) {
+            $this->markTestIncomplete('Cannot find login button. Login form fields found: ' . $debug);
+        }
     }
 
     /**
@@ -374,9 +419,10 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     protected function selectPayPalShippingMethod($method)
     {
-        $this->waitForItemAppear("id=shipping_method");
-        $this->select("id=shipping_method", "label=$method");
-        $this->waitForItemAppear("id=continue");
+        $this->waitForItemAppear("id=shipMethod");
+        $this->select("id=shipMethod", "label=$method");
+        $this->_waitForAppear('isElementPresent', "//input[@id='continue']", 5, true);
+        $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 5, true);
     }
 
     /**
@@ -413,16 +459,30 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     private function selectCorrectLoginFrame()
     {
-        if ($this->newPayPalUserInterface) {
-            $frameSelector = "//iframe[@name='injectedUl']";
+        // old frontend, nothing to be done here.
+        if (!$this->newPayPalUserInterface) {
+            return;
+        }
 
-            $this->_waitForAppear('isElementPresent', $frameSelector, 5, true);
-
-            if ($this->isElementPresent($frameSelector)) {
-                $this->frame(self::PAYPAL_FRAME_NAME);
-            } else {
-                $this->markTestIncomplete('PayPal is not giving us the normal page, we miss the iframe...');
+        $element = $this->getElementLazy('id=loginSection', false);
+        if ($element) {
+            if ($this->isTextPresent('Sie haben schon ein PayPal-Konto')) {
+                $this->click("link=Einloggen");
+            } else if ($this->isTextPresent('Have a PayPal account')) {
+                $this->click("link=Log In");
             }
+            return;
+        }
+
+        //still here? try this
+        $frameSelector = "//iframe[@name='injectedUl']";
+
+        $this->_waitForAppear('isElementPresent', $frameSelector, 5, true);
+
+        if ($this->isElementPresent($frameSelector)) {
+            $this->frame(self::PAYPAL_FRAME_NAME);
+        } else {
+            $this->markTestIncomplete('PayPal is not giving us the normal page, we miss the iframe...');
         }
     }
 
@@ -441,11 +501,13 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     }
 
     /**
-     * Express Checkout uses old User Interface.
+     * Express Checkout uses old User Interface or not.
+     *
+     * @param bool $useStandard
      */
-    protected function expressCheckoutWillBeUsed()
+    protected function expressCheckoutWillBeUsed($useExpress = true)
     {
-        $this->newPayPalUserInterface = false;
+        $this->newPayPalUserInterface = !$useExpress;
     }
 
     /**
@@ -453,14 +515,23 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     protected function clickPayPalContinue()
     {
-        if ($this->newPayPalUserInterface) {
-            $this->clickPayPalContinueNewPage();
-        } else {
-            $this->clickPayPalContinueOldPage();
+        $this->waitForItemAppear("//input[@id='continue_abovefold']", 5, true);
+        $this->waitForEditable("id=continue", 5, true);
+        $this->waitForEditable("id=confirmButtonTop", 5, true);
+
+        if ($this->isElementPresent("id=continue_abovefold") && $this->isEditable("id=continue_abovefold")) {
+            $this->clickAndWait("id=continue_abovefold");
+        } elseif($this->isElementPresent("id=continue") && $this->isEditable("id=continue")) {
+            $this->clickAndWait("id=continue");
+        } elseif ($this->isElementPresent("id=confirmButtonTop")) {
+            $this->clickAndWait("id=confirmButtonTop");
+        } elseif ($this->isElementPresent("id=retryLink")){
+            $this->markTestIncomplete('PayPal is showing us their retry link so the have some internal problems.');
         }
 
         //we should be redirected back to shop at this point
-        $this->_waitForAppear('isElementPresent', "id=breadCrumb", 10, true);
+        $this->_waitForAppear('isElementPresent', "id=breadCrumb", 5, true);
+        $this->assertTrue($this->isElementPresent("id=breadCrumb"));
     }
 
     /**
@@ -470,9 +541,8 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     private function clickPayPalContinueNewPage()
     {
-        $this->waitForItemAppear("//input[@id='confirmButtonTop']", 10, true);
-        $this->waitForEditable("id=confirmButtonTop");
-        $this->clickAndWait("id=confirmButtonTop");
+        $this->assertTrue($this->isElementPresent("id=confirmButtonTop"));
+        $this->click("id=confirmButtonTop");
     }
 
     /**
@@ -482,13 +552,16 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     private function clickPayPalContinueOldPage()
     {
-         $this->waitForItemAppear("//input[@id='continue']", 10, false);
-         $this->waitForItemAppear("//input[@id='continue_abovefold']", 3, false);
-         $this->waitForEditable("id=continue");
+         $this->waitForItemAppear("//input[@id='continue_abovefold']", 5, true);
+         $this->waitForEditable("id=continue", 5, true);
+         $this->waitForEditable("id=confirmButtonTop", 5, true);
+
          if ($this->isElementPresent("id=continue_abovefold") && $this->isEditable("id=continue_abovefold")) {
-           $this->clickAndWait("id=continue_abovefold");
-         } else {
-            $this->clickAndWait("id=continue");
+             $this->clickAndWait("id=continue_abovefold");
+         } elseif($this->isElementPresent("id=continue") && $this->isEditable("id=continue")) {
+             $this->clickAndWait("id=continue");
+         } elseif ($this->isElementPresent("id=confirmButtonTop")) {
+             $this->clickAndWait("id=confirmButtonTop");
          }
     }
 
@@ -535,7 +608,10 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     private function waitForPayPalOldPage()
     {
-        $this->waitForElement(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
+        $this->_waitForAppear('isElementPresent', "//input[@id='submitLogin']", 5, true);
+        $this->_waitForAppear('isElementPresent', "//input[@id='continue']", 5, true);
+        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 5, true);
+        $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 5, true);
     }
 
     /**
@@ -641,24 +717,23 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     /**
      * Finish payment process part that's to be done on PayPal page.
      *
-     * @param bool $expressCheckout
      * @param bool $usBuyer
+     * @param bool $doLogOut
      */
-    protected function payWithPayPal($expressCheckout = false, $usBuyer = false)
+    protected function payWithPayPal($usBuyer = false, $doLogOut = false)
     {
-        $loginMail = $this->getLoginDataByName('sBuyerLogin');
+        $this->checkforRetry();
 
-        //we might be automatically get logged in by PayPal, check before trying to log in again
-        if (!$this->isStillLoggedInToPP()) {
-            if (!$expressCheckout) {
-                // Commented cause it didn't run:
-                // $this->waitForPayPalPage();
-            }
-            if ($usBuyer) {
-                $loginMail = $this->getLoginDataByName('sBuyerUSLogin');
-            }
-            $this->loginToSandbox($loginMail);
+        $loginMail = $this->getLoginDataByName('sBuyerLogin');
+        $loginMail = $usBuyer? $this->getLoginDataByName('sBuyerUSLogin') : $loginMail;
+        $loginPassword = $this->getLoginDataByName('sBuyerPassword');
+
+        if ($doLogOut) {
+            $this->cancelPayPal();
+            $this->clickAndWait('paypalExpressCheckoutButton');
         }
+
+        $this->logMeIntoSandbox($loginMail, $loginPassword);
         $this->clickPayPalContinue();
     }
 
@@ -755,14 +830,15 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      *
      * @param string $expressCheckoutButtonIdentification
      * @param bool   $usBuyer
+     * @param bool   $doLogOut
      */
-    protected function payWithPayPalExpressCheckout($expressCheckoutButtonIdentification = 'paypalExpressCheckoutButton', $usBuyer = false)
+    protected function payWithPayPalExpressCheckout($expressCheckoutButtonIdentification = 'paypalExpressCheckoutButton', $usBuyer = false, $doLogOut = false)
     {
         // Commented cause it didn't run:
         // $this->_waitForAppear('isElementPresent', "//input[@class='{$expressCheckoutButtonIdentification}']", 3, true);
         $this->expressCheckoutWillBeUsed();
-        $this->click($expressCheckoutButtonIdentification);
-        $this->payWithPayPal(true, $usBuyer);
+        $this->clickAndWait($expressCheckoutButtonIdentification);
+        $this->payWithPayPal($usBuyer, $doLogOut);
     }
 
     /**
@@ -854,15 +930,104 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      *
      * @return bool
      */
-    private function isStillLoggedInToPP()
+    private function isLoggedInToPP()
     {
-        $this->selectWindow(null);
-        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 2, true);
+        $element = $this->getElementLazy('id=loginSection', false);
+        if ($element) {
+            return false;
+        }
 
-        $isStillLoggedIn = true;
-        $isStillLoggedIn &= $this->isTextPresent($this->getLoginDataByName('sBuyerFirstName'));
-        $isStillLoggedIn &= $this->isElementPresent("//input[@id='confirmButtonTop']");
+        if ($this->isTextPresent($this->getLoginDataByName('sBuyerFirstName'))) {
+            return true;
+        }
 
-        return $isStillLoggedIn;
+        $element = $this->getElementLazy('link=Nicht Sie?', false);
+        if ($element) {
+            return true;
+        }
+
+        $element = $this->getElementLazy('link=Not you?', false);
+        if ($element) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Try to log out from sandbox.
+     */
+    protected function doPayPalLogOut()
+    {
+        $element = $this->getElementLazy('link=Nicht Sie?', false);
+        if ($element) {
+            $element->click();
+            return;
+        }
+        $element = $this->getElementLazy('link=Not you?', false);
+        if ($element) {
+            $element->click();
+        }
+    }
+
+    /**
+     * Click cancel on payPal side to return to shop.
+     */
+    protected function cancelPayPal()
+    {
+        $element = $this->getElementLazy("id=cancelLink", false);
+        if ($element) {
+            $element->click();
+            return;
+        }
+        $element = $this->getElementLazy("id=cancel_return", false);
+        if ($element) {
+            $element->click();
+        }
+    }
+
+    /**
+     * Sometimes we get a page shown by PP that things don't wort atm and we should retry.
+     * Method here checks if retry link is available and if so clicks it.
+     */
+    private function checkforRetry()
+    {
+        //wait until we are safely on PP side
+        $this->waitForItemAppear("//input[@id='cancelLink']", 5, true);
+
+        $element = $this->getElementLazy("id=retryLink", false);
+        if ($element) {
+            $element->click();
+        }
+    }
+
+
+    protected function logMeIntoSandbox($loginMail, $loginPassword)
+    {
+        $this->checkforRetry();
+
+        //check for different landing page
+        $element = $this->getElementLazy('id=loginSection', false);
+        if ($element) {
+            if ($this->isTextPresent('Sie haben schon ein PayPal-Konto')) {
+                $this->click("link=Einloggen");
+            } else if ($this->isTextPresent('Have a PayPal account')) {
+                $this->click("link=Log In");
+            }
+        }
+
+        //check if we need to select a frame
+        $element = $this->getElementLazy('id=injectedUnifiedLogin', false);
+        if ($element) {
+            $frameSelector = "//iframe[@name='" . self::PAYPAL_FRAME_NAME . "']";
+            $this->_waitForAppear('isElementPresent', $frameSelector, 5, true);
+            if ($this->isElementPresent($frameSelector)) {
+                $this->frame(self::PAYPAL_FRAME_NAME);
+            } else {
+                $this->markTestIncomplete('PayPal is not giving us the normal page, we miss the iframe...');
+            }
+        }
+
+        $this->loginToOldSandbox($loginMail, $loginPassword);
     }
 }

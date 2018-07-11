@@ -25,11 +25,11 @@ class ArticleDetailsTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     protected function createDetailsMock($articleInfo, $showECSPopUp = 0)
     {
-        $basketComponent = $this->getMock(\OxidEsales\PayPalModule\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));
+        $basketComponent = $this->getMock(\OxidEsales\Eshop\Application\Component\BasketComponent::class, array('getCurrentArticleInfo', 'shopECSPopUp'));
         $basketComponent->expects($this->any())->method('getCurrentArticleInfo')->will($this->returnValue($articleInfo));
         $basketComponent->expects($this->any())->method('shopECSPopUp')->will($this->returnValue($showECSPopUp));
 
-        $details = $this->getMock(\OxidEsales\PayPalModule\Component\Widget\ArticleDetails::class, array('oePayPalGetRequest', 'getComponent'));
+        $details = $this->getMock(\OxidEsales\Eshop\Application\Component\Widget\ArticleDetails::class, array('oePayPalGetRequest', 'getComponent'));
         $details->expects($this->any())->method('getComponent')->will($this->returnValue($basketComponent));
 
         return $details;

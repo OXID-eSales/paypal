@@ -765,7 +765,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     protected function loginToShopFrontend()
     {
         $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
-        $this->waitForElement("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
+        $this->waitForElement("paypalExpressCheckoutButton");
         $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed");
         $this->assertElementPresent("//tr[@id='cartItem_1']/td[3]/div[2]");
         $this->assertEquals("Grand total: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")), "Grand total is not displayed correctly");

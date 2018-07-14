@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 ### Fixed
+- Fix PHP 7.1 compatibility of acceptance tests.
 
 ### Security
 

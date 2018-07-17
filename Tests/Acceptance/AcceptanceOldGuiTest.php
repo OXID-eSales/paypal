@@ -142,7 +142,6 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
     {
         // Change price for PayPal payment method
         $this->importSql(__DIR__ . '/testSql/vatOptions.sql');
-        $this->importSql(__DIR__ . '/testSql/assignPayPalToGermanyStandardShippingMethod.sql');
 
         // Go to admin and set on "Calculate default Shipping costs when User is not logged in yet "
         $this->loginAdminForModule("Master Settings", "Core Settings");
@@ -238,8 +237,6 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertElementPresent("//table[@id='order.info']/tbody/tr[2]/td[1]", "line with discount info is not displayed");
         $this->assertElementPresent("//table[@id='order.info']/tbody/tr[2]/td[2]", "line with discount info is not displayed");
         $this->assertEquals("PayPal", $this->getText("//table[4]/tbody/tr[1]/td[2]"), "Payment method not displayed in admin");
-
-        $this->markTestIncomplete('Change back when PP sandbox issues are fixed.');
         $this->assertEquals("Test S&H set", $this->getText("//table[4]/tbody/tr[2]/td[2]"), "Shipping method is not displayed in admin");
     }
 
@@ -604,7 +601,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
             'AMT' => '7.89',
             'ITEMAMT' => '0.99',
             'SHIPPINGAMT' => '6.90',
-            //'SHIPPINGCALCULATIONMODE' => 'Callback', //uncomment when PP fixed Sandbox issue with "User Selected Options Type Fields"
+            'SHIPPINGCALCULATIONMODE' => 'Callback',
             'ACK' => 'Success'];
         $this->assertLogData($assertRequest, $assertResponse);
 

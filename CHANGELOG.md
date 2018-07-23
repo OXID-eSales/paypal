@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [5.2.2] - 2018-07-17
+## [Unreleased]
 
 ### Added
 
@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Deprecated
 
 ### Removed
+
+### Fixed
+
+## [5.2.2] - 2018-07-17
 
 ### Fixed
 - Fix PHP 7.1 compatibility of acceptance tests.

@@ -28,6 +28,10 @@ In order to install the module via composer run one of the following commands in
 * **composer require oxid-esales/paypal-module:^5.0.0** to install the released version compatible with OXID eShop RC2
 * **composer require oxid-esales/paypal-module:dev-master** to install the latest unreleased version from github
 
+## Bugs and Issues
+
+If you experience any bugs or issues, please report them in the section **module PayPal** of https://bugs.oxid-esales.com.
+
 ### License
 
 Licensing of the software product depends on the shop edition used.

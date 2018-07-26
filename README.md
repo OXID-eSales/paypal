@@ -19,6 +19,9 @@ PayPal - The OXID eFire extension
 
 For installation instructions please see /documentation/UserManual_en.pdf in this package.
 
+### Bugs and Issues
+
+If you experience any bugs or issues, please report them in the section **module PayPal** of https://bugs.oxid-esales.com.
 
 ###License
 

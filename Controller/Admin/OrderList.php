@@ -26,7 +26,7 @@ namespace OxidEsales\PayPalModule\Controller\Admin;
  *
  * @mixin \OxidEsales\Eshop\Application\Controller\Admin\OrderList
  */
-class OrderList extends \OxidEsales\Eshop\Application\Controller\Admin\OrderList
+class OrderList extends OrderList_parent
 {
     /**
      * Executes parent method parent::render() and returns name of template

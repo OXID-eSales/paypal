@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- Show extra payment costs only if they are not zero [PR-44](https://github.com/OXID-eSales/paypal/pull/44)
 
 ### Deprecated
 

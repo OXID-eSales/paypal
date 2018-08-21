@@ -171,7 +171,6 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $emptyPayment->save();
 
         $deliverySetList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, array('getDeliverySetList'));
-        $deliverySetList->expects($this->any())->method('getDeliveryList')->will($this->returnValue(array()));
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, $deliverySetList);
 
         /** @var \OxidEsales\PayPalModule\Model\User $user */

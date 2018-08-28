@@ -62,18 +62,18 @@ class OrderList extends OrderList_parent
      *
      * @return string
      */
-    protected function buildSelectString($listObject = null)
+    protected function _buildSelectString($listObject = null)
     {
         $query = parent::_buildSelectString($listObject);
 
         $viewNameGenerator = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
         $viewName = $viewNameGenerator->getViewName("oxpayments");
 
-        $sQ = ", `oepaypal_order`.`oepaypal_paymentstatus`, `payments`.`oxdesc` as `paymentname` from `oxorder`
+        $queryPart = ", `oepaypal_order`.`oepaypal_paymentstatus`, `payments`.`oxdesc` as `paymentname` from `oxorder`
         LEFT JOIN `oepaypal_order` ON `oepaypal_order`.`oepaypal_orderid` = `oxorder`.`oxid`
         LEFT JOIN `" . $viewName . "` AS `payments` on `payments`.oxid=oxorder.oxpaymenttype ";
 
-        $query = str_replace('from oxorder', $sQ, $query);
+        $query = str_replace('from oxorder', $queryPart, $query);
 
         return $query;
     }
@@ -86,24 +86,24 @@ class OrderList extends OrderList_parent
      *
      * @return string
      */
-    protected function prepareWhereQuery($where, $sqlFull)
+    protected function _prepareWhereQuery($where, $fullQuery)
     {
-        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
-        $sQ = parent::_prepareWhereQuery($where, $sqlFull);
+        $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        $query = parent::_prepareWhereQuery($where, $fullQuery);
 
         $paymentStatus = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpaymentstatus");
         $paymentStatusList = new \OxidEsales\PayPalModule\Model\OrderPaymentStatusList();
 
         if ($paymentStatus && $paymentStatus != '-1' && in_array($paymentStatus, $paymentStatusList->getArray())) {
-            $sQ .= " AND ( `oepaypal_order`.`oepaypal_paymentstatus` = " . $db->quote($paymentStatus) . " )";
-            $sQ .= " AND ( `oepaypal_order`.`oepaypal_orderid` IS NOT NULL ) ";
+            $query .= " AND ( `oepaypal_order`.`oepaypal_paymentstatus` = " . $database->quote($paymentStatus) . " )";
+            $query .= " AND ( `oepaypal_order`.`oepaypal_orderid` IS NOT NULL ) ";
         }
 
         $payment = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpayment");
         if ($payment && $payment != '-1') {
-            $sQ .= " and ( oxorder.oxpaymenttype = " . $db->quote($payment) . " )";
+            $query .= " and ( oxorder.oxpaymenttype = " . $database->quote($payment) . " )";
         }
 
-        return $sQ;
+        return $query;
     }
 }

@@ -79,6 +79,12 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
             }
         }
 
+        if (isset($testCase['config'])) {
+            foreach ($testCase['config'] as $key=> $value) {
+                $this->getConfig()->setConfigParam($key, $value);
+            }
+        }
+
         $communicationHelper = new \OxidEsales\PayPalModule\Tests\Integration\Library\CommunicationHelper();
         $curl = $communicationHelper->getCurl(array());
 

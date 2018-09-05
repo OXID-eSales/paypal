@@ -21,7 +21,7 @@
 
 namespace OxidEsales\PayPalModule\Tests\Integration\Library;
 
-abstract class IntegrationTestHelper extends \PHPUnit_Framework_TestCase
+abstract class IntegrationTestHelper extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * The only way to skip this helper file with no errors

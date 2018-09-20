@@ -311,16 +311,6 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
     }
 
     /**
-     * Data provider for testSetExpressCheckoutSetParameters()
-     *
-     * @return array
-     */
-    public function testSetExpressCheckoutSetParameters_dataProvider()
-    {
-        return array(array(true), array(false));
-    }
-
-    /**
      * Test case for \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::processCallBack() - no user country id
      */
     public function testProcessCallBack_cancelPayment_noUserCountryId()
@@ -673,7 +663,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      *
      * @return array
      */
-    public function testSetDeliverySetListForCallbackResponse_deliveriesFitsInDeliverySet_dataProvider()
+    public function setDeliverySetListForCallbackResponseTest_deliveriesFitsInDeliverySet_dataProvider()
     {
         return array(array(true), array(false));
     }
@@ -684,7 +674,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      *
      * @param bool $isNetMode if net mode true
      *
-     * @dataProvider testSetDeliverySetListForCallbackResponse_deliveriesFitsInDeliverySet_dataProvider
+     * @dataProvider setDeliverySetListForCallbackResponseTest_deliveriesFitsInDeliverySet_dataProvider
      */
     public function testSetDeliverySetListForCallbackResponse_deliveriesFitsInDeliverySet($isNetMode)
     {

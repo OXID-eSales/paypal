@@ -31,7 +31,7 @@ class OrderActionManagerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return array
      */
-    public function testIsActionAvailable_dataProvider()
+    public function isActionAvailableTest_dataProvider()
     {
         return array(
             array('Sale', 'capture', 1000, 0, 0, 0, false),
@@ -61,7 +61,7 @@ class OrderActionManagerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Tests isPayPalActionValid
      *
-     * @dataProvider testIsActionAvailable_dataProvider
+     * @dataProvider isActionAvailableTest_dataProvider
      */
     public function testIsActionAvailable($transactionMode, $action, $total, $captured, $refunded, $voided, $isValid)
     {

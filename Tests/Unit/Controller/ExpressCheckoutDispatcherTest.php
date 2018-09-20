@@ -481,7 +481,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $this->addModuleObject(\OxidEsales\Eshop\Application\Model\User::class, $user);
 
         // setting expected exception
-        $this->setExpectedException(\OxidEsales\Eshop\Core\Exception\StandardException::class);
+        $this->expectException(\OxidEsales\Eshop\Core\Exception\StandardException::class);
 
         // preparing
         $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();

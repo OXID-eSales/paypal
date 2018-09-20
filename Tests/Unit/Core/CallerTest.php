@@ -107,7 +107,7 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCall_withMethodNotSuccessful_throwException()
     {
-        $this->setExpectedException(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class);
+        $this->expectException(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class);
 
         $params = array();
         $params["testParam"] = "testValue";

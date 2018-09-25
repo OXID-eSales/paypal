@@ -184,13 +184,26 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     }
 
     /**
+     * Asserts that text is not present.
+     *
+     * @param string $text    text to search
+     * @param string $message fail message
+     * @return void
+     */
+    public function assertTextNotPresent($text, $message = '')
+    {
+        $this->addToAssertionCount(1);
+        parent::assertTextNotPresent($text, $message);
+    }
+
+    /**
      * Fix for showing stack trace with phpunit 3.6 and later
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
-     * @throws Exception
+     * @throws Throwable
      */
-    protected function onNotSuccessfulTest(\Exception $exception)
+    protected function onNotSuccessfulTest(\Throwable $exception)
     {
         try {
             self::$doStopMink = false;
@@ -200,7 +213,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $skipExplanation = $this->canTestBeSkipped($message);
             if (!is_null($skipExplanation)) {
                 $this->logTestDebugMessage($skipExplanation);
-                $exception = new \PHPUnit_Framework_SkippedTestError($skipExplanation);
+                $exception = new \PHPUnit\Framework\SkippedTestError($skipExplanation);
             } else {
                 $this->logTestDebugMessage(__FUNCTION__ . ' ' . get_class($exception) . ' ' . $message);
             }

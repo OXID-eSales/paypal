@@ -515,6 +515,12 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     protected function clickPayPalContinue()
     {
+        //For the US buyer we might have one additional confirm button
+        $this->waitForItemAppear("//button[text()='Continue']", 5, true);
+        if ($this->isElementPresent("//button[text()='Continue']") && $this->isEditable("//button[text()='Continue']") ) {
+            $this->clickAndWait("//button[text()='Continue']");
+        }
+
         $this->waitForItemAppear("//input[@id='continue_abovefold']", 5, true);
         $this->waitForEditable("id=continue", 5, true);
         $this->waitForEditable("id=confirmButtonTop", 5, true);

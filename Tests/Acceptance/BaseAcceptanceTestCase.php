@@ -186,11 +186,11 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     /**
      * Fix for showing stack trace with phpunit 3.6 and later
      *
-     * @param \Throwable $exception
+     * @param \Exception $exception
      *
      * @throws Exception
      */
-    protected function onNotSuccessfulTest($exception)
+    protected function onNotSuccessfulTest(\Exception $exception)
     {
         try {
             self::$doStopMink = false;

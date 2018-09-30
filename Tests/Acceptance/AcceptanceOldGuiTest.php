@@ -217,12 +217,12 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
-        $this->assertEquals($this->getLoginDataByName('sBuyerFirstName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'first_name')][1]"));
-        $this->assertEquals($this->getLoginDataByName('sBuyerLastName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'last_name')][1]"));
+        $this->assertCaseInsensitiveText($this->getLoginDataByName('sBuyerFirstName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'first_name')][1]"));
+        $this->assertCaseInsensitiveText($this->getLoginDataByName('sBuyerLastName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'last_name')][1]"));
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
         $this->assertEquals("15,00 EUR", $this->getText("//td[5]"));
-        $this->assertEquals("Billing Address: {$this->getLoginDataByName('sBuyerFirstName')} {$this->getLoginDataByName('sBuyerLastName')} ESpachstr. 1 79111 Freiburg Germany E-mail: {$this->getLoginDataByName('sBuyerLogin')}", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
+        $this->assertCaseInsensitiveText("Billing Address: {$this->getLoginDataByName('sBuyerFirstName')} {$this->getLoginDataByName('sBuyerLastName')} ESpachstr. 1 79111 Freiburg Germany E-mail: {$this->getLoginDataByName('sBuyerLogin')}", $this->clearString($this->getText("//td[1]/table[1]/tbody/tr/td[1]")));
         $this->assertEquals("15,00", $this->getText("//table[@id='order.info']/tbody/tr[1]/td[2]"));
         $this->assertEquals("- 0,00", $this->getText("//table[@id='order.info']/tbody/tr[2]/td[2]"));
         $this->assertEquals("12,61", $this->getText("//table[@id='order.info']/tbody/tr[3]/td[2]"));
@@ -945,4 +945,11 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertLogData($assertRequest, $assertResponse);
     }
 
+    /**
+     * Test helper
+     */
+    protected function assertCaseInsensitiveText($expected, $actual)
+    {
+        $this->assertEquals(strtolower($expected), strtolower($actual));
+    }
 }

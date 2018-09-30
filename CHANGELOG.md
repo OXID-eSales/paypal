@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - [0006774](https://bugs.oxid-esales.com/view.php?id=6774) In backend, orderlist column 'PAYMENT METHOD' stays empty [PR-45](https://github.com/OXID-eSales/paypal/pull/45)
+- Fix and stabilize acceptance tests.
 
 ## [5.2.2] - 2018-07-17
 

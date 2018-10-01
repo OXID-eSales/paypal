@@ -233,7 +233,9 @@ class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\
         //switch on sandbox more
         $this->getConfig()->setConfigParam('blOEPayPalSandboxMode', true);
 
-        $mockedCurl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, ['setHost', 'setUrlToCall']);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Curl::class);
+        $mockBuilder->setMethods(['setHost', 'setUrlToCall']);
+        $mockedCurl = $mockBuilder->getMock();
         $mockedCurl->expects($this->once())
             ->method('setHost')
             ->with($this->equalTo(\OxidEsales\PayPalModule\Core\IpnConfig::OEPAYPAL_IPN_SANDBOX_HOST));
@@ -241,7 +243,9 @@ class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\
             ->method('setUrlToCall')
             ->with($this->equalTo(\OxidEsales\PayPalModule\Core\IpnConfig::OEPAYPAL_SANDBOX_IPN_CALLBACK_URL . '&cmd=_notify-validate'));
 
-        $mockedCaller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, ['call', 'getCurl']);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Caller::class);
+        $mockBuilder->setMethods(['call', 'getCurl']);
+        $mockedCaller = $mockBuilder->getMock();
         $mockedCaller->expects($this->once())
                      ->method('getCurl')
                      ->will($this->returnValue($mockedCurl));
@@ -417,7 +421,9 @@ class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\
      */
     protected function prepareCallerMock($request, $methodName = null)
     {
-        $caller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array("setRequest", 'call'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Caller::class);
+        $mockBuilder->setMethods(['setRequest', 'call']);
+        $caller = $mockBuilder->getMock();
         $caller->expects($this->once())->method("setRequest")->with($this->equalTo($request));
         if (!is_null($methodName)) {
             $caller->expects($this->once())->method("call")
@@ -463,7 +469,9 @@ class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\
                         'getTransactionMode'                   => 'AUTHORIZATION',
         );
 
-        $paypalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array_keys($mocks));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Config::class);
+        $mockBuilder->setMethods(array_keys($mocks));
+        $paypalConfig = $mockBuilder->getMock();
 
         foreach ($mocks as $method => $returnValue) {
             $paypalConfig->expects($this->any())->method($method)->will($this->returnValue($returnValue));
@@ -487,7 +495,9 @@ class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\
             $paypalPayPalRequest->setParameter($key, $value);
         }
 
-        $caller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array('call'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Caller::class);
+        $mockBuilder->setMethods(['call']);
+        $caller = $mockBuilder->getMock();
         $caller->expects($this->once())->method('call')->will($this->returnValue(array()));
         $caller->setRequest($paypalPayPalRequest);
 

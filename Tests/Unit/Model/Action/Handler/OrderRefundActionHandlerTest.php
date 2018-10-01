@@ -47,10 +47,9 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
         $type = 'Full';
         $comment = 'Comment';
 
-        $builder = $this->getMock(
-            \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class,
-            array('setTransactionId', 'setAmount', 'setRefundType', 'getRequest', 'setComment')
-        );
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class);
+        $mockBuilder->setMethods(['setTransactionId', 'setAmount', 'setRefundType', 'getRequest', 'setComment']);
+        $builder = $mockBuilder->getMock();
         $builder->expects($this->atLeastOnce())->method('setTransactionId')->with($this->equalTo($transId));
         $builder->expects($this->atLeastOnce())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
         $builder->expects($this->atLeastOnce())->method('setRefundType')->with($this->equalTo($type));
@@ -78,9 +77,12 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
      */
     public function testGetPayPalResponse_SetsCorrectRequestToService()
     {
-        $payPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        $payPalRequest = $mockBuilder->getMock();
 
-        $checkoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('refundTransaction'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        $mockBuilder->setMethods(['refundTransaction']);
+        $checkoutService = $mockBuilder->getMock();
         $checkoutService->expects($this->once())
             ->method('refundTransaction')
             ->with($this->equalTo($payPalRequest))
@@ -101,7 +103,9 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
         $payPalRequest = new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest();
         $payPalResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
 
-        $checkoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('refundTransaction'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        $mockBuilder->setMethods(['refundTransaction']);
+        $checkoutService = $mockBuilder->getMock();
         $checkoutService->expects($this->once())
             ->method('refundTransaction')
             ->will($this->returnValue($payPalResponse));
@@ -118,7 +122,8 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
      */
     protected function getService()
     {
-        return $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        return $mockBuilder->getMock();
     }
 
     /**

@@ -208,7 +208,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLog_notSetLogger_LoggerNotUsed()
     {
-        $caller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array('getLogger'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Caller::class);
+        $mockBuilder->setMethods(['getLogger']);
+        $caller = $mockBuilder->getMock();
         $caller->expects($this->once())->method('getLogger')->will($this->returnValue(null));
         $caller->log('logMassage');
     }
@@ -218,7 +220,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLog_setLogger_LoggerUsed()
     {
-        $logger = $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Logger::class);
+        $mockBuilder->setMethods(['log']);
+        $logger = $mockBuilder->getMock();
         $logger->expects($this->once())->method('log')->with($this->equalTo('logMassage'));
 
         $caller = new \OxidEsales\PayPalModule\Core\Caller();
@@ -231,7 +235,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLogUsage_onCallMethod_atLeastOnce()
     {
-        $logger = $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Logger::class);
+        $mockBuilder->setMethods(['log']);
+        $logger = $mockBuilder->getMock();
         $logger->expects($this->atLeastOnce())->method('log');
 
         $caller = new \OxidEsales\PayPalModule\Core\Caller();
@@ -247,7 +253,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testLogUsage_onGetCallBackResponseMethod_atLeastOnce()
     {
-        $logger = $this->getMock(\OxidEsales\PayPalModule\Core\Logger::class, array('log'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Logger::class);
+        $mockBuilder->setMethods(['log']);
+        $logger = $mockBuilder->getMock();
         $logger->expects($this->atLeastOnce())->method('log');
 
         $caller = new \OxidEsales\PayPalModule\Core\Caller();
@@ -269,7 +277,9 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function prepareCurl($response, $paramsCurl, $url, $charset)
     {
-        $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, array("execute", 'setUrlToCall', 'setParameters', 'setDataCharset'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Curl::class);
+        $mockBuilder->setMethods(['execute', 'setUrlToCall', 'setParameters', 'setDataCharset']);
+        $curl = $mockBuilder->getMock();
         $curl->expects($this->once())->method("execute")->will($this->returnValue($response));
         $curl->setDataCharset($charset);
         $curl->setParameters($paramsCurl);

@@ -170,7 +170,9 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
 
         //if $basketProductId is null we say that $basketItemsList is empty array
         if (!is_null($basketProductId)) {
-            $basketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getPersParams', 'getSelList'));
+            $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\BasketItem::class);
+            $mockBuilder->setMethods(['getProductId', 'getPersParams', 'getSelList']);
+            $basketItem = $mockBuilder->getMock();
             $basketItem->expects($this->any())->method('getProductId')->will($this->returnValue($basketProductId));
             $basketItem->expects($this->any())->method('getSelList')->will($this->returnValue($basketSelectionList));
             $basketItem->expects($this->any())->method('getPersParams')->will($this->returnValue($basketPersistentParam));
@@ -180,7 +182,9 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
             );
         }
 
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(['getContents']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue($basketItemsList));
 
         return $basket;

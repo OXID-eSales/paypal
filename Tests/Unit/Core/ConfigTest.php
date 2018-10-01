@@ -639,7 +639,10 @@ class ConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testGetCurrentUrl()
     {
         $currentUrl = 'http://oxideshop.com/test';
-        $utilsUrl = $this->getMock(\OxidEsales\Eshop\Core\UtilsUrl::class, array('getCurrentUrl'));
+
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\UtilsUrl::class);
+        $mockBuilder->setMethods(['getCurrentUrl']);
+        $utilsUrl = $mockBuilder->getMock();
         $utilsUrl->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($currentUrl));
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsUrl::class, $utilsUrl);
 

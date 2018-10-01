@@ -108,7 +108,9 @@ class OrderManagerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalOrderPaymentStatusCalculator = $this->preparePayPalOrderPaymentStatusCalculator($orderPayment, $order, $OrderCalculatedStatus);
 
         // Mock order manager to check if order is created from given payment. This prevents from database usage.
-        $payPalOrderManager = $this->getMock(\OxidEsales\PayPalModule\Model\OrderManager::class, array('getOrderFromPayment'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\OrderManager::class);
+        $mockBuilder->setMethods(['getOrderFromPayment']);
+        $payPalOrderManager = $mockBuilder->getMock();
         $payPalOrderManager->expects($this->once())->method('getOrderFromPayment')->with($orderPayment)->will($this->returnValue($order));
         $payPalOrderManager->setOrderPayment($orderPayment);
         $payPalOrderManager->setOrderPaymentStatusCalculator($payPalOrderPaymentStatusCalculator);
@@ -177,10 +179,9 @@ class OrderManagerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function preparePayPalOrderPaymentStatusCalculator($orderPayment, $order, $OrderCalculatedStatus)
     {
-        $payPalOrderPaymentStatusCalculator = $this->getMock(
-            \OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class,
-            array('setOrderPayment', 'setOrder', 'getStatus')
-        );
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
+        $mockBuilder->setMethods(['setOrderPayment', 'setOrder', 'getStatus']);
+        $payPalOrderPaymentStatusCalculator = $mockBuilder->getMock();
         $payPalOrderPaymentStatusCalculator->expects($this->any())->method('setOrderPayment')->with($orderPayment);
         $payPalOrderPaymentStatusCalculator->expects($this->once())->method('setOrder')->with($order);
         $payPalOrderPaymentStatusCalculator->expects($this->any())->method('getStatus')->will($this->returnValue($OrderCalculatedStatus));

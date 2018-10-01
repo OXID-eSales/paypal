@@ -137,7 +137,9 @@ class ShopLogoTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetShopLogoUrl($imageDir, $imageDirUrl, $imageName, $imgWidth, $imgHeight, $width, $height, $imageHandler, $result)
     {
-        $logo = $this->getMock(\OxidEsales\PayPalModule\Core\ShopLogo::class, array('resizeImage', 'getImageSize'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ShopLogo::class);
+        $mockBuilder->setMethods(['resizeImage', 'getImageSize']);
+        $logo = $mockBuilder->getMock();
         $logo->expects($this->any())->method('resizeImage')->will($this->returnValue(!empty($imageHandler)));
         $logo->expects($this->any())->method('getImageSize')->will($this->returnValue(array('width' => $imgWidth, 'height' => $imgHeight)));
 

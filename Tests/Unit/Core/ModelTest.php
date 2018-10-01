@@ -33,7 +33,10 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $id = 'RecordIdToLoad';
         $data = array('testkey' => 'testValue');
-        $gateway = $this->getMock(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load'));
+
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class);
+        $mockBuilder->setMethods(['load']);
+        $gateway = $mockBuilder->getMock();
         $gateway->expects($this->any())->method('load')->with($id)->will($this->returnValue($data));
 
         $model = $this->getPayPalModel($gateway, $id);
@@ -49,7 +52,10 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $id = 'RecordIdToLoad';
         $data = array('testkey' => 'testValue');
-        $gateway = $this->getMock(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load'));
+
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class);
+        $mockBuilder->setMethods(['load']);
+        $gateway = $mockBuilder->getMock();
         $gateway->expects($this->any())->method('load')->with($id)->will($this->returnValue($data));
 
         $model = $this->getPayPalModel($gateway, $id, $id);

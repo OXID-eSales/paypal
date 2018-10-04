@@ -374,6 +374,14 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $element->setValue($loginEmail);
             $debug .= 'email--';
         }
+
+        //We might get a next button before we can enter the password
+        $element = $this->getElementLazy("id=btnNext", false);
+        if ($element) {
+            $element->click();
+            $this->_waitForAppear('isElementPresent', "//input[@id='password']", 5, true);
+        }
+
         $element = $this->getElementLazy('login_password', false);
         if ($element) {
             $element->setValue($loginPassword);
@@ -385,8 +393,33 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $debug .= 'password--';
         }
 
+        $loginFound = $this->clickLogin();
+
+        $this->selectWindow(null);
+        $this->_waitForAppear('isElementPresent', "//input[@id='continue']", 5, true);
+        $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 5, true);
+        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 5, true);
+        $this->_waitForAppear('isTextPresent', $loginEmail, 5, true);
+
+        if ((false === $loginFound)
+             && !$this->isTextPresent($this->getLoginDataByName('sBuyerFirstName'))
+             && !$this->isTextPresent($loginEmail)
+        ) {
+            $this->markTestIncomplete('Cannot find login button. Login form fields found: ' . $debug);
+        }
+    }
+
+    /**
+     * Test helper, click login button if one can be found.
+     *
+     * @return bool
+     */
+    protected function clickLogin()
+    {
         $loginFound = false;
-        $element = $this->getElementLazy(self::PAYPAL_LOGIN_BUTTON_ID_NEW, false);
+        $xpath = "//button[@type='submit' and @id='btnLogin' and (contains(., 'Log In') or contains(., 'Einloggen'))]";
+        $this->waitForItemAppear($xpath, 5, true);
+        $element = $this->getElementLazy($xpath, false);
         if ($element) {
             $loginFound = true;
             $element->click();
@@ -397,19 +430,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
                 $element->click();
             }
         }
-
-        $this->selectWindow(null);
-        $this->_waitForAppear('isElementPresent', "//input[@id='continue']", 5, true);
-        $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 5, true);
-        $this->_waitForAppear('isTextPresent', $this->getLoginDataByName('sBuyerFirstName'), 5, true);
-        $this->_waitForAppear('isTextPresent', $loginEmail, 5, true);
-
-        if ((false == $loginFound)
-             && !$this->isTextPresent($this->getLoginDataByName('sBuyerFirstName'))
-             && !$this->isTextPresent($loginEmail)
-        ) {
-            $this->markTestIncomplete('Cannot find login button. Login form fields found: ' . $debug);
-        }
+        return $loginFound;
     }
 
     /**

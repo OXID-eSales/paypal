@@ -4,16 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [5.2.3] - Unreleased
+## [5.2.4] - Unreleased
 
 ### Added
 
 ### Changed
-- Show extra payment costs only if they are not zero [PR-44](https://github.com/OXID-eSales/paypal/pull/44)
 
 ### Deprecated
 
 ### Removed
+
+### Fixed
+
+## [5.2.3] - 2018-10-09
+
+### Changed
+- Show extra payment costs only if they are not zero [PR-44](https://github.com/OXID-eSales/paypal/pull/44)
 
 ### Fixed
 - [0006774](https://bugs.oxid-esales.com/view.php?id=6774) In backend, orderlist column 'PAYMENT METHOD' stays empty [PR-45](https://github.com/OXID-eSales/paypal/pull/45)
@@ -96,7 +102,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
-[v5.2.2]: https://github.com/OXID-eSales/paypal/compare/v5.2.1...HEAD
+[v5.2.3]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...HEAD
+[v5.2.2]: https://github.com/OXID-eSales/paypal/compare/v5.2.1...v5.2.2
 [v5.2.1]: https://github.com/OXID-eSales/paypal/compare/v5.2.0...v5.2.1
 [v5.2.0]: https://github.com/OXID-eSales/paypal/compare/v5.1.6...v5.2.0
 [v5.1.6]: https://github.com/OXID-eSales/paypal/compare/v5.1.5...v5.1.6

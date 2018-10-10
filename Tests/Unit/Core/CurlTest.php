@@ -240,7 +240,7 @@ class CurlTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetUrlToCall_badUrlSet_Exception()
     {
-        $this->setExpectedException(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
+        $this->expectException(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
 
         $endpointUrl = 'url';
         $payPalCurl = new \OxidEsales\PayPalModule\Core\Curl();
@@ -290,7 +290,9 @@ class CurlTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testExecute_setParameters_getResponseArray()
     {
-        $payPalCurl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, array("curlExecute", 'setOption', 'parseResponse', 'close'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Curl::class);
+        $mockBuilder->setMethods(['curlExecute', 'setOption', 'parseResponse', 'close']);
+        $payPalCurl = $mockBuilder->getMock();
 
         $payPalCurl->expects($this->any())->method('setOption');
         $payPalCurl->expects($this->once())->method('curlExecute')->will($this->returnValue('rParam1=rValue1'));

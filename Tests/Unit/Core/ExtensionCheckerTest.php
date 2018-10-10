@@ -113,7 +113,9 @@ class ExtensionCheckerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsActive_extensionIsSet($isActive, $extendedClasses, $disabledModules)
     {
-        $checker = $this->getMock(\OxidEsales\PayPalModule\Core\ExtensionChecker::class, array("getExtendedClasses", 'getDisabledModules'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ExtensionChecker::class);
+        $mockBuilder->setMethods(['getExtendedClasses', 'getDisabledModules']);
+        $checker = $mockBuilder->getMock();
         $checker->expects($this->any())->method("getExtendedClasses")->will($this->returnValue($extendedClasses));
         $checker->expects($this->any())->method("getDisabledModules")->will($this->returnValue($disabledModules));
 

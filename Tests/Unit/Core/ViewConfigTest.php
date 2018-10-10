@@ -44,10 +44,15 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsStandardCheckoutEnabled()
     {
-        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("isStandardCheckoutEnabled"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Config::class);
+        $mockBuilder->setMethods(['isStandardCheckoutEnabled']);
+        $payPalConfig = $mockBuilder->getMock();
         $payPalConfig->expects($this->once())->method("isStandardCheckoutEnabled")->will($this->returnValue(true));
 
-        $view = $this->getMock(ViewConfig::class, array("getPayPalConfig"), array($payPalConfig, null, null));
+        $mockBuilder = $this->getMockBuilder(ViewConfig::class);
+        $mockBuilder->setMethods(['getPayPalConfig']);
+        $mockBuilder->setConstructorArgs([$payPalConfig, null, null]);
+        $view = $mockBuilder->getMock();
         $view->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
         $this->assertTrue($view->isStandardCheckoutEnabled());
     }
@@ -99,7 +104,9 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsExpressCheckoutEnabledInDetailsWhenExpressCheckoutIsEnabled()
     {
-        $view = $this->getMock(\OxidEsales\PayPalModule\Core\ViewConfig::class, array("isExpressCheckoutEnabled"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ViewConfig::class);
+        $mockBuilder->setMethods(['isExpressCheckoutEnabled']);
+        $view = $mockBuilder->getMock();
         $view->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(true));
 
         $this->getConfig()->setConfigParam('blOEPayPalECheckoutInDetails', true);
@@ -115,7 +122,9 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsExpressCheckoutEnabledInDetailsWhenExpressCheckoutIsDisabled()
     {
-        $view = $this->getMock(\OxidEsales\PayPalModule\Core\ViewConfig::class, array("isExpressCheckoutEnabled"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ViewConfig::class);
+        $mockBuilder->setMethods(['isExpressCheckoutEnabled']);
+        $view = $mockBuilder->getMock();
         $view->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(false));
 
         $this->getConfig()->setConfigParam('blOEPayPalECheckoutInDetails', true);
@@ -131,7 +140,9 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsExpressCheckoutEnabledInMiniBasketWhenExpressCheckoutIsEnabled()
     {
-        $view = $this->getMock(\OxidEsales\PayPalModule\Core\ViewConfig::class, array("isExpressCheckoutEnabled"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ViewConfig::class);
+        $mockBuilder->setMethods(['isExpressCheckoutEnabled']);
+        $view = $mockBuilder->getMock();
         $view->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(true));
 
         $this->getConfig()->setConfigParam('blOEPayPalECheckoutInMiniBasket', true);
@@ -147,7 +158,9 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsExpressCheckoutEnabledInMiniBasketWhenExpressCheckoutIsDisabled()
     {
-        $view = $this->getMock(\OxidEsales\PayPalModule\Core\ViewConfig::class, array("isExpressCheckoutEnabled"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ViewConfig::class);
+        $mockBuilder->setMethods(['isExpressCheckoutEnabled']);
+        $view = $mockBuilder->getMock();
         $view->expects($this->exactly(2))->method("isExpressCheckoutEnabled")->will($this->returnValue(false));
 
         $this->getConfig()->setConfigParam('blOEPayPalECheckoutInMiniBasket', true);
@@ -190,10 +203,15 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSendOrderInfoToPayPal()
     {
-        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("sendOrderInfoToPayPal"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Config::class);
+        $mockBuilder->setMethods(['sendOrderInfoToPayPal']);
+        $payPalConfig = $mockBuilder->getMock();
         $payPalConfig->expects($this->once())->method("sendOrderInfoToPayPal")->will($this->returnValue(true));
 
-        $view = $this->getMock(\OxidEsales\PayPalModule\Core\ViewConfig::class, array("getPayPalConfig"), array($payPalConfig, null, null));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ViewConfig::class);
+        $mockBuilder->setMethods(['getPayPalConfig']);
+        $mockBuilder->setConstructorArgs([$payPalConfig, null, null]);
+        $view = $mockBuilder->getMock();
         $view->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
         $this->assertTrue($view->sendOrderInfoToPayPal());
     }
@@ -205,10 +223,14 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
 
-        $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Article::class);
+        $mockBuilder->setMethods(['getAmount']);
+        $article = $mockBuilder->getMock();
         $article->expects($this->any())->method('getAmount')->will($this->returnValue(5.6));
 
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(['getContents']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array($article)));
 
         $this->getSession()->setBasket($basket);
@@ -224,10 +246,14 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
 
-        $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Article::class);
+        $mockBuilder->setMethods(['getAmount']);
+        $article = $mockBuilder->getMock();
         $article->expects($this->any())->method('getAmount')->will($this->returnValue(5));
 
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(['getContents']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array($article)));
 
         $this->getSession()->setBasket($basket);
@@ -243,7 +269,9 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blOEPayPalSendToPayPal', true);
 
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getContents'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(['getContents']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array()));
 
         $this->getSession()->setBasket($basket);
@@ -258,10 +286,15 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testGetCurrentUrl()
     {
         $cancelURL = 'http://oxid-esales.com/test';
-        $payPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array("getCurrentUrl"));
+
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Config::class);
+        $mockBuilder->setMethods(['getCurrentUrl']);
+        $payPalConfig = $mockBuilder->getMock();
         $payPalConfig->expects($this->any())->method("getCurrentUrl")->will($this->returnValue($cancelURL));
 
-        $viewPayPalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\ViewConfig::class, array("getPayPalConfig"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\ViewConfig::class);
+        $mockBuilder->setMethods(['getPayPalConfig']);
+        $viewPayPalConfig = $mockBuilder->getMock();
         $viewPayPalConfig->expects($this->any())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
 
         $this->assertEquals($cancelURL, $viewPayPalConfig->getCurrentUrl());

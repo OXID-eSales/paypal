@@ -52,14 +52,20 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->getConfig()->setConfigParam('blSeoMode', false);
 
-        $validator = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class, array('isArticleValid'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class);
+        $mockBuilder->setMethods(['isArticleValid']);
+        $validator = $mockBuilder->getMock();
         $validator->expects($this->any())->method('isArticleValid')->will($this->returnValue($isArticleValid));
 
-        $currentItem = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class, array('getArticleAmount'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class);
+        $mockBuilder->setMethods(['getArticleAmount']);
+        $currentItem = $mockBuilder->getMock();
         $currentItem->expects($this->any())->method('getArticleAmount')->will($this->returnValue($articleAmount));
 
-        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $cmpBasket */
-        $cmpBasket = $this->getMock(BasketComponent::class, array('getValidator', 'getCurrentArticle'));
+        /** @var BasketComponent $cmpBasket */
+        $mockBuilder = $this->getMockBuilder(BasketComponent::class);
+        $mockBuilder->setMethods(['getValidator', 'getCurrentArticle']);
+        $cmpBasket = $mockBuilder->getMock();
         $cmpBasket->expects($this->any())->method('getValidator')->will($this->returnValue($validator));
         $cmpBasket->expects($this->any())->method('getCurrentArticle')->will($this->returnValue($currentItem));
 
@@ -77,11 +83,15 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $cancelURL = urlencode($url);
         $expectedURL = 'oepaypalexpresscheckoutdispatcher?fnc=setExpressCheckout&displayCartInPayPal=0&oePayPalCancelURL=' . $cancelURL;
 
-        $validator = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class, array('isArticleValid'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class);
+        $mockBuilder->setMethods(['isArticleValid']);
+        $validator = $mockBuilder->getMock();
         $validator->expects($this->any())->method('isArticleValid')->will($this->returnValue(true));
 
-        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $cmpBasket */
-        $cmpBasket = $this->getMock(BasketComponent::class, array('getValidator'));
+        /** @var BasketComponent $cmpBasket */
+        $mockBuilder = $this->getMockBuilder(BasketComponent::class);
+        $mockBuilder->setMethods(['getValidator']);
+        $cmpBasket = $mockBuilder->getMock();
         $cmpBasket->expects($this->any())->method('getValidator')->will($this->returnValue($validator));
 
         $this->assertEquals($expectedURL, $cmpBasket->actionExpressCheckoutFromDetailsPage());

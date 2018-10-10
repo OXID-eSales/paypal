@@ -105,10 +105,14 @@ class OutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function createBasket($productId, $basketAmount, $stockAmount)
     {
-        $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getStockAmount'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Article::class);
+        $mockBuilder->setMethods(['getStockAmount']);
+        $article = $mockBuilder->getMock();
         $article->expects($this->any())->method('getStockAmount')->will($this->returnValue($stockAmount));
 
-        $basketItem = $this->getMock(\OxidEsales\Eshop\Application\Model\BasketItem::class, array('getProductId', 'getAmount', 'getArticle'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\BasketItem::class);
+        $mockBuilder->setMethods(['getProductId', 'getAmount', 'getArticle']);
+        $basketItem = $mockBuilder->getMock();
         $basketItem->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
         $basketItem->expects($this->any())->method('getAmount')->will($this->returnValue($basketAmount));
         $basketItem->expects($this->any())->method('getArticle')->will($this->returnValue($article));
@@ -117,7 +121,9 @@ class OutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $productId => $basketItem
         );
 
-        $basket = $this->getMock(Basket::class, array('getContents'));
+        $mockBuilder = $this->getMockBuilder(Basket::class);
+        $mockBuilder->setMethods(['getContents']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue($basketItemsList));
 
         return $basket;

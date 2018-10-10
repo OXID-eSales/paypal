@@ -170,7 +170,15 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
      */
     public function testSetBasket_OnUpdateCalledOnBasket()
     {
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('onUpdate', 'calculateBasket', 'isVirtualPayPalBasket', 'getSumOfCostOfAllItemsPayPalBasket', 'getDiscountSumPayPalBasket'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(
+            ['onUpdate',
+             'calculateBasket',
+             'isVirtualPayPalBasket',
+             'getSumOfCostOfAllItemsPayPalBasket',
+             'getDiscountSumPayPalBasket']
+        );
+        $basket= $mockBuilder->getMock();
         $basket->expects($this->at(0))->method('onUpdate');
         $basket->expects($this->at(1))->method('calculateBasket');
         $basket->expects($this->atLeastOnce())->method('isVirtualPayPalBasket');
@@ -181,7 +189,9 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $builder->setBasket($basket);
         $builder->addBasketParams();
 
-        $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("setParameter"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        $mockBuilder->setMethods(['setParameter']);
+        $payPalService = $mockBuilder->getMock();
         $payPalService->expects($this->any())->method("setParameter");
     }
 
@@ -432,7 +442,9 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
      */
     protected function getPayPalRequestBuilder()
     {
-        $lang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array('translateString'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Language::class);
+        $mockBuilder->setMethods(['translateString']);
+        $lang = $mockBuilder->getMock();
         $lang->expects($this->any())
             ->method('translateString')
             ->will($this->returnArgument(0));

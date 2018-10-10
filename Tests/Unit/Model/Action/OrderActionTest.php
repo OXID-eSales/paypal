@@ -33,7 +33,10 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $order = new \stdClass();
         $handler = new \stdClass();
-        $action = $this->getMock(\OxidEsales\PayPalModule\Model\Action\OrderAction::class, array('process'), array($handler, $order));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\OrderAction::class);
+        $mockBuilder->setMethods(['process']);
+        $mockBuilder->setConstructorArgs([$handler, $order]);
+        $action = $mockBuilder->getMock();
 
         $this->assertSame($order, $action->getOrder());
         $this->assertSame($handler, $action->getHandler());

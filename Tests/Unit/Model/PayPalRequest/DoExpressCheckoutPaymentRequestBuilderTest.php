@@ -64,15 +64,21 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
         $result["PAYMENTINFO_0_TRANSACTIONID"] = "321";
 
         // preparing price
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getBruttoPrice']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(123));
 
         // preparing basket
-        $basket = $this->getMock(Basket::class, array("getPrice"));
+        $mockBuilder = $this->getMockBuilder(Basket::class);
+        $mockBuilder->setMethods(['getPrice']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method("getPrice")->will($this->returnValue($price));
 
         // preparing session
-        $session = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array("getBasket"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Session::class);
+        $mockBuilder->setMethods(['getBasket']);
+        $session = $mockBuilder->getMock();
         $session->expects($this->any())->method("getBasket")->will($this->returnValue($basket));
         $session->setVariable("oepaypal-token", "111");
         $session->setVariable("oepaypal-payerId", "222");

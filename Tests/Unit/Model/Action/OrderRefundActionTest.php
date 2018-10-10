@@ -127,7 +127,9 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_ProcessingOfServiceResponse_CommentAdded()
     {
-        $utilsDate = $this->getMock(\OxidEsales\Eshop\Core\UtilsDate::class, array('getTime'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\UtilsDate::class);
+        $mockBuilder->setMethods(['getTime']);
+        $utilsDate = $mockBuilder->getMock();
         $utilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $utilsDate);
         $comment = 'testComment';
@@ -167,9 +169,9 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getPayment()
     {
-        $payment = $this->getMock(\OxidEsales\PayPalModule\Model\OrderPayment::class, array('addComment'));
-
-        return $payment;
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $mockBuilder->setMethods(['addComment']);
+        return  $mockBuilder->getMock();
     }
 
     /**
@@ -214,9 +216,9 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $methods = array('getRefundAmount', 'getPaymentStatus', 'getTransactionId', 'getCurrency');
         $mockedMethods = array_unique(array_merge($methods, $testMethods));
 
-        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Response\ResponseDoRefund::class, $mockedMethods);
-
-        return $order;
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Response\ResponseDoRefund::class);
+        $mockBuilder->setMethods($mockedMethods);
+        return $mockBuilder->getMock();
     }
 
     /**
@@ -250,7 +252,10 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $handler = $this->_createStub('ActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
 
-        $action = $this->getMock(\OxidEsales\PayPalModule\Model\Action\OrderRefundAction::class, array('getDate'), array($handler, $order));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\OrderRefundAction::class);
+        $mockBuilder->setMethods(['getDate']);
+        $mockBuilder->setConstructorArgs([$handler, $order]);
+        $action = $mockBuilder->getMock();
         $action->expects($this->any())->method('getDate')->will($this->returnValue('date'));
 
         return $action;

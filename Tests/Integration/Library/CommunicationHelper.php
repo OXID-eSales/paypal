@@ -35,7 +35,9 @@ class CommunicationHelper extends \OxidEsales\PayPalModule\Tests\Integration\Lib
         /**
          * @var \OxidEsales\PayPalModule\Core\Caller $caller
          */
-        $caller = $this->getMock(\OxidEsales\PayPalModule\Core\Caller::class, array('call'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Caller::class);
+        $mockBuilder->setMethods(['call']);
+        $caller = $mockBuilder->getMock();
         $caller->expects($this->any())->method('call')->will($this->returnValue($params));
 
         $service = new \OxidEsales\PayPalModule\Core\PayPalService();
@@ -53,7 +55,9 @@ class CommunicationHelper extends \OxidEsales\PayPalModule\Tests\Integration\Lib
      */
     public function getCurl($result)
     {
-        $curl = $this->getMock(\OxidEsales\PayPalModule\Core\Curl::class, array('execute'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Curl::class);
+        $mockBuilder->setMethods(['execute']);
+        $curl = $mockBuilder->getMock();
         $curl->expects($this->any())->method('execute')->will($this->returnValue($result));
 
         return $curl;

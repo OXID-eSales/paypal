@@ -123,7 +123,9 @@ class IpnConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $url = 'http://mypaypal.local/webscr';
 
-        $ipnConfig = $this->getMock(\OxidEsales\PayPalModule\Core\IpnConfig::class, ['getIpnUrl']);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\IpnConfig::class);
+        $mockBuilder->setMethods(['getIpnUrl']);
+        $ipnConfig = $mockBuilder->getMock();
         $ipnConfig->expects($this->once())
             ->method('getIpnUrl')
             ->will($this->returnValue($url));

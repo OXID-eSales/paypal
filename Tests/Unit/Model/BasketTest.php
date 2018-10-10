@@ -35,10 +35,14 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function isVirtualPayPalBasketDataProvider()
     {
-        $product1 = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('isVirtualPayPalArticle'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Article::class);
+        $mockBuilder->setMethods(['isVirtualPayPalArticle']);
+        $product1 = $mockBuilder->getMock();
         $product1->expects($this->any())->method('isVirtualPayPalArticle')->will($this->returnValue(true));
 
-        $product2 = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('isVirtualPayPalArticle'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Article::class);
+        $mockBuilder->setMethods(['isVirtualPayPalArticle']);
+        $product2 = $mockBuilder->getMock();
         $product2->expects($this->any())->method('isVirtualPayPalArticle')->will($this->returnValue(false));
 
         return array(
@@ -56,7 +60,9 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $products = array($product1, $product2);
 
-        $basket = $this->getMock(Basket::class, array('getBasketArticles'));
+        $mockBuilder = $this->getMockBuilder(Basket::class);
+        $mockBuilder->setMethods(['getBasketArticles']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getBasketArticles')->will($this->returnValue($products));
 
         $this->assertEquals($result, $basket->isVirtualPayPalBasket());
@@ -84,11 +90,15 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalWrappingCosts($calculationModeNetto, $wrappingPriceBrutto, $wrappingPriceNetto, $wrappingPriceExpect)
     {
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getNettoPrice', 'getBruttoPrice'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getNettoPrice', 'getBruttoPrice']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($wrappingPriceBrutto));
         $price->expects($this->any())->method('getNettoPrice')->will($this->returnValue($wrappingPriceNetto));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getCosts', 'isCalculationModeNetto'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getCosts', 'isCalculationModeNetto']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getCosts')->with($this->equalTo('oxwrapping'))->will($this->returnValue($price));
         $basket->expects($this->once())->method('isCalculationModeNetto')->will($this->returnValue($calculationModeNetto));
 
@@ -102,11 +112,15 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalGiftCardCosts($calculationModeNetto, $giftCardPriceBrutto, $giftCardPriceNetto, $giftCardPrice)
     {
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getNettoPrice', 'getBruttoPrice'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getNettoPrice', 'getBruttoPrice']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($giftCardPriceBrutto));
         $price->expects($this->any())->method('getNettoPrice')->will($this->returnValue($giftCardPriceNetto));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getCosts', 'isCalculationModeNetto'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getCosts', 'isCalculationModeNetto']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getCosts')->with($this->equalTo('oxgiftcard'))->will($this->returnValue($price));
         $basket->expects($this->once())->method('isCalculationModeNetto')->will($this->returnValue($calculationModeNetto));
 
@@ -120,11 +134,15 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalPaymentCosts($calculationModeNetto, $paymentCostsPriceBrutto, $paymentCostsPriceNetto, $paymentPrice)
     {
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getNettoPrice', 'getBruttoPrice'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getNettoPrice', 'getBruttoPrice']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->any())->method('getBruttoPrice')->will($this->returnValue($paymentCostsPriceBrutto));
         $price->expects($this->any())->method('getNettoPrice')->will($this->returnValue($paymentCostsPriceNetto));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getCosts', 'isCalculationModeNetto'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getCosts', 'isCalculationModeNetto']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getCosts')->with($this->equalTo('oxpayment'))->will($this->returnValue($price));
         $basket->expects($this->once())->method('isCalculationModeNetto')->will($this->returnValue($calculationModeNetto));
 
@@ -171,7 +189,9 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetDiscountSumPayPalBasket($discount, $vouchers, $paymentCost, $result)
     {
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getTotalDiscount', 'getPaymentCosts', 'getVouchers'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(['getTotalDiscount', 'getPaymentCosts', 'getVouchers']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getTotalDiscount')->will($this->returnValue($discount));
         $basket->expects($this->once())->method('getVouchers')->will($this->returnValue($vouchers));
         $basket->expects($this->once())->method('getPaymentCosts')->will($this->returnValue($paymentCost));
@@ -207,7 +227,9 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetSumOfCostOfAllItemsPayPalBasket($productsPrice, $paymentCost, $wrappingCost, $result)
     {
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getProductsPrice', 'getPayPalPaymentCosts', 'getPayPalWrappingCosts'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getProductsPrice', 'getPayPalPaymentCosts', 'getPayPalWrappingCosts']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getProductsPrice')->will($this->returnValue($productsPrice));
         $basket->expects($this->once())->method('getPayPalPaymentCosts')->will($this->returnValue($paymentCost));
         $basket->expects($this->once())->method('getPayPalWrappingCosts')->will($this->returnValue($wrappingCost));
@@ -240,7 +262,9 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalBasketVatValue($productsVat, $wrappingVat, $giftCardVat, $payCostVat, $basketVat)
     {
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getProductVats', 'getPayPalWrappingVat', 'getPayPalGiftCardVat', 'getPayPalPayCostVat'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getProductVats', 'getPayPalWrappingVat', 'getPayPalGiftCardVat', 'getPayPalPayCostVat']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getProductVats')->will($this->returnValue($productsVat));
         $basket->expects($this->once())->method('getPayPalWrappingVat')->will($this->returnValue($wrappingVat));
         $basket->expects($this->once())->method('getPayPalGiftCardVat')->will($this->returnValue($giftCardVat));
@@ -272,7 +296,9 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalProductVat($productsVat, $basketVat)
     {
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getProductVats'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getProductVats']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getProductVats')->will($this->returnValue($productsVat));
 
         $this->assertEquals($basketVat, $basket->getPayPalBasketVatValue(), 'Products VAT SUM is different than expected.');
@@ -298,10 +324,14 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalWrappingVat($costVat, $costVatExpected)
     {
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getVatValue'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getVatValue']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->any())->method('getVatValue')->will($this->returnValue($costVat));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getCosts'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getCosts']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getCosts')->with($this->equalTo('oxwrapping'))->will($this->returnValue($price));
 
         $this->assertEquals($costVatExpected, $basket->getPayPalWrappingVat(), 'Wrapping VAT SUM is different than expected.');
@@ -314,10 +344,14 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalGiftCardVat($costVat, $costVatExpected)
     {
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getVatValue'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getVatValue']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->any())->method('getVatValue')->will($this->returnValue($costVat));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getCosts'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getCosts']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getCosts')->with($this->equalTo('oxgiftcard'))->will($this->returnValue($price));
 
         $this->assertEquals($costVatExpected, $basket->getPayPalGiftCardVat(), 'GiftCard VAT SUM is different than expected.');
@@ -330,10 +364,14 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPayPalPayCostVat($costVat, $costVatExpected)
     {
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array('getVatValue'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getVatValue']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->any())->method('getVatValue')->will($this->returnValue($costVat));
 
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getCosts'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getCosts']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method('getCosts')->with($this->equalTo('oxpayment'))->will($this->returnValue($price));
 
         $this->assertEquals($costVatExpected, $basket->getPayPalPayCostVat(), 'PayCost VAT SUM is different than expected.');
@@ -344,11 +382,15 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsFractionQuantityItemsPresentWhenFractionQuantityArticlePresent()
     {
-        $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Article::class);
+        $mockBuilder->setMethods(['getAmount']);
+        $article = $mockBuilder->getMock();
         $article->expects($this->any())->method('getAmount')->will($this->returnValue(5.6));
 
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getContents']);
         /** @var \OxidEsales\PayPalModule\Model\Basket $basket */
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array($article)));
 
         $this->assertTrue($basket->isFractionQuantityItemsPresent());
@@ -359,11 +401,15 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSendOrderInfoToPayPalWhenNoFractionQuantityArticlesArePresent()
     {
-        $article = $this->getMock(\OxidEsales\Eshop\Application\Model\Article::class, array('getAmount'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Article::class);
+        $mockBuilder->setMethods(['getAmount']);
+        $article = $mockBuilder->getMock();
         $article->expects($this->any())->method('getAmount')->will($this->returnValue(5));
 
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getContents']);
         /** @var \OxidEsales\PayPalModule\Model\Basket $basket */
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array($article)));
 
         $this->assertFalse($basket->isFractionQuantityItemsPresent());
@@ -374,8 +420,10 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testSendOrderInfoToPayPalWhenBasketIsEmpty()
     {
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Basket::class);
+        $mockBuilder->setMethods(['getContents']);
         /** @var \OxidEsales\PayPalModule\Model\Basket $basket */
-        $basket = $this->getMock(\OxidEsales\PayPalModule\Model\Basket::class, array('getContents'));
+        $basket  = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getContents')->will($this->returnValue(array()));
 
         $this->assertFalse($basket->isFractionQuantityItemsPresent());

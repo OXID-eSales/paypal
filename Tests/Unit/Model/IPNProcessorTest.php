@@ -101,7 +101,9 @@ class IPNProcessorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     protected function preparePaymentBuilder($lang, $request, $payment)
     {
-        $paymentBuilder = $this->getMock(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class, array('setLang', 'setRequest', 'buildPayment'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class);
+        $mockBuilder->setMethods(['setLang', 'setRequest', 'buildPayment']);
+        $paymentBuilder = $mockBuilder->getMock();
         $paymentBuilder->expects($this->atLeastOnce())->method('setLang')->with($lang);
         $paymentBuilder->expects($this->atLeastOnce())->method('setRequest')->with($request);
         $paymentBuilder->expects($this->atLeastOnce())->method('buildPayment')->will($this->returnValue($payment));
@@ -111,7 +113,9 @@ class IPNProcessorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     protected function prepareOrderManager($payment, $orderUpdated)
     {
-        $orderManager = $this->getMock(\OxidEsales\PayPalModule\Model\OrderManager::class, array('setOrderPayment', 'updateOrderStatus'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\OrderManager::class);
+        $mockBuilder->setMethods(['setOrderPayment', 'updateOrderStatus']);
+        $orderManager = $mockBuilder->getMock();
         $orderManager->expects($this->atLeastOnce())->method('setOrderPayment')->with($payment);
         $orderManager->expects($this->atLeastOnce())->method('updateOrderStatus')->will($this->returnValue($orderUpdated));
 

@@ -85,7 +85,9 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $details->setData($payPalData);
         $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new \OxidEsales\PayPalModule\Model\Address());
 
-        $payPalUser = $this->getMock(User::class, array('_setAutoGroups'));
+        $mockBuilder = $this->getMockBuilder(User::class);
+        $mockBuilder->setMethods(['_setAutoGroups']);
+        $payPalUser = $mockBuilder->getMock();
         $payPalUser->expects($this->once())->method('_setAutoGroups')->with($this->equalTo("8f241f11096877ac0.98748826"));
         $payPalUser->createPayPalUser($details);
         $userId = $payPalUser->getId();
@@ -272,7 +274,9 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsRealPayPalUser()
     {
-        $config = $this->getMock(\OxidEsales\Eshop\Core\Config::class, array('getConfigParam', 'getShopId'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Config::class);
+        $mockBuilder->setMethods(['getConfigParam', 'getShopId']);
+        $config = $mockBuilder->getMock();
         $config->expects($this->never())->method('getShopId');
         $config->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(true));
 
@@ -289,7 +293,10 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $user->setShopId('_testShop1');
         $user->save();
 
-        $user = $this->getMock(\OxidEsales\PayPalModule\Model\User::class, array('getConfig'), array(), '', false);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\User::class);
+        $mockBuilder->setMethods(['getConfig']);
+        $mockBuilder->disableOriginalConstructor();
+        $user = $mockBuilder->getMock();
         $user->expects($this->any())->method('getConfig')->will($this->returnValue($config));
 
         $this->assertEquals('_testId', $user->isRealPayPalUser('test@test.test'));
@@ -303,7 +310,9 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsRealPayPalUserMultiShop()
     {
-        $config = $this->getMock(\OxidEsales\Eshop\Core\Config::class, array('getConfigParam', 'getShopId'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Config::class);
+        $mockBuilder->setMethods(['getConfigParam', 'getShopId']);
+        $config = $mockBuilder->getMock();
         $config->expects($this->any())->method('getShopId')->will($this->returnValue('_testShop1'));
         $config->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(false));
 
@@ -329,7 +338,10 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $user = new \OxidEsales\PayPalModule\Model\User();
 
-        $user = $this->getMock(\OxidEsales\PayPalModule\Model\User::class, array('getConfig'), array(), '', false);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\User::class);
+        $mockBuilder->setMethods(['getConfig']);
+        $mockBuilder->disableOriginalConstructor();
+        $user = $mockBuilder->getMock();
         $user->expects($this->any())->method('getConfig')->will($this->returnValue($config));
 
         $this->assertEquals('_testId', $user->isRealPayPalUser('test@test.test'));

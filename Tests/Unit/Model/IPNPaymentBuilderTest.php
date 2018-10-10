@@ -151,7 +151,9 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         // Mock order loading, so we do not touch database.
         /** @var \OxidEsales\PayPalModule\Model\IPNPaymentBuilder $paymentBuilder */
-        $paymentBuilder = $this->getMock(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class, array('loadOrderPayment'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class);
+        $mockBuilder->setMethods(['loadOrderPayment']);
+        $paymentBuilder = $mockBuilder->getMock();
         $paymentBuilder->expects($this->atLeastOnce())->method('loadOrderPayment')->with($transactionIdRequestPayment)->will($this->returnValue($orderPayment));
         $paymentBuilder->setRequest($request);
         $paymentBuilder->setLang($lang);
@@ -205,7 +207,9 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function prepareRequestPaymentSetter($request, $orderPayment)
     {
-        $payPalIPNPaymentSetter = $this->getMock(\OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::class, array('setRequest', 'getRequestOrderPayment'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\IPNRequestPaymentSetter::class);
+        $mockBuilder->setMethods(['setRequest', 'getRequestOrderPayment']);
+        $payPalIPNPaymentSetter = $mockBuilder->getMock();
         $payPalIPNPaymentSetter->expects($this->atLeastOnce())->method('setRequest')->with($request);
         $payPalIPNPaymentSetter->expects($this->atLeastOnce())->method('getRequestOrderPayment')->will($this->returnValue($orderPayment));
 
@@ -253,10 +257,9 @@ class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function prepareIPNPaymentValidator($requestOrderPayment, $orderPayment, $lang, $valid, $validationMessage)
     {
-        $payPalIPNPaymentValidator = $this->getMock(
-            \OxidEsales\PayPalModule\Model\IPNPaymentValidator::class
-            , array('setRequestOrderPayment', 'setOrderPayment', 'setLang', 'isValid', 'getValidationFailureMessage')
-        );
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\IPNPaymentValidator::class);
+        $mockBuilder->setMethods(['setRequestOrderPayment', 'setOrderPayment', 'setLang', 'isValid', 'getValidationFailureMessage']);
+        $payPalIPNPaymentValidator = $mockBuilder->getMock();
         $payPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setRequestOrderPayment')->with($requestOrderPayment);
         $payPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setOrderPayment')->with($orderPayment);
         $payPalIPNPaymentValidator->expects($this->atLeastOnce())->method('setLang')->with($lang);

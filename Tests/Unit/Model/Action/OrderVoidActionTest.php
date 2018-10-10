@@ -90,7 +90,9 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testProcess_CommentAdded()
     {
-        $utilsDate = $this->getMock(\OxidEsales\Eshop\Core\UtilsDate::class, array('getTime'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\UtilsDate::class);
+        $mockBuilder->setMethods(['getTime']);
+        $utilsDate = $mockBuilder->getMock();
         $utilsDate->expects($this->any())->method('getTime')->will($this->returnValue(time()));
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $utilsDate);
 
@@ -126,9 +128,9 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getPayment()
     {
-        $payment = $this->getMock(\OxidEsales\PayPalModule\Model\OrderPayment::class, array('addComment'));
-
-        return $payment;
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\OrderPayment::class);
+        $mockBuilder->setMethods(['addComment']);
+        return $mockBuilder->getMock();
     }
 
     /**
@@ -173,9 +175,9 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $methods = array('getRefundAmount', 'getPaymentStatus', 'getTransactionId', 'getCurrency');
         $mockedMethods = array_unique(array_merge($methods, $testMethods));
 
-        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Response\ResponseDoVoid::class, $mockedMethods);
-
-        return $order;
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Response\ResponseDoVoid::class);
+        $mockBuilder->setMethods($mockedMethods);
+        return $mockBuilder->getMock();
     }
 
     /**
@@ -206,7 +208,10 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $data = $data ? $data : $this->getData();
         $handler = $this->_createStub('ActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
 
-        $action = $this->getMock(\OxidEsales\PayPalModule\Model\Action\OrderVoidAction::class, array('getDate'), array($handler, $order));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\OrderVoidAction::class);
+        $mockBuilder->setMethods(['getDate']);
+        $mockBuilder->setConstructorArgs([$handler, $order]);
+        $action = $mockBuilder->getMock();
         $action->expects($this->any())->method('getDate')->will($this->returnValue('date'));
 
         return $action;

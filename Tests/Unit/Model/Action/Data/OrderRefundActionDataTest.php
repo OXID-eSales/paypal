@@ -63,7 +63,10 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $order = $this->getOrder();
 
-        $actionData = $this->getMock(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class, array('getPaymentBeingRefunded'), array($request, $order));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class);
+        $mockBuilder->setMethods(['getPaymentBeingRefunded']);
+        $mockBuilder->setConstructorArgs([$request, $order]);
+        $actionData = $mockBuilder->getMock();
         $actionData->expects($this->any())->method('getPaymentBeingRefunded')->will($this->returnValue($payment));
 
         $this->assertEquals($remainingRefundSum, $actionData->getAmount());

@@ -101,10 +101,14 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function providerIsPaymentValid_allCases()
     {
-        $group1 = $this->getMock(\OxidEsales\Eshop\Application\Model\Groups::class, array("getId"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Groups::class);
+        $mockBuilder->setMethods(['getId']);
+        $group1 = $mockBuilder->getMock();
         $group1->expects($this->any())->method("getId")->will($this->returnValue("someGroup1"));
 
-        $group2 = $this->getMock(\OxidEsales\Eshop\Application\Model\Groups::class, array("getId"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Groups::class);
+        $mockBuilder->setMethods(['getId']);
+        $group2 = $mockBuilder->getMock();
         $group2->expects($this->any())->method("getId")->will($this->returnValue("someGroup2"));
 
         $listEmpty = oxNew(\OxidEsales\Eshop\Core\Model\ListModel::class);
@@ -153,7 +157,9 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentValid_allCases($isActivePayment, $rangeFrom, $rangeTo, $price, $paymentCountries, $userCountryId, $userShippingCountryId, $userHasAccount, $paymentUserGroups, $userGroups, $expectedResult)
     {
-        $payment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("getCountries", "getGroups"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $mockBuilder->setMethods(['getCountries', 'getGroups']);
+        $payment = $mockBuilder->getMock();
         $payment->expects($this->any())->method("getCountries")->will($this->returnValue($paymentCountries));
         $payment->expects($this->any())->method("getGroups")->will($this->returnValue($paymentUserGroups));
 
@@ -165,7 +171,9 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $address->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field($userShippingCountryId);
 
-        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getUserGroups", "hasAccount", "getSelectedAddress", "getSelectedAddressId"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
+        $mockBuilder->setMethods(['getUserGroups', 'hasAccount', 'getSelectedAddress', 'getSelectedAddressId']);
+        $user = $mockBuilder->getMock();
         $user->expects($this->any())->method("getUserGroups")->will($this->returnValue($userGroups));
         $user->expects($this->any())->method("hasAccount")->will($this->returnValue($userHasAccount));
         $user->expects($this->any())->method("getSelectedAddress")->will($this->returnValue($address));
@@ -189,11 +197,15 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsPaymentValid_NoGroupsAssignedToPayment_True()
     {
-        $payment = $this->getMock(\OxidEsales\Eshop\Application\Model\Payment::class, array("getCountries", "getGroups"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Payment::class);
+        $mockBuilder->setMethods(['getCountries', 'getGroups']);
+        $payment = $mockBuilder->getMock();
         $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
         $payment->expects($this->any())->method("getGroups")->will($this->returnValue(array()));
 
-        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("hasAccount"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
+        $mockBuilder->setMethods(['hasAccount']);
+        $user = $mockBuilder->getMock();
         $user->expects($this->any())->method("hasAccount")->will($this->returnValue(1));
 
         $validator = new \OxidEsales\PayPalModule\Model\PaymentValidator();
@@ -270,13 +282,22 @@ class PaymentValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getPaymentValidator()
     {
-        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array('hasAccount'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
+        $mockBuilder->setMethods(['hasAccount']);
+        $user = $mockBuilder->getMock();
         $user->expects($this->any())->method('hasAccount')->will($this->returnValue(true));
 
-        $paymentValidator = $this->getMock(
-            \OxidEsales\PayPalModule\Model\PaymentValidator::class,
-            array('isPaymentActive', 'getPrice', 'checkPriceRange', 'checkMinOrderPrice', 'getUser', 'checkUserGroup', 'checkUserCountry')
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
+        $mockBuilder->setMethods(
+            ['isPaymentActive',
+             'getPrice',
+             'checkPriceRange',
+             'checkMinOrderPrice',
+             'getUser',
+             'checkUserGroup',
+             'checkUserCountry']
         );
+        $paymentValidator = $mockBuilder->getMock();
         $paymentValidator->expects($this->any())->method('isPaymentActive')->will($this->returnValue(true));
         $paymentValidator->expects($this->any())->method('getPrice')->will($this->returnValue(true));
         $paymentValidator->expects($this->any())->method('checkPriceRange')->will($this->returnValue(true));

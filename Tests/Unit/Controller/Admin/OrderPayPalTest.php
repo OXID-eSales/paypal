@@ -47,10 +47,14 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $payPalOrderModel->load();
 
-        $payPalOxOrder = $this->getMock(Order::class, array('getPayPalOrder'));
+        $mockBuilder = $this->getMockBuilder(Order::class);
+        $mockBuilder->setMethods(['getPayPalOrder']);
+        $payPalOxOrder = $mockBuilder->getMock();
         $payPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($payPalOrderModel));
 
-        $payPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class);
+        $mockBuilder->setMethods(['getEditObject', 'isPayPalOrder']);
+        $payPalOrder = $mockBuilder->getMock();
         $payPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($payPalOxOrder));
         $payPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(true));
 
@@ -69,10 +73,14 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalOrderModel->setOrderId($soxId);
         $payPalOrderModel->save();
 
-        $payPalOxOrder = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Order::class);
+        $mockBuilder->setMethods(['getPayPalOrder']);
+        $payPalOxOrder = $mockBuilder->getMock();
         $payPalOxOrder->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($payPalOrderModel));
 
-        $payPalOrder = $this->getMock(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class, array('getEditObject', 'isPayPalOrder'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Controller\Admin\OrderController::class);
+        $mockBuilder->setMethods(['getEditObject', 'isPayPalOrder']);
+        $payPalOrder = $mockBuilder->getMock();
         $payPalOrder->expects($this->any())->method('getEditObject')->will($this->returnValue($payPalOxOrder));
         $payPalOrder->expects($this->once())->method('isPayPalOrder')->will($this->returnValue(false));
 

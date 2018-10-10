@@ -58,7 +58,9 @@ class PaymentControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->setRequestParameter("paymentid", "oxidpaypal");
         $this->setRequestParameter("displayCartInPayPal", 1);
 
-        $view = $this->getMock(\OxidEsales\PayPalModule\Controller\PaymentController::class, array("isConfirmedByPayPal"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Controller\PaymentController::class);
+        $mockBuilder->setMethods(['isConfirmedByPayPal']);
+        $view = $mockBuilder->getMock();
         $view->expects($this->once())->method("isConfirmedByPayPal")->will($this->returnValue(true));
 
         $this->assertNull($view->validatePayment());
@@ -75,10 +77,14 @@ class PaymentControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->setRequestParameter("paymentid", "oxidpaypal");
         $this->getSession()->setVariable("oepaypal-basketAmount", 129.00);
 
-        $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
+        $mockBuilder->setMethods(['getBruttoPrice']);
+        $price = $mockBuilder->getMock();
         $price->expects($this->once())->method("getBruttoPrice")->will($this->returnValue(129.00));
 
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array("getPrice"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(['getPrice']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->once())->method("getPrice")->will($this->returnValue($price));
 
         $view = new \OxidEsales\PayPalModule\Controller\PaymentController();

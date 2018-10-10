@@ -44,10 +44,9 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
         );
         $actionHandler = $this->getActionHandler($data);
 
-        $builder = $this->getMock(
-            \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class,
-            array('setAuthorizationId', 'setAmount', 'setCompleteType')
-        );
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class);
+        $mockBuilder->setMethods(['setAuthorizationId', 'setAmount', 'setCompleteType']);
+        $builder= $mockBuilder->getMock();
         $builder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($authId));
         $builder->expects($this->once())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
 
@@ -63,10 +62,13 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
     {
         $actionHandler = $this->getActionHandler();
 
-        $payPalRequest = $this->getMock(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest::class);
+        $payPalRequest = $mockBuilder->getMock();
         $actionHandler->setPayPalRequest($payPalRequest);
 
-        $checkoutService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doReAuthorization'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        $mockBuilder->setMethods(['doReAuthorization']);
+        $checkoutService = $mockBuilder->getMock();
         $checkoutService->expects($this->once())->method('doReAuthorization')->with($this->equalTo($payPalRequest));
         $actionHandler->setPayPalService($checkoutService);
 
@@ -74,11 +76,12 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
     }
 
     /**
-     * @return \OxidEsales\PayPalModule\Core\PayPalService|PHPUnit_Framework_MockObject_MockObject
+     * @return \OxidEsales\PayPalModule\Core\PayPalService
      */
     protected function getService()
     {
-        return $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        return  $mockBuilder->getMock();
     }
 
     /**

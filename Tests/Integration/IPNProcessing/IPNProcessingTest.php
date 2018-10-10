@@ -573,7 +573,9 @@ class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'getTransactionMode'                   => 'AUTHORIZATION',
         );
 
-        $paypalConfig = $this->getMock(\OxidEsales\PayPalModule\Core\Config::class, array_keys($mocks));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Config::class);
+        $mockBuilder->setMethods(array_keys($mocks));
+        $paypalConfig = $mockBuilder->getMock();
 
         foreach ($mocks as $method => $returnValue) {
             $paypalConfig->expects($this->any())->method($method)->will($this->returnValue($returnValue));
@@ -601,7 +603,10 @@ class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
         }
 
         $this->testOrderId = substr_replace(\OxidEsales\Eshop\Core\UtilsObject::getInstance()->generateUId(), '_', 0, 1);
-        $order             = $this->getMock(\OxidEsales\Eshop\Application\Model\Order::class, array('validateDeliveryAddress'));
+
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Order::class);
+        $mockBuilder->setMethods(['validateDeliveryAddress']);
+        $order = $mockBuilder->getMock();
         $order->setId($this->testOrderId);
         $order->oxorder__oxshopid        = new \OxidEsales\Eshop\Core\Field(1);
         $order->oxorder__oxuserid        = new \OxidEsales\Eshop\Core\Field($this->testUserId);
@@ -749,7 +754,9 @@ class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $lang         = $paypalConfig->getLang();
 
         //simulates IPN for capture
-        $paypalRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Request::class);
+        $mockBuilder->setMethods(['getPost']);
+        $paypalRequest = $mockBuilder->getMock();
         $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($data));
 
         $paymentBuilder = oxNew(\OxidEsales\PayPalModule\Model\IPNPaymentBuilder::class);
@@ -800,7 +807,9 @@ class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $lang         = $paypalConfig->getLang();
 
         foreach ($data as $post) {
-            $paypalRequest = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost'));
+            $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Request::class);
+            $mockBuilder->setMethods(['getPost']);
+            $paypalRequest = $mockBuilder->getMock();
             $paypalRequest->expects($this->any())->method('getPost')->will($this->returnValue($post));
             $processor = oxNew(\OxidEsales\PayPalModule\Model\IPNProcessor::class);
             $processor->setLang($lang);

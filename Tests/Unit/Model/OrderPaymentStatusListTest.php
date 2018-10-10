@@ -32,7 +32,7 @@ class OrderPaymentStatusListTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return array
      */
-    public function testAvailableStatuses_dataProvider()
+    public function availableStatusesTest_dataProvider()
     {
         return array(
             array('capture', array('completed')),
@@ -47,7 +47,7 @@ class OrderPaymentStatusListTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Testing adding amount to PayPal refunded amount
      *
-     * @dataProvider testAvailableStatuses_dataProvider
+     * @dataProvider availableStatusesTest_dataProvider
      */
     public function testGetAvailableStatuses($action, $statusList)
     {

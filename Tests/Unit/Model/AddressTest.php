@@ -68,18 +68,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalData['PAYMENTREQUEST_0_SHIPTOSTATE'] = 'SS';
         $payPalData['PAYMENTREQUEST_0_SHIPTOZIP'] = 'testZip';
         $payPalData['PAYMENTREQUEST_0_SHIPTOPHONENUM'] = 'testPhoneNum';
-
-        /*        $payPalData = $this->getMock(\OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails::class, array( 'getShipToName', 'getShipToStreet',
-                    'getShipToStreet2', 'getShipToCity', 'getShipToCountryCode', 'getShipToState', 'getShipToZip', 'getShipToPhoneNumber' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToName' )->will( $this->returnValue( 'testName testSurname' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToStreet' )->will( $this->returnValue( 'testStreetName str. 12' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToStreet2' )->will( $this->returnValue( 'testStreeName2 str. 123' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToCity' )->will( $this->returnValue( 'testCity' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToCountryCode' )->will( $this->returnValue( 'US' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToState' )->will( $this->returnValue( 'SS' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToZip' )->will( $this->returnValue( 'testZip' ) );
-                $payPalData->expects( $this->any() )->method( 'getShipToPhoneNumber' )->will( $this->returnValue( 'testPhoneNum' ) );*/
-
+        
         return $payPalData;
     }
 
@@ -96,7 +85,6 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $payPalOxAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
         $payPalOxAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');
-        //$addressId = $payPalOxAddress->getId();
         $addressId = $this->getSession()->getVariable('deladrid');
 
         $address = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);

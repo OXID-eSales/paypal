@@ -156,7 +156,9 @@ class IPNRequestVerifierTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     protected function prepareRequest($payPalRequest)
     {
-        $request = $this->getMock(\OxidEsales\PayPalModule\Core\Request::class, array('getPost'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Request::class);
+        $mockBuilder->setMethods(['getPost']);
+        $request = $mockBuilder->getMock();
         $request->expects($this->atLeastOnce())->method('getPost')->will($this->returnValue($payPalRequest));
 
         return $request;
@@ -164,7 +166,9 @@ class IPNRequestVerifierTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     protected function prepareCommunicationService($payPalResponse)
     {
-        $communicationService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doVerifyWithPayPal'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
+        $mockBuilder->setMethods(['doVerifyWithPayPal']);
+        $communicationService = $mockBuilder->getMock();
         $communicationService->expects($this->atLeastOnce())->method('doVerifyWithPayPal')->will($this->returnValue($payPalResponse));
 
         return $communicationService;
@@ -172,7 +176,15 @@ class IPNRequestVerifierTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     protected function preparePayPalValidator($payPalRequest, $payPalResponse, $shopOwner, $validatorSayIsValid, $validatorFailureMessage)
     {
-        $requestValidator = $this->getMock(\OxidEsales\PayPalModule\Model\IPNRequestValidator::class, array('setPayPalRequest', 'setPayPalResponse', 'setShopOwnerUserName', 'isValid', 'getValidationFailureMessage'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\IPNRequestValidator::class);
+        $mockBuilder->setMethods(
+            ['setPayPalRequest',
+             'setPayPalResponse',
+             'setShopOwnerUserName',
+             'isValid',
+             'getValidationFailureMessage']
+        );
+        $requestValidator = $mockBuilder->getMock();
         $requestValidator->expects($this->atLeastOnce())->method('setPayPalRequest')->with($payPalRequest);
         $requestValidator->expects($this->atLeastOnce())->method('setPayPalResponse')->with($payPalResponse);
         $requestValidator->expects($this->atLeastOnce())->method('setShopOwnerUserName')->with($shopOwner);

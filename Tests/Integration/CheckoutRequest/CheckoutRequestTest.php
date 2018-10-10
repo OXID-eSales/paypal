@@ -126,7 +126,10 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $this->setMockedUtils();
 
-        $dispatcher = $this->getMock($testCase['class'], array('getPayPalOrder'));
+        $mockBuilder = $this->getMockBuilder($testCase['class']);
+        $mockBuilder->setMethods(['getPayPalOrder']);
+        $dispatcher = $mockBuilder->getMock();
+
         $dispatcher->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($this->getOrder()));
 
         $dispatcher->setSession($session);
@@ -140,7 +143,10 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getSessionMock()
     {
-        $session = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array('getRemoteAccessToken'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Session::class);
+        $mockBuilder->setMethods(['getRemoteAccessToken']);
+        $session = $mockBuilder->getMock();
+
         $session->expects($this->any())->method('getRemoteAccessToken')->will($this->returnValue('token'));
 
         return $session;
@@ -173,7 +179,10 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getOrder()
     {
         /** @var \OxidEsales\Eshop\Application\Model\Order $order */
-        $order = $this->getMock(Order::class, array('finalizePayPalOrder'));
+        $mockBuilder = $this->getMockBuilder(Order::class);
+        $mockBuilder->setMethods(['finalizePayPalOrder']);
+        $order = $mockBuilder->getMock();
+
         $order->expects($this->any())->method('finalizePayPalOrder')->will($this->returnValue(null));
         $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $order->save();
@@ -186,7 +195,10 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function setMockedUtils()
     {
-        $utils = $this->getMock(\OxidEsales\Eshop\Core\Utils::class, array('redirect'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Utils::class);
+        $mockBuilder->setMethods(['redirect']);
+        $utils = $mockBuilder->getMock();
+
         $utils->expects($this->any())->method('redirect')->will($this->returnValue(null));
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Utils::class, $utils);
     }

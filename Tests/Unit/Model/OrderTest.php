@@ -108,8 +108,10 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
-        /** @var \OxidEsales\Eshop\Application\Model\Basket|\PHPUnit_Framework_MockObject_MockObject $basket */
-        $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPaymentId'));
+        /** @var \OxidEsales\Eshop\Application\Model\Basket $basket */
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $mockBuilder->setMethods(['getPaymentId']);
+        $basket = $mockBuilder->getMock();
         $basket->expects($this->any())->method('getPaymentId')->will($this->returnValue("anotherPayment"));
 
         /** @var \OxidEsales\Eshop\Application\Model\User $user */
@@ -170,7 +172,9 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $emptyPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
         $emptyPayment->save();
 
-        $deliverySetList = $this->getMock(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, array('getDeliverySetList'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
+        $mockBuilder->setMethods(['getDeliverySetList']);
+        $deliverySetList = $mockBuilder->getMock();
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, $deliverySetList);
 
         /** @var \OxidEsales\PayPalModule\Model\User $user */
@@ -200,7 +204,10 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testUpdateOrderNumber_OrderNumberNotSet()
     {
         $counterIdent = 'orderTestCounter';
-        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getCounterIdent'));
+
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Order::class);
+        $mockBuilder->setMethods(['_getCounterIdent']);
+        $order = $mockBuilder->getMock();
         $order->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($counterIdent));
         $order->oxorder__oxid = new \OxidEsales\Eshop\Core\Field('_test_order');
         $order->save();
@@ -219,7 +226,10 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testUpdateOrderNumber_OrderNumberSet()
     {
         $counterIdent = 'orderTestCounter';
-        $order = $this->getMock(\OxidEsales\PayPalModule\Model\Order::class, array('_getCounterIdent'));
+
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Order::class);
+        $mockBuilder->setMethods(['_getCounterIdent']);
+        $order = $mockBuilder->getMock();
         $order->expects($this->any())->method('_getCounterIdent')->will($this->returnValue($counterIdent));
 
         $counter = oxNew(\OxidEsales\Eshop\Core\Counter::class);

@@ -48,7 +48,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
 
             $validator = oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
             $validator->setUser($user);
-            $validator->setConfig($this->getConfig());
+            $validator->setConfig(\OxidEsales\Eshop\Core\Registry::getConfig());
             $validator->setPrice($basket->getPrice()->getPrice());
 
             if (!$validator->isPaymentValid()) {

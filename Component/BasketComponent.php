@@ -111,7 +111,7 @@ class BasketComponent extends BasketComponent_parent
     public function getCurrentArticleInfo()
     {
         $products = $this->_getItems();
-        $currentArticleId = $this->getConfig()->getRequestParameter('aid');
+        $currentArticleId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('aid');
         $params = null;
         if (!is_null($products[$currentArticleId])) {
             $params = $products[$currentArticleId];
@@ -183,7 +183,7 @@ class BasketComponent extends BasketComponent_parent
      */
     protected function formatUrl($unformedUrl)
     {
-        $myConfig = $this->getConfig();
+        $myConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
         $params = explode('?', $unformedUrl);
         $pageParams = isset($params[1]) ? $params[1] : null;
         $params = explode('/', $params[0]);

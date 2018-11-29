@@ -70,23 +70,23 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
 
             $basket->setPayment("oxidpaypal");
 
-            $prevOptionValue = $this->getConfig()->getConfigParam('blCalculateDelCostIfNotLoggedIn');
+            $prevOptionValue = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('blCalculateDelCostIfNotLoggedIn');
             if ($this->getPayPalConfig()->isDeviceMobile()) {
                 if ($this->getPayPalConfig()->getMobileECDefaultShippingId()) {
-                    $this->getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
+                    \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
                     $basket->setShipping($this->getPayPalConfig()->getMobileECDefaultShippingId());
                 } else {
-                    $this->getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', false);
+                    \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', false);
                 }
             }
 
             $basket->onUpdate();
             $basket->calculateBasket(true);
-            $this->getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', $prevOptionValue);
+            \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', $prevOptionValue);
 
             $validator = oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
             $validator->setUser($user);
-            $validator->setConfig($this->getConfig());
+            $validator->setConfig(\OxidEsales\Eshop\Core\Registry::getConfig());
             $validator->setPrice($basket->getPrice()->getPrice());
             $validator->setCheckCountry(false);
 
@@ -402,7 +402,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
     protected function setDeliverySetListForCallbackResponse($payPalService, $deliverySetList, $user, $basket)
     {
         $maxDeliveryAmount = $this->getPayPalConfig()->getMaxPayPalDeliveryAmount();
-        $cur = $this->getConfig()->getActShopCurrencyObject();
+        $cur = \OxidEsales\Eshop\Core\Registry::getConfig()->getActShopCurrencyObject();
         $basketPrice = $basket->getPriceForPayment() / $cur->rate;
         $actShipSet = $basket->getShippingId();
         $hasActShipSet = false;
@@ -428,7 +428,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
             if (count($deliveryList) > 0) {
                 $price = 0;
 
-                if ($this->getConfig()->getConfigParam('bl_perfLoadDelivery')) {
+                if (\OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('bl_perfLoadDelivery')) {
                     foreach ($deliveryList as $delivery) {
                         $price += $delivery->getDeliveryPrice($delVATPercent)->getBruttoPrice();
                     }

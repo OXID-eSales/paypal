@@ -85,7 +85,7 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $details->setData($payPalData);
         $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new \OxidEsales\PayPalModule\Model\Address());
 
-        $mockBuilder = $this->getMockBuilder(User::class);
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
         $mockBuilder->setMethods(['_setAutoGroups']);
         $payPalUser = $mockBuilder->getMock();
         $payPalUser->expects($this->once())->method('_setAutoGroups')->with($this->equalTo("8f241f11096877ac0.98748826"));
@@ -117,7 +117,7 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreatePayPalUser_streetName()
     {
-        // streetnr in firt position
+        // streetnr in first position
         $payPalData = $this->getPayPalData();
         $payPalData['PAYMENTREQUEST_0_SHIPTOSTREET'] = '12 testStreetName str.';
         $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
@@ -274,11 +274,7 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsRealPayPalUser()
     {
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Config::class);
-        $mockBuilder->setMethods(['getConfigParam', 'getShopId']);
-        $config = $mockBuilder->getMock();
-        $config->expects($this->never())->method('getShopId');
-        $config->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(true));
+        \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blMallUsers', true);
 
         $user = new \OxidEsales\Eshop\Application\Model\User();
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.test');
@@ -293,15 +289,14 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $user->setShopId('_testShop1');
         $user->save();
 
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\User::class);
-        $mockBuilder->setMethods(['getConfig']);
-        $mockBuilder->disableOriginalConstructor();
-        $user = $mockBuilder->getMock();
-        $user->expects($this->any())->method('getConfig')->will($this->returnValue($config));
+        $userMock = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class)
+            ->setMethods(['getShopIdQueryPart'])
+            ->getMock();
+        $userMock->expects($this->never())->method('getShopIdQueryPart');
 
-        $this->assertEquals('_testId', $user->isRealPayPalUser('test@test.test'));
-        $this->assertFalse($user->isRealPayPalUser('test1@test.test'));
-        $this->assertFalse($user->isRealPayPalUser('blabla@bla.bla'));
+        $this->assertEquals('_testId', $userMock->isRealPayPalUser('test@test.test'));
+        $this->assertFalse($userMock->isRealPayPalUser('test1@test.test'));
+        $this->assertFalse($userMock->isRealPayPalUser('blabla@bla.bla'));
     }
 
     /**
@@ -310,43 +305,38 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsRealPayPalUserMultiShop()
     {
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Config::class);
-        $mockBuilder->setMethods(['getConfigParam', 'getShopId']);
-        $config = $mockBuilder->getMock();
-        $config->expects($this->any())->method('getShopId')->will($this->returnValue('_testShop1'));
-        $config->expects($this->any())->method('getConfigParam')->with('blMallUsers')->will($this->returnValue(false));
-
         $user = new \OxidEsales\Eshop\Application\Model\User();
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.test');
         $user->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('paswd');
-        $user->oxuser__oxshopid = new \OxidEsales\Eshop\Core\Field('_testShop1');
+        $user->oxuser__oxshopid = new \OxidEsales\Eshop\Core\Field(1);
         $user->setId('_testId');
         $user->save();
 
         $user = new \OxidEsales\Eshop\Application\Model\User();
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test3@test.test');
         $user->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('paswd');
+        $user->oxuser__oxshopid = new \OxidEsales\Eshop\Core\Field(2);
         $user->setId('_testId2');
-        $user->setShopId('_testShop2');
         $user->save();
 
         $user = new \OxidEsales\Eshop\Application\Model\User();
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test1@test.test');
         $user->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('');
-        $user->setShopId('_testShop1');
+        $user->oxuser__oxshopid = new \OxidEsales\Eshop\Core\Field(1);
         $user->save();
 
         $user = new \OxidEsales\PayPalModule\Model\User();
 
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\User::class);
-        $mockBuilder->setMethods(['getConfig']);
-        $mockBuilder->disableOriginalConstructor();
-        $user = $mockBuilder->getMock();
-        $user->expects($this->any())->method('getConfig')->will($this->returnValue($config));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Config::class);
+        $mockBuilder->setMethods(['getShopId']);
+        $config = $mockBuilder->getMock();
+        $config->expects($this->any())->method('getShopId')->will($this->returnValue('1'));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Config::class, $config);
+        \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blMallUsers', true);
 
         $this->assertEquals('_testId', $user->isRealPayPalUser('test@test.test'));
         $this->assertFalse($user->isRealPayPalUser('test1@test.test'));
-        $this->assertFalse($user->isRealPayPalUser('test3@test.test'));
+        $this->assertEquals('_testId2', $user->isRealPayPalUser('test3@test.test'));
         $this->assertFalse($user->isRealPayPalUser('blabla@bla.bla'));
     }
 

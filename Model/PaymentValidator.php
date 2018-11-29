@@ -223,7 +223,7 @@ class PaymentValidator
         if ($payPalPayment->oxpayments__oxfromamount->value != 0 ||
             $payPalPayment->oxpayments__oxtoamount->value != 0
         ) {
-            $cur = $this->getConfig()->getActShopCurrencyObject();
+            $cur = \OxidEsales\Eshop\Core\Registry::getConfig()->getActShopCurrencyObject();
             $price = $this->getPrice() / $cur->rate;
 
             $isValid = (($price >= $payPalPayment->oxpayments__oxfromamount->value) &&
@@ -243,7 +243,7 @@ class PaymentValidator
     {
         $isValid = true;
 
-        if ($minOrderPrice = $this->getConfig()->getConfigParam('iMinOrderPrice')) {
+        if ($minOrderPrice = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('iMinOrderPrice')) {
             $isValid = $this->getPrice() > $minOrderPrice;
         }
 

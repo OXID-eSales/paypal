@@ -152,7 +152,7 @@ class Config
      */
     public function getPayPalHost()
     {
-        $host = $this->getConfig()->getConfigParam('sPayPalHost');
+        $host = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('sPayPalHost');
         if ($host) {
             $this->setPayPalHost($host);
         }
@@ -177,7 +177,7 @@ class Config
      */
     public function getPayPalSandboxHost()
     {
-        $host = $this->getConfig()->getConfigParam('sPayPalSandboxHost');
+        $host = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('sPayPalSandboxHost');
         if ($host) {
             $this->setPayPalSandboxHost($host);
         }
@@ -218,7 +218,7 @@ class Config
      */
     public function getPayPalApiUrl()
     {
-        $url = $this->getConfig()->getConfigParam('sPayPalApiUrl');
+        $url = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('sPayPalApiUrl');
         if ($url) {
             $this->setPayPalApiUrl($url);
         }
@@ -243,7 +243,7 @@ class Config
      */
     public function getPayPalSandboxApiUrl()
     {
-        $url = $this->getConfig()->getConfigParam('sPayPalSandboxApiUrl');
+        $url = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('sPayPalSandboxApiUrl');
         if ($url) {
             $this->setPayPalSandboxApiUrl($url);
         }
@@ -294,7 +294,7 @@ class Config
      */
     public function getPayPalUrl()
     {
-        $url = $this->getConfig()->getConfigParam('sPayPalUrl');
+        $url = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('sPayPalUrl');
         if ($url) {
             $this->setPayPalUrl($url);
         }
@@ -309,7 +309,7 @@ class Config
      */
     public function getPayPalSandboxUrl()
     {
-        $url = $this->getConfig()->getConfigParam('sPayPalSandboxUrl');
+        $url = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('sPayPalSandboxUrl');
         if ($url) {
             $this->setPayPalSandboxUrl($url);
         }
@@ -342,7 +342,7 @@ class Config
      */
     public function getParameter($paramName)
     {
-        return $this->getConfig()->getConfigParam($paramName);
+        return \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam($paramName);
     }
 
     /**
@@ -395,7 +395,7 @@ class Config
         $shopName = $this->getParameter('sOEPayPalBrandName');
 
         if (empty($shopName)) {
-            $shop = $this->getConfig()->getActiveShop();
+            $shop = \OxidEsales\Eshop\Core\Registry::getConfig()->getActiveShop();
             $shopName = $shop->oxshops__oxname->value;
         }
 
@@ -587,8 +587,8 @@ class Config
 
         if (!empty($logoName)) {
             $logo = oxNew(\OxidEsales\PayPalModule\Core\ShopLogo::class);
-            $logo->setImageDir($this->getConfig()->getImageDir());
-            $logo->setImageDirUrl($this->getConfig()->getImageUrl());
+            $logo->setImageDir(\OxidEsales\Eshop\Core\Registry::getConfig()->getImageDir());
+            $logo->setImageDirUrl(\OxidEsales\Eshop\Core\Registry::getConfig()->getImageUrl());
             $logo->setImageName($logoName);
             $logo->setImageHandler(\OxidEsales\Eshop\Core\Registry::getUtilsPic());
 
@@ -615,7 +615,7 @@ class Config
      */
     public function suppressIPNCallbackUrl()
     {
-        return (bool) $this->getConfig()->getConfigParam('OEPayPalDisableIPN');
+        return (bool) \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('OEPayPalDisableIPN');
     }
 
 
@@ -629,7 +629,7 @@ class Config
      */
     public function getShopUrl($admin = null)
     {
-        return $this->getConfig()->getCurrentShopUrl($admin);
+        return \OxidEsales\Eshop\Core\Registry::getConfig()->getCurrentShopUrl($admin);
     }
 
     /**
@@ -703,7 +703,7 @@ class Config
      */
     public function getMaxPayPalDeliveryAmount()
     {
-        $maxDeliveryAmount = $this->getConfig()->getConfigParam('dMaxPayPalDeliveryAmount');
+        $maxDeliveryAmount = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('dMaxPayPalDeliveryAmount');
         if (!$maxDeliveryAmount) {
             $maxDeliveryAmount = $this->maxDeliveryAmount;
         }
@@ -745,7 +745,7 @@ class Config
      */
     public function getMobileECDefaultShippingId()
     {
-        return $this->getConfig()->getConfigParam('sOEPayPalMECDefaultShippingId');
+        return \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('sOEPayPalMECDefaultShippingId');
     }
 
     /**
@@ -780,7 +780,7 @@ class Config
      */
     protected function getShopId()
     {
-        return $this->getConfig()->getShopId();
+        return \OxidEsales\Eshop\Core\Registry::getConfig()->getShopId();
     }
 
     /**

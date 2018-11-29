@@ -128,7 +128,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
 
         // checking if required field exists
-        $reqFields = $payPalAddress->getConfig()->getConfigParam("aMustFillFields");
+        $reqFields = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam("aMustFillFields");
         $this->assertTrue(in_array("oxaddress__oxstreet", $reqFields));
 
         $payPalAddress->createPayPalAddress($expressCheckoutResponse, 'testUserId');

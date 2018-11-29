@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Adapt tests to work with new phpunit.
+- Replace deprecated calls to getConfig();
 
 ### Deprecated
 

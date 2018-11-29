@@ -115,8 +115,8 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
     protected function getBaseUrl()
     {
         $session = $this->getSession();
-        $url = $this->getConfig()->getSslShopUrl() . "index.php?lang=" . \OxidEsales\Eshop\Core\Registry::getLang()->getBaseLanguage() . "&sid=" . $session->getId() . "&rtoken=" . $session->getRemoteAccessToken();
-        $url .= "&shp=" . $this->getConfig()->getShopId();
+        $url = \OxidEsales\Eshop\Core\Registry::getConfig()->getSslShopUrl() . "index.php?lang=" . \OxidEsales\Eshop\Core\Registry::getLang()->getBaseLanguage() . "&sid=" . $session->getId() . "&rtoken=" . $session->getRemoteAccessToken();
+        $url .= "&shp=" . \OxidEsales\Eshop\Core\Registry::getConfig()->getShopId();
 
         return $url;
     }

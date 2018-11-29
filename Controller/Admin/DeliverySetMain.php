@@ -57,7 +57,7 @@ class DeliverySetMain extends DeliverySetMain_parent
     {
         parent::save();
 
-        $config = $this->getConfig();
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
         /** @var \OxidEsales\PayPalModule\Core\Config $payPalConfig */
         $payPalConfig = oxNew(\OxidEsales\PayPalModule\Core\Config::class);
 

@@ -106,7 +106,7 @@ class Address extends Address_parent
      */
     protected function checkRequiredFieldsPayPalAddress($addressData)
     {
-        $reqFields = $this->getConfig()->getConfigParam('aMustFillFields');
+        $reqFields = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('aMustFillFields');
 
         $result = true;
 

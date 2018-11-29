@@ -46,8 +46,8 @@ class User extends User_parent
     {
         $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $query = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = " . $db->quote($userEmail) . " AND `oxpassword` != ''";
-        if (!$this->getConfig()->getConfigParam('blMallUsers')) {
-            $query .= " AND `oxshopid` = " . $db->quote($this->getConfig()->getShopId());
+        if (!\OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('blMallUsers')) {
+            $query .= $this->getShopIdQueryPart();
         }
         if ($userId = $db->getOne($query)) {
             return $userId;
@@ -160,6 +160,8 @@ class User extends User_parent
         $this->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field($userData['oxcountryid']);
         $this->oxuser__oxstateid = new \OxidEsales\Eshop\Core\Field($userData['oxstateid']);
         $this->oxuser__oxaddinfo = new \OxidEsales\Eshop\Core\Field($userData['oxaddinfo']);
+        $this->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('');
+        $this->oxuser__oxbirthdate = new \OxidEsales\Eshop\Core\Field('');
 
         if ($this->save()) {
             $this->_setAutoGroups($this->oxuser__oxcountryid->value);
@@ -220,7 +222,7 @@ class User extends User_parent
      */
     protected function checkRequiredFieldsPayPalUser($addressData)
     {
-        $reqFields = $this->getConfig()->getConfigParam('aMustFillFields');
+        $reqFields = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('aMustFillFields');
         $result = true;
 
         foreach ($reqFields as $field) {
@@ -312,5 +314,16 @@ class User extends User_parent
             $stateId = $state->getIdByCode($payPalData["SHIPTOSTATE"], $countryId);
         }
         $this->oxuser__oxstateid = new \OxidEsales\Eshop\Core\Field($stateId);
+    }
+
+    /**
+     * Create query part for selecting by shopid.
+     *
+     * @return string
+     */
+    protected function getShopIdQueryPart()
+    {
+        $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        return  " AND `oxshopid` = " . $db->quote(\OxidEsales\Eshop\Core\Registry::getConfig()->getShopId());
     }
 }

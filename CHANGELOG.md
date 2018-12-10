@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 ### Fixed
+- Fix readonly flag for deliveryset_main.tpl.
 
 ## [5.2.3] - 2018-10-09
 

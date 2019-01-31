@@ -133,7 +133,7 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
      *  - Call to check if request is valid (from PayPal and to correct shop).
      *  - Initiate payment status changes according to IPN information.
      *
-     * @return bool
+     * @return null
      */
     public function handleRequest()
     {
@@ -159,7 +159,8 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
             $requestHandled = $processor->process();
         }
 
-        return $requestHandled;
+        // this can't be boolean -> see BaseController->executeFunction() -> if value is true, an exception is thrown
+        //return $requestHandled;
     }
 
     /**

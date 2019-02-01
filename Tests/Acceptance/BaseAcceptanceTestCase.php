@@ -1019,12 +1019,12 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     private function checkforRetry()
     {
-        //wait until we are safely on PP side
-        $this->waitForItemAppear("//input[@id='cancelLink']", 5, true);
-
-        $element = $this->getElementLazy("id=retryLink", false);
-        if ($element) {
-            $element->click();
+        $this->waitForElement("//body");
+        if ($this->isElementPresent("//input[@id='cancelLink']")) {
+            $element = $this->getElementLazy("id=retryLink", false);
+            if ($element) {
+                $element->click();
+            }
         }
     }
 

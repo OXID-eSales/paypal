@@ -33,13 +33,6 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
     protected $serviceType = 2;
 
     /**
-     * Action for express checkout process
-     *
-     * @var string
-     */
-    protected $userAction = "commit";
-
-    /**
      * Processes PayPal callback
      */
     public function processCallBack()

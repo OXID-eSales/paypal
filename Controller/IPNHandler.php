@@ -35,7 +35,7 @@ class IPNHandler extends \OxidEsales\PayPalModule\Controller\FrontendController
      *
      * @var string
      */
-    protected $thisTemplate = 'ipnhandler.tpl';
+    protected $_sThisTemplate = 'ipnhandler.tpl';
 
     /**
      * PayPal request handler.

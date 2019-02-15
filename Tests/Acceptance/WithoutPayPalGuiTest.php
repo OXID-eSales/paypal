@@ -34,6 +34,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_nobuyerlogin
      */
     public function testForLoginUserChangeUserCountryToUnassignedPaymentMethod()
     {
@@ -58,6 +59,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_nobuyerlogin
      */
     public function testECS()
     {
@@ -118,30 +120,13 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
         $this->assertElementPresent("displayCartInPayPal");
         $this->clickAndWait("id=paypalExpressCheckoutMiniBasketImage");
         $this->assertLogData($assertRequest, $assertResponse);
-
-        $this->payWithPayPal();
-
-        // Check what was communicated with PayPal
-        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
-        $assertResponse = [
-            'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
-            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
-            'L_PAYMENTREQUEST_0_QTY0' => '2',
-            'ACK' => 'Success'];
-        $this->assertLogData($assertRequest, $assertResponse);
-
-        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
-        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
-        $this->assertEquals("162,00 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
-        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
-        $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
     }
 
     /**
      * testing if express button is not visible when PayPal is not active
      *
      * @group paypal_standalone
+     * @group paypal_nobuyerlogin
      */
     public function testPayPalExpressWhenPayPalInactive()
     {
@@ -187,6 +172,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_nobuyerlogin
      */
     public function testPayPalStandard()
     {
@@ -201,20 +187,13 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent("Germany", "Users country should be Germany");
         $this->clickNextStepInShopBasket();
         $this->assertElementPresent("//input[@value='oxidpaypal']");
-        $this->click("payment_oxidpaypal");
-        $this->clickNextStepInShopBasket();
-
-        $this->payWithPayPal();
-
-        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
-        $this->clickAndWait("//button[text()='Order now']");
-        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
     }
 
     /**
      * test if payment method PayPal is deactivated in shop backend, the PayPal express button should also disappear.
      *
      * @group paypal_standalone
+     * @group paypal_nobuyerlogin
      */
     public function testPayPalActive()
     {
@@ -243,6 +222,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
      * test if PayPal is not shown in frontend after configs is set in admin
      *
      * @group paypal_standalone
+     * @group paypal_nobuyerlogin
      */
     public function testPayPalShortcut()
     {
@@ -287,6 +267,8 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
      * Technical background: the basket object is stored in/restored from the session on each page or frame reload,
      * As the PayPal module extends the basket object, an instance of the specific PayPal basket object is stored.
      * After module deactivation this object cannot be restored.
+     *
+     * @group paypal_nobuyerlogin
      */
     public function testModuleDeactivationDoesNotResultInMaintenancePage()
     {

@@ -101,13 +101,13 @@ $aModule = array(
 
         array('group' => 'oepaypal_display', 'name' => 'sOEPayPalBrandName',                     'type' => 'str',  'value' => 'PayPal Testshop'),
         array('group' => 'oepaypal_display', 'name' => 'sOEPayPalBorderColor',                   'type' => 'str',  'value' => '2b8da4'),
-        array('group' => 'oepaypal_display', 'name' => 'sOEPayPalLogoImageOption',               'type' => 'select', 'constrains' => 'noLogo|shopLogo|customLogo', 'value' => 'noLogo'),
+        array('group' => 'oepaypal_display', 'name' => 'sOEPayPalLogoImageOption',               'type' => 'select', 'constraints' => 'noLogo|shopLogo|customLogo', 'value' => 'noLogo'),
         array('group' => 'oepaypal_display', 'name' => 'sOEPayPalCustomShopLogoImage',           'type' => 'str',    'value' => ''),
 
         array('group' => 'oepaypal_payment',     'name' => 'blOEPayPalSendToPayPal',          'type' => 'bool',   'value' => 'true'),
         array('group' => 'oepaypal_payment',     'name' => 'blOEPayPalDefaultUserChoice',     'type' => 'bool',   'value' => 'true'),
 
-        array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalTransactionMode',        'type' => 'select', 'constrains' => 'Sale|Authorization|Automatic', 'value' => 'Sale'),
+        array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalTransactionMode',        'type' => 'select', 'constraints' => 'Sale|Authorization|Automatic', 'value' => 'Sale'),
         array('group' => 'oepaypal_transaction', 'name' => 'sOEPayPalEmptyStockLevel',        'type' => 'str',    'value' => '0'),
 
         array('group' => 'oepaypal_api',         'name' => 'sOEPayPalUserEmail',              'type' => 'str',      'value' => ''),

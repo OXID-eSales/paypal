@@ -33,6 +33,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalRegularCheckoutPayment()
     {
@@ -163,6 +164,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalRegularCheckoutAndChangeQuantityAfterwardsViaAdmin()
     {
@@ -230,6 +232,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalDiscountsCategory()
     {
@@ -318,6 +321,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalDiscountsFromTill()
     {
@@ -471,6 +475,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalVouchers()
     {
@@ -562,6 +567,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalVAT()
     {
@@ -680,6 +686,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalProportional()
     {
@@ -961,6 +968,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testPayPalStandardNettoMode()
     {
@@ -1040,6 +1048,38 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
             'PAYMENTREQUEST_0_ITEMAMT' => '565.73',
             'PAYMENTREQUEST_0_SHIPPINGAMT' => '13.00'];
         $this->assertLogData($assertRequest, $assertResponse);
+    }
+
+    /**
+     * Testing ability to change country in standard PayPal.
+     * NOTE: this test originally asserted data on PayPal page.
+     * ($this->assertFalse($this->isElementPresent("id=changeAddressButton"), "In standard PayPal there should be not possibility to change address");)
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     * @group paypal_buyerlogin
+     */
+    public function testPayPalStandard()
+    {
+        // Login to shop and go standard PayPal
+        $this->openShop();
+        $this->switchLanguage("English");
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("English");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->clickNextStepInShopBasket();
+        $this->assertTextPresent("Germany", "Users country should be Germany");
+        $this->clickNextStepInShopBasket();
+        $this->assertElementPresent("//input[@value='oxidpaypal']");
+        $this->click("payment_oxidpaypal");
+        $this->clickNextStepInShopBasket();
+
+        $this->payWithPayPal();
+
+        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
+        $this->clickAndWait("//button[text()='Order now']");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
     }
 
     /**

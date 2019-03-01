@@ -65,6 +65,8 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         "Timeout waiting for 'Bestellen ohne Registrierung'",
         "Timeout waiting for 'cancel_return'",
         "Timeout waiting for '2 x Test product 1'",
+        "Timeout waiting for 'Thank you'",
+        "Timeout waiting for",
         "Entschuldigung",
         "Leider ist ein Fehler aufgetreten"
     ];
@@ -76,24 +78,49 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      * @var array
      */
     protected $failIdentifiersGroups = [
-        'internal_error'             => [['isTextPresent', 'internal'],
-                                         ['isTextPresent', 'error'],
-                                         ['isTextPresent', 'webmaster@paypal.com']],
-        'dispatch_error_en'          => [['isTextPresent', 'your last action could not be completed'],
-                                         ['isTextPresent', 'Dispatch Error'],
-                                         ['isTextPresent', 'PayPal']],
-        'dispatch_error_de'          => [['isTextPresent', 'letzte Aktion konnte leider nicht abgeschlossen werden'],
-                                         ['isTextPresent', 'Dispatch Error'],
-                                         ['isTextPresent', 'PayPal']],
-        'internal_error_sandbox'     => [['isTextPresent', 'internal'],
-                                         ['isTextPresent', 'error'],
-                                         ['isTextPresent', 'sandbox.paypal.com']],
-        'redirect_to_PP_failed_de'   => [['isTextPresent', 'Warenkorb'],
-                                         ['isElementPresent', 'paypalExpressCheckoutButton']],
-        'redirect_to_PP_failed_en'   => [['isTextPresent', 'Cart'],
-                                         ['isElementPresent', 'paypalExpressCheckoutButton']],
-        'not_logged_in_redirect_to_PP_failed_de'   => [['isTextPresent', 'Bestellen ohne Registrierung'],
-                                                       ['isElementPresent', 'paypalExpressCheckoutButton']]
+        'internal_error'                         => [
+            ['isTextPresent', 'internal'],
+            ['isTextPresent', 'error'],
+            ['isTextPresent', 'webmaster@paypal.com']
+        ],
+        'dispatch_error_en'                      => [
+            ['isTextPresent', 'your last action could not be completed'],
+            ['isTextPresent', 'Dispatch Error'],
+            ['isTextPresent', 'PayPal']
+        ],
+        'dispatch_error_de'                      => [
+            ['isTextPresent', 'letzte Aktion konnte leider nicht abgeschlossen werden'],
+            ['isTextPresent', 'Dispatch Error'],
+            ['isTextPresent', 'PayPal']
+        ],
+        'internal_error_sandbox'                 => [
+            ['isTextPresent', 'internal'],
+            ['isTextPresent', 'error'],
+            ['isTextPresent', 'sandbox.paypal.com']
+        ],
+        'redirect_to_PP_failed_de'               => [
+            ['isTextPresent', 'Warenkorb'],
+            ['isElementPresent', 'paypalExpressCheckoutButton']
+        ],
+        'redirect_to_PP_failed_en'               => [
+            ['isTextPresent', 'Cart'],
+            ['isElementPresent', 'paypalExpressCheckoutButton']
+        ],
+        'not_logged_in_redirect_to_PP_failed_de' => [
+            ['isTextPresent', 'Bestellen ohne Registrierung'],
+            ['isElementPresent', 'paypalExpressCheckoutButton']
+        ],
+        'curl_error_sandbox'                     => [
+            ['isTextPresent', 'Curl'],
+            ['isTextPresent', 'error'],
+            ['isTextPresent', '56']
+        ],
+        'technical_problems'                     => [
+            ['isTextPresent', 'not'],
+            ['isTextPresent', 'available'],
+            ['isTextPresent', 'technical'],
+            ['isTextPresent', 'problems']
+        ]
     ];
 
     /**
@@ -238,7 +265,13 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         $skipInfo = null;
         foreach ($this->knownExceptions as $known) {
             if (false !== strpos($message, $known)) {
-                $identified = $this->identifyFailure();
+                $failIdentifiersGroups = $this->failIdentifiersGroups;
+                if ('Timeout waiting for' == $known) {
+                    unset($failIdentifiersGroups ['redirect_to_PP_failed_de']);
+                    unset($failIdentifiersGroups ['redirect_to_PP_failed_en']);
+                    unset($failIdentifiersGroups ['not_logged_in_redirect_to_PP_failed_de']);
+                }
+                $identified = $this->identifyFailure($failIdentifiersGroups );
                 if (!is_null($identified)) {
                     $skipInfo = $known . ' - Skipped automatically due to external issue with PayPal sandbox: ' . $identified;
                 }
@@ -250,13 +283,15 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     /**
      * Check if any group of failure cause identifiers can be found on page.
      *
+     * @param array $failIdentifiersGroups
+     *
      * @return null|string
      */
-    protected function identifyFailure()
+    protected function identifyFailure(array $failIdentifiersGroups)
     {
         $identified = null;
         $this->selectWindow(null);
-        foreach ($this->failIdentifiersGroups as $key => $group) {
+        foreach ($failIdentifiersGroups as $key => $group) {
             $verified = true;
             foreach ($group as $checkFor) {
                 $method = $checkFor[0];

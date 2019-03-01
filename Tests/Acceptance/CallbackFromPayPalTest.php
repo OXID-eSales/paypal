@@ -293,9 +293,12 @@ class CallbackFromPayPalTest extends BaseAcceptanceTestCase
         $data = $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'getLogData');
 
         //next last thing in log has to be the request to PayPal
+        $callbackUrl = '';
         array_pop($data);
         $request = array_pop($data);
-        $callbackUrl = $request->data['CALLBACK'];
+        if (is_object($request)) {
+            $callbackUrl = $request->data['CALLBACK'];
+        }
 
         return $callbackUrl;
     }

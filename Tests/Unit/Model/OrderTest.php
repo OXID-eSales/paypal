@@ -62,10 +62,40 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->assertTrue((bool) $order->oxorder__oxid->value);
     }
 
+    public function dataProviderFinalizePayPalOrder()
+    {
+        return [
+            'sale'      => [
+                'Sale',
+                'OK',
+                date('Y-m-d'),
+                [
+                    'PAYMENTINFO_0_TRANSACTIONID' => '_testTransactionId',
+                    'PAYMENTINFO_0_PAYMENTSTATUS' => 'Completed',
+                ]
+            ],
+            'authorize' => [
+                'Authorization',
+                'NOT_FINISHED',
+                '0000-00-00',
+                [
+                    'PAYMENTINFO_0_TRANSACTIONID' => '_testTransactionId',
+                    'PAYMENTINFO_0_PAYMENTSTATUS' => 'Pending',
+                ]
+            ]
+        ];
+    }
+
     /**
      * Test case for \OxidEsales\PayPalModule\Model\Order::finalizePayPalOrder()
+     *
+     * @dataProvider dataProviderFinalizePayPalOrder()
+     *
+     * @param string $transactionMode
+     * @param string $expectedStatus
+     * @param string $expectedPaid
      */
-    public function testFinalizePayPalOrder()
+    public function testFinalizePayPalOrder($transactionMode, $expectedStatus, $expectedPaid, $result)
     {
         // creating order
         $order = new \OxidEsales\Eshop\Application\Model\Order();
@@ -80,19 +110,16 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $order = new \OxidEsales\PayPalModule\Model\Order();
         $order->loadPayPalOrder();
-
-        $result = array(
-            'PAYMENTINFO_0_TRANSACTIONID' => '_testTranzactionId'
-        );
+        
         $details = new \OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment();
         $details->setData($result);
 
-        $order->finalizePayPalOrder($details, $basket, 'Sale');
+        $order->finalizePayPalOrder($details, $basket, $transactionMode);
 
-        $this->assertEquals('NOT_FINISHED', $order->oxorder__oxtransstatus->value);
-        $this->assertEquals('_testTranzactionId', $order->oxorder__oxtransid->value);
+        $this->assertEquals($expectedStatus, $order->oxorder__oxtransstatus->value);
+        $this->assertEquals('_testTransactionId', $order->oxorder__oxtransid->value);
 
-        $this->assertEquals('0000-00-00', substr($order->oxorder__oxpaid->value, 0, 10));
+        $this->assertEquals($expectedPaid, substr($order->oxorder__oxpaid->value, 0, 10));
     }
 
     /**

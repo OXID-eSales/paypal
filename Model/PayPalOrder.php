@@ -189,16 +189,19 @@ class PayPalOrder extends \OxidEsales\PayPalModule\Core\Model
     /**
      * Set payment status.
      *
-     * @param string $status
+     * @param string                                    $status
+     * @param \OxidEsales\Eshop\Application\Model\Order $order Shop order object
      */
-    public function setPaymentStatus($status)
+    public function setPaymentStatus($status, \OxidEsales\Eshop\Application\Model\Order $order = null)
     {
         $this->setValue('oepaypal_paymentstatus', $status);
 
         // if payment completed, set order paid
         if ($status == \OxidEsales\PayPalModule\Model\PayPalOrder::PAYPAL_ORDER_STATE_COMPLETED) {
-            $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-            $order->load($this->getOrderId());
+            if (is_null($order)) {
+                $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+                $order->load($this->getOrderId());
+            }
             $order->markOrderPaid();
         }
     }

@@ -173,7 +173,7 @@ class Order extends Order_parent
         //setting order payment status after
         $paymentStatusCalculator = oxNew(\OxidEsales\PayPalModule\Model\OrderPaymentStatusCalculator::class);
         $paymentStatusCalculator->setOrder($this->getPayPalOrder());
-        $this->getPayPalOrder()->setPaymentStatus($paymentStatusCalculator->getStatus());
+        $this->getPayPalOrder()->setPaymentStatus($paymentStatusCalculator->getStatus(), $this);
         $this->getPayPalOrder()->save();
 
         //clear PayPal identification

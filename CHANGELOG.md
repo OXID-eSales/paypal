@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix readonly flag for deliveryset_main.tpl.
 - Button in paypal have correct text ("Continue" but not "Pay now" anymore)
 - [0006921](https://bugs.oxid-esales.com/view.php?id=6921) Fix downloadlink in user mail.
+- Wrap paypal payment block in div with "well well-sm" class to fit other payments [PR-47](https://github.com/OXID-eSales/paypal/pull/47)
 
 ## [5.2.3] - 2018-10-09
 

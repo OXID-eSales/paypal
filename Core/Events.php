@@ -115,9 +115,10 @@ class Events
     public static function disablePaymentMethod()
     {
         $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-        $payment->load('oxidpaypal');
-        $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(0);
-        $payment->save();
+        if ($payment->load('oxidpaypal')) {
+            $payment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(0);
+            $payment->save();
+        }
     }
 
     /**

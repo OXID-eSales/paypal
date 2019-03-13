@@ -40,8 +40,13 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testHandleRequest_emptyData_false()
     {
         $payPalIPNHandler = new \OxidEsales\PayPalModule\Controller\IPNHandler();
-        $result = $payPalIPNHandler->handleRequest();
+        $payPalIPNHandler->handleRequest();
 
-        $this->assertEquals(false, $result);
+        $logHelper = new \OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper();
+        $logData = $logHelper->getLogData();
+        $lastLogItem = end($logData);
+        $requestHandled = $lastLogItem->data['Result'] == 'true';
+
+        $this->assertEquals(false, $requestHandled);
     }
 }

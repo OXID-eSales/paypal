@@ -109,6 +109,10 @@ class PayPalLogHelper
                     $date = $this->parseDate($line);
                     $handle = $this->handleLogData($handle, $date, 'response');
                 }
+                if (false !== strpos($line, 'IPN Process result')) {
+                    $date = $this->parseDate($line);
+                    $handle = $this->handleLogData($handle, $date, 'ipn_handle_result');
+                }
             }
             fclose($handle);
         }

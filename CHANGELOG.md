@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed template variable in IPNHandler controller [PR-49](https://github.com/OXID-eSales/paypal/pull/49)
 - [0006955](https://bugs.oxid-esales.com/view.php?id=6955) Fix wrong payment method creation on module deactivation. [PR-50](https://github.com/OXID-eSales/paypal/pull/50)
 - [0006132](https://bugs.oxid-esales.com/view.php?id=6132) Backwards compatibility break: Fix wrong response of IPNHandler handleRequest [PR-48](https://github.com/OXID-eSales/paypal/pull/48)
+- [0006963](https://bugs.oxid-esales.com/view.php?id=6963) With PayPal Express Checkout the telephone number which is deposited with PayPal in the account is not handed over with to shop
 
 ## [5.2.3] - 2018-10-09
 

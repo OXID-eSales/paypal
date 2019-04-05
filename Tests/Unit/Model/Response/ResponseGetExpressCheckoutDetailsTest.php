@@ -49,7 +49,8 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
             'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => '+37000000000',
             'PAYMENTREQUEST_0_SHIPTOSTREET2'     => 'Street2',
             'SALUTATION'                         => 'this is salutation',
-            'BUSINESS'                           => 'company'
+            'BUSINESS'                           => 'company',
+            'PHONENUM'                           => '123-345-789'
         );
 
         return $data;
@@ -183,6 +184,19 @@ class ResponseGetExpressCheckoutDetailsTest extends \OxidEsales\TestingLibrary\U
         $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
         $response->setData($this->getResponseData());
         $this->assertEquals('+37000000000', $response->getShipToPhoneNumber());
+    }
+
+    /**
+     * Test getting phone number
+     */
+    public function testGetShipToPhoneNumberMandatory()
+    {
+        $defaultFields = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('aMustFillFields');
+        \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('aMustFillFields', array_merge($defaultFields, ['oxuser__oxfon']));
+
+        $response = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $response->setData($this->getResponseData());
+        $this->assertEquals('123-345-789', $response->getShipToPhoneNumber());
     }
 
     /**

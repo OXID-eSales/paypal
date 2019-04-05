@@ -148,12 +148,21 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
 
     /**
      * Return phone number.
+     * Note: PayPal returns a contact phone number only if your
+     *       Merchant Account Profile settings require that the buyer enter one.
      *
      * @return string
      */
     public function getShipToPhoneNumber()
     {
-        return $this->getValue('PAYMENTREQUEST_0_SHIPTOPHONENUM');
+        $value = $this->getValue('PAYMENTREQUEST_0_SHIPTOPHONENUM');
+        $requiredAddressFields = oxNew(\OxidEsales\Eshop\Application\Model\RequiredAddressFields::class);
+
+        if (in_array('oxuser__oxfon', $requiredAddressFields->getRequiredFields())) {
+            $phone = $this->getValue('PHONENUM');
+            $value = !empty($phone) ? $phone : $value;
+        }
+        return $value;
     }
 
     /**

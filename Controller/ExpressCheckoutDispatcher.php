@@ -62,6 +62,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
             $user = $this->getUser();
 
             $basket->setPayment("oxidpaypal");
+            $session->setVariable('paymentid', 'oxidpaypal');
 
             $prevOptionValue = $this->getConfig()->getConfigParam('blCalculateDelCostIfNotLoggedIn');
             if ($this->getPayPalConfig()->isDeviceMobile()) {

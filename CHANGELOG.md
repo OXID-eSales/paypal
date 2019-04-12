@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 ### Fixed
+- [0006972](https://bugs.oxid-esales.com/view.php?id=6972) Unfinished order with PayPal Express Checkout in some special constellations.
 
 ## [5.2.4] - 2019-04-10
 
@@ -128,7 +129,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
-[v5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...HEAD
+[v5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...HEAD
+[v5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...v5.2.4
 [v5.2.3]: https://github.com/OXID-eSales/paypal/compare/v5.2.2...v5.2.3
 [v5.2.2]: https://github.com/OXID-eSales/paypal/compare/v5.2.1...v5.2.2
 [v5.2.1]: https://github.com/OXID-eSales/paypal/compare/v5.2.0...v5.2.1

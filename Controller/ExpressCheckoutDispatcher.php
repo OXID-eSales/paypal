@@ -346,7 +346,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
         $delSetList = $this->getDeliverySetList($user);
 
         //no shipping methods for user country
-        if (!count($delSetList)) {
+        if (empty($delSetList)) {
             $logger = $this->getLogger();
             $logger->log("Callback error: NO DELIVERY LIST SET");
 
@@ -419,7 +419,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
                 $deliveryList = $deliveryListProvider->getDeliveryList($basket, $user, $this->getUserShippingCountryId($user), $delSetId);
             }
 
-            if (count($deliveryList) > 0) {
+            if (is_array($deliveryList) && !empty($deliveryList)) {
                 $price = 0;
 
                 if (\OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('bl_perfLoadDelivery')) {

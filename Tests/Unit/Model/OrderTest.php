@@ -199,9 +199,10 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $emptyPayment->oxpayments__oxactive = new \OxidEsales\Eshop\Core\Field(1);
         $emptyPayment->save();
 
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
-        $mockBuilder->setMethods(['getDeliverySetList']);
-        $deliverySetList = $mockBuilder->getMock();
+        $deliverySetList = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\DeliverySetList::class)
+            ->setMethods(['getDeliverySetList'])
+            ->getMock();
+        $deliverySetList->expects($this->once())->method('getDeliverySetList')->willReturn([]);
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\DeliverySetList::class, $deliverySetList);
 
         /** @var \OxidEsales\PayPalModule\Model\User $user */

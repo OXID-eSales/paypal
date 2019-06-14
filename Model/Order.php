@@ -177,10 +177,11 @@ class Order extends Order_parent
         $this->getPayPalOrder()->save();
 
         //clear PayPal identification
-        $this->getSession()->deleteVariable('oepaypal');
-        $this->getSession()->deleteVariable("oepaypal-payerId");
-        $this->getSession()->deleteVariable("oepaypal-userId");
-        $this->getSession()->deleteVariable('oepaypal-basketAmount');
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
+        $session->deleteVariable('oepaypal');
+        $session->deleteVariable("oepaypal-payerId");
+        $session->deleteVariable("oepaypal-userId");
+        $session->deleteVariable('oepaypal-basketAmount');
     }
 
     /**

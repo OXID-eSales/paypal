@@ -87,7 +87,7 @@ class PaymentGateway extends PaymentGateway_parent
     public function executePayment($amount, &$order)
     {
         $success = parent::executePayment($amount, $order);
-        $session = $this->getSession();
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
 
         if ( ($session->getVariable('paymentid') == 'oxidpaypal')
              || ($session->getBasket()->getPaymentId() == 'oxidpaypal')
@@ -113,7 +113,7 @@ class PaymentGateway extends PaymentGateway_parent
             // updating order state
             if ($order) {
                 $order->oePayPalUpdateOrderNumber();
-                $session = $this->getSession();
+                $session = \OxidEsales\Eshop\Core\Registry::getSession();
                 $basket = $session->getBasket();
 
                 $transactionMode = $this->getTransactionMode($basket);

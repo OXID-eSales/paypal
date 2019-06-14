@@ -35,7 +35,8 @@ class WrappingController extends WrappingController_parent
      */
     public function isPayPal()
     {
-        return ($this->getSession()->getVariable("paymentid") == "oxidpaypal") ? true : false;
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
+        return ($session->getVariable("paymentid") == "oxidpaypal") ? true : false;
     }
 
     /**
@@ -50,7 +51,8 @@ class WrappingController extends WrappingController_parent
 
         // in case user adds wrapping, basket info must be resubmitted..
         if ($this->isPayPal()) {
-            $payPalType = (int) $this->getSession()->getVariable("oepaypal");
+            $session = \OxidEsales\Eshop\Core\Registry::getSession();
+            $payPalType = (int) $session->getVariable("oepaypal");
 
             if ($payPalType == 1) {
                 $return = "payment";

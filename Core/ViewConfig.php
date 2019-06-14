@@ -104,7 +104,7 @@ class ViewConfig extends ViewConfig_parent
                 $user = $this->getUser();
                 $validator = $this->getPaymentValidator();
                 $validator->setUser($user);
-                $validator->setConfig($this->getConfig());
+                $validator->setConfig(\OxidEsales\Eshop\Core\Registry::getConfig());
                 $validator->setCheckCountry(false);
 
                 $this->expressCheckoutEnabled = $validator->isPaymentValid();
@@ -159,7 +159,7 @@ class ViewConfig extends ViewConfig_parent
                 $user = $this->getUser();
                 $validator = $this->getPaymentValidator();
                 $validator->setUser($user);
-                $validator->setConfig($this->getConfig());
+                $validator->setConfig(\OxidEsales\Eshop\Core\Registry::getConfig());
 
                 $this->standardCheckoutEnabled = $validator->isPaymentValid();
             }
@@ -224,7 +224,8 @@ class ViewConfig extends ViewConfig_parent
         $sendInfoToPayPalEnabled = $this->getPayPalConfig()->sendOrderInfoToPayPal();
         if ($sendInfoToPayPalEnabled) {
             /** @var \OxidEsales\PayPalModule\Model\Basket $basket */
-            $basket = $this->getSession()->getBasket();
+            $session = \OxidEsales\Eshop\Core\Registry::getSession();
+            $basket = $session->getBasket();
             $sendInfoToPayPalEnabled = !$basket->isFractionQuantityItemsPresent();
         }
 

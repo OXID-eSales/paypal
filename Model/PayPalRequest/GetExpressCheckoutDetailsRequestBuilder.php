@@ -102,7 +102,8 @@ class GetExpressCheckoutDetailsRequestBuilder
     public function buildRequest()
     {
         $request = $this->getPayPalRequest();
-        $request->setParameter('TOKEN', $this->getSession()->getVariable('oepaypal-token'));
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
+        $request->setParameter('TOKEN', $session->getVariable('oepaypal-token'));
 
         return $request;
     }

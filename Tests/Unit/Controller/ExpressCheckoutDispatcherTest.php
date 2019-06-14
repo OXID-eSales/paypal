@@ -135,6 +135,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder->setMethods(['getBasket']);
         $session = $mockBuilder->getMock();
         $session->expects($this->once())->method("getBasket")->will($this->returnValue($basket));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Session::class, $session);
 
         // preparing payment list
         $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\PaymentList::class);
@@ -148,7 +149,6 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder->setMethods(
             ['getPayPalCheckoutService',
              'initializeUserData',
-             'getSession',
              'getPayPalConfig',
              'isPaymentValidForUserCountry',
              'extractShippingId']
@@ -156,7 +156,6 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $dispatcher = $mockBuilder->getMock();
         $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
         $dispatcher->expects($this->once())->method("initializeUserData")->with($this->equalTo($details))->will($this->returnValue($user));
-        $dispatcher->expects($this->any())->method("getSession")->will($this->returnValue($session));
         $dispatcher->expects($this->once())->method("extractShippingId")->with($this->equalTo("222"), $this->equalTo($user))->will($this->returnValue("123"));
         $dispatcher->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
         $dispatcher->expects($this->once())->method("isPaymentValidForUserCountry")->with($this->equalTo($user))->will($this->returnValue(true));

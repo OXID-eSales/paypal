@@ -37,7 +37,7 @@ class PaymentController extends PaymentController_parent
     public function validatePayment()
     {
         $paymentId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('paymentid');
-        $session = $this->getSession();
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $basket = $session->getBasket();
         if ($paymentId === 'oxidpaypal' && !$this->isConfirmedByPayPal($basket)) {
             $session->setVariable('paymentid', 'oxidpaypal');
@@ -58,7 +58,8 @@ class PaymentController extends PaymentController_parent
      */
     public function isConfirmedByPayPal($basket)
     {
-        $oldBasketAmount = $this->getSession()->getVariable("oepaypal-basketAmount");
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
+        $oldBasketAmount = $session->getVariable("oepaypal-basketAmount");
         if (!$oldBasketAmount) {
             return false;
         }

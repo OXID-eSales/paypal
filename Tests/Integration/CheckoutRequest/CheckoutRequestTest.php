@@ -123,6 +123,7 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $basket = $basketConstruct->getBasket();
         $session = $this->getSessionMock();
         $session->setBasket($basket);
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Session::class, $session);
 
         $this->setMockedUtils();
 
@@ -131,8 +132,6 @@ class CheckoutRequestTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $dispatcher = $mockBuilder->getMock();
 
         $dispatcher->expects($this->any())->method('getPayPalOrder')->will($this->returnValue($this->getOrder()));
-
-        $dispatcher->setSession($session);
         $dispatcher->setUser($basketConstruct->getUser());
 
         return $dispatcher;

@@ -42,10 +42,11 @@ class BasketComponent extends BasketComponent_parent
      */
     public function actionExpressCheckoutFromDetailsPage()
     {
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $validator = $this->getValidator();
         $currentArticle = $this->getCurrentArticle();
         $validator->setItemToValidate($currentArticle);
-        $validator->setBasket($this->getSession()->getBasket());
+        $validator->setBasket($session->getBasket());
         if ($validator->isArticleValid()) {
             //Make express checkout
             $res = $this->actionAddToBasketAndGoToCheckout();
@@ -184,6 +185,7 @@ class BasketComponent extends BasketComponent_parent
     protected function formatUrl($unformedUrl)
     {
         $myConfig = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $params = explode('?', $unformedUrl);
         $pageParams = isset($params[1]) ? $params[1] : null;
         $params = explode('/', $params[0]);
@@ -191,7 +193,7 @@ class BasketComponent extends BasketComponent_parent
 
         $header = ($className) ? "cl=$className&" : '';  // adding view name
         $header .= ($pageParams) ? "$pageParams&" : '';   // adding page params
-        $header .= $this->getSession()->sid();            // adding session Id
+        $header .= $session->sid();            // adding session Id
 
         $url = $myConfig->getCurrentShopUrl($this->isAdmin());
 

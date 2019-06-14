@@ -335,7 +335,7 @@ class DoExpressCheckoutPaymentRequestBuilder
         $order = $this->getOrder();
         $config = $this->getPayPalConfig();
         $basket = $this->getBasket();
-        $session = $this->getSession();
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $lang = $this->getLang();
         $request = $this->getRequest();
 

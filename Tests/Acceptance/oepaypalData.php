@@ -22,15 +22,15 @@
  * Returns users data for PayPal testing
  */
 return array(
-    'sOEPayPalUsername' => '<PayPal UserName>',
-    'sOEPayPalPassword' => '<PayPal Password>',
-    'sOEPayPalSignature' => '<PayPal Signature>',
-    'sOEPayPalSandboxUsername' => '<PayPal Sandbox UserName>',
-    'sOEPayPalSandboxPassword' => '<PayPal Sandbox Password>',
-    'sOEPayPalSandboxSignature' => '<PayPal Sandbox Signature>',
-    'sBuyerLogin' => '<PayPal Buyer Login>',
-    'sBuyerUSLogin' => '<PayPal Buyer USA Login>',
-    'sBuyerPassword' => '<PayPal Buyer Password>.',
-    'sBuyerFirstName' => '<PayPal Buyer First Name>',
-    'sBuyerLastName' => '<PayPal Buyer Last Name>'
+    'sOEPayPalUsername' => 'PPmerchantOxidCI_api1.oxid.de',
+    'sOEPayPalPassword' => 'ZRYUWUB86XMUJY52',
+    'sOEPayPalSignature' => 'AB63pz3qIrLOaZiQqVB04NGoucJcA4oQN1QddNZajReW65daD9M.LtLq',
+    'sOEPayPalSandboxUsername' => 'PPmerchantOxidCI_api1.oxid.de',
+    'sOEPayPalSandboxPassword' => 'ZRYUWUB86XMUJY52',
+    'sOEPayPalSandboxSignature' => 'AB63pz3qIrLOaZiQqVB04NGoucJcA4oQN1QddNZajReW65daD9M.LtLq',
+    'sBuyerLogin' => 'SELENIUM_EE_1@oxid.de',
+    'sBuyerUSLogin' => 'SELENIUM_EE_1_US@oxid.de',
+    'sBuyerPassword' => 'SELENIUM_EE_1',
+    'sBuyerFirstName' => 'EEOne',
+    'sBuyerLastName' => 'SeleniumEE'
 );

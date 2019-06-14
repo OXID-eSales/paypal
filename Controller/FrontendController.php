@@ -62,8 +62,9 @@ class FrontendController extends \OxidEsales\Eshop\Application\Controller\Fronte
     public function getLogger()
     {
         if (is_null($this->logger)) {
+            $session = \OxidEsales\Eshop\Core\Registry::getSession();
             $this->logger = oxNew(\OxidEsales\PayPalModule\Core\Logger::class);
-            $this->logger->setLoggerSessionId($this->getSession()->getId());
+            $this->logger->setLoggerSessionId($session->getId());
         }
 
         return $this->logger;

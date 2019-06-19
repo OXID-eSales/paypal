@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Adapt tests to work with new phpunit.
 - Replace deprecated calls to getConfig();
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
+- Replace deprecated calls to getSession();
 
 ### Deprecated
 

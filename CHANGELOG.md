@@ -4,21 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [6.0.0] - Unreleased
-
-### Added
+## [6.0.0] - 2019-07-23
 
 ### Changed
 - Adapt tests to work with new phpunit.
 - Replace deprecated calls to getConfig();
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
 - Replace deprecated calls to getSession();
-
-### Deprecated
-
-### Removed
-
-### Fixed
 
 ## [5.2.5] - 2019-04-13
 
@@ -123,6 +115,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
+[v6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v6.0.0
 [v5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...v5.2.5
 [v5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...v5.2.4
 [v5.2.3]: https://github.com/OXID-eSales/paypal/compare/v5.2.2...v5.2.3

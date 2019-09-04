@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
 - Replace deprecated calls to getSession();
 
+## [5.2.6] - Unreleased
+
+### Fixed
+
+- Stabilize acceptance tests.
+
 ## [5.2.5] - 2019-04-13
 
 ### Fixed

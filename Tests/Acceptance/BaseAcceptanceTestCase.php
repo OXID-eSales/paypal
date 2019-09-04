@@ -785,7 +785,8 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     private function assertLogValues($logData, $expected)
     {
         foreach ($expected as $key => $value) {
-            $this->assertEquals($value, $logData[$key]);
+            $actualValue = isset($logData[$key]) ? $logData[$key] : null;
+            $this->assertEquals($value, $actualValue);
         }
     }
 

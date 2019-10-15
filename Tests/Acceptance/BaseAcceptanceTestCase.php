@@ -442,6 +442,12 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         ) {
             $this->markTestIncomplete('Cannot find login button. Login form fields found: ' . $debug);
         }
+
+        $element = $this->getElementLazy("id=notNowLink", false);
+        if ($element) {
+            $element->click();
+            $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 5, true);
+        }
     }
 
     /**

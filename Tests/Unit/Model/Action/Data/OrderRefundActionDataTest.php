@@ -26,10 +26,19 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Data;
  */
 class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+    public function providerRefundAmount()
+    {
+        return [['59,92'], ['59.92']];
+    }
+
     /**
      * Tests setting parameters from request
+     *
+     * @dataProvider providerRefundAmount
+     *
+     * @param string $refundAmount
      */
-    public function testSettingParameters_FromRequest()
+    public function testSettingParameters_FromRequest($refundAmount)
     {
         $transactionId = '123456';
         $amount = '59.92';
@@ -37,7 +46,7 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $params = array(
             'transaction_id' => $transactionId,
-            'refund_amount'  => $amount,
+            'refund_amount'  => $refundAmount,
             'refund_type'    => $type,
         );
         $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));

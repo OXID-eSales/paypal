@@ -36,6 +36,7 @@ class ECSOrderTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testECSOrderForNotLoggedInUser()
     {
@@ -84,6 +85,7 @@ class ECSOrderTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function testECSOrderForLoggedInUserLoggedInToPP()
     {

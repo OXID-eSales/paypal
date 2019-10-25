@@ -59,7 +59,7 @@ class OrderRefundActionData extends \OxidEsales\PayPalModule\Model\Action\Data\O
     public function getAmount()
     {
         $amount = $this->getRequest()->getRequestParameter('refund_amount');
-        $validDecimalAmount = preg_replace('/(?!\d+),(?=\d{0,2}$)/', '.', $amount) ?? $amount;
+        $validDecimalAmount = preg_replace('/,(?=\d{0,2}$)/', '.', $amount) ?? $amount;
 
         return $validDecimalAmount ? $validDecimalAmount : $this->getPaymentBeingRefunded()->getRemainingRefundAmount();
     }

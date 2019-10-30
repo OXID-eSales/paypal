@@ -186,6 +186,8 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testValidateDelivery_EmptyPaymentValid_PaymentValid()
     {
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\PaymentList::class, null);
+
         $basketMethods = array(
             'getPaymentId'  => 'oxidpaypal',
             'getShippingId' => 'oxidstandard',

@@ -26,16 +26,29 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Data;
  */
 class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+    public function providerCaptureAmount()
+    {
+        return [
+            ['59,92', '59.92'],
+            ['59.92', '59.92'],
+            ['1000,33', '1000.33'],
+            ['10,000,33', '10,000.33']
+        ];
+    }
+
     /**
      * Tests setting parameters from request
+     *
+     * @dataProvider providerCaptureAmount
+     *
+     * @param string $captureAmount
      */
-    public function testSettingParameters_FromRequest()
+    public function testSettingParameters_FromRequest($captureAmount, $calculatedAmount)
     {
-        $amount = '59.92';
         $type = 'Full';
 
         $params = array(
-            'capture_amount' => $amount,
+            'capture_amount' => $captureAmount,
             'capture_type'   => $type,
         );
         $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
@@ -44,7 +57,7 @@ class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData($request, $order);
 
-        $this->assertEquals($amount, $actionData->getAmount());
+        $this->assertEquals($calculatedAmount, $actionData->getAmount());
         $this->assertEquals($type, $actionData->getType());
     }
 

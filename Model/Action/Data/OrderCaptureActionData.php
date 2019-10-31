@@ -44,8 +44,9 @@ class OrderCaptureActionData extends \OxidEsales\PayPalModule\Model\Action\Data\
     public function getAmount()
     {
         $amount = $this->getRequest()->getRequestParameter('capture_amount');
+        $validDecimalAmount = preg_replace('/,(?=\d{0,2}$)/', '.', $amount) ?? $amount;
 
-        return $amount ? $amount : $this->getOrder()->getPayPalOrder()->getRemainingOrderSum();
+        return $validDecimalAmount ? $validDecimalAmount : $this->getOrder()->getPayPalOrder()->getRemainingOrderSum();
     }
 
     /**

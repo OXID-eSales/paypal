@@ -26,18 +26,31 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Data;
  */
 class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+    public function providerRefundAmount()
+    {
+        return [
+            ['59,92', '59.92'],
+            ['59.92', '59.92'],
+            ['1000,33', '1000.33'],
+            ['10,000,33', '10,000.33']
+        ];
+    }
+
     /**
      * Tests setting parameters from request
+     *
+     * @dataProvider providerRefundAmount
+     *
+     * @param string $refundAmount
      */
-    public function testSettingParameters_FromRequest()
+    public function testSettingParameters_FromRequest($refundAmount, $calculatedAmount)
     {
         $transactionId = '123456';
-        $amount = '59.92';
         $type = 'Full';
 
         $params = array(
             'transaction_id' => $transactionId,
-            'refund_amount'  => $amount,
+            'refund_amount'  => $refundAmount,
             'refund_type'    => $type,
         );
         $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
@@ -47,7 +60,7 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData($request, $order);
 
         $this->assertEquals($transactionId, $actionData->getTransactionId());
-        $this->assertEquals($amount, $actionData->getAmount());
+        $this->assertEquals($calculatedAmount, $actionData->getAmount());
         $this->assertEquals($type, $actionData->getType());
     }
 

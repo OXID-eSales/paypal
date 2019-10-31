@@ -104,32 +104,6 @@ class ECSOrderTest extends BaseAcceptanceTestCase
     }
 
     /**
-     * Test helper to search for product, ut to basket, click on PP ECS button.
-     */
-    protected function addToBasketProceedToPayPal()
-    {
-        $this->searchFor("1001");
-        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
-
-        $this->click("id=minibasketIcon");
-        $this->waitForElement("paypalExpressCheckoutButton");
-        $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
-        $this->clickAndWait("id=paypalExpressCheckoutButton");
-
-        // Check what was communicated with PayPal
-        $assertRequest = [
-            'L_PAYMENTREQUEST_0_AMT0' => 81.00,
-            'PAYMENTREQUEST_0_AMT' => 81.00,
-            'L_PAYMENTREQUEST_0_QTY0' => 1,
-            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR'];
-        $assertResponse = ['ACK' => 'Success'];
-        $this->assertLogData($assertRequest, $assertResponse);
-
-        //just in case ensure we are logged out of PayPal
-        $this->doPayPalLogOut();
-    }
-
-    /**
      * Tets helper.
      * Log customer in to paypal but do not click pay.
      */

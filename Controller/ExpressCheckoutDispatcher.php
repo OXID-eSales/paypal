@@ -208,6 +208,8 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
 
         if ($this->getPayPalConfig()->finalizeOrderOnPayPalSide()) {
             $next .= "?fnc=execute";
+            $next .= "&sDeliveryAddressMD5=" . $user->getEncodedDeliveryAddress();
+            $next .= "&stoken=" . $this->getSession()->getSessionChallengeToken();
         }
 
         return $next;

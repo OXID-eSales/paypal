@@ -185,6 +185,11 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
                 'value' => true,
                 'module' => 'module:oepaypal'
             ),
+            'blOEPayPalFinalizeOrderOnPayPal' => array(
+                'type' => 'bool',
+                'value' => 0,
+                'module' => 'module:oepaypal'
+            ),
         ));
 
         $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');

@@ -30,7 +30,9 @@
         _create: function () {
             var self = this;
 
-            $(self.element).click(function () {
+            $(self.element).click(function (e) {
+                e.preventDefault();
+
                 $(self.options.sForm + ' input[name="fnc"]').val(self.options.sAction);
                 $(self.options.sForm).submit();
             });

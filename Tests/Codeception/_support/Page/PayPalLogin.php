@@ -12,7 +12,7 @@ use OxidEsales\Codeception\Page\Checkout\OrderCheckout;
 use OxidEsales\Codeception\Page\Page;
 
 /**
- * Class PaypalLogin
+ * Class PayPalLogin
  * @package OxidEsales\PayPalModule\Tests\Codeception\Page
  */
 class PayPalLogin extends Page

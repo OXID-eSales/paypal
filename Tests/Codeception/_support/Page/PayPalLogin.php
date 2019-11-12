@@ -12,22 +12,26 @@ use OxidEsales\Codeception\Page\Checkout\OrderCheckout;
 use OxidEsales\Codeception\Page\Page;
 
 /**
- * Class PayPalLogin
+ * Class PaypalLogin
  * @package OxidEsales\PayPalModule\Tests\Codeception\Page
  */
 class PayPalLogin extends Page
 {
     public $userLoginEmail = '#email';
+    public $oldUserLoginEmail = '#login_email';
 
     public $userPassword = '#password';
+    public $oldUserPassword = '#login_password';
 
     public $nextButton = '#btnNext';
 
     public $loginButton = '#btnLogin';
+    public $oldLoginButton = '#submitLogin';
 
     public $confirmButton = '#confirmButtonTop';
+    public $oldConfirmButton = '#continue_abovefold';
 
-    public $oneTouchNotNowButton = '#notNowLink';
+    public $oneTouchNotNowLink = '#notNowLink';
 
     public $spinner = '#spinner';
 
@@ -35,12 +39,14 @@ class PayPalLogin extends Page
      * @param string $userName
      * @param string $userPassword
      *
-     * @return UserAccount
+     * @return $this
      */
     public function loginPayPalUser(string $userName, string $userPassword)
     {
         $I = $this->user;
+        $usingNewLogin = true;
 
+        // new login page
         if ($I->seePageHasElement($this->userLoginEmail)) {
             $I->waitForElementVisible($this->userLoginEmail, 30);
             $I->fillField($this->userLoginEmail, $userName);
@@ -50,13 +56,29 @@ class PayPalLogin extends Page
             $I->click($this->loginButton);
         }
 
-        if ($I->seePageHasElement($this->oneTouchNotNowButton)) {
-            $I->click($this->oneTouchNotNowButton);
+        // old login page
+        if ($I->seePageHasElement($this->oldUserLoginEmail)) {
+            $usingNewLogin = false;
+
+            $I->waitForElementVisible($this->oldUserLoginEmail, 30);
+            $I->fillField($this->oldUserLoginEmail, $userName);
+            $I->waitForElementVisible($this->oldUserPassword, 5);
+            $I->fillField($this->oldUserPassword, $userPassword);
+            $I->click($this->oldLoginButton);
         }
 
-        $I->waitForElementClickable($this->confirmButton, 60);
-        $I->waitForElementNotVisible($this->spinner, 60);
-        $I->click($this->confirmButton);
+        if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
+            $I->click($this->oneTouchNotNowLink);
+        }
+
+        if ($usingNewLogin) {
+            $I->waitForElementClickable($this->confirmButton, 60);
+            $I->waitForElementNotVisible($this->spinner, 60);
+            $I->click($this->confirmButton);
+        } else {
+            $I->waitForElementClickable($this->oldConfirmButton, 60);
+            $I->click($this->oldConfirmButton);
+        }
 
         return new OrderCheckout($I);
     }

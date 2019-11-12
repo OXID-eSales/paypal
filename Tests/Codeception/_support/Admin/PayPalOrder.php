@@ -25,31 +25,49 @@ class PayPalOrder extends Page
     public $errorBox = '.errorbox';
     public $captureErrorText = 'Error message from PayPal: Amount is not valid';
     public $refundErrorText = 'Error message from PayPal: The partial refund amount is not valid';
+    public $lastHistoryRowAction = '//*[@id="historyTable"]/tbody/tr[2]/td[2]';
+    public $lastHistoryRowAmount = '//*[@id="historyTable"]/tbody/tr[2]/td[3]';
 
     /**
      * Capture order
+     *
+     * @param $amount
+     * @param string $type
+     * @return $this
      */
-    public function captureAmount()
+    public function captureAmount($amount, $type = 'Complete')
     {
         $I = $this->user;
         $I->waitForElement($this->captureButton, 10);
         $I->click($this->captureButton);
-        $I->selectOption($this->amountSelect,'NotComplete');
-        $I->fillField($this->captureAmountInput, '55,55');
-        $I->click($this->pendingStatusCheckbox);
+        $I->selectOption($this->amountSelect, $type);
+        if ($type !== 'Complete') {
+            $I->fillField($this->captureAmountInput, $amount);
+            $I->click($this->pendingStatusCheckbox);
+        }
         $I->submitForm($this->editForm, []);
+
+        return $this;
     }
 
     /**
      * Refund amount
+     *
+     * @param $amount
+     * @param string $type
+     * @return $this
      */
-    public function refundAmount()
+    public function refundAmount($amount, $type = 'Full')
     {
         $I = $this->user;
         $I->waitForElement($this->refundButton, 10);
         $I->click($this->refundButton);
-        $I->selectOption($this->amountSelect,'Partial');
-        $I->fillField($this->refundAmountInput, '49,50');
+        $I->selectOption($this->amountSelect, $type);
+        if ($type !== 'Full') {
+            $I->fillField($this->refundAmountInput, $amount);
+        }
         $I->submitForm($this->editForm, []);
+
+        return $this;
     }
 }

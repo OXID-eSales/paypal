@@ -12,6 +12,7 @@ use OxidEsales\Codeception\Step\Basket;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\PayPalModule\Tests\Codeception\Admin\PayPalOrder;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
+use OxidEsales\Codeception\Module\Translation\Translator;
 
 /**
  * Class CaptureAndRefundCest
@@ -68,6 +69,10 @@ class CaptureAndRefundCest
         $order = [
             'order_number' => (int) $orderNumber,
             'payment_method' => 'PayPal',
+            'capture_amount' => '55,55',
+            'capture_type' => 'NotComplete',
+            'refund_amount' => '49,50',
+            'refund_type' => 'Partial',
         ];
 
         $ordersList->searchByOrderNumber($order['order_number']);
@@ -79,10 +84,14 @@ class CaptureAndRefundCest
         $I->executeJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return false;");
 
         $I->selectEditFrame();
-        $paypalOrder->captureAmount();
+        $paypalOrder->captureAmount($order['capture_amount'], $order['capture_type']);
         $I->dontSee($paypalOrder->captureErrorText, $paypalOrder->errorBox);
+        $I->see(Translator::translate('OEPAYPAL_CAPTURE'), $paypalOrder->lastHistoryRowAction);
+        $I->see('55.55', $paypalOrder->lastHistoryRowAmount);
 
-        $paypalOrder->refundAmount();
+        $paypalOrder->refundAmount($order['refund_amount'], $order['refund_type']);
         $I->dontSee($paypalOrder->refundErrorText, $paypalOrder->errorBox);
+        $I->see(Translator::translate('OEPAYPAL_REFUND'), $paypalOrder->lastHistoryRowAction);
+        $I->see('49.50', $paypalOrder->lastHistoryRowAmount);
     }
 }

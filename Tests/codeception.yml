@@ -12,7 +12,6 @@ paths:
 settings:
   colors: true
   log: true
-  bootstrap: _bootstrap.php
 
 extensions:
   enabled:

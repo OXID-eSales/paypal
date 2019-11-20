@@ -12,4 +12,11 @@ return [
         "userName" => "UserNamešÄßüл",
         "userLastName" => "UserSurnamešÄßüл",
     ],
+    'adminUser' => [
+        "userId" => "admin",
+        "userLoginName" => "admin@myoxideshop.com",
+        "userPassword" => "admin0303",
+        "userName" => "John",
+        "userLastName" => "Doe",
+    ],
 ];

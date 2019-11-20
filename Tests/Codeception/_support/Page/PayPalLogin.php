@@ -6,10 +6,11 @@
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Page;
 
+use OxidEsales\Codeception\Page\Checkout\OrderCheckout;
 use OxidEsales\Codeception\Page\Page;
 
 /**
- * Class PaypalLogin
+ * Class PayPalLogin
  * @package OxidEsales\PayPalModule\Tests\Codeception\Page
  */
 class PayPalLogin extends Page
@@ -70,13 +71,13 @@ class PayPalLogin extends Page
 
         if ($usingNewLogin) {
             $I->waitForElementClickable($this->confirmButton, 60);
-            $I->waitForElementNotVisible($this->spinner, 60);
+            $I->waitForElementNotVisible($this->spinner, 90);
             $I->click($this->confirmButton);
         } else {
             $I->waitForElementClickable($this->oldConfirmButton, 60);
             $I->click($this->oldConfirmButton);
         }
 
-        return $this;
+        return new OrderCheckout($I);
     }
 }

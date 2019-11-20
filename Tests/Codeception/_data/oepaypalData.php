@@ -21,7 +21,7 @@
 /**
  * Returns users data for PayPal testing
  */
-return array(
+return [
     'sOEPayPalUsername' => '<PayPal UserName>',
     'sOEPayPalPassword' => '<PayPal Password>',
     'sOEPayPalSignature' => '<PayPal Signature>',
@@ -33,4 +33,4 @@ return array(
     'sBuyerPassword' => '<PayPal Buyer Password>.',
     'sBuyerFirstName' => '<PayPal Buyer First Name>',
     'sBuyerLastName' => '<PayPal Buyer Last Name>'
-);
+];

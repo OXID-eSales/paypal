@@ -22,6 +22,7 @@
 namespace OxidEsales\PayPalModule\Tests\Codeception;
 
 use Codeception\Util\Fixtures;
+use OxidEsales\Codeception\Admin\AdminLoginPage;
 use OxidEsales\Codeception\Page\Home;
 
 /**
@@ -51,13 +52,26 @@ class AcceptanceTester extends \Codeception\Actor
         $I = $this;
         $homePage = new Home($I);
         $I->amOnPage($homePage->URL);
+
         return $homePage;
+    }
+
+    /**
+     * @return \OxidEsales\Codeception\Admin\AdminPanel
+     */
+    public function openAdminLoginPage()
+    {
+        $I = $this;
+        $adminPanel = new AdminLoginPage($I);
+        $I->amOnPage($adminPanel->URL);
+
+        return $adminPanel;
     }
 
     /**
      * Set PayPal settings
      */
-    public function initializePayPalSettingsData()
+    public function setPayPalSettingsData()
     {
         $I = $this;
         $I->updateConfigInDatabase('blPayPalLoggerEnabled', true);

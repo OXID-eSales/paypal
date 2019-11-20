@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Controller;
 
+use OxidEsales\Eshop\Core\Registry;
+
 /**
  * Order class wrapper for PayPal module
  *
@@ -82,6 +84,26 @@ class OrderController extends OrderController_parent
         }
 
         return $this->payment;
+    }
+
+    /**
+     * Make sure orderId is set in sess_challenge session field.
+     * If it's not set and the option to finalize order on paypal checkout is enabled,
+     * the last checkout step - thank you page - will redirect the user to home.
+     *
+     * @return string
+     */
+    public function execute()
+    {
+        $nextStep = parent::execute();
+        $session = Registry::getSession();
+
+        if (!$session->getVariable('sess_challenge')) {
+            $orderId = $this->getBasket()->getOrderId();
+            $session->setVariable('sess_challenge', $orderId);
+        }
+
+        return $nextStep;
     }
 
     /**

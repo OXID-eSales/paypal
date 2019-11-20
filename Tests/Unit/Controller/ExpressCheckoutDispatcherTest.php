@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
 
+use OxidEsales\Eshop\Core\Field;
+
 /**
  * Testing OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher class.
  */
@@ -92,8 +94,9 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $details->setData($detailsData);
 
         // preparing useer
-        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getId"));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getId", "getEncodedDeliveryAddress"));
         $user->expects($this->any())->method("getId")->will($this->returnValue("321"));
+        $user->expects($this->once())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
 
         $price = $this->getMock(\OxidEsales\Eshop\Core\Price::class, array("getBruttoPrice"));
         $price->expects($this->any())->method("getBruttoPrice")->will($this->returnValue(129.00));
@@ -133,7 +136,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $dispatcher->expects($this->once())->method("isPaymentValidForUserCountry")->with($this->equalTo($user))->will($this->returnValue(true));
 
         // testing
-        $this->assertEquals("order?fnc=execute", $dispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("order?fnc=execute&sDeliveryAddressMD5=encodeddeliveryaddress123&stoken=" . $session->getSessionChallengeToken(), $dispatcher->getExpressCheckoutDetails());
         $this->assertEquals("111", $this->getSession()->getVariable("oepaypal-payerId"));
         $this->assertEquals("321", $this->getSession()->getVariable("oepaypal-userId"));
         $this->assertEquals("129.00", $this->getSession()->getVariable("oepaypal-basketAmount"));
@@ -1242,12 +1245,21 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $paypalServiceStub = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('getExpressCheckoutDetails'));
         $paypalServiceStub->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($paypalExpressResponse));
 
-        $paypalExpressCheckoutDispatcherPartialStub = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array('getPayPalCheckoutService', 'isPayPalPaymentValid'));
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getEncodedDeliveryAddress", "getEmail"));
+        $user->expects($this->any())->method("getEmail")->will($this->returnValue("testpp@oxideshop.dev"));
+        $user->expects($this->any())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
+        $user->oxuser__oxcountryid = new Field("a7c40f631fc920687.20179984", Field::T_RAW);
+
+        $paypalExpressCheckoutDispatcherPartialStub = $this->getMock(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class, array('getPayPalCheckoutService', 'isPayPalPaymentValid', 'initializeUserData'));
         $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('isPayPalPaymentValid')->will($this->returnValue(true));
         $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('getPayPalCheckoutService')->will($this->returnValue($paypalServiceStub));
+        $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method("initializeUserData")->will($this->returnValue($user));
+
+        $encodedDeliveryAddress = $user->getEncodedDeliveryAddress();
+        $sessionToken = $this->getSession()->getSessionChallengeToken();
 
         /** @var \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher $paypalExpressCheckoutDispatcherPartialStub */
-        $controllerNameWhichIndicatesSuccess = 'order?fnc=execute';
+        $controllerNameWhichIndicatesSuccess = 'order?fnc=execute&sDeliveryAddressMD5=' . $encodedDeliveryAddress . '&stoken=' . $sessionToken;
         $controllerNameFromPaypalExpressCheckout = $paypalExpressCheckoutDispatcherPartialStub->getExpressCheckoutDetails();
 
         $messageToCoverBugFix = 'Something went wrong during the calculation of Total sum for active basket. ' .

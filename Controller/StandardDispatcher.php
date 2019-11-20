@@ -133,6 +133,8 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
             $request = $builder->buildRequest();
 
             $details = $payPalService->getExpressCheckoutDetails($request);
+
+            $user = $this->getUser();
         } catch (\OxidEsales\Eshop\Core\Exception\StandardException $excp) {
             // display error message
             $this->getUtilsView()->addErrorToDisplay($excp);
@@ -150,6 +152,8 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
         // finalize order on paypal side?
         if ($this->getPayPalConfig()->finalizeOrderOnPayPalSide()) {
             $next .= "?fnc=execute";
+            $next .= "&sDeliveryAddressMD5=" . $user->getEncodedDeliveryAddress();
+            $next .= "&stoken=" . $this->getSession()->getSessionChallengeToken();
         }
 
         // everything is fine - redirect to order

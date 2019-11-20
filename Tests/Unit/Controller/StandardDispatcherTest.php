@@ -60,7 +60,8 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testGetExpressCheckoutDetails()
     {
         // preparing session, inputs etc.
-        $this->getSession()->setVariable("oepaypal-token", "111");
+        $session = $this->getSession();
+        $session->setVariable("oepaypal-token", "111");
         $detailsData = ["PAYERID" => "111"];
         $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
         $details->setData($detailsData);
@@ -73,14 +74,19 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalService = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array("getExpressCheckoutDetails"));
         $payPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($details));
 
+        // prepare user
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getEncodedDeliveryAddress"));
+        $user->expects($this->once())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
+
         // preparing
-        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig"));
+        $dispatcher = $this->getMock(\OxidEsales\PayPalModule\Controller\StandardDispatcher::class, array("getPayPalCheckoutService", "getPayPalConfig", "getUser"));
         $dispatcher->expects($this->once())->method("getPayPalCheckoutService")->will($this->returnValue($payPalService));
         $dispatcher->expects($this->once())->method("getPayPalConfig")->will($this->returnValue($payPalConfig));
+        $dispatcher->expects($this->once())->method("getUser")->will($this->returnValue($user));
 
         // testing
-        $this->assertEquals("order?fnc=execute", $dispatcher->getExpressCheckoutDetails());
-        $this->assertEquals("111", $this->getSession()->getVariable("oepaypal-payerId"));
+        $this->assertEquals("order?fnc=execute&sDeliveryAddressMD5=encodeddeliveryaddress123&stoken=" . $session->getSessionChallengeToken(), $dispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("111", $session->getVariable("oepaypal-payerId"));
     }
 
     /**

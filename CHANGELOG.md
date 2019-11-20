@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Stabilize acceptance tests.
 - [0006235](https://bugs.oxid-esales.com/view.php?id=6235) Use comma as decimal separator during capture and refund.
 - [0006994](https://bugs.oxid-esales.com/view.php?id=6994) Fix "Finalize order after PayPal checkout" configuration option not working
+- [0006995](https://bugs.oxid-esales.com/view.php?id=6995) Fix wrong product quantity after clicking "Add and Checkout".
 
 ## [5.2.5] - 2019-04-13
 

@@ -8,8 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Stabilize acceptance tests.
-- [0006235](https://bugs.oxid-esales.com/view.php?id=6235) Use comma as decimal separator during capture and refund.
-- [0006994](https://bugs.oxid-esales.com/view.php?id=6994) Fix "Finalize order after PayPal checkout" configuration option not working
 
 ## [v6.0.0] - 2019-07-23
 
@@ -18,6 +16,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Replace deprecated calls to getConfig();
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
 - Replace deprecated calls to getSession();
+
+## [v5.2.6] - Unreleased
+
+### Fixed
+- [0006235](https://bugs.oxid-esales.com/view.php?id=6235) Use comma as decimal separator during capture and refund.
+- [0006994](https://bugs.oxid-esales.com/view.php?id=6994) Fix "Finalize order after PayPal checkout" configuration option not working
 
 ## [v5.2.5] - 2019-04-13
 
@@ -124,6 +128,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [v6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1
 [v6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v6.0.0
+[v5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...b-5.x
 [v5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...v5.2.5
 [v5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...v5.2.4
 [v5.2.3]: https://github.com/OXID-eSales/paypal/compare/v5.2.2...v5.2.3

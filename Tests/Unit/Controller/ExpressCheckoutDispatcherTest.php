@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
 
+use OxidEsales\Eshop\Core\Field;
+
 /**
  * Testing OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher class.
  */
@@ -99,9 +101,10 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
 
         // preparing user
         $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
-        $mockBuilder->setMethods(['getId']);
+        $mockBuilder->setMethods(['getId', 'getEncodedDeliveryAddress']);
         $user = $mockBuilder->getMock();
         $user->expects($this->any())->method("getId")->will($this->returnValue("321"));
+        $user->expects($this->once())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
         $mockBuilder->setMethods(['getBruttoPrice']);
@@ -161,7 +164,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $dispatcher->expects($this->once())->method("isPaymentValidForUserCountry")->with($this->equalTo($user))->will($this->returnValue(true));
 
         // testing
-        $this->assertEquals("order?fnc=execute", $dispatcher->getExpressCheckoutDetails());
+        $this->assertEquals("order?fnc=execute&sDeliveryAddressMD5=encodeddeliveryaddress123&stoken=" . $session->getSessionChallengeToken(), $dispatcher->getExpressCheckoutDetails());
         $this->assertEquals("111", $this->getSession()->getVariable("oepaypal-payerId"));
         $this->assertEquals("321", $this->getSession()->getVariable("oepaypal-userId"));
         $this->assertEquals("129.00", $this->getSession()->getVariable("oepaypal-basketAmount"));
@@ -1417,14 +1420,23 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $paypalServiceStub = $mockBuilder->getMock();
         $paypalServiceStub->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($paypalExpressResponse));
 
+        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getEncodedDeliveryAddress", "getEmail"));
+        $user->expects($this->any())->method("getEmail")->will($this->returnValue("testpp@oxideshop.dev"));
+        $user->expects($this->any())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
+        $user->oxuser__oxcountryid = new Field("a7c40f631fc920687.20179984", Field::T_RAW);
+
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class);
-        $mockBuilder->setMethods(['getPayPalCheckoutService', 'isPayPalPaymentValid']);
+        $mockBuilder->setMethods(['getPayPalCheckoutService', 'isPayPalPaymentValid', 'initializeUserData']);
         $paypalExpressCheckoutDispatcherPartialStub = $mockBuilder->getMock();
         $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('isPayPalPaymentValid')->will($this->returnValue(true));
         $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method('getPayPalCheckoutService')->will($this->returnValue($paypalServiceStub));
+        $paypalExpressCheckoutDispatcherPartialStub->expects($this->any())->method("initializeUserData")->will($this->returnValue($user));
+
+        $encodedDeliveryAddress = $user->getEncodedDeliveryAddress();
+        $sessionToken = $this->getSession()->getSessionChallengeToken();
 
         /** @var \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher $paypalExpressCheckoutDispatcherPartialStub */
-        $controllerNameWhichIndicatesSuccess = 'order?fnc=execute';
+        $controllerNameWhichIndicatesSuccess = 'order?fnc=execute&sDeliveryAddressMD5=' . $encodedDeliveryAddress . '&stoken=' . $sessionToken;
         $controllerNameFromPaypalExpressCheckout = $paypalExpressCheckoutDispatcherPartialStub->getExpressCheckoutDetails();
 
         $messageToCoverBugFix = 'Something went wrong during the calculation of Total sum for active basket. ' .

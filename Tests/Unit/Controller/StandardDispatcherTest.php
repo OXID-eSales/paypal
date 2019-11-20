@@ -79,7 +79,9 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalService->expects($this->once())->method("getExpressCheckoutDetails")->will($this->returnValue($details));
 
         // prepare user
-        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getEncodedDeliveryAddress"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
+        $mockBuilder->setMethods(['getEncodedDeliveryAddress']);
+        $user = $mockBuilder->getMock();
         $user->expects($this->once())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
 
         // preparing

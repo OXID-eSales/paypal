@@ -104,7 +104,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder->setMethods(['getId', 'getEncodedDeliveryAddress']);
         $user = $mockBuilder->getMock();
         $user->expects($this->any())->method("getId")->will($this->returnValue("321"));
-        $user->expects($this->once())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
+        $user->expects($this->any())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Price::class);
         $mockBuilder->setMethods(['getBruttoPrice']);
@@ -1420,7 +1420,9 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $paypalServiceStub = $mockBuilder->getMock();
         $paypalServiceStub->expects($this->any())->method('getExpressCheckoutDetails')->will($this->returnValue($paypalExpressResponse));
 
-        $user = $this->getMock(\OxidEsales\Eshop\Application\Model\User::class, array("getEncodedDeliveryAddress", "getEmail"));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
+        $mockBuilder->setMethods(['getEncodedDeliveryAddress', 'getEmail']);
+        $user = $mockBuilder->getMock();
         $user->expects($this->any())->method("getEmail")->will($this->returnValue("testpp@oxideshop.dev"));
         $user->expects($this->any())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
         $user->oxuser__oxcountryid = new Field("a7c40f631fc920687.20179984", Field::T_RAW);

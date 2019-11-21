@@ -155,7 +155,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
         if ($this->getPayPalConfig()->finalizeOrderOnPayPalSide()) {
             $next .= "?fnc=execute";
             $next .= "&sDeliveryAddressMD5=" . $user->getEncodedDeliveryAddress();
-            $next .= "&stoken=" . $this->getSession()->getSessionChallengeToken();
+            $next .= "&stoken=" . $session->getSessionChallengeToken();
         }
 
         // everything is fine - redirect to order

@@ -22,9 +22,10 @@ class CheckoutRedirectCest
      */
     public function _before(AcceptanceTester $I)
     {
+        $I->clearShopCache();
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->initializePayPalSettingsData();
+        $I->setPayPalSettingsData();
     }
 
     /**

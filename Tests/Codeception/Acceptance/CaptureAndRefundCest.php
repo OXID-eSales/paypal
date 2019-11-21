@@ -54,8 +54,7 @@ class CaptureAndRefundCest
         $paypalUserEmail = Fixtures::get('sBuyerLogin');
         $paypalUserPassword = Fixtures::get('sBuyerPassword');
 
-        $orderPage = $loginPage->loginPayPalUser($paypalUserEmail, $paypalUserPassword);
-        $orderPage->submitOrder();
+        $loginPage->loginAndCheckout($paypalUserEmail, $paypalUserPassword);
 
         $thankYouPage = new ThankYou($I);
         $orderNumber = $thankYouPage->grabOrderNumber();

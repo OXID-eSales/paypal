@@ -14,11 +14,9 @@ PayPal - The OXID eFire extension
 * Partial payment is possible.
 * The admin panel provides an overview of the PayPal payments per order.
 
-
 ### Setup
 
-For installation instructions please see /documentation/UserManual_en.pdf in this package.
-
+System requirements and installation instructions are described in the module documentation: https://docs.oxid-esales.com/modules/paypal/en/5.2/installation.html.
 
 ### Module installation via composer
 
@@ -28,6 +26,10 @@ In order to install the module via composer run one of the following commands in
 * **composer require oxid-esales/paypal-module:^5.0.0** to install the released version compatible with OXID eShop RC2
 * **composer require oxid-esales/paypal-module:dev-master** to install the latest unreleased version from github
 
-## Bugs and Issues
+### Bugs and Issues
 
 If you experience any bugs or issues, please report them in the section **module PayPal** of https://bugs.oxid-esales.com.
+
+### Documentation 
+
+The module documentation can be found on our documentation platform: https://docs.oxid-esales.com/modules/paypal/en/5.2/index.html.

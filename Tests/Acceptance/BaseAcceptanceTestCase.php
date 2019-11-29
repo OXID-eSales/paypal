@@ -797,7 +797,13 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     {
         foreach ($expected as $key => $value) {
             $actualValue = isset($logData[$key]) ? $logData[$key] : null;
-            $this->assertEquals($value, $actualValue);
+            if (is_numeric($value)) {
+                $value = sprintf("%.2f", $value);
+            }
+            if (is_numeric($actualValue)) {
+                $actualValue = sprintf("%.2f", $actualValue);
+            }
+            $this->assertSame($value, $actualValue);
         }
     }
 

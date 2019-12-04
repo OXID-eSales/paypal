@@ -77,6 +77,7 @@ class PayPalLogin extends Page
             $I->waitForElementClickable($this->oldConfirmButton, 60);
             $I->click($this->oldConfirmButton);
         }
+        $I->waitForDocumentReadyState();
 
         return new OrderCheckout($I);
     }

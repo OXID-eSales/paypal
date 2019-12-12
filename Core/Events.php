@@ -21,6 +21,9 @@
 
 namespace OxidEsales\PayPalModule\Core;
 
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+
 /**
  * Class defines what module does on Shop events.
  */
@@ -91,18 +94,19 @@ class Events
     {
         $active = false;
         $config = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $extensionChecker = oxNew(\OxidEsales\PayPalModule\Core\ExtensionChecker::class);
         $shops = $config->getShopIds();
         $activeShopId = $config->getShopId();
 
+        $payPalConfig = oxNew(\OxidEsales\PayPalModule\Core\Config::class);
+        $container = ContainerFactory::getInstance()->getContainer();
+        $moduleActivationBridge = $container->get(ModuleActivationBridgeInterface::class);
+
         foreach ($shops as $shopId) {
-            if ($shopId != $activeShopId) {
-                $extensionChecker->setShopId($shopId);
-                $extensionChecker->setExtensionId('oepaypal');
-                if ($extensionChecker->isActive()) {
-                    $active = true;
-                    break;
-                }
+            if ( ($shopId != $activeShopId) &&
+                 $moduleActivationBridge->isActive($payPalConfig->getModuleId(), $shopId)
+            ) {
+                $active = true;
+                break;
             }
         }
 

@@ -117,7 +117,7 @@ class ExtensionChecker
         $config = \OxidEsales\Eshop\Core\Registry::getConfig();
         $configKey = $config->getConfigParam('sConfigKey');
 
-        $select = "SELECT DECODE( `oxvarvalue` , " . $db->quote($configKey) . " ) AS `oxvarvalue` " .
+        $select = "SELECT `oxvarvalue` " .
                    "FROM `oxconfig` WHERE `oxvarname` = " . $db->quote($configName) . " AND `oxshopid` = " . $db->quote($this->getShopId());
 
         return unserialize($db->getOne($select));

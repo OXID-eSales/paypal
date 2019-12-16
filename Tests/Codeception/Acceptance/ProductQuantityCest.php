@@ -59,7 +59,8 @@ class ProductQuantityCest
         $I->click("#paypalExpressCheckoutDetailsButton");
         $I->waitForElementVisible('#actionAddToBasketAndGoToCheckout', 20);
         $I->click("#actionAddToBasketAndGoToCheckout");
-
+        $I->waitForDocumentReadyState();
+        
         $homePage = $I->openShop();
 
         //reload page to make sure basket modal is closed

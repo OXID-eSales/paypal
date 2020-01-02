@@ -72,9 +72,11 @@ class PayPalLogin extends Page
         if ($usingNewLogin) {
             $I->waitForElementClickable($this->confirmButton, 60);
             $I->waitForElementNotVisible($this->spinner, 90);
+            $I->scrollTo($this->confirmButton);
             $I->click($this->confirmButton);
         } else {
             $I->waitForElementClickable($this->oldConfirmButton, 60);
+            $I->scrollTo($this->oldConfirmButton);
             $I->click($this->oldConfirmButton);
         }
         $I->waitForDocumentReadyState();

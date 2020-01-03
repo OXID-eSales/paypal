@@ -466,6 +466,17 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $element->click();
             $this->_waitForAppear('isElementPresent', "//input[@id='confirmButtonTop']", 5, true);
         }
+
+        //When reaching this point in code, user should be logged in to PayPal sandbox. As we have issues with PayPal
+        //sandbox from time to time, doublecheck and skip test if we cannot be sure login was succesful.
+        if ($loginFound &&
+                !$this->isElementPresent("//input[@id='continue']") &&
+                !$this->isElementPresent("//input[@id='confirmButtonTop']") &&
+                !$this->isTextPresent($this->getLoginDataByName('sBuyerFirstName')) &&
+                !$this->isTextPresent($loginEmail)
+        ) {
+            $this->markTestIncomplete('User should be logged in to PayPal but cannot confirm being logged in. Autoskipping test.' );
+        }
     }
 
     /**
@@ -481,12 +492,12 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         $element = $this->getElementLazy($xpath, false);
         if ($element) {
             $loginFound = true;
-            $element->click();
+            $this->clickAndWait($xpath);
         } else {
             $element = $this->getElementLazy(self::PAYPAL_LOGIN_BUTTON_ID_OLD, false);
             if ($element) {
                 $loginFound = true;
-                $element->click();
+                $this->clickAndWait(self::PAYPAL_LOGIN_BUTTON_ID_OLD);
             }
         }
         return $loginFound;

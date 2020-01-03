@@ -1,5 +1,5 @@
 INSERT IGNORE INTO `oxvoucherseries` (`OXID`,        `OXMAPID`, `OXSHOPID`, `OXSERIENR`,           `OXSERIEDESCRIPTION`,      `OXDISCOUNT`, `OXDISCOUNTTYPE`, `OXBEGINDATE`,         `OXENDDATE`,          `OXALLOWSAMESERIES`, `OXALLOWOTHERSERIES`, `OXALLOWUSEANOTHER`, `OXMINIMUMVALUE`, `OXCALCULATEONCE`) VALUES
-                              ('testcoupon1',  101,       1,          'Test coupon 1', 'Test coupon 1 desc', 10.00,       'absolute',       '2008-01-01 00:00:00', '2020-01-01 00:00:00', 1,                   1,                    1,                   1.00,            1);
+                              ('testcoupon1',  101,       1,          'Test coupon 1', 'Test coupon 1 desc', 10.00,       'absolute',       '2008-01-01 00:00:00', now() + interval 1 day, 1,                   1,                    1,                   1.00,            1);
 
 REPLACE INTO `oxvoucherseries2shop` (`OXSHOPID`, `OXMAPOBJECTID`) VALUES
   (1, 101);

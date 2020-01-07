@@ -611,6 +611,8 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $this->clickAndWait("id=confirmButtonTop");
         } elseif ($this->isElementPresent("id=retryLink")){
             $this->markTestIncomplete('PayPal is showing us their retry link so the have some internal problems.');
+        } elseif ($this->isElementPresent("id=login_email") || $this->isElementPresent("id=email")) {
+            $this->markTestIncomplete('We unexpectedly get the PayPal login form again. Autoskipping test.');
         }
 
         //we should be redirected back to shop at this point

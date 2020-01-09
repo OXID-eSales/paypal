@@ -42,6 +42,8 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     const THANK_YOU_PAGE_IDENTIFIER = "Thank you";
     const IDENTITY_COLUMN_ORDER_PAYPAL_TAB_PRICE_VALUE = 2;
 
+    const ACCEPT_ALL_PP_COOKIES_IDENTIFIER = "id=acceptAllButton";
+
     /** @var int How much time to wait for pages to load. Wait time is multiplied by this value. */
     protected $_iWaitTimeMultiplier = 3;
 
@@ -839,7 +841,9 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $this->clickAndWait('paypalExpressCheckoutButton');
         }
 
+        $this->acceptAllCookies();
         $this->logMeIntoSandbox($loginMail, $loginPassword);
+        $this->acceptAllCookies();
         $this->clickPayPalContinue();
     }
 
@@ -1083,12 +1087,18 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     {
         $element = $this->getElementLazy("id=cancelLink", false);
         if ($element) {
-            $element->click();
+            $this->clickAndWait("id=cancelLink");
             return;
         }
         $element = $this->getElementLazy("id=cancel_return", false);
         if ($element) {
-            $element->click();
+            $this->clickAndWait("id=cancel_return");
+        }
+
+        //we should be redirected back to shop at this point
+        $this->_waitForAppear('isElementPresent', "id=breadCrumb", 5, true);
+        if( !$this->isElementPresent("id=breadCrumb")) {
+            $this->markTestIncomplete('Cancel PayPal and return to shop did not work, marking test as incomplete.');
         }
     }
 
@@ -1161,5 +1171,17 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
 
         //just in case ensure we are logged out of PayPal
         $this->doPayPalLogOut();
+    }
+
+    /**
+     * PayPal cookie banner might get in the way.
+     * Click confirm if banner is found.
+     */
+    private function acceptAllCookies()
+    {
+        $element = $this->getElementLazy(self:: ACCEPT_ALL_PP_COOKIES_IDENTIFIER, false);
+        if ($element) {
+            $this->clickAndWait(self:: ACCEPT_ALL_PP_COOKIES_IDENTIFIER);
+        }
     }
 }

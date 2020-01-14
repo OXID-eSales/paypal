@@ -1,8 +1,11 @@
 <?php
+
 /**
  * Copyright © OXID eSales AG. All rights reserved.
  * See LICENSE file for license details.
  */
+
+declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Page;
 
@@ -26,20 +29,23 @@ class PayPalLogin extends Page
     public $loginButton = '#btnLogin';
     public $oldLoginButton = '#submitLogin';
 
-    public $confirmButton = '#confirmButtonTop';
+    public $newConfirmButton = '#confirmButtonTop';
     public $oldConfirmButton = '#continue_abovefold';
 
     public $oneTouchNotNowLink = '#notNowLink';
 
     public $spinner = '#spinner';
 
+    public $gdprCookieBanner = "#gdprCookieBanner";
+    public $acceptAllPaypalCookies = "#acceptAllButton";
+
     /**
      * @param string $userName
      * @param string $userPassword
      *
-     * @return $this
+     * @return OrderCheckout
      */
-    public function loginAndCheckout(string $userName, string $userPassword)
+    public function loginAndCheckout(string $userName, string $userPassword): OrderCheckout
     {
         $I = $this->user;
         $usingNewLogin = true;
@@ -69,16 +75,23 @@ class PayPalLogin extends Page
             $I->click($this->oneTouchNotNowLink);
         }
 
-        if ($usingNewLogin) {
-            $I->waitForElementClickable($this->confirmButton, 60);
-            $I->waitForElementNotVisible($this->spinner, 90);
-            $I->scrollTo($this->confirmButton);
-            $I->click($this->confirmButton);
-        } else {
-            $I->waitForElementClickable($this->oldConfirmButton, 60);
-            $I->scrollTo($this->oldConfirmButton);
-            $I->click($this->oldConfirmButton);
+        $confirmButton = $usingNewLogin ? $this->newConfirmButton : $this->oldConfirmButton;
+        $I->waitForElementClickable($confirmButton, 60);
+        $I->waitForElementNotVisible($this->spinner, 90);
+
+        // In case we have cookie message, accept all cookies
+        if ($I->seePageHasElement($this->gdprCookieBanner)) {
+            $I->click($this->acceptAllPaypalCookies);
+            // In case that the content blocking is enabled,
+            // because the cookie came from a tracker
+            // we wont be able to accept it, then remove the message
+            if ($I->seePageHasElement($this->gdprCookieBanner)) {
+                $I->executeJS("document.getElementById('".substr($this->gdprCookieBanner, 1)."').remove();");
+            }
+            $I->waitForElementNotVisible($this->gdprCookieBanner);
         }
+
+        $I->click($confirmButton);
         $I->waitForDocumentReadyState();
 
         return new OrderCheckout($I);

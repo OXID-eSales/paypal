@@ -91,6 +91,7 @@ class PayPalLogin extends Page
             $I->waitForElementNotVisible($this->gdprCookieBanner);
         }
 
+        $I->waitForElementNotVisible($this->spinner, 90);
         $I->click($confirmButton);
         $I->waitForDocumentReadyState();
 

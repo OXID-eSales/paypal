@@ -749,6 +749,76 @@ class Config
     }
 
     /**
+     * Returns if all PayPal banners should be hidden
+     *
+     * @return bool
+     */
+    public function hideAllBanners()
+    {
+        return $this->getParameter('oePayPalBannersHideAll');
+    }
+
+    /**
+     * Returns if PayPal banners should be shown on the start page
+     *
+     * @return bool
+     */
+    public function showBannersStartPage()
+    {
+        return $this->getParameter('oePayPalBannersStartPage');
+    }
+
+    /**
+     * Returns if PayPal banners should be shown on the category page
+     *
+     * @return bool
+     */
+    public function showBannersCategoryPage()
+    {
+        return $this->getParameter('oePayPalBannersCategoryPage');
+    }
+
+    /**
+     * Returns if PayPal banners should be shown on the search results page
+     *
+     * @return bool
+     */
+    public function showBannersSearchResultsPage()
+    {
+        return $this->getParameter('oePayPalBannersSearchResultsPage');
+    }
+
+    /**
+     * Returns if PayPal banners should be shown on the product details page
+     *
+     * @return bool
+     */
+    public function showBannersProductDetailsPage()
+    {
+        return $this->getParameter('oePayPalBannersProductDetailsPage');
+    }
+
+    /**
+     * Returns if PayPal banners should be shown on the checkout page
+     *
+     * @return bool
+     */
+    public function showBannersCheckoutPage()
+    {
+        return $this->getParameter('oePayPalBannersCheckoutPage');
+    }
+
+    /**
+     * Returns the PayPal banners colour scheme
+     *
+     * @return string
+     */
+    public function getBannersColorScheme()
+    {
+        return $this->getParameter('oePayPalBannersColorScheme');
+    }
+
+    /**
      * Returns logo image name according to parameter
      *
      * @return mixed|string

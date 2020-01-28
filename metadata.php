@@ -91,6 +91,14 @@ $aModule = array(
         array('template' => 'page/checkout/user.tpl',             'block'=>'checkout_user_main',                    'file'=>'/views/blocks/page/checkout/oepaypalexpresscheckout.tpl'),
      ),
     'settings' => array(
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersHideAll',               'type' => 'bool', 'value' => 'false'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersStartPage',             'type' => 'bool', 'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCategoryPage',          'type' => 'bool', 'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersSearchResultsPage',     'type' => 'bool', 'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersProductDetailsPage',    'type' => 'bool', 'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCheckoutPage',          'type' => 'bool', 'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersColorScheme',           'type' => 'select', 'constraints' => 'blue|black|white|white-no-border', 'value' => 'blue'),
+
         // functionality is currently not available
         //array('group' => 'oepaypal_checkout', 'name' => 'blOEPayPalGuestBuyRole',           'type' => 'bool', 'value' => 'false'),//customizedcheckout_paypalguestbuyrole
         array('group' => 'oepaypal_checkout', 'name' => 'blOEPayPalStandardCheckout',      'type' => 'bool',   'value' => 'true'),

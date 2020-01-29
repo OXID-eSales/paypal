@@ -91,6 +91,7 @@ $aLang = array(
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInDetails'          => 'If PayPal Express is enabled, the PayPal Express button will be displayed in the products detail page.',
 
     'SHOP_MODULE_GROUP_oepaypal_banners'                     => 'Banner settings',
+    'SHOP_MODULE_oePayPalClientId'                           => 'Client id',
     'SHOP_MODULE_oePayPalBannersHideAll'                     => 'Hide installment banner',
     'SHOP_MODULE_oePayPalBannersStartPage'                   => 'Show installment banner on start page',
     'SHOP_MODULE_oePayPalBannersCategoryPage'                => 'Show installment banner on category pages',

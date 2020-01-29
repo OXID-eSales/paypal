@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Core;
 
+use OxidEsales\Eshop\Core\Registry;
+
 /**
  * ViewConfig class wrapper for PayPal module.
  *
@@ -264,5 +266,78 @@ class ViewConfig extends ViewConfig_parent
     public function getCurrentUrl()
     {
         return $this->getPayPalConfig()->getCurrentUrl();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPayPalClientId(): string
+    {
+        return Registry::getConfig()->getConfigParam('oePayPalClientId');
+    }
+
+    /**
+     * Returns whether PayPal banners should be shown on the start page
+     *
+     * @return bool
+     */
+    public function showPayPalBannerOnStartPage()
+    {
+        $config = Registry::getConfig();
+        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersStartPage');
+    }
+
+    /**
+     * Returns whether PayPal banners should be shown on the category page
+     *
+     * @return bool
+     */
+    public function showPayPalBannerOnCategoryPage()
+    {
+        $config = Registry::getConfig();
+        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersCategoryPage');
+    }
+
+    /**
+     * Returns whether PayPal banners should be shown on the search results page
+     *
+     * @return bool
+     */
+    public function showPayPalBannerOnSearchResultsPage()
+    {
+        $config = Registry::getConfig();
+        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersSearchResultsPage');
+    }
+
+    /**
+     * Returns whether PayPal banners should be shown on the product details page
+     *
+     * @return bool
+     */
+    public function showPayPalBannerOnProductDetailsPage()
+    {
+        $config = Registry::getConfig();
+        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersProductDetailsPage');
+    }
+
+    /**
+     * Returns whether PayPal banners should be shown on the checkout page
+     *
+     * @return bool
+     */
+    public function showPayPalBannerOnCheckoutPage()
+    {
+        $config = Registry::getConfig();
+        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersCheckoutPage');
+    }
+
+    /**
+     * Returns the PayPal banners colour scheme
+     *
+     * @return string
+     */
+    public function getPayPalBannersColorScheme()
+    {
+        return Registry::getConfig()->getConfigParam('oePayPalBannersColorScheme');
     }
 }

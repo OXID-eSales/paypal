@@ -68,6 +68,7 @@ $aModule = array(
     'templates' => array(
         'order_paypal.tpl' => 'oe/oepaypal/views/admin/tpl/order_paypal.tpl',
         'ipnhandler.tpl'   => 'oe/oepaypal/views/tpl/ipnhandler.tpl',
+        'installment_banners.tpl' => 'oe/oepaypal/views/tpl/installment_banners.tpl'
     ),
     'blocks' => array(
         array('template' => 'deliveryset_main.tpl',               'block'=>'admin_deliveryset_main_form',           'file'=>'/views/blocks/deliveryset_main.tpl'),
@@ -89,8 +90,10 @@ $aModule = array(
         array('template' => 'page/details/inc/productmain.tpl',   'block'=>'mb_details_productmain_tobasket',       'file'=>'/views/blocks/mobile/oepaypalexpresscheckoutdetailspage.tpl'),
         array('template' => 'page/details/inc/productmain.tpl',   'block'=>'mb_details_productmain_morepics',       'file'=>'/views/blocks/mobile/oepaypalexpresscheckoutdetailspagepopup.tpl'),
         array('template' => 'page/checkout/user.tpl',             'block'=>'checkout_user_main',                    'file'=>'/views/blocks/page/checkout/oepaypalexpresscheckout.tpl'),
+        array('template' => 'layout/page.tpl',                    'block'=>'content_main',                          'file'=>'/views/blocks/layout/page_installment_banner.tpl'),
      ),
     'settings' => array(
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalClientId',                     'type' => 'str',  'value' => ''),
         array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersHideAll',               'type' => 'bool', 'value' => 'false'),
         array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersStartPage',             'type' => 'bool', 'value' => 'true'),
         array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCategoryPage',          'type' => 'bool', 'value' => 'true'),

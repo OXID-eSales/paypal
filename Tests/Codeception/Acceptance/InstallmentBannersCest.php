@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
+use OxidEsales\Codeception\Module\Translation\Translator;
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Step\Basket;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
@@ -154,5 +155,56 @@ class InstallmentBannersCest
         $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
         $I->reloadPage();
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function checkBannerPlaceholderAppearsOnStartPageOnlyByCorrectConfig(AcceptanceTester $I)
+    {
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', false);
+        $I->openShop();
+        $I->dontSeeElementInDOM("#paypal-installment-banner-container");
+
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
+        $I->clearShopCache();
+        $I->openShop();
+        $I->seeElementInDOM("#paypal-installment-banner-container");
+
+        $I->click(Translator::translate('HELP'));
+        $I->dontSeeElementInDOM("#paypal-installment-banner-container");
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function checkCorrectDefaultsSentToPaypalInstallmentsOnStartPageWithEmptyBasket(AcceptanceTester $I)
+    {
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
+        $I->openShop();
+
+        $I->checkInstallmentBannerData(0, '20x1', 'EUR');
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function checkCorrectSumSentToPaypalInstallmentsOnStartPageWithFilledBasketBrutto(AcceptanceTester $I)
+    {
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
+        $I->updateConfigInDatabase('blShowNetPrice', false);
+
+        $homePage = $I->openShop();
+        $basket = new Basket($I);
+        $basketItem = [
+            'id' => 'dc5ffdf380e15674b56dd562a7cb6aec',
+            'title' => 'Kuyichi leather belt JEVER',
+            'amount' => 4,
+            'price' => '119,60 €'
+        ];
+        $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
+        $homePage->seeMiniBasketContains([$basketItem], $basketItem['price'], (string)$basketItem['amount']);
+
+        $I->checkInstallmentBannerData(119.6);
     }
 }

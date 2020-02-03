@@ -1,3 +1,7 @@
+[{if !isset($size) }]
+    [{assign var="size" value="20x1"}]
+[{/if}]
+
 [{assign var="currency" value=$oView->getActCurrency()}]
 <script src="https://www.paypal.com/sdk/js?client-id=[{$oViewConf->getPayPalClientId()}]&components=messages"></script>
 <script>
@@ -9,8 +13,9 @@
       style: {
         layout: 'flex',
         color: '[{$oViewConf->getPayPalBannersColorScheme()}]',
-        ratio: '20x1'
+        ratio: '[{$size}]'
       }
     }).render('#paypal-installment-banner-container');
   };
+
 </script>

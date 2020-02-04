@@ -91,7 +91,7 @@ $aLang = array(
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInDetails'          => 'If PayPal Express is enabled, the PayPal Express button will be displayed in the products detail page.',
 
     'SHOP_MODULE_GROUP_oepaypal_banners'                     => 'Banner settings',
-    'SHOP_MODULE_oePayPalClientId'                           => 'Client id',
+    'SHOP_MODULE_oePayPalClientId'                           => 'Client ID',
     'SHOP_MODULE_oePayPalBannersHideAll'                     => 'Hide installment banner',
     'SHOP_MODULE_oePayPalBannersStartPage'                   => 'Show installment banner on start page',
     'SHOP_MODULE_oePayPalBannersCategoryPage'                => 'Show installment banner on category pages',
@@ -102,5 +102,5 @@ $aLang = array(
     'SHOP_MODULE_oePayPalBannersColorScheme_blue'            => 'blue',
     'SHOP_MODULE_oePayPalBannersColorScheme_black'           => 'black',
     'SHOP_MODULE_oePayPalBannersColorScheme_white'           => 'white',
-    'SHOP_MODULE_oePayPalBannersColorScheme_white-no-border' => 'white-no-border',
+    'SHOP_MODULE_oePayPalBannersColorScheme_white-no-border' => 'white, no border',
 );

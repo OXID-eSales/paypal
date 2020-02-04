@@ -90,7 +90,7 @@ $aLang = array(
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInMiniBasket'       => 'Ist PayPal Express aktiv, wird der PayPal Express-Button im Mini-Warenkorb angezeigt.',
 
     'SHOP_MODULE_GROUP_oepaypal_banners'                     => 'Banner-Einstellungen',
-    'SHOP_MODULE_oePayPalClientId'                           => '[TR]Client id',
+    'SHOP_MODULE_oePayPalClientId'                           => 'Client-ID',
     'SHOP_MODULE_oePayPalBannersHideAll'                     => 'Ratenzahlung-Banner nicht anzeigen',
     'SHOP_MODULE_oePayPalBannersStartPage'                   => 'Ratenzahlung-Banner auf Startseite anzeigen',
     'SHOP_MODULE_oePayPalBannersCategoryPage'                => 'Ratenzahlung-Banner auf Kategorieseiten anzeigen',

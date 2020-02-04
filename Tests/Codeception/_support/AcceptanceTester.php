@@ -80,5 +80,22 @@ class AcceptanceTester extends \Codeception\Actor
         $I->updateConfigInDatabase('sOEPayPalSandboxUsername', Fixtures::get('sOEPayPalSandboxUsername'));
         $I->updateConfigInDatabase('sOEPayPalSandboxPassword', Fixtures::get('sOEPayPalSandboxPassword'));
         $I->updateConfigInDatabase('sOEPayPalSandboxSignature', Fixtures::get('sOEPayPalSandboxSignature'));
+        $I->updateConfigInDatabase('oePayPalClientId', Fixtures::get('OEPayPalClientId'));
+    }
+
+    /**
+     * Switch to PayPal Installment banner iframe
+     * and check if body contains elements.
+     */
+    public function seePayPalInstallmentBanner()
+    {
+        $I = $this;
+
+        $I->switchToIFrame("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
+        $I->waitForElementVisible("//body[node()]");
+
+        $I->switchToWindow();
+
+        return $this;
     }
 }

@@ -31,6 +31,7 @@ return [
         'oxcreate'     => date("Y-m-d H:i:s"),
         'oxregister'   => date("Y-m-d H:i:s"),
         'oxbirthdate'  => date("Y-m-d"),
+        'oxpasssalt'   => ''
     ],
     'userPassword'  => 'useruser',
     // This product is available in ce|pe|ee demodata

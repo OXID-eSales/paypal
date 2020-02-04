@@ -120,6 +120,22 @@ class AcceptanceTester extends \Codeception\Actor
         return $this;
     }
 
+    public function checkInstallmentBannerData(float $amount, string $ratio = null, string $currency = null)
+    {
+        $I = $this;
+
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex(sprintf("amount: %s", $amount)), $onloadMethod);
+
+        if ($ratio) {
+            $I->assertRegExp($this->prepareMessagePartRegex(sprintf("ratio: '%s'", $ratio)), $onloadMethod);
+        }
+
+        if ($currency) {
+            $I->assertRegExp($this->prepareMessagePartRegex(sprintf("currency: '%s'", $currency)), $onloadMethod);
+        }
+    }
+
     /**
      * @return array
      */
@@ -142,5 +158,16 @@ class AcceptanceTester extends \Codeception\Actor
     public function getExistingUserPassword(): string
     {
         return Fixtures::get('userPassword');
+    }
+
+    /**
+     * Wrap the message part in message required conditions
+     *
+     * @param string $part
+     * @return string
+     */
+    protected function prepareMessagePartRegex($part)
+    {
+        return "/paypal.Messages\(\{[^}\)]*{$part}/";
     }
 }

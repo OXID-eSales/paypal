@@ -95,6 +95,7 @@ $aModule = array(
         array('template' => 'page/checkout/basket.tpl',           'block'=>'checkout_basket_next_step_top',         'file'=>'/views/blocks/page/checkout/basket_installment_banner_after.tpl'),
         array('template' => 'page/checkout/basket.tpl',           'block'=>'checkout_basket_emptyshippingcart',     'file'=>'/views/blocks/page/checkout/basket_installment_banner_before.tpl'),
         array('template' => 'page/checkout/payment.tpl',          'block'=>'checkout_payment_main',                 'file'=>'/views/blocks/page/checkout/basket_installment_banner_before.tpl'),
+        array('template' => 'page/list/list.tpl',                 'block'=>'page_list_listhead',                    'file'=>'/views/blocks/page/list/list.tpl'),
      ),
     'settings' => array(
         array('group' => 'oepaypal_banners', 'name' => 'oePayPalClientId',                     'type' => 'str',  'value' => ''),

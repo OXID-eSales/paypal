@@ -25,6 +25,7 @@ class InstallmentBannersCest
      */
     public function _before(AcceptanceTester $I)
     {
+        $I->clearShopCache();
         $I->haveInDatabase('oxuser', $I->getExistingUserData());
         $I->setPayPalSettingsData();
     }
@@ -103,5 +104,62 @@ class InstallmentBannersCest
         $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
         $I->reloadPage();
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function categoryPageBanner(AcceptanceTester $I)
+    {
+        $I->wantToTest('PayPal installment banner on category page');
+
+        $I->updateConfigInDatabase('oePayPalBannersCategoryPage', false);
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
+
+        $homePage = $I->openShop();
+        $basket = new Basket($I);
+        $basketItem = Fixtures::get('product');
+        $basket->addProductToBasket($basketItem['id'], (int)$basketItem['amount']);
+        $homePage
+            ->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount'])
+            ->openCategoryPage("Kiteboarding");
+
+        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+
+        //Check installment banner body in Flow theme
+        $I->updateConfigInDatabase('oePayPalBannersCategoryPage', true);
+        $I->reloadPage();
+        $I->seePayPalInstallmentBanner();
+
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: 119.6"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("ratio: '20x1'"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        //Check installment banner body in Wave theme
+        $I->updateConfigInDatabase('sTheme', 'wave');
+        $I->reloadPage();
+        $I->seePayPalInstallmentBanner();
+
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: 119.6"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("ratio: '20x1'"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        // Check banner visibility when oePayPalBannersHideAll setting is set to true
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->reloadPage();
+        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+    }
+
+    /**
+     * Wrap the message part in message required conditions
+     *
+     * @param string $part
+     * @return string
+     */
+    protected function prepareMessagePartRegex($part)
+    {
+        return "/paypal.Messages\(\{[^}\)]*{$part}/";
     }
 }

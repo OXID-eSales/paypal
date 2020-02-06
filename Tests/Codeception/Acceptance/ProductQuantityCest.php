@@ -10,8 +10,6 @@ use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Step\Basket;
 use OxidEsales\Codeception\Step\ProductNavigation;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
-use OxidEsales\PayPalModule\Tests\Codeception\Admin\PayPalOrder;
-use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 
 /**
  * Class ProductQuantityCest
@@ -36,16 +34,11 @@ class ProductQuantityCest
 
         $basket = new Basket($I);
 
-        $basketItem = [
-            'id' => 'dc5ffdf380e15674b56dd562a7cb6aec',
-            'title' => 'Kuyichi leather belt JEVER',
-            'amount' => 4,
-            'price' => '119,60 €'
-        ];
+        $basketItem = Fixtures::get('product');
 
         $expectedBasketContent = [
-            'id' => 'dc5ffdf380e15674b56dd562a7cb6aec',
-            'title' => 'Kuyichi leather belt JEVER',
+            'id' => $basketItem['id'],
+            'title' => $basketItem['title'],
             'amount' => 5,
             'price' => '149,50 €'
         ];
@@ -59,6 +52,7 @@ class ProductQuantityCest
         $I->click("#paypalExpressCheckoutDetailsButton");
         $I->waitForElementVisible('#actionAddToBasketAndGoToCheckout', 20);
         $I->click("#actionAddToBasketAndGoToCheckout");
+        $I->waitForPageLoad();
 
         $homePage = $I->openShop();
 

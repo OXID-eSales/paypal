@@ -92,6 +92,9 @@ $aModule = array(
         array('template' => 'page/checkout/user.tpl',             'block'=>'checkout_user_main',                    'file'=>'/views/blocks/page/checkout/oepaypalexpresscheckout.tpl'),
         array('template' => 'page/shop/start.tpl',                'block'=>'start_welcome_text',                    'file'=>'/views/blocks/page/shop/start.tpl'),
         array('template' => 'page/search/search.tpl',             'block'=>'search_header',                         'file'=>'/views/blocks/page/search/search.tpl'),
+        array('template' => 'page/checkout/basket.tpl',           'block'=>'checkout_basket_next_step_top',         'file'=>'/views/blocks/page/checkout/basket_installment_banner_after.tpl'),
+        array('template' => 'page/checkout/basket.tpl',           'block'=>'checkout_basket_emptyshippingcart',     'file'=>'/views/blocks/page/checkout/basket_installment_banner_before.tpl'),
+        array('template' => 'page/checkout/payment.tpl',          'block'=>'checkout_payment_main',                 'file'=>'/views/blocks/page/checkout/basket_installment_banner_before.tpl'),
      ),
     'settings' => array(
         array('group' => 'oepaypal_banners', 'name' => 'oePayPalClientId',                     'type' => 'str',  'value' => ''),

@@ -98,4 +98,48 @@ class AcceptanceTester extends \Codeception\Actor
 
         return $this;
     }
+
+    /**
+     * @return AcceptanceTester
+     */
+    public function seePayPalInstallmentBannerInFlowAndWaveTheme(): AcceptanceTester
+    {
+        $I = $this;
+
+        //Check installment banner body in Flow theme
+        $I->updateConfigInDatabase('sTheme', 'flow');
+        $I->reloadPage();
+        $I->seePayPalInstallmentBanner();
+
+        //Check installment banner body in Wave theme
+        $I->updateConfigInDatabase('sTheme', 'wave');
+        $I->reloadPage();
+        $I->seePayPalInstallmentBanner();
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExistingUserData(): array
+    {
+        return Fixtures::get('user');
+    }
+
+    /**
+     * @return string
+     */
+    public function getExistingUserName(): string
+    {
+        return $this->getExistingUserData()['oxusername'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getExistingUserPassword(): string
+    {
+        return Fixtures::get('userPassword');
+    }
 }

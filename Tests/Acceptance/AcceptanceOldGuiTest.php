@@ -120,7 +120,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
         $this->assertEquals("Gesamtbetrag: 81,00 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")));
         $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
-        $this->assertTextPresent("E-Mail: " . $this->getLoginDataByName('sBuyerLogin'));
+        $this->assertTextPresent("E-Mail");
+        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
         $this->assertEquals("Versandart Ändern Standard", $this->clearString($this->getText("orderShipping")));
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");

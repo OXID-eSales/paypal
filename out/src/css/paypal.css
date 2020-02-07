@@ -159,3 +159,7 @@
 .oePayPalPopupNav button {
     margin-left: 15px;
 }
+
+#details_container #paypal-installment-banner-container {
+    padding-bottom: 20px;
+}

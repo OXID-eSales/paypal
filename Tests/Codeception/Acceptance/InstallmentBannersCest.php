@@ -12,6 +12,7 @@ namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Step\Basket;
+use OxidEsales\Codeception\Step\ProductNavigation;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 
 /**
@@ -265,5 +266,118 @@ class InstallmentBannersCest
         $homePage->seeMiniBasketContains([$basketItem], $basketItem['price'], (string)$basketItem['amount']);
 
         $I->checkInstallmentBannerData(100.52);
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function productDetailsPageBannerBrutto(AcceptanceTester $I)
+    {
+        $I->wantToTest('PayPal installment banner on product details page');
+
+        $product = [
+            'id' => '1000',
+            'title' => 'Test product 0 [EN] šÄßüл',
+            'amount' => 1,
+            'price' => '50'
+        ];
+        $basketItem = [
+            'id' => '1001',
+            'title' => 'Test product 1 [EN] šÄßüл',
+            'amount' => 1,
+            'price' => '100'
+        ];
+
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', false);
+
+        $I->openShop();
+        $productNavigation = new ProductNavigation($I);
+        $productNavigation->openProductDetailsPage($product['id']);
+        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', true);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme();
+
+        // Check banner amount when basket is empty
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: " . $product['price']), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        // Check banner amount when basket is not empty
+        $basket = new Basket($I);
+        $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
+        $productNavigation->openProductDetailsPage($product['id']);
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: 150"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        // Check banner amount when the given product is also in the basket
+        $basket->addProductToBasket($product['id'], $product['amount']);
+        $productNavigation->openProductDetailsPage($product['id']);
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: 150"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        // Check banner visibility when oePayPalBannersHideAll setting is set to true
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->reloadPage();
+        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function productDetailsPageBannerNetto(AcceptanceTester $I)
+    {
+        $I->wantToTest('PayPal installment banner on product details page');
+        $I->updateConfigInDatabase('blShowNetPrice', true);
+
+        $product = [
+            'id' => '1000',
+            'title' => 'Test product 0 [EN] šÄßüл',
+            'amount' => 1,
+            'price' => '42,02'
+        ];
+        $basketItem = [
+            'id' => '1001',
+            'title' => 'Test product 1 [EN] šÄßüл',
+            'amount' => 1,
+            'price' => '84,03'
+        ];
+
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', false);
+
+        $I->openShop();
+        $productNavigation = new ProductNavigation($I);
+        $productNavigation->openProductDetailsPage($product['id']);
+        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', true);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme();
+
+        // Check banner amount when basket is empty
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: " . $product['price']), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        // Check banner amount when basket is not empty
+        $basket = new Basket($I);
+        $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
+        $productNavigation->openProductDetailsPage($product['id']);
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: 126,05"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        // Check banner amount when the given product is also in the basket
+        $basket->addProductToBasket($product['id'], $product['amount']);
+        $productNavigation->openProductDetailsPage($product['id']);
+        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex("amount: 126,05"), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+
+        // Check banner visibility when oePayPalBannersHideAll setting is set to true
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->reloadPage();
+        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
     }
 }

@@ -3,9 +3,15 @@
 [{/if}]
 
 [{assign var="currency" value=$oView->getActCurrency()}]
-<script src="https://www.paypal.com/sdk/js?client-id=[{$oViewConf->getPayPalClientId()}]&components=messages"></script>
-<script>
-  window.onload = function() {
+
+[{oxscript include="https://www.paypal.com/sdk/js?client-id="|cat:$oViewConf->getPayPalClientId()|cat:"&components=messages"}]
+<script type="application/javascript">
+  // Create installment banner holder
+  const p = document.createElement('div');
+  p.setAttribute('id', 'paypal-installment-banner-container');
+  document.querySelector('[{$selector}]').appendChild(p);
+
+  PayPalMessage = function () {
     paypal.Messages({
       amount: [{$amount}],
       currency: '[{$currency->name}]',
@@ -18,4 +24,9 @@
     }).render('#paypal-installment-banner-container');
   };
 
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', PayPalMessage);
+  } else {
+    PayPalMessage();
+  }
 </script>

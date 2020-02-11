@@ -640,7 +640,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         // Check if PayPal is not displayed for Germany
         $this->assertElementNotPresent("//select[@name='sShipSet']/option[text()='Paypal']", "Paypal is displayed for Germany, but must be not shown");
 
-        $this->assertEquals("COD (Cash on Delivery) (7,50 €)", $this->getText("//form[@id='payment']/dl[5]/dt/label/b"), "Wrong payment method is shown");
+        $this->assertEquals("COD (Cash on Delivery) (7,50 €)", $this->getText("//form[@id='payment']/dl[4]/dt/label/b"), "Wrong payment method is shown");
         $this->assertTextPresent("COD (Cash on Delivery) (7,50 €)", "Wrong payment method is shown");
         $this->assertFalse($this->isTextPresent("PayPal (0,00 €)"), "PayPal should not be displayed as payment method");
 

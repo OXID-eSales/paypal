@@ -101,9 +101,9 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @return AcceptanceTester
+     * @param float $amount
      */
-    public function seePayPalInstallmentBannerInFlowAndWaveTheme(): AcceptanceTester
+    public function seePayPalInstallmentBannerInFlowAndWaveTheme(float $amount = 0)
     {
         $I = $this;
 
@@ -111,29 +111,28 @@ class AcceptanceTester extends \Codeception\Actor
         $I->updateConfigInDatabase('sTheme', 'flow');
         $I->reloadPage();
         $I->seePayPalInstallmentBanner();
+        $I->checkInstallmentBannerData($amount);
 
         //Check installment banner body in Wave theme
         $I->updateConfigInDatabase('sTheme', 'wave');
         $I->reloadPage();
         $I->seePayPalInstallmentBanner();
-
-        return $this;
+        $I->checkInstallmentBannerData($amount);
     }
 
-    public function checkInstallmentBannerData(float $amount, string $ratio = null, string $currency = null)
+    /**
+     * @param float  $amount
+     * @param string $ratio
+     * @param string $currency
+     */
+    public function checkInstallmentBannerData(float $amount = 0, string $ratio = '20x1', string $currency = 'EUR')
     {
         $I = $this;
 
         $onloadMethod = $I->executeJS("return window.onload.toString()");
         $I->assertRegExp($this->prepareMessagePartRegex(sprintf("amount: %s", $amount)), $onloadMethod);
-
-        if ($ratio) {
-            $I->assertRegExp($this->prepareMessagePartRegex(sprintf("ratio: '%s'", $ratio)), $onloadMethod);
-        }
-
-        if ($currency) {
-            $I->assertRegExp($this->prepareMessagePartRegex(sprintf("currency: '%s'", $currency)), $onloadMethod);
-        }
+        $I->assertRegExp($this->prepareMessagePartRegex(sprintf("ratio: '%s'", $ratio)), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex(sprintf("currency: '%s'", $currency)), $onloadMethod);
     }
 
     /**

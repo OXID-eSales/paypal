@@ -284,7 +284,22 @@ class ViewConfig extends ViewConfig_parent
     public function showPayPalBannerOnStartPage()
     {
         $config = Registry::getConfig();
-        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersStartPage');
+        return (
+            !$config->getConfigParam('oePayPalBannersHideAll') &&
+            $config->getConfigParam('oePayPalBannersStartPage') &&
+            $config->getConfigParam('oePayPalBannersStartPageSelector')
+        );
+    }
+
+    /**
+     * Returns PayPal banners selector for the start page
+     *
+     * @return string
+     */
+    public function getPayPalBannerStartPageSelector()
+    {
+        $config = Registry::getConfig();
+        return $config->getConfigParam('oePayPalBannersStartPageSelector');
     }
 
     /**
@@ -295,7 +310,22 @@ class ViewConfig extends ViewConfig_parent
     public function showPayPalBannerOnCategoryPage()
     {
         $config = Registry::getConfig();
-        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersCategoryPage');
+        return (
+            !$config->getConfigParam('oePayPalBannersHideAll') &&
+            $config->getConfigParam('oePayPalBannersCategoryPage') &&
+            $config->getConfigParam('oePayPalBannersCategoryPageSelector')
+        );
+    }
+
+    /**
+     * Returns PayPal banners selector for the category page
+     *
+     * @return string
+     */
+    public function getPayPalBannerCategoryPageSelector()
+    {
+        $config = Registry::getConfig();
+        return $config->getConfigParam('oePayPalBannersCategoryPageSelector');
     }
 
     /**
@@ -306,7 +336,22 @@ class ViewConfig extends ViewConfig_parent
     public function showPayPalBannerOnSearchResultsPage()
     {
         $config = Registry::getConfig();
-        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersSearchResultsPage');
+        return (
+            !$config->getConfigParam('oePayPalBannersHideAll') &&
+            $config->getConfigParam('oePayPalBannersSearchResultsPage') &&
+            $config->getConfigParam('oePayPalBannersSearchResultsPageSelector')
+        );
+    }
+
+    /**
+     * Returns PayPal banners selector for the search page
+     *
+     * @return string
+     */
+    public function getPayPalBannerSearchPageSelector()
+    {
+        $config = Registry::getConfig();
+        return $config->getConfigParam('oePayPalBannersSearchResultsPageSelector');
     }
 
     /**
@@ -317,7 +362,22 @@ class ViewConfig extends ViewConfig_parent
     public function showPayPalBannerOnProductDetailsPage()
     {
         $config = Registry::getConfig();
-        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersProductDetailsPage');
+        return (
+            !$config->getConfigParam('oePayPalBannersHideAll') &&
+            $config->getConfigParam('oePayPalBannersProductDetailsPage') &&
+            $config->getConfigParam('oePayPalBannersProductDetailsPageSelector')
+        );
+    }
+
+    /**
+     * Returns PayPal banners selector for the product detail page
+     *
+     * @return string
+     */
+    public function getPayPalBannerProductDetailsPageSelector()
+    {
+        $config = Registry::getConfig();
+        return $config->getConfigParam('oePayPalBannersProductDetailsPageSelector');
     }
 
     /**
@@ -327,8 +387,45 @@ class ViewConfig extends ViewConfig_parent
      */
     public function showPayPalBannerOnCheckoutPage()
     {
+        $showBanner = false;
         $config = Registry::getConfig();
-        return !$config->getConfigParam('oePayPalBannersHideAll') && $config->getConfigParam('oePayPalBannersCheckoutPage');
+        if ($this->getActionClassName() === 'basket') {
+            $showBanner = (
+                !$config->getConfigParam('oePayPalBannersHideAll') &&
+                $config->getConfigParam('oePayPalBannersCheckoutPage') &&
+                $config->getConfigParam('oePayPalBannersCartPageSelector')
+            );
+        } else if ($this->getActionClassName() === 'payment') {
+            $showBanner = (
+                !$config->getConfigParam('oePayPalBannersHideAll') &&
+                $config->getConfigParam('oePayPalBannersCheckoutPage') &&
+                $config->getConfigParam('oePayPalBannersPaymentPageSelector')
+            );
+        }
+
+        return $showBanner;
+    }
+
+    /**
+     * Returns PayPal banners selector for the cart page
+     *
+     * @return string
+     */
+    public function getPayPalBannerCartPageSelector()
+    {
+        $config = Registry::getConfig();
+        return $config->getConfigParam('oePayPalBannersCartPageSelector');
+    }
+
+    /**
+     * Returns PayPal banners selector for the payment page
+     *
+     * @return string
+     */
+    public function getPayPalBannerPaymentPageSelector()
+    {
+        $config = Registry::getConfig();
+        return $config->getConfigParam('oePayPalBannersPaymentPageSelector');
     }
 
     /**

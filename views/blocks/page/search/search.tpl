@@ -6,6 +6,5 @@
         [{assign var="paypalInstallmentPrice" value=$oxcmp_basket->getNettoSum()}]
     [{/if}]
 
-    [{include file="installment_banners.tpl" amount=$paypalInstallmentPrice}]
-    <div id="paypal-installment-banner-container"></div>
+    [{include file="installment_banners.tpl" amount=$paypalInstallmentPrice selector=$oViewConf->getPayPalBannerSearchPageSelector()}]
 [{/if}]

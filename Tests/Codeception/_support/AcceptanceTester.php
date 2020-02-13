@@ -109,12 +109,20 @@ class AcceptanceTester extends \Codeception\Actor
 
         //Check installment banner body in Flow theme
         $I->updateConfigInDatabase('sTheme', 'flow');
+        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .row');
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '#content .page-header .clearfix');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.detailsParams');
+        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkoutSteps ~ .spacer');
         $I->reloadPage();
         $I->seePayPalInstallmentBanner();
         $I->checkInstallmentBannerData($amount);
 
         //Check installment banner body in Wave theme
         $I->updateConfigInDatabase('sTheme', 'wave');
+        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .container');
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '.page-header');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '#detailsItemsPager');
+        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkout-steps');
         $I->reloadPage();
         $I->seePayPalInstallmentBanner();
         $I->checkInstallmentBannerData($amount);
@@ -129,7 +137,7 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $I = $this;
 
-        $onloadMethod = $I->executeJS("return window.onload.toString()");
+        $onloadMethod = $I->executeJS("return PayPalMessage.toString()");
         $I->assertRegExp($this->prepareMessagePartRegex(sprintf("amount: %s", $amount)), $onloadMethod);
         $I->assertRegExp($this->prepareMessagePartRegex(sprintf("ratio: '%s'", $ratio)), $onloadMethod);
         $I->assertRegExp($this->prepareMessagePartRegex(sprintf("currency: '%s'", $currency)), $onloadMethod);

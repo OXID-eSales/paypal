@@ -5,9 +5,7 @@
     [{/if}]
 
     [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/src/css/paypal_installment.css')}]
-    [{include file="installment_banners.tpl" amount=$paypalInstallmentPrice}]
-
-    <div id="paypal-installment-banner-container"></div>
+    [{include file="installment_banners.tpl" amount=$paypalInstallmentPrice selector=$oViewConf->getPayPalBannerStartPageSelector()}]
 [{/if}]
 
 [{$smarty.block.parent}]

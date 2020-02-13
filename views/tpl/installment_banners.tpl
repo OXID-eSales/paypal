@@ -7,11 +7,12 @@
 [{oxscript include="https://www.paypal.com/sdk/js?client-id="|cat:$oViewConf->getPayPalClientId()|cat:"&components=messages"}]
 <script type="application/javascript">
   // Create installment banner holder
-  const p = document.createElement('div');
-  p.setAttribute('id', 'paypal-installment-banner-container');
-  document.querySelector('[{$selector}]').appendChild(p);
+  var newNode = document.createElement('div');
+  newNode.setAttribute('id', 'paypal-installment-banner-container');
+  var referenceNode = document.querySelector('[{$selector}]');
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 
-  PayPalMessage = function () {
+  var PayPalMessage = function () {
     paypal.Messages({
       amount: [{$amount}],
       currency: '[{$currency->name}]',

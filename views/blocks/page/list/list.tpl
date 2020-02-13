@@ -6,7 +6,6 @@
         [{assign var="paypalInstallmentPrice" value=$oxcmp_basket->getNettoSum()}]
     [{/if}]
 
-    [{include file="installment_banners.tpl" amount=$paypalInstallmentPrice}]
-
-    [{oxscript add="$('<div>', { 'id': 'paypal-installment-banner-container'}).appendTo('.page-header');"}]
+    [{oxstyle include=$oViewConf->getModuleUrl('oepaypal','out/src/css/paypal_installment.css')}]
+    [{include file="installment_banners.tpl" amount=$paypalInstallmentPrice selector=$oViewConf->getPayPalBannerCategoryPageSelector()}]
 [{/if}]

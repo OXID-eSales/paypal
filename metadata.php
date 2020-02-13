@@ -99,14 +99,20 @@ $aModule = array(
         array('template' => 'page/details/inc/productmain.tpl',   'block'=>'details_productmain_price_value',       'file'=>'/views/blocks/page/details/inc/productmain.tpl'),
      ),
     'settings' => array(
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalClientId',                     'type' => 'str',  'value' => ''),
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersHideAll',               'type' => 'bool', 'value' => 'false'),
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersStartPage',             'type' => 'bool', 'value' => 'true'),
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCategoryPage',          'type' => 'bool', 'value' => 'true'),
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersSearchResultsPage',     'type' => 'bool', 'value' => 'true'),
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersProductDetailsPage',    'type' => 'bool', 'value' => 'true'),
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCheckoutPage',          'type' => 'bool', 'value' => 'true'),
-        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersColorScheme',           'type' => 'select', 'constraints' => 'blue|black|white|white-no-border', 'value' => 'blue'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalClientId',                          'type' => 'str',    'value' => ''),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersHideAll',                    'type' => 'bool',   'value' => 'false'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersStartPage',                  'type' => 'bool',   'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersStartPageSelector',          'type' => 'str',    'value' => '#wrapper .row'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCategoryPage',               'type' => 'bool',   'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCategoryPageSelector',       'type' => 'str',    'value' => '.page-header'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersSearchResultsPage',          'type' => 'bool',   'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersSearchResultsPageSelector',  'type' => 'str',    'value' => '#content .page-header .clearfix'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersProductDetailsPage',         'type' => 'bool',   'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersProductDetailsPageSelector', 'type' => 'str',    'value' => '.detailsParams'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCheckoutPage',               'type' => 'bool',   'value' => 'true'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersCartPageSelector',           'type' => 'str',    'value' => '.cart-buttons'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersPaymentPageSelector',        'type' => 'str',    'value' => '.checkoutSteps ~ .spacer'),
+        array('group' => 'oepaypal_banners', 'name' => 'oePayPalBannersColorScheme',                'type' => 'select', 'constraints' => 'blue|black|white|white-no-border', 'value' => 'blue'),
 
         // functionality is currently not available
         //array('group' => 'oepaypal_checkout', 'name' => 'blOEPayPalGuestBuyRole',           'type' => 'bool', 'value' => 'false'),//customizedcheckout_paypalguestbuyrole

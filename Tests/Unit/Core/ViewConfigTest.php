@@ -373,17 +373,38 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Test case for ViewConfig::showPayPalBannerOnCheckoutPage()
+     *
+     * @dataProvider providerBannerCheckoutPage
+     *
+     * @param string $actionClassName
+     * @param string $selectorSetting
      */
-    public function testShowPayPalBannerOnCheckoutPage()
+    public function showPayPalBannerOnCheckoutPage(string $actionClassName, string $selectorSetting)
     {
-        $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
+        $viewMock = $this
+            ->getMockBuilder(\OxidEsales\PayPalModule\Core\ViewConfig::class)
+            ->setMethods(['getActionClassName'])
+            ->getMock();
+        $viewMock->expects($this->once())->method('getActionClassName')->will($this->returnValue($actionClassName));
 
         $this->getConfig()->setConfigParam('oePayPalBannersHideAll', false);
         $this->getConfig()->setConfigParam('oePayPalBannersCheckoutPage', true);
-        $this->assertTrue($view->showPayPalBannerOnCheckoutPage());
+        $this->assertTrue($viewMock->showPayPalBannerOnCheckoutPage());
 
         $this->getConfig()->setConfigParam('oePayPalBannersHideAll', true);
-        $this->assertFalse($view->showPayPalBannerOnCheckoutPage());
+        $this->assertFalse($viewMock->showPayPalBannerOnCheckoutPage());
+
+        $this->getConfig()->setConfigParam('oePayPalBannersHideAll', false);
+        $this->getConfig()->setConfigParam($selectorSetting, '');
+        $this->assertFalse($viewMock->showPayPalBannerOnCheckoutPage());
+    }
+
+    public function providerBannerCheckoutPage()
+    {
+        return [
+            ['basket', 'oePayPalBannersCartPageSelector'],
+            ['payment', 'oePayPalBannersPaymentPageSelector']
+        ];
     }
 
     /**

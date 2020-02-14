@@ -40,5 +40,12 @@ return [
         'title' => 'Kuyichi leather belt JEVER',
         'amount' => '4',
         'price' => '119,60 €'
-    ]
+    ],
+    'variant' => [
+        'id' => '531b537118f5f4d7a427cdb825440922',
+        'maxNettoPrice' => 83.95,
+        'maxBruttoPrice' => 99.9,
+        'minNettoPrice' => 78.07,
+        'minBruttoPrice' => 92.9,
+    ],
 ];

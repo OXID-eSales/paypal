@@ -59,6 +59,7 @@ class ProductQuantityCest
         $I->click("#paypalExpressCheckoutDetailsButton");
         $I->waitForElementVisible('#actionAddToBasketAndGoToCheckout', 20);
         $I->click("#actionAddToBasketAndGoToCheckout");
+        $I->waitForPageLoad();
 
         $homePage = $I->openShop();
 

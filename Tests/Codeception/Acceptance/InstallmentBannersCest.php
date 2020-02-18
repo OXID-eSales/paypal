@@ -239,6 +239,7 @@ class InstallmentBannersCest
     public function checkCorrectSumSentToPaypalInstallmentsOnStartPageWithFilledBasketBrutto(AcceptanceTester $I)
     {
         $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
         $I->updateConfigInDatabase('blShowNetPrice', false);
         $I->updateConfigInDatabase('iNewBasketItemMessage', false);
 
@@ -257,6 +258,7 @@ class InstallmentBannersCest
     public function checkCorrectSumSentToPaypalInstallmentsOnStartPageWithFilledBasketNetto(AcceptanceTester $I)
     {
         $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
         $I->updateConfigInDatabase('blShowNetPrice', true);
         $I->updateConfigInDatabase('iNewBasketItemMessage', false);
 
@@ -275,50 +277,31 @@ class InstallmentBannersCest
      */
     public function productDetailsPageBannerBrutto(AcceptanceTester $I)
     {
-        $I->wantToTest('PayPal installment banner on product details page');
+        $I->wantToTest('PayPal installment banner on product details page brutto mode');
 
-        $product = [
-            'id' => '1000',
-            'title' => 'Test product 0 [EN] šÄßüл',
-            'amount' => 1,
-            'price' => '50'
-        ];
-        $basketItem = [
-            'id' => '1001',
-            'title' => 'Test product 1 [EN] šÄßüл',
-            'amount' => 1,
-            'price' => '100'
-        ];
+        $product = Fixtures::get('variant');
+        $basketItem = Fixtures::get('product');
 
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', false);
 
-        $I->openShop();
         $productNavigation = new ProductNavigation($I);
         $productNavigation->openProductDetailsPage($product['id']);
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', true);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme();
-
-        // Check banner amount when basket is empty
-        $onloadMethod = $I->executeJS("return window.onload.toString()");
-        $I->assertRegExp($this->prepareMessagePartRegex("amount: " . $product['price']), $onloadMethod);
-        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+        $productNavigation->openProductDetailsPage($product['id']);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($product['minBruttoPrice']);
 
         // Check banner amount when basket is not empty
         $basket = new Basket($I);
-        $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
+        $basket->addProductToBasket($basketItem['id'], 1);
         $productNavigation->openProductDetailsPage($product['id']);
-        $onloadMethod = $I->executeJS("return window.onload.toString()");
-        $I->assertRegExp($this->prepareMessagePartRegex("amount: 150"), $onloadMethod);
-        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(122.8);
 
         // Check banner amount when the given product is also in the basket
-        $basket->addProductToBasket($product['id'], $product['amount']);
+        $basket->addProductToBasket($product['id'], 1);
         $productNavigation->openProductDetailsPage($product['id']);
-        $onloadMethod = $I->executeJS("return window.onload.toString()");
-        $I->assertRegExp($this->prepareMessagePartRegex("amount: 150"), $onloadMethod);
-        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(122.8);
 
         // Check banner visibility when oePayPalBannersHideAll setting is set to true
         $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
@@ -331,55 +314,58 @@ class InstallmentBannersCest
      */
     public function productDetailsPageBannerNetto(AcceptanceTester $I)
     {
-        $I->wantToTest('PayPal installment banner on product details page');
+        $I->wantToTest('PayPal installment banner on product details page in netto mode');
         $I->updateConfigInDatabase('blShowNetPrice', true);
 
-        $product = [
-            'id' => '1000',
-            'title' => 'Test product 0 [EN] šÄßüл',
-            'amount' => 1,
-            'price' => '42,02'
-        ];
-        $basketItem = [
-            'id' => '1001',
-            'title' => 'Test product 1 [EN] šÄßüл',
-            'amount' => 1,
-            'price' => '84,03'
-        ];
+        $product = Fixtures::get('variant');
+        $basketItem = Fixtures::get('product');
 
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', false);
-
-        $I->openShop();
         $productNavigation = new ProductNavigation($I);
         $productNavigation->openProductDetailsPage($product['id']);
-        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
-
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', true);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme();
-
-        // Check banner amount when basket is empty
-        $onloadMethod = $I->executeJS("return window.onload.toString()");
-        $I->assertRegExp($this->prepareMessagePartRegex("amount: " . $product['price']), $onloadMethod);
-        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($product['minNettoPrice']);
 
         // Check banner amount when basket is not empty
         $basket = new Basket($I);
-        $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
+        $basket->addProductToBasket($basketItem['id'], 1);
         $productNavigation->openProductDetailsPage($product['id']);
-        $onloadMethod = $I->executeJS("return window.onload.toString()");
-        $I->assertRegExp($this->prepareMessagePartRegex("amount: 126,05"), $onloadMethod);
-        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(103.2);
 
         // Check banner amount when the given product is also in the basket
-        $basket->addProductToBasket($product['id'], $product['amount']);
+        $basket->addProductToBasket($product['id'], 1);
         $productNavigation->openProductDetailsPage($product['id']);
-        $onloadMethod = $I->executeJS("return window.onload.toString()");
-        $I->assertRegExp($this->prepareMessagePartRegex("amount: 126,05"), $onloadMethod);
-        $I->assertRegExp($this->prepareMessagePartRegex("currency: 'EUR'"), $onloadMethod);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(103.2);
+    }
 
-        // Check banner visibility when oePayPalBannersHideAll setting is set to true
-        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
-        $I->reloadPage();
-        $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function productVariantBannerBrutto(AcceptanceTester $I)
+    {
+        $I->wantToTest('PayPal installment banner for selected variant in brutto mode');
+
+        $product = Fixtures::get('variant');
+
+        $productNavigation = new ProductNavigation($I);
+        $productDetailPage = $productNavigation->openProductDetailsPage($product['id']);
+        $productDetailPage->selectVariant(1, 'W 30/L 30');
+        $productDetailPage->selectVariant(2, 'Super Blue');
+        $I->checkInstallmentBannerData($product['maxBruttoPrice']);
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function productVariantBannerNetto(AcceptanceTester $I)
+    {
+        $I->wantToTest('PayPal installment banner for selected variant in netto mode');
+        $I->updateConfigInDatabase('blShowNetPrice', true);
+
+        $product = Fixtures::get('variant');
+
+        $productNavigation = new ProductNavigation($I);
+        $productDetailPage = $productNavigation->openProductDetailsPage($product['id']);
+        $productDetailPage->selectVariant(1, 'W 30/L 30');
+        $productDetailPage->selectVariant(2, 'Super Blue');
+        $I->checkInstallmentBannerData($product['maxNettoPrice']);
     }
 }

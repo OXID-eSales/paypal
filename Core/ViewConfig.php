@@ -388,14 +388,15 @@ class ViewConfig extends ViewConfig_parent
     public function showPayPalBannerOnCheckoutPage()
     {
         $showBanner = false;
+        $actionClassName = $this->getActionClassName();
         $config = Registry::getConfig();
-        if ($this->getActionClassName() === 'basket') {
+        if ($actionClassName === 'basket') {
             $showBanner = (
                 !$config->getConfigParam('oePayPalBannersHideAll') &&
                 $config->getConfigParam('oePayPalBannersCheckoutPage') &&
                 $config->getConfigParam('oePayPalBannersCartPageSelector')
             );
-        } else if ($this->getActionClassName() === 'payment') {
+        } else if ($actionClassName === 'payment') {
             $showBanner = (
                 !$config->getConfigParam('oePayPalBannersHideAll') &&
                 $config->getConfigParam('oePayPalBannersCheckoutPage') &&

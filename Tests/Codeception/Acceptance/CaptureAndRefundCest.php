@@ -29,6 +29,9 @@ class CaptureAndRefundCest
 
     /**
      * @param AcceptanceTester $I
+     * 
+     * @group paypal_external
+     * @group paypal_buyerlogin
      */
     public function orderCaptureAndRefundAmount(AcceptanceTester $I)
     {

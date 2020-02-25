@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [5.2.6] - Unreleased
+## [5.2.6] - 2020-02-25
 
 ### Fixed
 
@@ -115,7 +115,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
-
+[v5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v5.2.6
 [v5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...v5.2.5
 [v5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...v5.2.4
 [v5.2.3]: https://github.com/OXID-eSales/paypal/compare/v5.2.2...v5.2.3

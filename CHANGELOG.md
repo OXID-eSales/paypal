@@ -5,20 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-
-## [Unreleased]
+## [3.5.0] - Unreleased
 
 ### Added
+- PayPal Installment Banners" feature added.
+- New settings for configuring the banners added. Its possible to separately configure banners for these page types:
+  - Start page
+  - Product details page
+  - Category page
+  - Search result page
+  - Checkout page
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [3.4.0] - 2018-05-03
 

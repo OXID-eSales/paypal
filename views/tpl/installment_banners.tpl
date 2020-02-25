@@ -11,6 +11,8 @@
   newNode.setAttribute('id', 'paypal-installment-banner-container');
   var referenceNode = document.querySelector('[{$selector}]');
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var bannerLayout = windowWidth <= 400 ? 'text' : 'flex';
 
   var PayPalMessage = function () {
     paypal.Messages({
@@ -18,7 +20,7 @@
       currency: '[{$currency->name}]',
       countryCode: '[{$oViewConf->getActLanguageAbbr()|upper}]',
       style: {
-        layout: 'flex',
+        layout: bannerLayout,
         color: '[{$oViewConf->getPayPalBannersColorScheme()}]',
         ratio: '[{$size}]'
       }

@@ -8,8 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### ADDED
 - PayPal Installment Banners" feature added.
-- New settings for configuring the banners added.
-  Banners can be configured to be shown on Start page, Product details page, Category page, Search result page and Checkout page.
+- New settings for configuring the banners added. Its possible to separately configure banners for these page types:
+  - Start page
+  - Product details page
+  - Category page
+  - Search result page
+  - Checkout page
 
 ## [v6.0.1] - 2019-10-21
 

@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Adapt module to removal of oxconfig encoding feature.
 
 
+## [v6.0.2] - 2020-02-25
+
+### Fixed
+- Stabilize acceptance tests.
+
 ## [v6.0.1] - 2019-10-21
 
 ### Fixed
@@ -132,10 +137,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
-
+[v6.0.2]: https://github.com/OXID-eSales/paypal/compare/v6.0.1...v6.0.2
 [v6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1
-[v6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v6.0.0
-[v5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...b-5.x
+[v6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v6.0.0
 [v5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v5.2.6
 [v5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...v5.2.5
 [v5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...v5.2.4

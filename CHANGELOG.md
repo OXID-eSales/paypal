@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v6.1.0] - Unreleased
 
-### ADDED
+### Added
 - PayPal Installment Banners" feature added.
 - New settings for configuring the banners added. Its possible to separately configure banners for these page types:
   - Start page

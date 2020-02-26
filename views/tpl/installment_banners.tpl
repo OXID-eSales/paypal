@@ -11,10 +11,11 @@
   newNode.setAttribute('id', 'paypal-installment-banner-container');
   var referenceNode = document.querySelector('[{$selector}]');
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  var bannerLayout = windowWidth <= 400 ? 'text' : 'flex';
 
   var PayPalMessage = function () {
+    var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    var bannerLayout = windowWidth <= 400 ? 'text' : 'flex';
+
     paypal.Messages({
       amount: [{$amount}],
       currency: '[{$currency->name}]',
@@ -30,6 +31,10 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', PayPalMessage);
   } else {
+    PayPalMessage();
+  }
+
+  window.onresize = function () {
     PayPalMessage();
   }
 </script>

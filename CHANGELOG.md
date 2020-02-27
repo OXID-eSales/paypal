@@ -4,11 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.3.0] - Unreleased
+
+### Added
+- PayPal Installment Banners" feature added.
+- New settings for configuring the banners added. Its possible to separately configure banners for these page types:
+  - Start page
+  - Product details page
+  - Category page
+  - Search result page
+  - Checkout page
+
 ## [5.2.6] - 2020-02-25
 
 ### Fixed
 
-- Stabilize acceptance tests.
+- Acceptance tests stability increased.
 - [0006235](https://bugs.oxid-esales.com/view.php?id=6235) Use comma as decimal separator during capture and refund.
 - [0006994](https://bugs.oxid-esales.com/view.php?id=6994) Fix "Finalize order after PayPal checkout" configuration option not working
 - [0006995](https://bugs.oxid-esales.com/view.php?id=6995) Fix wrong product quantity after clicking "Add and Checkout".
@@ -115,23 +126,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
-[v5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v5.2.6
-[v5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...v5.2.5
-[v5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...v5.2.4
-[v5.2.3]: https://github.com/OXID-eSales/paypal/compare/v5.2.2...v5.2.3
-[v5.2.2]: https://github.com/OXID-eSales/paypal/compare/v5.2.1...v5.2.2
-[v5.2.1]: https://github.com/OXID-eSales/paypal/compare/v5.2.0...v5.2.1
-[v5.2.0]: https://github.com/OXID-eSales/paypal/compare/v5.1.6...v5.2.0
-[v5.1.6]: https://github.com/OXID-eSales/paypal/compare/v5.1.5...v5.1.6
-[v5.1.5]: https://github.com/OXID-eSales/paypal/compare/v5.1.4...v5.1.5
-[v5.1.4]: https://github.com/OXID-eSales/paypal/compare/v5.1.3...v5.1.4
-[v5.1.3]: https://github.com/OXID-eSales/paypal/compare/v5.1.2...v5.1.3
-[v5.1.2]: https://github.com/OXID-eSales/paypal/compare/v5.1.1...v5.1.2
-[v5.1.1]: https://github.com/OXID-eSales/paypal/compare/v5.1.0...v5.1.1
-[v5.1.0]: https://github.com/OXID-eSales/paypal/compare/v5.0.5...v5.1.0
-[v5.0.5]: https://github.com/OXID-eSales/paypal/compare/v5.0.4...v5.0.5
-[v5.0.4]: https://github.com/OXID-eSales/paypal/compare/v5.0.3...v5.0.4
-[v5.0.3]: https://github.com/OXID-eSales/paypal/compare/v5.0.2...v5.0.3
-[v5.0.2]: https://github.com/OXID-eSales/paypal/compare/v5.0.1...v5.0.2
-[v5.0.1]: https://github.com/OXID-eSales/paypal/compare/v5.0.0...v5.0.1
-[v5.0.0]: https://github.com/OXID-eSales/paypal/compare/v4.0.0...v5.0.0
+
+[5.3.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...b-5.x
+[5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v5.2.6
+[5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...v5.2.5
+[5.2.4]: https://github.com/OXID-eSales/paypal/compare/v5.2.3...v5.2.4
+[5.2.3]: https://github.com/OXID-eSales/paypal/compare/v5.2.2...v5.2.3
+[5.2.2]: https://github.com/OXID-eSales/paypal/compare/v5.2.1...v5.2.2
+[5.2.1]: https://github.com/OXID-eSales/paypal/compare/v5.2.0...v5.2.1
+[5.2.0]: https://github.com/OXID-eSales/paypal/compare/v5.1.6...v5.2.0
+[5.1.6]: https://github.com/OXID-eSales/paypal/compare/v5.1.5...v5.1.6
+[5.1.5]: https://github.com/OXID-eSales/paypal/compare/v5.1.4...v5.1.5
+[5.1.4]: https://github.com/OXID-eSales/paypal/compare/v5.1.3...v5.1.4
+[5.1.3]: https://github.com/OXID-eSales/paypal/compare/v5.1.2...v5.1.3
+[5.1.2]: https://github.com/OXID-eSales/paypal/compare/v5.1.1...v5.1.2
+[5.1.1]: https://github.com/OXID-eSales/paypal/compare/v5.1.0...v5.1.1
+[5.1.0]: https://github.com/OXID-eSales/paypal/compare/v5.0.5...v5.1.0
+[5.0.5]: https://github.com/OXID-eSales/paypal/compare/v5.0.4...v5.0.5
+[5.0.4]: https://github.com/OXID-eSales/paypal/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/OXID-eSales/paypal/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/OXID-eSales/paypal/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/OXID-eSales/paypal/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/OXID-eSales/paypal/compare/v4.0.0...v5.0.0

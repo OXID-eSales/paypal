@@ -5,7 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [3.5.0] - Unreleased
+## [Unreleased]
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [3.5.0] - 2020-02-27
 
 ### Added
 - PayPal Installment Banners" feature added.
@@ -50,7 +64,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
-[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v3.4.0...HEAD
+[Unreleased]: https://github.com/OXID-eSales/paypal/compare/v3.5.0...HEAD
+[v3.5.0]: https://github.com/OXID-eSales/paypal/compare/3.4.0...v3.5.0
 [v3.4.0]: https://github.com/OXID-eSales/paypal/compare/3.3.2...v3.4.0
 [v3.3.2]: https://github.com/OXID-eSales/paypal/compare/3.3.1...v3.3.2
 [v3.3.1]: https://github.com/OXID-eSales/paypal/compare/3.3.0...v3.3.1

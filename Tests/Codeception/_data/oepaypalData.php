@@ -32,5 +32,6 @@ return [
     'sBuyerUSLogin' => '<PayPal Buyer USA Login>',
     'sBuyerPassword' => '<PayPal Buyer Password>.',
     'sBuyerFirstName' => '<PayPal Buyer First Name>',
-    'sBuyerLastName' => '<PayPal Buyer Last Name>'
+    'sBuyerLastName' => '<PayPal Buyer Last Name>',
+    'OEPayPalClientId' => '<PayPal Client Id>'
 ];

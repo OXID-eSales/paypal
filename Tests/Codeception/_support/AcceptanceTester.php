@@ -80,5 +80,101 @@ class AcceptanceTester extends \Codeception\Actor
         $I->updateConfigInDatabase('sOEPayPalSandboxUsername', Fixtures::get('sOEPayPalSandboxUsername'));
         $I->updateConfigInDatabase('sOEPayPalSandboxPassword', Fixtures::get('sOEPayPalSandboxPassword'));
         $I->updateConfigInDatabase('sOEPayPalSandboxSignature', Fixtures::get('sOEPayPalSandboxSignature'));
+        $I->updateConfigInDatabase('oePayPalClientId', Fixtures::get('OEPayPalClientId'));
+    }
+
+    /**
+     * Switch to PayPal Installment banner iframe
+     * and check if body contains elements.
+     */
+    public function seePayPalInstallmentBanner()
+    {
+        $I = $this;
+
+        $I->waitForElement("//div[contains(@id, 'paypal-installment-banner-container')]");
+        $I->switchToIFrame("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
+        $I->waitForElementVisible("//body[node()]");
+
+        $I->switchToWindow();
+
+        return $this;
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function seePayPalInstallmentBannerInFlowAndWaveTheme(float $amount = 0)
+    {
+        $I = $this;
+
+        //Check installment banner body in Flow theme
+        $I->updateConfigInDatabase('sTheme', 'flow');
+        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .row');
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '#content .page-header .clearfix');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.detailsParams');
+        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkoutSteps ~ .spacer');
+        $I->reloadPage();
+        $I->seePayPalInstallmentBanner();
+        $I->checkInstallmentBannerData($amount);
+
+        //Check installment banner body in Wave theme
+        $I->updateConfigInDatabase('sTheme', 'wave');
+        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .container');
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '.page-header');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '#detailsItemsPager');
+        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkout-steps');
+        $I->reloadPage();
+        $I->seePayPalInstallmentBanner();
+        $I->checkInstallmentBannerData($amount);
+    }
+
+    /**
+     * @param float  $amount
+     * @param string $ratio
+     * @param string $currency
+     */
+    public function checkInstallmentBannerData(float $amount = 0, string $ratio = '20x1', string $currency = 'EUR')
+    {
+        $I = $this;
+
+        $onloadMethod = $I->executeJS("return PayPalMessage.toString()");
+        $I->assertRegExp($this->prepareMessagePartRegex(sprintf("amount: %s", $amount)), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex(sprintf("ratio: '%s'", $ratio)), $onloadMethod);
+        $I->assertRegExp($this->prepareMessagePartRegex(sprintf("currency: '%s'", $currency)), $onloadMethod);
+    }
+
+    /**
+     * @return array
+     */
+    public function getExistingUserData(): array
+    {
+        return Fixtures::get('user');
+    }
+
+    /**
+     * @return string
+     */
+    public function getExistingUserName(): string
+    {
+        return $this->getExistingUserData()['oxusername'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getExistingUserPassword(): string
+    {
+        return Fixtures::get('userPassword');
+    }
+
+    /**
+     * Wrap the message part in message required conditions
+     *
+     * @param string $part
+     * @return string
+     */
+    protected function prepareMessagePartRegex($part)
+    {
+        return "/paypal.Messages\(\{[^}\)]*{$part}/";
     }
 }

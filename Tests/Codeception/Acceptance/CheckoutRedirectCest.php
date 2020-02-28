@@ -45,12 +45,7 @@ class CheckoutRedirectCest
 
         $basket = new Basket($I);
 
-        $basketItem = [
-            'id' => 'dc5ffdf380e15674b56dd562a7cb6aec',
-            'title' => 'Kuyichi leather belt JEVER',
-            'amount' => 4,
-            'price' => '119,60 €'
-        ];
+        $basketItem = Fixtures::get('product');
 
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
         $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);

@@ -403,6 +403,7 @@ class ViewConfig extends ViewConfig_parent
                 $config->getConfigParam('oePayPalBannersPaymentPageSelector')
             );
         }
+
         return $showBanner;
     }
 

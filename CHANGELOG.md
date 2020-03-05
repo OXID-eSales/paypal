@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.3.1] - Unreleased
+
+### Fixed
+- [0007077](https://bugs.oxid-esales.com/view.php?id=7077) Shipping Methods with special chars not found by PayPal Express.
+
+
 ## [5.3.0] - 2020-02-27
 
 ### Added

@@ -16,16 +16,18 @@
     var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     var bannerLayout = windowWidth <= 400 ? 'text' : 'flex';
 
-    paypal.Messages({
-      amount: [{$amount}],
-      currency: '[{$currency->name}]',
-      countryCode: '[{$oViewConf->getActLanguageAbbr()|upper}]',
-      style: {
-        layout: bannerLayout,
-        color: '[{$oViewConf->getPayPalBannersColorScheme()}]',
-        ratio: '[{$size}]'
-      }
-    }).render('#paypal-installment-banner-container');
+      if (typeof paypal !== 'undefined') {
+        paypal.Messages({
+            amount: [{$amount}],
+            currency: '[{$currency->name}]',
+            countryCode: '[{$oViewConf->getActLanguageAbbr()|upper}]',
+            style: {
+                layout: bannerLayout,
+                color: '[{$oViewConf->getPayPalBannersColorScheme()}]',
+                ratio: '[{$size}]'
+            }
+        }).render('#paypal-installment-banner-container');
+    }
   };
 
   if (document.readyState === 'loading') {

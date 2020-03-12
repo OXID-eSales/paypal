@@ -59,6 +59,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         \OxidEsales\Eshop\Core\DatabaseProvider::getDB()->execute("DELETE FROM oxaddress WHERE OXID = '_testUserAddressId' ");
 
         $this->resetTestDataDeliveryCostRule();
+        $this->cleanUpTable('oxdeliveryset');
 
         parent::tearDown();
     }
@@ -1067,26 +1068,50 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $this->assertEquals("oxdefaultadmin", $payPalUser->getId());
     }
 
+    public function providerExtractShippingId()
+    {
+        return [
+           'plain' => [
+               'name' => 'Delivery Set Name'
+           ],
+           'umlaute' => [
+               'name' => 'Delivery Sät Name'
+           ],
+           'quotes' => [
+               'name' => "Delivery 'Sät' Name"
+           ]
+        ];
+    }
+
     /**
      * Test case for \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::_extractShippingId()
+     *
+     * @dataProvider providerExtractShippingId
      */
-    public function testExtractShippingId()
+    public function testExtractShippingId($name)
     {
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Language::class);
-        $mockBuilder->setMethods(['translateString']);
-        $lang = $mockBuilder->getMock();
+        $deliverySet = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySet::class);
+        $deliverySet->setId('_paypaltest');
+        $deliverySet->assign(['oxtitle' => $name]);
+        $deliverySet->save();
+
+        $lang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array("translateString"));
         $lang->expects($this->once())->method("translateString")->with($this->equalTo("OEPAYPAL_PRICE"))->will($this->returnValue("Price:"));
         $this->addModuleObject(\OxidEsales\Eshop\Core\Language::class, $lang);
 
         $payPalConfig = $this->_createStub('ePayPalConfig', array('getCharset' => 'UTF-8'));
 
-        $deliverySetList = array("oxidstandart" => "Delivery Set Name");
-        $this->setSessionParam("oepaypal-oxDelSetList", $deliverySetList);
-
         $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
         $dispatcher->setPayPalConfig($payPalConfig);
-        $id = $dispatcher->extractShippingId("Delivery Set Name Price:", null);
-        $this->assertEquals("oxidstandart", $id);
+
+        $deliverySetList = [
+            $deliverySet->getId() => $deliverySet
+        ];
+        $deliverySetList =  $dispatcher->makeUniqueNames($deliverySetList);
+        $this->setSessionParam("oepaypal-oxDelSetList", $deliverySetList);
+
+        $id = $dispatcher->extractShippingId($name . " Price:", null);
+        $this->assertEquals($deliverySet->getId(), $id);
     }
 
     /**

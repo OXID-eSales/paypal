@@ -201,8 +201,8 @@ class PayPalLogHelper
         preg_match_all("/\'(.*)\'(\s*=>\s*)\'*(.*)\'*/", $line, $matches);
 
         if (is_array($matches) && isset($matches[1])) {
-            $object->key = $matches[1][0];
-            $object->value = rtrim(rtrim($matches[3][0], ','), "'");
+            $object->key = isset($matches[1][0]) ? $matches[1][0] : null;
+            $object->value = isset($matches[3][0]) ? rtrim(rtrim($matches[3][0], ','), "'") : null;
         }
         return $object;
     }

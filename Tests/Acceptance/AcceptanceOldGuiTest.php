@@ -128,6 +128,54 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
     }
 
     /**
+     * Testing paypal express button.
+     * Verify that shop can correctly match shipping method.
+     * Needs shipping costs callback from PayPal so it will not work locally unless you use ngrok or something similar.
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     * @group paypal_buyerlogin
+     */
+    public function testPayPalExpressShippingMethodMatch()
+    {
+        //Change S&H set to contain an Umlaut
+        $this->importSql(__DIR__ . '/testSql/changeShippingName_' . SHOP_EDITION . '.sql');
+   
+        // Testing when user is not logged in
+        $this->openShop();
+        $this->switchLanguage("Deutsch");
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("Deutsch");
+
+        $this->waitForElement("paypalExpressCheckoutButton");
+        $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
+
+        // Go to PayPal express
+        $this->payWithPayPalExpressCheckout();
+
+        // Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = [
+            'PAYMENTREQUEST_0_AMT'          => '0.99',
+            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+            'L_PAYMENTREQUEST_0_NAME0'      => 'Test product 1',
+            'ACK'                           => 'Success'
+        ];
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        // User is on the 4th page
+        $this->assertElementPresent("//button[text()='Zahlungspflichtig bestellen']");
+        $this->assertEquals("Gesamtbetrag: 0,99 €", $this->clearString($this->getText("//div[@id='basketSummary']//tr[5]")));
+        $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
+        $this->assertTextPresent("E-Mail");
+        $this->assertTextPresent($this->getLoginDataByName('sBuyerLogin'));
+        $this->assertEquals("Versandart Ändern Test ä S&H set", $this->clearString($this->getText("orderShipping")));
+        $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']");
+        $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
+    }
+    
+    /**
      * test if option "Calculate default Shipping costs when User is not logged in yet" is working correct in PayPal
      *
      * NOTE: User is not logged in to shop yet and no delivery set id stored in shop session at this point.

@@ -33,6 +33,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
 - Replace deprecated calls to getSession();
 
+## [5.3.1] - Unreleased
+
+### Fixed
+- [0007077](https://bugs.oxid-esales.com/view.php?id=7077) Shipping Methods with special chars not found by PayPal Express.
+
 ## [5.3.0] - 2020-02-27
 
 ### Added
@@ -47,6 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [5.2.6] - 2020-02-25
 
 ### Fixed
+
 - Acceptance tests stability increased.
 - [0006235](https://bugs.oxid-esales.com/view.php?id=6235) Use comma as decimal separator during capture and refund.
 - [0006994](https://bugs.oxid-esales.com/view.php?id=6994) Fix "Finalize order after PayPal checkout" configuration option not working

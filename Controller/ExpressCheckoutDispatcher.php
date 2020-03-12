@@ -489,7 +489,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
             }
 
             $suffix = ($nameCounts[$deliverySetName] > 1) ? " (" . $nameCounts[$deliverySetName] . ")" : '';
-            $result[$deliverySet->oxdeliveryset__oxid->value] = $deliverySetName . $suffix;
+            $result[$deliverySet->oxdeliveryset__oxid->value] = $this->reencodeHtmlEntities($deliverySetName . $suffix);
         }
 
         return $result;
@@ -523,9 +523,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
         $result = null;
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
 
-        $charset = $this->getPayPalConfig()->getCharset();
-        $shippingOptionName = htmlentities(html_entity_decode($shippingOptionName, ENT_QUOTES, $charset), ENT_QUOTES, $charset);
-
+        $shippingOptionName = $this->reencodeHtmlEntities($shippingOptionName);
         $name = trim(str_replace(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), "", $shippingOptionName));
 
         $deliverySetList = $session->getVariable("oepaypal-oxDelSetList");
@@ -750,5 +748,15 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
     private function setAnonymousUser($basket, $user)
     {
         $basket->setBasketUser($user);
+    }
+
+    /**
+     * @param string $input
+     */
+    private function reencodeHtmlEntities($input)
+    {
+        $charset = $this->getPayPalConfig()->getCharset();
+
+        return htmlentities(html_entity_decode($input, ENT_QUOTES, $charset), ENT_QUOTES, $charset);
     }
 }

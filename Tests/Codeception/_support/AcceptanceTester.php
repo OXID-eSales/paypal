@@ -114,6 +114,7 @@ class AcceptanceTester extends \Codeception\Actor
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.detailsParams');
         $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkoutSteps ~ .spacer');
         $I->reloadPage();
+        $I->waitForPageLoad();
         $I->seePayPalInstallmentBanner();
         $I->checkInstallmentBannerData($amount);
 
@@ -124,6 +125,7 @@ class AcceptanceTester extends \Codeception\Actor
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '#detailsItemsPager');
         $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkout-steps');
         $I->reloadPage();
+        $I->waitForPageLoad();
         $I->seePayPalInstallmentBanner();
         $I->checkInstallmentBannerData($amount);
     }

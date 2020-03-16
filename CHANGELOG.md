@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Adapt module to removal of oxconfig encoding feature.
 
-## [6.1.0] - Unreleased
+## [6.1.0] - 2020-03-16
 
 ### Added
 - PayPal Installment Banners" feature added.
@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - Search result page
   - Checkout page
 
+### Fixed
+- [0007077](https://bugs.oxid-esales.com/view.php?id=7077) Shipping Methods with special chars not found by PayPal Express.
+- Javascript issues for banners in case of missing client id. 
+  
 ## [6.0.2] - 2020-02-25
 
 ### Fixed
@@ -167,6 +171,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
+[6.1.0]: https://github.com/OXID-eSales/paypal/compare/v6.0.2...v6.1.0
 [6.0.2]: https://github.com/OXID-eSales/paypal/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v6.0.0

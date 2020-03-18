@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Adapt module to removal of oxconfig encoding feature.
 
+## [6.1.1] - Unreleased
+
+### Fixed
+- Stabilize acceptance tests.
+
 ## [6.1.0] - 2020-03-16
 
 ### Added

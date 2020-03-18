@@ -27,7 +27,9 @@ class InstallmentBannersCest
      */
     public function _before(AcceptanceTester $I)
     {
+        $I->clearShopCache();
         $I->setPayPalSettingsData();
+        $I->updateConfigInDatabase('blUseStock', false);
     }
 
     /**

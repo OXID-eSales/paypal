@@ -27,6 +27,7 @@ class InstallmentBannersCest
      */
     public function _before(AcceptanceTester $I)
     {
+        $I->activateFlowTheme();
         $I->clearShopCache();
         $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('blUseStock', false);
@@ -310,29 +311,59 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner on product details page brutto mode');
 
-        $product = Fixtures::get('variant');
+        $parentProduct = Fixtures::get('parent');
+        $variant = Fixtures::get('variant');
+        $alternateVariant = Fixtures::get('alternate_variant');
         $basketItem = Fixtures::get('product');
 
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', false);
 
-        $productNavigation = new ProductNavigation($I);
-        $productNavigation->openProductDetailsPage($product['id']);
+        $parentProductNavigation = new ProductNavigation($I);
+        $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
+            ->seeOnBreadCrumb(Translator::translate('YOU_ARE_HERE'));
+        $I->dontSee(Translator::translate('ERROR_MESSAGE_ARTICLE_ARTICLE_NOT_BUYABLE'));
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', true);
-        $productNavigation->openProductDetailsPage($product['id']);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($product['minBruttoPrice']);
+        $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
+            ->seeOnBreadCrumb(Translator::translate('YOU_ARE_HERE'));
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($parentProduct['minBruttoPrice'], Translator::translate('YOU_ARE_HERE'));
 
         // Check banner amount when basket is not empty
         $basket = new Basket($I);
         $basket->addProductToBasket($basketItem['id'], 1);
-        $productNavigation->openProductDetailsPage($product['id']);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(122.8);
+        $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
+            ->seeOnBreadCrumb(Translator::translate('YOU_ARE_HERE'));
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(
+            $basketItem['bruttoprice_single'] + $parentProduct['minBruttoPrice'],
+            Translator::translate('YOU_ARE_HERE')
+        );
 
         // Check banner amount when the given product is also in the basket
-        $basket->addProductToBasket($product['id'], 1);
-        $productNavigation->openProductDetailsPage($product['id']);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(122.8);
+        $basket->addProductToBasket($variant['id'], 1);
+        $I->waitForPageLoad();
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($basketItem['bruttoprice_single'] + $variant['bruttoprice']); //check on front page
+
+        //check banner in case we open variant parent details page and have no variant selected
+        $parentProductNavigation->openProductDetailsPage($parentProduct['id']);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(
+            $basketItem['bruttoprice_single'] + $variant['bruttoprice'],
+            Translator::translate('YOU_ARE_HERE')
+        ); //check on details page
+
+        //check banner in case we open alternate variant details page, alternate variant price should be added to price
+        $parentProductNavigation->openProductDetailsPage($alternateVariant['id']);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(
+            $basketItem['bruttoprice_single'] + $variant['bruttoprice'] + $alternateVariant['bruttoprice'],
+            Translator::translate('YOU_ARE_HERE')
+        ); //check on details page */
+
+        //check banner in case we open variant details page
+        $parentProductNavigation->openProductDetailsPage($variant['id']);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(
+            $basketItem['bruttoprice_single'] + $variant['bruttoprice'],
+            Translator::translate('YOU_ARE_HERE')
+        ); //check on details page */
 
         // Check banner visibility when oePayPalBannersHideAll setting is set to true
         $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
@@ -351,23 +382,48 @@ class InstallmentBannersCest
         $I->wantToTest('PayPal installment banner on product details page in netto mode');
         $I->updateConfigInDatabase('blShowNetPrice', true);
 
-        $product = Fixtures::get('variant');
+        $parentProduct = Fixtures::get('parent');
+        $variant = Fixtures::get('variant');
+        $alternateVariant = Fixtures::get('alternate_variant');
         $basketItem = Fixtures::get('product');
 
-        $productNavigation = new ProductNavigation($I);
-        $productNavigation->openProductDetailsPage($product['id']);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($product['minNettoPrice']);
+        $parentProductNavigation = new ProductNavigation($I);
+        $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
+            ->seeOnBreadCrumb(Translator::translate('YOU_ARE_HERE'));
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($parentProduct['minNettoPrice']);
 
         // Check banner amount when basket is not empty
         $basket = new Basket($I);
-        $basket->addProductToBasket($basketItem['id'], 1);
-        $productNavigation->openProductDetailsPage($product['id']);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(103.2);
+        $basket->addProductToBasket($basketItem['id'], 1);   
+        $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
+            ->seeOnBreadCrumb(Translator::translate('YOU_ARE_HERE'));
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($basketItem['nettoprice_single'] + $parentProduct['minNettoPrice']);
 
         // Check banner amount when the given product is also in the basket
-        $basket->addProductToBasket($product['id'], 1);
-        $productNavigation->openProductDetailsPage($product['id']);
-        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(103.2);
+        $basket->addProductToBasket($variant['id'], 1); 
+        $I->waitForPageLoad(); 
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme($basketItem['nettoprice_single'] + $variant['nettoprice']); //check on front page
+
+        //check banner in case we open variant parent details page and have no variant selected
+        $parentProductNavigation->openProductDetailsPage($parentProduct['id']);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(
+            $basketItem['nettoprice_single'] + $variant['nettoprice'],
+            Translator::translate('YOU_ARE_HERE')
+        ); //check on details page
+
+        //check banner in case we open alternate variant details page, alternate variant price should be added to price
+        $parentProductNavigation->openProductDetailsPage($alternateVariant['id']);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(
+            $basketItem['nettoprice_single'] + $variant['nettoprice'] + $alternateVariant['nettoprice'],
+            Translator::translate('YOU_ARE_HERE')
+        ); //check on details page */
+
+        //check banner in case we open variant details page
+        $parentProductNavigation->openProductDetailsPage($variant['id']);
+        $I->seePayPalInstallmentBannerInFlowAndWaveTheme(
+            $basketItem['nettoprice_single'] + $variant['nettoprice'],
+            Translator::translate('YOU_ARE_HERE')
+        ); //check on details page */
     }
 
     /**
@@ -380,7 +436,7 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner for selected variant in brutto mode');
 
-        $product = Fixtures::get('variant');
+        $product = Fixtures::get('parent');
 
         $productNavigation = new ProductNavigation($I);
         $productDetailPage = $productNavigation->openProductDetailsPage($product['id']);
@@ -400,7 +456,7 @@ class InstallmentBannersCest
         $I->wantToTest('PayPal installment banner for selected variant in netto mode');
         $I->updateConfigInDatabase('blShowNetPrice', true);
 
-        $product = Fixtures::get('variant');
+        $product = Fixtures::get('parent');
 
         $productNavigation = new ProductNavigation($I);
         $productDetailPage = $productNavigation->openProductDetailsPage($product['id']);

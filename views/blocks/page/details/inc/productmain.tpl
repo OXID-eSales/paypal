@@ -4,7 +4,7 @@
     [{if $oxcmp_basket->isPriceViewModeNetto()}]
         [{assign var="bannerAmount" value=$oxcmp_basket->getNettoSum()}]
     [{/if}]
-    [{if $oDetailsProduct->getFPrice() && $oxcmp_basket->getArtStockInBasket($oDetailsProduct->getId()) === 0}]
+    [{if ($oxcmp_basket->getArtStockInBasket($oDetailsProduct->getId()) === 0) && !$oxcmp_basket->hasProductVariantInBasket($oDetailsProduct)}]
         [{assign var="oPrice" value=$oDetailsProduct->getPrice()}]
         [{if $oDetailsProduct->isParentNotBuyable()}]
             [{assign var="oPrice" value=$oDetailsProduct->getVarMinPrice()}]

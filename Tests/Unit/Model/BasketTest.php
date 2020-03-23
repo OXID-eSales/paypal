@@ -428,4 +428,92 @@ class BasketTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $this->assertFalse($basket->isFractionQuantityItemsPresent());
     }
+
+    public function providerHasProductVariantInBasket()
+    {
+        return [
+            'parent'        => [
+                [
+                    '_variant',
+                    '_alternate_variant'
+                ],
+                '_parent',
+                'assertTrue'
+            ],
+            'variant'       => [
+                [
+                    '_variant'
+                ],
+                '_variant',
+                'assertFalse'
+            ],
+            'other_variant' => [
+                [
+                    '_variant'
+                ],
+                '_alternate_variant',
+                'assertFalse'
+            ],
+            'has_no_variant'=> [
+                [
+                    '_variant'
+                ],
+                '_has_no_variant',
+                'assertFalse'
+            ]
+        ];
+    }
+
+    /**
+     * @param array $toBasket
+     * @param string $productId
+     * @param string $assertMethod
+     *
+     * @dataProvider providerHasProductVariantInBasket()
+     */
+    public function testHasProductVariantInBasket($toBasket, $productId, $assertMethod)
+    {
+        $this->prepareProducts();
+
+        $product = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
+        $product->load($productId);
+
+        $basket = oxNew(\OxidEsales\Eshop\Application\Model\Basket::class);
+        foreach ($toBasket as $productId) {
+            $basket->addToBasket($productId, 1);
+        }
+
+        $this->$assertMethod($basket->hasProductVariantInBasket($product));
+    }
+
+    private function prepareProducts()
+    {
+        $products = [
+            '_parent' => [
+                'oxid' => '_parent',
+                'oxstock' => 0
+            ],
+            '_variant'=> [
+                'oxid' => '_variant',
+                'oxparentid' => '_parent',
+                'oxstock' => 10
+            ],
+            '_alternate_variant'=> [
+                'oxid' => '_alternate_variant',
+                'oxparentid' => '_parent',
+                'oxstock' => 20
+            ],
+            '_has_no_variant' => [
+                'oxid' => '_has_no_variant',
+                'oxstock' => 100
+            ]
+        ];
+
+        foreach ($products as $assign) {
+            $product = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
+            $product->assign($assign);
+            $product->save();
+        }
+    }
+
 }

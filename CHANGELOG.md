@@ -4,10 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [6.1.1] - Unreleased
+## [6.2.0] - Unreleased
+
+### Added
+- New method Basket::hasProductVariantInBasket();
 
 ### Fixed
 - Stabilize acceptance tests.
+- Banners on product details page for variants.
 
 ## [6.1.0] - 2020-03-16
 

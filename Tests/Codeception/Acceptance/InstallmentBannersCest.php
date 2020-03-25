@@ -34,6 +34,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_search
      */
     public function searchPageBannerInBruttoMode(AcceptanceTester $I)
     {
@@ -65,6 +68,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_search
      */
     public function searchPageBannerInNettoMode(AcceptanceTester $I)
     {
@@ -88,6 +94,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_checkout
      */
     public function checkoutPageBannerInBruttoMode(AcceptanceTester $I)
     {
@@ -134,6 +143,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_checkout
      */
     public function checkoutPageBannerInNettoMode(AcceptanceTester $I)
     {
@@ -156,6 +168,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_category
      */
     public function categoryPageBannerInBruttoMode(AcceptanceTester $I)
     {
@@ -186,6 +201,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_category
      */
     public function categoryPageBannerInNettoMode(AcceptanceTester $I)
     {
@@ -208,6 +226,8 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
      */
     public function checkBannerPlaceholderAppearsOnStartPageOnlyByCorrectConfig(AcceptanceTester $I)
     {
@@ -226,6 +246,8 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
      */
     public function checkCorrectDefaultsSentToPaypalInstallmentsOnStartPageWithEmptyBasket(AcceptanceTester $I)
     {
@@ -237,6 +259,8 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
      */
     public function checkCorrectSumSentToPaypalInstallmentsOnStartPageWithFilledBasketBrutto(AcceptanceTester $I)
     {
@@ -256,6 +280,8 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
      */
     public function checkCorrectSumSentToPaypalInstallmentsOnStartPageWithFilledBasketNetto(AcceptanceTester $I)
     {
@@ -276,6 +302,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_details
      */
     public function productDetailsPageBannerBrutto(AcceptanceTester $I)
     {
@@ -313,6 +342,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_details
      */
     public function productDetailsPageBannerNetto(AcceptanceTester $I)
     {
@@ -340,6 +372,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_variant
      */
     public function productVariantBannerBrutto(AcceptanceTester $I)
     {
@@ -356,6 +391,9 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     *
+     * @group installment_banners_paypal
+     * @group installment_banners_paypal_variant
      */
     public function productVariantBannerNetto(AcceptanceTester $I)
     {

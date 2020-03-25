@@ -9,10 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Adapt module to removal of oxconfig encoding feature.
 
-## [6.1.1] - Unreleased
+## [6.2.0] - Unreleased
+
+### Added
+- New method Basket::hasProductVariantInBasket();
 
 ### Fixed
 - Stabilize acceptance tests.
+- Banners on product details page for variants.
 
 ## [6.1.0] - 2020-03-16
 

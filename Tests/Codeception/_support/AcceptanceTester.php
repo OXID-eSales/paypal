@@ -24,6 +24,7 @@ namespace OxidEsales\PayPalModule\Tests\Codeception;
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Admin\AdminLoginPage;
 use OxidEsales\Codeception\Page\Home;
+use OxidEsales\Codeception\Module\Translation\Translator;
 
 /**
  * Inherited Methods
@@ -100,32 +101,55 @@ class AcceptanceTester extends \Codeception\Actor
         return $this;
     }
 
-    /**
-     * @param float $amount
-     */
-    public function seePayPalInstallmentBannerInFlowAndWaveTheme(float $amount = 0)
+    public function activateFlowTheme()
     {
         $I = $this;
 
-        //Check installment banner body in Flow theme
+        //prepare testing with flow theme
         $I->updateConfigInDatabase('sTheme', 'flow');
         $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .row');
         $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '#content .page-header .clearfix');
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.detailsParams');
         $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkoutSteps ~ .spacer');
-        $I->reloadPage();
-        $I->waitForPageLoad();
-        $I->seePayPalInstallmentBanner();
-        $I->checkInstallmentBannerData($amount);
+    }
 
-        //Check installment banner body in Wave theme
+    public function activateWaveTheme()
+    {
+        $I = $this;
+
+        //prepare testing with wave theme
         $I->updateConfigInDatabase('sTheme', 'wave');
         $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .container');
         $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '.page-header');
         $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '#detailsItemsPager');
         $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkout-steps');
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function seePayPalInstallmentBannerInFlowAndWaveTheme(float $amount = 0, $breadCrumbText = '')
+    {
+        $I = $this;
+
+        //Check installment banner body in Flow theme
         $I->reloadPage();
         $I->waitForPageLoad();
+        if ($breadCrumbText) {
+            $I->see($breadCrumbText);
+        }
+        $I->dontSee(Translator::translate('ERROR_MESSAGE_ARTICLE_ARTICLE_NOT_BUYABLE'));
+        $I->seePayPalInstallmentBanner();
+        $I->checkInstallmentBannerData($amount);
+
+        //Check installment banner body in Wave theme
+        $this->activateWaveTheme();
+        $I->reloadPage();
+        $I->waitForPageLoad();
+        if ($breadCrumbText) {
+            $I->see($breadCrumbText);
+        }
+        $I->dontSee(Translator::translate('ERROR_MESSAGE_ARTICLE_ARTICLE_NOT_BUYABLE'));
         $I->seePayPalInstallmentBanner();
         $I->checkInstallmentBannerData($amount);
     }

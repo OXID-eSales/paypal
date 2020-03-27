@@ -4,16 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [5.3.2] - Unreleased
+
+### Fixed
+- Acceptance tests stability increased.
+
 ## [5.3.1] - 2020-03-14
 
 ### Fixed
 - [0007077](https://bugs.oxid-esales.com/view.php?id=7077) Shipping Methods with special chars not found by PayPal Express.
 - Javascript issues for banners in case of missing client id.
-
-## [5.3.1] - Unreleased
-
-### Fixed
-- Acceptance tests stability increased.
 
 ## [5.3.0] - 2020-02-27
 
@@ -137,7 +138,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
-[5.3.1]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...b-5.x
+
+[5.3.2]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...b-5.x
+[5.3.1]: https://github.com/OXID-eSales/paypal/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v5.3.0
 [5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v5.2.6
 [5.2.5]: https://github.com/OXID-eSales/paypal/compare/v5.2.4...v5.2.5

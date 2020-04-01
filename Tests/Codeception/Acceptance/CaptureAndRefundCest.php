@@ -79,10 +79,12 @@ class CaptureAndRefundCest
         $paypalOrder = new PayPalOrder($I);
         $I->waitForElement($paypalOrder->paypalTab, 10);
         $I->click($paypalOrder->paypalTab);
-        $I->executeJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
-        $I->waitForJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
+        $I->executeJS("document.querySelector('a[href=\"#oepaypalorder_paypal\"]').click()");
 
+        // Wait for list and edit sections to load
+        $I->selectListFrame();
         $I->selectEditFrame();
+
         $paypalOrder->captureAmount($order['capture_amount'], $order['capture_type']);
         $I->dontSee($paypalOrder->captureErrorText, $paypalOrder->errorBox);
         $I->see(Translator::translate('OEPAYPAL_CAPTURE'), $paypalOrder->lastHistoryRowAction);

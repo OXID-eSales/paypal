@@ -48,8 +48,6 @@ class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreateAction($action, $class)
     {
-        $this->expectException(PayPalInvalidActionException::class);
-
         $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $request = new \OxidEsales\PayPalModule\Core\Request();
         $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
@@ -60,11 +58,11 @@ class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Test case for \OxidEsales\PayPalModule\Model\Action\OrderActionFactory::createAction
      * Testing action object creation with incorrect actions
-     *
-     * @expectedException \OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException
      */
     public function testCreateActionWithInvalidData()
     {
+        $this->expectException(PayPalInvalidActionException::class);
+
         $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $request = new \OxidEsales\PayPalModule\Core\Request();
         $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);

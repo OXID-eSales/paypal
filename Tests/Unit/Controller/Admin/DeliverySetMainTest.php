@@ -23,7 +23,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Controller\Admin;
 
 class DeliverySetMainTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

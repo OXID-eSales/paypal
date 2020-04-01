@@ -28,7 +28,7 @@ class OrderPayPalTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      *  Setup: Prepare data - create need tables
      */
-    public function setUp()
+    public function setUp(): void
     {
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_order`');
     }

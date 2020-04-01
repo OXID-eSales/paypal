@@ -59,7 +59,7 @@ class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $userAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
         $mobileDevicesTypes = $userAgent->getMobileDeviceTypes();
-        $this->assertContains('iphone|', $mobileDevicesTypes);
+        $this->assertStringContainsString('iphone|', $mobileDevicesTypes);
     }
 
     /**

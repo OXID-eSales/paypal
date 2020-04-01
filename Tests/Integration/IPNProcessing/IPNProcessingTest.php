@@ -58,7 +58,7 @@ class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Set up fixture.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -77,7 +77,7 @@ class IPNProcessingTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Tear down fixture.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->cleanUpTable('oxorder');
         $this->cleanUpTable('oxuser');

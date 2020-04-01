@@ -23,6 +23,7 @@ class ProductQuantityCest
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
         $I->updateInDatabase('oxuser', Fixtures::get('adminData'), ['OXUSERNAME' => 'admin']);
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
     }
 
     /**

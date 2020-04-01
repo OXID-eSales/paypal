@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Adapt module to removal of oxconfig encoding feature.
 
+### Fixed
+- Test compatibility with shop master.
+
 ## [6.2.0] - Unreleased
 
 ### Added

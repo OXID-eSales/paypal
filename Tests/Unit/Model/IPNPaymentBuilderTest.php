@@ -26,7 +26,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model;
  */
 class IPNPaymentBuilderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

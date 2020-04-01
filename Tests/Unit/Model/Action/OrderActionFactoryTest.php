@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action;
 
+use OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException;
+
 /**
  * Testing \OxidEsales\PayPalModule\Model\Action\OrderActionFactory class.
  */
@@ -46,6 +48,8 @@ class OrderActionFactoryTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCreateAction($action, $class)
     {
+        $this->expectException(PayPalInvalidActionException::class);
+
         $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $request = new \OxidEsales\PayPalModule\Core\Request();
         $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);

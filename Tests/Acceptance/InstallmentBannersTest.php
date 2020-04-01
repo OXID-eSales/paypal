@@ -253,7 +253,7 @@ class InstallmentBannersTest extends BaseAcceptanceTestCase
         $this->assertFalse($this->isElementPresent('paypal-installment-banner-container'));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

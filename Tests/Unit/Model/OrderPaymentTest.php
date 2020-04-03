@@ -24,7 +24,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 /**
  * Testing oxAccessRightException class.
  */
-class Unit_oePayPal_models_oePayPalOrderPaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class OrderPaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      *  Setup: Prepare data - create need tables

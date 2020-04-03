@@ -97,9 +97,9 @@ class InstallmentBannersTest extends BaseAcceptanceTestCase
         $this->getMinkSession()->getDriver()->executeScript($bruteForceScript);
         $content = $this->getElement(self::PAYPAL_CONTAINER_ID)->getText();
 
-        $this->assertRegExp($this->prepareMessagePartRegex(sprintf("amount: %s", $amount)), $content);
-        $this->assertRegExp($this->prepareMessagePartRegex(sprintf("ratio: '%s'", $ratio)), $content);
-        $this->assertRegExp($this->prepareMessagePartRegex(sprintf("currency: '%s'", $currency)), $content);
+        $this->assertMatchesRegularExpression($this->prepareMessagePartRegex(sprintf("amount: %s", $amount)), $content);
+        $this->assertMatchesRegularExpression($this->prepareMessagePartRegex(sprintf("ratio: '%s'", $ratio)), $content);
+        $this->assertMatchesRegularExpression($this->prepareMessagePartRegex(sprintf("currency: '%s'", $currency)), $content);
     }
 
     /**

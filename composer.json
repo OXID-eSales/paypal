@@ -24,11 +24,18 @@
         "lib-curl": ">=7.26.0",
         "lib-openssl": ">=1.0.1",
         "ext-curl": "*",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "internations/http-mock": "^0.12.1"
     },
     "autoload": {
         "psr-4": {
             "OxidEsales\\PayPalModule\\": "../../../source/modules/oe/oepaypal"
+        }
+    },
+    "repositories": {
+        "internations/http-mock": {
+            "type": "vcs",
+            "url": "https://github.com/InterNations/http-mock"
         }
     }
 }

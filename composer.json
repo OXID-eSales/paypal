@@ -31,11 +31,5 @@
         "psr-4": {
             "OxidEsales\\PayPalModule\\": "../../../source/modules/oe/oepaypal"
         }
-    },
-    "repositories": {
-        "internations/http-mock": {
-            "type": "vcs",
-            "url": "https://github.com/InterNations/http-mock"
-        }
     }
 }

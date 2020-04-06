@@ -74,14 +74,16 @@ class Config
      *
      * @var string
      */
-    protected $payPalSandboxHost = 'api-3t.sandbox.paypal.com';
+//    protected $payPalSandboxHost = 'api-3t.sandbox.paypal.com';
+    protected $payPalSandboxHost = 'localhost:8082';
 
     /**
      * PayPal sandbox Url where user must be redirected after his session gets PayPal token.
      *
      * @var string
      */
-    protected $payPalSandboxUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+//    protected $payPalSandboxUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+    protected $payPalSandboxUrl = 'http://localhost:8082/cgi-bin/webscr';
 
     /**
      * PayPal Url where user must be redirected after his session gets PayPal token.
@@ -95,7 +97,8 @@ class Config
      *
      * @var string
      */
-    protected $payPalSandboxApiUrl = 'https://api-3t.sandbox.paypal.com/nvp';
+//    protected $payPalSandboxApiUrl = 'https://api-3t.sandbox.paypal.com/nvp';
+    protected $payPalSandboxApiUrl = 'http://localhost:8082/nvp';
 
     /**
      * PayPal API url.

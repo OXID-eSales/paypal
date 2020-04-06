@@ -4,7 +4,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 
 use InterNations\Component\HttpMock\PHPUnit\HttpMockTrait;
 
-class MockServerExample extends \OxidEsales\TestingLibrary\UnitTestCase
+class HttpMockUnitTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     use HttpMockTrait;
 
@@ -30,6 +30,9 @@ class MockServerExample extends \OxidEsales\TestingLibrary\UnitTestCase
         parent::tearDown();
     }
 
+    /**
+     * @group http_mock
+     */
     public function testSimpleRequest()
     {
         $this->http->mock
@@ -44,6 +47,9 @@ class MockServerExample extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->assertSame('mocked body', file_get_contents('http://localhost:8082/resource'));
     }
 
+    /**
+     * @group http_mock
+     */
     public function testAccessingRecordedRequests()
     {
         $this->http->mock
@@ -61,7 +67,10 @@ class MockServerExample extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->assertSame('/foo', $this->http->requests->latest()->getPath());
     }
 
-    public function testAsd123()
+    /**
+     * @group http_mock
+     */
+    public function testMockUsingRegex()
     {
         $this->http->mock
             ->when()

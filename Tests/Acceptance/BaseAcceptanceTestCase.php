@@ -600,6 +600,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         }
 
         $this->waitForItemAppear("//input[@id='continue_abovefold']", 5, true);
+        $this->waitForItemAppear("//id=payment-submit-btn", 5, true);
         $this->waitForEditable("id=continue", 5, true);
         $this->waitForEditable("id=confirmButtonTop", 5, true);
 
@@ -613,6 +614,8 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             $this->markTestIncomplete('PayPal is showing us their retry link so the have some internal problems.');
         } elseif ($this->isElementPresent("id=login_email") || $this->isElementPresent("id=email")) {
             $this->markTestIncomplete('We unexpectedly get the PayPal login form again. Autoskipping test.');
+        } elseif($this->isElementPresent("id=payment-submit-btn")) {
+            $this->clickAndWait("id=payment-submit-btn");
         }
 
         //we should be redirected back to shop at this point

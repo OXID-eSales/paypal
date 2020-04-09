@@ -69,6 +69,7 @@ class ECSOrderTest extends BaseAcceptanceTestCase
         $this->openShop();
         $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
         $this->addToBasketProceedToPayPal();
+        $this->cancelPayPal();
 
         $this->open(shopURL . '/index.php?cl=order');
         $this->assertElementPresent("//button[text()='Order now']");

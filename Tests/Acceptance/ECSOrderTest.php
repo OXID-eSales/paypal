@@ -47,7 +47,8 @@ class ECSOrderTest extends BaseAcceptanceTestCase
         $this->addToBasketProceedToPayPal();
         $this->logIntoPayPal();
 
-        $this->open(shopURL . '/index.php?cl=order');
+        $this->openShop();
+        $this->open($this->_getShopUrl(['cl' => 'order']));
         $this->assertTextPresent("%CART%");
         $this->assertElementNotPresent("//button[text()='Order now']");
     }
@@ -71,7 +72,8 @@ class ECSOrderTest extends BaseAcceptanceTestCase
         $this->addToBasketProceedToPayPal();
         $this->cancelPayPal();
 
-        $this->open(shopURL . '/index.php?cl=order');
+        $this->openShop();
+        $this->open($this->_getShopUrl(['cl' => 'order']));
         $this->assertElementPresent("//button[text()='Order now']");
         $this->clickAndWait("//button[text()='Order now']");
         $this->assertTextNotPresent(self::THANK_YOU_PAGE_IDENTIFIER);
@@ -97,7 +99,8 @@ class ECSOrderTest extends BaseAcceptanceTestCase
         $this->addToBasketProceedToPayPal();
         $this->logIntoPayPal();
 
-        $this->open(shopURL . '/index.php?cl=order');
+        $this->openShop();
+        $this->open($this->_getShopUrl(['cl' => 'order']));
         $this->assertElementPresent("//button[text()='Order now']");
         $this->clickAndWait("//button[text()='Order now']");
         $this->assertTextNotPresent(self::THANK_YOU_PAGE_IDENTIFIER);

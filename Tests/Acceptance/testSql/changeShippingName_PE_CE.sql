@@ -1,3 +1,5 @@
+SET @@session.sql_mode = '';
+
 # Delivery set demo data
 REPLACE INTO `oxdeliveryset` (`OXID`, `OXSHOPID`, `OXACTIVE`, `OXACTIVEFROM`, `OXACTIVETO`, `OXTITLE`, `OXTITLE_1`, `OXPOS`) VALUES ('testdelset', 1,  1, '1990-01-01 00:00:00', '2099-12-12 23:59:59', 'Test ä S&H set', 'Test ä S&H set', 0);
 

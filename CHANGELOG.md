@@ -46,11 +46,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
 - Replace deprecated calls to getSession();
 
+## [5.3.2] - Unreleased
+
+### Fixed
+- Acceptance tests stability increased.
+- Fix and stabilize acceptance tests. Adapt to latest changes in PayPal Gui.
+
 ## [5.3.1] - 2020-03-14
 
 ### Fixed
 - [0007077](https://bugs.oxid-esales.com/view.php?id=7077) Shipping Methods with special chars not found by PayPal Express.
-- Javascript issues for banners in case of missing client id. 
+- Javascript issues for banners in case of missing client id.
 
 ## [5.3.0] - 2020-02-27
 
@@ -177,7 +183,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [6.1.0]: https://github.com/OXID-eSales/paypal/compare/v6.0.2...v6.1.0
 [6.0.2]: https://github.com/OXID-eSales/paypal/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1
-[6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v6.0.0
+[6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...v6.0.0
+[5.3.2]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...b-5.x
 [5.3.1]: https://github.com/OXID-eSales/paypal/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v5.3.0
 [5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v5.2.6

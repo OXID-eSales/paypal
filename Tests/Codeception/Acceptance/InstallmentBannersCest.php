@@ -112,7 +112,7 @@ class InstallmentBannersCest
 
         // 0. Prepare basket
         $basket = new Basket($I);
-        $basketPage = $basket->addProductToBasketAndOpen(Fixtures::get('product')['id'], 1, 'basket');
+        $basketPage = $basket->addProductToBasketAndOpenBasket(Fixtures::get('product')['id'], 1, 'basket');
 
         // 1. Basket overview
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
@@ -159,7 +159,7 @@ class InstallmentBannersCest
 
         // 0. Prepare basket
         $basket = new Basket($I);
-        $basketPage = $basket->addProductToBasketAndOpen(Fixtures::get('product')['id'], 1, 'basket');
+        $basketPage = $basket->addProductToBasketAndOpenBasket(Fixtures::get('product')['id'], 1, 'basket');
 
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme(33.8);
 

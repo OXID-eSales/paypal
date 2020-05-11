@@ -287,7 +287,8 @@ class ViewConfig extends ViewConfig_parent
         return (
             !$config->getConfigParam('oePayPalBannersHideAll') &&
             $config->getConfigParam('oePayPalBannersStartPage') &&
-            $config->getConfigParam('oePayPalBannersStartPageSelector')
+            $config->getConfigParam('oePayPalBannersStartPageSelector') &&
+            $config->getConfigParam('bl_perfLoadPrice')
         );
     }
 
@@ -313,7 +314,8 @@ class ViewConfig extends ViewConfig_parent
         return (
             !$config->getConfigParam('oePayPalBannersHideAll') &&
             $config->getConfigParam('oePayPalBannersCategoryPage') &&
-            $config->getConfigParam('oePayPalBannersCategoryPageSelector')
+            $config->getConfigParam('oePayPalBannersCategoryPageSelector') &&
+            $config->getConfigParam('bl_perfLoadPrice')
         );
     }
 
@@ -339,7 +341,8 @@ class ViewConfig extends ViewConfig_parent
         return (
             !$config->getConfigParam('oePayPalBannersHideAll') &&
             $config->getConfigParam('oePayPalBannersSearchResultsPage') &&
-            $config->getConfigParam('oePayPalBannersSearchResultsPageSelector')
+            $config->getConfigParam('oePayPalBannersSearchResultsPageSelector') &&
+            $config->getConfigParam('bl_perfLoadPrice')
         );
     }
 
@@ -365,7 +368,8 @@ class ViewConfig extends ViewConfig_parent
         return (
             !$config->getConfigParam('oePayPalBannersHideAll') &&
             $config->getConfigParam('oePayPalBannersProductDetailsPage') &&
-            $config->getConfigParam('oePayPalBannersProductDetailsPageSelector')
+            $config->getConfigParam('oePayPalBannersProductDetailsPageSelector') &&
+            $config->getConfigParam('bl_perfLoadPrice')
         );
     }
 
@@ -394,13 +398,15 @@ class ViewConfig extends ViewConfig_parent
             $showBanner = (
                 !$config->getConfigParam('oePayPalBannersHideAll') &&
                 $config->getConfigParam('oePayPalBannersCheckoutPage') &&
-                $config->getConfigParam('oePayPalBannersCartPageSelector')
+                $config->getConfigParam('oePayPalBannersCartPageSelector') &&
+                $config->getConfigParam('bl_perfLoadPrice')
             );
-        } else if ($actionClassName === 'payment') {
+        } elseif ($actionClassName === 'payment') {
             $showBanner = (
                 !$config->getConfigParam('oePayPalBannersHideAll') &&
                 $config->getConfigParam('oePayPalBannersCheckoutPage') &&
-                $config->getConfigParam('oePayPalBannersPaymentPageSelector')
+                $config->getConfigParam('oePayPalBannersPaymentPageSelector') &&
+                $config->getConfigParam('bl_perfLoadPrice')
             );
         }
 

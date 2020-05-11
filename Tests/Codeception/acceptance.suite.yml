@@ -22,6 +22,8 @@ modules:
         populate: true # run populator before all tests
         cleanup: true # run populator before each test
         populator: '%PHP_BIN% %VENDOR_PATH%/bin/reset-shop && mysql --defaults-file=$mysql_config --default-character-set=utf8 $dbname < $dump'
+        initial_queries:
+          - "SET SESSION sql_mode = '';"
     - \OxidEsales\Codeception\Module\Oxideshop:
         depends:
           - WebDriver

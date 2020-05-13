@@ -1085,13 +1085,14 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
 
     /**
      * Click cancel on payPal side to return to shop.
+     *
+     * @param bool $isRetry
      */
-    protected function cancelPayPal()
+    protected function cancelPayPal($isRetry = false)
     {
         $element = $this->getElementLazy("id=cancelLink", false);
         if ($element) {
             $this->clickAndWait("id=cancelLink");
-            return;
         }
         $element = $this->getElementLazy("id=cancel_return", false);
         if ($element) {
@@ -1101,7 +1102,11 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         //we should be redirected back to shop at this point
         $this->_waitForAppear('isElementPresent', "id=breadCrumb", 5, true);
         if( !$this->isElementPresent("id=breadCrumb")) {
-            $this->markTestIncomplete('Cancel PayPal and return to shop did not work, marking test as incomplete.');
+            if (!$isRetry) {
+                $this->cancelPayPal(true);
+            } else {
+                $this->markTestIncomplete('Cancel PayPal and return to shop did not work, marking test as incomplete.');
+            }
         }
     }
 

@@ -43,6 +43,14 @@ For running acceptance tests you need to provide credentials data in `oepaypal/T
 - Set `sBuyerPassword`
 - Set `OEPayPalClientId`
 
+For running codeception tests you need to provide credentials data in `oepaypal/Tests/Codeception/_data/oepaypalData.php` file:
+- Set `sOEPayPalSandboxUsername`
+- Set `sOEPayPalSandboxPassword`
+- Set `sOEPayPalSandboxSignature`
+- Set `sBuyerLogin`
+- Set `sBuyerPassword`
+- Set `OEPayPalClientId`
+
 For running the tests, follow the instructions from [here](https://github.com/OXID-eSales/testing_library#running-tests).
 
 ### Bugs and Issues

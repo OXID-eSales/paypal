@@ -26,6 +26,25 @@ In order to install the module via composer run one of the following commands in
 * **composer require oxid-esales/paypal-module:^5.0.0** to install the released version compatible with OXID eShop RC2
 * **composer require oxid-esales/paypal-module:dev-master** to install the latest unreleased version from github
 
+### Running tests locally
+
+Change the `test_config.yml` file of your project, before running any test:
+- Set `partial_module_paths` to `oe/oepaypal`
+- Set `activate_all_modules` to `true`
+- Set `run_tests_for_shop` to `false`
+- Set `additional_test_paths` to `''`
+- Set `retry_times_after_test_fail` to `0`
+
+For running acceptance tests you need to provide credentials data in `oepaypal/Tests/Acceptance/oepaypalData.php` file:
+- Set `sOEPayPalSandboxUsername`
+- Set `sOEPayPalSandboxPassword`
+- Set `sOEPayPalSandboxSignature`
+- Set `sBuyerLogin`
+- Set `sBuyerPassword`
+- Set `OEPayPalClientId`
+
+For running the tests, follow the instructions from [here](https://github.com/OXID-eSales/testing_library#running-tests).
+
 ### Bugs and Issues
 
 If you experience any bugs or issues, please report them in the section **module PayPal** of https://bugs.oxid-esales.com.

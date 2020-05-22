@@ -28,14 +28,15 @@ In order to install the module via composer run one of the following commands in
 
 ### Running tests locally
 
-Change the `test_config.yml` file of your project, before running any test:
+To run this module tests locally, ensure the `test_config.yml` values are correct:
 - Set `partial_module_paths` to `oe/oepaypal`
 - Set `activate_all_modules` to `true`
+- Set `run_tests_for_modules` to `true`
 - Set `run_tests_for_shop` to `false`
 - Set `additional_test_paths` to `''`
 - Set `retry_times_after_test_fail` to `0`
 
-For running acceptance tests you need to provide credentials data in `oepaypal/Tests/Acceptance/oepaypalData.php` file:
+For running acceptance tests you need to provide sandbox credentials data in `oepaypal/Tests/Acceptance/oepaypalData.php` file:
 - Set `sOEPayPalSandboxUsername`
 - Set `sOEPayPalSandboxPassword`
 - Set `sOEPayPalSandboxSignature`
@@ -43,7 +44,7 @@ For running acceptance tests you need to provide credentials data in `oepaypal/T
 - Set `sBuyerPassword`
 - Set `OEPayPalClientId`
 
-For running codeception tests you need to provide credentials data in `oepaypal/Tests/Codeception/_data/oepaypalData.php` file:
+For running codeception tests you need to provide sandbox credentials data in `oepaypal/Tests/Codeception/_data/oepaypalData.php` file:
 - Set `sOEPayPalSandboxUsername`
 - Set `sOEPayPalSandboxPassword`
 - Set `sOEPayPalSandboxSignature`
@@ -51,7 +52,7 @@ For running codeception tests you need to provide credentials data in `oepaypal/
 - Set `sBuyerPassword`
 - Set `OEPayPalClientId`
 
-For running the tests, follow the instructions from [here](https://github.com/OXID-eSales/testing_library#running-tests).
+For running the tests and more configuration options, follow the instructions from [here](https://github.com/OXID-eSales/testing_library#running-tests).
 
 ### Bugs and Issues
 

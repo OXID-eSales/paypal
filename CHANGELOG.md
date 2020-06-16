@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Acceptance tests stability increased.
 - Fix and stabilize acceptance tests. Adapt to latest changes in PayPal Gui.
+- Fix variant switching issues when installment banners element is missing. 
 
 ## [5.3.1] - 2020-03-14
 

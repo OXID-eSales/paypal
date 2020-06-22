@@ -10,7 +10,11 @@
   var newNode = document.createElement('div');
   newNode.setAttribute('id', 'paypal-installment-banner-container');
   var referenceNode = document.querySelector('[{$selector}]');
-  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+  if (referenceNode) {
+      referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+  } else {
+      console.warn('Installment banners was not added due to missing element `[{$selector}]`');
+  }
 
   var PayPalMessage = function () {
     var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;

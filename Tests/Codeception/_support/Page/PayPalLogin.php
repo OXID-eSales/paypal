@@ -80,6 +80,21 @@ class PayPalLogin extends Page
         $I->waitForElementNotVisible($this->spinner, 90);
 
         // In case we have cookie message, accept all cookies
+        $this->acceptAllPayPalCookies();
+
+        $I->waitForElementNotVisible($this->spinner, 90);
+        $this->acceptAllPayPalCookies();
+        $I->click($confirmButton);
+        $I->waitForDocumentReadyState();
+
+        return new OrderCheckout($I);
+    }
+    
+    private function acceptAllPayPalCookies()
+    {
+        $I = $this->user;
+
+        // In case we have cookie message, accept all cookies
         if ($I->seePageHasElement($this->gdprCookieBanner)) {
             $I->click($this->acceptAllPaypalCookies);
             // In case that the content blocking is enabled,
@@ -90,11 +105,5 @@ class PayPalLogin extends Page
             }
             $I->waitForElementNotVisible($this->gdprCookieBanner);
         }
-
-        $I->waitForElementNotVisible($this->spinner, 90);
-        $I->click($confirmButton);
-        $I->waitForDocumentReadyState();
-
-        return new OrderCheckout($I);
-    }
+    }    
 }

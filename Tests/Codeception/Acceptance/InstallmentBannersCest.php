@@ -439,9 +439,31 @@ class InstallmentBannersCest
         $product = Fixtures::get('parent');
 
         $productNavigation = new ProductNavigation($I);
-        $productDetailPage = $productNavigation->openProductDetailsPage($product['id']);
-        $productDetailPage->selectVariant(1, 'W 30/L 30');
-        $productDetailPage->selectVariant(2, 'Super Blue');
+        $productNavigation
+            ->openProductDetailsPage($product['id'])
+            ->selectVariant(1, 'W 30/L 30')
+            ->selectVariant(2, 'Super Blue')
+            ->seeProductData([
+                'id'          => '0702-85-853-1-3',
+                'title'       => 'Kuyichi Jeans ANNA W 30/L 30 | Super Blue',
+                'description' => 'Cool lady jeans by Kuyichi',
+                'price'       => '99,90 €'
+            ]);
+        $I->checkInstallmentBannerData($product['maxBruttoPrice']);
+
+        $I->activateWaveTheme();
+        $I->reloadPage();
+        $I->waitForPageLoad();
+        $productDetails = $productNavigation
+            ->openProductDetailsPage($product['id']);
+        $this->selectWaveVariant($I, 1, 'W 30/L 30');
+        $this->selectWaveVariant($I, 2, 'Super Blue');
+        $productDetails->seeProductData([
+                'id'          => '0702-85-853-1-3',
+                'title'       => 'Kuyichi Jeans ANNA W 30/L 30 | Super Blue',
+                'description' => 'Cool lady jeans by Kuyichi',
+                'price'       => '99,90 €'
+            ]);
         $I->checkInstallmentBannerData($product['maxBruttoPrice']);
     }
 
@@ -451,17 +473,68 @@ class InstallmentBannersCest
      * @group installment_banners_paypal
      * @group installment_banners_paypal_variant
      */
-    public function productVariantBannerNetto(AcceptanceTester $I)
+    public function productVariantBannerWrongSelector(AcceptanceTester $I)
     {
-        $I->wantToTest('PayPal installment banner for selected variant in netto mode');
-        $I->updateConfigInDatabase('blShowNetPrice', true);
+        $I->wantToTest('PayPal installment banner with wrong selector');
+
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.non-existing-css-selector');
 
         $product = Fixtures::get('parent');
 
         $productNavigation = new ProductNavigation($I);
-        $productDetailPage = $productNavigation->openProductDetailsPage($product['id']);
-        $productDetailPage->selectVariant(1, 'W 30/L 30');
-        $productDetailPage->selectVariant(2, 'Super Blue');
-        $I->checkInstallmentBannerData($product['maxNettoPrice']);
+        $productNavigation
+            ->openProductDetailsPage($product['id'])
+            ->seeProductData([
+                'id'          => '3570',
+                'title'       => 'Kuyichi Jeans ANNA',
+                'description' => 'Cool lady jeans by Kuyichi',
+                'price'       => 'from 92,90 € *'
+            ])
+            ->selectVariant(1, "W 30/L 30", "W 30/L 30")
+            ->selectVariant(2, "Blue", "W 30/L 30, Blue")
+            ->seeProductData([
+                'id'          => '0702-85-853-1-1',
+                'title'       => 'Kuyichi Jeans ANNA W 30/L 30 | Blue',
+                'description' => 'Cool lady jeans by Kuyichi',
+                'price'       => '99,90 €'
+            ]);
+
+        $I->activateWaveTheme();
+        $I->reloadPage();
+        $I->waitForPageLoad();
+        $productDetails = $productNavigation
+            ->openProductDetailsPage($product['id'])
+            ->seeProductData([
+                'id'          => '3570',
+                'title'       => 'Kuyichi Jeans ANNA',
+                'description' => 'Cool lady jeans by Kuyichi',
+                'price'       => 'from 92,90 € *'
+        ]);
+        $this->selectWaveVariant($I, 1, 'W 30/L 30');
+        $this->selectWaveVariant($I, 2, 'Blue');
+        $productDetails->seeProductData([
+            'id'          => '0702-85-853-1-1',
+            'title'       => 'Kuyichi Jeans ANNA W 30/L 30 | Blue',
+            'description' => 'Cool lady jeans by Kuyichi',
+            'price'       => '99,90 €'
+        ]);
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @param int              $variant      The position of the variant.
+     * @param string           $variantValue The value of the variant.
+     */
+    private function selectWaveVariant(AcceptanceTester $I, int $variant, string $variantValue)
+    {
+        $variantSelection = '/descendant::button[@class="btn btn-outline-dark btn-sm dropdown-toggle"][%s]';
+        $variantOpenSelection = '//ul[@class="dropdown-menu  vardrop"]';
+
+        $I->click(sprintf($variantSelection, $variant));
+        $I->click($variantValue);
+        $I->click($variantValue);
+        $I->waitForElementNotVisible($variantOpenSelection);
+        $I->waitForPageLoad();
+        $I->see($variantValue);
     }
 }

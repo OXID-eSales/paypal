@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Acceptance;
 
+use \OxidEsales\PayPalModule\Core\Config as PayPalConfig;
+
 /**
  * @todo add dependency between external tests. If one fails next should not start.
  */
@@ -1057,6 +1059,15 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         $element = $this->getElementLazy('link=Not you?', false);
         if ($element) {
             $element->click();
+            return;
+        }
+
+        $payPalConfig = oxNew(PayPalConfig::class);
+        $this->open($payPalConfig->getPayPalSandboxUrl());
+        $element = $this->getElementLazy('header-logout', false);
+        if ($element) {
+            $element->click();
+            $this->waitForPageToLoad();
         }
     }
 

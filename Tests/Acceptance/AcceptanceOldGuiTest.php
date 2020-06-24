@@ -642,7 +642,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $loginPassword = $this->getLoginDataByName('sBuyerPassword');
         $this->clickAndWait('paypalExpressCheckoutButton');
         $this->doPayPalLogOut();
-        $this->cancelPayPal();
+        $this->open(shopURL);
+        $this->openBasket("English");
         $this->clickAndWait('paypalExpressCheckoutButton');
         $this->logMeIntoSandbox($loginMail, $loginPassword);
         $this->clickPayPalContinue();

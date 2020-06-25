@@ -532,7 +532,9 @@ class InstallmentBannersCest
 
         $I->click(sprintf($variantSelection, $variant));
         $I->click($variantValue);
-        $I->click($variantValue);
+        if ($I->see($variantValue)) {
+            $I->click($variantValue);
+        }
         $I->waitForElementNotVisible($variantOpenSelection);
         $I->waitForPageLoad();
         $I->see($variantValue);

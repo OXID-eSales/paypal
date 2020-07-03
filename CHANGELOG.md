@@ -54,7 +54,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
 - Replace deprecated calls to getSession();
 
-## [5.3.2] - Unreleased
+## [5.3.2] - 2020-07-03
 
 ### Fixed
 - Acceptance tests stability increased.
@@ -194,7 +194,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [6.0.2]: https://github.com/OXID-eSales/paypal/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...v6.0.0
-[5.3.2]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...b-5.x
+[5.3.2]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...v5.3.2
 [5.3.1]: https://github.com/OXID-eSales/paypal/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v5.3.0
 [5.2.6]: https://github.com/OXID-eSales/paypal/compare/v5.2.5...v5.2.6

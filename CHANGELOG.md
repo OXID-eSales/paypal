@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Test compatibility with shop master.
 
-## [6.2.0] - Unreleased
+## [6.2.0] - 2020-07-03
 
 ### Added
 - New method Basket::hasProductVariantInBasket();
@@ -190,6 +190,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
+[6.2.0]: https://github.com/OXID-eSales/paypal/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/OXID-eSales/paypal/compare/v6.0.2...v6.1.0
 [6.0.2]: https://github.com/OXID-eSales/paypal/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1

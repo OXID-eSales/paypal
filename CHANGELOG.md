@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [6.2.0] - Unreleased
+## [6.2.0] - 2020-07-03
 
 ### Added
 - New method Basket::hasProductVariantInBasket();
@@ -181,6 +181,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
+[6.2.0]: https://github.com/OXID-eSales/paypal/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/OXID-eSales/paypal/compare/v6.0.2...v6.1.0
 [6.0.2]: https://github.com/OXID-eSales/paypal/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1

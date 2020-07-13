@@ -39,6 +39,8 @@ class PayPalLogin extends Page
     public $gdprCookieBanner = "#gdprCookieBanner";
     public $acceptAllPaypalCookies = "#acceptAllButton";
 
+    public $loginSection = "#loginSection";
+
     /**
      * @param string $userName
      * @param string $userPassword
@@ -49,6 +51,8 @@ class PayPalLogin extends Page
     {
         $I = $this->user;
         $usingNewLogin = true;
+
+        $this->waitForPayPalPage();
 
         // new login page
         if ($I->seePageHasElement($this->userLoginEmail)) {
@@ -89,7 +93,26 @@ class PayPalLogin extends Page
 
         return new OrderCheckout($I);
     }
-    
+
+    public function waitForPayPalPage(): PayPalLogin
+    {
+        $I = $this->user;
+
+        $I->waitForDocumentReadyState();
+        $I->waitForElementNotVisible($this->spinner, 90);
+        $I->wait(8);
+
+        if ($I->seePageHasElement($this->loginSection)) {
+            $I->click('.loginRedirect a');
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->spinner, 90);
+            $I->waitForElementNotVisible($this->loginSection);
+         }
+
+        return $this;
+    }
+
+
     private function acceptAllPayPalCookies()
     {
         $I = $this->user;

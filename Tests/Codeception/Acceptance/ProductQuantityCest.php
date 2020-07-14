@@ -28,6 +28,8 @@ class ProductQuantityCest
 
     /**
      * @param AcceptanceTester $I
+     *                           
+     * @group product_quantity_paypal                          
      */
     public function increaseProductQuantity(AcceptanceTester $I)
     {

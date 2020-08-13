@@ -41,6 +41,11 @@ class PayPalLogin extends Page
 
     public $loginSection = "#loginSection";
 
+    public $cancelLink = "#cancelLink";
+    public $returnToShop = "#cancel_return";
+
+    public $breadCrumb = "#breadCrumb";
+
     /**
      * @param string $userName
      * @param string $userPassword
@@ -112,6 +117,29 @@ class PayPalLogin extends Page
         return $this;
     }
 
+    /**
+     * Click cancel on payPal side to return to shop.
+     */
+    public function cancelPayPal(bool $isRetry = false): void
+    {
+        $I = $this->user;
+
+        if ($I->seePageHasElement($this->cancelLink)) {
+            $I->amOnUrl($I->grabAttributeFrom($this->cancelLink, 'href'));
+            $I->waitForDocumentReadyState();
+        } elseif ($I->seePageHasElement($this->returnToShop)) {
+            $I->amOnUrl($I->grabAttributeFrom($this->returnToShop, 'href'));
+            $I->waitForDocumentReadyState();
+        }
+
+        //we should be redirected back to shop at this point
+        if ($I->dontSeeElement($this->breadCrumb) &&
+            $I->dontSeeElement(strtolower($this->breadCrumb)) &&
+            !$isRetry
+        ) {
+            $this->cancelPayPal(true);
+        }
+    }
 
     private function acceptAllPayPalCookies()
     {

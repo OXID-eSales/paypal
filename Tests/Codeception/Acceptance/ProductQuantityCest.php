@@ -10,6 +10,7 @@ use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Step\Basket;
 use OxidEsales\Codeception\Step\ProductNavigation;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
+use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 
 /**
  * Class ProductQuantityCest
@@ -46,7 +47,7 @@ class ProductQuantityCest
         ];
 
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $home = $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
 
         $productNavigation = new ProductNavigation($I);
         $productNavigation->openProductDetailsPage($basketItem['id']);
@@ -56,10 +57,12 @@ class ProductQuantityCest
         $I->click("#actionAddToBasketAndGoToCheckout");
         $I->waitForDocumentReadyState();
 
-        $homePage = $I->openShop();
+        $paypalPage = new PaypalLogin($I);
+        $paypalPage->acceptAllPaypalCookies;
+        $paypalPage->cancelPayPal();
 
         //reload page to make sure basket modal is closed
         $I->reloadPage();
-        $homePage->seeMiniBasketContains([$expectedBasketContent], $expectedBasketContent['price'], $expectedBasketContent['amount']);
+        $home->seeMiniBasketContains([$expectedBasketContent], $expectedBasketContent['price'], $expectedBasketContent['amount']);
     }
 }

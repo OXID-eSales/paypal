@@ -60,6 +60,7 @@ class PayPalLogHelper
      */
     public function cleanPayPalLog()
     {
+        $this->renamePayPalLog();
         $pathToLog = $this->getPathToPayPalLog();
         if (file_exists($pathToLog)) {
             unlink($pathToLog);

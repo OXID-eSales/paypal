@@ -74,7 +74,7 @@ class PayPalLogHelper
     {
         $pathToLog = $this->getPathToPayPalLog();
         if (file_exists($pathToLog)) {
-            rename($pathToLog, $pathToLog . ('_' . microtime(true)));
+            rename($pathToLog, $pathToLog . ('_' . microtime(true)) . '.log');
         }
     }
 

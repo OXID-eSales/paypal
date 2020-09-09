@@ -330,6 +330,8 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
         $logger = $this->getLogger();
         $logger->setTitle("CALLBACK REQUEST FROM PAYPAL");
         $logger->log(http_build_query($_REQUEST, "", "&"));
+        $logger->log(serialize($_POST));
+        $logger->log(serialize($_GET));
 
         // initializing user..
         $user = $this->getCallBackUser($_REQUEST);

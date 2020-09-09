@@ -428,7 +428,7 @@ class SetExpressCheckoutRequestBuilder
         $request = $this->getPayPalRequest();
 
         $request->setParameter("CALLBACK", $this->getCallbackUrl());
-        $request->setParameter("CALLBACKTIMEOUT", 6);
+        $request->setParameter("CALLBACKTIMEOUT", 20);
     }
 
     /**

@@ -37,6 +37,8 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     public function processCallBack()
     {
+        echo "VERSION=&PWD=&USER=&SIGNATURE=&L_SHIPPINGOPTIONNAME0=Test+%C3%A4+S%26H+set&L_SHIPPINGOPTIONLABEL0=Preis&L_SHIPPINGOPTIONAMOUNT0=0.00&L_SHIPPINGOPTIONISDEFAULT0=true&L_TAXAMT0=0.00&L_SHIPPINGOPTIONNAME1=Beispiel+Set1%3A+UPS+48+Std.&L_SHIPPINGOPTIONLABEL1=Preis&L_SHIPPINGOPTIONAMOUNT1=0.00&L_SHIPPINGOPTIONISDEFAULT1=false&L_TAXAMT1=0.00&L_SHIPPINGOPTIONNAME2=Beispiel+Set1%3A+UPS+24+Std.+Express&L_SHIPPINGOPTIONLABEL2=Preis&L_SHIPPINGOPTIONAMOUNT2=12.90&L_SHIPPINGOPTIONISDEFAULT2=false&L_TAXAMT2=0.00&OFFERINSURANCEOPTION=false&METHOD=CallbackResponse";
+        exit;
         $payPalService = $this->getPayPalCheckoutService();
         $this->setParamsForCallbackResponse($payPalService);
         $request = $payPalService->callbackResponse();
@@ -330,6 +332,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
         $logger = $this->getLogger();
         $logger->setTitle("CALLBACK REQUEST FROM PAYPAL");
         $logger->log(http_build_query($_REQUEST, "", "&"));
+        $logger->log(serialize($_SERVER));
         $logger->log(serialize($_POST));
         $logger->log(serialize($_GET));
 

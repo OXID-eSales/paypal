@@ -28,6 +28,8 @@ namespace OxidEsales\PayPalModule\Tests\Acceptance;
  */
 class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 {
+    protected $retryTimes = 0;
+
     /**
      * testing paypal express button
      *
@@ -140,7 +142,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
     {
         //Change S&H set to contain an Umlaut
         $this->importSql(__DIR__ . '/testSql/changeShippingName_' . SHOP_EDITION . '.sql');
-   sleep(600);
+   sleep(1200);
         // Testing when user is not logged in
         $this->openShop();
         $this->switchLanguage("Deutsch");

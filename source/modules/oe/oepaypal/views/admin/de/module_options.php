@@ -87,7 +87,7 @@ $aLang = array(
     'SHOP_MODULE_blOEPayPalECheckoutInMiniBasket'        => 'Express Checkout im Mini-Warenkorb anzeigen',
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInMiniBasket'   => 'Ist PayPal Express aktiv, wird der PayPal Express-Button im Mini-Warenkorb angezeigt.',
 
-    'SHOP_MODULE_GROUP_oepaypal_banners'                     => 'Banner-Einstellungen | Bieten Sie Ihren Kunden PayPal Ratenzahlung mit 0% effektiven Jahreszins an. Erfahren Sie hier <a href="https://www.paypal.com/de/webapps/mpp/installments#A9" target="_blank">mehr</a>.',
+    'SHOP_MODULE_GROUP_oepaypal_banners'                     => 'Banner-Einstellungen | Bieten Sie Ihren Kunden PayPal Ratenzahlung mit 0% effektiven Jahreszins an. Erfahren Sie hier <a href="https://www.paypal.com/de/webapps/mpp/installments" target="_blank">mehr</a>.',
     'SHOP_MODULE_oePayPalClientId'                           => 'Client-ID',
     'SHOP_MODULE_oePayPalBannersHideAll'                     => 'Ratenzahlung-Banner nicht anzeigen',
     'SHOP_MODULE_oePayPalBannersStartPage'                   => 'Ratenzahlung-Banner auf Startseite anzeigen',

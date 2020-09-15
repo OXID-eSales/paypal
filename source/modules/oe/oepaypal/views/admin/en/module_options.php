@@ -88,7 +88,7 @@ $aLang = array(
     'SHOP_MODULE_blOEPayPalECheckoutInDetails'           => 'Show Express Checkout in the products detail page',
     'HELP_SHOP_MODULE_blOEPayPalECheckoutInDetails'      => 'If PayPal Express is enabled, the PayPal Express button will be displayed in the products detail page.',
 
-    'SHOP_MODULE_GROUP_oepaypal_banners'                     => 'Banner settings | Offer your customers PayPal installment payment with 0% effective annual interest. Read <a href="https://www.paypal.com/de/webapps/mpp/installments#A9" target="_blank">more</a>.',
+    'SHOP_MODULE_GROUP_oepaypal_banners'                     => 'Banner settings | Offer your customers PayPal installment payment with 0% effective annual interest. Read <a href="https://www.paypal.com/de/webapps/mpp/installments" target="_blank">more</a>.',
     'SHOP_MODULE_oePayPalClientId'                           => 'Client ID',
     'SHOP_MODULE_oePayPalBannersHideAll'                     => 'Hide installment banner',
     'SHOP_MODULE_oePayPalBannersStartPage'                   => 'Show installment banner on start page',

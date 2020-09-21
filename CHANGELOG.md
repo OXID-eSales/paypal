@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [5.3.3] - Unreleased
+
+### Fixed
+- [0007168](https://bugs.oxid-esales.com/view.php?id=7168) The method Caller::validateResponse only catches ACK failures, but not internal service errors.
+
 ## [5.3.2] - 2020-07-03
 
 ### Fixed

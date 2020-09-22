@@ -293,8 +293,9 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     protected function getCallBackUrl()
     {
-        $controllerKey = \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getIdByClassName(get_class());
-        return $this->getSession()->processUrl($this->getBaseUrl() . "&cl=" . $controllerKey . "&fnc=processCallBack");
+        return '';
+        //$controllerKey = \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getIdByClassName(get_class());
+        //return $this->getSession()->processUrl($this->getBaseUrl() . "&cl=" . $controllerKey . "&fnc=processCallBack");
     }
 
     /**

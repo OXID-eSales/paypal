@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Core;
 
+use OxidEsales\PayPalModule\Core\Exception\PayPalResponseException;
+
 /**
  * PayPal caller service class
  */
@@ -165,16 +167,16 @@ class Caller
      *
      * @param array $response
      *
-     * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalResponseException if response has error from PayPal
+     * @throws PayPalResponseException if response has error from PayPal
      */
     protected function validateResponse($response)
     {
-        if ('Failure' == $response['ACK']) {
-            /**
-             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalResponseException $exception
-             */
-            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class, $response['L_LONGMESSAGE0'], $response['L_ERRORCODE0']);
-            throw $exception;
+        if (in_array($response['ACK'], ['SuccessWithWarning', 'FailureWithWarning'])) {
+            $this->log($response, 'Response with warning from PayPal');
+        }
+
+        if (in_array($response['ACK'], ['Failure', 'FailureWithWarning'])) {
+            throw new PayPalResponseException($response['L_LONGMESSAGE0'], $response['L_ERRORCODE0']);
         }
     }
 

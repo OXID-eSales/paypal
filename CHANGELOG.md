@@ -51,6 +51,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional description for banner settings [PR-51](https://github.com/OXID-eSales/paypal/pull/51)
 
+### Fixed
+- [0007168](https://bugs.oxid-esales.com/view.php?id=7168) The method Caller::validateResponse only catches ACK failures, but not internal service errors.
+
 ## [5.3.2] - 2020-07-03
 
 ### Fixed

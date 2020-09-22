@@ -21,6 +21,10 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 
+use OxidEsales\PayPalModule\Core\Caller;
+use OxidEsales\PayPalModule\Core\Exception\PayPalResponseException;
+use OxidEsales\PayPalModule\Core\Logger;
+
 /**
  * Testing PayPal caller class.
  */
@@ -104,26 +108,93 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Test case for \OxidEsales\PayPalModule\Core\Caller::call()
+     *
+     * @dataProvider callMethodNotSuccessfulProvider
      */
-    public function testCall_withMethodNotSuccessful_throwException()
+    public function testCall_withMethodNotSuccessful_throwException(string $status)
     {
-        $this->setExpectedException(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class);
+        $this->setExpectedException(PayPalResponseException::class);
 
-        $params = array();
-        $params["testParam"] = "testValue";
+        $response = [
+            'ACK' => $status,
+            'L_LONGMESSAGE0' => 'message',
+            'L_ERRORCODE0' => 1
+        ];
 
-        $curlParams = $params;
-
-        $url = 'http://url.com';
-        $charset = 'latin';
-
-        $response = array('ACK' => 'Failure', 'L_LONGMESSAGE0' => 'message', 'L_ERRORCODE0' => 1);
-
-        $caller = new \OxidEsales\PayPalModule\Core\Caller();
-        $caller->setParameters($params);
-
-        $caller->setCurl($this->prepareCurl($response, $curlParams, $url, $charset));
+        $caller = $this->prepareCaller($response);
         $this->assertEquals($response, $caller->call());
+    }
+
+    public function callMethodNotSuccessfulProvider(): array
+    {
+        return [
+            ['status' => 'Failure'],
+            ['status' => 'FailureWithWarning']
+        ];
+    }
+
+    /**
+     * Test case for \OxidEsales\PayPalModule\Core\Caller::call()
+     *
+     * @dataProvider callMethodWithWarningProvider
+     */
+    public function testCall_withWarning(string $status, bool $expectException)
+    {
+        if ($expectException) {
+            $this->setExpectedException(PayPalResponseException::class);
+        }
+
+        $response = [
+            'ACK' => $status,
+            'L_LONGMESSAGE0' => 'message',
+            'L_ERRORCODE0' => 1
+        ];
+
+        $caller = $this->prepareCaller($response);
+
+        $logger = $this
+            ->getMockBuilder(Logger::class)
+            ->getMock();
+        $logger
+            ->expects($this->at(4))
+            ->method('setTitle')
+            ->with('Response with warning from PayPal');
+        $logger
+            ->expects($this->at(5))
+            ->method('log')
+            ->with($response);
+
+        $caller->setLogger($logger);
+
+        $this->assertEquals($response, $caller->call());
+
+    }
+
+    public function callMethodWithWarningProvider(): array
+    {
+        return [
+            [
+                'status'          => 'SuccessWithWarning',
+                'expectException' => false
+            ],
+            [
+                'status'          => 'FailureWithWarning',
+                'expectException' => true
+            ]
+        ];
+    }
+
+    private function prepareCaller(array $response): Caller
+    {
+        $params = [
+            'testParam' => 'testValue'
+        ];
+
+        $caller = new Caller();
+        $caller->setParameters($params);
+        $caller->setCurl($this->prepareCurl($response, $params, 'http://url.com', 'latin'));
+
+        return $caller;
     }
 
     /**

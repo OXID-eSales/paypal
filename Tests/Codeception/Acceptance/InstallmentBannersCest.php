@@ -477,7 +477,7 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner with wrong selector');
 
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.non-existing-css-selector');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.non-existing-css-selector', 'string');
 
         $product = Fixtures::get('parent');
 

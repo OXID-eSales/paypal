@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [5.3.3] - Unreleased
+## [5.3.3] - 2020-10-08
 
 ### Added
 - Additional description for banner settings [PR-51](https://github.com/OXID-eSales/paypal/pull/51)
@@ -149,7 +149,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 
-[5.3.3]: https://github.com/OXID-eSales/paypal/compare/v5.3.2...b-5.x
+[5.3.4]: https://github.com/OXID-eSales/paypal/compare/v5.3.3...b-5.x
+[5.3.3]: https://github.com/OXID-eSales/paypal/compare/v5.3.2...v5.3.3
 [5.3.2]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...v5.3.2
 [5.3.1]: https://github.com/OXID-eSales/paypal/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v5.3.0

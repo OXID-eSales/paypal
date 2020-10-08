@@ -30,7 +30,7 @@ class InstallmentBannersCest
         $I->activateFlowTheme();
         $I->clearShopCache();
         $I->setPayPalSettingsData();
-        $I->updateConfigInDatabase('blUseStock', false);
+        $I->updateConfigInDatabase('blUseStock', false, 'bool');
     }
 
     /**
@@ -43,8 +43,8 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner on search page in brutto mode');
 
-        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPage', false);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPage', false, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
 
         $basketItem = Fixtures::get('product');
 
@@ -58,11 +58,11 @@ class InstallmentBannersCest
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
         //Check installment banner body in Flow theme
-        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPage', true);
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPage', true, 'bool');
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme(119.6);
 
         // Check banner visibility when oePayPalBannersHideAll setting is set to true
-        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true, 'bool');
         $I->reloadPage();
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
     }
@@ -77,8 +77,8 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner on search page in netto mode');
 
-        $I->updateConfigInDatabase('blShowNetPrice', true);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
+        $I->updateConfigInDatabase('blShowNetPrice', true, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
 
         $product = Fixtures::get('product');
         $product['price'] = '100,52 €';
@@ -104,7 +104,7 @@ class InstallmentBannersCest
         $I->wantToTest('PayPal installment banner on checkout page in brutto mode');
         $I->haveInDatabase('oxuser', $I->getExistingUserData());
 
-        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', false);
+        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', false, 'bool');
 
         $I
             ->openShop()
@@ -117,27 +117,27 @@ class InstallmentBannersCest
         // 1. Basket overview
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
-        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', true);
+        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', true, 'bool');
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme(33.8);
 
         // Check banner visibility when oePayPalBannersHideAll setting is set to true
-        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true, 'bool');
         $I->reloadPage();
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
         // 3. Payment
-        $I->updateConfigInDatabase('oePayPalBannersHideAll', false);
-        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', false);
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', false, 'bool');
+        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', false, 'bool');
 
         $basketPage->goToNextStep()->goToNextStep();
 
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
-        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', true);
+        $I->updateConfigInDatabase('oePayPalBannersCheckoutPage', true, 'bool');
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme(33.8);
 
         // Check banner visibility when oePayPalBannersHideAll setting is set to true
-        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true, 'bool');
         $I->reloadPage();
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
     }
@@ -152,7 +152,7 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner on checkout page in netto mode');
         $I->haveInDatabase('oxuser', $I->getExistingUserData());
-        $I->updateConfigInDatabase('blShowNetPrice', true);
+        $I->updateConfigInDatabase('blShowNetPrice', true, 'bool');
         $I
             ->openShop()
             ->loginUser($I->getExistingUserName(), $I->getExistingUserPassword());
@@ -177,8 +177,8 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner on category page in brutto mode');
 
-        $I->updateConfigInDatabase('oePayPalBannersCategoryPage', false);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
+        $I->updateConfigInDatabase('oePayPalBannersCategoryPage', false, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
 
         $homePage = $I->openShop();
         $basket = new Basket($I);
@@ -191,11 +191,11 @@ class InstallmentBannersCest
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
         //Check installment banner body in Flow and Wave theme
-        $I->updateConfigInDatabase('oePayPalBannersCategoryPage', true);
+        $I->updateConfigInDatabase('oePayPalBannersCategoryPage', true, 'bool');
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme(119.6);
 
         // Check banner visibility when oePayPalBannersHideAll setting is set to true
-        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true, 'bool');
         $I->reloadPage();
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
     }
@@ -210,8 +210,8 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner on category page in netto mode');
 
-        $I->updateConfigInDatabase('blShowNetPrice', true);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
+        $I->updateConfigInDatabase('blShowNetPrice', true, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
 
         $homePage = $I->openShop();
         $basket = new Basket($I);
@@ -232,11 +232,11 @@ class InstallmentBannersCest
      */
     public function checkBannerPlaceholderAppearsOnStartPageOnlyByCorrectConfig(AcceptanceTester $I)
     {
-        $I->updateConfigInDatabase('oePayPalBannersStartPage', false);
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', false, 'bool');
         $I->openShop();
         $I->dontSeeElementInDOM("#paypal-installment-banner-container");
 
-        $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', true, 'bool');
         $I->clearShopCache();
         $I->openShop();
         $I->seeElementInDOM("#paypal-installment-banner-container");
@@ -252,7 +252,7 @@ class InstallmentBannersCest
      */
     public function checkCorrectDefaultsSentToPaypalInstallmentsOnStartPageWithEmptyBasket(AcceptanceTester $I)
     {
-        $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', true, 'bool');
         $I->openShop();
 
         $I->checkInstallmentBannerData();
@@ -265,10 +265,10 @@ class InstallmentBannersCest
      */
     public function checkCorrectSumSentToPaypalInstallmentsOnStartPageWithFilledBasketBrutto(AcceptanceTester $I)
     {
-        $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
-        $I->updateConfigInDatabase('blShowNetPrice', false);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', true, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
+        $I->updateConfigInDatabase('blShowNetPrice', false, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
 
         $homePage = $I->openShop();
         $basket = new Basket($I);
@@ -286,10 +286,10 @@ class InstallmentBannersCest
      */
     public function checkCorrectSumSentToPaypalInstallmentsOnStartPageWithFilledBasketNetto(AcceptanceTester $I)
     {
-        $I->updateConfigInDatabase('oePayPalBannersStartPage', true);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
-        $I->updateConfigInDatabase('blShowNetPrice', true);
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
+        $I->updateConfigInDatabase('oePayPalBannersStartPage', true, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
+        $I->updateConfigInDatabase('blShowNetPrice', true, 'bool');
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
 
         $homePage = $I->openShop();
         $basket = new Basket($I);
@@ -316,7 +316,7 @@ class InstallmentBannersCest
         $alternateVariant = Fixtures::get('alternate_variant');
         $basketItem = Fixtures::get('product');
 
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', false);
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', false, 'bool');
 
         $parentProductNavigation = new ProductNavigation($I);
         $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
@@ -324,7 +324,7 @@ class InstallmentBannersCest
         $I->dontSee(Translator::translate('ERROR_MESSAGE_ARTICLE_ARTICLE_NOT_BUYABLE'));
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
 
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', true);
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPage', true, 'bool');
         $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
             ->seeOnBreadCrumb(Translator::translate('YOU_ARE_HERE'));
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme($parentProduct['minBruttoPrice'], Translator::translate('YOU_ARE_HERE'));
@@ -366,7 +366,7 @@ class InstallmentBannersCest
         ); //check on details page */
 
         // Check banner visibility when oePayPalBannersHideAll setting is set to true
-        $I->updateConfigInDatabase('oePayPalBannersHideAll', true);
+        $I->updateConfigInDatabase('oePayPalBannersHideAll', true, 'bool');
         $I->reloadPage();
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
     }
@@ -380,7 +380,7 @@ class InstallmentBannersCest
     public function productDetailsPageBannerNetto(AcceptanceTester $I)
     {
         $I->wantToTest('PayPal installment banner on product details page in netto mode');
-        $I->updateConfigInDatabase('blShowNetPrice', true);
+        $I->updateConfigInDatabase('blShowNetPrice', true, 'bool');
 
         $parentProduct = Fixtures::get('parent');
         $variant = Fixtures::get('variant');
@@ -477,7 +477,7 @@ class InstallmentBannersCest
     {
         $I->wantToTest('PayPal installment banner with wrong selector');
 
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.non-existing-css-selector', 'string');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.non-existing-css-selector', 'str');
 
         $product = Fixtures::get('parent');
 

@@ -75,13 +75,13 @@ class AcceptanceTester extends \Codeception\Actor
     public function setPayPalSettingsData()
     {
         $I = $this;
-        $I->updateConfigInDatabase('blPayPalLoggerEnabled', true);
-        $I->updateConfigInDatabase('blOEPayPalSandboxMode', true);
-        $I->updateConfigInDatabase('sOEPayPalSandboxUserEmail', Fixtures::get('sOEPayPalSandboxUsername'), 'string');
-        $I->updateConfigInDatabase('sOEPayPalSandboxUsername', Fixtures::get('sOEPayPalSandboxUsername'), 'string');
-        $I->updateConfigInDatabase('sOEPayPalSandboxPassword', Fixtures::get('sOEPayPalSandboxPassword'), 'string');
-        $I->updateConfigInDatabase('sOEPayPalSandboxSignature', Fixtures::get('sOEPayPalSandboxSignature'), 'string');
-        $I->updateConfigInDatabase('oePayPalClientId', Fixtures::get('OEPayPalClientId'), 'string');
+        $I->updateConfigInDatabase('blPayPalLoggerEnabled', true, 'bool');
+        $I->updateConfigInDatabase('blOEPayPalSandboxMode', true, 'bool');
+        $I->updateConfigInDatabase('sOEPayPalSandboxUserEmail', Fixtures::get('sOEPayPalSandboxUsername'), 'str');
+        $I->updateConfigInDatabase('sOEPayPalSandboxUsername', Fixtures::get('sOEPayPalSandboxUsername'), 'str');
+        $I->updateConfigInDatabase('sOEPayPalSandboxPassword', Fixtures::get('sOEPayPalSandboxPassword'), 'str');
+        $I->updateConfigInDatabase('sOEPayPalSandboxSignature', Fixtures::get('sOEPayPalSandboxSignature'), 'str');
+        $I->updateConfigInDatabase('oePayPalClientId', Fixtures::get('OEPayPalClientId'), 'str');
     }
 
     /**
@@ -106,11 +106,11 @@ class AcceptanceTester extends \Codeception\Actor
         $I = $this;
 
         //prepare testing with flow theme
-        $I->updateConfigInDatabase('sTheme', 'flow', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .row', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '#content .page-header .clearfix', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.detailsParams', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkoutSteps ~ .spacer', 'string');
+        $I->updateConfigInDatabase('sTheme', 'flow', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .row', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '#content .page-header .clearfix', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '.detailsParams', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkoutSteps ~ .spacer', 'str');
     }
 
     public function activateWaveTheme()
@@ -118,11 +118,11 @@ class AcceptanceTester extends \Codeception\Actor
         $I = $this;
 
         //prepare testing with wave theme
-        $I->updateConfigInDatabase('sTheme', 'wave', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .container', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '.page-header', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '#detailsItemsPager', 'string');
-        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkout-steps', 'string');
+        $I->updateConfigInDatabase('sTheme', 'wave', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersStartPageSelector', '#wrapper .container', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersSearchResultsPageSelector', '.page-header', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersProductDetailsPageSelector', '#detailsItemsPager', 'str');
+        $I->updateConfigInDatabase('oePayPalBannersPaymentPageSelector', '.checkout-steps', 'str');
     }
 
     /**

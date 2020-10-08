@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Test compatibility with shop master.
 
+## [6.2.1] - Unreleased
+
+### Fixed
+- Improve Codeception tests.
+
 ## [6.2.0] - 2020-07-03
 
 ### Added

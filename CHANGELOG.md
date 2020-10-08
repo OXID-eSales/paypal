@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Test compatibility with shop master.
 
-## [6.2.1] - Unreleased
+## [6.2.1] - 2020-10-08
 
 ### Fixed
 - Improve Codeception tests.
@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Ensure support for PHP 7.2, drop support for PHP 5.6.
 - Replace deprecated calls to getSession();
 
-## [5.3.3] - Unreleased
+## [5.3.3] - 2020-10-08
 
 ### Added
 - Additional description for banner settings [PR-51](https://github.com/OXID-eSales/paypal/pull/51)
@@ -203,12 +203,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
+[6.2.1]: https://github.com/OXID-eSales/paypal/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/OXID-eSales/paypal/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/OXID-eSales/paypal/compare/v6.0.2...v6.1.0
 [6.0.2]: https://github.com/OXID-eSales/paypal/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/OXID-eSales/paypal/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...v6.0.0
-[5.3.3]: https://github.com/OXID-eSales/paypal/compare/v5.3.2...b-5.x
+[5.3.4]: https://github.com/OXID-eSales/paypal/compare/v5.3.3...b-5.x
+[5.3.3]: https://github.com/OXID-eSales/paypal/compare/v5.3.2...v5.3.3
 [5.3.2]: https://github.com/OXID-eSales/paypal/compare/v5.3.1...v5.3.2
 [5.3.1]: https://github.com/OXID-eSales/paypal/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/OXID-eSales/paypal/compare/v5.2.6...v5.3.0

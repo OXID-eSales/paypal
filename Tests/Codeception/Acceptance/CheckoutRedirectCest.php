@@ -41,7 +41,7 @@ class CheckoutRedirectCest
     public function checkRedirectOnCheckout(AcceptanceTester $I, Example $example)
     {
         $I->wantToTest('redirect to finalize order on successful PayPal checkout');
-        $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', $example['setting']);
+        $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', $example['setting'], 'bool');
 
         $basket = new Basket($I);
 

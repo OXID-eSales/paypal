@@ -25,6 +25,7 @@ use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Admin\AdminLoginPage;
 use OxidEsales\Codeception\Page\Home;
 use OxidEsales\Codeception\Module\Translation\Translator;
+use OxidEsales\Facts\Facts;
 
 /**
  * Inherited Methods
@@ -69,19 +70,20 @@ class AcceptanceTester extends \Codeception\Actor
         return $adminPanel;
     }
 
-    /**
-     * Set PayPal settings
-     */
-    public function setPayPalSettingsData()
+    public function activatePaypalModule(): void
     {
-        $I = $this;
-        $I->updateConfigInDatabase('blPayPalLoggerEnabled', true, 'bool');
-        $I->updateConfigInDatabase('blOEPayPalSandboxMode', true, 'bool');
-        $I->updateConfigInDatabase('sOEPayPalSandboxUserEmail', Fixtures::get('sOEPayPalSandboxUsername'), 'str');
-        $I->updateConfigInDatabase('sOEPayPalSandboxUsername', Fixtures::get('sOEPayPalSandboxUsername'), 'str');
-        $I->updateConfigInDatabase('sOEPayPalSandboxPassword', Fixtures::get('sOEPayPalSandboxPassword'), 'str');
-        $I->updateConfigInDatabase('sOEPayPalSandboxSignature', Fixtures::get('sOEPayPalSandboxSignature'), 'str');
-        $I->updateConfigInDatabase('oePayPalClientId', Fixtures::get('OEPayPalClientId'), 'str');
+        $rootPath = (new Facts())->getShopRootPath();
+        $possiblePaths = [
+            '/bin/oe-console',
+            '/vendor/bin/oe-console',
+        ];
+        foreach ($possiblePaths as $path) {
+            if (is_file($rootPath . $path)) {
+                exec($rootPath . $path . ' oe:module:activate oepaypal');
+                return;
+            }
+        }
+        throw new \Exception('Could not find script "/bin/oe-console" to activate module');
     }
 
     /**

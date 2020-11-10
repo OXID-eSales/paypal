@@ -34,7 +34,7 @@ class ProductQuantityCest
      */
     public function increaseProductQuantity(AcceptanceTester $I)
     {
-        $I->setPayPalSettingsData();
+        $I->activatePaypalModule();
 
         $basket = new Basket($I);
 

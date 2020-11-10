@@ -144,6 +144,6 @@ $aModule = array(
         array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxUsername',        'type' => 'str',      'value' => ''),
         array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxPassword',        'type' => 'password', 'value' => ''),
         array('group' => 'oepaypal_development', 'name' => 'sOEPayPalSandboxSignature',       'type' => 'str',      'value' => ''),
-        array('group' => 'oepaypal_development', 'name' => 'OEPayPalDisableIPN',              'type' => 'str',      'value' => 'false'),
+        array('group' => 'oepaypal_development', 'name' => 'OEPayPalDisableIPN',              'type' => 'bool',     'value' => 'false'),
     )
 );

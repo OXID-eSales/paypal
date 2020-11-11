@@ -1,3 +1,4 @@
 .idea/
 Thumbs.db
 .DS_STORE
+.env

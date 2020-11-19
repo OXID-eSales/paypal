@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -22,6 +23,7 @@
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
 
 use OxidEsales\Eshop\Application\Controller\OrderController;
+use OxidEsales\PayPalModule\Tests\Unit\AdminUserTrait;
 
 if (!class_exists('oePayPalOrder_parent')) {
     class oePayPalOrder_parent extends \OxidEsales\Eshop\Application\Controller\OrderController
@@ -34,6 +36,8 @@ if (!class_exists('oePayPalOrder_parent')) {
  */
 class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+    use AdminUserTrait;
+    
     /**
      * Tear down the fixture.
      */

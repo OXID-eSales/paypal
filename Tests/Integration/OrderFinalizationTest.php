@@ -23,9 +23,12 @@ namespace OxidEsales\Eshop\PayPalModule\Tests\Integration;
 
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\PayPalModule\Tests\Unit\AdminUserTrait;
 
 class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+    use AdminUserTrait;
+
     public function providerFinalizeOrder_TransStatusNotChange()
     {
         $order = oxNew(Order::class);

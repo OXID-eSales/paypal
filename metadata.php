@@ -66,9 +66,9 @@ $aModule = array(
         'onDeactivate' => '\OxidEsales\PayPalModule\Core\Events::onDeactivate'
     ),
     'templates' => array(
-        'order_paypal.tpl' => 'oe/oepaypal/views/admin/tpl/order_paypal.tpl',
-        'ipnhandler.tpl'   => 'oe/oepaypal/views/tpl/ipnhandler.tpl',
-        'installment_banners.tpl' => 'oe/oepaypal/views/tpl/installment_banners.tpl'
+        'order_paypal.tpl' => 'views/admin/tpl/order_paypal.tpl',
+        'ipnhandler.tpl'   => 'views/tpl/ipnhandler.tpl',
+        'installment_banners.tpl' => 'views/tpl/installment_banners.tpl'
     ),
     'blocks' => array(
         array('template' => 'deliveryset_main.tpl',               'block'=>'admin_deliveryset_main_form',           'file'=>'/views/blocks/deliveryset_main.tpl'),

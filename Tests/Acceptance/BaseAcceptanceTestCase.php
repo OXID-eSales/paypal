@@ -22,6 +22,7 @@
 namespace OxidEsales\PayPalModule\Tests\Acceptance;
 
 use \OxidEsales\PayPalModule\Core\Config as PayPalConfig;
+use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * @todo add dependency between external tests. If one fails next should not start.
@@ -294,6 +295,9 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
 
         $language = oxNew(\OxidEsales\Eshop\Core\Language::class);
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Language::class, $language);
+
+        $dotenv = new \Symfony\Component\Dotenv\Dotenv();
+        $dotenv->load(__DIR__.'/../../.env');
     }
 
     /**
@@ -467,7 +471,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     protected function getLoginDataByName($varName)
     {
-        if (!$varValue = getenv($varName)) {
+        if (!$varValue = $_ENV[$varName]) {
             throw new \Exception('Undefined variable: ' . $varName);
         }
 

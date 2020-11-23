@@ -62,8 +62,8 @@ class CheckoutRedirectCest
 
         $paypalPage = new PaypalLogin($I);
 
-        $paypalUserEmail = getenv('sBuyerLogin');
-        $paypalUserPassword = getenv('sBuyerPassword');
+        $paypalUserEmail = $_ENV['sBuyerLogin'];
+        $paypalUserPassword = $_ENV['sBuyerPassword'];
         $paypalPage->loginAndCheckout($paypalUserEmail, $paypalUserPassword);
 
         $I->waitForText(Translator::translate($example['expectedEndText']), 10);

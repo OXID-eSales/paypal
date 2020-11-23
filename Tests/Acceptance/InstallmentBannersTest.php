@@ -259,11 +259,6 @@ class InstallmentBannersTest extends BaseAcceptanceTestCase
 
         $this->callShopSC(
             'oxConfig', null, null, [
-                'oePayPalClientId'                          => [
-                    'type'   => 'str',
-                    'value'  => $this->getLoginDataByName('OEPayPalClientId'),
-                    'module' => 'module:oepaypal'
-                ],
                 'iNewBasketItemMessage'                     => [
                     'type'   => 'int',
                     'value'  => 0,

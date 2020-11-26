@@ -7,11 +7,6 @@
     "license": [
         "GPL-3.0-only"
     ],
-    "extra": {
-        "oxideshop": {
-            "target-directory": "oe/oepaypal"
-        }
-    },
     "require": {
         "php": ">=7.0",
         "lib-curl": ">=7.26.0",

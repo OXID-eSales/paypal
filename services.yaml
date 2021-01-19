@@ -1,0 +1,9 @@
+services:
+
+  _defaults:
+    public: false
+    autowire: true
+
+  OxidEsales\PayPalModule\Subscriber\Order:
+      class: OxidEsales\PayPalModule\Subscriber\Order
+      tags: ['kernel.event_subscriber']

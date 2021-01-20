@@ -61,9 +61,9 @@ class CaptureAndRefundCest
 
         $adminLoginPage = $I->openAdminLoginPage();
         $adminUser = Fixtures::get('adminUser');
-        $adminPanel = $adminLoginPage->login($adminUser['userLoginName'], $adminUser['userPassword']);
-
-        $ordersList = $adminPanel->openOrders($adminPanel);
+        $ordersList = $adminLoginPage
+            ->login($adminUser['userLoginName'], $adminUser['userPassword'])
+            ->openOrders();
 
         $order = [
             'order_number' => (int) $orderNumber,

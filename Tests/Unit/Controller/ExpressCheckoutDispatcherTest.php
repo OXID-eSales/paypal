@@ -23,6 +23,7 @@
 namespace OxidEsales\PayPalModule\Tests\Unit\Controller;
 
 use OxidEsales\Eshop\Core\Field;
+use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\PayPalModule\Tests\Unit\AdminUserTrait;
 
 /**
@@ -1436,6 +1437,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     public function testGetExpressCheckoutDetailsIsAbleToCalculateCorrectTotalSumOfBasket()
     {
+        EshopRegistry::getConfig()->setConfigParam('blOEPayPalFinalizeOrderOnPayPal', true);
         $productPrice = 8;
         $shippingCost = 100;
 

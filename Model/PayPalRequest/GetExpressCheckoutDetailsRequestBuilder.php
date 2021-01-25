@@ -33,12 +33,8 @@ class GetExpressCheckoutDetailsRequestBuilder
      */
     protected $payPalRequest = null;
 
-    /**
-     * Session object
-     *
-     * @var \OxidEsales\Eshop\Core\Session
-     */
-    protected $session = null;
+    /** @var ?string */
+    protected $token = null;
 
     /**
      * Sets PayPal request object.
@@ -68,30 +64,31 @@ class GetExpressCheckoutDetailsRequestBuilder
      * Sets Session.
      *
      * @param \OxidEsales\Eshop\Core\Session $session
+     * @deprecated Use self::setToken to set token or omit this method if it should be taken from session
      */
     public function setSession($session)
     {
-        $this->session = $session;
     }
 
     /**
-     * Returns Session.
-     *
-     * @return \OxidEsales\Eshop\Core\Session
-     *
-     * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException
+     * @return string|null
      */
-    public function getSession()
+    public function getToken(): ?string
     {
-        if (!$this->session) {
-            /**
-             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $exception
-             */
-            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
-            throw $exception;
+        if (!$this->token) {
+            $session = \OxidEsales\Eshop\Core\Registry::getSession();
+            $this->token = $session->getVariable('oepaypal-token');
         }
 
-        return $this->session;
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     */
+    public function setToken(?string $token)
+    {
+        $this->token = $token;
     }
 
     /**
@@ -102,8 +99,7 @@ class GetExpressCheckoutDetailsRequestBuilder
     public function buildRequest()
     {
         $request = $this->getPayPalRequest();
-        $session = \OxidEsales\Eshop\Core\Registry::getSession();
-        $request->setParameter('TOKEN', $session->getVariable('oepaypal-token'));
+        $request->setParameter('TOKEN', $this->getToken());
 
         return $request;
     }

@@ -105,6 +105,53 @@ class PayPalLogin extends Page
 
         return new OrderCheckout($I);
     }
+    
+    /**
+     * @param string $userName
+     * @param string $userPassword
+     *
+     * @return OrderCheckout
+     */
+    public function checkoutWithStandardPayPal(string $userName, string $userPassword): OrderCheckout
+    {
+        $I = $this->user;
+        $usingNewLogin = false;
+
+        $this->waitForPayPalPage();
+
+        if ($I->seePageHasElement($this->oldLoginSection)) {
+            $I->waitForElementVisible($this->userLoginEmail, 5);
+            $I->fillField($this->userLoginEmail, $userName);
+            $I->waitForElementVisible($this->userPassword, 5);
+            $I->fillField($this->userPassword, $userPassword);
+            $I->click($this->loginButton);
+        }
+
+        if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
+            $I->click($this->oneTouchNotNowLink);
+        }
+
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+
+        if ($I->seePageHasElement($this->gdprContainer)) {
+            $I->executeJS("document.getElementById('".substr($this->gdprContainer, 1)."').remove();");
+        }
+
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+        $I->waitForElementVisible($this->paymentSection, 60);
+        $I->waitForElementVisible($this->addressSection, 60);
+        $I->waitForElementClickable($this->paymentConfirmButton, 60);
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+        
+        if ($I->seePageHasElement($this->paymentConfirmButton)) {
+            $I->click($this->paymentConfirmButton);
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
+        }
+
+        return new OrderCheckout($I);
+    }
 
     /**
      * @param string $userName

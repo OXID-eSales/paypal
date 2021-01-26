@@ -99,7 +99,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      *
      * @return string
      */
-    protected function getTransactionMode($basket)
+    public function getTransactionMode($basket)
     {
         $transactionMode = $this->getPayPalConfig()->getTransactionMode();
 
@@ -167,7 +167,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      *
      * @return string
      */
-    protected function getReturnUrl()
+    public function getReturnUrl()
     {
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $controllerKey = \OxidEsales\Eshop\Core\Registry::getControllerClassNameResolver()->getIdByClassName(get_class());
@@ -179,7 +179,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      *
      * @return string
      */
-    protected function getCancelUrl()
+    public function getCancelUrl()
     {
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
         return $session->processUrl($this->getBaseUrl() . "&cl=payment");

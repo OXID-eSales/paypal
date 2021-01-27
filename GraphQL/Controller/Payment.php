@@ -25,14 +25,15 @@ final class Payment
 {
     /**
      * @Query
+     * @Logged()
      *
      * @return string[]
      */
     public function paypalApprovalProcess(
         string $basketId,
-        string $returnUrl = null,
-        string $cancelUrl = null,
-        bool $displayBasketInPayPal = true
+        string $returnUrl,
+        string $cancelUrl,
+        bool $displayBasketInPayPal
     ): array {
         $basket = ContainerFactory::getInstance()
             ->getContainer()
@@ -58,35 +59,57 @@ final class Payment
         }
 
         $standardPaypalController = oxNew(StandardDispatcher::class);
-        $paypalConfig             = $standardPaypalController->getPayPalConfig();
+        $paypalConfig = $standardPaypalController->getPayPalConfig();
 
         $requestBuilder = oxNew(SetExpressCheckoutRequestBuilder::class);
         $requestBuilder->setPayPalConfig($paypalConfig);
         $requestBuilder->setBasket($basketModel);
         $requestBuilder->setUser($standardPaypalController->getUser());
 
-
-//        $requestBuilder->setReturnUrl($returnUrl);
-//        $requestBuilder->setCancelUrl($cancelUrl);
-
-        $requestBuilder->setReturnUrl($returnUrl ?? $standardPaypalController->getReturnUrl());
-        $requestBuilder->setCancelUrl($cancelUrl ?? $standardPaypalController->getCancelUrl());
+        $requestBuilder->setReturnUrl($returnUrl);
+        $requestBuilder->setCancelUrl($cancelUrl);
 
         $displayBasketInPayPal = $displayBasketInPayPal && !$basketModel->isFractionQuantityItemsPresent();
         $requestBuilder->setShowCartInPayPal($displayBasketInPayPal);
         $requestBuilder->setTransactionMode($standardPaypalController->getTransactionMode($basketModel));
 
-        $paypalRequest  = $requestBuilder->buildStandardCheckoutRequest();
-        $payPalService  = $standardPaypalController->getPayPalCheckoutService();
+        $paypalRequest = $requestBuilder->buildStandardCheckoutRequest();
+        $payPalService = $standardPaypalController->getPayPalCheckoutService();
         $paypalResponse = $payPalService->setExpressCheckout($paypalRequest);
 
-        // 1. save the token for the basket.
-        // 2. hook to event before placeOrder and set token to session
-        // 3. check how placeOrder brake and whats wrong.
+        $token = $paypalResponse->getToken();
+
+        $userBasketModel = $basket->getEshopModel();
+        $userBasketModel->assign([
+            'OEPAYPAL_PAYMENT_TOKEN' => $token
+        ]);
+        $userBasketModel->save();
 
         return [
-            'token'          => $paypalResponse->getToken(),
-            'paypalLoginUrl' => $paypalConfig->getPayPalCommunicationUrl($paypalResponse->getToken()),
+            'token' => $token,
+            'paypalLoginUrl' => $paypalConfig->getPayPalCommunicationUrl($token),
+        ];
+    }
+
+    /**
+     * @Query()
+     * @Logged()
+     *
+     * @return string[]
+     */
+    public function paypalPaymentStatus(string $paypalToken): array
+    {
+        $builder = oxNew(GetExpressCheckoutDetailsRequestBuilder::class);
+        $paypalRequest = $builder->getPayPalRequest();
+        $paypalRequest->setParameter('TOKEN', $paypalToken);
+
+        $standardPaypalController = oxNew(StandardDispatcher::class);
+        $payPalService = $standardPaypalController->getPayPalCheckoutService();
+        $paypalResponse = $payPalService->getExpressCheckoutDetails($paypalRequest);
+
+        return [
+            'token' => $paypalToken,
+            'payerId' => $paypalResponse->getPayerId(),
         ];
     }
 }

@@ -8,6 +8,8 @@ use OxidEsales\GraphQL\Storefront\Basket\Event\BeforePlaceOrder as OriginalEvent
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as BasketService;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
+use OxidEsales\PayPalModule\Controller\StandardDispatcher;
+use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BeforePlaceOrder implements EventSubscriberInterface
@@ -33,7 +35,31 @@ class BeforePlaceOrder implements EventSubscriberInterface
 
     public function handle(OriginalEvent $event): OriginalEvent
     {
+        $userBasket = $this->basketService->getAuthenticatedCustomerBasket((string)$event->getBasketId());
+        $paymentMethod = $this->basketRelationService->payment($userBasket);
 
+        if (!is_null($paymentMethod) && $paymentMethod->getId()->val() === 'oxidpaypal') {
+            $userBasketModel = $userBasket->getEshopModel();
+            $sessionBasket = $this->sharedBasketInfra->getBasket($userBasket);
+
+            $token = $userBasketModel->getFieldData('OEPAYPAL_PAYMENT_TOKEN');
+
+            $builder = oxNew(GetExpressCheckoutDetailsRequestBuilder::class);
+            $paypalRequest = $builder->getPayPalRequest();
+            $paypalRequest->setParameter('TOKEN', $token);
+
+            $standardPaypalController = oxNew(StandardDispatcher::class);
+            $payPalService = $standardPaypalController->getPayPalCheckoutService();
+            $paypalResponse = $payPalService->getExpressCheckoutDetails($paypalRequest);
+            $payerId = $paypalResponse->getPayerId();
+
+            // In order to be able to finalize order, using PayPal as payment method,
+            // we need to prepare the following session variables.
+            $session = \OxidEsales\Eshop\Core\Registry::getSession();
+            $session->setBasket($sessionBasket);
+            $session->setVariable('oepaypal-token', $token);
+            $session->setVariable('oepaypal-payerId', $payerId);
+        }
 
         return $event;
     }

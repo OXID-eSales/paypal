@@ -24,7 +24,14 @@ class CaptureAndRefundCest
     {
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->updateInDatabase('oxuser', Fixtures::get('adminData'), ['OXUSERNAME' => 'admin']);
+
+        // Create an admin in case it does not exist
+        $adminData = Fixtures::get('adminData');
+        $admin = $I->grabFromDatabase('oxuser', 'OXUSERNAME', ['OXUSERNAME' => $adminData['OXUSERNAME']]);
+        if (!$admin) {
+            $I->haveInDatabase('oxuser', $adminData);
+        }
+
         $I->activatePaypalModule();
     }
 

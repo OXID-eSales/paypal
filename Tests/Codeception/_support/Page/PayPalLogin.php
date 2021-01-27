@@ -36,15 +36,22 @@ class PayPalLogin extends Page
 
     public $spinner = '#spinner';
 
+    public $gdprContainer = "#gdpr-container";
     public $gdprCookieBanner = "#gdprCookieBanner";
     public $acceptAllPaypalCookies = "#acceptAllButton";
 
     public $loginSection = "#loginSection";
+    public $oldLoginSection = "#passwordSection";
 
     public $cancelLink = "#cancelLink";
     public $returnToShop = "#cancel_return";
 
     public $breadCrumb = "#breadCrumb";
+
+    public $paymentConfirmButton = "#payment-submit-btn";
+    public $paymentSection = "//section[@data-testid='ship-to-container']";
+    public $addressSection = "//div[@data-testid='shipping-address']";
+    public $globalSpinner = "//div[@data-testid='global-spinner']";
 
     /**
      * @param string $userName
@@ -97,6 +104,48 @@ class PayPalLogin extends Page
         $I->waitForDocumentReadyState();
 
         return new OrderCheckout($I);
+    }
+
+    /**
+     * @param string $userName
+     * @param string $userPassword
+     */
+    public function approveGraphqlStandardPayPal(string $userName, string $userPassword): void
+    {
+        $I = $this->user;
+
+        $this->waitForPayPalPage();
+
+        if ($I->seePageHasElement($this->oldLoginSection)) {
+            $I->waitForElementVisible($this->userLoginEmail, 5);
+            $I->fillField($this->userLoginEmail, $userName);
+            $I->waitForElementVisible($this->userPassword, 5);
+            $I->fillField($this->userPassword, $userPassword);
+            $I->click($this->loginButton);
+        }
+
+        if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
+            $I->click($this->oneTouchNotNowLink);
+        }
+
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+
+        if ($I->seePageHasElement($this->gdprContainer)) {
+            $I->executeJS("document.getElementById('".substr($this->gdprContainer, 1)."').remove();");
+        }
+
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+        $I->waitForElementVisible($this->paymentSection, 60);
+        $I->waitForElementVisible($this->addressSection, 60);
+        $I->waitForElementClickable($this->paymentConfirmButton, 60);
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+
+        if ($I->seePageHasElement($this->paymentConfirmButton)) {
+            $I->click($this->paymentConfirmButton);
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
+        }
     }
 
     public function waitForPayPalPage(): PayPalLogin

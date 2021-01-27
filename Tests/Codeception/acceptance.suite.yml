@@ -5,6 +5,10 @@ bootstrap: _bootstrap.php
 modules:
   enabled:
     - Asserts
+    - REST:
+        url: '%SHOP_URL%'
+        depends: PhpBrowser
+        part: Json
     - \OxidEsales\PayPalModule\Tests\Codeception\Helper\Acceptance
     - WebDriver:
         url: '%SHOP_URL%'
@@ -38,7 +42,9 @@ modules:
     - \OxidEsales\Codeception\Module\Translation\TranslationsModule:
         shop_path: '%SHOP_SOURCE_PATH%'
         paths: 'Application/views/flow,Application/views/admin,modules/oe/oepaypal/translations,modules/oe/oepaypal/views/admin'
-    - \OxidEsales\Codeception\Module\OxideshopModules:
-
+    - \OxidEsales\Codeception\Module\OxideshopModules
+    - \OxidEsales\PayPalModule\Tests\Codeception\Module\AcceptanceHelper:
+        depends:
+          - REST
 step_decorators:
   - \Codeception\Step\Retry

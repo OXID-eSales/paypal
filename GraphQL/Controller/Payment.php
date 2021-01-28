@@ -29,14 +29,23 @@ use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as AccountBasketService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Controller\StandardDispatcher;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
+use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use OxidEsales\PayPalModule\Model\PaymentValidator;
-use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
 
 final class Payment
 {
+    /** @var PaymentService */
+    private $paymentService;
+
+    public function __construct(
+        PaymentService $paymentService
+    ) {
+        $this->paymentService = $paymentService;
+    }
+
     /**
      * @Query
      * @Logged()
@@ -113,17 +122,9 @@ final class Payment
      */
     public function paypalPaymentStatus(string $paypalToken): array
     {
-        $builder = oxNew(GetExpressCheckoutDetailsRequestBuilder::class);
-        $paypalRequest = $builder->getPayPalRequest();
-        $paypalRequest->setParameter('TOKEN', $paypalToken);
-
-        $standardPaypalController = oxNew(StandardDispatcher::class);
-        $payPalService = $standardPaypalController->getPayPalCheckoutService();
-        $paypalResponse = $payPalService->getExpressCheckoutDetails($paypalRequest);
-
         return [
             'token' => $paypalToken,
-            'payerId' => $paypalResponse->getPayerId(),
+            'confirmed' => $this->paymentService->isPaymentConfirmed($paypalToken)
         ];
     }
 }

@@ -29,6 +29,7 @@ use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Controller\StandardDispatcher;
 use OxidEsales\PayPalModule\GraphQL\DataType\BasketExtendType;
+use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -43,14 +44,19 @@ class BeforePlaceOrder implements EventSubscriberInterface
     /** @var BasketRelationService */
     private $basketRelationService;
 
+    /** @var PaymentService */
+    private $paymentService;
+
     public function __construct(
         BasketService $basketService,
         SharedBasketInfrastructure $sharedBasketInfra,
-        BasketRelationService $basketRelationService
+        BasketRelationService $basketRelationService,
+        PaymentService $paymentService
     ) {
         $this->basketService = $basketService;
         $this->sharedBasketInfra = $sharedBasketInfra;
         $this->basketRelationService  = $basketRelationService;
+        $this->paymentService = $paymentService;
     }
 
     public function handle(OriginalEvent $event): OriginalEvent
@@ -63,15 +69,7 @@ class BeforePlaceOrder implements EventSubscriberInterface
 
             $extendUserBasket = new BasketExtendType();
             $token = $extendUserBasket->paypalToken($userBasket);
-
-            $builder = oxNew(GetExpressCheckoutDetailsRequestBuilder::class);
-            $paypalRequest = $builder->getPayPalRequest();
-            $paypalRequest->setParameter('TOKEN', $token);
-
-            $standardPaypalController = oxNew(StandardDispatcher::class);
-            $payPalService = $standardPaypalController->getPayPalCheckoutService();
-            $paypalResponse = $payPalService->getExpressCheckoutDetails($paypalRequest);
-            $payerId = $paypalResponse->getPayerId();
+            $payerId = $this->paymentService->getPayerId($token);
 
             // In order to be able to finalize order, using PayPal as payment method,
             // we need to prepare the following session variables.

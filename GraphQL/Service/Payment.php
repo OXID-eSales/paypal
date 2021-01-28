@@ -26,6 +26,7 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
+use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Model\PaymentValidator;
@@ -83,5 +84,51 @@ final class Payment
 
             throw $exception;
         }
+    }
+
+    public function getPayPalCommunicationInformation(
+        BasketDataType $basket,
+        string $returnUrl,
+        string $cancelUrl,
+        bool $displayBasketInPayPal
+    ): PayPalCommunicationInformation {
+        $sessionBasket = $this->getCalculatedSessionBasket($basket);
+
+        $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
+        $paypalConfig = $this->getPayPalConfig();
+
+        $requestBuilder = $this->requestInfrastructure->getSetExpressCheckoutRequestBuilder();
+        $requestBuilder->setPayPalConfig($paypalConfig);
+        $requestBuilder->setBasket($sessionBasket);
+        $requestBuilder->setUser($standardPaypalController->getUser());
+
+        $requestBuilder->setReturnUrl($returnUrl);
+        $requestBuilder->setCancelUrl($cancelUrl);
+
+        $displayBasketInPayPal = $displayBasketInPayPal && !$sessionBasket->isFractionQuantityItemsPresent();
+        $requestBuilder->setShowCartInPayPal($displayBasketInPayPal);
+        $requestBuilder->setTransactionMode($standardPaypalController->getTransactionMode($sessionBasket));
+
+        $paypalRequest = $requestBuilder->buildStandardCheckoutRequest();
+        $payPalService = $standardPaypalController->getPayPalCheckoutService();
+        $paypalResponse = $payPalService->setExpressCheckout($paypalRequest);
+
+        $token = $paypalResponse->getToken();
+
+        return new PayPalCommunicationInformation(
+            $token,
+            $paypalConfig->getPayPalCommunicationUrl($token)
+        );
+    }
+
+    public function getPayPalConfig()
+    {
+        $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
+        return $standardPaypalController->getPayPalConfig();
+    }
+
+    protected function getCalculatedSessionBasket(BasketDataType $basket)
+    {
+        return $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
     }
 }

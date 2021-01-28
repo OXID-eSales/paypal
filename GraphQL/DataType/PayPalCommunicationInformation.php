@@ -21,24 +21,41 @@
 
 declare(strict_types=1);
 
-namespace OxidEsales\PayPalModule\GraphQL\Service;
+namespace OxidEsales\PayPalModule\GraphQL\DataType;
 
-use OxidEsales\GraphQL\Base\Framework\NamespaceMapperInterface;
+use TheCodingMachine\GraphQLite\Annotations\Field;
+use TheCodingMachine\GraphQLite\Annotations\Type;
 
-final class NamespaceMapper implements NamespaceMapperInterface
+/**
+ * @Type()
+ */
+final class PayPalCommunicationInformation
 {
-    public function getControllerNamespaceMapping(): array
+    /** @var string */
+    private $token;
+
+    /** @var string */
+    private $communicationUrl;
+
+    public function __construct(string $token, string $communicationUrl)
     {
-        return [
-            '\\OxidEsales\\PayPalModule\\GraphQL\\Controller' => __DIR__ . '/../Controller/',
-        ];
+        $this->token = $token;
+        $this->communicationUrl = $communicationUrl;
     }
 
-    public function getTypeNamespaceMapping(): array
+    /**
+     * @Field()
+     */
+    public function getToken(): string
     {
-        return [
-            '\\OxidEsales\\PayPalModule\\GraphQL\\DataType' => __DIR__ . '/../DataType/',
-            '\\OxidEsales\\PayPalModule\\GraphQL\\Service' => __DIR__ . '/../Service/',
-        ];
+        return $this->token;
+    }
+
+    /**
+     * @Field()
+     */
+    public function getCommunicationUrl(): string
+    {
+        return $this->communicationUrl;
     }
 }

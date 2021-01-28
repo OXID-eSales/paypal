@@ -24,10 +24,8 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\Controller;
 
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
-use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
-use OxidEsales\PayPalModule\Controller\StandardDispatcher;
+use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
-use OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
 
@@ -39,75 +37,50 @@ final class Payment
     /** @var StorefrontBasketService */
     private $storefrontBasketService;
 
-    /** @var SharedBasketInfrastructure */
-    private $sharedBasketInfrastructure;
-
     public function __construct(
         PaymentService $paymentService,
-        StorefrontBasketService $storefrontBasketService,
-        SharedBasketInfrastructure $sharedBasketInfrastructure
+        StorefrontBasketService $storefrontBasketService
     ) {
         $this->paymentService = $paymentService;
         $this->storefrontBasketService = $storefrontBasketService;
-        $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
     }
 
     /**
      * @Query
      * @Logged()
-     *
-     * @return string[]
      */
     public function paypalApprovalProcess(
         string $basketId,
         string $returnUrl,
         string $cancelUrl,
         bool $displayBasketInPayPal
-    ): array {
+    ): PayPalCommunicationInformation {
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
-        $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
 
         // validate basket user, address and delivery stuff
         $this->paymentService->validateBasketData($basket);
 
-        $standardPaypalController = oxNew(StandardDispatcher::class);
-        $paypalConfig = $standardPaypalController->getPayPalConfig();
-
-        $requestBuilder = oxNew(SetExpressCheckoutRequestBuilder::class);
-        $requestBuilder->setPayPalConfig($paypalConfig);
-        $requestBuilder->setBasket($basketModel);
-        $requestBuilder->setUser($standardPaypalController->getUser());
-
-        $requestBuilder->setReturnUrl($returnUrl);
-        $requestBuilder->setCancelUrl($cancelUrl);
-
-        $displayBasketInPayPal = $displayBasketInPayPal && !$basketModel->isFractionQuantityItemsPresent();
-        $requestBuilder->setShowCartInPayPal($displayBasketInPayPal);
-        $requestBuilder->setTransactionMode($standardPaypalController->getTransactionMode($basketModel));
-
-        $paypalRequest = $requestBuilder->buildStandardCheckoutRequest();
-        $payPalService = $standardPaypalController->getPayPalCheckoutService();
-        $paypalResponse = $payPalService->setExpressCheckout($paypalRequest);
-
-        $token = $paypalResponse->getToken();
+        $communicationInformation = $this->paymentService->getPayPalCommunicationInformation(
+            $basket,
+            $returnUrl,
+            $cancelUrl,
+            $displayBasketInPayPal
+        );
 
         $userBasketModel = $basket->getEshopModel();
         $userBasketModel->assign([
-            'OEPAYPAL_PAYMENT_TOKEN' => $token
+            'OEPAYPAL_PAYMENT_TOKEN' => $communicationInformation->getToken()
         ]);
         $userBasketModel->save();
 
-        return [
-            'token' => $token,
-            'paypalLoginUrl' => $paypalConfig->getPayPalCommunicationUrl($token),
-        ];
+        return $communicationInformation;
     }
 
     /**
      * @Query()
      * @Logged()
      *
-     * @return string[]
+     * @return array
      */
     public function paypalPaymentStatus(string $paypalToken): array
     {

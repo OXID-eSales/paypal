@@ -32,11 +32,13 @@ class CaptureAndRefundCest
      * 
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_captureandrefund
      */
     public function orderCaptureAndRefundAmount(AcceptanceTester $I)
     {
         $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('sOEPayPalTransactionMode', 'Authorization', 'str');
+        $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', true, 'bool');
 
         $basket = new Basket($I);
 

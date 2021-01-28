@@ -67,11 +67,7 @@ final class Payment
             $displayBasketInPayPal
         );
 
-        $userBasketModel = $basket->getEshopModel();
-        $userBasketModel->assign([
-            'OEPAYPAL_PAYMENT_TOKEN' => $communicationInformation->getToken()
-        ]);
-        $userBasketModel->save();
+        $this->paymentService->updateBasketToken($basket, $communicationInformation->getToken());
 
         return $communicationInformation;
     }
@@ -80,7 +76,7 @@ final class Payment
      * @Query()
      * @Logged()
      *
-     * @return array
+     * @return string[]
      */
     public function paypalPaymentStatus(string $paypalToken): array
     {

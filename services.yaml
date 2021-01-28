@@ -4,8 +4,8 @@ services:
     public: false
     autowire: true
 
-  OxidEsales\PayPalModule\GraphQL:
-    resource: 'GraphQL/{Controller|Service}/*'
+  OxidEsales\PayPalModule\GraphQL\Controller\:
+    resource: 'GraphQL/Controller/*'
     public: true
 
   OxidEsales\PayPalModule\GraphQL\Service\NamespaceMapper:

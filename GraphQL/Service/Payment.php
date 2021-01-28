@@ -23,12 +23,14 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
+use OxidEsales\Eshop\Application\Model\Basket as SessionBasket;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
+use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
+use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
-use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Model\PaymentValidator;
 
 final class Payment
@@ -68,7 +70,7 @@ final class Payment
     /**
      * @throws PayPalException
      */
-    public function validateBasketData(BasketDataType $basket)
+    public function validateBasketData(BasketDataType $basket): void
     {
         $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
 
@@ -121,14 +123,23 @@ final class Payment
         );
     }
 
-    public function getPayPalConfig()
+    public function getPayPalConfig(): PayPalConfig
     {
         $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
         return $standardPaypalController->getPayPalConfig();
     }
 
-    protected function getCalculatedSessionBasket(BasketDataType $basket)
+    protected function getCalculatedSessionBasket(BasketDataType $basket): SessionBasket
     {
         return $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
+    }
+
+    public function updateBasketToken(BasketDataType $basket, string $token): void
+    {
+        $userBasketModel = $basket->getEshopModel();
+        $userBasketModel->assign([
+            'OEPAYPAL_PAYMENT_TOKEN' => $token
+        ]);
+        $userBasketModel->save();
     }
 }

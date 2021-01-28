@@ -23,13 +23,10 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Controller;
 
-use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Controller\StandardDispatcher;
-use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
-use OxidEsales\PayPalModule\Model\PaymentValidator;
 use OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
@@ -70,18 +67,8 @@ final class Payment
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
         $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
 
-        $validator = oxNew(PaymentValidator::class);
-        $validator->setUser($basketModel->getUser());
-        $validator->setConfig(EshopRegistry::getConfig());
-        $validator->setPrice($basketModel->getPrice()->getPrice());
-
-        if (!$validator->isPaymentValid()) {
-            /** @var PayPalException $exception */
-            $exception = oxNew(PayPalException::class);
-            $exception->setMessage(EshopRegistry::getLang()->translateString('OEPAYPAL_PAYMENT_NOT_VALID'));
-
-            throw $exception;
-        }
+        // validate basket user, address and delivery stuff
+        $this->paymentService->validateBasketData($basket);
 
         $standardPaypalController = oxNew(StandardDispatcher::class);
         $paypalConfig = $standardPaypalController->getPayPalConfig();

@@ -23,17 +23,27 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
+use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
+use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
+use OxidEsales\PayPalModule\Model\PaymentValidator;
 
 final class Payment
 {
     /** @var RequestInfrastructure */
     private $requestInfrastructure;
 
+    /** @var SharedBasketInfrastructure */
+    private $sharedBasketInfrastructure;
+
     public function __construct(
-        RequestInfrastructure $requestInfrastructure
+        RequestInfrastructure $requestInfrastructure,
+        SharedBasketInfrastructure $sharedBasketInfrastructure
     ) {
         $this->requestInfrastructure = $requestInfrastructure;
+        $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
     }
 
     public function isPaymentConfirmed(string $token): bool
@@ -52,5 +62,26 @@ final class Payment
         $paypalResponse = $payPalService->getExpressCheckoutDetails($paypalRequest);
 
         return $paypalResponse->getPayerId();
+    }
+
+    /**
+     * @throws PayPalException
+     */
+    public function validateBasketData(BasketDataType $basket)
+    {
+        $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
+
+        $validator = oxNew(PaymentValidator::class);
+        $validator->setUser($basketModel->getUser());
+        $validator->setConfig(Registry::getConfig());
+        $validator->setPrice($basketModel->getPrice()->getPrice());
+
+        if (!$validator->isPaymentValid()) {
+            /** @var PayPalException $exception */
+            $exception = oxNew(PayPalException::class);
+            $exception->setMessage(Registry::getLang()->translateString('OEPAYPAL_PAYMENT_NOT_VALID'));
+
+            throw $exception;
+        }
     }
 }

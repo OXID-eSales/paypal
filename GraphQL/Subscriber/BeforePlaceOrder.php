@@ -9,6 +9,7 @@ use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as BasketService;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Controller\StandardDispatcher;
+use OxidEsales\PayPalModule\GraphQL\DataType\BasketExtendType;
 use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -39,10 +40,10 @@ class BeforePlaceOrder implements EventSubscriberInterface
         $paymentMethod = $this->basketRelationService->payment($userBasket);
 
         if (!is_null($paymentMethod) && $paymentMethod->getId()->val() === 'oxidpaypal') {
-            $userBasketModel = $userBasket->getEshopModel();
             $sessionBasket = $this->sharedBasketInfra->getBasket($userBasket);
 
-            $token = $userBasketModel->getFieldData('OEPAYPAL_PAYMENT_TOKEN');
+            $extendUserBasket = new BasketExtendType();
+            $token = $extendUserBasket->paypalToken($userBasket);
 
             $builder = oxNew(GetExpressCheckoutDetailsRequestBuilder::class);
             $paypalRequest = $builder->getPayPalRequest();

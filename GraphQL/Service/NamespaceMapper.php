@@ -23,7 +23,7 @@ final class NamespaceMapper implements NamespaceMapperInterface
     public function getTypeNamespaceMapping(): array
     {
         return [
-//            '\\OxidEsales\\PayPalModule\\GraphQL\\DataType' => __DIR__ . '/../DataType/',
+            '\\OxidEsales\\PayPalModule\\GraphQL\\DataType' => __DIR__ . '/../DataType/',
 //            '\\OxidEsales\\PayPalModule\\GraphQL\\Service' => __DIR__ . '/../Service/',
 //            '\\OxidEsales\\PayPalModule\\GraphQL\\Infrastructure' => __DIR__ . '/../DataType/',
         ];

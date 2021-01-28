@@ -24,8 +24,7 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\Controller;
 
 use OxidEsales\Eshop\Core\Registry as EshopRegistry;
-use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as AccountBasketService;
+use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Controller\StandardDispatcher;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
@@ -40,10 +39,20 @@ final class Payment
     /** @var PaymentService */
     private $paymentService;
 
+    /** @var StorefrontBasketService */
+    private $storefrontBasketService;
+
+    /** @var SharedBasketInfrastructure */
+    private $sharedBasketInfrastructure;
+
     public function __construct(
-        PaymentService $paymentService
+        PaymentService $paymentService,
+        StorefrontBasketService $storefrontBasketService,
+        SharedBasketInfrastructure $sharedBasketInfrastructure
     ) {
         $this->paymentService = $paymentService;
+        $this->storefrontBasketService = $storefrontBasketService;
+        $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
     }
 
     /**
@@ -58,15 +67,8 @@ final class Payment
         string $cancelUrl,
         bool $displayBasketInPayPal
     ): array {
-        $basket = ContainerFactory::getInstance()
-            ->getContainer()
-            ->get(AccountBasketService::class)
-            ->getAuthenticatedCustomerBasket($basketId);
-
-        $basketModel = ContainerFactory::getInstance()
-            ->getContainer()
-            ->get(SharedBasketInfrastructure::class)
-            ->getCalculatedBasket($basket);
+        $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
+        $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
 
         $validator = oxNew(PaymentValidator::class);
         $validator->setUser($basketModel->getUser());

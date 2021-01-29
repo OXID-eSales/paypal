@@ -32,7 +32,7 @@ class CheckoutRedirectCest
      * @group checkoutFrontend
      * @group paypal_external
      * @group paypal_buyerlogin
-     *        
+     *
      * @example { "setting": false, "expectedEndText": "MESSAGE_SUBMIT_BOTTOM" }
      * @example { "setting": true, "expectedEndText": "THANK_YOU_FOR_ORDER" }
      *

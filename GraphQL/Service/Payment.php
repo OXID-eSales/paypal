@@ -75,26 +75,18 @@ final class Payment
         string $cancelUrl,
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
-        $sessionBasket = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
+        $paymentManager = $this->requestInfrastructure->getPaymentManager();
         $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
 
-        $requestBuilder = $this->requestInfrastructure->getSetExpressCheckoutRequestBuilder();
-        $requestBuilder->setPayPalConfig($this->getPayPalConfig());
-        $requestBuilder->setBasket($sessionBasket);
-        $requestBuilder->setUser($standardPaypalController->getUser());
+        $response = $paymentManager->setExpressCheckout(
+            $this->sharedBasketInfrastructure->getCalculatedBasket($basket),
+            $standardPaypalController->getUser(),
+            $returnUrl,
+            $cancelUrl,
+            $displayBasketInPayPal
+        );
 
-        $requestBuilder->setReturnUrl($returnUrl);
-        $requestBuilder->setCancelUrl($cancelUrl);
-
-        $displayBasketInPayPal = $displayBasketInPayPal && !$sessionBasket->isFractionQuantityItemsPresent();
-        $requestBuilder->setShowCartInPayPal($displayBasketInPayPal);
-        $requestBuilder->setTransactionMode($standardPaypalController->getTransactionMode($sessionBasket));
-
-        $paypalRequest = $requestBuilder->buildStandardCheckoutRequest();
-        $payPalService = $standardPaypalController->getPayPalCheckoutService();
-        $paypalResponse = $payPalService->setExpressCheckout($paypalRequest);
-
-        $token = $paypalResponse->getToken();
+        $token = $response->getToken();
 
         return new PayPalCommunicationInformation(
             $token,

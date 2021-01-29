@@ -64,9 +64,6 @@ final class Payment
     ): PayPalCommunicationInformation {
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
 
-        // validate basket user, address and delivery stuff
-        $this->basketService->validateBasketData($basket);
-
         $communicationInformation = $this->paymentService->getPayPalCommunicationInformation(
             $basket,
             $returnUrl,

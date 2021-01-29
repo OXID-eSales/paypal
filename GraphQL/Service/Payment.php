@@ -52,7 +52,7 @@ final class Payment
 
     public function getPayPalTokenStatus(string $paypalToken): PayPalTokenStatus
     {
-        $communicationConfirmed = $this->$this->getPayerId($paypalToken) ? true : false;
+        $communicationConfirmed = $this->getPayerId($paypalToken) ? true : false;
 
         return new PayPalTokenStatus(
             $paypalToken,

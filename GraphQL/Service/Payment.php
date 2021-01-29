@@ -23,17 +23,13 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
-use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
-use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
-use OxidEsales\PayPalModule\Model\PaymentValidator;
 
 final class Payment
 {

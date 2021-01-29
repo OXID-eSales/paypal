@@ -24,8 +24,8 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\DataType;
 
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
-use TheCodingMachine\GraphQLite\Annotations\Field;
 use TheCodingMachine\GraphQLite\Annotations\ExtendType;
+use TheCodingMachine\GraphQLite\Annotations\Field;
 
 /**
  * @ExtendType(class=BasketDataType::class)

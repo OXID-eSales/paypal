@@ -64,5 +64,6 @@ return [
     'shipping' => [
         'standard' => 'oxidstandard'
     ],
-    'payment_id' => 'oxidpaypal'
+    'payment_id' => 'oxidpaypal',
+    'payment_id_other' => 'oxidcashondel'
 ];

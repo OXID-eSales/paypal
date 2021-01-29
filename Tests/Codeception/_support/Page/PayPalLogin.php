@@ -153,11 +153,7 @@ class PayPalLogin extends Page
         return new OrderCheckout($I);
     }
 
-    /**
-     * @param string $userName
-     * @param string $userPassword
-     */
-    public function approveGraphqlStandardPayPal(string $userName, string $userPassword): void
+    public function loginToPayPal(string $userName, string $userPassword): void
     {
         $I = $this->user;
 
@@ -178,12 +174,23 @@ class PayPalLogin extends Page
         $I->waitForElementNotVisible($this->globalSpinner, 30);
 
         if ($I->seePageHasElement($this->gdprContainer)) {
-            $I->executeJS("document.getElementById('".substr($this->gdprContainer, 1)."').remove();");
+            $I->executeJS("document.getElementById('" . substr($this->gdprContainer, 1) . "').remove();");
         }
 
         $I->waitForElementNotVisible($this->globalSpinner, 30);
         $I->waitForElementVisible($this->paymentSection, 60);
         $I->waitForElementVisible($this->addressSection, 60);
+    }
+
+   /**
+     * @param string $userName
+     * @param string $userPassword
+     */
+    public function approveGraphqlStandardPayPal(string $userName, string $userPassword): void
+    {
+        $I = $this->user;
+        $this->loginToPayPal($userName, $userPassword);
+
         $I->waitForElementClickable($this->paymentConfirmButton, 60);
         $I->waitForElementNotVisible($this->globalSpinner, 30);
 

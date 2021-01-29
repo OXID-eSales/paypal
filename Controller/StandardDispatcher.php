@@ -66,6 +66,21 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
     }
 
     /**
+     * Returns transaction mode.
+     *
+     * @param \OxidEsales\Eshop\Application\Model\Basket $basket
+     *
+     * @return string
+     *
+     * @deprecated Please use OxidEsales\PayPalModule\Model::getTransactionMode
+     */
+    protected function getTransactionMode($basket)
+    {
+        $paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
+        return $paymentManager->getTransactionMode($basket, $this->getPayPalConfig());
+    }
+
+    /**
      * Executes "GetExpressCheckoutDetails" and on SUCCESS response - saves
      * user information and redirects to order page, on failure - sets error
      * message and redirects to basket page

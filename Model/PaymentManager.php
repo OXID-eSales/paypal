@@ -102,7 +102,7 @@ class PaymentManager
         }
     }
 
-    protected function getTransactionMode(Basket $basket, Config $payPalConfig): string
+    public function getTransactionMode(Basket $basket, Config $payPalConfig): string
     {
         $transactionMode = $payPalConfig->getTransactionMode();
 

@@ -33,6 +33,15 @@ class GetExpressCheckoutDetailsRequestBuilder
      */
     protected $payPalRequest = null;
 
+    /**
+     * Session object
+     *
+     * @var \OxidEsales\Eshop\Core\Session
+     *
+     * @deprecated Session property is never used in this class
+     */
+    protected $session = null;
+
     /** @var ?string */
     protected $token = null;
 
@@ -68,6 +77,29 @@ class GetExpressCheckoutDetailsRequestBuilder
      */
     public function setSession($session)
     {
+        $this->session = $session;
+    }
+
+    /**
+     * Returns Session.
+     *
+     * @return \OxidEsales\Eshop\Core\Session
+     *
+     * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException
+     *
+     * @deprecated Session property is never used in this class
+     */
+    public function getSession()
+    {
+        if (!$this->session) {
+            /**
+             * @var \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException $exception
+             */
+            $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException::class);
+            throw $exception;
+        }
+
+        return $this->session;
     }
 
     /**

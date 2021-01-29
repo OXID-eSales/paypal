@@ -30,6 +30,7 @@ use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketIn
 use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
+use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
 use OxidEsales\PayPalModule\Model\PaymentValidator;
 
@@ -49,9 +50,14 @@ final class Payment
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
     }
 
-    public function isPaymentConfirmed(string $token): bool
+    public function getPayPalTokenStatus(string $paypalToken): PayPalTokenStatus
     {
-        return $this->getPayerId($token) ? true : false;
+        $communicationConfirmed = $this->$this->getPayerId($paypalToken) ? true : false;
+
+        return new PayPalTokenStatus(
+            $paypalToken,
+            $communicationConfirmed
+        );
     }
 
     public function getPayerId(string $token): ?string
@@ -80,11 +86,7 @@ final class Payment
         $validator->setPrice($basketModel->getPrice()->getPrice());
 
         if (!$validator->isPaymentValid()) {
-            /** @var PayPalException $exception */
-            $exception = oxNew(PayPalException::class);
-            $exception->setMessage(Registry::getLang()->translateString('OEPAYPAL_PAYMENT_NOT_VALID'));
-
-            throw $exception;
+            throw new PayPalException('OEPAYPAL_PAYMENT_NOT_VALID');
         }
     }
 
@@ -94,13 +96,11 @@ final class Payment
         string $cancelUrl,
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
-        $sessionBasket = $this->getCalculatedSessionBasket($basket);
-
+        $sessionBasket = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
         $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
-        $paypalConfig = $this->getPayPalConfig();
 
         $requestBuilder = $this->requestInfrastructure->getSetExpressCheckoutRequestBuilder();
-        $requestBuilder->setPayPalConfig($paypalConfig);
+        $requestBuilder->setPayPalConfig($this->getPayPalConfig());
         $requestBuilder->setBasket($sessionBasket);
         $requestBuilder->setUser($standardPaypalController->getUser());
 
@@ -119,7 +119,7 @@ final class Payment
 
         return new PayPalCommunicationInformation(
             $token,
-            $paypalConfig->getPayPalCommunicationUrl($token)
+            $this->getPayPalCommunicationUrl($token)
         );
     }
 
@@ -129,13 +129,18 @@ final class Payment
         return $standardPaypalController->getPayPalConfig();
     }
 
-    protected function getCalculatedSessionBasket(BasketDataType $basket): SessionBasket
+    public function getPayPalCommunicationUrl($token): string
     {
-        return $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
+        $payPalConfig = $this->getPayPalConfig();
+        return $payPalConfig->getPayPalCommunicationUrl($token);
     }
 
     public function updateBasketToken(BasketDataType $basket, string $token): void
     {
+        /**
+         * @TODO: check if we can/need to revoke the old token.
+         */
+
         $userBasketModel = $basket->getEshopModel();
         $userBasketModel->assign([
             'OEPAYPAL_PAYMENT_TOKEN' => $token

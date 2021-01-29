@@ -25,6 +25,7 @@ namespace OxidEsales\PayPalModule\GraphQL\Controller;
 
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
+use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
@@ -75,14 +76,9 @@ final class Payment
     /**
      * @Query()
      * @Logged()
-     *
-     * @return string[]
      */
-    public function paypalPaymentStatus(string $paypalToken): array
+    public function paypalTokenStatus(string $paypalToken): PayPalTokenStatus
     {
-        return [
-            'token' => $paypalToken,
-            'confirmed' => $this->paymentService->isPaymentConfirmed($paypalToken)
-        ];
+        return $this->paymentService->getPayPalTokenStatus($paypalToken);
     }
 }

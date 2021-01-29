@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
-use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
@@ -39,22 +38,12 @@ final class Payment
     /** @var SharedBasketInfrastructure */
     private $sharedBasketInfrastructure;
 
-    /** @var BasketRelationService */
-    private $basketRelationService;
-
-    /** @var Basket */
-    private $basketService;
-
     public function __construct(
         RequestInfrastructure $requestInfrastructure,
-        SharedBasketInfrastructure $sharedBasketInfrastructure,
-        BasketRelationService $basketRelationService,
-        Basket $basketService
+        SharedBasketInfrastructure $sharedBasketInfrastructure
     ) {
         $this->requestInfrastructure = $requestInfrastructure;
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
-        $this->basketRelationService = $basketRelationService;
-        $this->basketService = $basketService;
     }
 
     public function getPayPalTokenStatus(string $paypalToken): PayPalTokenStatus

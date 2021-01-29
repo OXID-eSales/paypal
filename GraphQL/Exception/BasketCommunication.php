@@ -29,11 +29,11 @@ final class BasketCommunication extends InvalidRequest
 {
     public static function notStarted(string $basketId): self
     {
-        throw new self(sprintf("PayPal communication for basket %s is not started", $basketId));
+        return new self(sprintf("PayPal communication for basket %s is not started", $basketId));
     }
 
     public static function notConfirmed(string $basketId): self
     {
-        throw new self(sprintf("PayPal communication for basket %s is not confirmed", $basketId));
+        return new self(sprintf("PayPal communication for basket %s is not confirmed", $basketId));
     }
 }

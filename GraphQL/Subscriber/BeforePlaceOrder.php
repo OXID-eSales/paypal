@@ -72,12 +72,12 @@ class BeforePlaceOrder implements EventSubscriberInterface
 
             $token = $extendUserBasket->paypalToken($userBasket);
             if (!$token) {
-                BasketCommunication::notStarted($userBasket->id()->val());
+                throw BasketCommunication::notStarted($userBasket->id()->val());
             }
 
             $tokenStatus = $this->paymentService->getPayPalTokenStatus($token);
             if (!$tokenStatus->getStatus()) {
-                BasketCommunication::notConfirmed($userBasket->id()->val());
+                throw BasketCommunication::notConfirmed($userBasket->id()->val());
             }
 
             // In order to be able to finalize order, using PayPal as payment method,

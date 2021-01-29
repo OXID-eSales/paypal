@@ -54,10 +54,10 @@ final class Basket
     public function checkBasketPaymentMethodIsPayPal(BasketDataType $basket): bool
     {
         $paymentMethod = $this->basketRelationService->payment($basket);
-        $result = true;
+        $result = false;
 
         if (!is_null($paymentMethod) && $paymentMethod->getId()->val() === 'oxidpaypal') {
-            $result = false;
+            $result = true;
         }
 
         return $result;
@@ -65,16 +65,12 @@ final class Basket
 
     /**
      * @throws WrongPaymentMethod
-     * @throws PayPalException
      */
-    public function validateBasketData(BasketDataType $basket): void
+    public function validateBasketPaymentMethod(BasketDataType $basket): void
     {
         if (!$this->checkBasketPaymentMethodIsPayPal($basket)) {
             throw new WrongPaymentMethod();
         }
-
-        $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
-        $this->request->getPaymentManager()->validatePayment($basketModel->getUser(), $basketModel);
     }
 
     public function updateBasketToken(BasketDataType $basket, string $token): void

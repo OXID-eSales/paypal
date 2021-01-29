@@ -25,7 +25,6 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
-use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
@@ -94,15 +93,9 @@ final class Payment
         );
     }
 
-    public function getPayPalConfig(): PayPalConfig
-    {
-        $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
-        return $standardPaypalController->getPayPalConfig();
-    }
-
     public function getPayPalCommunicationUrl($token): string
     {
-        $payPalConfig = $this->getPayPalConfig();
+        $payPalConfig = $this->requestInfrastructure->getPayPalConfig();
         return $payPalConfig->getPayPalCommunicationUrl($token);
     }
 }

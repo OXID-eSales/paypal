@@ -26,11 +26,13 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 use OxidEsales\Eshop\Application\Model\Basket as SessionBasket;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
+use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
+use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
 use OxidEsales\PayPalModule\Model\PaymentValidator;
 
@@ -42,12 +44,17 @@ final class Payment
     /** @var SharedBasketInfrastructure */
     private $sharedBasketInfrastructure;
 
+    /** @var BasketRelationService */
+    private $basketRelationService;
+
     public function __construct(
         RequestInfrastructure $requestInfrastructure,
-        SharedBasketInfrastructure $sharedBasketInfrastructure
+        SharedBasketInfrastructure $sharedBasketInfrastructure,
+        BasketRelationService $basketRelationService
     ) {
         $this->requestInfrastructure = $requestInfrastructure;
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
+        $this->basketRelationService = $basketRelationService;
     }
 
     public function getPayPalTokenStatus(string $paypalToken): PayPalTokenStatus
@@ -74,10 +81,16 @@ final class Payment
     }
 
     /**
+     * @throws WrongPaymentMethod
      * @throws PayPalException
      */
     public function validateBasketData(BasketDataType $basket): void
     {
+        $paymentMethod = $this->basketRelationService->payment($basket);
+        if (!$paymentMethod || $paymentMethod->getId()->val() !== 'oxidpaypal') {
+            throw new WrongPaymentMethod();
+        }
+
         $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
 
         $validator = oxNew(PaymentValidator::class);

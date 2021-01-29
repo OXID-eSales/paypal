@@ -29,6 +29,7 @@ use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Controller\StandardDispatcher;
 use OxidEsales\PayPalModule\GraphQL\DataType\BasketExtendType;
+use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -65,18 +66,24 @@ class BeforePlaceOrder implements EventSubscriberInterface
         $paymentMethod = $this->basketRelationService->payment($userBasket);
 
         if (!is_null($paymentMethod) && $paymentMethod->getId()->val() === 'oxidpaypal') {
-            $sessionBasket = $this->sharedBasketInfra->getBasket($userBasket);
-
             $extendUserBasket = new BasketExtendType();
+
             $token = $extendUserBasket->paypalToken($userBasket);
-            $payerId = $this->paymentService->getPayerId($token);
+            if (!$token) {
+                BasketCommunication::notStarted($userBasket->id()->val());
+            }
+
+            $tokenStatus = $this->paymentService->getPayPalTokenStatus($token);
+            if (!$tokenStatus->getStatus()) {
+                BasketCommunication::notConfirmed($userBasket->id()->val());
+            }
 
             // In order to be able to finalize order, using PayPal as payment method,
             // we need to prepare the following session variables.
             $session = \OxidEsales\Eshop\Core\Registry::getSession();
-            $session->setBasket($sessionBasket);
+            $session->setBasket($this->sharedBasketInfra->getBasket($userBasket));
             $session->setVariable('oepaypal-token', $token);
-            $session->setVariable('oepaypal-payerId', $payerId);
+            $session->setVariable('oepaypal-payerId', $this->paymentService->getPayerId($token));
         }
 
         return $event;

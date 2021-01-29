@@ -23,7 +23,6 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
-use OxidEsales\Eshop\Application\Model\Basket as SessionBasket;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
@@ -47,14 +46,19 @@ final class Payment
     /** @var BasketRelationService */
     private $basketRelationService;
 
+    /** @var Basket */
+    private $basketService;
+
     public function __construct(
         RequestInfrastructure $requestInfrastructure,
         SharedBasketInfrastructure $sharedBasketInfrastructure,
-        BasketRelationService $basketRelationService
+        BasketRelationService $basketRelationService,
+        Basket $basketService
     ) {
         $this->requestInfrastructure = $requestInfrastructure;
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
         $this->basketRelationService = $basketRelationService;
+        $this->basketService = $basketService;
     }
 
     public function getPayPalTokenStatus(string $paypalToken): PayPalTokenStatus
@@ -86,8 +90,7 @@ final class Payment
      */
     public function validateBasketData(BasketDataType $basket): void
     {
-        $paymentMethod = $this->basketRelationService->payment($basket);
-        if (!$paymentMethod || $paymentMethod->getId()->val() !== 'oxidpaypal') {
+        if (!$this->basketService->checkBasketPaymentMethodIsPayPal($basket)) {
             throw new WrongPaymentMethod();
         }
 

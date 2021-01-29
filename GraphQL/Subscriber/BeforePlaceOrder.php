@@ -24,20 +24,19 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\Subscriber;
 
 use OxidEsales\GraphQL\Storefront\Basket\Event\BeforePlaceOrder as OriginalEvent;
-use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as BasketService;
+use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
-use OxidEsales\PayPalModule\Controller\StandardDispatcher;
 use OxidEsales\PayPalModule\GraphQL\DataType\BasketExtendType;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
+use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
-use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BeforePlaceOrder implements EventSubscriberInterface
 {
-    /** @var BasketService */
-    private $basketService;
+    /** @var StorefrontBasketService */
+    private $storefrontBasketService;
 
     /** @var SharedBasketInfrastructure */
     private $sharedBasketInfra;
@@ -48,24 +47,27 @@ class BeforePlaceOrder implements EventSubscriberInterface
     /** @var PaymentService */
     private $paymentService;
 
+    /** @var BasketService */
+    private $basketService;
+
     public function __construct(
-        BasketService $basketService,
+        StorefrontBasketService $storefrontBasketService,
         SharedBasketInfrastructure $sharedBasketInfra,
         BasketRelationService $basketRelationService,
-        PaymentService $paymentService
+        PaymentService $paymentService,
+        BasketService $basketService
     ) {
-        $this->basketService = $basketService;
+        $this->storefrontBasketService = $storefrontBasketService;
         $this->sharedBasketInfra = $sharedBasketInfra;
         $this->basketRelationService  = $basketRelationService;
         $this->paymentService = $paymentService;
+        $this->basketService = $basketService;
     }
 
     public function handle(OriginalEvent $event): OriginalEvent
     {
-        $userBasket = $this->basketService->getAuthenticatedCustomerBasket((string)$event->getBasketId());
-        $paymentMethod = $this->basketRelationService->payment($userBasket);
-
-        if (!is_null($paymentMethod) && $paymentMethod->getId()->val() === 'oxidpaypal') {
+        $userBasket = $this->storefrontBasketService->getAuthenticatedCustomerBasket((string)$event->getBasketId());
+        if ($this->basketService->checkBasketPaymentMethodIsPayPal($userBasket)) {
             $extendUserBasket = new BasketExtendType();
 
             $token = $extendUserBasket->paypalToken($userBasket);

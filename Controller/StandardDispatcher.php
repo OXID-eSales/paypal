@@ -42,7 +42,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
             $paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
             $result = $paymentManager->setExpressCheckout(
                 $session->getBasket(),
-                $this->getUser(),
+                $this->getUser() ?: null,
                 $this->getReturnUrl(),
                 $this->getCancelUrl(),
                 (bool)$this->getRequest()->getRequestParameter("displayCartInPayPal")

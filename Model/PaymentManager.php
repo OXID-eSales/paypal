@@ -48,7 +48,7 @@ class PaymentManager
 
     public function setExpressCheckout(
         Basket $basket,
-        $user,
+        ?User $user,
         string $returnUrl,
         string $cancelUrl,
         bool $showCartInPayPal
@@ -60,15 +60,7 @@ class PaymentManager
         $basket->onUpdate();
         $basket->calculateBasket(true);
 
-        $validator = oxNew(PaymentValidator::class);
-        $validator->setUser($user);
-        $validator->setConfig(Registry::getConfig());
-        $validator->setPrice($basket->getPrice()->getPrice());
-
-        if (!$validator->isPaymentValid()) {
-            $message = Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID");
-            throw oxNew(PayPalException::class, $message);
-        }
+        $this->validatePayment($user, $basket);
 
         $builder->setPayPalConfig($payPalConfig);
         $builder->setBasket($basket);
@@ -95,6 +87,19 @@ class PaymentManager
         $request = $builder->buildRequest();
 
         return $this->payPalService->getExpressCheckoutDetails($request);
+    }
+
+    public function validatePayment(?User $user, Basket $basket): void
+    {
+        $validator = oxNew(PaymentValidator::class);
+        $validator->setUser($user);
+        $validator->setConfig(Registry::getConfig());
+        $validator->setPrice($basket->getPrice()->getPrice());
+
+        if (!$validator->isPaymentValid()) {
+            $message = Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID");
+            throw oxNew(PayPalException::class, $message);
+        }
     }
 
     protected function getTransactionMode(Basket $basket, Config $payPalConfig): string

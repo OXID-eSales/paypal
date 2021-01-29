@@ -23,13 +23,12 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
-use OxidEsales\EshopCommunity\Core\Registry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
-use OxidEsales\PayPalModule\Model\PaymentValidator;
+use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request;
 
 final class Basket
 {
@@ -39,12 +38,17 @@ final class Basket
     /** @var SharedBasketInfrastructure */
     private $sharedBasketInfrastructure;
 
+    /** @var Request */
+    private $request;
+
     public function __construct(
         BasketRelationService $basketRelationService,
-        SharedBasketInfrastructure $sharedBasketInfrastructure
+        SharedBasketInfrastructure $sharedBasketInfrastructure,
+        Request $request
     ) {
         $this->basketRelationService = $basketRelationService;
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
+        $this->request = $request;
     }
 
     public function checkBasketPaymentMethodIsPayPal(BasketDataType $basket): bool
@@ -70,15 +74,7 @@ final class Basket
         }
 
         $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
-
-        $validator = oxNew(PaymentValidator::class);
-        $validator->setUser($basketModel->getUser());
-        $validator->setConfig(Registry::getConfig());
-        $validator->setPrice($basketModel->getPrice()->getPrice());
-
-        if (!$validator->isPaymentValid()) {
-            throw new PayPalException('OEPAYPAL_PAYMENT_NOT_VALID');
-        }
+        $this->request->getPaymentManager()->validatePayment($basketModel->getUser(), $basketModel);
     }
 
     public function updateBasketToken(BasketDataType $basket, string $token): void

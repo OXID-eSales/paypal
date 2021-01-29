@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\Infrastructure;
 
 use OxidEsales\PayPalModule\Controller\StandardDispatcher;
+use OxidEsales\PayPalModule\Model\PaymentManager;
 use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder;
 
@@ -42,5 +43,10 @@ final class Request
     public function getGetExpressCheckoutRequestBuilder(): GetExpressCheckoutDetailsRequestBuilder
     {
         return oxNew(GetExpressCheckoutDetailsRequestBuilder::class);
+    }
+
+    public function getPaymentManager(): PaymentManager
+    {
+        return oxNew(PaymentManager::class, $this->getStandardDispatcher()->getPayPalCheckoutService());
     }
 }

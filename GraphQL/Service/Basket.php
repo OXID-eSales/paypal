@@ -23,19 +23,28 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
+use OxidEsales\EshopCommunity\Core\Registry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
+use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
+use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
+use OxidEsales\PayPalModule\Model\PaymentValidator;
 
 final class Basket
 {
     /** @var BasketRelationService */
     private $basketRelationService;
 
+    /** @var SharedBasketInfrastructure */
+    private $sharedBasketInfrastructure;
+
     public function __construct(
-        BasketRelationService $basketRelationService
+        BasketRelationService $basketRelationService,
+        SharedBasketInfrastructure $sharedBasketInfrastructure
     ) {
         $this->basketRelationService = $basketRelationService;
+        $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
     }
 
     public function checkBasketPaymentMethodIsPayPal(BasketDataType $basket): bool
@@ -48,5 +57,40 @@ final class Basket
         }
 
         return $result;
+    }
+
+    /**
+     * @throws WrongPaymentMethod
+     * @throws PayPalException
+     */
+    public function validateBasketData(BasketDataType $basket): void
+    {
+        if (!$this->checkBasketPaymentMethodIsPayPal($basket)) {
+            throw new WrongPaymentMethod();
+        }
+
+        $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
+
+        $validator = oxNew(PaymentValidator::class);
+        $validator->setUser($basketModel->getUser());
+        $validator->setConfig(Registry::getConfig());
+        $validator->setPrice($basketModel->getPrice()->getPrice());
+
+        if (!$validator->isPaymentValid()) {
+            throw new PayPalException('OEPAYPAL_PAYMENT_NOT_VALID');
+        }
+    }
+
+    public function updateBasketToken(BasketDataType $basket, string $token): void
+    {
+        /**
+         * @TODO: check if we can/need to revoke the old token.
+         */
+
+        $userBasketModel = $basket->getEshopModel();
+        $userBasketModel->assign([
+            'OEPAYPAL_PAYMENT_TOKEN' => $token
+        ]);
+        $userBasketModel->save();
     }
 }

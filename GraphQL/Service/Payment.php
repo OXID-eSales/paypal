@@ -84,28 +84,6 @@ final class Payment
         return $paypalResponse->getPayerId();
     }
 
-    /**
-     * @throws WrongPaymentMethod
-     * @throws PayPalException
-     */
-    public function validateBasketData(BasketDataType $basket): void
-    {
-        if (!$this->basketService->checkBasketPaymentMethodIsPayPal($basket)) {
-            throw new WrongPaymentMethod();
-        }
-
-        $basketModel = $this->sharedBasketInfrastructure->getCalculatedBasket($basket);
-
-        $validator = oxNew(PaymentValidator::class);
-        $validator->setUser($basketModel->getUser());
-        $validator->setConfig(Registry::getConfig());
-        $validator->setPrice($basketModel->getPrice()->getPrice());
-
-        if (!$validator->isPaymentValid()) {
-            throw new PayPalException('OEPAYPAL_PAYMENT_NOT_VALID');
-        }
-    }
-
     public function getPayPalCommunicationInformation(
         BasketDataType $basket,
         string $returnUrl,
@@ -149,18 +127,5 @@ final class Payment
     {
         $payPalConfig = $this->getPayPalConfig();
         return $payPalConfig->getPayPalCommunicationUrl($token);
-    }
-
-    public function updateBasketToken(BasketDataType $basket, string $token): void
-    {
-        /**
-         * @TODO: check if we can/need to revoke the old token.
-         */
-
-        $userBasketModel = $basket->getEshopModel();
-        $userBasketModel->assign([
-            'OEPAYPAL_PAYMENT_TOKEN' => $token
-        ]);
-        $userBasketModel->save();
     }
 }

@@ -26,6 +26,7 @@ namespace OxidEsales\PayPalModule\GraphQL\Controller;
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
+use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
@@ -35,15 +36,20 @@ final class Payment
     /** @var PaymentService */
     private $paymentService;
 
+    /** @var BasketService */
+    private $basketService;
+
     /** @var StorefrontBasketService */
     private $storefrontBasketService;
 
     public function __construct(
         PaymentService $paymentService,
+        BasketService $basketService,
         StorefrontBasketService $storefrontBasketService
     ) {
         $this->paymentService = $paymentService;
         $this->storefrontBasketService = $storefrontBasketService;
+        $this->basketService = $basketService;
     }
 
     /**
@@ -59,7 +65,7 @@ final class Payment
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
 
         // validate basket user, address and delivery stuff
-        $this->paymentService->validateBasketData($basket);
+        $this->basketService->validateBasketData($basket);
 
         $communicationInformation = $this->paymentService->getPayPalCommunicationInformation(
             $basket,
@@ -68,7 +74,7 @@ final class Payment
             $displayBasketInPayPal
         );
 
-        $this->paymentService->updateBasketToken($basket, $communicationInformation->getToken());
+        $this->basketService->updateBasketToken($basket, $communicationInformation->getToken());
 
         return $communicationInformation;
     }

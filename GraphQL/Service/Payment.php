@@ -62,15 +62,10 @@ final class Payment
 
     public function getPayerId(string $token): ?string
     {
-        $builder = $this->requestInfrastructure->getGetExpressCheckoutRequestBuilder();
-        $paypalRequest = $builder->getPayPalRequest();
-        $paypalRequest->setParameter('TOKEN', $token);
+        $paymentManager = $this->requestInfrastructure->getPaymentManager();
+        $details = $paymentManager->getExpressCheckoutDetails($token);
 
-        $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
-        $payPalService = $standardPaypalController->getPayPalCheckoutService();
-        $paypalResponse = $payPalService->getExpressCheckoutDetails($paypalRequest);
-
-        return $paypalResponse->getPayerId();
+        return $details->getPayerId();
     }
 
     public function getPayPalCommunicationInformation(

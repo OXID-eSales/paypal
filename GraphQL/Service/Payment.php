@@ -47,6 +47,11 @@ final class Payment
 
     public function getPayPalTokenStatus(string $paypalToken): PayPalTokenStatus
     {
+        /**
+         * @TODO: this method name is not correct. We cannot decide about token
+         * status by checking if it have payer id available
+         */
+
         $communicationConfirmed = $this->getPayerId($paypalToken) ? true : false;
 
         return new PayPalTokenStatus(

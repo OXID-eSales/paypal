@@ -34,6 +34,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalExpressForLoggedInUser()
     {
@@ -88,6 +89,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalExpressForNotLoggedInUser()
     {
@@ -135,6 +137,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
+     * @group paypal_callback
      */
     public function testPayPalExpressShippingMethodMatch()
     {
@@ -189,6 +193,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalShippingCostNotLoginUser()
     {
@@ -298,6 +303,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalStockOneSale()
     {
@@ -361,6 +367,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalStockOneAutomatic()
     {
@@ -438,6 +445,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalStockSufficientAutomatic()
     {
@@ -514,6 +522,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
+     * @group paypal_callback
      */
     public function testPayPalExpressNettoMode()
     {
@@ -585,6 +595,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * can log in to Sandbox again.
      *
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalLoginCancelLoginPay()
     {
@@ -607,6 +618,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
+     * @group paypal_callback
      */
     public function testPayPalPaymentForGermany()
     {
@@ -767,6 +780,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalPaymentForLoginUser()
     {
@@ -844,7 +858,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group paypal_buyerlogin
+     * @group paypal_nobuyerlogin
      */
     public function testNoPayPalExpressInUserStepForLoggedInUser()
     {
@@ -867,7 +881,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group paypal_buyerlogin
+     * @group paypal_nobuyerlogin
      */
     public function testPayPalExpressInUserStepForNotLoggedInUserCancel()
     {
@@ -895,7 +909,8 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
-     * @group paypal_buyerlogin
+     * @group paypal_nobuyerlogin
+     * @group paypal_express
      */
     public function testPayPalExpressInUserStepForNotLoggedInUserError()
     {
@@ -932,6 +947,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayPalExpressInUserStepForNotLoggedInUserCannotPayWithPP()
     {
@@ -968,6 +984,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testPayWithPayPalExpressInUserStepForNotLoggedInUserOk()
     {
@@ -1014,6 +1031,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testECS()
     {

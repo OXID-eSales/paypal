@@ -33,6 +33,7 @@ class InstallmentBannersTest extends BaseAcceptanceTestCase
      * Tets installment banner on start page
      *
      * @group paypal_nobuyerlogin
+     * @group paypal_banners
      */
     public function testBannerOnStartPage()
     {

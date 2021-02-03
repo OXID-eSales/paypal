@@ -28,6 +28,7 @@ use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketIn
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
+use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
 
 final class Payment
 {
@@ -45,27 +46,42 @@ final class Payment
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
     }
 
-    public function getPayPalTokenStatus(string $paypalToken): PayPalTokenStatus
+    public function getPayPalTokenStatus(string $token, ResponseGetExpressCheckoutDetails $details = null): PayPalTokenStatus
     {
         /**
          * @TODO: this method name is not correct. We cannot decide about token
          * status by checking if it have payer id available
          */
 
-        $communicationConfirmed = $this->getPayerId($paypalToken) ? true : false;
+        if (is_null($details)) {
+            $details = $this->getExpressCheckoutDetails($token);
+        }
+
+        $communicationConfirmed = $this->getPayerId($details) ? true : false;
 
         return new PayPalTokenStatus(
-            $paypalToken,
+            $token,
             $communicationConfirmed
         );
     }
 
-    public function getPayerId(string $token): ?string
+    public function getPayerId(ResponseGetExpressCheckoutDetails $details): ?string
+    {
+        return $details->getPayerId();
+    }
+
+    public function getExpressCheckoutDetails(string $token): ResponseGetExpressCheckoutDetails
     {
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
-        $details = $paymentManager->getExpressCheckoutDetails($token);
 
-        return $details->getPayerId();
+        return $paymentManager->getExpressCheckoutDetails($token);
+    }
+
+    public function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
+    {
+        $paymentManager = $this->requestInfrastructure->getPaymentManager();
+
+        return $paymentManager->validateApprovedBasketAmount($currentAmount, $approvedAmount);
     }
 
     public function getPayPalCommunicationInformation(

@@ -31,6 +31,7 @@ use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequest
 use OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder;
 use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
 use OxidEsales\PayPalModule\Model\Response\ResponseSetExpressCheckout;
+use OxidEsales\PayPalModule\Core\PayPalCheckValidator;
 
 /**
  * Class \OxidEsales\PayPalModule\Model\PaymentManager.
@@ -117,5 +118,14 @@ class PaymentManager
         }
 
         return $transactionMode;
+    }
+
+    public function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
+    {
+        $payPalCheckValidator = oxNew(PayPalCheckValidator::class);
+        $payPalCheckValidator->setNewBasketAmount($currentAmount);
+        $payPalCheckValidator->setOldBasketAmount($approvedAmount);
+
+        return $payPalCheckValidator->isPayPalCheckValid();
     }
 }

@@ -14,7 +14,10 @@ use Codeception\Util\HttpCode;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use TheCodingMachine\GraphQLite\Types\ID;
 use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
+use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
 use OxidEsales\Codeception\Module\Translation\Translator;
+use OxidEsales\GraphQL\Storefront\Basket\Exception\PlaceOrder;
+use OxidEsales\Eshop\Application\Model\Order as EshopOrderModel;
 
 class CheckoutWithGraphqlCest
 {
@@ -166,10 +169,10 @@ class CheckoutWithGraphqlCest
         $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 1);
 
         //place the order
-        $result = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
+        $result = $this->placeOrder($I, $basketId, HttpCode::INTERNAL_SERVER_ERROR);
 
-        //TODO: doublecheck if PayPal basket contents was changed, if so then we must not process the order
-        // and answer with a message like OEPAYPAL_ORDER_TOTAL_HAS_CHANGED
+        $expectedException = BasketCommunication::basketChange($basketId);
+        $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
     }
 
     /**
@@ -178,9 +181,9 @@ class CheckoutWithGraphqlCest
      * @group paypal_checkout
      * @group paypal_graphql
      */
-    public function checkoutWithGraphqlChangeDeliveryAddressAfterApproval(AcceptanceTester $I)
+    public function checkoutWithGraphqlChangeDeliveryAddressToNonPayPalCountryAfterApproval(AcceptanceTester $I)
     {
-        $I->wantToTest('placing an order with PayPal via graphql fails if delivery address was changed after PP approval');
+        $I->wantToTest('placing an order with PayPal via graphql fails if delivery address was changed after PP approval to unsupported country');
         $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword(), 0);
 
         //prepare basket
@@ -202,8 +205,42 @@ class CheckoutWithGraphqlCest
         $result = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
         $I->assertStringContainsString("Delivery set 'oxidstandard' is unavailable!", $result['errors'][0]['message']);
 
-        //TODO: doublecheck if PayPal basket contents was changed, if so then we must not process the order
-        // and answer with a message like 'OEPAYPAL_ERROR_USER_ADDRESS'
+        //TODO: We changed delivery address to country (Belgium) which is not assigned to oxidstandard delivery set.
+        // So that exception message is ok but we might find a better way to handle basket changes in graphql.
+    }
+
+    /**
+     * @group paypal_external
+     * @group paypal_buyerlogin
+     * @group paypal_checkout
+     * @group paypal_graphql
+     * @group wip
+     */
+    public function checkoutWithGraphqlChangeDeliveryAddressAfterApproval(AcceptanceTester $I)
+    {
+        $I->wantToTest('placing an order with PayPal via graphql fails if delivery address was changed after PP approval');
+        $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword(), 0);
+
+        //prepare basket
+        $basketId = $this->createBasket($I, 'my_cart_one');
+        $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 2);
+        $this->setBasketDeliveryMethod($I, $basketId, Fixtures::get('shipping')['standard']);
+        $this->setBasketPaymentMethod($I, $basketId, Fixtures::get('payment_id'));
+
+        //Get token and approval url, make customer approve the payment
+        $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
+        $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
+        $loginPage = new PayPalLogin($I);
+        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+
+        //change delivery address to one where country is assigned to oxidpaypal payment method.
+        $this->setBasketDeliveryAddress($I, $basketId, $this->createDeliveryAddress($I));
+
+        //place the order
+        $result = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
+
+        $expectedException = PlaceOrder::byBasketId($basketId, EshopOrderModel::ORDER_STATE_INVALIDDELADDRESSCHANGED);
+        $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
     }
 
     /**

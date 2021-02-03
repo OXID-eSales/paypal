@@ -36,4 +36,9 @@ final class BasketCommunication extends InvalidRequest
     {
         return new self(sprintf("PayPal communication for basket %s is not confirmed", $basketId));
     }
+
+    public static function basketChange(string $basketId): self
+    {
+        return new self(sprintf("PayPal communication for basket %s discovered basket change. Please run paypal approval process again.", $basketId));
+    }
 }

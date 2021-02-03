@@ -65,7 +65,7 @@ class Address extends Address_parent
      *
      * @return array
      */
-    protected function prepareDataPayPalAddress($details)
+    public function prepareDataPayPalAddress($details)
     {
         $addressData = array();
 

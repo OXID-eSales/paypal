@@ -25,15 +25,15 @@ namespace OxidEsales\PayPalModule\GraphQL\Exception;
 
 use OxidEsales\GraphQL\Base\Exception\InvalidRequest;
 
-final class BasketCommunication extends InvalidRequest
+final class BasketValidation extends InvalidRequest
 {
-    public static function notStarted(string $basketId): self
+    public static function basketChange(string $basketId): self
     {
-        return new self(sprintf("PayPal communication for basket %s is not started", $basketId));
+        return new self(sprintf("Content change discovered for basket %s. Please run paypal approval process again.", $basketId));
     }
 
-    public static function notConfirmed(string $basketId): self
+    public static function basketAddressChange(string $basketId): self
     {
-        return new self(sprintf("PayPal communication for basket %s is not confirmed", $basketId));
+        return new self(sprintf("Address change discovered for basket %s. Please run paypal approval process again.", $basketId));
     }
 }

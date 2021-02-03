@@ -14,10 +14,9 @@ use Codeception\Util\HttpCode;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use TheCodingMachine\GraphQLite\Types\ID;
 use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
-use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
+use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\GraphQL\Storefront\Basket\Exception\PlaceOrder;
-use OxidEsales\Eshop\Application\Model\Order as EshopOrderModel;
 
 class CheckoutWithGraphqlCest
 {
@@ -171,7 +170,7 @@ class CheckoutWithGraphqlCest
         //place the order
         $result = $this->placeOrder($I, $basketId, HttpCode::INTERNAL_SERVER_ERROR);
 
-        $expectedException = BasketCommunication::basketChange($basketId);
+        $expectedException = BasketValidation::basketChange($basketId);
         $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
     }
 
@@ -198,15 +197,16 @@ class CheckoutWithGraphqlCest
         $loginPage = new PayPalLogin($I);
         $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
 
-        //change delivery address to one where country which is not assigned to oxidpaypal payment method.
+        //We change delivery address to country (Belgium) which is not assigned to oxidstandard delivery set.
         $this->setBasketDeliveryAddress($I, $basketId, $this->createDeliveryAddress($I, 'a7c40f632e04633c9.47194042'));
 
         //place the order
-        $result = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
-        $I->assertStringContainsString("Delivery set 'oxidstandard' is unavailable!", $result['errors'][0]['message']);
+        $result = $this->placeOrder($I, $basketId, HttpCode::INTERNAL_SERVER_ERROR);
+        $expectedException = BasketValidation::basketAddressChange($basketId);
+        $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
 
-        //TODO: We changed delivery address to country (Belgium) which is not assigned to oxidstandard delivery set.
-        // So that exception message is ok but we might find a better way to handle basket changes in graphql.
+        //PayPal check runs before shop check. Here's what shop would find:
+        //$I->assertStringContainsString("Delivery set 'oxidstandard' is unavailable!", $result['errors'][0]['message']);
     }
 
     /**
@@ -214,7 +214,6 @@ class CheckoutWithGraphqlCest
      * @group paypal_buyerlogin
      * @group paypal_checkout
      * @group paypal_graphql
-     * @group wip
      */
     public function checkoutWithGraphqlChangeDeliveryAddressAfterApproval(AcceptanceTester $I)
     {
@@ -237,9 +236,9 @@ class CheckoutWithGraphqlCest
         $this->setBasketDeliveryAddress($I, $basketId, $this->createDeliveryAddress($I));
 
         //place the order
-        $result = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
+        $result = $this->placeOrder($I, $basketId, HttpCode::INTERNAL_SERVER_ERROR);
 
-        $expectedException = PlaceOrder::byBasketId($basketId, EshopOrderModel::ORDER_STATE_INVALIDDELADDRESSCHANGED);
+        $expectedException = BasketValidation::basketAddressChange($basketId);
         $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
     }
 

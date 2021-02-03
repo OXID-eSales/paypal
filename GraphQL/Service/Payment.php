@@ -25,10 +25,15 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
+use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
+use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
 use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
+use OxidEsales\Eshop\Application\Model\Basket as EshopBasketModel;
+use OxidEsales\Eshop\Application\Model\User as EshopUserModel;
+use OxidEsales\Eshop\Application\Model\Address as EshopAddressModel;
 
 final class Payment
 {
@@ -38,30 +43,35 @@ final class Payment
     /** @var SharedBasketInfrastructure */
     private $sharedBasketInfrastructure;
 
+    /** @var BasketRelationService */
+    private $basketRelationService;
+
     public function __construct(
         RequestInfrastructure $requestInfrastructure,
-        SharedBasketInfrastructure $sharedBasketInfrastructure
+        SharedBasketInfrastructure $sharedBasketInfrastructure,
+        BasketRelationService $basketRelationService
     ) {
         $this->requestInfrastructure = $requestInfrastructure;
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
+        $this->basketRelationService  = $basketRelationService;
     }
 
     public function getPayPalTokenStatus(string $token, ResponseGetExpressCheckoutDetails $details = null): PayPalTokenStatus
     {
-        /**
-         * @TODO: this method name is not correct. We cannot decide about token
-         * status by checking if it have payer id available
-         */
+        //NOTE: only when the approval was finished on PayPal site (payment channel and delivery adress registered with PayPal)
+        //the getExpressCHeckoutResponse will contain the PayerId. So we can use this to get information
+        //about token status. If anything is amiss, PayPal will no let the order pass.
 
         if (is_null($details)) {
             $details = $this->getExpressCheckoutDetails($token);
         }
 
-        $communicationConfirmed = $this->getPayerId($details) ? true : false;
+        $payerId = $this->getPayerId($details);
 
         return new PayPalTokenStatus(
             $token,
-            $communicationConfirmed
+            $payerId ? true : false,
+            (string) $payerId
         );
     }
 
@@ -77,11 +87,44 @@ final class Payment
         return $paymentManager->getExpressCheckoutDetails($token);
     }
 
-    public function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
+    /**
+     * @throws BasketValidation
+     */
+    public function getValidEshopBasketModel(BasketDataType $userBasket, ResponseGetExpressCheckoutDetails $expressCheckoutDetails): EshopBasketModel
     {
-        $paymentManager = $this->requestInfrastructure->getPaymentManager();
+        /** @var EshopBasketModel $sessionBasket */
+        $sessionBasket = $this->sharedBasketInfrastructure->getCalculatedBasket($userBasket);
+        if (!$this->validateApprovedBasketAmount(
+            $sessionBasket->getPrice()->getBruttoPrice(),
+            $expressCheckoutDetails->getAmount())
+        ) {
+            throw BasketValidation::basketChange($userBasket->id()->val());
+        }
 
-        return $paymentManager->validateApprovedBasketAmount($currentAmount, $approvedAmount);
+        //delivery address currently related to user basket
+        //if that one is null, the user's invoice address is used as delivery address
+        /** @var EshopUserModel $eshopModel */
+        $eshopModel = $sessionBasket->getUser();
+        $shipToAddress = $this->basketRelationService->deliveryAddress($userBasket);
+        if (!is_null($shipToAddress)) {
+            /** @var EshopAddressModel $eshopModel */
+            $eshopModel = $shipToAddress->getEshopModel();
+        }
+
+        //Ensure delivery address registered with PayPal is the same as shop will use
+        $paypalAddressModel = oxNew(EshopAddressModel::class);
+        $paypalAddressData = $paypalAddressModel->prepareDataPayPalAddress($expressCheckoutDetails);
+
+        $compareWith = [];
+        foreach ($paypalAddressData as $key => $value) {
+            $compareWith[$key] = $eshopModel->getFieldData($key);
+        }
+        $diff = array_diff($paypalAddressData, $compareWith);
+        if (!empty($diff)) {
+            throw BasketValidation::basketAddressChange($userBasket->id()->val());
+        }
+
+        return $sessionBasket;
     }
 
     public function getPayPalCommunicationInformation(
@@ -113,5 +156,12 @@ final class Payment
     {
         $payPalConfig = $this->requestInfrastructure->getPayPalConfig();
         return $payPalConfig->getPayPalCommunicationUrl($token);
+    }
+
+    protected function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
+    {
+        $paymentManager = $this->requestInfrastructure->getPaymentManager();
+
+        return $paymentManager->validateApprovedBasketAmount($currentAmount, $approvedAmount);
     }
 }

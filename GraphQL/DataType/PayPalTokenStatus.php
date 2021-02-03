@@ -37,10 +37,14 @@ final class PayPalTokenStatus
     /** @var bool */
     private $status;
 
-    public function __construct(string $token, bool $status)
+    /** @var string */
+    private $payerId;
+
+    public function __construct(string $token, bool $status, string $payerId)
     {
         $this->token = $token;
         $this->status = $status;
+        $this->payerId = $payerId;
     }
 
     /**
@@ -57,5 +61,11 @@ final class PayPalTokenStatus
     public function getStatus(): bool
     {
         return $this->status;
+    }
+
+    // for internal user only
+    public function getPayerId(): string
+    {
+        return $this->payerId;
     }
 }

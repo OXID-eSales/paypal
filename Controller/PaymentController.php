@@ -64,10 +64,7 @@ class PaymentController extends PaymentController_parent
             return false;
         }
 
-        $payPalCheckValidator = oxNew(\OxidEsales\PayPalModule\Core\PayPalCheckValidator::class);
-        $payPalCheckValidator->setNewBasketAmount($basket->getPrice()->getBruttoPrice());
-        $payPalCheckValidator->setOldBasketAmount($oldBasketAmount);
-
-        return $payPalCheckValidator->isPayPalCheckValid();
+        $paymentManager = oxNew(\OxidEsales\PayPalModule\Model\PaymentManager::class);
+        return $paymentManager->validateApprovedBasketAmount($basket->getPrice()->getBruttoPrice(), $oldBasketAmount);
     }
 }

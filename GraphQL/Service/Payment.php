@@ -136,12 +136,16 @@ final class Payment
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
         $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
 
+        $shipToAddress = $this->basketRelationService->deliveryAddress($basket);
+        $shipToAddressid = $shipToAddress ? (string) $shipToAddress->id(): '';
+
         $response = $paymentManager->setExpressCheckout(
             $this->sharedBasketInfrastructure->getCalculatedBasket($basket),
             $standardPaypalController->getUser(),
             $returnUrl,
             $cancelUrl,
-            $displayBasketInPayPal
+            $displayBasketInPayPal,
+            $shipToAddressid
         );
 
         $token = $response->getToken();

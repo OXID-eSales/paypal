@@ -52,11 +52,16 @@ class PaymentManager
         ?User $user,
         string $returnUrl,
         string $cancelUrl,
-        bool $showCartInPayPal
+        bool $showCartInPayPal,
+        string $deliveryAddressId
     ): ResponseSetExpressCheckout {
         $payPalConfig = oxNew(Config::class);
         $builder = oxNew(SetExpressCheckoutRequestBuilder::class);
 
+        if ($deliveryAddressId && $user) {
+            $user->setSelectedAddressId($deliveryAddressId);
+            $basket->setUser($user);
+        }
         $basket->setPayment("oxidpaypal");
         $basket->onUpdate();
         $basket->calculateBasket(true);

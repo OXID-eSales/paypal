@@ -164,11 +164,11 @@ class PayPalLogin extends Page
             $I->fillField($this->userLoginEmail, $userName);
             $I->waitForElementVisible($this->userPassword, 5);
             $I->fillField($this->userPassword, $userPassword);
-            $I->click($this->loginButton);
+            $I->retryClick($this->loginButton);
         }
 
         if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
-            $I->click($this->oneTouchNotNowLink);
+            $I->retryClick($this->oneTouchNotNowLink);
         }
 
         $I->waitForElementNotVisible($this->globalSpinner, 30);
@@ -195,7 +195,7 @@ class PayPalLogin extends Page
         $I->waitForElementNotVisible($this->globalSpinner, 30);
 
         if ($I->seePageHasElement($this->paymentConfirmButton)) {
-            $I->click($this->paymentConfirmButton);
+            $I->retryClick($this->paymentConfirmButton);
             $I->waitForDocumentReadyState();
             $I->waitForElementNotVisible($this->globalSpinner, 60);
             $I->wait(10);

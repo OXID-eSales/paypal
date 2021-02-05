@@ -148,7 +148,7 @@ final class Payment
             $shipToAddressid
         );
 
-        $token = $response->getToken();
+        $token = (string) $response->getToken();
 
         return new PayPalCommunicationInformation(
             $token,

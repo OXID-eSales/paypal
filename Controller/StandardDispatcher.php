@@ -39,13 +39,15 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $session->setVariable("oepaypal", "1");
         try {
+            $selectedAddressId = $this->getUser()? (string) $this->getUser()->getSelectedAddressId() : '';
             $paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
             $result = $paymentManager->setExpressCheckout(
                 $session->getBasket(),
                 $this->getUser() ?: null,
                 $this->getReturnUrl(),
                 $this->getCancelUrl(),
-                (bool)$this->getRequest()->getRequestParameter("displayCartInPayPal")
+                (bool)$this->getRequest()->getRequestParameter("displayCartInPayPal"),
+                $selectedAddressId
             );
         } catch (\OxidEsales\Eshop\Core\Exception\StandardException $excp) {
             // error - unable to set order info - display error message

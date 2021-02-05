@@ -47,12 +47,18 @@ final class Payment
     private $basketRelationService;
 
     public function __construct(
-        RequestInfrastructure $requestInfrastructure,
-        SharedBasketInfrastructure $sharedBasketInfrastructure,
-        BasketRelationService $basketRelationService
+        RequestInfrastructure $requestInfrastructure
     ) {
         $this->requestInfrastructure = $requestInfrastructure;
+    }
+
+    public function setSharedBasketInfrastructure(SharedBasketInfrastructure $sharedBasketInfrastructure): void
+    {
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
+    }
+
+    public function setBasketRelationService(BasketRelationService $basketRelationService): void
+    {
         $this->basketRelationService  = $basketRelationService;
     }
 

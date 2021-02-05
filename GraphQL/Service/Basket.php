@@ -42,13 +42,19 @@ final class Basket
     private $request;
 
     public function __construct(
-        BasketRelationService $basketRelationService,
-        SharedBasketInfrastructure $sharedBasketInfrastructure,
         Request $request
     ) {
-        $this->basketRelationService = $basketRelationService;
-        $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
         $this->request = $request;
+    }
+
+    public function setSharedBasketInfrastructure(SharedBasketInfrastructure $sharedBasketInfrastructure): void
+    {
+        $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
+    }
+
+    public function setBasketRelationService(BasketRelationService $basketRelationService): void
+    {
+        $this->basketRelationService  = $basketRelationService;
     }
 
     public function checkBasketPaymentMethodIsPayPal(BasketDataType $basket): bool

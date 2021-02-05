@@ -44,12 +44,15 @@ final class Payment
 
     public function __construct(
         PaymentService $paymentService,
-        BasketService $basketService,
-        StorefrontBasketService $storefrontBasketService
+        BasketService $basketService
     ) {
         $this->paymentService = $paymentService;
-        $this->storefrontBasketService = $storefrontBasketService;
         $this->basketService = $basketService;
+    }
+
+    public function setStorefrontBasketService(StorefrontBasketService $storefrontBasketService): void
+    {
+        $this->storefrontBasketService = $storefrontBasketService;
     }
 
     /**

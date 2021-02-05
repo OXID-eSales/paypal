@@ -910,7 +910,6 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_nobuyerlogin
-     * @group paypal_express
      */
     public function testPayPalExpressInUserStepForNotLoggedInUserError()
     {

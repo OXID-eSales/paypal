@@ -21,6 +21,7 @@ class FinalizeOrderOnPayPalTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testFinalizeOrderOnPayPalSideOnForNotLoggedInUser()
     {
@@ -46,6 +47,7 @@ class FinalizeOrderOnPayPalTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testFinalizeOrderOnPayPalSideOffForNotLoggedInUser()
     {
@@ -74,6 +76,7 @@ class FinalizeOrderOnPayPalTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testFinalizeOrderOnPayPalSideOnForLoggedInUser()
     {
@@ -100,6 +103,7 @@ class FinalizeOrderOnPayPalTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_express
      */
     public function testFinalizeOrderOnPayPalSideOffForLoggedInUser()
     {

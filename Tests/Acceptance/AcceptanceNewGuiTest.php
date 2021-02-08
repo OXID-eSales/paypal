@@ -34,6 +34,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalRegularCheckoutPayment()
     {
@@ -166,6 +167,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalRegularCheckoutAndChangeQuantityAfterwardsViaAdmin()
     {
@@ -234,6 +236,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalDiscountsCategory()
     {
@@ -323,6 +326,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalDiscountsFromTill()
     {
@@ -477,6 +481,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalVouchers()
     {
@@ -569,6 +574,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalVAT()
     {
@@ -688,6 +694,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalProportional()
     {
@@ -970,6 +977,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalStandardNettoMode()
     {
@@ -1059,6 +1067,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_standard
      */
     public function testPayPalStandard()
     {

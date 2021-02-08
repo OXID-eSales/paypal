@@ -234,6 +234,7 @@ class CallbackFromPayPalTest extends BaseAcceptanceTestCase
      *
      * @group paypal_standalone
      * @group paypal_external
+     * @group paypal_nobuyerlogin
      *
      * @dataProvider providerCallBackTests
      */

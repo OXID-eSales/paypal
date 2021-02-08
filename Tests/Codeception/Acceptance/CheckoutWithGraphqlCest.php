@@ -75,7 +75,6 @@ class CheckoutWithGraphqlCest
      * @group paypal_buyerlogin
      * @group paypal_checkout
      * @group paypal_graphql
-     * @group wip
      */
     public function checkoutWithGraphql(AcceptanceTester $I)
     {

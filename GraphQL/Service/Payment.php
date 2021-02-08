@@ -30,6 +30,7 @@ use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
+use OxidEsales\PayPalModule\Model\PaymentManager;
 use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
 use OxidEsales\Eshop\Application\Model\Basket as EshopBasketModel;
 use OxidEsales\Eshop\Application\Model\User as EshopUserModel;
@@ -170,8 +171,6 @@ final class Payment
 
     protected function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
     {
-        $paymentManager = $this->requestInfrastructure->getPaymentManager();
-
-        return $paymentManager->validateApprovedBasketAmount($currentAmount, $approvedAmount);
+        return PaymentManager::validateApprovedBasketAmount($currentAmount, $approvedAmount);
     }
 }

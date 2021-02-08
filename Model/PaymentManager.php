@@ -125,7 +125,7 @@ class PaymentManager
         return $transactionMode;
     }
 
-    public function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
+    public static function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
     {
         $payPalCheckValidator = oxNew(PayPalCheckValidator::class);
         $payPalCheckValidator->setNewBasketAmount($currentAmount);

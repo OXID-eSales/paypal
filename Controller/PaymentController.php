@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Controller;
 
+use \OxidEsales\PayPalModule\Model\PaymentManager;
+
 /**
  * Payment class wrapper for PayPal module
  *
@@ -64,7 +66,6 @@ class PaymentController extends PaymentController_parent
             return false;
         }
 
-        $paymentManager = oxNew(\OxidEsales\PayPalModule\Model\PaymentManager::class);
-        return $paymentManager->validateApprovedBasketAmount($basket->getPrice()->getBruttoPrice(), $oldBasketAmount);
+        return PaymentManager::validateApprovedBasketAmount($basket->getPrice()->getBruttoPrice(), $oldBasketAmount);
     }
 }

@@ -171,6 +171,8 @@ final class Payment
 
     protected function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
     {
-        return PaymentManager::validateApprovedBasketAmount($currentAmount, $approvedAmount);
+        $paymentManager = $this->requestInfrastructure->getPaymentManager();
+
+        return $paymentManager->validateApprovedBasketAmount($currentAmount, $approvedAmount);
     }
 }

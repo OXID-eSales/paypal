@@ -29,6 +29,7 @@ use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
+use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
 use OxidEsales\PayPalModule\Model\PaymentManager;
 use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
@@ -48,19 +49,31 @@ final class Payment
     private $basketRelationService;
 
     public function __construct(
-        RequestInfrastructure $requestInfrastructure
+        RequestInfrastructure $requestInfrastructure,
+        SharedBasketInfrastructure $sharedBasketInfrastructure = null,
+        BasketRelationService $basketRelationService = null
     ) {
         $this->requestInfrastructure = $requestInfrastructure;
-    }
-
-    public function setSharedBasketInfrastructure(SharedBasketInfrastructure $sharedBasketInfrastructure): void
-    {
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
+        $this->basketRelationService = $basketRelationService;
     }
 
-    public function setBasketRelationService(BasketRelationService $basketRelationService): void
+    public function getSharedBasketInfrastructure(): SharedBasketInfrastructure
     {
-        $this->basketRelationService  = $basketRelationService;
+        if (is_null($this->sharedBasketInfrastructure)) {
+            throw GraphQLServiceNotFound::byServiceName(SharedBasketInfrastructure::class);
+        }
+
+        return $this->sharedBasketInfrastructure;
+    }
+
+    public function getBasketRelationService(): BasketRelationService
+    {
+        if (is_null($this->basketRelationService)) {
+            throw GraphQLServiceNotFound::byServiceName(BasketRelationService::class);
+        }
+
+        return $this->basketRelationService;
     }
 
     public function getPayPalTokenStatus(string $token, ResponseGetExpressCheckoutDetails $details = null): PayPalTokenStatus
@@ -100,7 +113,7 @@ final class Payment
     public function getValidEshopBasketModel(BasketDataType $userBasket, ResponseGetExpressCheckoutDetails $expressCheckoutDetails): EshopBasketModel
     {
         /** @var EshopBasketModel $sessionBasket */
-        $sessionBasket = $this->sharedBasketInfrastructure->getCalculatedBasket($userBasket);
+        $sessionBasket = $this->getSharedBasketInfrastructure()->getCalculatedBasket($userBasket);
         if (!$this->validateApprovedBasketAmount(
             $sessionBasket->getPrice()->getBruttoPrice(),
             $expressCheckoutDetails->getAmount())
@@ -112,7 +125,7 @@ final class Payment
         //if that one is null, the user's invoice address is used as delivery address
         /** @var EshopUserModel $eshopModel */
         $eshopModel = $sessionBasket->getUser();
-        $shipToAddress = $this->basketRelationService->deliveryAddress($userBasket);
+        $shipToAddress = $this->getBasketRelationService()->deliveryAddress($userBasket);
         if (!is_null($shipToAddress)) {
             /** @var EshopAddressModel $eshopModel */
             $eshopModel = $shipToAddress->getEshopModel();
@@ -143,11 +156,11 @@ final class Payment
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
         $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
 
-        $shipToAddress = $this->basketRelationService->deliveryAddress($basket);
+        $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
         $shipToAddressid = $shipToAddress ? (string) $shipToAddress->id(): '';
 
         $response = $paymentManager->setExpressCheckout(
-            $this->sharedBasketInfrastructure->getCalculatedBasket($basket),
+            $this->getSharedBasketInfrastructure()->getCalculatedBasket($basket),
             $standardPaypalController->getUser(),
             $returnUrl,
             $cancelUrl,
@@ -171,6 +184,7 @@ final class Payment
 
     protected function validateApprovedBasketAmount(float $currentAmount, float $approvedAmount): bool
     {
+        /** @var PaymentManager $paymentManager */
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
 
         return $paymentManager->validateApprovedBasketAmount($currentAmount, $approvedAmount);

@@ -26,7 +26,7 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
-use OxidEsales\PayPalModule\Core\Exception\PayPalException;
+use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request;
 
@@ -42,24 +42,36 @@ final class Basket
     private $request;
 
     public function __construct(
-        Request $request
+        Request $request,
+        SharedBasketInfrastructure $sharedBasketInfrastructure = null,
+        BasketRelationService $basketRelationService = null
     ) {
         $this->request = $request;
-    }
-
-    public function setSharedBasketInfrastructure(SharedBasketInfrastructure $sharedBasketInfrastructure): void
-    {
         $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
+        $this->basketRelationService = $basketRelationService;
     }
 
-    public function setBasketRelationService(BasketRelationService $basketRelationService): void
+    public function getSharedBasketInfrastructure(): SharedBasketInfrastructure
     {
-        $this->basketRelationService  = $basketRelationService;
+        if (is_null($this->sharedBasketInfrastructure)) {
+            throw GraphQLServiceNotFound::byServiceName(SharedBasketInfrastructure::class);
+        }
+
+        return $this->sharedBasketInfrastructure;
+    }
+
+    public function getBasketRelationService(): BasketRelationService
+    {
+        if (is_null($this->basketRelationService)) {
+            throw GraphQLServiceNotFound::byServiceName(BasketRelationService::class);
+        }
+
+        return $this->basketRelationService;
     }
 
     public function checkBasketPaymentMethodIsPayPal(BasketDataType $basket): bool
     {
-        $paymentMethod = $this->basketRelationService->payment($basket);
+        $paymentMethod = $this->getBasketRelationService()->payment($basket);
         $result = false;
 
         if (!is_null($paymentMethod) && $paymentMethod->getId()->val() === 'oxidpaypal') {

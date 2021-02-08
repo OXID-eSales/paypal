@@ -31,15 +31,12 @@ use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
-use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
+use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 
 final class BeforePlaceOrder
 {
     /** @var StorefrontBasketService */
     private $storefrontBasketService;
-
-    /** @var BasketRelationService */
-    private $basketRelationService;
 
     /** @var PaymentService */
     private $paymentService;
@@ -49,29 +46,26 @@ final class BeforePlaceOrder
 
     public function __construct(
         PaymentService $paymentService,
-        BasketService $basketService
+        BasketService $basketService,
+        StorefrontBasketService $storefrontBasketService = null
     ) {
         $this->paymentService = $paymentService;
         $this->basketService = $basketService;
-    }
-
-    public function setStorefrontBasketService(StorefrontBasketService $storefrontBasketService): void
-    {
         $this->storefrontBasketService = $storefrontBasketService;
     }
 
-    public function setBasketRelationService(BasketRelationService $basketRelationService): void
+    public function getStorefrontBasketService(): StorefrontBasketService
     {
-        $this->basketRelationService  = $basketRelationService;
+        if (is_null($this->storefrontBasketService)) {
+            throw GraphQLServiceNotFound::byServiceName(StorefrontBasketService::class);
+        }
+
+        return $this->storefrontBasketService;
     }
 
     public function handle(BeforePlaceOrderEvent $event): void
     {
-        if (!$this->storefrontBasketService || !$this->basketService ){
-            return;
-        }
-
-        $userBasket = $this->storefrontBasketService->getAuthenticatedCustomerBasket((string)$event->getBasketId());
+        $userBasket = $this->getStorefrontBasketService()->getAuthenticatedCustomerBasket((string)$event->getBasketId());
         if ($this->basketService->checkBasketPaymentMethodIsPayPal($userBasket)) {
             $extendUserBasket = new BasketExtendType();
 

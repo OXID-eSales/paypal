@@ -53,7 +53,7 @@ class ResponseGetExpressCheckoutDetails extends \OxidEsales\PayPalModule\Model\R
      */
     public function getPayerId()
     {
-        return $this->getValue('PAYERID');
+        return (string) $this->getValue('PAYERID');
     }
 
     /**

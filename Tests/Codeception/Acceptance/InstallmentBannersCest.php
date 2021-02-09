@@ -29,7 +29,7 @@ class InstallmentBannersCest
     {
         $I->activateFlowTheme();
         $I->clearShopCache();
-        $I->setPayPalSettingsData();
+        $I->activatePaypalModule();
         $I->updateConfigInDatabase('blUseStock', false, 'bool');
     }
 

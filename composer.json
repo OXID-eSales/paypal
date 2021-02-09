@@ -7,21 +7,17 @@
     "license": [
         "GPL-3.0-only"
     ],
-    "extra": {
-        "oxideshop": {
-            "target-directory": "oe/oepaypal"
-        }
-    },
     "require": {
         "php": ">=7.0",
         "lib-curl": ">=7.26.0",
         "lib-openssl": ">=1.0.1",
         "ext-curl": "*",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "symfony/dotenv": "^5.1"
     },
     "autoload": {
         "psr-4": {
-            "OxidEsales\\PayPalModule\\": "../../../source/modules/oe/oepaypal"
+            "OxidEsales\\PayPalModule\\": ""
         }
     }
 }

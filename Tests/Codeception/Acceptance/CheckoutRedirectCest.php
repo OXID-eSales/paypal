@@ -23,16 +23,16 @@ class CheckoutRedirectCest
     public function _before(AcceptanceTester $I)
     {
         $I->clearShopCache();
+        $I->activatePaypalModule();
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->setPayPalSettingsData();
     }
 
     /**
      * @group checkoutFrontend
      * @group paypal_external
      * @group paypal_buyerlogin
-     *        
+     *
      * @example { "setting": false, "expectedEndText": "MESSAGE_SUBMIT_BOTTOM" }
      * @example { "setting": true, "expectedEndText": "THANK_YOU_FOR_ORDER" }
      *
@@ -62,8 +62,8 @@ class CheckoutRedirectCest
 
         $paypalPage = new PaypalLogin($I);
 
-        $paypalUserEmail = Fixtures::get('sBuyerLogin');
-        $paypalUserPassword = Fixtures::get('sBuyerPassword');
+        $paypalUserEmail = $_ENV['sBuyerLogin'];
+        $paypalUserPassword = $_ENV['sBuyerPassword'];
         $paypalPage->loginAndCheckout($paypalUserEmail, $paypalUserPassword);
 
         $I->waitForText(Translator::translate($example['expectedEndText']), 10);

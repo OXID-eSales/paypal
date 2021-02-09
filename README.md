@@ -36,21 +36,61 @@ To run this module tests locally, ensure the `test_config.yml` values are correc
 - Set `additional_test_paths` to `''`
 - Set `retry_times_after_test_fail` to `0`
 
-For running acceptance tests you need to provide sandbox credentials data in `oepaypal/Tests/Acceptance/oepaypalData.php` file:
+For running acceptance and codeception tests you need to provide sandbox credentials data:
 - Set `sOEPayPalSandboxUsername`
 - Set `sOEPayPalSandboxPassword`
 - Set `sOEPayPalSandboxSignature`
-- Set `sBuyerLogin`
-- Set `sBuyerPassword`
+- Set `blOEPayPalSandboxMode` to `true`
+- Set `blPayPalLoggerEnabled` to `true`
 - Set `OEPayPalClientId`
 
-For running codeception tests you need to provide sandbox credentials data in `oepaypal/Tests/Codeception/_data/oepaypalData.php` file:
-- Set `sOEPayPalSandboxUsername`
-- Set `sOEPayPalSandboxPassword`
-- Set `sOEPayPalSandboxSignature`
+These credentials can be set in shop_dir/var/configuration/environment/1.yaml. More information about it can be found [here](https://oxidforge.org/en/deployment-concepts-starting-from-oxid-eshop-6-2-0.html).
+
+```yaml
+modules:
+  oepaypal:
+    moduleSettings:
+      oePayPalClientId:
+        value: client_id
+      sOEPayPalSandboxUsername:
+        value: sandbox_user
+      sOEPayPalSandboxPassword:
+        value: sandbox_password
+      sOEPayPalSandboxSignature:
+        value: sandbox_signature
+      blOEPayPalSandboxMode:
+        value: true
+      blPayPalLoggerEnabled:
+        value: true
+```
+
+Also PayPal login credentials will be needed, they can be set in module_dir/.env file:
+
 - Set `sBuyerLogin`
 - Set `sBuyerPassword`
-- Set `OEPayPalClientId`
+- Set `sBuyerFirstName`
+- Set `sBuyerLastName`
+
+```
+sBuyerLogin=pp_buyer_email
+sBuyerPassword=pp_buyer_pass
+sBuyerFirstName=pp_buyer_first_name
+sBuyerLastName=pp_buyer_last_name
+```
+
+#### When all credentials are set up you can run the following commands:
+```shell
+# Installs the module, activates it and applies the configurations from shop_dir/var/configuration/environment/1.yaml file
+bin/oe-console oe:module:install vendor/oxid-esales/paypal-module
+bin/oe-console oe:module:activate oepaypal
+bin/oe-console oe:module:apply-configuration
+# Runs codeception tests
+vendor/bin/runtests-codeception
+# Runs selenium tests
+vendor/bin/runtests-selenium
+# Runs unit and integration tests
+vendor/bin/runtests
+```
 
 For running the tests and more configuration options, follow the instructions from [here](https://github.com/OXID-eSales/testing_library#running-tests).
 

@@ -23,6 +23,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Model\PayPalRequest;
 
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 
 /**
  * Testing \OxidEsales\PayPalModule\Model\PayPalRequest\DoExpressCheckoutPaymentRequestBuilder class.
@@ -60,6 +61,7 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
      */
     public function testDoExpressCheckoutPayment($trigger, $buttonSource)
     {
+        EshopRegistry::getConfig()->setConfigParam('OEPayPalDisableIPN', false);
         // preparing session, inputs etc.
         $result["PAYMENTINFO_0_TRANSACTIONID"] = "321";
 
@@ -107,7 +109,7 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
             'TOKEN'                              => '111',
             'PAYERID'                            => '222',
             'PAYMENTREQUEST_0_PAYMENTACTION'     => 'Sale',
-            'PAYMENTREQUEST_0_AMT'               => 123,
+            'PAYMENTREQUEST_0_AMT'               => '123.00',
             'PAYMENTREQUEST_0_CURRENCYCODE'      => "EUR",
             'PAYMENTREQUEST_0_NOTIFYURL'         => $this->getConfig()->getCurrentShopUrl() . "index.php?cl=oepaypalipnhandler&fnc=handleRequest&shp=" . $config->getShopId(),
             'PAYMENTREQUEST_0_DESC'              => $subj,
@@ -116,8 +118,8 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
             'PAYMENTREQUEST_0_SHIPTOSTREET'      => 'some street 47',
             'PAYMENTREQUEST_0_SHIPTOCITY'        => 'some city',
             'PAYMENTREQUEST_0_SHIPTOZIP'         => 'zip',
-            'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => '',
-            'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => '',
+            'PAYMENTREQUEST_0_SHIPTOPHONENUM'    => null,
+            'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => null,
         );
 
         $expectedResult['BUTTONSOURCE'] = $buttonSource;

@@ -22,6 +22,7 @@
 namespace OxidEsales\PayPalModule\Tests\Acceptance;
 
 use \OxidEsales\PayPalModule\Core\Config as PayPalConfig;
+use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * @todo add dependency between external tests. If one fails next should not start.
@@ -137,64 +138,6 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     public function addTestData($testSuitePath)
     {
         parent::addTestData($testSuitePath);
-
-        $this->callShopSC('oxConfig', null, null, array(
-            'sOEPayPalTransactionMode' => array(
-                'type' => 'select',
-                'value' => 'Authorization',
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalUsername' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalUsername'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalPassword' => array(
-                'type' => 'password',
-                'value' => $this->getLoginDataByName('sOEPayPalPassword'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSignature' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalSignature'),
-                'module' => 'module:oepaypal'
-            ),
-            'blOEPayPalSandboxMode' => array(
-                'type' => 'bool',
-                'value' => 1,
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSandboxUsername' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalSandboxUsername'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSandboxPassword' => array(
-                'type' => 'password',
-                'value' => $this->getLoginDataByName('sOEPayPalSandboxPassword'),
-                'module' => 'module:oepaypal'
-            ),
-            'sOEPayPalSandboxSignature' => array(
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalSandboxSignature'),
-                'module' => 'module:oepaypal'
-            ),
-            'blPayPalLoggerEnabled' => array(
-                'type' => 'str',
-                'value' => true,
-                'module' => 'module:oepaypal'
-            ),
-            'OEPayPalDisableIPN' => array(
-                'type' => 'str',
-                'value' => true,
-                'module' => 'module:oepaypal'
-            ),
-            'blOEPayPalFinalizeOrderOnPayPal' => array(
-                'type' => 'bool',
-                'value' => 0,
-                'module' => 'module:oepaypal'
-            ),
-        ));
 
         $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
 
@@ -346,17 +289,15 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
                 'value' => 'Sale',
                 'module' => 'module:oepaypal'
             ],
-            'sOEPayPalSandboxSignature' => [
-                'type' => 'str',
-                'value' => $this->getLoginDataByName('sOEPayPalSandboxSignature'),
-                'module' => 'module:oepaypal'
-            ],
         ]);
 
         $this->callShopSC(\OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper::class, 'cleanPayPalLog');
 
         $language = oxNew(\OxidEsales\Eshop\Core\Language::class);
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\Language::class, $language);
+
+        $dotenv = new \Symfony\Component\Dotenv\Dotenv();
+        $dotenv->load(__DIR__.'/../../.env');
     }
 
     /**
@@ -530,11 +471,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     protected function getLoginDataByName($varName)
     {
-        if (!$varValue = getenv($varName)) {
-            $varValue = $this->getArrayValueFromFile($varName, __DIR__ .'/oepaypalData.php');
-        }
-
-        if (!$varValue) {
+        if (!$varValue = $_ENV[$varName]) {
             throw new \Exception('Undefined variable: ' . $varName);
         }
 

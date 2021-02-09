@@ -29,7 +29,7 @@ In order to install the module via composer run one of the following commands in
 ### Running tests locally
 
 To run this module tests locally, ensure the `test_config.yml` values are correct:
-- Set `partial_module_paths` to `oe/oepaypal`
+- Set `module_ids` to `oepaypal`
 - Set `activate_all_modules` to `true`
 - Set `run_tests_for_modules` to `true`
 - Set `run_tests_for_shop` to `false`

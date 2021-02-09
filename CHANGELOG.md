@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.3.0] - Unreleased
+
+### Added
+- PayPal as payment method for OXID GraphQL Storefront module:
+  - services.yaml
+  - Code in namespace `\OxidEsales\PayPalModule\GraphQL\`
+  - Codeception tests in group `paypal_graphql`
+  - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setToken()`
+  - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getToken()`
+  - `\OxidEsales\PayPalModule\Model\PaymentManager`
+  - Column `oxuserbaskets.OEPAYPAL_PAYMENT_TOKEN` to hold the PayPal token needed for GraphQL checkout.
+
+### Changed
+- Changes visibility from protected to public for the following methods:
+   `\OxidEsales\PayPalModule\Model\Address::prepareDataPayPalAddress()`
+   `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getReturnUrl()`
+   `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getCancelUrl()`
+
+### Deprecated
+  - Deprecated the following methods:
+    `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setSession()`
+    `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getSession()`
+    `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getTransactionMode()`
+
 ## [6.2.1] - 2020-10-08
 
 ### Fixed

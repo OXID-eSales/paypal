@@ -87,7 +87,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
 
         // Admin
         // Checking if order is saved in Admin
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->assureAdminOrderNameIsPresent();
         $this->openListItem("2");
 
@@ -200,7 +200,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         sleep(5);
 
         // Go to an admin and check this order nr
-        $this->loginAdminForModule("Administer Orders", "Orders");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
@@ -300,7 +300,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->assureAdminOrderNameIsPresent();
         $this->openListItem("2");
         $this->assertTextPresent("Internal Status: OK");
@@ -453,7 +453,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->waitForElement("//[@id='row.1']", 5, true);
         $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
@@ -545,7 +545,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
@@ -665,7 +665,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
@@ -704,7 +704,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->importSql(__DIR__ . '/testSql/newVAT.sql');
 
         // Go to admin and set on all VAT options
-        $this->loginAdminForModule("Master Settings", "Core Settings");
+        $this->loginAdmin("Master Settings", "Core Settings");
         $this->openTab("Settings");
         $this->click("link=VAT");
         sleep(1);
@@ -828,7 +828,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin to activate proportional calculation
-        $this->loginAdminForModule("Master Settings", "Core Settings");
+        $this->loginAdmin("Master Settings", "Core Settings");
         $this->openTab("Settings");
         $this->click("link=VAT");
         usleep(50000);
@@ -946,7 +946,7 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->assureAdminOrderNameIsPresent();
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");

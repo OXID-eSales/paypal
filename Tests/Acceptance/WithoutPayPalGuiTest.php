@@ -131,7 +131,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
     public function testPayPalExpressWhenPayPalInactive()
     {
         // Disable PayPal
-        $this->loginAdminForModule("Extensions", "Modules");
+        $this->loginAdmin("Extensions", "Modules");
         $this->openListItem("PayPal");
         $this->frame("edit");
         $this->clickAndWait("module_deactivate");
@@ -252,7 +252,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent("Thank you for ordering at OXID eShop", "Order is not finished successful");
 
         // Go to Admin
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->openListItem("2");
 
         // Go to PayPal tab
@@ -273,7 +273,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
     public function testModuleDeactivationDoesNotResultInMaintenancePage()
     {
         $pageReloadTime = 2; // seconds
-        $this->loginAdminForModule("Extensions", "Modules");
+        $this->loginAdmin("Extensions", "Modules");
         $this->openListItem("PayPal");
         $this->frame("edit");
         // Deactivate the PayPal module, if it is not active activate it first.
@@ -283,7 +283,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
             // The module was not active, so activate and deactivate it
             $this->click("module_activate");
             $this->logoutAdmin("link=Logout");
-            $this->loginAdminForModule("Extensions", "Modules");
+            $this->loginAdmin("Extensions", "Modules");
             $this->openListItem("PayPal");
             $this->frame("edit");
             $this->click("module_deactivate");

@@ -76,7 +76,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
 
         // Checking if order is saved in Admin
-        $this->loginAdminForModule("Administer Orders", "Orders");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->openListItem("2");
 
         $this->openTab("Main");
@@ -201,7 +201,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->importSql(__DIR__ . '/testSql/vatOptions.sql');
 
         // Go to admin and set on "Calculate default Shipping costs when User is not logged in yet "
-        $this->loginAdminForModule("Master Settings", "Core Settings");
+        $this->loginAdmin("Master Settings", "Core Settings");
         $this->openTab("Settings");
         $this->click("link=Other settings");
         sleep(1);
@@ -273,7 +273,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->assertCaseInsensitiveText($this->getLoginDataByName('sBuyerFirstName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'first_name')][1]"));
         $this->assertCaseInsensitiveText($this->getLoginDataByName('sBuyerLastName'), $this->getText("//tr[@id='row.1']/td[contains(@class, 'last_name')][1]"));
         $this->openListItem("link=2");
@@ -355,7 +355,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
     }
@@ -433,7 +433,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: NOT_FINISHED"); //means capture has to be done manually with these settings
     }
@@ -511,7 +511,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // Go to admin and check the order
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: OK");
     }
@@ -714,7 +714,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertElementPresent("paypalExpressCheckoutButton", "PayPal express button not displayed in the cart");
 
         // Go to admin and check previous order status and check if new order didn't appear in admin.
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->selectMenu("Administer Orders", "Orders");
         $this->assertElementNotPresent("link=2");
 
@@ -748,7 +748,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
         $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
 
         // After successful purchase, go to admin and check order status
-        $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->loginAdmin("Administer Orders", "Orders");
         $this->click("link=Order No.");
         $this->waitForPageToLoad("30000");
 

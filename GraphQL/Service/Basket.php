@@ -27,6 +27,7 @@ use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 use OxidEsales\PayPalModule\GraphQL\Exception\PaymentValidation;
+use OxidEsales\PayPalModule\Model\PaymentManager;
 
 final class Basket
 {
@@ -82,4 +83,18 @@ final class Basket
         ]);
         $userBasketModel->save();
     }
+
+    public function updateExpressBasketInformation(BasketDataType $basket, string $token): void
+    {
+        $userBasketModel = $basket->getEshopModel();
+        $userBasketModel->assign(
+            [
+                'OEPAYPAL_PAYMENT_TOKEN' => $token,
+                'OEPAYPAL_SERVICE_TYPE'  => PaymentManager::PAYPAL_SERVICE_TYPE_EXPRESS,
+                'OEGQL_PAYMENTID'        => 'oxidpaypal'
+            ]
+        );
+        $userBasketModel->save();
+    }
+
 }

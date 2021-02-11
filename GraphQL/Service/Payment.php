@@ -24,7 +24,10 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\Eshop\Core\Model\BaseModel;
+use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
+use OxidEsales\GraphQL\Storefront\Basket\DataType\BasketOwner as BasketOwnerDataType;
+use OxidEsales\GraphQL\Storefront\Customer\Exception\CustomerNotFound;
 use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
@@ -32,6 +35,7 @@ use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request as RequestInfrastructure;
+use OxidEsales\PayPalModule\Model\PaymentManager;
 use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
 use OxidEsales\Eshop\Application\Model\Basket as EshopBasketModel;
 use OxidEsales\Eshop\Application\Model\User as EshopUserModel;
@@ -111,6 +115,28 @@ final class Payment
         BasketDataType $userBasket,
         ResponseGetExpressCheckoutDetails $expressCheckoutDetails
     ): EshopBasketModel {
+
+        //TODO: at this point we need to check if we have PayPal Express or paypal as standard payment method checkout
+        // and act accordingly
+        if (PaymentManager::PAYPAL_SERVICE_TYPE_EXPRESS == $userBasket->getEshopModel()->getFieldData('OEPAYPAL_SERVICE_TYPE')) {
+            $paymentManager = $this->requestInfrastructure->getPaymentManager();
+            $user = $paymentManager->initializeUserData($expressCheckoutDetails, (string) $userBasket->getUserId());
+
+            if (is_null($user->getSelectedAddressId())) {
+                EshopRegistry::getSession()->deleteVariable('deladrid');
+            }
+
+            //TODO: check if we run into problems here
+            EshopRegistry::getSession()->setVariable('usr', $user->getId());
+
+            $deliveryMethodId = $paymentManager->extractShippingId($expressCheckoutDetails->getShippingOptionName(), $user);
+            $userBasket->getEshopModel()->assign([
+                'OEGQL_DELIVERYMETHODID' => $deliveryMethodId,
+                'OEGQL_DELADDRESSID' => $user->getSelectedAddressId()
+            ]);
+            $userBasket->getEshopModel()->save();
+        }
+
         $sessionBasket = $this->getUserBasketSession($userBasket);
 
         $this->validateApprovedBasketAmount($sessionBasket, $expressCheckoutDetails, $userBasket);
@@ -213,6 +239,45 @@ final class Payment
             $this->getPayPalCommunicationUrl($token)
         );
     }
+
+    public function getPayPalExpressCommunicationInformation(
+        BasketDataType $basket,
+        string $returnUrl,
+        string $cancelUrl,
+        string $callbackUrl,
+        bool $displayBasketInPayPal
+    ): PayPalCommunicationInformation {
+        $paymentManager = $this->requestInfrastructure->getPaymentManager();
+        $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
+        $shipToAddressid = $shipToAddress ? (string) $shipToAddress->id(): '';
+
+        //for Express checkout, the user might not yet exist (anonymous user)
+        try {
+            /** @var BasketOwnerDataType $customer */
+            $owner = $this->getBasketRelationService()->owner($basket);
+            $user = $owner->getEshopModel();
+        } catch (CustomerNotFound $e) {
+            $user = null;
+        }
+
+        $response = $paymentManager->setExpressExpressCheckout(
+            $this->getSharedBasketInfrastructure()->getBasket($basket),
+            $user,
+            $returnUrl,
+            $cancelUrl,
+            $callbackUrl,
+            $displayBasketInPayPal,
+            $shipToAddressid
+        );
+
+        $token = (string) $response->getToken();
+
+        return new PayPalCommunicationInformation(
+            $token,
+            $this->getPayPalCommunicationUrl($token)
+        );
+    }
+
 
     public function getPayPalCommunicationUrl($token): string
     {

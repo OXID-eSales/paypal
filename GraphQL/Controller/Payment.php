@@ -28,6 +28,7 @@ use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
+use OxidEsales\PayPalModule\Model\PaymentManager;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
 
@@ -78,6 +79,37 @@ final class Payment
         );
 
         $this->basketService->updateBasketToken($basket, $communicationInformation->getToken());
+
+        return $communicationInformation;
+    }
+
+    /**
+     * @Query
+     * @Logged
+     * //NOTE: the basket might have a dummy user id (anonymous token)
+     */
+    public function paypalExpressApprovalProcess(
+        string $basketId,
+        string $returnUrl,
+        string $cancelUrl,
+        string $callbackUrl,
+        bool $displayBasketInPayPal
+    ): PayPalCommunicationInformation {
+
+        $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
+
+        $communicationInformation = $this->paymentService->getPayPalExpressCommunicationInformation(
+            $basket,
+            $returnUrl,
+            $cancelUrl,
+            $callbackUrl,
+            $displayBasketInPayPal
+        );
+
+        $this->basketService->updateExpressBasketInformation(
+            $basket,
+            $communicationInformation->getToken()
+        );
 
         return $communicationInformation;
     }

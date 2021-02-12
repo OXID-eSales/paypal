@@ -202,6 +202,59 @@ class PayPalLogin extends Page
         }
     }
 
+    /**
+     * @param string $userName
+     * @param string $userPassword
+     */
+    public function approveGraphqlExpressPayPal(string $userName, string $userPassword): void
+    {
+        $I = $this->user;
+
+        $this->waitForPayPalPage();
+
+        if ($I->seePageHasElement($this->oldLoginSection)) {
+            $I->waitForElementVisible($this->userLoginEmail, 5);
+            $I->fillField($this->userLoginEmail, $userName);
+            $I->waitForElementVisible($this->userPassword, 5);
+            $I->fillField($this->userPassword, $userPassword);
+            $I->retryClick($this->loginButton);
+        }
+
+        if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
+            $I->retryClick($this->oneTouchNotNowLink);
+        }
+
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+
+        if ($I->seePageHasElement($this->gdprContainer)) {
+            $I->executeJS("document.getElementById('" . substr($this->gdprContainer, 1) . "').remove();");
+        }
+
+        $I->wait(3);
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+
+        if ($I->see('Weiter')) {
+            $I->retryClick('Weiter');
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->spinner, 90);
+            $I->waitForElementNotVisible($this->loginSection);
+        }
+
+        if ($I->seePageHasElement($this->paymentConfirmButton)) {
+            $I->retryClick($this->paymentConfirmButton);
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
+        }
+
+        if ($I->seePageHasElement($this->newConfirmButton)) {
+            $I->retryClick($this->newConfirmButton);
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
+        }
+    }
+
     public function waitForPayPalPage(): PayPalLogin
     {
         $I = $this->user;

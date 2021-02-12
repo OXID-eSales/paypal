@@ -280,11 +280,13 @@ trait GraphqlCheckoutTrait
                             firstName
                             lastName
                             street
+                            city
                         }
                         deliveryAddress {
                             firstName
                             lastName
                             street
+                            city
                             country {
                                 id
                             }

@@ -25,13 +25,10 @@ namespace OxidEsales\PayPalModule\GraphQL\Exception;
 
 use OxidEsales\GraphQL\Base\Exception\InvalidRequest;
 
-final class WrongPaymentMethod extends InvalidRequest
+final class PaymentValidation extends InvalidRequest
 {
-    public function __construct(
-        $message = "Payment method should be PayPal",
-        $code = 0,
-        \Throwable $previous = null
-    ) {
-        parent::__construct($message, $code, $previous);
+    public static function paymentMethodIsNotPaypal(): self
+    {
+        return new self('Payment method should be PayPal.');
     }
 }

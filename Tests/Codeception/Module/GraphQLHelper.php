@@ -14,10 +14,11 @@ use Codeception\Module;
 use Codeception\Module\REST;
 use InvalidArgumentException;
 use Lcobucci\JWT\Parser;
-use OxidEsales\Facts\Facts;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
 use PHPUnit\Framework\AssertionFailedError;
 
-class AcceptanceHelper extends Module implements DependsOnModule
+class GraphQLHelper extends Module implements DependsOnModule
 {
     /** @var REST */
     private $rest;
@@ -38,11 +39,6 @@ class AcceptanceHelper extends Module implements DependsOnModule
     public function getRest(): REST
     {
         return $this->rest;
-    }
-
-    public function _beforeSuite($settings = []): void // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-    {
-        exec((new Facts())->getShopRootPath() . '/bin/oe-console oe:module:activate oe_graphql_base');
     }
 
     public function sendGQLQuery(
@@ -127,5 +123,23 @@ class AcceptanceHelper extends Module implements DependsOnModule
         }
 
         return $sid;
+    }
+
+    public function checkGraphBaseActive(): bool
+    {
+        $moduleActivation = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleActivationBridgeInterface::class);
+
+        return (bool) $moduleActivation->isActive('oe_graphql_base', 1);
+    }
+
+    public function checkGraphStorefrontActive(): bool
+    {
+        $moduleActivation = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleActivationBridgeInterface::class);
+
+        return (bool) $moduleActivation->isActive('oe_graphql_storefront', 1);
     }
 }

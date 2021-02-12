@@ -81,8 +81,8 @@ final class Payment
         ResponseGetExpressCheckoutDetails $details = null
     ): PayPalTokenStatus {
         //NOTE: only when the approval was finished on PayPal site
-        //(payment channel and delivery adress registered with PayPal)
-        //the getExpressCHeckoutResponse will contain the PayerId. So we can use this to get information
+        //(payment channel and delivery address registered with PayPal)
+        //the getExpressCheckoutResponse will contain the PayerId. So we can use this to get information
         //about token status. If anything is amiss, PayPal will no let the order pass.
 
         if (is_null($details)) {
@@ -121,7 +121,7 @@ final class Payment
 
     private function getUserBasketSession(BasketDataType $userBasket): EshopBasketModel
     {
-        return $this->sharedBasketInfrastructure->getCalculatedBasket($userBasket);
+        return $this->getSharedBasketInfrastructure()->getCalculatedBasket($userBasket);
     }
 
     private function validateApprovedBasketAddress(
@@ -154,7 +154,7 @@ final class Payment
         EshopBasketModel $sessionBasket,
         BasketDataType $userBasket
     ): BaseModel {
-        $shipToAddress = $this->basketRelationService->deliveryAddress($userBasket);
+        $shipToAddress = $this->getBasketRelationService()->deliveryAddress($userBasket);
         if (!is_null($shipToAddress)) {
             /** @var EshopAddressModel $eshopModel */
             $modelWithAddress = $shipToAddress->getEshopModel();
@@ -193,18 +193,17 @@ final class Payment
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
-        $standardPaypalController = $this->requestInfrastructure->getStandardDispatcher();
 
         $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
-        $shipToAddressid = $shipToAddress ? (string) $shipToAddress->id(): '';
+        $shipToAddressId = $shipToAddress ? (string) $shipToAddress->id(): '';
 
         $response = $paymentManager->setExpressCheckout(
-            $this->getSharedBasketInfrastructure()->getCalculatedBasket($basket),
-            $standardPaypalController->getUser(),
+            $this->getUserBasketSession($basket),
+            $this->getBasketRelationService()->owner($basket)->getEshopModel(),
             $returnUrl,
             $cancelUrl,
             $displayBasketInPayPal,
-            $shipToAddressid
+            $shipToAddressId
         );
 
         $token = (string) $response->getToken();

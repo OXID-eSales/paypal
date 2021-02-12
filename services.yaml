@@ -22,7 +22,6 @@ services:
     class: OxidEsales\PayPalModule\GraphQL\Service\Basket
     public: true
     arguments:
-      $sharedBasketInfrastructure: '@?OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket'
       $basketRelationService: '@?OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService'
 
   OxidEsales\PayPalModule\GraphQL\Service\Payment:

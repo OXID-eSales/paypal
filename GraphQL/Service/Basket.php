@@ -25,39 +25,18 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService;
-use OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket as SharedBasketInfrastructure;
 use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
-use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
-use OxidEsales\PayPalModule\GraphQL\Infrastructure\Request;
+use OxidEsales\PayPalModule\GraphQL\Exception\PaymentValidation;
 
 final class Basket
 {
     /** @var BasketRelationService */
     private $basketRelationService;
 
-    /** @var SharedBasketInfrastructure */
-    private $sharedBasketInfrastructure;
-
-    /** @var Request */
-    private $request;
-
     public function __construct(
-        Request $request,
-        SharedBasketInfrastructure $sharedBasketInfrastructure = null,
         BasketRelationService $basketRelationService = null
     ) {
-        $this->request = $request;
-        $this->sharedBasketInfrastructure = $sharedBasketInfrastructure;
         $this->basketRelationService = $basketRelationService;
-    }
-
-    public function getSharedBasketInfrastructure(): SharedBasketInfrastructure
-    {
-        if (is_null($this->sharedBasketInfrastructure)) {
-            throw GraphQLServiceNotFound::byServiceName(SharedBasketInfrastructure::class);
-        }
-
-        return $this->sharedBasketInfrastructure;
     }
 
     public function getBasketRelationService(): BasketRelationService
@@ -82,12 +61,12 @@ final class Basket
     }
 
     /**
-     * @throws WrongPaymentMethod
+     * @throws PaymentValidation
      */
     public function validateBasketPaymentMethod(BasketDataType $basket): void
     {
         if (!$this->checkBasketPaymentMethodIsPayPal($basket)) {
-            throw new WrongPaymentMethod();
+            throw PaymentValidation::paymentMethodIsNotPaypal();
         }
     }
 

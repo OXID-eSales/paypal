@@ -23,25 +23,20 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Infrastructure;
 
-use OxidEsales\PayPalModule\Controller\StandardDispatcher;
 use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
+use OxidEsales\PayPalModule\Core\PayPalService;
 use OxidEsales\PayPalModule\Model\PaymentManager;
 
 final class Request
 {
-    public function getStandardDispatcher(): StandardDispatcher
-    {
-        return oxNew(StandardDispatcher::class);
-    }
-
     public function getPaymentManager(): PaymentManager
     {
-        return oxNew(PaymentManager::class, $this->getStandardDispatcher()->getPayPalCheckoutService());
+        $payPalCheckoutService = oxNew(PayPalService::class);
+        return oxNew(PaymentManager::class, $payPalCheckoutService);
     }
 
     public function getPayPalConfig(): PayPalConfig
     {
-        $standardPaypalController = $this->getStandardDispatcher();
-        return $standardPaypalController->getPayPalConfig();
+        return oxNew(PayPalConfig::class);
     }
 }

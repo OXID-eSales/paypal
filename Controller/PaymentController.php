@@ -21,7 +21,6 @@
 
 namespace OxidEsales\PayPalModule\Controller;
 
-use OxidEsales\PayPalModule\Core\PayPalCheckValidator;
 use OxidEsales\PayPalModule\Model\PaymentManager;
 use OxidEsales\PayPalModule\Core\PayPalService;
 

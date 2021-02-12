@@ -43,7 +43,7 @@ modules:
         shop_path: '%SHOP_SOURCE_PATH%'
         paths: 'Application/views/flow,Application/views/admin,modules/oe/oepaypal/translations,modules/oe/oepaypal/views/admin'
     - \OxidEsales\Codeception\Module\OxideshopModules
-    - \OxidEsales\PayPalModule\Tests\Codeception\Module\AcceptanceHelper:
+    - \OxidEsales\PayPalModule\Tests\Codeception\Module\GraphQLHelper:
         depends:
           - REST
 step_decorators:

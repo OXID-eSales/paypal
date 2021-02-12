@@ -39,7 +39,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $session->setVariable("oepaypal", "1");
         try {
-            $selectedAddressId = $this->getUser()? (string) $this->getUser()->getSelectedAddressId() : '';
+            $selectedAddressId = $this->getUser() ? (string) $this->getUser()->getSelectedAddressId() : '';
             $paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
             $result = $paymentManager->setExpressCheckout(
                 $session->getBasket(),

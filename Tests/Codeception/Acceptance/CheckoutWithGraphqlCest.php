@@ -6,17 +6,14 @@
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
+use OxidEsales\GraphQL\Storefront\Basket\Exception\BasketAccessForbidden;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
-use OxidEsales\Facts\Facts;
 use Codeception\Util\Fixtures;
 use Codeception\Scenario;
 use Codeception\Util\HttpCode;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
-use TheCodingMachine\GraphQLite\Types\ID;
-use OxidEsales\PayPalModule\GraphQL\Exception\WrongPaymentMethod;
+use OxidEsales\PayPalModule\GraphQL\Exception\PaymentValidation;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
-use OxidEsales\Codeception\Module\Translation\Translator;
-use OxidEsales\GraphQL\Storefront\Basket\Exception\PlaceOrder;
 
 class CheckoutWithGraphqlCest
 {
@@ -24,28 +21,12 @@ class CheckoutWithGraphqlCest
 
     use GraphqlCheckoutTrait;
 
-    public function _beforeSuite($settings = []): void // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-    {
-        $rootPath      = (new Facts())->getShopRootPath();
-        $possiblePaths = [
-            '/bin/oe-console',
-            '/vendor/bin/oe-console',
-        ];
-
-        foreach ($possiblePaths as $path) {
-            if (is_file($rootPath . $path)) {
-                exec($rootPath . $path . ' oe:module:activate oe_graphql_base');
-                exec($rootPath . $path . ' oe:module:activate oe_graphql_storefront');
-
-                return;
-            }
-        }
-
-        throw new Exception('Could not find script "/bin/oe-console" to activate module');
-    }
-
     public function _before(AcceptanceTester $I, Scenario $scenario): void
     {
+        if (!($I->checkGraphBaseActive() && $I->checkGraphStorefrontActive())) {
+            $I->markTestSkipped('GraphQL modules are not active');
+        }
+
         $I->updateConfigInDatabase('blPerfNoBasketSaving', false, 'bool');
         $I->updateConfigInDatabase('blCalculateDelCostIfNotLoggedIn', false, 'bool');
         $I->updateConfigInDatabase('iVoucherTimeout', 10800, 'int'); // matches default value
@@ -328,7 +309,7 @@ class CheckoutWithGraphqlCest
      */
     public function checkoutWithGraphqlEmptyBasket(AcceptanceTester $I)
     {
-        $I->wantToTest('placing an order fails with PayPal via graphql not started');
+        $I->wantToTest('placing an order fails with PayPal via graphql with empty basket');
         $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword(), 0);
 
         //prepare basket
@@ -337,8 +318,8 @@ class CheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId, HttpCode::INTERNAL_SERVER_ERROR);
 
-        $expectedMessage = (new WrongPaymentMethod())->getMessage();
-        $I->assertEquals($expectedMessage, $approvalDetails['errors'][0]['message']);
+        $expectedException = PaymentValidation::paymentMethodIsNotPaypal();
+        $I->assertEquals($expectedException->getMessage(), $approvalDetails['errors'][0]['message']);
     }
 
     /**
@@ -423,7 +404,7 @@ class CheckoutWithGraphqlCest
         );
 
         //place the order
-        $result  = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
+        $result = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
 
         $I->assertStringContainsString(
         //TODO: use Codeception Translator when it is possible to switch the language:
@@ -451,8 +432,8 @@ class CheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId, HttpCode::INTERNAL_SERVER_ERROR);
 
-        $expectedMessage = (new WrongPaymentMethod())->getMessage();
-        $I->assertEquals($expectedMessage, $approvalDetails['errors'][0]['message']);
+        $expectedException = PaymentValidation::paymentMethodIsNotPaypal();
+        $I->assertEquals($expectedException->getMessage(), $approvalDetails['errors'][0]['message']);
     }
 
     /**
@@ -515,5 +496,48 @@ class CheckoutWithGraphqlCest
         //token is approved
         $result = $this->paypalTokenStatus($I, $approvalDetails['data']['paypalApprovalProcess']['token']);
         $I->assertTrue($result['data']['paypalTokenStatus']['status']);
+    }
+
+    /**
+     * @group paypal_external
+     * @group paypal_buyerlogin
+     * @group paypal_checkout
+     * @group paypal_graphql
+     */
+    public function checkoutWithGraphqlPlaceOrderWhichDoesNotBelongToYou(AcceptanceTester $I)
+    {
+        $I->wantToTest('placing an order with PayPal via graphql which does not belong to you');
+        $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword(), 0);
+
+        //prepare basket
+        $basketId = $this->createBasket($I, 'my_cart_one');
+        $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 2);
+        $this->setBasketDeliveryMethod($I, $basketId, Fixtures::get('shipping')['standard']);
+        $this->setBasketPaymentMethod($I, $basketId, Fixtures::get('payment_id'));
+
+        //Get token and approval url, make customer approve the payment
+        $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
+        $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
+        $loginPage = new PayPalLogin($I);
+        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+
+        $I->logoutFromGraphQLApi();
+        $I->haveInDatabase('oxuser', $I->getExistingUserData());
+        $I->loginToGraphQLApi($I->getExistingUserName(), $I->getExistingUserPassword(), 0);
+
+        //place the order
+        $result = $this->placeOrder($I, $basketId, HttpCode::UNAUTHORIZED);
+        $I->assertStringContainsString(
+            BasketAccessForbidden::byAuthenticatedUser()->getMessage(),
+            $result['errors'][0]['message']
+        );
+
+        $I->logoutFromGraphQLApi();
+        $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword(), 0);
+
+        $result  = $this->placeOrder($I, $basketId);
+        $orderId = $result['data']['placeOrder']['id'];
+
+        $I->assertNotEmpty($orderId);
     }
 }

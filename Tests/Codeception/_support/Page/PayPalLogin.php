@@ -224,20 +224,35 @@ class PayPalLogin extends Page
             $I->retryClick($this->oneTouchNotNowLink);
         }
 
+        $I->waitForElementNotVisible($this->preloaderSpinner, 30);
         $I->waitForElementNotVisible($this->globalSpinner, 30);
+        $I->waitForElementNotVisible($this->spinner, 30);
 
         if ($I->seePageHasElement($this->gdprContainer)) {
             $I->executeJS("document.getElementById('" . substr($this->gdprContainer, 1) . "').remove();");
         }
+        if ($I->seePageHasElement($this->gdprCookieBanner)) {
+            $I->executeJS("document.getElementById('" . substr($this->gdprCookieBanner, 1) . "').remove();");
+        }
 
-        $I->wait(3);
+        $I->waitForElementNotVisible($this->preloaderSpinner, 30);
         $I->waitForElementNotVisible($this->globalSpinner, 30);
+        $I->waitForElementNotVisible($this->spinner, 30);
+        $I->wait(3);
 
-        if ($I->see('Weiter')) {
-            $I->retryClick('Weiter');
+
+        if ($I->seePageHasElement($this->newConfirmButton)) {
+            $I->retryClick($this->newConfirmButton);
             $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->spinner, 90);
-            $I->waitForElementNotVisible($this->loginSection);
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
+        }
+
+        if ($I->seePageHasElement("//input[@id='" . $this->newConfirmButton . "']")) {
+            $I->executeJS("document.getElementById('" . substr($this->newConfirmButton, 1) . "').submit();");
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
         }
 
         if ($I->seePageHasElement($this->paymentConfirmButton)) {
@@ -247,12 +262,8 @@ class PayPalLogin extends Page
             $I->wait(10);
         }
 
-        if ($I->seePageHasElement($this->newConfirmButton)) {
-            $I->retryClick($this->newConfirmButton);
-            $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->globalSpinner, 60);
-            $I->wait(10);
-        }
+        //we should be back to shop frontend as we sent a redirect url to paypal
+        $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
     }
 
     public function waitForPayPalPage(): PayPalLogin

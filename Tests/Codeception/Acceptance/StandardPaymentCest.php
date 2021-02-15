@@ -11,7 +11,6 @@ use OxidEsales\Codeception\Page\Checkout\ThankYou;
 use OxidEsales\Codeception\Step\Basket;
 use OxidEsales\Codeception\Page\Checkout\Basket as BasketCheckout;
 use OxidEsales\Codeception\Page\Checkout\PaymentCheckout;
-use OxidEsales\Codeception\Page\Checkout\OrderCheckout;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use OxidEsales\Codeception\Module\Translation\Translator;

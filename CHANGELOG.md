@@ -10,14 +10,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - PayPal as payment method for OXID GraphQL Storefront module:
   - services.yaml
   - Code in namespace `\OxidEsales\PayPalModule\GraphQL\`
-  - Codeception tests in group `paypal_graphql`
+  - Codeception tests in group `paypal_graphql` resp. `paypal_checkout`.
   - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setToken()`
   - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getToken()`
   - `\OxidEsales\PayPalModule\Model\PaymentManager`
   - Column `oxuserbaskets.OEPAYPAL_PAYMENT_TOKEN` to hold the PayPal token needed for GraphQL checkout.
+  - Column `oxuser.OEPAYPAL_ANON_USERID` to relate an anonymous user to his shop account if existing.
+  - Method:
+    - `\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::processGraphQLCallBack()`
+    - `\OxidEsales\PayPalModule\Model\User::setAnonymousUserId()`
+    - `\OxidEsales\PayPalModule\Model\User::getAnonymousId()`
+    - `\OxidEsales\PayPalModule\Model\User::load()`
+    - `\OxidEsales\PayPalModule\Model\User::hasNoInvoiceAddress()`
+    - `\OxidEsales\PayPalModule\Model\User::setGrouspAfterUserCreation()`
+    - `\OxidEsales\PayPalModule\Model\User::setInvoiceDataFromPayPalResult()`
 
 ### Changed
-- Changes visibility from protected to public for the following methods:
+- Changed visibility from protected to public for the following methods:
    `\OxidEsales\PayPalModule\Model\Address::prepareDataPayPalAddress()`
    `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getReturnUrl()`
    `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getCancelUrl()`

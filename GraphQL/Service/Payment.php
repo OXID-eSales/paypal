@@ -116,23 +116,25 @@ final class Payment
         ResponseGetExpressCheckoutDetails $expressCheckoutDetails
     ): EshopBasketModel {
 
-        //TODO: at this point we need to check if we have PayPal Express or paypal as standard payment method checkout
+        //At this point we need to check if we have PayPal Express or paypal as standard payment method checkout
         // and act accordingly
         if (PaymentManager::PAYPAL_SERVICE_TYPE_EXPRESS == $userBasket->getEshopModel()->getFieldData('OEPAYPAL_SERVICE_TYPE')) {
             $paymentManager = $this->requestInfrastructure->getPaymentManager();
             $user = $paymentManager->initializeUserData($expressCheckoutDetails, (string) $userBasket->getUserId());
 
+            $userBasket->getEshopModel()->setUser($user);
+
             if (is_null($user->getSelectedAddressId())) {
                 EshopRegistry::getSession()->deleteVariable('deladrid');
             }
 
-            //TODO: check if we run into problems here
             EshopRegistry::getSession()->setVariable('usr', $user->getId());
+            EshopRegistry::getSession()->setUser($user);
 
             $deliveryMethodId = $paymentManager->extractShippingId($expressCheckoutDetails->getShippingOptionName(), $user);
             $userBasket->getEshopModel()->assign([
                 'OEGQL_DELIVERYMETHODID' => $deliveryMethodId,
-                'OEGQL_DELADDRESSID' => $user->getSelectedAddressId()
+                'OEGQL_DELADDRESSID'     => $user->getSelectedAddressId()
             ]);
             $userBasket->getEshopModel()->save();
         }
@@ -264,6 +266,7 @@ final class Payment
             $user,
             $returnUrl,
             $cancelUrl,
+            $paymentManager->getGraphQLCallBackUrl((string) $basket->id()),
             $displayBasketInPayPal,
             $shipToAddressid
         );

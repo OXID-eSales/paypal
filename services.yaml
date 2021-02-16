@@ -9,6 +9,7 @@ services:
     public: true
     calls:
       - [setStorefrontBasketService, ['@?OxidEsales\GraphQL\Storefront\Basket\Service\Basket']]
+      - [setAuthenticationService, ['@?OxidEsales\GraphQL\Base\Service\Authentication']]
 
   OxidEsales\PayPalModule\GraphQL\Service\NamespaceMapper:
     class: OxidEsales\PayPalModule\GraphQL\Service\NamespaceMapper
@@ -36,3 +37,7 @@ services:
     public: true
     arguments:
       $storefrontBasketService: '@?OxidEsales\GraphQL\Storefront\Basket\Service\Basket'
+
+  OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider:
+    class: OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider
+    tags: ['graphql_permission_provider']

@@ -23,20 +23,29 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
-final class NamespaceMapper
+final class PermissionProvider
 {
-    public function getControllerNamespaceMapping(): array
+    public function getPermissions(): array
     {
         return [
-            '\\OxidEsales\\PayPalModule\\GraphQL\\Controller' => __DIR__ . '/../Controller/',
-        ];
-    }
-
-    public function getTypeNamespaceMapping(): array
-    {
-        return [
-            '\\OxidEsales\\PayPalModule\\GraphQL\\DataType' => __DIR__ . '/../DataType/',
-            '\\OxidEsales\\PayPalModule\\GraphQL\\Service' => __DIR__ . '/../Service/',
+            'oxidcustomer' => [
+                'PAYPAL_EXPRESS_APPROVAL',
+                'PAYPAL_TOKEN_STATUS'
+            ],
+            'oxidnotyetordered' => [
+                'PAYPAL_EXPRESS_APPROVAL',
+                'PAYPAL_TOKEN_STATUS'
+            ],
+            'oxidanonymous' => [
+                'CREATE_BASKET',
+                'ADD_PRODUCT_TO_BASKET',
+                'REMOVE_BASKET_PRODUCT',
+                'ADD_VOUCHER',
+                'REMOVE_VOUCHER',
+                'PLACE_ORDER',
+                'PAYPAL_EXPRESS_APPROVAL',
+                'PAYPAL_TOKEN_STATUS'
+            ],
         ];
     }
 }

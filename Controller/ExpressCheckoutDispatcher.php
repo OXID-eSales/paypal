@@ -39,6 +39,18 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
     protected $paymentManager = null;
 
     /**
+     * Processes PayPal callback for graphql
+     */
+    public function processGraphQLCallBack()
+    {
+        $basketid = $this->getRequest()->getRequestParameter("basketid");
+        $sessionBasket = $this->getPaymentManager()->prepareCallback($basketid);
+        \OxidEsales\Eshop\Core\Registry::getSession()->setBasket($sessionBasket);
+
+        return $this->processCallBack();
+    }
+
+    /**
      * Processes PayPal callback
      */
     public function processCallBack()
@@ -68,7 +80,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
 
             if ($this->getPayPalConfig()->isDeviceMobile()) {
                 $basket->setShipping($this->getPayPalConfig()->getMobileECDefaultShippingId());
-                $shippingId = $this->getPayPalConfig()->getMobileECDefaultShippingId();
+                $shippingId = (string) $this->getPayPalConfig()->getMobileECDefaultShippingId();
             }
 
             $result = $this->getPaymentManager()->setExpressExpressCheckout(
@@ -143,8 +155,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
             return "payment";
         }
 
-        $deliverySetList = $session->getVariable("oepaypal-oxDelSetList");
-        $shippingId = $this->getPaymentManager()->extractShippingId(urldecode($details->getShippingOptionName()), $user, $deliverySetList);
+        $shippingId = $this->extractShippingId(urldecode($details->getShippingOptionName()), $user);
 
         $this->setAnonymousUser($basket, $user);
 
@@ -486,10 +497,43 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     protected function initializeUserData($details)
     {
-         return $this->getPaymentManager()->initializeUserData(
-            $details,
-            (string) \OxidEsales\Eshop\Core\Registry::getSession()->getVariable('usr')
-        );
+        $session = \OxidEsales\Eshop\Core\Registry::getSession();
+        $userEmail = $details->getEmail();
+        $loggedUser = $this->getUser();
+        if ($loggedUser) {
+            $userEmail = $loggedUser->oxuser__oxusername->value;
+        }
+
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        if ($userId = $user->isRealPayPalUser($userEmail)) {
+            // if user exist
+            $user->load($userId);
+
+            if (!$loggedUser) {
+                if (!$user->isSamePayPalUser($details)) {
+                    /**
+                     * @var $exception \OxidEsales\Eshop\Core\Exception\StandardException
+                     */
+                    $exception = oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class);
+                    $exception->setMessage('OEPAYPAL_ERROR_USER_ADDRESS');
+                    throw $exception;
+                }
+            } elseif (!$user->isSameAddressUserPayPalUser($details) || !$user->isSameAddressPayPalUser($details)) {
+                // user has selected different address in PayPal (not equal with usr shop address)
+                // so adding PayPal address as new user address to shop user account
+                $this->createUserAddress($details, $userId);
+            } else {
+                // removing custom shipping address ID from session as user uses billing
+                // address for shipping
+                $session->deleteVariable('deladrid');
+            }
+        } else {
+            $user->createPayPalUser($details);
+        }
+
+        $session->setVariable('usr', $user->getId());
+
+        return $user;
     }
 
     /**

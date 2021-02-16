@@ -23,14 +23,15 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Controller;
 
+use OxidEsales\GraphQL\Base\Service\Authentication;
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
 use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
-use OxidEsales\PayPalModule\Model\PaymentManager;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
+use TheCodingMachine\GraphQLite\Annotations\Right;
 
 final class Payment
 {
@@ -43,17 +44,27 @@ final class Payment
     /** @var StorefrontBasketService */
     private $storefrontBasketService;
 
+    /** @var Authentication\ */
+    private $authenticationService;
+
     public function __construct(
         PaymentService $paymentService,
-        BasketService $basketService
+        BasketService $basketService,
+        Authentication $authenticationService = null
     ) {
         $this->paymentService = $paymentService;
         $this->basketService = $basketService;
+        $this->authenticationService = $authenticationService;
     }
 
     public function setStorefrontBasketService(StorefrontBasketService $storefrontBasketService): void
     {
         $this->storefrontBasketService = $storefrontBasketService;
+    }
+
+    public function setAuthenticationService(Authentication $authenticationService): void
+    {
+        $this->authenticationService = $authenticationService;
     }
 
     /**
@@ -85,16 +96,15 @@ final class Payment
 
     /**
      * @Query
-     * @Logged
-     * //NOTE: the basket might have a dummy user id (anonymous token)
+     * @Right("PAYPAL_EXPRESS_APPROVAL")
      */
     public function paypalExpressApprovalProcess(
         string $basketId,
         string $returnUrl,
         string $cancelUrl,
         bool $displayBasketInPayPal
-    ): PayPalCommunicationInformation {
-
+    ): PayPalCommunicationInformation
+    {
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
 
         $communicationInformation = $this->paymentService->getPayPalExpressCommunicationInformation(
@@ -114,7 +124,7 @@ final class Payment
 
     /**
      * @Query()
-     * @Logged()
+     * @Right("PAYPAL_TOKEN_STATUS")
      */
     public function paypalTokenStatus(string $paypalToken): PayPalTokenStatus
     {

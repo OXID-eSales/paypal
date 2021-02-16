@@ -7,6 +7,7 @@
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
 use OxidEsales\GraphQL\Storefront\Basket\Exception\BasketAccessForbidden;
+use OxidEsales\GraphQL\Storefront\Country\Exception\CountryNotFound;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use Codeception\Util\Fixtures;
 use Codeception\Scenario;
@@ -83,6 +84,36 @@ class CheckoutWithGraphqlCest
         $orderId = $result['data']['placeOrder']['id'];
 
         $I->assertNotEmpty($orderId);
+    }
+
+    /**
+     * @group paypal_external
+     * @group paypal_buyerlogin
+     * @group paypal_checkout
+     * @group paypal_graphql
+     */
+    public function checkoutWithGraphqlNewUserWithoutInvoiceAddress(AcceptanceTester $I)
+    {
+        $I->wantToTest('placing an order with PayPal via graphql for newly registered user without invoice address');
+
+        //register customer via graphql, he's in 'oxidnotyetordered' group.
+        $username     = 'newPayPalUser@oxid-esales.com';
+        $password     = 'useruser';
+        $this->registerCustomer($I, $username, $password);
+
+        //log in to graphql
+        $I->loginToGraphQLApi($username, $password);
+
+        //prepare basket
+        $basketId = $this->createBasket($I, 'my_cart_one');
+        $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 2);
+
+        //this is as far as we get in this case because of missing invoice country
+        $shippingId = Fixtures::get('shipping')['standard'];
+        $result = $this->setBasketDeliveryMethod($I, $basketId, $shippingId, HttpCode::NOT_FOUND);
+
+        $expectedException = CountryNotFound::byId('');
+        $I->assertStringContainsString($expectedException->getMessage(), $result);
     }
 
     /**
@@ -523,6 +554,7 @@ class CheckoutWithGraphqlCest
 
         $I->logoutFromGraphQLApi();
         $I->haveInDatabase('oxuser', $I->getExistingUserData());
+        $I->haveInDatabase('oxobject2group', Fixtures::get('usergroups'));
         $I->loginToGraphQLApi($I->getExistingUserName(), $I->getExistingUserPassword(), 0);
 
         //place the order

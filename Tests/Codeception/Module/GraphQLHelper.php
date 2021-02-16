@@ -79,6 +79,19 @@ class GraphQLHelper extends Module implements DependsOnModule
         $this->rest->amBearerAuthenticated($this->grabTokenFromResponse());
     }
 
+    public function anonymousLoginToGraphQLApi(int $shopId = 1): void
+    {
+        $this->logoutFromGraphQLApi();
+
+        $query     = 'query{token}';
+
+        $this->sendGQLQuery($query, [], 0, $shopId);
+        $this->rest->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+        $this->rest->seeResponseIsJson();
+        $this->seeResponseContainsValidJWTToken();
+
+        $this->rest->amBearerAuthenticated($this->grabTokenFromResponse());
+    }
     public function logoutFromGraphQLApi(): void
     {
         $this->rest->deleteHeader('Authorization');

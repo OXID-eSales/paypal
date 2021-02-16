@@ -90,6 +90,7 @@ final class BeforePlaceOrder
             $session = EshopRegistry::getSession();
             $session->setBasket($sessionBasket);
             $session->setVariable('oepaypal-token', $token);
+            $session->setVariable("oepaypal-userId", $sessionBasket->getUser()->getId());
             $session->setVariable('oepaypal-payerId', $tokenStatus->getPayerId());
         }
     }

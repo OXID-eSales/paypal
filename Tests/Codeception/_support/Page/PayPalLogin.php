@@ -54,6 +54,8 @@ class PayPalLogin extends Page
 
     public $paypalBannerContainer = "//div[@id='paypal-installment-banner-container']";
 
+    public $backToInputEmail = "#backToInputEmailLink";
+
     /**
      * @param string $userName
      * @param string $userPassword
@@ -138,6 +140,11 @@ class PayPalLogin extends Page
         if ($I->seePageHasElement($this->oldLoginSection)) {
             $I->waitForElementVisible($this->userLoginEmail, 5);
             $I->fillField($this->userLoginEmail, $userName);
+
+            if ($I->seePageHasElement($this->nextButton)) {
+                $I->retryClick($this->nextButton);
+            }
+
             $I->waitForElementVisible($this->userPassword, 5);
             $I->fillField($this->userPassword, $userPassword);
             $I->retryClick($this->loginButton);
@@ -211,56 +218,18 @@ class PayPalLogin extends Page
         $I = $this->user;
 
         $this->waitForPayPalPage();
+        $this->waitForSpinnerDisappearance();
+        $this->removeCookieConsent();
 
-        if ($I->seePageHasElement($this->oldLoginSection)) {
-            $I->waitForElementVisible($this->userLoginEmail, 5);
-            $I->fillField($this->userLoginEmail, $userName);
-            $I->waitForElementVisible($this->userPassword, 5);
-            $I->fillField($this->userPassword, $userPassword);
-            $I->retryClick($this->loginButton);
-        }
-
-        if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
-            $I->retryClick($this->oneTouchNotNowLink);
-        }
-
-        $I->waitForElementNotVisible($this->preloaderSpinner, 30);
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
-        $I->waitForElementNotVisible($this->spinner, 30);
-
-        if ($I->seePageHasElement($this->gdprContainer)) {
-            $I->executeJS("document.getElementById('" . substr($this->gdprContainer, 1) . "').remove();");
-        }
-        if ($I->seePageHasElement($this->gdprCookieBanner)) {
-            $I->executeJS("document.getElementById('" . substr($this->gdprCookieBanner, 1) . "').remove();");
-        }
-
-        $I->waitForElementNotVisible($this->preloaderSpinner, 30);
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
-        $I->waitForElementNotVisible($this->spinner, 30);
+        $this->loginToPayPal($userName, $userPassword);
+        $this->waitForSpinnerDisappearance();
         $I->wait(3);
 
+        $this->confirmPayPal();
 
-        if ($I->seePageHasElement($this->newConfirmButton)) {
-            $I->retryClick($this->newConfirmButton);
-            $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->globalSpinner, 60);
-            $I->wait(10);
-        }
-
-        if ($I->seePageHasElement("//input[@id='" . $this->newConfirmButton . "']")) {
-            $I->executeJS("document.getElementById('" . substr($this->newConfirmButton, 1) . "').submit();");
-            $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->globalSpinner, 60);
-            $I->wait(10);
-        }
-
-        if ($I->seePageHasElement($this->paymentConfirmButton)) {
-            $I->retryClick($this->paymentConfirmButton);
-            $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->globalSpinner, 60);
-            $I->wait(10);
-        }
+        //retry
+        $this->waitForSpinnerDisappearance();
+        $this->confirmPayPal();
 
         //we should be back to shop frontend as we sent a redirect url to paypal
         $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
@@ -277,10 +246,17 @@ class PayPalLogin extends Page
         if ($I->seePageHasElement($this->loginSection)) {
             $I->click('.loginRedirect a');
             $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->spinner, 90);
+            $this->waitForSpinnerDisappearance();
             $I->waitForElementNotVisible($this->loginSection);
          }
-
+   /*
+        if ($I->seePageHasElement($this->backToInputEmail)) {
+            $I->retryClick($this->backToInputEmail);
+            $I->waitForDocumentReadyState();
+            $this->waitForSpinnerDisappearance();
+            $I->waitForElementNotVisible($this->loginSection);
+        }
+*/
         return $this;
     }
 

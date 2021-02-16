@@ -24,13 +24,14 @@ namespace OxidEsales\PayPalModule\Model;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Application\Model\User as EshopUserModel;
+use OxidEsales\Eshop\Application\Model\UserBasket as EshopUserBasketModel;
 use OxidEsales\Eshop\Application\Model\DeliverySetList as EshopDeliverySetListModel;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Exception\ArticleException as EshopArticleException;
 use OxidEsales\Eshop\Core\Exception\StandardException as EshopStandardException;
 use OxidEsales\PayPalModule\Core\Config as PayPalConfig;
 use OxidEsales\PayPalModule\Core\Exception\PayPalException;
 use OxidEsales\PayPalModule\Core\PayPalService;
-use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
 use OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder;
 use OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder;
 use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
@@ -96,6 +97,7 @@ class PaymentManager
         ?User $user,
         string $returnUrl,
         string $cancelUrl,
+        string $callbackUrl,
         bool $showCartInPayPal,
         string $shippingId = ''
     ): ResponseSetExpressCheckout
@@ -105,14 +107,14 @@ class PaymentManager
         $basket->setShipping($shippingId);
 
         //calculate basket
-        //in case of mobile device, the basket needs to come with mobile default shipping id
+        $mobileDefaultShippingId = $this->payPalConfig->getMobileECDefaultShippingId();
         $prevOptionValue = Registry::getConfig()->getConfigParam('blCalculateDelCostIfNotLoggedIn');
         Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', false);
-        if ($shippingId === $this->payPalConfig->getMobileECDefaultShippingId()) {
-            Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
-        } else {
-            $builder->setCallBackUrl($this->getCallBackUrl());
+        if (!$this->payPalConfig->isDeviceMobile()) {
+            $builder->setCallBackUrl($callbackUrl);
             $builder->setMaxDeliveryAmount($this->payPalConfig->getMaxPayPalDeliveryAmount());
+        } elseif (!empty($mobileDefaultShippingId) && ($shippingId === $mobileDefaultShippingId)) {
+            Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
         }
 
         $basket->setPayment("oxidpaypal");
@@ -121,7 +123,7 @@ class PaymentManager
         $basket->calculateBasket(true);
         Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', $prevOptionValue);
 
-        $this->validatePayment($user, $basket);
+        $this->validatePayment($user, $basket, true);
 
         $builder->setPayPalConfig($this->payPalConfig);
         $builder->setBasket($basket);
@@ -199,10 +201,10 @@ class PaymentManager
 
         /** @var EshopUserModel $user */
         $authenticatedUser = oxNew(EshopUserModel::class);
-        $userExists = false;
+        $authenticatedUserExists = false;
         if ($authenticatedUser->load($authenticatedUserId)) {
             $userEmail = $authenticatedUser->getFieldData('oxusername');
-            $userExists = true;
+            $authenticatedUserExists = true;
         }
 
         $user = oxNew(EshopUserModel::class);
@@ -210,12 +212,18 @@ class PaymentManager
             // if user exist
             $user->load($userId);
 
-            if (!$userExists) {
-                if (!$user->isSamePayPalUser($details)) {
+            if (!$authenticatedUserExists) {
+                if ($user->hasNoInvoiceAddress()) {
+                    //this can only happen when user was registered via graphql, is anonymous and did not yet set invoice data
+                    $user->setInvoiceDataFromPayPalResult($details);
+                } elseif (!$user->isSamePayPalUser($details)) {
                     $exception = new EshopStandardException();
                     $exception->setMessage('OEPAYPAL_ERROR_USER_ADDRESS');
                     throw $exception;
                 }
+            } elseif ($user->hasNoInvoiceAddress()) {
+                //this can only happen when user was registered via graphql, is logged in and did not yet set invoice data
+                $user->setInvoiceDataFromPayPalResult($details);
             } elseif (!$user->isSameAddressUserPayPalUser($details) || !$user->isSameAddressPayPalUser($details)) {
                 // user has selected different address in PayPal (not equal with usr shop address)
                 // so adding PayPal address as new user address to shop user account
@@ -227,16 +235,20 @@ class PaymentManager
                 $user->setSelectedAddressId(null);
             }
         } else {
+            $user->setId($authenticatedUserId);
             $user->createPayPalUser($details);
+            $user->load($authenticatedUserId);
         }
+
+        $user->setAnonymousUserId($authenticatedUserId);
 
         return $user;
     }
 
     public function extractShippingId(
         string $shippingOptionName,
-        EshopUserModel $user,
-        ?EshopDeliverySetListModel $deliverySetList = null
+        ?EshopUserModel $user = null,
+        array $deliverySetList = null
     ): ?string
     {
         $result = null;
@@ -268,7 +280,7 @@ class PaymentManager
         if ($user->getSelectedAddressId() && $user->getSelectedAddress()) {
             $countryId = $user->getSelectedAddress()->getFieldData('oxcountryid');
         } else {
-            $countryId = $user->getFieldData('oxcountryid');
+            $countryId = (string) $user->getFieldData('oxcountryid');
         }
 
         return $countryId;
@@ -291,7 +303,7 @@ class PaymentManager
         $nameCounts = [];
 
         foreach ($deliverySetList as $deliverySet) {
-            $deliverySetName = trim($deliverySet->getFieldData('oxtitle'));
+            $deliverySetName = trim($deliverySet->oxdeliveryset__oxtitle->value);
 
             if (isset($nameCounts[$deliverySetName])) {
                 $nameCounts[$deliverySetName] += 1;
@@ -300,23 +312,55 @@ class PaymentManager
             }
 
             $suffix = ($nameCounts[$deliverySetName] > 1) ? " (" . $nameCounts[$deliverySetName] . ")" : '';
-            $result[$deliverySet->getFieldData('oxid')] = $this->reencodeHtmlEntities($deliverySetName . $suffix);
+            $result[$deliverySet->oxdeliveryset__oxid->value] = $this->reencodeHtmlEntities($deliverySetName . $suffix);
         }
 
         return $result;
     }
 
-    /**
-     * TODO: we add session information to callback url (sid, rtoken) but we don't do session with graphql.
-     * Nevertheless the session will exist on the server and the callback can use it.
-     * Needs to be covered by anonymous user tests.
-     */
-    public function getCallBackUrl(): string
+    public function prepareCallback(string $basketId): Basket
     {
-        $baseUrl = Registry::getConfig()->getSslShopUrl() . "index.php?lang=" . Registry::getLang()->getBaseLanguage() .
-                   "&sid=" . Registry::getSession()->getId() . "&rtoken=" . Registry::getSession()->getRemoteAccessToken() .
-                   "&shp=" . Registry::getConfig()->getShopId();
+        $sessionBasket = oxNew(Basket::class);
+        $userBasket = oxNew(EshopUserBasketModel::class);
+        if (!$userBasket->load($basketId)) {
+            return $sessionBasket;
+        }
 
-        return Registry::getSession()->processUrl($baseUrl . "&cl=oepaypalexpresscheckoutdispatcher&fnc=processCallBack");
+        foreach ($userBasket->getItems() as $basketItem) {
+            try {
+                $selectList = $basketItem->getSelList();
+
+                $sessionBasket->addToBasket(
+                    $basketItem->getFieldData('oxartid'),
+                    $basketItem->getFieldData('oxamount'),
+                    $selectList,
+                    $basketItem->getPersParams(),
+                    true
+                );
+            } catch (EshopArticleException $exception) {
+                // caught and ignored
+            }
+        }
+
+        //calculate the basket
+        Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
+        if ($userBasket->getFieldData('OEGQL_DELIVERYMETHODID')) {
+            $sessionBasket->setShipping($userBasket->getFieldData('OEGQL_DELIVERYMETHODID'));
+        }
+        $sessionBasket->calculateBasket(true);
+
+        return $sessionBasket;
+    }
+
+    /**
+     * We do not have the session stored when using the graphql API.
+     * Callback needs to use the basket id instead.
+     */
+    public function getGraphQLCallBackUrl(string $basketId): string
+    {
+        return Registry::getConfig()->getSslShopUrl() . "index.php?lang=" . Registry::getLang()->getBaseLanguage() .
+                   "&basketid=" . $basketId .
+                   "&shp=" . Registry::getConfig()->getShopId() .
+                   "&cl=oepaypalexpresscheckoutdispatcher&fnc=processGraphQLCallBack";
     }
 }

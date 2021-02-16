@@ -100,7 +100,7 @@ trait GraphqlCheckoutTrait
         ';
         $result = $this->getGQLResponse($I, $mutation, $variables, $status);
 
-        if ($status === HttpCode::BAD_REQUEST) {
+        if (($status === HttpCode::BAD_REQUEST) || ($status === HttpCode::NOT_FOUND)) {
             return (string) $result['errors'][0]['message'];
         }
 
@@ -321,5 +321,73 @@ trait GraphqlCheckoutTrait
         }
 
         return $result;
+    }
+
+
+    protected function registerCustomer(AcceptanceTester $I, string $email, string $password = 'useruser'): array
+    {
+        $variables = [
+            'email'    => $email,
+            'password' => $password,
+            'name',
+        ];
+
+        $mutation = 'mutation ($email: String!, $password: String!) {
+            customerRegister (
+                customer: {
+                    email:    $email,
+                    password: $password
+                }
+            ) {
+                id
+                email
+            }
+        }';
+
+        $result = $this->getGQLResponse($I, $mutation, $variables, HttpCode::OK);
+
+        return $result['data']['customerRegister'];
+    }
+
+    protected function setInvoiceAddress(AcceptanceTester $I): array
+    {
+        $variables = [
+            'firstName'    => 'Test',
+            'lastName'     => 'Registered',
+            'street'       => 'Landstraße',
+            'streetNumber' => '66',
+            'zipCode'      => '22547',
+            'city'         => 'Hamburg',
+            'countryId'    => new ID('a7c40f631fc920687.20179984'),
+        ];
+
+        $mutation = 'mutation (
+                  $firstName: String!,
+                  $lastName: String!,
+                  $street: String!,
+                  $streetNumber: String!,
+                  $zipCode: String!,
+                  $city: String!,
+                  $countryId: ID!
+                ) {
+                customerInvoiceAddressSet (
+                    invoiceAddress: {
+                        firstName: $firstName,
+                        lastName: $lastName,
+                        street: $street,
+                        streetNumber: $streetNumber
+                        zipCode: $zipCode,
+                        city: $city,
+                        countryId: $countryId
+                    })
+                {
+                    firstName
+                    lastName
+                }
+            }';
+
+        $result = $this->getGQLResponse($I, $mutation, $variables, HttpCode::OK);
+
+        return $result['data']['customerInvoiceAddressSet'];
     }
 }

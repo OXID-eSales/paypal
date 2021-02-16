@@ -16,23 +16,20 @@ trait GraphqlExpressCheckoutTrait
     protected function paypalExpressApprovalProcess(
         AcceptanceTester $I,
         string $basketId,
-        int $status = HttpCode::OK,
-        string $callbackUrl = ''
+        int $status = HttpCode::OK
     ): array
     {
         $variables = [
             'basketId' => $basketId,
-            'returnUrl' => EshopRegistry::getConfig()->getShopUrl(),
-            'callbackUrl' => $callbackUrl
+            'returnUrl' => EshopRegistry::getConfig()->getShopUrl()
         ];
 
         $mutation = '
-            query ($basketId: String!, $returnUrl: String!, $callbackUrl: String!) {
+            query ($basketId: String!, $returnUrl: String!) {
                 paypalExpressApprovalProcess(
                     basketId: $basketId,
                     returnUrl: $returnUrl,
-                    cancelUrl: "",
-                    callbackUrl: $callbackUrl,
+                    cancelUrl: ""
                     displayBasketInPayPal: true
                 ) {
                    token

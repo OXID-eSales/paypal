@@ -244,7 +244,6 @@ final class Payment
         BasketDataType $basket,
         string $returnUrl,
         string $cancelUrl,
-        string $callbackUrl,
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
@@ -265,7 +264,6 @@ final class Payment
             $user,
             $returnUrl,
             $cancelUrl,
-            $callbackUrl,
             $displayBasketInPayPal,
             $shipToAddressid
         );

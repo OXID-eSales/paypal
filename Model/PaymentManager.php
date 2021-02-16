@@ -96,7 +96,6 @@ class PaymentManager
         ?User $user,
         string $returnUrl,
         string $cancelUrl,
-        string $callBackUrl,
         bool $showCartInPayPal,
         string $shippingId = ''
     ): ResponseSetExpressCheckout
@@ -112,7 +111,7 @@ class PaymentManager
         if ($shippingId === $this->payPalConfig->getMobileECDefaultShippingId()) {
             Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
         } else {
-            $builder->setCallBackUrl($callBackUrl);
+            $builder->setCallBackUrl($this->getCallBackUrl());
             $builder->setMaxDeliveryAmount($this->payPalConfig->getMaxPayPalDeliveryAmount());
         }
 
@@ -307,4 +306,17 @@ class PaymentManager
         return $result;
     }
 
+    /**
+     * TODO: we add session information to callback url (sid, rtoken) but we don't do session with graphql.
+     * Nevertheless the session will exist on the server and the callback can use it.
+     * Needs to be covered by anonymous user tests.
+     */
+    public function getCallBackUrl(): string
+    {
+        $baseUrl = Registry::getConfig()->getSslShopUrl() . "index.php?lang=" . Registry::getLang()->getBaseLanguage() .
+                   "&sid=" . Registry::getSession()->getId() . "&rtoken=" . Registry::getSession()->getRemoteAccessToken() .
+                   "&shp=" . Registry::getConfig()->getShopId();
+
+        return Registry::getSession()->processUrl($baseUrl . "&cl=oepaypalexpresscheckoutdispatcher&fnc=processCallBack");
+    }
 }

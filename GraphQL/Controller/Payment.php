@@ -92,7 +92,6 @@ final class Payment
         string $basketId,
         string $returnUrl,
         string $cancelUrl,
-        string $callbackUrl,
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
 
@@ -102,7 +101,6 @@ final class Payment
             $basket,
             $returnUrl,
             $cancelUrl,
-            $callbackUrl,
             $displayBasketInPayPal
         );
 

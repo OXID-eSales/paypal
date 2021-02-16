@@ -6,6 +6,7 @@
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
+use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use Codeception\Util\HttpCode;
 use TheCodingMachine\GraphQLite\Types\ID;
@@ -154,15 +155,16 @@ trait GraphqlCheckoutTrait
     protected function paypalApprovalProcess(AcceptanceTester $I, string $basketId, int $status = HttpCode::OK): array
     {
         $variables = [
-            'basketId' => $basketId
+            'basketId' => $basketId,
+            'returnUrl' => EshopRegistry::getConfig()->getShopUrl()
         ];
 
         $mutation = '
-            query ($basketId: String!) {
+            query ($basketId: String!, $returnUrl: String!) {
                 paypalApprovalProcess(
                     basketId: $basketId,
-                    returnUrl: "",
-                    cancelUrl: "",
+                    returnUrl: $returnUrl,
+                    cancelUrl: ""
                     displayBasketInPayPal: true
                 ) {
                    token

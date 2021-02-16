@@ -49,9 +49,10 @@ class PayPalLogin extends Page
     public $breadCrumb = "#breadCrumb";
 
     public $paymentConfirmButton = "#payment-submit-btn";
-    public $paymentSection = "//section[@data-testid='ship-to-container']";
-    public $addressSection = "//div[@data-testid='shipping-address']";
     public $globalSpinner = "//div[@data-testid='global-spinner']";
+    public $preloaderSpinner = "//div[@id='preloaderSpinner']";
+
+    public $paypalBannerContainer = "//div[@id='paypal-installment-banner-container']";
 
     /**
      * @param string $userName
@@ -115,40 +116,14 @@ class PayPalLogin extends Page
     public function checkoutWithStandardPayPal(string $userName, string $userPassword): OrderCheckout
     {
         $I = $this->user;
-        $usingNewLogin = false;
 
-        $this->waitForPayPalPage();
+        $this->loginToPayPal($userName, $userPassword);
 
-        if ($I->seePageHasElement($this->oldLoginSection)) {
-            $I->waitForElementVisible($this->userLoginEmail, 5);
-            $I->fillField($this->userLoginEmail, $userName);
-            $I->waitForElementVisible($this->userPassword, 5);
-            $I->fillField($this->userPassword, $userPassword);
-            $I->click($this->loginButton);
-        }
+        $this->confirmPayPal();
 
-        if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
-            $I->click($this->oneTouchNotNowLink);
-        }
-
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
-
-        if ($I->seePageHasElement($this->gdprContainer)) {
-            $I->executeJS("document.getElementById('".substr($this->gdprContainer, 1)."').remove();");
-        }
-
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
-        $I->waitForElementVisible($this->paymentSection, 60);
-        $I->waitForElementVisible($this->addressSection, 60);
-        $I->waitForElementClickable($this->paymentConfirmButton, 60);
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
-        
-        if ($I->seePageHasElement($this->paymentConfirmButton)) {
-            $I->click($this->paymentConfirmButton);
-            $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->globalSpinner, 60);
-            $I->wait(10);
-        }
+        //retry
+        $this->waitForSpinnerDisappearance();
+        $this->confirmPayPal();
 
         return new OrderCheckout($I);
     }
@@ -158,6 +133,7 @@ class PayPalLogin extends Page
         $I = $this->user;
 
         $this->waitForPayPalPage();
+        $this->removeCookieConsent();
 
         if ($I->seePageHasElement($this->oldLoginSection)) {
             $I->waitForElementVisible($this->userLoginEmail, 5);
@@ -171,15 +147,10 @@ class PayPalLogin extends Page
             $I->retryClick($this->oneTouchNotNowLink);
         }
 
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
-
-        if ($I->seePageHasElement($this->gdprContainer)) {
-            $I->executeJS("document.getElementById('" . substr($this->gdprContainer, 1) . "').remove();");
-        }
-
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
-        $I->waitForElementVisible($this->paymentSection, 60);
-        $I->waitForElementVisible($this->addressSection, 60);
+        $this->waitForSpinnerDisappearance();
+        $this->removeCookieConsent();
+        $this->waitForSpinnerDisappearance();
+        $I->wait(3);
     }
 
    /**
@@ -189,10 +160,39 @@ class PayPalLogin extends Page
     public function approveGraphqlStandardPayPal(string $userName, string $userPassword): void
     {
         $I = $this->user;
+
         $this->loginToPayPal($userName, $userPassword);
 
-        $I->waitForElementClickable($this->paymentConfirmButton, 60);
-        $I->waitForElementNotVisible($this->globalSpinner, 30);
+        $this->confirmPayPal();
+
+        //retry
+        $this->waitForSpinnerDisappearance();
+        $this->confirmPayPal();
+
+        //we should be back to shop frontend as we sent a redirect url to paypal
+        $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
+    }
+
+    public function confirmPayPal()
+    {
+        $I = $this->user;
+
+        $this->waitForSpinnerDisappearance();
+        $this->removeCookieConsent();
+
+        if ($I->seePageHasElement(substr($this->newConfirmButton, 1))) {
+            $I->retryClick($this->newConfirmButton);
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
+        }
+
+        if ($I->seePageHasElement("//input[@id='" . substr($this->newConfirmButton, 1) . "']")) {
+            $I->executeJS("document.getElementById('" . substr($this->newConfirmButton, 1) . "').click();");
+            $I->waitForDocumentReadyState();
+            $I->waitForElementNotVisible($this->globalSpinner, 60);
+            $I->wait(10);
+        }
 
         if ($I->seePageHasElement($this->paymentConfirmButton)) {
             $I->retryClick($this->paymentConfirmButton);
@@ -259,5 +259,24 @@ class PayPalLogin extends Page
             }
             $I->waitForElementNotVisible($this->gdprCookieBanner);
         }
-    }    
+    }
+
+    private function waitForSpinnerDisappearance()
+    {
+        $I = $this->user;
+        $I->waitForElementNotVisible($this->preloaderSpinner, 30);
+        $I->waitForElementNotVisible($this->globalSpinner, 30);
+        $I->waitForElementNotVisible($this->spinner, 30);
+    }
+
+    private function removeCookieConsent()
+    {
+        $I = $this->user;
+        if ($I->seePageHasElement($this->gdprContainer)) {
+            $I->executeJS("document.getElementById('" . substr($this->gdprContainer, 1) . "').remove();");
+        }
+        if ($I->seePageHasElement($this->gdprCookieBanner)) {
+            $I->executeJS("document.getElementById('" . substr($this->gdprCookieBanner, 1) . "').remove();");
+        }
+    }
 }

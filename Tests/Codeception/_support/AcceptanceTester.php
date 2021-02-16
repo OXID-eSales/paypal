@@ -194,6 +194,14 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * @return string
+     */
+    public function getDemoUserName(): string
+    {
+        return Fixtures::get('demoUserName');
+    }
+
+    /**
      * Wrap the message part in message required conditions
      *
      * @param string $part

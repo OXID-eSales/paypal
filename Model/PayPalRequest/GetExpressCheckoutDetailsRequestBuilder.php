@@ -37,8 +37,13 @@ class GetExpressCheckoutDetailsRequestBuilder
      * Session object
      *
      * @var \OxidEsales\Eshop\Core\Session
+     *
+     * @deprecated Session property is never used in this class
      */
     protected $session = null;
+
+    /** @var ?string */
+    protected $token = null;
 
     /**
      * Sets PayPal request object.
@@ -68,6 +73,7 @@ class GetExpressCheckoutDetailsRequestBuilder
      * Sets Session.
      *
      * @param \OxidEsales\Eshop\Core\Session $session
+     * @deprecated Use self::setToken to set token or omit this method if it should be taken from session
      */
     public function setSession($session)
     {
@@ -80,6 +86,8 @@ class GetExpressCheckoutDetailsRequestBuilder
      * @return \OxidEsales\Eshop\Core\Session
      *
      * @throws \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException
+     *
+     * @deprecated Session property is never used in this class
      */
     public function getSession()
     {
@@ -95,6 +103,27 @@ class GetExpressCheckoutDetailsRequestBuilder
     }
 
     /**
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        if (!$this->token) {
+            $session = \OxidEsales\Eshop\Core\Registry::getSession();
+            $this->token = $session->getVariable('oepaypal-token');
+        }
+
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     */
+    public function setToken(?string $token)
+    {
+        $this->token = $token;
+    }
+
+    /**
      * Builds Request.
      *
      * @return \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest
@@ -102,8 +131,7 @@ class GetExpressCheckoutDetailsRequestBuilder
     public function buildRequest()
     {
         $request = $this->getPayPalRequest();
-        $session = \OxidEsales\Eshop\Core\Registry::getSession();
-        $request->setParameter('TOKEN', $session->getVariable('oepaypal-token'));
+        $request->setParameter('TOKEN', $this->getToken());
 
         return $request;
     }

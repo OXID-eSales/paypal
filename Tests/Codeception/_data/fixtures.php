@@ -34,6 +34,7 @@ return [
         'oxpasssalt'   => ''
     ],
     'userPassword'  => 'useruser',
+    'demoUserName'  => 'user@oxid-esales.com',
     // This product is available in ce|pe|ee demodata
     'product' => [
         'id' => 'dc5ffdf380e15674b56dd562a7cb6aec',
@@ -60,4 +61,9 @@ return [
         'bruttoprice' => '109.9',
         'nettoprice'  => '92.35'
     ],
+    'shipping' => [
+        'standard' => 'oxidstandard'
+    ],
+    'payment_id' => 'oxidpaypal',
+    'payment_id_other' => 'oxidcashondel'
 ];

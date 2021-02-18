@@ -92,6 +92,14 @@ vendor/bin/runtests-selenium
 vendor/bin/runtests
 ```
 
+For running codeception tests in test group **paypal_graphql**, you need the [GraphQL Storefront module](https://github.com/OXID-eSales/graphql-storefront-module/) installed
+and the following settings in the `test_config.yml`: 
+- Set `partial_module_paths` to `oe/graphql-base,oe/graphql-storefront,oe/oepaypal`
+- Set `activate_all_modules` to `true`
+- Set `run_tests_for_modules` to `true`
+- Set `run_tests_for_shop` to `false`
+- Set `additional_test_paths` to `''`
+
 For running the tests and more configuration options, follow the instructions from [here](https://github.com/OXID-eSales/testing_library#running-tests).
 
 ### Bugs and Issues
@@ -100,4 +108,4 @@ If you experience any bugs or issues, please report them in the section **module
 
 ### Documentation
 
-The module documentation can be found on our documentation platform: https://docs.oxid-esales.com/modules/paypal/en/6.0/index.html.
+The module documentation can be found on our documentation platform: https://docs.oxid-esales.com/modules/paypal/en/6.3/index.html.

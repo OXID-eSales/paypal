@@ -390,6 +390,7 @@ class InstallmentBannersCest
         $parentProductNavigation = new ProductNavigation($I);
         $parentProductNavigation->openProductDetailsPage($parentProduct['id'])
             ->seeOnBreadCrumb(Translator::translate('YOU_ARE_HERE'));
+        $I->waitForPageLoad();
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme($parentProduct['minNettoPrice']);
 
         // Check banner amount when basket is not empty

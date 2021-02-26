@@ -35,6 +35,15 @@ class InstallmentBannersCest
 
     /**
      * @param AcceptanceTester $I
+     */
+    public function _after(AcceptanceTester $I)
+    {
+        $I->activateFlowTheme();
+        $I->clearShopCache();
+    }
+
+    /**
+     * @param AcceptanceTester $I
      *
      * @group installment_banners_paypal
      * @group installment_banners_paypal_search

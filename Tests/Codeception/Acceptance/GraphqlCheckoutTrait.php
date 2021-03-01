@@ -16,11 +16,10 @@ trait GraphqlCheckoutTrait
     protected function getGQLResponse(
         AcceptanceTester $I,
         string $query,
-        array $variables = [],
-        int $status = HttpCode::OK
+        array $variables = []
     ): array {
         $I->sendGQLQuery($query, $variables);
-        $I->seeResponseCodeIs($status);
+        $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
 
         return $I->grabJsonResponseAsArray();
@@ -78,8 +77,7 @@ trait GraphqlCheckoutTrait
     protected function setBasketDeliveryMethod(
         AcceptanceTester $I,
         string $basketId,
-        string $deliverySetId,
-        int $status = HttpCode::OK
+        string $deliverySetId
     ): string {
         $variables = [
             'basketId'   => new ID($basketId),
@@ -98,9 +96,9 @@ trait GraphqlCheckoutTrait
                 }
             }
         ';
-        $result = $this->getGQLResponse($I, $mutation, $variables, $status);
+        $result = $this->getGQLResponse($I, $mutation, $variables);
 
-        if (($status === HttpCode::BAD_REQUEST) || ($status === HttpCode::NOT_FOUND)) {
+        if (isset($result['errors'])) {
             return (string) $result['errors'][0]['message'];
         }
 
@@ -129,7 +127,7 @@ trait GraphqlCheckoutTrait
         return $result['data']['basketSetPayment']['id'];
     }
 
-    protected function placeOrder(AcceptanceTester $I, string $basketId, int $status = HttpCode::OK, ?bool $termsAndConditions = null): array
+    protected function placeOrder(AcceptanceTester $I, string $basketId, ?bool $termsAndConditions = null): array
     {
         //now actually place the order
         $variables = [
@@ -149,10 +147,10 @@ trait GraphqlCheckoutTrait
             }
         ';
 
-        return $this->getGQLResponse($I, $mutation, $variables, $status);
+        return $this->getGQLResponse($I, $mutation, $variables);
     }
 
-    protected function paypalApprovalProcess(AcceptanceTester $I, string $basketId, int $status = HttpCode::OK): array
+    protected function paypalApprovalProcess(AcceptanceTester $I, string $basketId): array
     {
         $variables = [
             'basketId' => $basketId,
@@ -173,12 +171,12 @@ trait GraphqlCheckoutTrait
             }
         ';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, $status);
+        $result = $this->getGQLResponse($I, $mutation, $variables);
 
         return $result;
     }
 
-    protected function paypalTokenStatus(AcceptanceTester $I, string $token, int $status = HttpCode::OK): array
+    protected function paypalTokenStatus(AcceptanceTester $I, string $token): array
     {
         $variables = [
             'token' => $token
@@ -195,7 +193,7 @@ trait GraphqlCheckoutTrait
             }
         ';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, $status);
+        $result = $this->getGQLResponse($I, $mutation, $variables);
 
         return $result;
     }
@@ -344,7 +342,7 @@ trait GraphqlCheckoutTrait
             }
         }';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, HttpCode::OK);
+        $result = $this->getGQLResponse($I, $mutation, $variables);
 
         return $result['data']['customerRegister'];
     }
@@ -386,7 +384,7 @@ trait GraphqlCheckoutTrait
                 }
             }';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, HttpCode::OK);
+        $result = $this->getGQLResponse($I, $mutation, $variables);
 
         return $result['data']['customerInvoiceAddressSet'];
     }

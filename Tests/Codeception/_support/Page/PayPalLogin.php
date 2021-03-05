@@ -249,14 +249,14 @@ class PayPalLogin extends Page
             $this->waitForSpinnerDisappearance();
             $I->waitForElementNotVisible($this->loginSection);
          }
-   /*
+
         if ($I->seePageHasElement($this->backToInputEmail)) {
             $I->retryClick($this->backToInputEmail);
             $I->waitForDocumentReadyState();
             $this->waitForSpinnerDisappearance();
-            $I->waitForElementNotVisible($this->loginSection);
+            $I->waitForElementNotVisible($this->backToInputEmail);
         }
-*/
+
         return $this;
     }
 

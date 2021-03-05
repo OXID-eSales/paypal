@@ -190,7 +190,7 @@ trait GraphqlCheckoutTrait
                     paypalToken: $token
                 ) {
                    token
-                   status
+                   tokenApproved
                 }
             }
         ';

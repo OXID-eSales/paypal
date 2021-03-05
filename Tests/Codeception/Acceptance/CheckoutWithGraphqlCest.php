@@ -508,7 +508,7 @@ class CheckoutWithGraphqlCest
 
         //token is valid but not yet approved
         $result = $this->paypalTokenStatus($I, $approvalDetails['data']['paypalApprovalProcess']['token']);
-        $I->assertFalse($result['data']['paypalTokenStatus']['status']);
+        $I->assertFalse($result['data']['paypalTokenStatus']['tokenApproved']);
 
         //make customer login to paypal but cancel
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
@@ -517,7 +517,7 @@ class CheckoutWithGraphqlCest
 
         //token is not approved
         $result = $this->paypalTokenStatus($I, $approvalDetails['data']['paypalApprovalProcess']['token']);
-        $I->assertFalse($result['data']['paypalTokenStatus']['status']);
+        $I->assertFalse($result['data']['paypalTokenStatus']['tokenApproved']);
 
         //make customer approve the payment
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
@@ -526,7 +526,7 @@ class CheckoutWithGraphqlCest
 
         //token is approved
         $result = $this->paypalTokenStatus($I, $approvalDetails['data']['paypalApprovalProcess']['token']);
-        $I->assertTrue($result['data']['paypalTokenStatus']['status']);
+        $I->assertTrue($result['data']['paypalTokenStatus']['tokenApproved']);
     }
 
     /**

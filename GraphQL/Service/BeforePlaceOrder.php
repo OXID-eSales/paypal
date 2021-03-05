@@ -78,7 +78,7 @@ final class BeforePlaceOrder
             $expressCheckoutDetails = $this->paymentService->getExpressCheckoutDetails($token);
 
             $tokenStatus = $this->paymentService->getPayPalTokenStatus($token, $expressCheckoutDetails);
-            if (!$tokenStatus->getStatus()) {
+            if (!$tokenStatus->isTokenApproved()) {
                 throw BasketCommunication::notConfirmed($userBasket->id()->val());
             }
 

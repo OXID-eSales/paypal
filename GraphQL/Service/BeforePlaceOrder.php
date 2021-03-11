@@ -25,7 +25,6 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\GraphQL\Storefront\Basket\Event\BeforePlaceOrder as BeforePlaceOrderEvent;
-use OxidEsales\PayPalModule\GraphQL\DataType\BasketExtendType;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
 use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;

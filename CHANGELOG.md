@@ -11,13 +11,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - services.yaml
   - Code in namespace `\OxidEsales\PayPalModule\GraphQL\`
   - Codeception tests in group `paypal_graphql` resp. `paypal_checkout`.
-  - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setToken()`
-  - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getToken()`
-  - `\OxidEsales\PayPalModule\Model\PaymentManager`
   - Column `oxuserbaskets.OEPAYPAL_PAYMENT_TOKEN` to hold the PayPal token needed for GraphQL checkout.
-  - Column `oxuser.OEPAYPAL_ANON_USERID` to relate an anonymous user to his shop account if existing.
+  - Column `oxuser.OEPAYPAL_ANON_USERID` to relate an anonymous user to his shop account if existing
+  - Class `\OxidEsales\PayPalModule\Model\PaymentManager`
+  - Property `\OxidEsales\PayPalModule\Controller\Dispatcher::paymentManager`
   - Method:
+    - `\OxidEsales\PayPalModule\Controller\Dispatcher::getPaymentManager()`
     - `\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::processGraphQLCallBack()`
+    - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setToken()`
+    - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getToken()`
     - `\OxidEsales\PayPalModule\Model\User::setAnonymousUserId()`
     - `\OxidEsales\PayPalModule\Model\User::getAnonymousId()`
     - `\OxidEsales\PayPalModule\Model\User::load()`
@@ -27,15 +29,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Changed visibility from protected to public for the following methods:
-   `\OxidEsales\PayPalModule\Model\Address::prepareDataPayPalAddress()`
-   `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getReturnUrl()`
-   `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getCancelUrl()`
+  - `\OxidEsales\PayPalModule\Model\Address::prepareDataPayPalAddress()`
+  - `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getReturnUrl()`
+  - `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getCancelUrl()`
 
 ### Deprecated
   - Deprecated the following methods:
-    `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setSession()`
-    `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getSession()`
-    `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getTransactionMode()`
+    - `\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::getTransactionMode()`
+    - `\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::makeUniqueNames()`
+    - `\OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::reencodeHtmlEntities()`
+    - `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getTransactionMode()`
+    - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setSession()`
+    - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getSession()`
 
 ## [6.2.2] - 2021-03-04
 

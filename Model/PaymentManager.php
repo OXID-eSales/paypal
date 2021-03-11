@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -58,7 +59,7 @@ class PaymentManager
         $this->payPalConfig = oxNew(PayPalConfig::class);
     }
 
-    public function setExpressCheckout(
+    public function setStandardCheckout(
         Basket $basket,
         ?User $user,
         string $returnUrl,
@@ -92,7 +93,7 @@ class PaymentManager
         return $this->payPalService->setExpressCheckout($request);
     }
 
-    public function setExpressExpressCheckout(
+    public function setExpressCheckout(
         Basket $basket,
         ?User $user,
         string $returnUrl,
@@ -117,10 +118,9 @@ class PaymentManager
             Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
         }
 
-        $basket->setPayment("oxidpaypal");
         $basket->onUpdate();
-
         $basket->calculateBasket(true);
+
         Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', $prevOptionValue);
 
         $this->validatePayment($user, $basket, true);

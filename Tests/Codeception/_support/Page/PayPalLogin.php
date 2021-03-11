@@ -55,6 +55,7 @@ class PayPalLogin extends Page
     public $paypalBannerContainer = "//div[@id='paypal-installment-banner-container']";
 
     public $backToInputEmail = "#backToInputEmailLink";
+    public $errorSection = '#notifications #pageLevelErrors';
 
     /**
      * @param string $userName
@@ -160,7 +161,7 @@ class PayPalLogin extends Page
         $I->wait(3);
     }
 
-   /**
+    /**
      * @param string $userName
      * @param string $userPassword
      */
@@ -249,14 +250,14 @@ class PayPalLogin extends Page
             $this->waitForSpinnerDisappearance();
             $I->waitForElementNotVisible($this->loginSection);
          }
-
+/*
         if ($I->seePageHasElement($this->backToInputEmail)) {
             $I->retryClick($this->backToInputEmail);
             $I->waitForDocumentReadyState();
             $this->waitForSpinnerDisappearance();
             $I->waitForElementNotVisible($this->backToInputEmail);
         }
-
+*/
         return $this;
     }
 

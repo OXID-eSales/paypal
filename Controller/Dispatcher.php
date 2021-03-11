@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -18,7 +19,10 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2018
  */
+
 namespace OxidEsales\PayPalModule\Controller;
+
+use OxidEsales\PayPalModule\Model\PaymentManager;
 
 /**
  * Abstract PayPal Dispatcher class
@@ -30,7 +34,7 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
      *
      * @var int
      */
-    protected $serviceType = 1;
+    protected $serviceType = PaymentManager::PAYPAL_SERVICE_TYPE_STANDARD;
 
     /**
      * PayPal checkout service
@@ -45,6 +49,9 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
      * @var string
      */
     protected $userAction = "continue";
+
+    /** @var PaymentManager */
+    protected $paymentManager = null;
 
     /**
      * Executes "GetExpressCheckoutDetails" and on SUCCESS response - saves
@@ -75,6 +82,15 @@ abstract class Dispatcher extends \OxidEsales\PayPalModule\Controller\FrontendCo
         }
 
         return $this->payPalCheckoutService;
+    }
+
+    protected function getPaymentManager(): PaymentManager
+    {
+        if (is_null($this->paymentManager)) {
+            $this->paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
+        }
+
+        return $this->paymentManager;
     }
 
     /**

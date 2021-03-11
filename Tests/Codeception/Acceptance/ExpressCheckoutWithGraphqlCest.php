@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © OXID eSales AG. All rights reserved.
  * See LICENSE file for license details.
@@ -6,16 +7,14 @@
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
+use OxidEsales\GraphQL\Storefront\Basket\Exception\BasketAccessForbidden;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\Facts\Facts;
 use Codeception\Util\Fixtures;
 use Codeception\Scenario;
 use Codeception\Util\HttpCode;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
-use TheCodingMachine\GraphQLite\Types\ID;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
-use OxidEsales\Codeception\Module\Translation\Translator;
-use OxidEsales\GraphQL\Storefront\Basket\Exception\PlaceOrder;
 
 class ExpressCheckoutWithGraphqlCest
 {
@@ -26,36 +25,20 @@ class ExpressCheckoutWithGraphqlCest
     use GraphqlCheckoutTrait;
     use GraphqlExpressCheckoutTrait;
 
-    public function _beforeSuite($settings = []): void // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-    {
-        $rootPath = (new Facts())->getShopRootPath();
-        $possiblePaths = [
-            '/bin/oe-console',
-            '/vendor/bin/oe-console',
-        ];
-
-        foreach ($possiblePaths as $path) {
-            if (is_file($rootPath . $path)) {
-                exec($rootPath . $path . ' oe:module:activate oe_graphql_base');
-                exec($rootPath . $path . ' oe:module:activate oe_graphql_storefront');
-
-                return;
-            }
-        }
-
-        throw new Exception('Could not find script "/bin/oe-console" to activate module');
-    }
-
     public function _before(AcceptanceTester $I, Scenario $scenario): void
     {
-        $I->updateConfigInDatabase('blPerfNoBasketSaving', false, 'bool');
-        $I->updateConfigInDatabase('blCalculateDelCostIfNotLoggedIn', false, 'bool');
+        if (!($I->checkGraphBaseActive() && $I->checkGraphStorefrontActive())) {
+            $I->markTestSkipped('GraphQL modules are not active');
+        }
+
+        $I->updateConfigInDatabase('blPerfNoBasketSaving', false);
+        $I->updateConfigInDatabase('blCalculateDelCostIfNotLoggedIn', false);
         $I->updateConfigInDatabase('iVoucherTimeout', 10800, 'int'); // matches default value
 
         $I->activateFlowTheme();
         $I->clearShopCache();
         $I->setPayPalSettingsData();
-        $I->updateConfigInDatabase('blUseStock', false, 'bool');
+        $I->updateConfigInDatabase('blUseStock', false);
 
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
@@ -69,20 +52,12 @@ class ExpressCheckoutWithGraphqlCest
                 'oxstreetnr' => '13',
                 'oxzip'      => '79098',
                 'oxfname'    => 'Marc',
-                'oxlname'    => 'Muster'
-            ],
-            [
-                'oxusername' => Fixtures::get('sBuyerLogin')
-            ]
-        );
-        $I->updateInDatabase(
-            'oxuser',
-            [
+                'oxlname'    => 'Muster',
                 'oxpassword' => '$2y$10$b186f117054b700a89de9uXDzfahkizUucitfPov3C2cwF5eit2M2',
                 'oxpasssalt' => 'b186f117054b700a89de929ce90c6aef'
             ],
             [
-                'oxusername' => $I->getDemoUserName()
+                'oxusername' => Fixtures::get('sBuyerLogin')
             ]
         );
 
@@ -98,7 +73,7 @@ class ExpressCheckoutWithGraphqlCest
     public function expressCheckoutWithGraphql(AcceptanceTester $I)
     {
         //user exists in shop, has password in shop, is logged in via graphql and basket is shipping cost free
-        //invoice adress is used as delivery address
+        //invoice address is used as delivery address
         //username in shop differs from PayPal email
         $I->wantToTest('logged in user placing an order successfully with PayPal Express via graphql');
         $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword());
@@ -114,8 +89,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
@@ -140,7 +114,7 @@ class ExpressCheckoutWithGraphqlCest
      * @group paypal_graphql
      * @group paypal_graphql_express
      */
-    public function expressCheckoutWithGraphqlDeliveryAdress(AcceptanceTester $I)
+    public function expressCheckoutWithGraphqlDeliveryAddress(AcceptanceTester $I)
     {
         //user exists in shop, has password in shop, is logged in via graphql and basket is shipping cost free
         //user login in shop is the same as PP email
@@ -164,8 +138,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -204,11 +177,11 @@ class ExpressCheckoutWithGraphqlCest
      * @group paypal_graphql
      * @group paypal_graphql_express
      */
-    public function expressCheckoutWithGraphqlDeliveryAdressDifferentPPUserName(AcceptanceTester $I)
+    public function expressCheckoutWithGraphqlDeliveryAddressDifferentPPUserName(AcceptanceTester $I)
     {
         //user exists in shop, has password in shop, is logged in via graphql and basket is shipping cost free
         //user login in shop is different from PayPal login
-        //use picks different delivery address in PayPal (which we mimick by changing user invoice city after PP approval)
+        //user picks different delivery address in PayPal (which we mimic by changing user invoice city after PP approval)
         $I->wantToTest('logged user place order succeeds with PayPal Express via graphql for different PP email');
 
         $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword());
@@ -220,8 +193,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -277,8 +249,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -341,8 +312,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -395,8 +365,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -439,8 +408,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -492,8 +460,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -504,10 +471,11 @@ class ExpressCheckoutWithGraphqlCest
         $I->anonymousLoginToGraphQLApi();
         $result = $this->placeOrder($I, $basketId, HttpCode::UNAUTHORIZED);
 
+        $expectedException = BasketAccessForbidden::byAuthenticatedUser();
         $I->assertEquals(
-            'You are not allowed to access this basket as it belongs to somebody else',
-            $result['errors'][0]['message'])
-        ;
+            $expectedException->getMessage(),
+            $result['errors'][0]['message']
+        );
     }
 
     /**
@@ -541,8 +509,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -554,6 +521,13 @@ class ExpressCheckoutWithGraphqlCest
         $orderId = $result['data']['placeOrder']['id'];
 
         $I->assertNotEmpty($orderId);
+
+        $I->seeInDatabase(
+            'oxuser',
+            [
+                'oxusername' => Fixtures::get('sBuyerLogin')
+            ]
+        );
     }
 
     /**
@@ -587,8 +561,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -640,8 +613,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -652,10 +624,11 @@ class ExpressCheckoutWithGraphqlCest
         $I->loginToGraphQLApi(Fixtures::get('sBuyerLogin'), $I->getExistingUserPassword());
         $result = $this->placeOrder($I, $basketId, HttpCode::UNAUTHORIZED);
 
+        $expectedException = BasketAccessForbidden::byAuthenticatedUser();
         $I->assertEquals(
-            'You are not allowed to access this basket as it belongs to somebody else',
-            $result['errors'][0]['message'])
-        ;
+            $expectedException->getMessage(),
+            $result['errors'][0]['message']
+        );
     }
 
     /**
@@ -694,8 +667,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -755,8 +727,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -816,8 +787,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -849,9 +819,9 @@ class ExpressCheckoutWithGraphqlCest
         $I->wantToTest('anonymous existing no invoice user places order with PayPal Express via graphql');
 
         //register customer via graphql, he's in 'oxidnotyetordered' group. Username must be same as PayPal email.
-        $username     = Fixtures::get('sBuyerLogin');
-        $password     = 'useruser';
-        $userId = $this->registerCustomer($I, $username, $password)['id'];
+        $username = Fixtures::get('sBuyerLogin');
+        $password = $I->getExistingUserPassword();
+        $userId   = $this->registerCustomer($I, $username, $password)['id'];
 
         $I->dontSeeInDatabase(
             'oxuser',
@@ -875,8 +845,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
@@ -894,7 +863,12 @@ class ExpressCheckoutWithGraphqlCest
             'oxuser',
             [
                 'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName')
+                'oxfname'    => Fixtures::get('sBuyerFirstName'),
+                'oxlname'    => Fixtures::get('sBuyerLastName'),
+                'oxstreet'   => 'ESpachstr.',
+                'oxstreetnr' => '1',
+                'oxzip'      => '79111',
+                'oxcity'     => 'Freiburg',
             ]
         );
 
@@ -950,8 +924,7 @@ class ExpressCheckoutWithGraphqlCest
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(
             $I,
-            $basketId,
-            HttpCode::OK
+            $basketId
         );
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);

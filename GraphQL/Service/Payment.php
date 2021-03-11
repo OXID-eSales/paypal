@@ -139,17 +139,12 @@ final class Payment
             $userBasket->getEshopModel()->save();
         }
 
-        $sessionBasket = $this->getUserBasketSession($userBasket);
+        $sessionBasket = $this->getSharedBasketInfrastructure()->getCalculatedBasket($userBasket);
 
         $this->validateApprovedBasketAmount($sessionBasket, $expressCheckoutDetails, $userBasket);
         $this->validateApprovedBasketAddress($sessionBasket, $expressCheckoutDetails, $userBasket);
 
         return $sessionBasket;
-    }
-
-    private function getUserBasketSession(BasketDataType $userBasket): EshopBasketModel
-    {
-        return $this->getSharedBasketInfrastructure()->getCalculatedBasket($userBasket);
     }
 
     private function validateApprovedBasketAddress(
@@ -225,8 +220,8 @@ final class Payment
         $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
         $shipToAddressId = $shipToAddress ? (string) $shipToAddress->id(): '';
 
-        $response = $paymentManager->setExpressCheckout(
-            $this->getUserBasketSession($basket),
+        $response = $paymentManager->setStandardCheckout(
+            $this->getSharedBasketInfrastructure()->getBasket($basket),
             $this->getBasketRelationService()->owner($basket)->getEshopModel(),
             $returnUrl,
             $cancelUrl,
@@ -250,7 +245,7 @@ final class Payment
     ): PayPalCommunicationInformation {
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
         $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
-        $shipToAddressid = $shipToAddress ? (string) $shipToAddress->id(): '';
+        $shipToAddressId = $shipToAddress ? (string) $shipToAddress->id(): '';
 
         //for Express checkout, the user might not yet exist (anonymous user)
         try {
@@ -261,14 +256,14 @@ final class Payment
             $user = null;
         }
 
-        $response = $paymentManager->setExpressExpressCheckout(
+        $response = $paymentManager->setExpressCheckout(
             $this->getSharedBasketInfrastructure()->getBasket($basket),
             $user,
             $returnUrl,
             $cancelUrl,
             $paymentManager->getGraphQLCallBackUrl((string) $basket->id()),
             $displayBasketInPayPal,
-            $shipToAddressid
+            $shipToAddressId
         );
 
         $token = (string) $response->getToken();
@@ -278,7 +273,6 @@ final class Payment
             $this->getPayPalCommunicationUrl($token)
         );
     }
-
 
     public function getPayPalCommunicationUrl($token): string
     {

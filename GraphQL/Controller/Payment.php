@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -44,17 +45,15 @@ final class Payment
     /** @var StorefrontBasketService */
     private $storefrontBasketService;
 
-    /** @var Authentication\ */
+    /** @var Authentication */
     private $authenticationService;
 
     public function __construct(
         PaymentService $paymentService,
-        BasketService $basketService,
-        Authentication $authenticationService = null
+        BasketService $basketService
     ) {
         $this->paymentService = $paymentService;
         $this->basketService = $basketService;
-        $this->authenticationService = $authenticationService;
     }
 
     public function setStorefrontBasketService(StorefrontBasketService $storefrontBasketService): void

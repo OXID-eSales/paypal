@@ -118,6 +118,54 @@ class ExpressCheckoutWithGraphqlCest
     /**
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_graphql
+     * @group paypal_graphql_express
+     */
+    public function expressCheckoutWithGraphqlSetShippingAndPaymentAndDeliveryAdress(AcceptanceTester $I)
+    {
+        //user exists in shop, has password in shop, is logged in via graphql and basket is shipping cost free
+        //invoice address is used as delivery address
+        //username in shop differs from PayPal email
+        //basket comes with delivery and payment method (non paypal) already set, which gets overwritten with paypal
+        //basket also comes with delivery address
+        $I->wantToTest('logged in user placing an order successfully with PayPal Express via graphql');
+        $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword());
+
+        //prepare basket
+        $basketId = $this->createBasket($I, 'pp_express_cart');
+        $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 4);
+        $this->setBasketDeliveryAddress($I, $basketId, $this->createDeliveryAddress($I));
+        $this->setBasketDeliveryMethod($I, $basketId, Fixtures::get('shipping')['standard']);
+        $this->setBasketPaymentMethod($I, $basketId, Fixtures::get('payment_id_other'));
+
+        //query basket payments
+        $basketPayments = $this->getBasketPaymentIds($I, $basketId);
+        $I->assertArrayHasKey(Fixtures::get('payment_id'), $basketPayments);
+
+        //Get token and approval url, make customer approve the payment
+        $approvalDetails = $this->paypalExpressApprovalProcess(
+            $I,
+            $basketId
+        );
+        $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
+        $loginPage = new PayPalLogin($I);
+        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+
+        //place the order
+        $result = $this->placeOrder($I, $basketId);
+        $orderId = $result['data']['placeOrder']['id'];
+
+        $I->assertNotEmpty($orderId);
+
+        $orderDetails = $this->getLatestOrderFromOrderHistory($I);
+        $I->assertSame($orderId, $orderDetails['id']);
+        $I->assertNotEmpty($orderDetails['deliveryAddress']);
+        $I->assertNotEquals($orderDetails['invoiceAddress']['lastName'], $orderDetails['deliveryAddress']['lastName']);
+    }
+
+    /**
+     * @group paypal_external
+     * @group paypal_buyerlogin
      * @group paypal_checkout
      * @group paypal_graphql
      * @group paypal_graphql_express

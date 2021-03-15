@@ -246,12 +246,15 @@ final class Payment
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
         $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
         $shipToAddressId = $shipToAddress ? (string) $shipToAddress->id(): '';
+        $deliveryMethod = $this->getBasketRelationService()->deliveryMethod($basket);
+        $shippingMethodId = $deliveryMethod ? (string) $deliveryMethod->id() : '';
 
         //for Express checkout, the user might not yet exist (anonymous user)
         try {
             /** @var BasketOwnerDataType $customer */
             $owner = $this->getBasketRelationService()->owner($basket);
             $user = $owner->getEshopModel();
+            $user->setSelectedAddressId($shipToAddressId);
         } catch (CustomerNotFound $e) {
             $user = null;
         }
@@ -263,7 +266,7 @@ final class Payment
             $cancelUrl,
             $paymentManager->getGraphQLCallBackUrl((string) $basket->id()),
             $displayBasketInPayPal,
-            $shipToAddressId
+            $shippingMethodId
         );
 
         $token = (string) $response->getToken();

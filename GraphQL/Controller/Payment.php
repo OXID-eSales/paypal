@@ -24,7 +24,6 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Controller;
 
-use OxidEsales\GraphQL\Base\Service\Authentication;
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
@@ -45,9 +44,6 @@ final class Payment
     /** @var StorefrontBasketService */
     private $storefrontBasketService;
 
-    /** @var Authentication */
-    private $authenticationService;
-
     public function __construct(
         PaymentService $paymentService,
         BasketService $basketService
@@ -59,11 +55,6 @@ final class Payment
     public function setStorefrontBasketService(StorefrontBasketService $storefrontBasketService): void
     {
         $this->storefrontBasketService = $storefrontBasketService;
-    }
-
-    public function setAuthenticationService(Authentication $authenticationService): void
-    {
-        $this->authenticationService = $authenticationService;
     }
 
     /**

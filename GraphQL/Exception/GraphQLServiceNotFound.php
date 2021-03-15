@@ -23,9 +23,9 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Exception;
 
-use OxidEsales\GraphQL\Base\Exception\InvalidRequest;
+use Exception;
 
-final class GraphQLServiceNotFound extends InvalidRequest
+final class GraphQLServiceNotFound extends Exception
 {
     public static function byServiceName(string $name): self
     {

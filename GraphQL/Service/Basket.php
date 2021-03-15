@@ -40,18 +40,11 @@ final class Basket
         $this->basketRelationService = $basketRelationService;
     }
 
-    public function getBasketRelationService(): BasketRelationService
-    {
-        if (is_null($this->basketRelationService)) {
-            throw GraphQLServiceNotFound::byServiceName(BasketRelationService::class);
-        }
-
-        return $this->basketRelationService;
-    }
-
     public function checkBasketPaymentMethodIsPayPal(BasketDataType $basket): bool
     {
-        $paymentMethod = $this->getBasketRelationService()->payment($basket);
+        $this->validateState();
+
+        $paymentMethod = $this->basketRelationService->payment($basket);
         $result = false;
 
         if (!is_null($paymentMethod) && $paymentMethod->getId()->val() === 'oxidpaypal') {
@@ -97,4 +90,10 @@ final class Basket
         $userBasketModel->save();
     }
 
+    protected function validateState(): void
+    {
+        if (is_null($this->basketRelationService)) {
+            throw GraphQLServiceNotFound::byServiceName(BasketRelationService::class);
+        }
+    }
 }

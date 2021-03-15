@@ -27,6 +27,7 @@ namespace OxidEsales\PayPalModule\GraphQL\Controller;
 use OxidEsales\GraphQL\Storefront\Basket\Service\Basket as StorefrontBasketService;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalCommunicationInformation;
 use OxidEsales\PayPalModule\GraphQL\DataType\PayPalTokenStatus;
+use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
@@ -46,14 +47,11 @@ final class Payment
 
     public function __construct(
         PaymentService $paymentService,
-        BasketService $basketService
+        BasketService $basketService,
+        StorefrontBasketService $storefrontBasketService = null
     ) {
         $this->paymentService = $paymentService;
         $this->basketService = $basketService;
-    }
-
-    public function setStorefrontBasketService(StorefrontBasketService $storefrontBasketService): void
-    {
         $this->storefrontBasketService = $storefrontBasketService;
     }
 
@@ -67,6 +65,8 @@ final class Payment
         string $cancelUrl,
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
+        $this->validateState();
+
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
 
         // validate if basket payment method is correct
@@ -95,6 +95,8 @@ final class Payment
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation
     {
+        $this->validateState();
+
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
 
         $communicationInformation = $this->paymentService->getPayPalExpressCommunicationInformation(
@@ -119,5 +121,12 @@ final class Payment
     public function paypalTokenStatus(string $paypalToken): PayPalTokenStatus
     {
         return $this->paymentService->getPayPalTokenStatus($paypalToken);
+    }
+
+    protected function validateState(): void
+    {
+        if (is_null($this->storefrontBasketService)) {
+            throw GraphQLServiceNotFound::byServiceName(StorefrontBasketService::class);
+        }
     }
 }

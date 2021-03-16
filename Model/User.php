@@ -21,6 +21,11 @@
 
 namespace OxidEsales\PayPalModule\Model;
 
+use OxidEsales\Eshop\Core\Exception\StandardException as EshopStandardException;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
+use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
+
 /**
  * PayPal oxUser class.
  *
@@ -314,6 +319,82 @@ class User extends User_parent
             $stateId = $state->getIdByCode($payPalData["SHIPTOSTATE"], $countryId);
         }
         $this->oxuser__oxstateid = new \OxidEsales\Eshop\Core\Field($stateId);
+    }
+
+    public function setAnonymousUserId(string $userId): bool
+    {
+        $this->assign(
+            [
+                'OEPAYPAL_ANON_USERID' => $userId,
+            ]
+        );
+
+        return (bool) $this->save();
+    }
+
+    public function getAnonymousId(string $userId): string
+    {
+        $queryBuilder = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(QueryBuilderFactoryInterface::class)
+            ->create();
+
+        $queryBuilder->select('oxuser.oxid')
+            ->from('oxuser')
+            ->where('(oxshopid = :shopid)')
+            ->andWhere('(oxuser.OEPAYPAL_ANON_USERID = :userid)')
+            ->setParameters([
+                ':userid' => $userId,
+                ':shopid' => \OxidEsales\Eshop\Core\Registry::getConfig()->getShopId()
+            ]);
+
+        $result = $queryBuilder->execute();
+        $id     = $result->fetchOne();
+
+        $id = $id ?: $userId;
+
+        return $id;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function load($id)
+    {
+        if (!parent::load($id)) {
+            return parent::load($this->getAnonymousId($id));
+        }
+
+        return true;
+    }
+
+    public function hasNoInvoiceAddress(): bool
+    {
+        return $this->getFieldData('oxusername') === $this->_getMergedAddressFields();
+    }
+
+    public function setGroupsAfterUserCreation(): void
+    {
+        $this->_setAutoGroups($this->oxuser__oxcountryid->value);
+
+        // and adding to group "oxidnotyetordered"
+        $this->addToGroup("oxidnotyetordered");
+    }
+
+    public function setInvoiceDataFromPayPalResult(ResponseGetExpressCheckoutDetails $payPalData): void
+    {
+        //doublecheck
+        if (!$this->hasNoInvoiceAddress()) {
+            $exception = new EshopStandardException();
+            $exception->setMessage('OEPAYPAL_ERROR_USER_ADDRESS');
+            throw $exception;
+        }
+
+        $this->assign($this->prepareDataPayPalUser($payPalData));
+        $this->save();
+        $this->setGroupsAfterUserCreation();
     }
 
     /**

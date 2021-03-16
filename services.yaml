@@ -40,3 +40,11 @@ services:
     public: true
     arguments:
       $storefrontBasketService: '@?OxidEsales\GraphQL\Storefront\Basket\Service\Basket'
+
+  OxidEsales\PayPalModule\GraphQL\Service\BasketExtendType:
+    class: OxidEsales\PayPalModule\GraphQL\Service\BasketExtendType
+    public: true
+
+  OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider:
+    class: OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider
+    tags: ['graphql_permission_provider']

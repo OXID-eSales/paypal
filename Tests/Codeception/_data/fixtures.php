@@ -33,6 +33,11 @@ return [
         'oxbirthdate'  => date("Y-m-d"),
         'oxpasssalt'   => ''
     ],
+    'usergroups' => [
+        'OXID'       => 'pptestusergroups',
+        'oxobjectid' => 'pptestuser',
+        'oxgroupsid' => 'oxidcustomer'
+    ],
     'userPassword'  => 'useruser',
     'demoUserName'  => 'user@oxid-esales.com',
     // This product is available in ce|pe|ee demodata
@@ -65,5 +70,72 @@ return [
         'standard' => 'oxidstandard'
     ],
     'payment_id' => 'oxidpaypal',
-    'payment_id_other' => 'oxidcashondel'
+    'payment_id_other' => 'oxidcashondel',
+    'oxvoucherseries' => [
+        'OXID'               => 'ppgserie1',
+        'OXSERIENR'          => 'ppgserie1',
+        'OXDISCOUNT'         => '10',
+        'OXDISCOUNTTYPE'     => 'absolute',
+        'OXBEGINDATE'        => '2000-01-01',
+        'OXENDDATE'          => '2050-12-31',
+        'OXSERIEDESCRIPTION' => 'PPG test voucher',
+        'OXALLOWOTHERSERIES' => 1
+    ],
+    'oxvoucherseries_ee' => [
+        'OXID'               => 'ppgserie1',
+        'OXMAPID'            => '6543',
+        'OXSERIENR'          => 'ppgserie1',
+        'OXDISCOUNT'         => '10',
+        'OXDISCOUNTTYPE'     => 'absolute',
+        'OXBEGINDATE'        => '2000-01-01',
+        'OXENDDATE'          => '2050-12-31',
+        'OXSERIEDESCRIPTION' => 'PPG test voucher',
+        'OXALLOWOTHERSERIES' => 1
+    ],
+    'oxvoucherseries2shop' => [
+        'OXSHOPID'           => '1',
+        'OXMAPOBJECTID'      => '6543'
+    ],
+    'oxvouchers'        => [
+        'OXID'             => 'ppgvoucher1',
+        'OXVOUCHERNR'      => 'ppgvoucher1',
+        'OXVOUCHERSERIEID' => 'ppgserie1'
+    ],
+    'oxdiscount'       => [
+        'OXID'         => 'ppgdiscount',
+        'OXSHOPID'     => 1,
+        'OXACTIVE'     => 1,
+        'OXACTIVEFROM' => '2020-12-01 00:00:00',
+        'OXACTIVETO'   => '2099-01-01 00:00:00',
+        'OXTITLE'      => 'ppgdiscount for product',
+        'OXTITLE_1'    => 'ppgdiscount for product',
+        'OXAMOUNT'     => 1,
+        'OXAMOUNTTO'   => 999999,
+        'OXADDSUMTYPE' => 'abs',
+        'OXADDSUM'     => 9.9
+    ],
+    'oxdiscount_ee'     => [
+        'OXID'         => 'ppgdiscount',
+        'OXMAPID'      => '7654',
+        'OXSHOPID'     => 1,
+        'OXACTIVE'     => 1,
+        'OXACTIVEFROM' => '2020-12-01 00:00:00',
+        'OXACTIVETO'   => '2099-01-01 00:00:00',
+        'OXTITLE'      => 'ppgdiscount for product',
+        'OXTITLE_1'    => 'ppgdiscount for product',
+        'OXAMOUNT'     => 1,
+        'OXAMOUNTTO'   => 999999,
+        'OXADDSUMTYPE' => 'abs',
+        'OXADDSUM'     => 9.9
+    ],
+    'oxdiscount2shop'   => [
+        'OXSHOPID'      => '1',
+        'OXMAPOBJECTID' => '7654'
+    ],
+    'oxobject2discount' => [
+        'OXID'         => 'ppgdiscountrelation',
+        'OXDISCOUNTID' => 'ppgdiscount',
+        'OXOBJECTID'   => 'dc5ffdf380e15674b56dd562a7cb6aec',
+        'OXTYPE'       => 'oxarticles'
+    ]
 ];

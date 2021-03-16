@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -30,6 +31,7 @@ use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
+use TheCodingMachine\GraphQLite\Annotations\Right;
 
 final class Payment
 {
@@ -83,8 +85,36 @@ final class Payment
     }
 
     /**
+     * @Query
+     * @Right("PAYPAL_EXPRESS_APPROVAL")
+     */
+    public function paypalExpressApprovalProcess(
+        string $basketId,
+        string $returnUrl,
+        string $cancelUrl,
+        bool $displayBasketInPayPal
+    ): PayPalCommunicationInformation
+    {
+        $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
+
+        $communicationInformation = $this->paymentService->getPayPalExpressCommunicationInformation(
+            $basket,
+            $returnUrl,
+            $cancelUrl,
+            $displayBasketInPayPal
+        );
+
+        $this->basketService->updateExpressBasketInformation(
+            $basket,
+            $communicationInformation->getToken()
+        );
+
+        return $communicationInformation;
+    }
+
+    /**
      * @Query()
-     * @Logged()
+     * @Right("PAYPAL_TOKEN_STATUS")
      */
     public function paypalTokenStatus(string $paypalToken): PayPalTokenStatus
     {

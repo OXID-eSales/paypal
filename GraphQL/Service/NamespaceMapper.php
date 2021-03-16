@@ -23,9 +23,7 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
-#use OxidEsales\GraphQL\Base\Framework\NamespaceMapperInterface;
-
-final class NamespaceMapper #implements NamespaceMapperInterface
+final class NamespaceMapper
 {
     public function getControllerNamespaceMapping(): array
     {

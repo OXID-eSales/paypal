@@ -58,7 +58,7 @@ final class PayPalTokenStatus
     /**
      * @Field()
      */
-    public function getStatus(): bool
+    public function isTokenApproved(): bool
     {
         return $this->status;
     }

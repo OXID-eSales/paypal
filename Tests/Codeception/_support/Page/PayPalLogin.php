@@ -54,6 +54,9 @@ class PayPalLogin extends Page
 
     public $paypalBannerContainer = "//div[@id='paypal-installment-banner-container']";
 
+    public $backToInputEmail = "#backToInputEmailLink";
+    public $errorSection = '#notifications #pageLevelErrors';
+
     /**
      * @param string $userName
      * @param string $userPassword
@@ -141,6 +144,11 @@ class PayPalLogin extends Page
         if ($I->seePageHasElement($this->oldLoginSection)) {
             $I->waitForElementVisible($this->userLoginEmail, 5);
             $I->fillField($this->userLoginEmail, $userName);
+
+            if ($I->seePageHasElement($this->nextButton)) {
+                $I->retryClick($this->nextButton);
+            }
+
             $I->waitForElementVisible($this->userPassword, 5);
             $I->fillField($this->userPassword, $userPassword);
             $I->retryClick($this->loginButton);
@@ -156,7 +164,7 @@ class PayPalLogin extends Page
         $I->wait(3);
     }
 
-   /**
+    /**
      * @param string $userName
      * @param string $userPassword
      */
@@ -205,6 +213,32 @@ class PayPalLogin extends Page
         }
     }
 
+    /**
+     * @param string $userName
+     * @param string $userPassword
+     */
+    public function approveGraphqlExpressPayPal(string $userName, string $userPassword): void
+    {
+        $I = $this->user;
+
+        $this->waitForPayPalPage();
+        $this->waitForSpinnerDisappearance();
+        $this->removeCookieConsent();
+
+        $this->loginToPayPal($userName, $userPassword);
+        $this->waitForSpinnerDisappearance();
+        $I->wait(3);
+
+        $this->confirmPayPal();
+
+        //retry
+        $this->waitForSpinnerDisappearance();
+        $this->confirmPayPal();
+
+        //we should be back to shop frontend as we sent a redirect url to paypal
+        $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
+    }
+
     public function waitForPayPalPage(): PayPalLogin
     {
         $I = $this->user;
@@ -216,10 +250,17 @@ class PayPalLogin extends Page
         if ($I->seePageHasElement($this->loginSection)) {
             $I->retryClick('.loginRedirect a');
             $I->waitForDocumentReadyState();
-            $I->waitForElementNotVisible($this->spinner, 90);
+            $this->waitForSpinnerDisappearance();
             $I->waitForElementNotVisible($this->loginSection);
          }
-
+/*
+        if ($I->seePageHasElement($this->backToInputEmail)) {
+            $I->retryClick($this->backToInputEmail);
+            $I->waitForDocumentReadyState();
+            $this->waitForSpinnerDisappearance();
+            $I->waitForElementNotVisible($this->backToInputEmail);
+        }
+*/
         return $this;
     }
 

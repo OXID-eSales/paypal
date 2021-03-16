@@ -22,12 +22,16 @@
 namespace OxidEsales\PayPalModule\Tests\Unit\Model;
 
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Application\Model\User as EshopUserModel;
+use OxidEsales\Eshop\Core\Exception\StandardException as EshopStandardException;
 
 /**
  * Testing oxAccessRightException class.
  */
 class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
+    private const TEST_USER_ID = 'e7af1c3b786fd02906ccd75698f4e6b9 ';
+
     /**
      * Tear down the fixture.
      */
@@ -392,6 +396,55 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->assertEquals('testZip', $payPalUser->oxuser__oxzip->value);
         $this->assertEquals('8f241f11096877ac0.98748826', $payPalUser->oxuser__oxcountryid->value);
         $this->assertEquals('333', $payPalUser->oxuser__oxstateid->value);
+    }
+
+    public function testLoadCustomerFromAnonymousId(): void
+    {
+        $anonymousId = 'anonymoususer';
+        $userId = md5(uniqid());
+        $username = 'mydummyuseroxid-esales.com';
+
+        $user = oxNew(EshopUserModel::class);
+        $user->assign(
+            [
+                'oxid'       => $userId,
+                'oxusername' => $username
+            ]
+        );
+        $user->save();
+
+        $user = oxNew(EshopUserModel::class);
+        $this->assertFalse($user->load($anonymousId));
+
+        $user = oxNew(EshopUserModel::class);
+        $user->load($userId);
+        $user->assign(
+            [
+                'OEPAYPAL_ANON_USERID' => $anonymousId
+            ]
+        );
+        $user->save();
+
+        $user = oxNew(EshopUserModel::class);
+        $user->setId($anonymousId);
+        $this->assertTrue($user->load($anonymousId));
+
+        $this->assertSame($userId, $user->getId());
+        $this->assertSame($username, $user->getFieldData('oxusername'));
+    }
+
+    public function testSetInvoiceDataFromPayPalResultError()
+    {
+        $payPalData = $this->getPayPalData();
+        $details = new \OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails();
+        $details->setData($payPalData);
+
+        $user = oxNew(EshopUserModel::class);
+        $user->load(self::TEST_USER_ID);
+
+        $this->expectException(EshopStandardException::class);
+
+        $user->setInvoiceDataFromPayPalResult($details);
     }
 
     /**

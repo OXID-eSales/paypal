@@ -109,6 +109,7 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
         $mockBuilder->setMethods(['getId', 'getEncodedDeliveryAddress']);
         $user = $mockBuilder->getMock();
+        $user->assign(['oxcountryid' => 'a7c40f631fc920687.20179984']);
         $user->expects($this->any())->method("getId")->will($this->returnValue("321"));
         $user->expects($this->any())->method("getEncodedDeliveryAddress")->will($this->returnValue("encodeddeliveryaddress123"));
 

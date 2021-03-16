@@ -23,20 +23,29 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Service;
 
-use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
-use TheCodingMachine\GraphQLite\Annotations\ExtendType;
-use TheCodingMachine\GraphQLite\Annotations\Field;
-
-/**
- * @ExtendType(class=BasketDataType::class)
- */
-final class BasketExtendType
+final class PermissionProvider
 {
-    /**
-     * @Field()
-     */
-    public function paypalToken(BasketDataType $basket): string
+    public function getPermissions(): array
     {
-        return $basket->getEshopModel()->getFieldData('OEPAYPAL_PAYMENT_TOKEN');
+        return [
+            'oxidcustomer' => [
+                'PAYPAL_EXPRESS_APPROVAL',
+                'PAYPAL_TOKEN_STATUS'
+            ],
+            'oxidnotyetordered' => [
+                'PAYPAL_EXPRESS_APPROVAL',
+                'PAYPAL_TOKEN_STATUS'
+            ],
+            'oxidanonymous' => [
+                'CREATE_BASKET',
+                'ADD_PRODUCT_TO_BASKET',
+                'REMOVE_BASKET_PRODUCT',
+                'ADD_VOUCHER',
+                'REMOVE_VOUCHER',
+                'PLACE_ORDER',
+                'PAYPAL_EXPRESS_APPROVAL',
+                'PAYPAL_TOKEN_STATUS'
+            ],
+        ];
     }
 }

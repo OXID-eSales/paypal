@@ -25,7 +25,6 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\GraphQL\Storefront\Basket\Event\BeforePlaceOrder as BeforePlaceOrderEvent;
-use OxidEsales\PayPalModule\GraphQL\DataType\BasketExtendType;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
 use OxidEsales\PayPalModule\GraphQL\Service\Basket as BasketService;
 use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
@@ -79,7 +78,7 @@ final class BeforePlaceOrder
             $expressCheckoutDetails = $this->paymentService->getExpressCheckoutDetails($token);
 
             $tokenStatus = $this->paymentService->getPayPalTokenStatus($token, $expressCheckoutDetails);
-            if (!$tokenStatus->getStatus()) {
+            if (!$tokenStatus->isTokenApproved()) {
                 throw BasketCommunication::notConfirmed($userBasket->id()->val());
             }
 
@@ -90,6 +89,7 @@ final class BeforePlaceOrder
             $session = EshopRegistry::getSession();
             $session->setBasket($sessionBasket);
             $session->setVariable('oepaypal-token', $token);
+            $session->setVariable("oepaypal-userId", $sessionBasket->getUser()->getId());
             $session->setVariable('oepaypal-payerId', $tokenStatus->getPayerId());
         }
     }

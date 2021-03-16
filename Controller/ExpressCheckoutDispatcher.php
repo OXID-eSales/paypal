@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -18,7 +19,12 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2018
  */
+
 namespace OxidEsales\PayPalModule\Controller;
+
+use OxidEsales\Eshop\Core\Registry as EshopRegistry;
+use OxidEsales\PayPalModule\Model\PaymentManager;
+use OxidEsales\PayPalModule\Model\Response\ResponseGetExpressCheckoutDetails;
 
 /**
  * PayPal Express Checkout dispatcher class
@@ -30,7 +36,19 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      *
      * @var int
      */
-    protected $serviceType = 2;
+    protected $serviceType = PaymentManager::PAYPAL_SERVICE_TYPE_EXPRESS;
+
+    /**
+     * Processes PayPal callback for graphql
+     */
+    public function processGraphQLCallBack()
+    {
+        $basketId = $this->getRequest()->getRequestParameter("basketid");
+        $sessionBasket = $this->getPaymentManager()->prepareCallback($basketId);
+        EshopRegistry::getSession()->setBasket($sessionBasket);
+
+        $this->processCallBack();
+    }
 
     /**
      * Processes PayPal callback
@@ -40,7 +58,7 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
         $payPalService = $this->getPayPalCheckoutService();
         $this->setParamsForCallbackResponse($payPalService);
         $request = $payPalService->callbackResponse();
-        \OxidEsales\Eshop\Core\Registry::getUtils()->showMessageAndExit($request);
+        EshopRegistry::getUtils()->showMessageAndExit($request);
     }
 
     /**
@@ -52,66 +70,25 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     public function setExpressCheckout()
     {
-        $session = \OxidEsales\Eshop\Core\Registry::getSession();
-        $session->setVariable("oepaypal", "2");
+        $session = EshopRegistry::getSession();
+        $session->setVariable("oepaypal", PaymentManager::PAYPAL_SERVICE_TYPE_EXPRESS);
         try {
-            /** @var \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder $builder */
-            $builder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder::class);
-
-            $basket = $session->getBasket();
-            $user = $this->getUser();
-
-            $basket->setPayment("oxidpaypal");
             $session->setVariable('paymentid', 'oxidpaypal');
+            $shippingId = '';
 
-            $prevOptionValue = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('blCalculateDelCostIfNotLoggedIn');
             if ($this->getPayPalConfig()->isDeviceMobile()) {
-                if ($this->getPayPalConfig()->getMobileECDefaultShippingId()) {
-                    \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', true);
-                    $basket->setShipping($this->getPayPalConfig()->getMobileECDefaultShippingId());
-                } else {
-                    \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', false);
-                }
+                $shippingId = (string) $this->getPayPalConfig()->getMobileECDefaultShippingId();
             }
 
-            $basket->onUpdate();
-            $basket->calculateBasket(true);
-            \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('blCalculateDelCostIfNotLoggedIn', $prevOptionValue);
-
-            $validator = oxNew(\OxidEsales\PayPalModule\Model\PaymentValidator::class);
-            $validator->setUser($user);
-            $validator->setConfig(\OxidEsales\Eshop\Core\Registry::getConfig());
-            $validator->setPrice($basket->getPrice()->getPrice());
-            $validator->setCheckCountry(false);
-
-            if (!$validator->isPaymentValid()) {
-                /**
-                 * @var \OxidEsales\PayPalModule\Core\Exception\PayPalException $exception
-                 */
-                $exception = oxNew(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
-                $exception->setMessage(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PAYMENT_NOT_VALID"));
-                throw $exception;
-            }
-
-            $builder->setPayPalConfig($this->getPayPalConfig());
-            $builder->setBasket($basket);
-            $builder->setUser($user);
-            $builder->setReturnUrl($this->getReturnUrl());
-            $builder->setCancelUrl($this->getCancelUrl());
-
-            if (!$this->getPayPalConfig()->isDeviceMobile()) {
-                $builder->setCallBackUrl($this->getCallBackUrl());
-                $builder->setMaxDeliveryAmount($this->getPayPalConfig()->getMaxPayPalDeliveryAmount());
-            }
-            $showCartInPayPal = $this->getRequest()->getRequestParameter("displayCartInPayPal");
-            $showCartInPayPal = $showCartInPayPal && !$basket->isFractionQuantityItemsPresent();
-            $builder->setShowCartInPayPal($showCartInPayPal);
-            $builder->setTransactionMode($this->getTransactionMode($basket));
-
-            $request = $builder->buildExpressCheckoutRequest();
-
-            $payPalService = $this->getPayPalCheckoutService();
-            $result = $payPalService->setExpressCheckout($request);
+            $result = $this->getPaymentManager()->setExpressCheckout(
+                $session->getBasket(),
+                $this->getUser() ?: null,
+                $this->getReturnUrl(),
+                $this->getCancelUrl(),
+                $this->getCallBackUrl(),
+                (bool)$this->getRequest()->getRequestParameter("displayCartInPayPal"),
+                $shippingId
+            );
         } catch (\OxidEsales\Eshop\Core\Exception\StandardException $excp) {
             // error - unable to set order info - display error message
             $this->getUtilsView()->addErrorToDisplay($excp);
@@ -145,11 +122,8 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
         $basket = $session->getBasket();
 
         try {
-            $payPalService = $this->getPayPalCheckoutService();
-            $builder = oxNew(\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::class);
-            $builder->setSession($session);
-            $request = $builder->buildRequest();
-            $details = $payPalService->getExpressCheckoutDetails($request);
+            /** @var ResponseGetExpressCheckoutDetails $details */
+            $details = $this->getPaymentManager()->getExpressCheckoutDetails();
 
             // Remove flag of "new item added" to not show "Item added" popup when returning to checkout from paypal
             $basket->isNewItemAdded();
@@ -222,22 +196,13 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      * @param \OxidEsales\Eshop\Application\Model\Basket $basket
      *
      * @return string
+     *
+     * @deprecated Please use OxidEsales\PayPalModule\Model\PaymentManager::getTransactionMode
      */
     protected function getTransactionMode($basket)
     {
-        $transactionMode = $this->getPayPalConfig()->getTransactionMode();
-
-        if ($transactionMode == "Automatic") {
-            $outOfStockValidator = new \OxidEsales\PayPalModule\Model\OutOfStockValidator();
-            $outOfStockValidator->setBasket($basket);
-            $outOfStockValidator->setEmptyStockLevel($this->getPayPalConfig()->getEmptyStockLevel());
-
-            $transactionMode = ($outOfStockValidator->hasOutOfStockArticles()) ? "Authorization" : "Sale";
-
-            return $transactionMode;
-        }
-
-        return $transactionMode;
+        $paymentManager = $this->getPaymentManager();
+        return $paymentManager->getTransactionMode($basket, $this->getPayPalConfig());
     }
 
     /**
@@ -473,26 +438,12 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      * @param array $deliverySetList delivery list
      *
      * @return array
+     *
+     * @deprecated Please use OxidEsales\PayPalModule\Model\PaymentManager::makeUniqueNames
      */
     public function makeUniqueNames($deliverySetList)
     {
-        $result = array();
-        $nameCounts = array();
-
-        foreach ($deliverySetList as $deliverySet) {
-            $deliverySetName = trim($deliverySet->oxdeliveryset__oxtitle->value);
-
-            if (isset($nameCounts[$deliverySetName])) {
-                $nameCounts[$deliverySetName] += 1;
-            } else {
-                $nameCounts[$deliverySetName] = 1;
-            }
-
-            $suffix = ($nameCounts[$deliverySetName] > 1) ? " (" . $nameCounts[$deliverySetName] . ")" : '';
-            $result[$deliverySet->oxdeliveryset__oxid->value] = $this->reencodeHtmlEntities($deliverySetName . $suffix);
-        }
-
-        return $result;
+        return $this->getPaymentManager()->makeUniqueNames($deliverySetList);
     }
 
     /**
@@ -520,26 +471,9 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
      */
     protected function extractShippingId($shippingOptionName, $user)
     {
-        $result = null;
-        $session = \OxidEsales\Eshop\Core\Registry::getSession();
+        $deliverySetList = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable("oepaypal-oxDelSetList");
 
-        $shippingOptionName = $this->reencodeHtmlEntities($shippingOptionName);
-        $name = trim(str_replace(\OxidEsales\Eshop\Core\Registry::getLang()->translateString("OEPAYPAL_PRICE"), "", $shippingOptionName));
-
-        $deliverySetList = $session->getVariable("oepaypal-oxDelSetList");
-
-        if (!$deliverySetList) {
-            $delSetList = $this->getDeliverySetList($user);
-            $deliverySetList = $this->makeUniqueNames($delSetList);
-        }
-
-        if (is_array($deliverySetList)) {
-            $flipped = array_flip($deliverySetList);
-
-            $result = $flipped[$name];
-        }
-
-        return $result;
+        return $this->getPaymentManager()->extractShippingId($shippingOptionName, $user, $deliverySetList);
     }
 
     /**
@@ -752,6 +686,8 @@ class ExpressCheckoutDispatcher extends \OxidEsales\PayPalModule\Controller\Disp
 
     /**
      * @param string $input
+     *
+     * @deprecated Please use OxidEsales\PayPalModule\Model\PaymentManager::reencodeHtmlEntities
      */
     private function reencodeHtmlEntities($input)
     {

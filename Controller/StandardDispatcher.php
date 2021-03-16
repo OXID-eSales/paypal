@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales PayPal module.
  *
@@ -18,6 +19,7 @@
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2018
  */
+
 namespace OxidEsales\PayPalModule\Controller;
 
 use OxidEsales\PayPalModule\Model\PaymentManager;
@@ -37,11 +39,11 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
     public function setExpressCheckout()
     {
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
-        $session->setVariable("oepaypal", "1");
+        $session->setVariable("oepaypal", PaymentManager::PAYPAL_SERVICE_TYPE_STANDARD);
         try {
             $selectedAddressId = $this->getUser() ? (string) $this->getUser()->getSelectedAddressId() : '';
-            $paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
-            $result = $paymentManager->setExpressCheckout(
+            $paymentManager = $this->getPaymentManager();
+            $result = $paymentManager->setStandardCheckout(
                 $session->getBasket(),
                 $this->getUser() ?: null,
                 $this->getReturnUrl(),
@@ -74,11 +76,11 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
      *
      * @return string
      *
-     * @deprecated Please use OxidEsales\PayPalModule\Model::getTransactionMode
+     * @deprecated Please use OxidEsales\PayPalModule\Model\PaymentManager::getTransactionMode
      */
     protected function getTransactionMode($basket)
     {
-        $paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
+        $paymentManager = $this->getPaymentManager();
         return $paymentManager->getTransactionMode($basket, $this->getPayPalConfig());
     }
 
@@ -94,7 +96,7 @@ class StandardDispatcher extends \OxidEsales\PayPalModule\Controller\Dispatcher
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
 
         try {
-            $paymentManager = oxNew(PaymentManager::class, $this->getPayPalCheckoutService());
+            $paymentManager = $this->getPaymentManager();
             $details = $paymentManager->getExpressCheckoutDetails();
 
             $user = $this->getUser();

@@ -110,7 +110,7 @@ class CheckoutWithGraphqlCest
 
         //this is as far as we get in this case because of missing invoice country
         $shippingId = Fixtures::get('shipping')['standard'];
-        $result = $this->setBasketDeliveryMethod($I, $basketId, $shippingId, HttpCode::NOT_FOUND);
+        $result = $this->setBasketDeliveryMethod($I, $basketId, $shippingId);
 
         $expectedException = CountryNotFound::byId('');
         $I->assertStringContainsString($expectedException->getMessage(), $result);

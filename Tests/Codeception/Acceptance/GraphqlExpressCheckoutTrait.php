@@ -8,15 +8,12 @@ namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
 use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
-use Codeception\Util\HttpCode;
-use TheCodingMachine\GraphQLite\Types\ID;
 
 trait GraphqlExpressCheckoutTrait
 {
     protected function paypalExpressApprovalProcess(
         AcceptanceTester $I,
-        string $basketId,
-        int $status = HttpCode::OK
+        string $basketId
     ): array
     {
         $variables = [
@@ -39,17 +36,14 @@ trait GraphqlExpressCheckoutTrait
             }
         ';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, $status);
-
-        return $result;
+        return $this->getGQLResponse($I, $mutation, $variables);
     }
 
     protected function removeProductFromBasket(
         AcceptanceTester $I,
         string $basketId,
         string $productId,
-        int $amount = 1,
-        int $status = HttpCode::OK
+        int $amount = 1
     ): array
     {
         $variables = [
@@ -67,16 +61,13 @@ trait GraphqlExpressCheckoutTrait
             }
         }';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, $status);
-
-        return $result;
+        return $this->getGQLResponse($I, $mutation, $variables);
     }
 
     protected function addVoucherToBasket(
         AcceptanceTester $I,
         string $basketId,
-        string $voucherNumber,
-        int $status = HttpCode::OK
+        string $voucherNumber
     ) : array
     {
         $variables = [
@@ -93,16 +84,13 @@ trait GraphqlExpressCheckoutTrait
             }
         }';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, $status);
-
-        return $result;
+        return $this->getGQLResponse($I, $mutation, $variables);
     }
 
     protected function removeVoucherFromBasket(
         AcceptanceTester $I,
         string $basketId,
-        string $voucherId,
-        int $status = HttpCode::OK
+        string $voucherId
     ) : array
     {
         $variables = [
@@ -119,8 +107,6 @@ trait GraphqlExpressCheckoutTrait
             }
         }';
 
-        $result = $this->getGQLResponse($I, $mutation, $variables, $status);
-
-        return $result;
+        return $this->getGQLResponse($I, $mutation, $variables);
     }
 }

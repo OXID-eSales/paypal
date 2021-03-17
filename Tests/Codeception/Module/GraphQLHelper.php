@@ -72,7 +72,6 @@ class GraphQLHelper extends Module implements DependsOnModule
         ];
 
         $this->sendGQLQuery($query, $variables, 0, $shopId);
-        $this->rest->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
         $this->rest->seeResponseIsJson();
         $this->seeResponseContainsValidJWTToken();
 
@@ -86,7 +85,6 @@ class GraphQLHelper extends Module implements DependsOnModule
         $query     = 'query{token}';
 
         $this->sendGQLQuery($query, [], 0, $shopId);
-        $this->rest->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
         $this->rest->seeResponseIsJson();
         $this->seeResponseContainsValidJWTToken();
 

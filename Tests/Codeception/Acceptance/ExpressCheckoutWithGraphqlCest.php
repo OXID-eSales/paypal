@@ -12,7 +12,6 @@ use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\Facts\Facts;
 use Codeception\Util\Fixtures;
 use Codeception\Scenario;
-use Codeception\Util\HttpCode;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 
@@ -429,7 +428,7 @@ class ExpressCheckoutWithGraphqlCest
         $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
 
         //place the order
-        $result = $this->placeOrder($I, $basketId, HttpCode::BAD_REQUEST);
+        $result = $this->placeOrder($I, $basketId);
 
         $I->assertEquals('OEPAYPAL_ERROR_USER_ADDRESS', $result['errors'][0]['debugMessage']);
     }
@@ -525,7 +524,7 @@ class ExpressCheckoutWithGraphqlCest
 
         //try to place the order with a new anonymous token
         $I->anonymousLoginToGraphQLApi();
-        $result = $this->placeOrder($I, $basketId, HttpCode::UNAUTHORIZED);
+        $result = $this->placeOrder($I, $basketId);
 
         $expectedException = BasketAccessForbidden::byAuthenticatedUser();
         $I->assertEquals(
@@ -678,7 +677,7 @@ class ExpressCheckoutWithGraphqlCest
 
         //User gets a non anonymous token to place the order
         $I->loginToGraphQLApi(Fixtures::get('sBuyerLogin'), $I->getExistingUserPassword());
-        $result = $this->placeOrder($I, $basketId, HttpCode::UNAUTHORIZED);
+        $result = $this->placeOrder($I, $basketId);
 
         $expectedException = BasketAccessForbidden::byAuthenticatedUser();
         $I->assertEquals(
@@ -854,7 +853,7 @@ class ExpressCheckoutWithGraphqlCest
         $this->deactivateDiscount($I);
 
         //place the order
-        $result = $this->placeOrder($I, $basketId, HttpCode::INTERNAL_SERVER_ERROR);
+        $result = $this->placeOrder($I, $basketId);
         $exception = BasketValidation::basketChange($basketId);
         $I->assertEquals($exception->getMessage(), $result['errors'][0]['message']);
     }

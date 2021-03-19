@@ -185,15 +185,14 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * NOTE: User is not logged in to shop yet and no delivery set id stored in shop session at this point.
      * Means if option blCalculateDelCostIfNotLoggedIn is set in shop, pre-calculated delivery costs will be sent to PP.
      * By default the shop takes the oxidstandard delivery set (3.90 EUR but no PayPal assigned)..
-     * Usually PP would use the callback to check for default PayPal delivery set (testdelset, 130 EUR) and send this
-     * info back in GetExpressCheckoutDetails in field SHIPPINGOPTIONNAME. Atm PP sandbox does no give us this
-     * information for causes unknown. So or now we assign PayPal to oxidstandard.
-     * We will restore the test back to it's former behaviour at some later point.
+     * PP will use the callback to check for default PayPal delivery set (testdelset, 13 EUR) and send this
+     * info back in GetExpressCheckoutDetails in field SHIPPINGOPTIONNAME. 
      *
      * @group paypal_standalone
      * @group paypal_external
      * @group paypal_buyerlogin
      * @group paypal_express
+     * @group paypal_callback
      */
     public function testPayPalShippingCostNotLoginUser()
     {

@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Model;
 
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Driver\Result;
 use OxidEsales\Eshop\Core\Exception\StandardException as EshopStandardException;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
@@ -348,10 +350,8 @@ class User extends User_parent
                 ':shopid' => \OxidEsales\Eshop\Core\Registry::getConfig()->getShopId()
             ]);
 
-        $result = $queryBuilder->execute();
-        $id     = $result->fetchOne();
-
-        $id = $id ?: $userId;
+        $result = $queryBuilder->execute()->fetch(FetchMode::COLUMN);
+        $id = $result ?: $userId;
 
         return $id;
     }

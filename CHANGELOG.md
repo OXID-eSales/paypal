@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `\OxidEsales\PayPalModule\Model\Address::prepareDataPayPalAddress()`
   - `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getReturnUrl()`
   - `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getCancelUrl()`
+- Drop support for PHP 7.0.
 
 ### Deprecated
   - Deprecated the following methods:

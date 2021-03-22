@@ -194,6 +194,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
      * @group paypal_external
      * @group paypal_buyerlogin
      * @group paypal_express
+     * @group paypal_callback
      */
     public function testPayPalShippingCostNotLoginUser()
     {
@@ -434,6 +435,7 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
 
         // Go to admin and check the order
         $this->loginAdminForModule("Administer Orders", "Orders", "btn.help", "link=2");
+        $this->waitForFrameToLoad('list', 1000);
         $this->openListItem("link=2");
         $this->assertTextPresent("Internal Status: NOT_FINISHED"); //means capture has to be done manually with these settings
     }

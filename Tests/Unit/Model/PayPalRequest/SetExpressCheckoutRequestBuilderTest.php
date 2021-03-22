@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\PayPalRequest;
 
+use OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException;
+
 /**
  * Testing \OxidEsales\PayPalModule\Model\PayPalRequest\SetExpressCheckoutRequestBuilder class.
  */
@@ -75,11 +77,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $this->assertNotContains('LOGOIMG', $builder->getPayPalRequest()->getData());
     }
 
-    /**
-     * @expectedException \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException
-     */
     public function testAddBaseParams_NoConfigSet_ExceptionThrown()
     {
+        $this->expectException(PayPalMissingParameterException::class);
+
         $builder = $this->getPayPalRequestBuilder();
         $builder->addBaseParams();
     }
@@ -223,11 +224,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $this->assertNotContains('PAYMENTREQUEST_0_TAXAMT', $builder->getPayPalRequest()->getData());
     }
 
-    /**
-     * @expectedException \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException
-     */
     public function testSetBasket_NoConfigSet_ExceptionThrown()
     {
+        $this->expectException(PayPalMissingParameterException::class);
+
         $builder = $this->getPayPalRequestBuilder();
         $builder->addBasketParams();
     }
@@ -257,11 +257,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
-    /**
-     * @expectedException \OxidEsales\PayPalModule\Core\Exception\PayPalMissingParameterException
-     */
     public function testSetDescription_NoConfigSet_ExceptionThrown()
     {
+        $this->expectException(PayPalMissingParameterException::class);
+
         $builder = $this->getPayPalRequestBuilder();
         $builder->addDescriptionParams();
     }

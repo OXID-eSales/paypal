@@ -29,7 +29,7 @@ class OrderPaymentStatusCalculatorTest extends \OxidEsales\TestingLibrary\UnitTe
     /**
      *  Setup: Prepare data - create need tables
      */
-    public function setUp()
+    protected function setUp(): void
     {
         \OxidEsales\PayPalModule\Core\Events::addOrderPaymentsTable();
         \OxidEsales\PayPalModule\Core\Events::addOrderTable();

@@ -29,7 +29,7 @@ class OrderPaymentCommentListTest extends \OxidEsales\TestingLibrary\UnitTestCas
     /**
      *  Setup: Prepare data - create need tables
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpaymentcomments`');
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('TRUNCATE `oepaypal_orderpayments`');

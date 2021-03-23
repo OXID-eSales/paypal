@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Page;
 
+use Facebook\WebDriver\Exception\ElementNotVisibleException;
 use OxidEsales\Codeception\Page\Checkout\OrderCheckout;
 use OxidEsales\Codeception\Page\Page;
 
@@ -56,6 +57,9 @@ class PayPalLogin extends Page
 
     public $backToInputEmail = "#backToInputEmailLink";
     public $errorSection = '#notifications #pageLevelErrors';
+    public $splitPassword = '#splitPassword';
+    public $splitEmail = '#splitEmail';
+    public $rememberedEmail = "//div[@class='profileRememberedEmail']";
 
     /**
      * @param string $userName
@@ -137,6 +141,20 @@ class PayPalLogin extends Page
 
         $this->waitForPayPalPage();
         $this->removeCookieConsent();
+
+        if ($I->seePageHasElement($this->splitPassword)
+            && $I->seePageHasElement($this->rememberedEmail)
+            && $I->seePageHasElement($this->backToInputEmail)
+        ) {
+            try {
+                $I->seeAndClick($this->backToInputEmail);
+                $I->waitForDocumentReadyState();
+                $this->waitForSpinnerDisappearance();
+                $I->waitForElementNotVisible($this->backToInputEmail);
+            } catch(ElementNotVisibleException $e) {
+                //nothing to be done, element was not visible
+            }
+        }
 
         if ($I->seePageHasElement($this->oldLoginSection)) {
             $I->waitForElementVisible($this->userLoginEmail, 5);
@@ -250,14 +268,7 @@ class PayPalLogin extends Page
             $this->waitForSpinnerDisappearance();
             $I->waitForElementNotVisible($this->loginSection);
          }
-/*
-        if ($I->seePageHasElement($this->backToInputEmail)) {
-            $I->retryClick($this->backToInputEmail);
-            $I->waitForDocumentReadyState();
-            $this->waitForSpinnerDisappearance();
-            $I->waitForElementNotVisible($this->backToInputEmail);
-        }
-*/
+
         return $this;
     }
 

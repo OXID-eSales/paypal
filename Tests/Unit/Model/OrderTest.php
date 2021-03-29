@@ -190,11 +190,9 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Application\Model\PaymentList::class, null);
 
-        $basketMethods = array(
-            'getPaymentId'  => 'oxidpaypal',
-            'getShippingId' => 'oxidstandard',
-        );
-        $basket = $this->createStub(\OxidEsales\PayPalModule\Model\Basket::class, $basketMethods);
+        $basket = $this->createPartialMock(\OxidEsales\PayPalModule\Model\Basket::class, ['getPaymentId', 'getShippingId']);
+        $basket->method('getPaymentId')->willReturn('oxidpaypal');
+        $basket->method('getShippingId')->willReturn('oxidstandard');
 
         $emptyPayment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
         $emptyPayment->load('oxempty');

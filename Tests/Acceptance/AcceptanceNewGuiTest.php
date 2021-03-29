@@ -74,8 +74,8 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
         $this->assertEquals("0,99 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");
         $this->assertEquals("Zahlungsart Ändern PayPal", $this->clearString($this->getText("orderPayment")));
         $this->assertEquals("Versandart Ändern Test S&H set", $this->clearString($this->getText("orderShipping")));
-        $this->assertContains("testing_account@oxid-esales.dev", $this->clearString($this->getText("orderAddress")));
-        $this->assertContains("SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland", $this->clearString($this->getText("orderAddress")));
+        $this->assertStringContainsString("testing_account@oxid-esales.dev", $this->clearString($this->getText("orderAddress")));
+        $this->assertStringContainsString("SeleniumTestCase Äß'ü Testing acc for Selenium Herr Testing user acc Äß'ü PayPal Äß'ü Musterstr. Äß'ü 1 79098 Musterstadt Äß'ü Deutschland", $this->clearString($this->getText("orderAddress")));
         $this->clickAndWait("//button[text()='Zahlungspflichtig bestellen']", 90);
         $this->assertTextPresent("Vielen Dank für Ihre Bestellung im OXID eShop", "Order is not finished successful");
 

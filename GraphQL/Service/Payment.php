@@ -62,24 +62,6 @@ final class Payment
         $this->basketRelationService = $basketRelationService;
     }
 
-    public function getSharedBasketInfrastructure(): SharedBasketInfrastructure
-    {
-        if (is_null($this->sharedBasketInfrastructure)) {
-            throw GraphQLServiceNotFound::byServiceName(SharedBasketInfrastructure::class);
-        }
-
-        return $this->sharedBasketInfrastructure;
-    }
-
-    public function getBasketRelationService(): BasketRelationService
-    {
-        if (is_null($this->basketRelationService)) {
-            throw GraphQLServiceNotFound::byServiceName(BasketRelationService::class);
-        }
-
-        return $this->basketRelationService;
-    }
-
     public function getPayPalTokenStatus(
         string $token,
         ResponseGetExpressCheckoutDetails $details = null
@@ -116,6 +98,8 @@ final class Payment
         ResponseGetExpressCheckoutDetails $expressCheckoutDetails
     ): EshopBasketModel {
 
+        $this->validateState();
+
         //At this point we need to check if we have PayPal Express or paypal as standard payment method checkout
         // and act accordingly
         if (PaymentManager::PAYPAL_SERVICE_TYPE_EXPRESS == $userBasket->getEshopModel()->getFieldData('OEPAYPAL_SERVICE_TYPE')) {
@@ -139,7 +123,7 @@ final class Payment
             $userBasket->getEshopModel()->save();
         }
 
-        $sessionBasket = $this->getSharedBasketInfrastructure()->getCalculatedBasket($userBasket);
+        $sessionBasket = $this->sharedBasketInfrastructure->getCalculatedBasket($userBasket);
 
         $this->validateApprovedBasketAmount($sessionBasket, $expressCheckoutDetails, $userBasket);
         $this->validateApprovedBasketAddress($sessionBasket, $expressCheckoutDetails, $userBasket);
@@ -177,7 +161,9 @@ final class Payment
         EshopBasketModel $sessionBasket,
         BasketDataType $userBasket
     ): BaseModel {
-        $shipToAddress = $this->getBasketRelationService()->deliveryAddress($userBasket);
+        $this->validateState();
+
+        $shipToAddress = $this->basketRelationService->deliveryAddress($userBasket);
         if (!is_null($shipToAddress)) {
             /** @var EshopAddressModel $eshopModel */
             $modelWithAddress = $shipToAddress->getEshopModel();
@@ -215,14 +201,16 @@ final class Payment
         string $cancelUrl,
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
+        $this->validateState();
+
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
 
-        $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
+        $shipToAddress = $this->basketRelationService->deliveryAddress($basket);
         $shipToAddressId = $shipToAddress ? (string) $shipToAddress->id(): '';
 
         $response = $paymentManager->setStandardCheckout(
-            $this->getSharedBasketInfrastructure()->getBasket($basket),
-            $this->getBasketRelationService()->owner($basket)->getEshopModel(),
+            $this->sharedBasketInfrastructure->getBasket($basket),
+            $this->basketRelationService->owner($basket)->getEshopModel(),
             $returnUrl,
             $cancelUrl,
             $displayBasketInPayPal,
@@ -243,16 +231,18 @@ final class Payment
         string $cancelUrl,
         bool $displayBasketInPayPal
     ): PayPalCommunicationInformation {
+        $this->validateState();
+
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
-        $shipToAddress = $this->getBasketRelationService()->deliveryAddress($basket);
+        $shipToAddress = $this->basketRelationService->deliveryAddress($basket);
         $shipToAddressId = $shipToAddress ? (string) $shipToAddress->id(): '';
-        $deliveryMethod = $this->getBasketRelationService()->deliveryMethod($basket);
+        $deliveryMethod = $this->basketRelationService->deliveryMethod($basket);
         $shippingMethodId = $deliveryMethod ? (string) $deliveryMethod->id() : '';
 
         //for Express checkout, the user might not yet exist (anonymous user)
         try {
             /** @var BasketOwnerDataType $customer */
-            $owner = $this->getBasketRelationService()->owner($basket);
+            $owner = $this->basketRelationService->owner($basket);
             $user = $owner->getEshopModel();
             $user->setSelectedAddressId($shipToAddressId);
         } catch (CustomerNotFound $e) {
@@ -260,7 +250,7 @@ final class Payment
         }
 
         $response = $paymentManager->setExpressCheckout(
-            $this->getSharedBasketInfrastructure()->getBasket($basket),
+            $this->sharedBasketInfrastructure->getBasket($basket),
             $user,
             $returnUrl,
             $cancelUrl,
@@ -281,5 +271,16 @@ final class Payment
     {
         $payPalConfig = $this->requestInfrastructure->getPayPalConfig();
         return $payPalConfig->getPayPalCommunicationUrl($token);
+    }
+
+    protected function validateState(): void
+    {
+        if (is_null($this->sharedBasketInfrastructure)) {
+            throw GraphQLServiceNotFound::byServiceName(SharedBasketInfrastructure::class);
+        }
+
+        if (is_null($this->basketRelationService)) {
+            throw GraphQLServiceNotFound::byServiceName(BasketRelationService::class);
+        }
     }
 }

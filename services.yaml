@@ -7,8 +7,6 @@ services:
   OxidEsales\PayPalModule\GraphQL\Controller\:
     resource: 'GraphQL/Controller/*'
     public: true
-    calls:
-      - [setStorefrontBasketService, ['@?OxidEsales\GraphQL\Storefront\Basket\Service\Basket']]
 
   OxidEsales\PayPalModule\GraphQL\Service\NamespaceMapper:
     class: OxidEsales\PayPalModule\GraphQL\Service\NamespaceMapper
@@ -25,21 +23,14 @@ services:
   OxidEsales\PayPalModule\GraphQL\Service\Basket:
     class: OxidEsales\PayPalModule\GraphQL\Service\Basket
     public: true
-    arguments:
-      $basketRelationService: '@?OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService'
 
   OxidEsales\PayPalModule\GraphQL\Service\Payment:
     class: OxidEsales\PayPalModule\GraphQL\Service\Payment
     public: true
-    arguments:
-      $sharedBasketInfrastructure: '@?OxidEsales\GraphQL\Storefront\Shared\Infrastructure\Basket'
-      $basketRelationService: '@?OxidEsales\GraphQL\Storefront\Basket\Service\BasketRelationService'
 
   OxidEsales\PayPalModule\GraphQL\Service\BeforePlaceOrder:
     class: OxidEsales\PayPalModule\GraphQL\Service\BeforePlaceOrder
     public: true
-    arguments:
-      $storefrontBasketService: '@?OxidEsales\GraphQL\Storefront\Basket\Service\Basket'
 
   OxidEsales\PayPalModule\GraphQL\Service\BasketExtendType:
     class: OxidEsales\PayPalModule\GraphQL\Service\BasketExtendType

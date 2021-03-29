@@ -34,14 +34,14 @@ use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 
 final class BeforePlaceOrder
 {
-    /** @var StorefrontBasketService */
-    private $storefrontBasketService;
-
     /** @var PaymentService */
     private $paymentService;
 
     /** @var BasketService */
     private $basketService;
+
+    /** @var StorefrontBasketService */
+    private $storefrontBasketService;
 
     public function __construct(
         PaymentService $paymentService,
@@ -53,18 +53,11 @@ final class BeforePlaceOrder
         $this->storefrontBasketService = $storefrontBasketService;
     }
 
-    public function getStorefrontBasketService(): StorefrontBasketService
-    {
-        if (is_null($this->storefrontBasketService)) {
-            throw GraphQLServiceNotFound::byServiceName(StorefrontBasketService::class);
-        }
-
-        return $this->storefrontBasketService;
-    }
-
     public function handle(BeforePlaceOrderEvent $event): void
     {
-        $userBasket = $this->getStorefrontBasketService()->getAuthenticatedCustomerBasket((string)$event->getBasketId());
+        $this->validateState();
+
+        $userBasket = $this->storefrontBasketService->getAuthenticatedCustomerBasket((string)$event->getBasketId());
         if ($this->basketService->checkBasketPaymentMethodIsPayPal($userBasket)) {
             $extendUserBasket = new BasketExtendType();
 
@@ -91,6 +84,13 @@ final class BeforePlaceOrder
             $session->setVariable('oepaypal-token', $token);
             $session->setVariable("oepaypal-userId", $sessionBasket->getUser()->getId());
             $session->setVariable('oepaypal-payerId', $tokenStatus->getPayerId());
+        }
+    }
+
+    protected function validateState(): void
+    {
+        if (is_null($this->storefrontBasketService)) {
+            throw GraphQLServiceNotFound::byServiceName(StorefrontBasketService::class);
         }
     }
 }

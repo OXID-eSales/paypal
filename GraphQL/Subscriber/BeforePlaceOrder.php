@@ -32,7 +32,8 @@ class BeforePlaceOrder implements EventSubscriberInterface
     /** @var BeforePlaceOrderService */
     private $beforePlaceOrderService;
 
-    public function __construct(BeforePlaceOrderService $beforePlaceOrderService) {
+    public function __construct(BeforePlaceOrderService $beforePlaceOrderService)
+    {
         $this->beforePlaceOrderService = $beforePlaceOrderService;
     }
 

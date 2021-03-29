@@ -239,7 +239,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      *
      * @throws Throwable
      */
-    protected function onNotSuccessfulTest(\Throwable $exception)
+    protected function onNotSuccessfulTest(\Throwable $exception): void
     {
         try {
             self::$doStopMink = false;

@@ -113,7 +113,21 @@ class CheckoutWithGraphqlCest
         $result = $this->setBasketDeliveryMethod($I, $basketId, $shippingId);
 
         $expectedException = CountryNotFound::byId('');
-        $I->assertStringContainsString($expectedException->getMessage(), $result);
+        $this->doAssertStringContainsString($expectedException->getMessage(), $result);
+    }
+
+    /**
+     * @param string $needle
+     * @param string $haystack
+     * @param string $message
+     */
+    protected function doAssertStringContainsString(AcceptanceTester $I, $needle, $haystack)
+    {
+        if (method_exists($I, 'assertStringContainsString')) {
+            $I->assertStringContainsString($needle, $haystack);
+        } else {
+            $I->assertContains($needle, $haystack);
+        }
     }
 
     /**
@@ -183,7 +197,7 @@ class CheckoutWithGraphqlCest
         $result = $this->placeOrder($I, $basketId);
 
         $expectedException = BasketValidation::basketChange($basketId);
-        $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
+        $I->doAssertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
     }
 
     /**
@@ -215,10 +229,10 @@ class CheckoutWithGraphqlCest
         //place the order
         $result = $this->placeOrder($I, $basketId);
         $expectedException = BasketValidation::basketAddressChange($basketId);
-        $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
+        $I->doAssertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
 
         //PayPal check runs before shop check. Here's what shop would find:
-        //$I->assertStringContainsString("Delivery set 'oxidstandard' is unavailable!", $result['errors'][0]['message']);
+        //$I->doAssertStringContainsString("Delivery set 'oxidstandard' is unavailable!", $result['errors'][0]['message']);
     }
 
     /**
@@ -251,7 +265,7 @@ class CheckoutWithGraphqlCest
         $result = $this->placeOrder($I, $basketId);
 
         $expectedException = BasketValidation::basketAddressChange($basketId);
-        $I->assertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
+        $I->doAssertStringContainsString($expectedException->getMessage(), $result['errors'][0]['message']);
     }
 
     /**
@@ -370,7 +384,7 @@ class CheckoutWithGraphqlCest
 
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
-        $I->assertStringContainsString(
+        $I->doAssertStringContainsString(
             //TODO: use Codeception Translator when it is possible to switch the language:
             // to German 'OEPAYPAL_RESPONSE_FROM_PAYPAL'
             'Fehlermeldung von PayPal',
@@ -437,7 +451,7 @@ class CheckoutWithGraphqlCest
         //place the order
         $result = $this->placeOrder($I, $basketId);
 
-        $I->assertStringContainsString(
+        $I->doAssertStringContainsString(
         //TODO: use Codeception Translator when it is possible to switch the language:
         // to German 'OEPAYPAL_RESPONSE_FROM_PAYPAL'
             'Fehlermeldung von PayPal',
@@ -479,7 +493,7 @@ class CheckoutWithGraphqlCest
 
         $result = $this->paypalTokenStatus($I, self::EXPIRED_TOKEN);
 
-        $I->assertStringContainsString(
+        $I->doAssertStringContainsString(
         //TODO: use Codeception Translator when it is possible to switch the language:
         // to German 'OEPAYPAL_RESPONSE_FROM_PAYPAL'
             'Fehlermeldung von PayPal',
@@ -559,7 +573,7 @@ class CheckoutWithGraphqlCest
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
-        $I->assertStringContainsString(
+        $I->doAssertStringContainsString(
             BasketAccessForbidden::byAuthenticatedUser()->getMessage(),
             $result['errors'][0]['message']
         );

@@ -24,7 +24,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 /**
  * Tests for oeThemeSwitcherUserAgent class
  */
-class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class UserAgentTest extends BaseUnitTest
 {
     public function providerIsMobile()
     {
@@ -59,7 +59,7 @@ class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $userAgent = new \OxidEsales\PayPalModule\Core\UserAgent();
         $mobileDevicesTypes = $userAgent->getMobileDeviceTypes();
-        $this->assertStringContainsString('iphone|', $mobileDevicesTypes);
+        $this->doAssertStringContainsString('iphone|', $mobileDevicesTypes);
     }
 
     /**

@@ -25,7 +25,7 @@ use OxidEsales\Eshop\Application\Model\Order;
 
 class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');

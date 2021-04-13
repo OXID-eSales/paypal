@@ -239,7 +239,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      *
      * @throws Throwable
      */
-    protected function onNotSuccessfulTest(\Throwable $exception)
+    protected function onNotSuccessfulTest(\Throwable $exception): void
     {
         try {
             self::$doStopMink = false;
@@ -330,7 +330,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     /**
      * Set up fixture.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -362,7 +362,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     /**
      * Tear down fixture.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->newPayPalUserInterface = true;
 

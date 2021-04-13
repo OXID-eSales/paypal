@@ -32,7 +32,7 @@ class ConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Cleans oxConfig table and calls parent::tearDown();
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute("delete from oxconfig where oxvarname like 'paypal_%'");
 

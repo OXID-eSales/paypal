@@ -35,7 +35,7 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Tear down the fixture.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $delete = 'TRUNCATE TABLE `oxuser`';
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($delete);
@@ -46,7 +46,7 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

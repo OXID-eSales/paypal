@@ -29,7 +29,7 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
     /**
      *  Setup: Prepare data - create need tables
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

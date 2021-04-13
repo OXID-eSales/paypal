@@ -30,7 +30,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
      * Tear down the fixture.
      *
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -42,7 +42,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

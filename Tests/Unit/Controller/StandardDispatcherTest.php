@@ -25,7 +25,7 @@ class StandardDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         // fix for state ID compatability between editions

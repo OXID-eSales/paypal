@@ -53,7 +53,7 @@ class IPNPaymentCreatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Fixture set up.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

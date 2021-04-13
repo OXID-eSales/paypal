@@ -448,6 +448,10 @@ class Curl
             $string = iconv($this->getConnectionCharset(), $charset, $string);
         }
 
+        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+            $string = stripslashes($string);
+        }
+
         return $string;
     }
 

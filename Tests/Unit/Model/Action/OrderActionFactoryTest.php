@@ -21,7 +21,7 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action;
 
-use OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException;
+use \OxidEsales\PayPalModule\Core\Exception\PayPalInvalidActionException;
 
 /**
  * Testing \OxidEsales\PayPalModule\Model\Action\OrderActionFactory class.

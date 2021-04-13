@@ -51,6 +51,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setSession()`
     - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getSession()`
 
+## [6.2.3] - 2021-04-13
+
+### Fixed
+- Improve tests to run with higher phpunit version
+
 ## [6.2.2] - 2021-03-04
 
 ### Fixed
@@ -250,6 +255,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
 [6.3.0]: https://github.com/OXID-eSales/paypal/compare/v6.2.1...b-6.x
+[6.2.3]: https://github.com/OXID-eSales/paypal/compare/v6.2.2...v6.2.3
+[6.2.2]: https://github.com/OXID-eSales/paypal/compare/v6.2.1...v6.2.2
 [6.2.1]: https://github.com/OXID-eSales/paypal/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/OXID-eSales/paypal/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/OXID-eSales/paypal/compare/v6.0.2...v6.1.0

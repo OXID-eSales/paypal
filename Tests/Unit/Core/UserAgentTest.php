@@ -24,7 +24,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 /**
  * Tests for oeThemeSwitcherUserAgent class
  */
-class UserAgentTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class UserAgentTest extends BaseUnitTest
 {
     public function providerIsMobile()
     {

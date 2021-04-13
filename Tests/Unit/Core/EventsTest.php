@@ -48,7 +48,7 @@ class EventsTest extends \OxidEsales\TestingLibrary\UnitTestCase
         parent::setUp();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpaymentcomments`');
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('DROP TABLE IF EXISTS `oepaypal_orderpayments`');

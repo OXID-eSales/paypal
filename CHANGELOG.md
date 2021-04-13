@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.2.3] - 2021-04-13
+
+### Fixed
+- Improve tests to run with higher phpunit version
+
 ## [6.2.2] - 2021-03-04
 
 ### Fixed
@@ -201,6 +206,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
+[6.2.3]: https://github.com/OXID-eSales/paypal/compare/v6.2.2...v6.2.3
+[6.2.2]: https://github.com/OXID-eSales/paypal/compare/v6.2.1...v6.2.2
 [6.2.1]: https://github.com/OXID-eSales/paypal/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/OXID-eSales/paypal/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/OXID-eSales/paypal/compare/v6.0.2...v6.1.0

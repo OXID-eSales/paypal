@@ -99,6 +99,9 @@ final class Payment
 
         $basket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($basketId);
 
+        // validate if pp express payment is available
+        $this->basketService->validateBasketExpressPaymentMethod();
+
         $communicationInformation = $this->paymentService->getPayPalExpressCommunicationInformation(
             $basket,
             $returnUrl,

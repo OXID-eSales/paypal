@@ -16,6 +16,10 @@ services:
     class: OxidEsales\PayPalModule\GraphQL\Subscriber\BeforePlaceOrder
     tags: [ 'kernel.event_subscriber' ]
 
+  OxidEsales\PayPalModule\GraphQL\Subscriber\BeforeBasketPayments:
+    class: OxidEsales\PayPalModule\GraphQL\Subscriber\BeforeBasketPayments
+    tags: [ 'kernel.event_subscriber' ]
+
   OxidEsales\PayPalModule\GraphQL\Infrastructure\Request:
     class: OxidEsales\PayPalModule\GraphQL\Infrastructure\Request
     public: true

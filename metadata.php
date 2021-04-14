@@ -54,6 +54,7 @@ $aModule = array(
         \OxidEsales\Eshop\Application\Model\Basket::class                     => \OxidEsales\PayPalModule\Model\Basket::class,
         \OxidEsales\Eshop\Application\Model\Article::class                    => \OxidEsales\PayPalModule\Model\Article::class,
         \OxidEsales\Eshop\Application\Model\PaymentGateway::class             => \OxidEsales\PayPalModule\Model\PaymentGateway::class,
+        \OxidEsales\Eshop\Application\Model\PaymentList::class                => \OxidEsales\PayPalModule\Model\PaymentList::class,
     ),
     'controllers' => array(
         'oepaypalexpresscheckoutdispatcher' => \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher::class,

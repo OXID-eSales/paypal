@@ -1013,6 +1013,7 @@ class ExpressCheckoutWithGraphqlCest
     /**
      * @group paypal_external
      * @group paypal_buyerlogin
+     * @group paypal_checkout
      * @group paypal_graphql
      * @group paypal_graphql_express
      */

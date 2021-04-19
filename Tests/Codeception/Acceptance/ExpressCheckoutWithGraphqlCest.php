@@ -1010,51 +1010,6 @@ class ExpressCheckoutWithGraphqlCest
         );
     }
 
-    /**
-     * @group paypal_external
-     * @group paypal_buyerlogin
-     * @group paypal_checkout
-     * @group paypal_graphql
-     * @group paypal_graphql_express
-     */
-    public function expressCheckoutWithGraphqlWhenExpressPaymentIsDisabled(AcceptanceTester $I)
-    {
-        //disable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', false, null, 'module:oepaypal');
-
-        //user exists in shop, has password in shop, is logged in via graphql and basket is shipping cost free
-        //invoice address is used as delivery address
-        //username in shop differs from PayPal email
-        $I->wantToTest('logged in user tries placing an order with PayPal Express via graphql when PayPal Express is disabled');
-        $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword());
-
-        //prepare basket
-        $basketId = $this->createBasket($I, 'pp_express_cart');
-        $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 4);
-
-        //query basket payments
-        $basketPayments = $this->getBasketPaymentIds($I, $basketId);
-        $I->assertArrayHasKey(Fixtures::get('payment_id'), $basketPayments);
-
-        //Get token and approval url, make customer approve the payment
-        $approvalDetails = $this->paypalExpressApprovalProcess(
-            $I,
-            $basketId
-        );
-        $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
-        $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
-
-        //place the order
-        $result = $this->placeOrder($I, $basketId);
-        $orderId = $result['data']['placeOrder']['id'];
-
-        $I->assertNull($orderId);
-
-        //re-enable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', true, null, 'module:oepaypal');
-    }
-
     private function prepareVoucherSeries(AcceptanceTester $I): void
     {
         $facts = new Facts();

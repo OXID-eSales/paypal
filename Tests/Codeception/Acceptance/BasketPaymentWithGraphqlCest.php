@@ -7,6 +7,7 @@
 
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use Codeception\Util\Fixtures;
 
@@ -41,18 +42,12 @@ class BasketPaymentWithGraphqlCest
             ]
         );
 
-        //re-enable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', true, null, 'module:oepaypal');
-        //re-enable standard payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', true, null, 'module:oepaypal');
+        $this->enablePayments();
     }
 
     public function _after()
     {
-        //re-enable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', true, null, 'module:oepaypal');
-        //re-enable standard payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', true, null, 'module:oepaypal');
+        $this->enablePayments();
     }
 
     /**
@@ -94,9 +89,8 @@ class BasketPaymentWithGraphqlCest
      */
     public function testBasketPaymentsStandardPaymentTurnedOff(AcceptanceTester $I): void
     {
-        //disable standard payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', false, null, 'module:oepaypal');
-        
+        $this->disableStandardPayment();
+
         $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword(), 0);
 
         //prepare standard basket
@@ -117,8 +111,7 @@ class BasketPaymentWithGraphqlCest
             $result
         );
 
-        //re-enable standard payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', true, null, 'module:oepaypal');
+        $this->enableStandardPayment();
     }
 
     /**
@@ -130,9 +123,8 @@ class BasketPaymentWithGraphqlCest
      */
     public function testBasketPaymentsExpressPaymentTurnedOff(AcceptanceTester $I): void
     {
-        //disable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', false, null, 'module:oepaypal');
-        
+        $this->disableExpressPayment();
+
         $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword());
 
         //prepare standard basket
@@ -149,8 +141,7 @@ class BasketPaymentWithGraphqlCest
 
         $I->assertSame("Payment method 'oxidpaypal' is unavailable!", $result);
 
-        //re-enable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', true, null, 'module:oepaypal');
+        $this->enableExpressPayment();
     }
 
     /**
@@ -162,11 +153,7 @@ class BasketPaymentWithGraphqlCest
      */
     public function testBasketPaymentsTurnedOff(AcceptanceTester $I): void
     {
-        //disable standard payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', false, null, 'module:oepaypal');
-
-        //disable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', false, null, 'module:oepaypal');
+        $this->disablePayments();
 
         $I->loginToGraphQLApi($I->getDemoUserName(), $I->getExistingUserPassword(), 0);
 
@@ -184,10 +171,7 @@ class BasketPaymentWithGraphqlCest
 
         $I->assertSame("Payment method 'oxidpaypal' is unavailable!", $result);
 
-        //re-enable express payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', true, null, 'module:oepaypal');
-        //re-enable standard payment
-        \OxidEsales\Eshop\Core\Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', true, null, 'module:oepaypal');
+        $this->enablePayments();
     }
 
     private function prepareExpressBasket(AcceptanceTester $I, string $basketTitle): string
@@ -222,5 +206,37 @@ class BasketPaymentWithGraphqlCest
         }
 
         return $availablePayments;
+    }
+
+    private function enablePayments(): void
+    {
+        $this->enableExpressPayment();
+        $this->enableStandardPayment();
+    }
+
+    private function disablePayments(): void
+    {
+        $this->disableExpressPayment();
+        $this->disableStandardPayment();
+    }
+
+    private function enableStandardPayment(): void
+    {
+        Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', true, null, 'module:oepaypal');
+    }
+
+    private function enableExpressPayment(): void
+    {
+        Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', true, null, 'module:oepaypal');
+    }
+
+    private function disableStandardPayment(): void
+    {
+        Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalStandardCheckout', false, null, 'module:oepaypal');
+    }
+
+    private function disableExpressPayment(): void
+    {
+        Registry::getConfig()->saveShopConfVar('bool', 'blOEPayPalExpressCheckout', false, null, 'module:oepaypal');
     }
 }

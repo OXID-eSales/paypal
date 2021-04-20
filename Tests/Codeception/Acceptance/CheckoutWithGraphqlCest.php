@@ -34,7 +34,6 @@ class CheckoutWithGraphqlCest
 
         $I->activateFlowTheme();
         $I->clearShopCache();
-        $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('blUseStock', false, 'bool');
 
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
@@ -77,7 +76,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result  = $this->placeOrder($I, $basketId);
@@ -138,7 +137,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result  = $this->placeOrder($I, $basketId);
@@ -174,7 +173,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //change basket contents
         $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 1);
@@ -207,7 +206,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //We change delivery address to country (Belgium) which is not assigned to oxidstandard delivery set.
         $this->setBasketDeliveryAddress($I, $basketId, $this->createDeliveryAddress($I, 'a7c40f632e04633c9.47194042'));
@@ -242,7 +241,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //change delivery address to one where country is assigned to oxidpaypal payment method.
         $this->setBasketDeliveryAddress($I, $basketId, $this->createDeliveryAddress($I));
@@ -275,7 +274,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->loginToPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->loginToPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //placing the order fails
         $result  = $this->placeOrder($I, $basketId);
@@ -399,7 +398,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //change payment method
         $this->setBasketPaymentMethod($I, $basketId, Fixtures::get('payment_id_other'));
@@ -513,7 +512,7 @@ class CheckoutWithGraphqlCest
         //make customer login to paypal but cancel
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->loginToPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->loginToPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //token is not approved
         $result = $this->paypalTokenStatus($I, $approvalDetails['data']['paypalApprovalProcess']['token']);
@@ -522,7 +521,7 @@ class CheckoutWithGraphqlCest
         //make customer approve the payment
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //token is approved
         $result = $this->paypalTokenStatus($I, $approvalDetails['data']['paypalApprovalProcess']['token']);
@@ -550,7 +549,7 @@ class CheckoutWithGraphqlCest
         $approvalDetails = $this->paypalApprovalProcess($I, $basketId);
         $I->amOnUrl($approvalDetails['data']['paypalApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlStandardPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlStandardPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         $I->logoutFromGraphQLApi();
         $I->haveInDatabase('oxuser', $I->getExistingUserData());

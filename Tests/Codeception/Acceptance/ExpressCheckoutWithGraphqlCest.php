@@ -36,7 +36,6 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->activateFlowTheme();
         $I->clearShopCache();
-        $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('blUseStock', false);
 
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
@@ -54,7 +53,7 @@ class ExpressCheckoutWithGraphqlCest
                 'oxlname'    => 'Muster'
             ],
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
         $I->updateInDatabase(
@@ -100,7 +99,7 @@ class ExpressCheckoutWithGraphqlCest
         );
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -148,7 +147,7 @@ class ExpressCheckoutWithGraphqlCest
         );
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -178,13 +177,13 @@ class ExpressCheckoutWithGraphqlCest
         $I->updateInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ],
             [
                 'oxusername' => $I->getDemoUserName()
             ]
         );
-        $I->loginToGraphQLApi(Fixtures::get('sBuyerLogin'), $I->getExistingUserPassword());
+        $I->loginToGraphQLApi($_ENV['sBuyerLogin'], $I->getExistingUserPassword());
 
         //prepare basket
         $basketId = $this->createBasket($I, 'pp_express_cart');
@@ -198,7 +197,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //change invoice city, this has the same effect as user changing delivery address in PP
         $I->updateInDatabase(
@@ -207,7 +206,7 @@ class ExpressCheckoutWithGraphqlCest
                 'oxcity' => 'Hamburg'
             ],
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -253,7 +252,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //change invoice city, this has the same effect as user changing delivery address in PP
         $I->updateInDatabase(
@@ -309,7 +308,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -345,9 +344,9 @@ class ExpressCheckoutWithGraphqlCest
         $I->updateInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName'),
-                'oxlname'    => Fixtures::get('sBuyerLastName'),
+                'oxusername' => $_ENV['sBuyerLogin'],
+                'oxfname'    => $_ENV['sBuyerFirstName'],
+                'oxlname'    => $_ENV['sBuyerLastName'],
                 'oxstreet'   => 'ESpachstr.',
                 'oxstreetnr' => '1',
                 'oxzip'      => '79111',
@@ -372,7 +371,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -402,9 +401,9 @@ class ExpressCheckoutWithGraphqlCest
         $I->updateInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName'),
-                'oxlname'    => Fixtures::get('sBuyerLastName')
+                'oxusername' => $_ENV['sBuyerLogin'],
+                'oxfname'    => $_ENV['sBuyerFirstName'],
+                'oxlname'    => $_ENV['sBuyerLastName']
             ],
             [
                 'oxusername' => $I->getDemoUserName()
@@ -425,7 +424,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -450,7 +449,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -468,7 +467,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -479,7 +478,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->seeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
     }
@@ -501,7 +500,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -520,7 +519,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //try to place the order with a new anonymous token
         $I->anonymousLoginToGraphQLApi();
@@ -551,7 +550,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -569,7 +568,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -580,7 +579,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->seeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
     }
@@ -603,7 +602,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerUSLogin')
+                'oxusername' => $_ENV['sBuyerUSLogin']
             ]
         );
 
@@ -621,7 +620,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->loginToPayPal(Fixtures::get('sBuyerUSLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->loginToPayPal($_ENV['sBuyerUSLogin'], $_ENV['sBuyerPassword']);
 
         $I->seeInSource("doesn't ship to this location. Please use a different address");
     }
@@ -646,9 +645,9 @@ class ExpressCheckoutWithGraphqlCest
         $I->updateInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName'),
-                'oxlname'    => Fixtures::get('sBuyerLastName'),
+                'oxusername' => $_ENV['sBuyerLogin'],
+                'oxfname'    => $_ENV['sBuyerFirstName'],
+                'oxlname'    => $_ENV['sBuyerLastName'],
                 'oxstreet'   => 'ESpachstr.',
                 'oxstreetnr' => '1',
                 'oxzip'      => '79111',
@@ -673,10 +672,10 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //User gets a non anonymous token to place the order
-        $I->loginToGraphQLApi(Fixtures::get('sBuyerLogin'), $I->getExistingUserPassword());
+        $I->loginToGraphQLApi($_ENV['sBuyerLogin'], $I->getExistingUserPassword());
         $result = $this->placeOrder($I, $basketId);
 
         $expectedException = BasketAccessForbidden::byAuthenticatedUser();
@@ -703,7 +702,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -727,7 +726,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -738,7 +737,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->seeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -768,7 +767,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -787,7 +786,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
         
         //place the order
         $result = $this->placeOrder($I, $basketId);
@@ -798,7 +797,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->seeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -828,7 +827,7 @@ class ExpressCheckoutWithGraphqlCest
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin')
+                'oxusername' => $_ENV['sBuyerLogin']
             ]
         );
 
@@ -847,7 +846,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //discount timed out
         $this->deactivateDiscount($I);
@@ -874,15 +873,15 @@ class ExpressCheckoutWithGraphqlCest
         $I->wantToTest('anonymous existing no invoice user places order with PayPal Express via graphql');
 
         //register customer via graphql, he's in 'oxidnotyetordered' group. Username must be same as PayPal email.
-        $username = Fixtures::get('sBuyerLogin');
+        $username = $_ENV['sBuyerLogin'];
         $password = $I->getExistingUserPassword();
         $userId   = $this->registerCustomer($I, $username, $password)['id'];
 
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName')
+                'oxusername' => $_ENV['sBuyerLogin'],
+                'oxfname'    => $_ENV['sBuyerFirstName']
             ]
         );
 
@@ -905,7 +904,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //Our user's invoice address is missing in shop and will be set from PayPal details
         //place the order
@@ -917,9 +916,9 @@ class ExpressCheckoutWithGraphqlCest
         $I->seeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName'),
-                'oxlname'    => Fixtures::get('sBuyerLastName'),
+                'oxusername' => $_ENV['sBuyerLogin'],
+                'oxfname'    => $_ENV['sBuyerFirstName'],
+                'oxlname'    => $_ENV['sBuyerLastName'],
                 'oxstreet'   => 'ESpachstr.',
                 'oxstreetnr' => '1',
                 'oxzip'      => '79111',
@@ -953,15 +952,15 @@ class ExpressCheckoutWithGraphqlCest
         $I->wantToTest('logged existing no invoice user places order with PayPal Express via graphql');
 
         //register customer via graphql, he's in 'oxidnotyetordered' group. Username must be same as PayPal email.
-        $username     = Fixtures::get('sBuyerLogin');
+        $username     = $_ENV['sBuyerLogin'];
         $password     = 'useruser';
         $userId = $this->registerCustomer($I, $username, $password)['id'];
 
         $I->dontSeeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName')
+                'oxusername' => $_ENV['sBuyerLogin'],
+                'oxfname'    => $_ENV['sBuyerFirstName']
             ]
         );
 
@@ -984,7 +983,7 @@ class ExpressCheckoutWithGraphqlCest
 
         $I->amOnUrl($approvalDetails['data']['paypalExpressApprovalProcess']['communicationUrl']);
         $loginPage = new PayPalLogin($I);
-        $loginPage->approveGraphqlExpressPayPal(Fixtures::get('sBuyerLogin'), Fixtures::get('sBuyerPassword'));
+        $loginPage->approveGraphqlExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         //Our user's invoice address is missing in shop and will be set from PayPal details
         //place the order
@@ -996,8 +995,8 @@ class ExpressCheckoutWithGraphqlCest
         $I->seeInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('sBuyerLogin'),
-                'oxfname'    => Fixtures::get('sBuyerFirstName')
+                'oxusername' => $_ENV['sBuyerLogin'],
+                'oxfname'    => $_ENV['sBuyerFirstName']
             ]
         );
 

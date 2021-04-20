@@ -43,3 +43,7 @@ services:
   OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider:
     class: OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider
     tags: ['graphql_permission_provider']
+
+  OxidEsales\PayPalModule\Core\Config:
+    class: OxidEsales\PayPalModule\Core\Config
+

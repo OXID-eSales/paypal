@@ -26,7 +26,6 @@ class BasketPaymentWithGraphqlCest
 
         $I->activateFlowTheme();
         $I->clearShopCache();
-        $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('blUseStock', false, 'bool');
 
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));

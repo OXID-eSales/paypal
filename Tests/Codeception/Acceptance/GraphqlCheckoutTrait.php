@@ -52,14 +52,15 @@ trait GraphqlCheckoutTrait
         ];
 
         $mutation = '
-            mutation ($basketId: String!, $productId: String!, $amount: Float! ) {
-                basketAddProduct(
+            mutation ($basketId: ID!, $productId: ID!, $amount: Float! ) {
+                basketAddItem(
                     basketId: $basketId,
                     productId: $productId,
                     amount: $amount
                 ) {
                     id
                     items {
+                        id
                         product {
                             id
                         }
@@ -71,7 +72,7 @@ trait GraphqlCheckoutTrait
 
         $result = $this->getGQLResponse($I, $mutation, $variables);
 
-        return $result['data']['basketAddProduct']['items'];
+        return $result['data']['basketAddItem']['items'];
     }
 
     protected function setBasketDeliveryMethod(

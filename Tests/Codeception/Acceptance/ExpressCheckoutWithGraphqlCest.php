@@ -509,8 +509,9 @@ class ExpressCheckoutWithGraphqlCest
 
         //prepare basket
         $basketId = $this->createBasket($I, 'pp_express_cart');
-        $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 5);
-        $this->removeProductFromBasket($I, $basketId, Fixtures::get('product')['id'], 1);
+        $basketWithItems = $this->addProductToBasket($I, $basketId, Fixtures::get('product')['id'], 5);
+        $itemId = $basketWithItems[0]['id'];
+        $this->removeItemFromBasket($I, $basketId, $itemId, 1);
 
         //Get token and approval url, make customer approve the payment
         $approvalDetails = $this->paypalExpressApprovalProcess(

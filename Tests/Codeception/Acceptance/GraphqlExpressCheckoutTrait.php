@@ -39,24 +39,25 @@ trait GraphqlExpressCheckoutTrait
         return $this->getGQLResponse($I, $mutation, $variables);
     }
 
-    protected function removeProductFromBasket(
+    protected function removeItemFromBasket(
         AcceptanceTester $I,
         string $basketId,
-        string $productId,
+        string $itemId,
         int $amount = 1
     ): array
     {
         $variables = [
-            'basketId'  => $basketId,
-            'productId' => $productId,
-            'amount'    => $amount
+            'basketId' => $basketId,
+            'itemId'   => $itemId,
+            'amount'   => $amount
         ];
 
-        $mutation = 'mutation ($basketId: String!, $productId: String!, $amount: Int!) {
-            basketRemoveProduct(
-            basketId: $basketId, 
-            productId: $productId, 
-            amount: $amount ) {
+        $mutation = 'mutation ($basketId: ID!, $itemId: ID!, $amount: Int!) {
+            basketRemoveItem(
+                basketId: $basketId, 
+                itemId: $itemId, 
+                amount: $amount
+            ) {
                 id
             }
         }';

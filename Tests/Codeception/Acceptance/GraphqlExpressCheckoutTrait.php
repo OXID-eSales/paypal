@@ -8,6 +8,7 @@ namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
 use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
+use TheCodingMachine\GraphQLite\Types\ID;
 
 trait GraphqlExpressCheckoutTrait
 {
@@ -23,7 +24,7 @@ trait GraphqlExpressCheckoutTrait
         ];
 
         $mutation = '
-            query ($basketId: String!, $returnUrl: String!, $cancelUrl: String!) {
+            query ($basketId: ID!, $returnUrl: String!, $cancelUrl: String!) {
                 paypalExpressApprovalProcess(
                     basketId: $basketId,
                     returnUrl: $returnUrl,
@@ -76,7 +77,7 @@ trait GraphqlExpressCheckoutTrait
             'voucherNumber' => $voucherNumber
         ];
 
-        $mutation = 'mutation ($basketId: String!, $voucherNumber: String!) {
+        $mutation = 'mutation ($basketId: ID!, $voucherNumber: String!) {
             basketAddVoucher (
                 basketId: $basketId,
                 voucherNumber: $voucherNumber

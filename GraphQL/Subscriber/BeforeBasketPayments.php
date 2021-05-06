@@ -53,7 +53,7 @@ class BeforeBasketPayments extends AbstractShopAwareEventSubscriber
     {
         $this->validateState();
 
-        $basketDataType = $this->storefrontBasketService->getAuthenticatedCustomerBasket((string) $event->getBasketId());
+        $basketDataType = $this->storefrontBasketService->getAuthenticatedCustomerBasket($event->getBasketId());
         if ($this->basketService->checkBasketPaymentMethodIsPayPal($basketDataType)) {
             $extendUserBasket = new BasketExtendType();
             $session = EshopRegistry::getSession();

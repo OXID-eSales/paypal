@@ -159,7 +159,7 @@ trait GraphqlCheckoutTrait
         ];
 
         $mutation = '
-            query ($basketId: String!, $returnUrl: String!) {
+            query ($basketId: ID!, $returnUrl: String!) {
                 paypalApprovalProcess(
                     basketId: $basketId,
                     returnUrl: $returnUrl,
@@ -239,7 +239,7 @@ trait GraphqlCheckoutTrait
         ];
 
         $mutation = '
-            mutation ($basketId: String!, $deliveryAddressId: String!) {
+            mutation ($basketId: ID!, $deliveryAddressId: ID!) {
                 basketSetDeliveryAddress(basketId: $basketId, deliveryAddressId: $deliveryAddressId) {
                     deliveryAddress {
                         id

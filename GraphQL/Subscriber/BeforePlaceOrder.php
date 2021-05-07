@@ -23,11 +23,13 @@ declare(strict_types=1);
 
 namespace OxidEsales\PayPalModule\GraphQL\Subscriber;
 
+use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Event\AbstractShopAwareEventSubscriber;
 use OxidEsales\PayPalModule\GraphQL\Service\BeforePlaceOrder as BeforePlaceOrderService;
 
-class BeforePlaceOrder implements EventSubscriberInterface
+class BeforePlaceOrder extends AbstractShopAwareEventSubscriber
 {
     /** @var BeforePlaceOrderService */
     private $beforePlaceOrderService;
@@ -39,6 +41,8 @@ class BeforePlaceOrder implements EventSubscriberInterface
 
     public function handle(Event $event): Event
     {
+        $this->validateState();
+
         $this->beforePlaceOrderService->handle($event);
         
         return $event;
@@ -49,5 +53,12 @@ class BeforePlaceOrder implements EventSubscriberInterface
         return [
             'OxidEsales\GraphQL\Storefront\Basket\Event\BeforePlaceOrder' => 'handle'
         ];
+    }
+
+    protected function validateState(): void
+    {
+        if (is_null($this->beforePlaceOrderService)) {
+            throw GraphQLServiceNotFound::byServiceName(BeforePlaceOrderService::class);
+        }
     }
 }

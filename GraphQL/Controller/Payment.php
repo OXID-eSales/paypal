@@ -33,6 +33,7 @@ use OxidEsales\PayPalModule\GraphQL\Service\Payment as PaymentService;
 use TheCodingMachine\GraphQLite\Annotations\Logged;
 use TheCodingMachine\GraphQLite\Annotations\Query;
 use TheCodingMachine\GraphQLite\Annotations\Right;
+use TheCodingMachine\GraphQLite\Types\ID;
 
 final class Payment
 {
@@ -60,7 +61,7 @@ final class Payment
      * @Logged()
      */
     public function paypalApprovalProcess(
-        string $basketId,
+        ID $basketId,
         string $returnUrl,
         string $cancelUrl,
         bool $displayBasketInPayPal
@@ -89,7 +90,7 @@ final class Payment
      * @Right("PAYPAL_EXPRESS_APPROVAL")
      */
     public function paypalExpressApprovalProcess(
-        string $basketId,
+        ID $basketId,
         string $returnUrl,
         string $cancelUrl,
         bool $displayBasketInPayPal

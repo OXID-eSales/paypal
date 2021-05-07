@@ -58,7 +58,7 @@ final class BeforePlaceOrder
     {
         $this->validateState();
 
-        $userBasket = $this->storefrontBasketService->getAuthenticatedCustomerBasket((string)$event->getBasketId());
+        $userBasket = $this->storefrontBasketService->getAuthenticatedCustomerBasket($event->getBasketId());
         if ($this->basketService->checkBasketPaymentMethodIsPayPal($userBasket)) {
             $extendUserBasket = new BasketExtendType();
 

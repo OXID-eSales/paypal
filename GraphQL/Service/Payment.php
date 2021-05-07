@@ -25,6 +25,7 @@ namespace OxidEsales\PayPalModule\GraphQL\Service;
 
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry as EshopRegistry;
+use OxidEsales\GraphQL\Base\Exception\InvalidLogin;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\Basket as BasketDataType;
 use OxidEsales\GraphQL\Storefront\Basket\DataType\BasketOwner as BasketOwnerDataType;
 use OxidEsales\GraphQL\Storefront\Customer\Exception\CustomerNotFound;
@@ -234,8 +235,7 @@ final class Payment
         $this->validateState();
 
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
-        $shipToAddress = $this->basketRelationService->deliveryAddress($basket);
-        $shipToAddressId = $shipToAddress ? (string) $shipToAddress->id(): '';
+        $shipToAddressId = $this->getDeliveryAddressId($basket);
         $deliveryMethod = $this->basketRelationService->deliveryMethod($basket);
         $shippingMethodId = $deliveryMethod ? (string) $deliveryMethod->id() : '';
 
@@ -282,5 +282,17 @@ final class Payment
         if (is_null($this->basketRelationService)) {
             throw GraphQLServiceNotFound::byServiceName(BasketRelationService::class);
         }
+    }
+
+    protected function getDeliveryAddressId(BasketDataType $basket): String
+    {
+        try {
+            //use might be logged in to his existing shop account
+            $shipToAddress = $this->basketRelationService->deliveryAddress($basket);
+        } catch (InvalidLogin $e) {
+            //in case of anonymous user access of delivery address is forbidden
+        }
+
+        return $shipToAddress ? (string) $shipToAddress->id(): '';
     }
 }

@@ -494,6 +494,12 @@ class ConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getConfig()->setConfigParam("sOEPayPalCustomShopLogoImage", $customLogoImage);
         $this->getConfig()->setConfigParam("sShopLogo", $shopLogoImage);
 
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\UtilsPic::class);
+        $mockBuilder->setMethods(['resizeImage']);
+        $utilsUrl = $mockBuilder->getMock();
+        $utilsUrl->expects($this->any())->method('resizeImage')->will($this->returnValue(true));
+        \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsPic::class, $utilsUrl);
+
         $this->assertEquals($expected, $config->getLogoUrl());
         $this->cleanUp();
     }

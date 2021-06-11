@@ -51,6 +51,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::setSession()`
     - `\OxidEsales\PayPalModule\Model\PayPalRequest\GetExpressCheckoutDetailsRequestBuilder::getSession()`
 
+### Fixed
+- LastName field size in admin orders list [PR-52](https://github.com/OXID-eSales/paypal/pull/52)
+
 ## [6.2.3] - 2021-04-13
 
 ### Fixed

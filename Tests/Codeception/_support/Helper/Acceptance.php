@@ -22,4 +22,9 @@ class Acceptance extends \Codeception\Module
         }
         return true;
     }
+
+    public function makeScreenshot()
+    {
+        $this->getModule('WebDriver')->_saveScreenshot(codecept_output_dir() . time() . 'screenshot.png');
+    }
 }

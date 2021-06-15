@@ -96,7 +96,7 @@ class AcceptanceTester extends \Codeception\Actor
         $I->switchToIFrame("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
         $I->waitForElementVisible("//body[node()]");
 
-        $I->switchToWindow();
+        $I->switchToIFrame();
 
         return $this;
     }

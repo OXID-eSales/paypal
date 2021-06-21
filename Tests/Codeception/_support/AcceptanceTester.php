@@ -92,7 +92,7 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $I = $this;
 
-        $I->waitForElement("//div[contains(@id, 'paypal-installment-banner-container')]//iframe", 30);
+        $I->waitForElement("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
         $I->switchToIFrame("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
         $I->waitForElementVisible("//body[node()]");
 
@@ -140,6 +140,7 @@ class AcceptanceTester extends \Codeception\Actor
         }
         $I->dontSee(Translator::translate('ERROR_MESSAGE_ARTICLE_ARTICLE_NOT_BUYABLE'));
         $I->makeScreenshot();
+        $I->makeHtmlSnapshot();
         $I->seePayPalInstallmentBanner();
         $I->checkInstallmentBannerData($amount);
 

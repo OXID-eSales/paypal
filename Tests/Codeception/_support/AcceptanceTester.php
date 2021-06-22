@@ -96,7 +96,7 @@ class AcceptanceTester extends \Codeception\Actor
         $I->switchToIFrame("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
         $I->waitForElementVisible("//body[node()]");
 
-        $I->switchToWindow();
+        $I->switchToIFrame();
 
         return $this;
     }
@@ -139,8 +139,6 @@ class AcceptanceTester extends \Codeception\Actor
             $I->see($breadCrumbText);
         }
         $I->dontSee(Translator::translate('ERROR_MESSAGE_ARTICLE_ARTICLE_NOT_BUYABLE'));
-        $I->makeScreenshot();
-        $I->makeHtmlSnapshot();
         $I->seePayPalInstallmentBanner();
         $I->checkInstallmentBannerData($amount);
 

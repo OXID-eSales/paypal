@@ -49,6 +49,7 @@ class StandardPaymentCest
     public function checkoutWithPaypalStandard(AcceptanceTester $I)
     {
         $I->setPayPalSettingsData();
+        $I->updateConfigInDatabase('iNewBasketItemMessage', false, 'bool');
         $I->updateConfigInDatabase('sOEPayPalTransactionMode', 'Authorization', 'str');
         $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', false, 'bool');
 

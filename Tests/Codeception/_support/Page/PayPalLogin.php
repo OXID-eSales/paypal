@@ -103,11 +103,9 @@ class PayPalLogin extends Page
         $I->waitForElementClickable($confirmButton, 60);
         $I->waitForElementNotVisible($this->spinner, 90);
 
-        // In case we have cookie message, accept all cookies
-        $this->acceptAllPayPalCookies();
+        $this->removeCookieConsent();
+        $this->waitForSpinnerDisappearance();
 
-        $I->waitForElementNotVisible($this->spinner, 90);
-        $this->acceptAllPayPalCookies();
         $I->click($confirmButton);
         $this->waitForPayPalPage();
 

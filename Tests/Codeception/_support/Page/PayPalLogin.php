@@ -108,6 +108,7 @@ class PayPalLogin extends Page
 
         $I->waitForElementNotVisible($this->spinner, 90);
         $this->acceptAllPayPalCookies();
+        $I->waitForElementNotVisible($this->spinner, 90);
         $I->click($confirmButton);
         $this->waitForPayPalPage();
 

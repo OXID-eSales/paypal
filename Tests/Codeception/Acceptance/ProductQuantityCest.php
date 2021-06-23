@@ -47,7 +47,7 @@ class ProductQuantityCest
         ];
 
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $home = $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
 
         $productNavigation = new ProductNavigation($I);
         $productNavigation->openProductDetailsPage($basketItem['id']);
@@ -61,8 +61,6 @@ class ProductQuantityCest
         $paypalPage->acceptAllPaypalCookies;
         $paypalPage->cancelPayPal();
 
-        //reload page to make sure basket modal is closed
-        $I->reloadPage();
-        $home->seeMiniBasketContains([$expectedBasketContent], $expectedBasketContent['price'], $expectedBasketContent['amount']);
+        $I->openShop()->seeMiniBasketContains([$expectedBasketContent], $expectedBasketContent['price'], $expectedBasketContent['amount']);
     }
 }

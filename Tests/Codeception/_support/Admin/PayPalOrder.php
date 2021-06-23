@@ -46,6 +46,7 @@ class PayPalOrder extends Page
             $I->click($this->pendingStatusCheckbox);
         }
         $I->submitForm($this->editForm, []);
+        $I->waitForElementNotVisible($this->editForm, 30);
 
         return $this;
     }
@@ -67,6 +68,7 @@ class PayPalOrder extends Page
             $I->fillField($this->refundAmountInput, $amount);
         }
         $I->submitForm($this->editForm, []);
+        $I->waitForElementNotVisible($this->editForm, 30);
 
         return $this;
     }

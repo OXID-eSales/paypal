@@ -79,7 +79,8 @@ class CaptureAndRefundCest
 
         $I->selectListFrame();
         $paypalOrder = new PayPalOrder($I);
-        $I->waitForElement($paypalOrder->paypalTab, 10);
+        $I->click($order['payment_method']);
+        $I->waitForElementClickable($paypalOrder->paypalTab, 30);
         $I->click($paypalOrder->paypalTab);
         $I->executeJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
         $I->waitForJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");

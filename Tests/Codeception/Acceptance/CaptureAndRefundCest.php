@@ -59,30 +59,16 @@ class CaptureAndRefundCest
         $thankYouPage = new ThankYou($I);
         $orderNumber = $thankYouPage->grabOrderNumber();
 
-        $adminLoginPage = $I->openAdminLoginPage();
-        $adminUser = Fixtures::get('adminUser');
-        $adminPanel = $adminLoginPage->login($adminUser['userLoginName'], $adminUser['userPassword']);
-
-        $ordersList = $adminPanel->openOrders($adminPanel);
-
         $order = [
-            'order_number' => (int) $orderNumber,
+            'order_number'   => (int) $orderNumber,
             'payment_method' => 'PayPal',
             'capture_amount' => '55,55',
-            'capture_type' => 'NotComplete',
-            'refund_amount' => '49,50',
-            'refund_type' => 'Partial',
+            'capture_type'   => 'NotComplete',
+            'refund_amount'  => '49,50',
+            'refund_type'    => 'Partial',
         ];
 
-        $ordersList->find("where[oxorder][oxordernr]", $order['order_number']);
-
-        $I->selectListFrame();
-        $paypalOrder = new PayPalOrder($I);
-        $I->waitForElement($paypalOrder->paypalTab, 10);
-        $I->retryClick($paypalOrder->paypalTab);
-        $I->executeJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
-        $I->waitForJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
-        $I->selectEditFrame();
+        $paypalOrder = $this->openAdminOrder($I, (int) $orderNumber);
 
         $paypalOrder->captureAmount($order['capture_amount'], $order['capture_type']);
         $I->dontSee($paypalOrder->captureErrorText, $paypalOrder->errorBox);
@@ -93,5 +79,37 @@ class CaptureAndRefundCest
         $I->dontSee($paypalOrder->refundErrorText, $paypalOrder->errorBox);
         $I->see(Translator::translate('OEPAYPAL_REFUND'), $paypalOrder->lastHistoryRowAction);
         $I->see('49.50', $paypalOrder->lastHistoryRowAmount);
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @param int              $orderNumber
+     *
+     * @return PayPalOrder
+     * @throws \Exception
+     */
+    protected function openAdminOrder(AcceptanceTester $I, int $orderNumber, bool $retry = false)
+    {
+        $adminLoginPage = $I->openAdminLoginPage();
+        $adminUser = Fixtures::get('adminUser');
+        $adminPanel = $adminLoginPage->login($adminUser['userLoginName'], $adminUser['userPassword']);
+
+        $ordersList = $adminPanel->openOrders($adminPanel);
+
+        $ordersList->find("where[oxorder][oxordernr]", $orderNumber);
+
+        $I->selectListFrame();
+        $paypalOrder = new PayPalOrder($I);
+        $I->waitForElement($paypalOrder->paypalTab, 10);
+        $I->retryClick($paypalOrder->paypalTab);
+        $I->executeJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
+        $I->waitForJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
+        $I->selectEditFrame();
+
+        if (!$I->seePageHasElement($paypalOrder->captureButton) && !$retry) {
+            $this->openAdminOrder($I, $orderNumber, true);
+        }
+
+        return $paypalOrder;
     }
 }

@@ -86,7 +86,8 @@ class CaptureAndRefundCest
 
         $I->selectListFrame();
         $paypalOrder = new PayPalOrder($I);
-        $I->waitForElement($paypalOrder->paypalTab, 10);
+        $I->click($order['payment_method']);
+        $I->waitForElementClickable($paypalOrder->paypalTab, 30);
         $I->click($paypalOrder->paypalTab);
         $I->executeJS("document.querySelector('a[href=\"#oepaypalorder_paypal\"]').click()");
 

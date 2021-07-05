@@ -20,7 +20,7 @@ use OxidEsales\Codeception\Module\Translation\Translator;
  */
 class CaptureAndRefundCest
 {
-    private $maxRetries = 5;
+    private $maxRetries = 20;
 
     public function _before(AcceptanceTester $I)
     {
@@ -85,6 +85,7 @@ class CaptureAndRefundCest
         $I->see('55.55', $paypalOrder->lastHistoryRowAmount);
 
         $paypalOrder->refundAmount($order['refund_amount'], $order['refund_type']);
+        $I->wait(1);
         $I->dontSee($paypalOrder->refundErrorText, $paypalOrder->errorBox);
         $I->see(Translator::translate('OEPAYPAL_REFUND'), $paypalOrder->lastHistoryRowAction);
         $I->see('49.50', $paypalOrder->lastHistoryRowAmount);
@@ -99,28 +100,39 @@ class CaptureAndRefundCest
      */
     protected function openAdminOrder(AcceptanceTester $I, int $orderNumber, int $retry = 0)
     {
+        if ($retry >= $this->maxRetries) {
+            $I->makeScreenshot();
+            $I->makeHtmlSnapshot();
+            $I->markTestIncomplete('Did not manage to open the PayPal order tab');
+        }
+
         $adminLoginPage = $I->openAdminLoginPage();
         $adminUser = Fixtures::get('adminUser');
         $adminPanel = $adminLoginPage->login($adminUser['userLoginName'], $adminUser['userPassword']);
 
         $ordersList = $adminPanel->openOrders($adminPanel);
 
-        $ordersList->find("where[oxorder][oxordernr]", $orderNumber);
+        $ordersList->searchByOrderNumber($orderNumber);
+        $I->wait(1);
+        if ($I->seePageHasElement('//a[text()="' . $orderNumber . '"]')) {
+            $I->retryClick('//a[text()="' . $orderNumber . '"]');
+        } elseif ($I->seePageHasElement('//a[text()="PayPal"]')) {
+            $I->retryClick('//a[text()="PayPal"]');
+        } else {
+            $this->openAdminOrder($I, $orderNumber, ++$retry);
+        }
 
-        $I->selectListFrame();
+        $I->wait(1);
         $paypalOrder = new PayPalOrder($I);
-        $I->waitForElement($paypalOrder->paypalTab, 10);
+        if (!$I->seePageHasElement($paypalOrder->paypalTab)) {
+            $this->openAdminOrder($I, $orderNumber, ++$retry);
+        }
+
         $I->retryClick($paypalOrder->paypalTab);
-        $I->executeJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
-        $I->waitForJS("top.oxid.admin.changeEditBar('oepaypalorder_paypal',6);return true;");
         $I->selectEditFrame();
 
-        if (!$I->seePageHasElement($paypalOrder->captureButton) && ($retry < $this->maxRetries)) {
+        if (!$I->seePageHasElement($paypalOrder->captureButton)) {
             $this->openAdminOrder($I, $orderNumber, ++$retry);
-        } elseif (!$I->seePageHasElement($paypalOrder->captureButton) && ($retry >= $this->maxRetries)) {
-             $I->makeScreenshot();
-             $I->makeHtmlSnapshot();
-             $I->markTestIncomplete('Did not manage to open the PayPal order tab');
         }
 
         return $paypalOrder;

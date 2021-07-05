@@ -206,7 +206,6 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
     {
         // Set PayPal payment inactive.
         $this->importSql(__DIR__ . '/testSql/setPayPalPaymentInactive.sql');
-        $this->activateTheme('flow');
 
         // Go to shop to check is PayPal not visible in front end
         $this->openShop();
@@ -217,6 +216,7 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
 
         // Go to basket and check is express PayPal not visible
        // \OxidEsales\Eshop\Core\Registry::getLogger()->error($this->getHtmlSource());
+        $this->activateTheme('flow');
         $this->searchFor("1001");
        // \OxidEsales\Eshop\Core\Registry::getLogger()->error($this->getHtmlSource());
         $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);

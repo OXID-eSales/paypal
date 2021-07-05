@@ -215,11 +215,10 @@ class WithoutPayPalGuiTest extends BaseAcceptanceTestCase
         $this->switchLanguage("English");
 
         // Go to basket and check is express PayPal not visible
-       // \OxidEsales\Eshop\Core\Registry::getLogger()->error($this->getHtmlSource());
         $this->activateTheme('flow');
         $this->searchFor("1001");
-       // \OxidEsales\Eshop\Core\Registry::getLogger()->error($this->getHtmlSource());
         $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->activateTheme('azure');
         $this->openBasket("English");
         $this->assertFalse($this->isElementPresent("paypalExpressCheckoutButton"), "PayPal express button should be not visible in frontend");
 

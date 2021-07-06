@@ -332,6 +332,8 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
      */
     protected function setUp(): void
     {
+        $this->exceptionLogHelper->clearExceptionLogFile();
+
         parent::setUp();
 
         $this->clearCache();
@@ -451,6 +453,14 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         }
 
         $loginFound = $this->clickLogin();
+
+        $this->_waitForAppear('isElementPresent', '//input[@id="password"]', 5, true);
+        $element = $this->getElementLazy('//input[@id="password"]', false);
+        if ($element) {
+            $element->setValue($loginPassword);
+            $debug .= 'password--';
+            $loginFound = $this->clickLogin();
+        }
 
         $this->selectWindow(null);
         $this->_waitForAppear('isElementPresent', "//input[@id='continue']", 5, true);

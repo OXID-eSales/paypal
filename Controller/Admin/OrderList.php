@@ -69,7 +69,7 @@ class OrderList extends OrderList_parent
         $viewNameGenerator = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
         $viewName = $viewNameGenerator->getViewName("oxpayments");
 
-        $queryPart = ", `oepaypal_order`.`oepaypal_paymentstatus`, `payments`.`oxdesc` as `paymentname` from `oxorder`
+        $queryPart = ", `oepaypal_order`.`oepaypal_paymentstatus`, `payments`.`oxdesc` as `paymentname` from oxorder
         LEFT JOIN `oepaypal_order` ON `oepaypal_order`.`oepaypal_orderid` = `oxorder`.`oxid`
         LEFT JOIN `" . $viewName . "` AS `payments` on `payments`.oxid=oxorder.oxpaymenttype ";
 

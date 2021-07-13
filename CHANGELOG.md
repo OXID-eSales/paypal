@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Test compatibility with shop master.
 
-## [6.3.0] - Unreleased
+## [6.3.0] - 2021-07-13
 
 ### Added
 - PayPal as payment method for OXID GraphQL Storefront module:
@@ -34,13 +34,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - `\OxidEsales\PayPalModule\Model\User::hasNoInvoiceAddress()`
     - `\OxidEsales\PayPalModule\Model\User::setGrouspAfterUserCreation()`
     - `\OxidEsales\PayPalModule\Model\User::setInvoiceDataFromPayPalResult()`
+- PHP 8 support
 
 ### Changed
 - Changed visibility from protected to public for the following methods:
   - `\OxidEsales\PayPalModule\Model\Address::prepareDataPayPalAddress()`
   - `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getReturnUrl()`
   - `\OxidEsales\PayPalModule\Controller\StandardDispatcher::getCancelUrl()`
-- Drop support for PHP 7.0.
+- Updated php version requirements to ^7.3 || ^8.0
 
 ### Deprecated
   - Deprecated the following methods:
@@ -257,7 +258,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
-[6.3.0]: https://github.com/OXID-eSales/paypal/compare/v6.2.1...b-6.x
+[6.3.0]: https://github.com/OXID-eSales/paypal/compare/v6.2.3...v6.3.0
 [6.2.3]: https://github.com/OXID-eSales/paypal/compare/v6.2.2...v6.2.3
 [6.2.2]: https://github.com/OXID-eSales/paypal/compare/v6.2.1...v6.2.2
 [6.2.1]: https://github.com/OXID-eSales/paypal/compare/v6.2.0...v6.2.1

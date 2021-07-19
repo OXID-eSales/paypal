@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.3.1] - 2021-07-19
+
+### Changed
+- Updated php version requirements to ^7.1 || ^8.0
+
 ## [6.3.0] - 2021-07-13
 
 ### Added

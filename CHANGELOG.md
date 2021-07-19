@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Test compatibility with shop master.
 
+## [6.3.1] - 2021-07-19
+
+### Changed
+- Updated php version requirements to ^7.1 || ^8.0
+
 ## [6.3.0] - 2021-07-13
 
 ### Added

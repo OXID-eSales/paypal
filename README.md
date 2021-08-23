@@ -16,7 +16,7 @@ PayPal - The OXID eFire extension
 
 ### Setup
 
-System requirements and installation instructions are described in the module documentation: https://docs.oxid-esales.com/modules/paypal/en/6.0/installation.html.
+System requirements and installation instructions are described in the module documentation: https://docs.oxid-esales.com/modules/paypal/en/latest/installation.html.
 
 ### Module installation via composer
 
@@ -110,4 +110,4 @@ If you experience any bugs or issues, please report them in the section **module
 
 ### Documentation
 
-The module documentation can be found on our documentation platform: https://docs.oxid-esales.com/modules/paypal/en/6.3/index.html.
+The module documentation can be found on our documentation platform: https://docs.oxid-esales.com/modules/paypal/en/latest/index.html.

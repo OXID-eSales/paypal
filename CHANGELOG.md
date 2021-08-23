@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Test compatibility with shop master.
 
+## [6.3.2] - Unreleased
+
+### Fixed
+- OrderList::_buildSelectString is giving congruent result after replacing "from order" part [PR-54](https://github.com/OXID-eSales/paypal/pull/54)
+
 ## [6.3.1] - 2021-07-19
 
 ### Changed
@@ -263,6 +268,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
+[6.3.2]: https://github.com/OXID-eSales/paypal/compare/v6.3.1...b-6.x
 [6.3.1]: https://github.com/OXID-eSales/paypal/compare/v6.3.0...v6.3.1
 [6.3.0]: https://github.com/OXID-eSales/paypal/compare/v6.2.3...v6.3.0
 [6.2.3]: https://github.com/OXID-eSales/paypal/compare/v6.2.2...v6.2.3

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Test compatibility with shop master.
+- Documentation link in README now points to latest version [PR-55](https://github.com/SvenBrunk/paypal.git)
 
 ## [6.3.2] - Unreleased
 

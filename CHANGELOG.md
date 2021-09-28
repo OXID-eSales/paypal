@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - OrderList::_buildSelectString is giving congruent result after replacing "from order" part [PR-54](https://github.com/OXID-eSales/paypal/pull/54)
+- Improve User::load() method
 
 ## [6.3.1] - 2021-07-19
 

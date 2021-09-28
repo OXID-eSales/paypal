@@ -354,10 +354,11 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testLoadUserPayPalUser()
     {
         //session empty
-        $user = new \OxidEsales\PayPalModule\Model\User();
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $this->assertFalse($user->loadUserPayPalUser());
+        $this->assertEmpty($user->oxuser__oxid->value);
 
-        $user = new \OxidEsales\Eshop\Application\Model\User();
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.test');
         $user->oxuser__oxpassword = new \OxidEsales\Eshop\Core\Field('paswd');
         $user->setId('_testId');
@@ -366,7 +367,7 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         // user id in session
         $this->getSession()->setVariable('oepaypal-userId', '_testId');
 
-        $user = new \OxidEsales\PayPalModule\Model\User();
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $this->assertTrue($user->loadUserPayPalUser());
         $this->assertEquals('_testId', $user->oxuser__oxid->value);
     }
@@ -431,6 +432,15 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $this->assertSame($userId, $user->getId());
         $this->assertSame($username, $user->getFieldData('oxusername'));
+    }
+
+    public function testLoadEmptyCustomerId(): void
+    {
+        $user = oxNew(EshopUserModel::class);
+        $success = $user->load('');
+
+        $this->assertFalse($success);
+        $this->assertEmpty($user->getFieldData('oxusername'));
     }
 
     public function testSetInvoiceDataFromPayPalResultError()

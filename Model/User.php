@@ -336,6 +336,10 @@ class User extends User_parent
 
     public function getAnonymousId(string $userId): string
     {
+        if (empty($userId)) {
+            return '';
+        }
+
         $queryBuilder = ContainerFactory::getInstance()
             ->getContainer()
             ->get(QueryBuilderFactoryInterface::class)
@@ -364,7 +368,7 @@ class User extends User_parent
     public function load($id)
     {
         if (!parent::load($id)) {
-            return parent::load($this->getAnonymousId($id));
+            return !empty($id) ? parent::load($this->getAnonymousId($id)) : false;
         }
 
         return true;

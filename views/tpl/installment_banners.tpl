@@ -4,8 +4,6 @@
 
 [{assign var="currency" value=$oView->getActCurrency()}]
 
-[{oxscript include="https://www.paypal.com/sdk/js?client-id="|cat:$oViewConf->getPayPalClientId()|cat:"&components=messages"}]
-
 [{capture assign="installmentBanners"}]
     // Create installment banner holder
     var newNode = document.createElement('div');
@@ -54,4 +52,4 @@
         initWhenPayPalMessageAvailable();
     }
 [{/capture}]
-[{oxscript add=$installmentBanners}]
+[{oxscript add=$installmentBanners ucservice='paypal_banner'}]

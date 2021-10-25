@@ -98,6 +98,11 @@ $aModule = array(
         array('template' => 'page/checkout/payment.tpl',          'block'=>'checkout_payment_main',                 'file'=>'/views/blocks/page/checkout/basket_installment_banner_before.tpl'),
         array('template' => 'page/list/list.tpl',                 'block'=>'page_list_listhead',                    'file'=>'/views/blocks/page/list/list.tpl'),
         array('template' => 'page/details/inc/productmain.tpl',   'block'=>'details_productmain_price_value',       'file'=>'/views/blocks/page/details/inc/productmain.tpl'),
+            [
+                'template' => 'layout/base.tpl',
+                'block'    => 'head_meta_description',
+                'file'     =>'/views/blocks/head_meta_description.tpl'
+            ],
      ),
     'settings' => array(
         array('group' => 'oepaypal_banners', 'name' => 'oePayPalClientId',                          'type' => 'str',    'value' => ''),

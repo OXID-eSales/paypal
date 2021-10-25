@@ -444,4 +444,12 @@ class ViewConfig extends ViewConfig_parent
     {
         return Registry::getConfig()->getConfigParam('oePayPalBannersColorScheme');
     }
+
+    /**
+     * @return string
+     */
+    public function getPayPalSdkNamespace(): string
+    {
+        return 'paypal_' . md5(microtime(true));
+    }
 }

@@ -3,8 +3,9 @@
 [{/if}]
 
 [{assign var="currency" value=$oView->getActCurrency()}]
+[{assign var="paypal_namespace" value=$oViewConf->getPayPalSdkNamespace()}]
 
-[{oxscript include="https://www.paypal.com/sdk/js?client-id="|cat:$oViewConf->getPayPalClientId()|cat:"&components=messages"}]
+<script type="application/javascript" src="https://www.paypal.com/sdk/js?client-id=[{$oViewConf->getPayPalClientId()}]&components=messages" data-namespace="[{$paypal_namespace}]" defer></script>
 
 [{capture assign="installmentBanners"}]
     // Create installment banner holder
@@ -22,7 +23,7 @@
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         var bannerLayout = windowWidth <= 400 ? 'text' : 'flex';
 
-        paypal.Messages({
+       [{$paypal_namespace}].Messages({
             amount: [{$amount}],
             currency: '[{$currency->name}]',
             countryCode: '[{$oViewConf->getActLanguageAbbr()|upper}]',
@@ -35,7 +36,7 @@
     };
 
     var initWhenPayPalMessageAvailable = function (){
-        if (typeof paypal !== 'undefined' && typeof paypal.Messages !== 'undefined') {
+        if (typeof [{$paypal_namespace}] !== 'undefined' && typeof [{$paypal_namespace}].Messages !== 'undefined') {
             PayPalMessage();
         } else {
             setTimeout(function(){

@@ -367,11 +367,14 @@ class User extends User_parent
      */
     public function load($id)
     {
+        $result = true;
         if (!parent::load($id)) {
-            return !empty($id) ? parent::load($this->getAnonymousId($id)) : false;
+            $result = !empty($id) ? parent::load($this->getAnonymousId($id)) : false;
+            $this->setId($id);
+            $this->_isLoaded = false;
         }
 
-        return true;
+        return $result;
     }
 
     public function hasNoInvoiceAddress(): bool

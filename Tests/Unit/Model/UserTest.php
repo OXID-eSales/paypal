@@ -429,8 +429,9 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $user = oxNew(EshopUserModel::class);
         $user->setId($anonymousId);
         $this->assertTrue($user->load($anonymousId));
+        $this->assertFalse($user->isLoaded());
 
-        $this->assertSame($userId, $user->getId());
+        $this->assertSame($anonymousId, $user->getId());
         $this->assertSame($username, $user->getFieldData('oxusername'));
     }
 

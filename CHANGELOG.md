@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Undecided] - unreleased
 
 ### Changed
-- Update tests to work with GraphQL Base v6.0.
+- Update tests and module to work with GraphQL Storefront v2.0.
 
 ## [6.3.2] - 2021-07-19
 

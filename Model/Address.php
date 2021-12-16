@@ -167,7 +167,6 @@ class Address extends Address_parent
         if (!empty($address[1]) && $address[2]) {
             $address['street'] = $address[1];
             $address['streetnr'] = $address[2];
-
             return $address;
         }
 
@@ -178,9 +177,21 @@ class Address extends Address_parent
         if (!empty($address[1]) && $address[2]) {
             $address['street'] = $address[2];
             $address['streetnr'] = $address[1];
-
             return $address;
         }
+
+        #D3 START FIX IF CUST USES  "streetName.Nr"
+        // checking if street number is at the end but has no space in between streetName and streetNr
+        preg_match("/(.*?)\s*(\d*(?<=\d{1}).?$)/", $shipToStreet, $address);
+        debug(date('h:i:s')." ".__METHOD__." ".__LINE__.": ".$address[1]." - ".$address[2]);
+
+        // checking if street name and number was found
+        if (!empty($address[1]) && $address[2]) {
+            $address['street'] = $address[1];
+            $address['streetnr'] = $address[2];
+            return $address;
+        }
+        #D3 END
 
         // it is not possible to resolve address, so assign it without any parsing
         $address['street'] = $shipToStreet;

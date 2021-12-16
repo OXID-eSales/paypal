@@ -183,7 +183,6 @@ class Address extends Address_parent
         #D3 START FIX IF CUST USES  "streetName.Nr"
         // checking if street number is at the end but has no space in between streetName and streetNr
         preg_match("/(.*?)\s*(\d*(?<=\d{1}).?$)/", $shipToStreet, $address);
-        debug(date('h:i:s')." ".__METHOD__." ".__LINE__.": ".$address[1]." - ".$address[2]);
 
         // checking if street name and number was found
         if (!empty($address[1]) && $address[2]) {

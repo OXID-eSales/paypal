@@ -210,7 +210,7 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $address["ress"][] = array("Street Name", "4a-5");
         $address["ress"][] = array("Street Name 11", "4a-5");
         $address["ress"][] = array("Street Name", "");
-        $address["ress"][] = array("bertoldstr.48", "");
+        $address["ress"][] = array("bertoldstr.", "48");
         $address["ress"][] = array("Street Name", "4 a");
 
         foreach ($address["addr"] as $key => $value) {
@@ -292,5 +292,116 @@ class AddressTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $this->assertEquals($result[0], $address->oxaddress__oxfname->value);
         $this->assertEquals($result[1], $address->oxaddress__oxlname->value);
+    }
+
+    /**
+     * @param $address
+     * @param $expected
+     *
+     * @dataProvider testSplitShipToStreetPayPalAddressDataProvider
+     */
+    public function testSplitShipToStreetPayPalAddress($address, $expected)
+    {
+        $payPalOxAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
+        $addressArray = $payPalOxAddress->splitShipToStreetPayPalAddress($address);
+
+        $this->assertSame(
+            $expected,
+            $addressArray
+        );
+    }
+
+    public function testSplitShipToStreetPayPalAddressDataProvider()
+    {
+        return [
+            'dot without space' =>
+            [
+                'canzlerstr.333332',
+                [
+                    '0'   => 'canzlerstr.333332',
+                    '1'   => 'canzlerstr.',
+                    '2'    => '333332',
+                    'street'   => 'canzlerstr.',
+                    'streetnr'    => '333332'
+                ]
+            ],
+            'comma' =>
+            [
+                'alsenzstr,32',
+                [
+                    '0'   => 'alsenzstr,32',
+                    '1'   => 'alsenzstr,',
+                    '2'    => '32',
+                    'street'   => 'alsenzstr,',
+                    'streetnr'    => '32'
+                ]
+            ],
+            'dash' =>
+            [
+                'alsenzstr-32',
+                [
+                    '0'   => 'alsenzstr-32',
+                    '1'   => 'alsenzstr-',
+                    '2'    => '32',
+                    'street'   => 'alsenzstr-',
+                    'streetnr'    => '32'
+                ]
+            ],
+            'dot with number and letter' =>
+            [
+                'canzlerstr.333332a',
+                [
+                    '0'   => 'canzlerstr.333332a',
+                    '1'   => 'canzlerstr.',
+                    '2'    => '333332a',
+                    'street'   => 'canzlerstr.',
+                    'streetnr'    => '333332a'
+                ]
+            ],
+            'dot with space' =>
+            [
+                'canzlerstr. 333332',
+                [
+                    '0'   => 'canzlerstr. 333332',
+                    '1'   => 'canzlerstr.',
+                    '2'    => '333332',
+                    'street'   => 'canzlerstr.',
+                    'streetnr'    => '333332'
+                ]
+            ],
+            'inserted space and dot with space' =>
+            [
+                'can zlerstr. 333332',
+                [
+                    '0'   => 'can zlerstr. 333332',
+                    '1'   => 'can zlerstr.',
+                    '2'    => '333332',
+                    'street'   => 'can zlerstr.',
+                    'streetnr'    => '333332'
+                ]
+            ],
+            'inserted dash and space' =>
+            [
+                'Park-d.-Opfer-des-Faschismus 1',
+                [
+                    '0'   => 'Park-d.-Opfer-des-Faschismus 1',
+                    '1'   => 'Park-d.-Opfer-des-Faschismus',
+                    '2'    => '1',
+                    'street'   => 'Park-d.-Opfer-des-Faschismus',
+                    'streetnr'    => '1'
+                ]
+            ],
+            'digit in streetname plus streetnumber' =>
+            [
+                'Str. des 17.Juni 34',
+                [
+                    '0'   => 'Str. des 17.Juni 34',
+                    '1'   => 'Str. des 17.Juni',
+                    '2'    => '34',
+                    'street'   => 'Str. des 17.Juni',
+                    'streetnr'    => '34'
+                ]
+            ]
+        ];
     }
 }

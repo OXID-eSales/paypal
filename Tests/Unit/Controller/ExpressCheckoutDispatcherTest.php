@@ -413,8 +413,10 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Logger::class);
         $mockBuilder->setMethods(['log']);
         $payPalLogger = $mockBuilder->getMock();
-        $payPalLogger->expects($this->at(0))->method("log");
-        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NO SHIPPING COUNTRY ID"));
+        $payPalLogger->expects($this->atLeast(2))->method("log")->withConsecutive(
+            [$this->anything()],
+            [$this->equalTo("Callback error: NO SHIPPING COUNTRY ID")]
+        );
 
         // creating user without set country id
         $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
@@ -449,8 +451,10 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Logger::class);
         $mockBuilder->setMethods(['log']);
         $payPalLogger = $mockBuilder->getMock();
-        $payPalLogger->expects($this->at(0))->method("log");
-        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NO DELIVERY LIST SET"));
+        $payPalLogger->expects($this->atLeast(2))->method("log")->withConsecutive(
+            [$this->anything()],
+            [$this->equalTo("Callback error: NO DELIVERY LIST SET")]
+        );
 
         $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $user->load("oxdefaultadmin");
@@ -485,8 +489,10 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Logger::class);
         $mockBuilder->setMethods(['log']);
         $payPalLogger = $mockBuilder->getMock();
-        $payPalLogger->expects($this->at(0))->method("log");
-        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: NOT VALID COUNTRY ID"));
+        $payPalLogger->expects($this->atLeast(2))->method("log")->withConsecutive(
+            [$this->anything()],
+            [$this->equalTo("Callback error: NOT VALID COUNTRY ID")]
+        );
 
         $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $user->load("oxdefaultadmin");
@@ -531,8 +537,10 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Logger::class);
         $mockBuilder->setMethods(['log']);
         $payPalLogger = $mockBuilder->getMock();
-        $payPalLogger->expects($this->at(0))->method("log");
-        $payPalLogger->expects($this->at(1))->method("log")->with($this->equalTo("Callback error: DELIVERY SET LIST HAS NO PAYPAL"));
+        $payPalLogger->expects($this->atLeast(2))->method("log")->withConsecutive(
+            [$this->anything()],
+            [$this->equalTo("Callback error: DELIVERY SET LIST HAS NO PAYPAL")]
+        );
 
         $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         $user->load("oxdefaultadmin");
@@ -1117,14 +1125,11 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $deliverySet->assign(['oxtitle' => $name]);
         $deliverySet->save();
 
-        $lang = $this->getMock(\OxidEsales\Eshop\Core\Language::class, array("translateString"));
-        $lang->expects($this->once())->method("translateString")->with($this->equalTo("OEPAYPAL_PRICE"))->will($this->returnValue("Price:"));
+        $lang = $this->createPartialMock(\OxidEsales\Eshop\Core\Language::class, ['translateString']);
+        $lang->expects($this->once())->method("translateString")->with('OEPAYPAL_PRICE')->willReturn('Price:');
         $this->addModuleObject(\OxidEsales\Eshop\Core\Language::class, $lang);
 
-        $payPalConfig = $this->_createStub('ePayPalConfig', array('getCharset' => 'UTF-8'));
-
         $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
-        $dispatcher->setPayPalConfig($payPalConfig);
 
         $deliverySetList = [
             $deliverySet->getId() => $deliverySet

@@ -58,11 +58,12 @@ class DeliverySetMain extends DeliverySetMain_parent
         parent::save();
 
         $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
         /** @var \OxidEsales\PayPalModule\Core\Config $payPalConfig */
         $payPalConfig = oxNew(\OxidEsales\PayPalModule\Core\Config::class);
 
         $deliverySetId = $this->getEditObjectId();
-        $deliverySetMarked = (bool) $config->getRequestParameter('isPayPalDefaultMobilePayment');
+        $deliverySetMarked = (bool) $request->getRequestParameter('isPayPalDefaultMobilePayment');
         $mobileECDefaultShippingId = $payPalConfig->getMobileECDefaultShippingId();
 
         if ($deliverySetMarked && $deliverySetId != $mobileECDefaultShippingId) {

@@ -39,14 +39,15 @@ class PaymentController extends PaymentController_parent
      */
     public function validatePayment()
     {
-        $paymentId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('paymentid');
+        $request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+        $paymentId = $request->getRequestParameter('paymentid');
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $basket = $session->getBasket();
         if ($paymentId === 'oxidpaypal' && !$this->isConfirmedByPayPal($basket)) {
             $session->setVariable('paymentid', 'oxidpaypal');
 
             return 'oepaypalstandarddispatcher?fnc=setExpressCheckout'
-                   . '&displayCartInPayPal=' . ((int) \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('displayCartInPayPal'));
+                   . '&displayCartInPayPal=' . ((int) $request->getRequestParameter('displayCartInPayPal'));
         }
 
         return parent::validatePayment();

@@ -30,7 +30,7 @@ abstract class OrderAction
      *
      * @var \OxidEsales\PayPalModule\Model\PayPalOrder
      */
-    protected $_oOrder = null;
+    protected $order = null;
 
     /**
      * @var string

@@ -15,6 +15,11 @@
         "ext-openssl": "*",
         "symfony/dotenv": "^5.1"
     },
+    "require-dev": {
+        "codeception/module-rest": "*",
+        "codeception/module-phpbrowser": "^1.0.2",
+        "codeception/module-db": "*"
+    },
     "autoload": {
         "psr-4": {
             "OxidEsales\\PayPalModule\\": ""

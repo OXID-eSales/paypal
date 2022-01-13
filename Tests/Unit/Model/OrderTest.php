@@ -208,6 +208,9 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /** @var \OxidEsales\PayPalModule\Model\User $user */
         $user = oxNew(\OxidEsales\PayPalModule\Model\User::class);
 
+        //can't clone null in $order->setUser($user);
+        $user->oxuser__oxustidstatus = (object)[];
+
         $order = oxNew(\OxidEsales\PayPalModule\Model\Order::class);
         $order->setUser($user);
 

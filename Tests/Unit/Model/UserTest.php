@@ -94,9 +94,9 @@ class UserTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->addModuleObject(\OxidEsales\Eshop\Application\Model\Address::class, new \OxidEsales\PayPalModule\Model\Address());
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class);
-        $mockBuilder->setMethods(['_setAutoGroups']);
+        $mockBuilder->setMethods(['setAutoGroups']);
         $payPalUser = $mockBuilder->getMock();
-        $payPalUser->expects($this->once())->method('_setAutoGroups')->with($this->equalTo("8f241f11096877ac0.98748826"));
+        $payPalUser->expects($this->once())->method('setAutoGroups')->with($this->equalTo("8f241f11096877ac0.98748826"));
         $payPalUser->createPayPalUser($details);
         $userId = $payPalUser->getId();
 

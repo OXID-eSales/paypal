@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Handler;
 
+use OxidEsales\PayPalModule\Model\Action\Data\OrderReauthorizeActionData;
+
 /**
  * Testing \OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler class.
  */
@@ -35,17 +37,21 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
         $currency = 'LTU';
         $amount = 59.67;
 
-        $data = $this->_createStub(
-            'Data', array(
-                'getAuthorizationId' => $authId,
-                'getAmount'          => $amount,
-                'getCurrency'        => $currency,
+        $data = $this->createPartialMock(
+            OrderReauthorizeActionData::class, array(
+                'getAuthorizationId',
+                'getAmount',
+                'getCurrency',
             )
         );
+        $data->method('getAuthorizationId')->willReturn($authId);
+        $data->method('getAmount')->willReturn($amount);
+        $data->method('getCurrency')->willReturn($currency);
+
         $actionHandler = $this->getActionHandler($data);
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class);
-        $mockBuilder->setMethods(['setAuthorizationId', 'setAmount', 'setCompleteType']);
+        $mockBuilder->onlyMethods(['setAuthorizationId', 'setAmount', 'setCompleteType']);
         $builder= $mockBuilder->getMock();
         $builder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($authId));
         $builder->expects($this->once())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
@@ -67,7 +73,7 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
         $actionHandler->setPayPalRequest($payPalRequest);
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
-        $mockBuilder->setMethods(['doReAuthorization']);
+        $mockBuilder->onlyMethods(['doReAuthorization']);
         $checkoutService = $mockBuilder->getMock();
         $checkoutService->expects($this->once())->method('doReAuthorization')->with($this->equalTo($payPalRequest));
         $actionHandler->setPayPalService($checkoutService);

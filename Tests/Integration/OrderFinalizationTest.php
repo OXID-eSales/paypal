@@ -58,11 +58,10 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $paymentGateway = $this->getPaymentGateway($payPalReturnStatus);
 
-        /** @var \OxidEsales\PayPalModule\Model\Order $order */
-        $mockBuilder = $this->getMockBuilder(Order::class);
-        $mockBuilder->setMethods(['_getGateway', '_sendOrderByEmail', 'validateOrder']);
-        $order = $mockBuilder->getMock();
-        $order->expects($this->any())->method('_getGateway')->will($this->returnValue($paymentGateway));
+        $order = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Order::class)
+            ->onlyMethods(['getGateway', 'sendOrderByEmail', 'validateOrder'])
+            ->getMock();
+        $order->method('getGateway')->willReturn($paymentGateway);
 
         $order->setId('_testOrderId');
         $order->finalizeOrder($basket, $this->getUser());
@@ -86,11 +85,11 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $result = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment::class);
         $result->setData(array('PAYMENTINFO_0_PAYMENTSTATUS' => $payPalReturnStatus));
 
-        /** @var \OxidEsales\PayPalModule\Core\PayPalService $service */
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
-        $mockBuilder->setMethods(['doExpressCheckoutPayment']);
-        $service = $mockBuilder->getMock();
-        $service->expects($this->any())->method('doExpressCheckoutPayment')->will($this->returnValue($result));
+        $service = $this->createPartialMock(
+            \OxidEsales\PayPalModule\Core\PayPalService::class,
+            ['doExpressCheckoutPayment']
+        );
+        $service->method('doExpressCheckoutPayment')->willReturn($result);
 
         /** @var \OxidEsales\PayPalModule\Model\PaymentGateway $payPalPaymentGateway */
         $payPalPaymentGateway = oxNew(\OxidEsales\Eshop\Application\Model\PaymentGateway::class);

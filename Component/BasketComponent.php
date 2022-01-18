@@ -51,7 +51,7 @@ class BasketComponent extends BasketComponent_parent
             //Make express checkout
             $res = $this->actionAddToBasketAndGoToCheckout();
         } else {
-            $res = $this->_getRedirectUrl();
+            $res = $this->getRedirectUrl();
             //if amount is more than 0, do not redirect, show ESC popup instead
             if ($currentArticle->getArticleAmount() > 0) {
                 $this->shopPopUp = true;
@@ -169,7 +169,8 @@ class BasketComponent extends BasketComponent_parent
      */
     public function getPayPalCancelURL()
     {
-        $url = $this->formatUrl($this->_getRedirectUrl());
+        //todo ?
+        $url = $this->formatUrl($this->getRedirectUrl());
         $replacedURL = str_replace('showECSPopup=1', 'showECSPopup=0', $url);
 
         return urlencode($replacedURL);

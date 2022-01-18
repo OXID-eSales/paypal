@@ -111,7 +111,7 @@ class BasketComponent extends BasketComponent_parent
      */
     public function getCurrentArticleInfo()
     {
-        $products = $this->_getItems();
+        $products = $this->getItems();
         $currentArticleId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('aid');
         $params = null;
         if (!is_null($products[$currentArticleId])) {
@@ -130,7 +130,7 @@ class BasketComponent extends BasketComponent_parent
     {
         $currentItem = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class);
         $currentArticleId = $this->getRequest()->getPostParameter('aid');
-        $products = $this->_getItems();
+        $products = $this->getItems();
         $productInfo = $products[$currentArticleId];
         $currentItem->setArticleId($currentArticleId);
         $currentItem->setSelectList($productInfo['sel']);

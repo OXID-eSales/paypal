@@ -112,7 +112,7 @@ class BasketComponent extends BasketComponent_parent
     public function getCurrentArticleInfo()
     {
         $products = $this->getItems();
-        $currentArticleId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('aid');
+        $currentArticleId = $this->getRequest()->getRequestParameter('aid');
         $params = null;
         if (!is_null($products[$currentArticleId])) {
             $params = $products[$currentArticleId];

@@ -171,7 +171,7 @@ class User extends User_parent
         $this->oxuser__oxbirthdate = new \OxidEsales\Eshop\Core\Field('');
 
         if ($this->save()) {
-            $this->_setAutoGroups($this->oxuser__oxcountryid->value);
+            $this->setAutoGroups($this->oxuser__oxcountryid->value);
 
             // and adding to group "oxidnotyetordered"
             $this->addToGroup("oxidnotyetordered");
@@ -381,7 +381,7 @@ class User extends User_parent
 
     public function setGroupsAfterUserCreation(): void
     {
-        $this->_setAutoGroups($this->oxuser__oxcountryid->value);
+        $this->setAutoGroups($this->oxuser__oxcountryid->value);
 
         // and adding to group "oxidnotyetordered"
         $this->addToGroup("oxidnotyetordered");

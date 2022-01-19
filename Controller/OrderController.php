@@ -133,7 +133,7 @@ class OrderController extends OrderController_parent
      */
     protected function getNextStep($success)
     {
-        $nextStep = parent::_getNextStep($success);
+        $nextStep = parent::getNextStep($success);
 
         // Detecting PayPal & loading order & execute payment only if go wrong
         if ($this->isPayPal() && ($success == \OxidEsales\Eshop\Application\Model\Order::ORDER_STATE_PAYMENTERROR)) {

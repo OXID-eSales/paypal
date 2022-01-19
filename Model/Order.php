@@ -71,7 +71,7 @@ class Order extends Order_parent
         if ($this->oxorder__oxordernr->value) {
             $updated = (bool) oxNew(\OxidEsales\Eshop\Core\Counter::class)->update($this->_getCounterIdent(), $this->oxorder__oxordernr->value);
         } else {
-            $updated = $this->_setNumber();
+            $updated = $this->setNumber();
         }
 
         return $updated;

@@ -53,7 +53,7 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'refund_amount'  => $refundAmount,
             'refund_type'    => $type,
         );
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
 
         $order = $this->getOrder();
 
@@ -71,8 +71,8 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $remainingRefundSum = 59.67;
 
-        $payment = $this->_createStub('oePayPalPayPalOrderPayment', array('getRemainingRefundAmount' => $remainingRefundSum));
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
+        $payment = $this->createStub('oePayPalPayPalOrderPayment', array('getRemainingRefundAmount' => $remainingRefundSum));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
 
         $order = $this->getOrder();
 
@@ -98,7 +98,7 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payment->save();
 
         $params = array('transaction_id' => $transactionId);
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
 
         $order = $this->getOrder();
 
@@ -118,7 +118,7 @@ class OrderRefundActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getRequest($params)
     {
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
 
         return $request;
     }

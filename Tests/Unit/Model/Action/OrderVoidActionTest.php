@@ -61,7 +61,7 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'getAuthorizationId' => $authentificationId,
             'getCorrelationId'   => $correlationId
         );
-        $payPalResponse = $this->_createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoVoid::class, $payPalResponseMethods);
+        $payPalResponse = $this->createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoVoid::class, $payPalResponseMethods);
 
         $payment = new \OxidEsales\PayPalModule\Model\OrderPayment();
         $payment->setDate($date);
@@ -143,7 +143,7 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getPaymentList($testMethods = array())
     {
         $methods = array('addPayment' => $this->getPayment());
-        $paymentList = $this->_createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
+        $paymentList = $this->createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
 
         return $paymentList;
     }
@@ -158,7 +158,7 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getOrder($testMethods = array())
     {
         $methods = array('getPaymentList' => $this->getPaymentList());
-        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
+        $order = $this->createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
 
         return $order;
     }
@@ -189,7 +189,7 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getData($methods = array())
     {
-        $data = $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData::class, $methods);
+        $data = $this->createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData::class, $methods);
 
         return $data;
     }
@@ -206,7 +206,7 @@ class OrderVoidActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getAction($payPalResponse, $order, $data = null)
     {
         $data = $data ? $data : $this->getData();
-        $handler = $this->_createStub('ActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
+        $handler = $this->createStub('ActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\OrderVoidAction::class);
         $mockBuilder->setMethods(['getDate']);

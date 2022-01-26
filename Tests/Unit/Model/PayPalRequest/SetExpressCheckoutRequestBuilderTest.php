@@ -50,7 +50,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getLogoUrl'        => 'LogoImg',
             'isGuestBuyEnabled' => true,
         );
-        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
+        $config = $this->createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setPayPalConfig($config);
@@ -68,7 +68,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'isGuestBuyEnabled' => true,
             'getLogoUrl'        => null,
         );
-        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
+        $config = $this->createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setPayPalConfig($config);
@@ -135,7 +135,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             $basketMethodValues[$key] = $value;
         }
 
-        return $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        return $this->createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
     }
 
     public function testSetBasket_AllParamsSet()
@@ -154,7 +154,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'L_SHIPPINGOPTIONAMOUNT0'       => '66.66',
         );
 
-        $price = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, array('getBruttoPrice' => '99.99'));
+        $price = $this->createStub(\OxidEsales\Eshop\Core\Price::class, array('getBruttoPrice' => '99.99'));
 
         $basketMethodValues = array('getPrice' => $price);
         $basket = $this->getBasketStub($basketMethodValues);
@@ -241,12 +241,12 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $basketMethodValues = array(
             'getFPrice' => '99.99',
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
         $configMethodValues = array('getBrandName' => 'ShopName');
-        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
+        $config = $this->createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
-        $lang = $this->_createStub(\OxidEsales\Eshop\Core\Language::class, array('translateString' => '%s %s %s'));
+        $lang = $this->createStub(\OxidEsales\Eshop\Core\Language::class, array('translateString' => '%s %s %s'));
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setLang($lang);
@@ -286,7 +286,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $priceMethodValues = array(
             'getPrice' => '99.99',
         );
-        $price = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, $priceMethodValues);
+        $price = $this->createStub(\OxidEsales\Eshop\Core\Price::class, $priceMethodValues);
 
         $basketItemMethodValues = array(
             'getTitle'     => 'BasketItemTitle',
@@ -296,7 +296,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getArticle'   => $article,
         );
 
-        $basketItem = $this->_createStub(\OxidEsales\Eshop\Application\Model\BasketItem::class, $basketItemMethodValues);
+        $basketItem = $this->createStub(\OxidEsales\Eshop\Application\Model\BasketItem::class, $basketItemMethodValues);
         $basketItems = array($basketItem, $basketItem);
 
         $basketMethodValues = array(
@@ -305,7 +305,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 0
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -328,7 +328,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 0
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -351,7 +351,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 100,
             'getPayPalGiftCardCosts'     => 0
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -374,7 +374,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 100.99
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -394,7 +394,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $basketMethodValues = array(
             'getSumOfCostOfAllItemsPayPalBasket' => '99.99'
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -418,7 +418,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $userMethodValues = array(
             'getSelectedAddressId' => null,
         );
-        $user = $this->_createStub(\OxidEsales\Eshop\Application\Model\User::class, $userMethodValues);
+        $user = $this->createStub(\OxidEsales\Eshop\Application\Model\User::class, $userMethodValues);
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
         $user->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
         $user->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');

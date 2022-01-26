@@ -62,7 +62,7 @@ class OrderActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getRequest($params)
     {
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
 
         return $request;
     }

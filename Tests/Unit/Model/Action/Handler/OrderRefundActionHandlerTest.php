@@ -56,7 +56,7 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
         $builder->expects($this->atLeastOnce())->method('setComment')->with($this->equalTo($comment));
         $builder->expects($this->any())->method('getRequest')->will($this->returnValue(new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest()));
 
-        $data = $this->_createStub(
+        $data = $this->createStub(
             'Data', array(
                 'getTransactionId' => $transId,
                 'getAmount'        => $amount,

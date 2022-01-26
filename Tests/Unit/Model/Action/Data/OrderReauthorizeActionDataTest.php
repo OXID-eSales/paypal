@@ -33,9 +33,9 @@ class OrderReauthorizeActionDataTest extends \OxidEsales\TestingLibrary\UnitTest
     {
         $remainingOrderSum = 59.67;
 
-        $payPalOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $remainingOrderSum));
-        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
+        $payPalOrder = $this->createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $remainingOrderSum));
+        $order = $this->createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
 
         $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderReauthorizeActionData($request, $order);
 
@@ -51,7 +51,7 @@ class OrderReauthorizeActionDataTest extends \OxidEsales\TestingLibrary\UnitTest
      */
     protected function getRequest($params)
     {
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
 
         return $request;
     }

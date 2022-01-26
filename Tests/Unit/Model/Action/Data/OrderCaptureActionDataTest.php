@@ -51,7 +51,7 @@ class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'capture_amount' => $captureAmount,
             'capture_type'   => $type,
         );
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
 
         $order = $this->getOrder();
 
@@ -68,9 +68,9 @@ class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $remainingOrderSum = 59.67;
 
-        $payPalOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $remainingOrderSum));
-        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
+        $payPalOrder = $this->createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $remainingOrderSum));
+        $order = $this->createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
 
         $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData($request, $order);
 
@@ -86,7 +86,7 @@ class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getRequest($params)
     {
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
+        $request = $this->createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
 
         return $request;
     }

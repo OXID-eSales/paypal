@@ -65,7 +65,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
         $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
 
-        $validator = $this->_createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
+        $validator = $this->createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
         $view->setPaymentValidator($validator);
 
         $this->assertTrue($view->isExpressCheckoutEnabled());
@@ -79,7 +79,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', false);
         $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
 
-        $validator = $this->_createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
+        $validator = $this->createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
         $view->setPaymentValidator($validator);
 
         $this->assertFalse($view->isExpressCheckoutEnabled());
@@ -93,7 +93,7 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
         $view = oxNew(\OxidEsales\PayPalModule\Core\ViewConfig::class);
 
-        $validator = $this->_createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => false));
+        $validator = $this->createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => false));
         $view->setPaymentValidator($validator);
 
         $this->assertFalse($view->isExpressCheckoutEnabled());

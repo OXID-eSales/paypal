@@ -169,7 +169,6 @@ class BasketComponent extends BasketComponent_parent
      */
     public function getPayPalCancelURL()
     {
-        //todo ?
         $url = $this->formatUrl($this->getRedirectUrl());
         $replacedURL = str_replace('showECSPopup=1', 'showECSPopup=0', $url);
 

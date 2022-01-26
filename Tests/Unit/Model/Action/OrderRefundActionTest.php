@@ -78,7 +78,7 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'getRefundAmount'  => $amount,
             'getCurrency'      => $currency,
         );
-        $payPalResponse = $this->createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoRefund::class, $payPalResponseMethods);
+        $payPalResponse = $this->_createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoRefund::class, $payPalResponseMethods);
 
         $payment = new \OxidEsales\PayPalModule\Model\OrderPayment();
         $payment->setDate($date);
@@ -184,7 +184,7 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getPaymentList($testMethods = array())
     {
         $methods = array('addPayment' => $this->getPayment());
-        $paymentList = $this->createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
+        $paymentList = $this->_createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
 
         return $paymentList;
     }
@@ -199,7 +199,7 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getOrder($testMethods = array())
     {
         $methods = array('getPaymentList' => $this->getPaymentList());
-        $order = $this->createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
+        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
 
         return $order;
     }
@@ -230,7 +230,7 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getData($methods = array())
     {
-        $data = $this->createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class, $methods);
+        $data = $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData::class, $methods);
 
         return $data;
     }
@@ -250,7 +250,7 @@ class OrderRefundActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $data = $data ? $data : $this->getData();
         $data->expects($this->any())->method('getPaymentBeingRefunded')->will($this->returnValue(new \OxidEsales\PayPalModule\Model\OrderPayment()));
 
-        $handler = $this->createStub('ActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
+        $handler = $this->_createStub('ActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\OrderRefundAction::class);
         $mockBuilder->setMethods(['getDate']);

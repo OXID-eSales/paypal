@@ -45,7 +45,7 @@ class OrderCaptureActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestC
         $builder->expects($this->once())->method('setCompleteType')->with($this->equalTo($type));
         $builder->expects($this->once())->method('setComment')->with($this->equalTo($comment));
 
-        $data = $this->createStub(
+        $data = $this->_createStub(
             'Data', array(
                 'getAuthorizationId' => $authId,
                 'getAmount'          => $amount,

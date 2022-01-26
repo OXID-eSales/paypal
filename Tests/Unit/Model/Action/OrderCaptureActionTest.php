@@ -65,7 +65,7 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'getCapturedAmount' => $amount,
             'getCurrency'       => $currency,
         );
-        $payPalResponse = $this->createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class, $payPalResponseMethods);
+        $payPalResponse = $this->_createStub(\OxidEsales\PayPalModule\Model\Response\ResponseDoCapture::class, $payPalResponseMethods);
 
         $payment = new \OxidEsales\PayPalModule\Model\OrderPayment();
         $payment->setDate($date);
@@ -232,7 +232,7 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getPaymentList($testMethods = array())
     {
         $methods = array('addPayment' => $this->getPayment());
-        $paymentList = $this->createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
+        $paymentList = $this->_createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
 
         return $paymentList;
     }
@@ -247,7 +247,7 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getOrder($testMethods = array())
     {
         $methods = array('getPaymentList' => $this->getPaymentList(), 'save' => true);
-        $order = $this->createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
+        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
 
         return $order;
     }
@@ -278,7 +278,7 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getData($methods = array())
     {
-        $data = $this->createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData::class, $methods);
+        $data = $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData::class, $methods);
 
         return $data;
     }
@@ -296,8 +296,8 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getAction($payPalResponse, $order, $data = null, $reauthorizeHandler = null)
     {
         $data = $data ? $data : $this->getData();
-        $handler = $this->createStub('CaptureActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
-        $reauthorizeHandler = $reauthorizeHandler ? $reauthorizeHandler : $this->createStub(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, array());
+        $handler = $this->_createStub('CaptureActionHandler', array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
+        $reauthorizeHandler = $reauthorizeHandler ? $reauthorizeHandler : $this->_createStub(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class, array());
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\OrderCaptureAction::class);
         $mockBuilder->setMethods(['getDate']);

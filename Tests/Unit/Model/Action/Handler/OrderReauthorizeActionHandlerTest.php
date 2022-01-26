@@ -35,7 +35,7 @@ class OrderReauthorizeActionHandlerTest extends \OxidEsales\TestingLibrary\UnitT
         $currency = 'LTU';
         $amount = 59.67;
 
-        $data = $this->createStub(
+        $data = $this->_createStub(
             'Data', array(
                 'getAuthorizationId' => $authId,
                 'getAmount'          => $amount,

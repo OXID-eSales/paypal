@@ -36,7 +36,7 @@ class OrderVoidActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $amount = 59.67;
         $comment = "Comment";
 
-        $data = $this->createStub(
+        $data = $this->_createStub(
             'Data', array(
                 'getAuthorizationId' => $authId,
                 'getAmount'          => $amount,

@@ -151,7 +151,7 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
         $userMethodValues = array(
             'getSelectedAddressId' => null,
         );
-        $user = $this->createStub(\OxidEsales\Eshop\Application\Model\User::class, $userMethodValues);
+        $user = $this->_createStub(\OxidEsales\Eshop\Application\Model\User::class, $userMethodValues);
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
         $user->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
         $user->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');

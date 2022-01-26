@@ -69,7 +69,7 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsLoaded_DatabaseRecordNotFound()
     {
-        $gateway = $this->createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => null));
+        $gateway = $this->_createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => null));
 
         $model = $this->getPayPalModel($gateway);
         $model->load();
@@ -82,7 +82,7 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsLoaded_DatabaseRecordFound()
     {
-        $gateway = $this->createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => array('oePayPalId' => 'testId')));
+        $gateway = $this->_createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => array('oePayPalId' => 'testId')));
 
         $model = $this->getPayPalModel($gateway);
         $model->load();
@@ -101,7 +101,7 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getPayPalModel($gateway, $getId = null, $setId = null)
     {
-        $model = $this->createStub(\OxidEsales\PayPalModule\Core\Model::class, array('getDbGateway' => $gateway, 'getId' => $getId), array('setId'));
+        $model = $this->_createStub(\OxidEsales\PayPalModule\Core\Model::class, array('getDbGateway' => $gateway, 'getId' => $getId), array('setId'));
         if ($setId) {
             $model->expects($this->any())->method('setId')->with($setId);
         }

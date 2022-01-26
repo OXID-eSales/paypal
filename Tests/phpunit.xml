@@ -1,24 +1,11 @@
-<phpunit backupGlobals="true"
-         backupStaticAttributes="false"
-         cacheTokens="true"
-         colors="false"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         printerClass="\OxidEsales\TestingLibrary\Printer"
-         forceCoversAnnotation="false"
-         processIsolation="false"
-         stopOnError="false"
-         stopOnFailure="false"
-         stopOnIncomplete="false"
-         stopOnSkipped="false"
-         verbose="false">
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../Component</directory>
-            <directory suffix=".php">../Controller</directory>
-            <directory suffix=".php">../Core</directory>
-            <directory suffix=".php">../Model</directory>
-        </whitelist>
-    </filter>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="true" backupStaticAttributes="false" colors="false" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" printerClass="\OxidEsales\TestingLibrary\Printer" forceCoversAnnotation="false" processIsolation="false" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" verbose="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">../Component</directory>
+      <directory suffix=".php">../Controller</directory>
+      <directory suffix=".php">../Core</directory>
+      <directory suffix=".php">../Model</directory>
+    </include>
+  </coverage>
 </phpunit>

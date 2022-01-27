@@ -252,7 +252,7 @@ class OrderActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getActionFactory($request, $payPalOrder)
     {
-        $order = $this->createStub(Order::class, array('getPayPalOrder' => $payPalOrder));
+        $order = $this->createConfiguredMock(Order::class, array('getPayPalOrder' => $payPalOrder));
 
         $actionFactory = new \OxidEsales\PayPalModule\Model\Action\OrderActionFactory($request, $order);
 

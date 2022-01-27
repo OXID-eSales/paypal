@@ -1121,7 +1121,11 @@ class ExpressCheckoutDispatcherTest extends \OxidEsales\TestingLibrary\UnitTestC
         $lang->expects($this->once())->method("translateString")->with($this->equalTo("OEPAYPAL_PRICE"))->will($this->returnValue("Price:"));
         $this->addModuleObject(\OxidEsales\Eshop\Core\Language::class, $lang);
 
-        $payPalConfig = $this->createStub('ePayPalConfig', array('getCharset' => 'UTF-8'));
+        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\Config::class);
+        $mockBuilder->setMethods(['getCharset']);
+        $payPalConfig = $mockBuilder->getMock();
+        $payPalConfig->expects($this->once())->method("getCharset")->will($this->returnValue('UTF-8'));
+
 
         $dispatcher = new \OxidEsales\PayPalModule\Controller\ExpressCheckoutDispatcher();
         $dispatcher->setPayPalConfig($payPalConfig);

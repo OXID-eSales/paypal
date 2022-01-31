@@ -36,18 +36,24 @@ class OrderVoidActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $amount = 59.67;
         $comment = "Comment";
 
-        $data = $this->createStub(
-            'Data', array(
-                'getAuthorizationId' => $authId,
-                'getAmount'          => $amount,
-                'getComment'         => $comment,
-                'getCurrency'        => $currency,
-            )
+        $data = $this->createPartialMock(
+            \OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData::class,
+            [
+                'getAuthorizationId',
+                'getAmount',
+                'getComment',
+                'getCurrency',
+            ]
         );
+        $data->method('getAuthorizationId')->willReturn($authId);
+        $data->method('getAmount')->willReturn($amount);
+        $data->method('getComment')->willReturn($comment);
+        $data->method('getCurrency')->willReturn($currency);
+
         $actionHandler = $this->getActionHandler($data);
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class);
-        $mockBuilder->setMethods(['setAuthorizationId', 'setAmount', 'setCompleteType', 'getRequest', 'setComment']);
+        $mockBuilder->onlyMethods(['setAuthorizationId', 'setAmount', 'setCompleteType', 'getRequest', 'setComment']);
         $builder = $mockBuilder->getMock();
         $builder->expects($this->once())->method('setAuthorizationId')->with($this->equalTo($authId));
         $builder->expects($this->once())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
@@ -71,7 +77,7 @@ class OrderVoidActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $actionHandler->setPayPalRequest($payPalRequest);
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
-        $mockBuilder->setMethods(['doVoid']);
+        $mockBuilder->onlyMethods(['doVoid']);
         $checkoutService = $mockBuilder->getMock();
         $checkoutService->expects($this->once())
             ->method('doVoid')

@@ -155,14 +155,24 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $logger = $this
             ->getMockBuilder(Logger::class)
             ->getMock();
+
         $logger
-            ->expects($this->at(4))
+            ->expects($this->exactly(3))
             ->method('setTitle')
-            ->with('Response with warning from PayPal');
+            ->withConsecutive(
+                ['setTitle' => 'Request to PayPal'],
+                ['setTitle' => 'Response from PayPal'],
+                ['setTitle' => 'Response with warning from PayPal'],
+
+            );
         $logger
-            ->expects($this->at(5))
+            ->expects($this->exactly(3))
             ->method('log')
-            ->with($response);
+            ->withConsecutive(
+                ['log' => ['testParam' => 'testValue']],
+                ['log' => $response],
+                ['log' => $response],
+            );
 
         $caller->setLogger($logger);
 
@@ -359,4 +369,3 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         return $curl;
     }
 }
-

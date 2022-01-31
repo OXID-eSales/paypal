@@ -148,10 +148,12 @@ class DoExpressCheckoutPaymentRequestBuilderTest extends \OxidEsales\TestingLibr
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => null,
         );
 
-        $userMethodValues = array(
-            'getSelectedAddressId' => null,
+        $user = $this->createPartialMock(
+            \OxidEsales\Eshop\Application\Model\User::class,
+            ['getSelectedAddressId']
         );
-        $user = $this->createStub(\OxidEsales\Eshop\Application\Model\User::class, $userMethodValues);
+        $user->method('getSelectedAddressId')->willReturn(null);
+
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
         $user->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
         $user->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');

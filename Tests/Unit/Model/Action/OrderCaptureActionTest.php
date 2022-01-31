@@ -131,14 +131,14 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payment = $this->getPayment();
         $payment->expects($this->once())->method('addComment')->with($this->equalTo($comment));
 
-        $paymentList = $this->getPaymentList(array('addPayment'));
-        $paymentList->expects($this->any())->method('addPayment')->will($this->returnValue($payment));
+        $paymentList = $this->createPartialMock(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, ['addPayment']);
+        $paymentList->method('addPayment')->willReturn($payment);
 
-        $order = $this->getOrder(array('getPaymentList'));
-        $order->expects($this->any())->method('getPaymentList')->will($this->returnValue($paymentList));
+        $order = $this->createPartialMock(\OxidEsales\PayPalModule\Model\PayPalOrder::class, ['getPaymentList']);
+        $order->method('getPaymentList')->willReturn($paymentList);
 
         $data = $this->createStub(\OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData::class);
-        $data->expects($this->any())->method('getComment')->will($this->returnValue($commentContent));
+        $data->expects($this->once())->method('getComment')->will($this->returnValue($commentContent));
 
         $action = $this->getAction($payPalResponse, $order, $data);
 
@@ -220,14 +220,10 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Returns payment object
-     *
-     * @return \OxidEsales\PayPalModule\Model\OrderPayment
      */
     protected function getPayment()
     {
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\OrderPayment::class);
-        $mockBuilder->onlyMethods(['addComment']);
-        return $mockBuilder->getMock();
+        return $this->createPartialMock(\OxidEsales\PayPalModule\Model\OrderPayment::class, ['addComment']);
     }
 
     /**

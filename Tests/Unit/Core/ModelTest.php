@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 
+use OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway;
+
 /**
  * Testing Model class.
  */
@@ -34,12 +36,10 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $id = 'RecordIdToLoad';
         $data = array('testkey' => 'testValue');
 
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class);
-        $mockBuilder->setMethods(['load']);
-        $gateway = $mockBuilder->getMock();
-        $gateway->expects($this->any())->method('load')->with($id)->will($this->returnValue($data));
+        $gatewayMock = $this->createPartialMock(OrderPaymentDbGateway::class, ['load']);
+        $gatewayMock->method('load')->with($id)->willReturn($data);
 
-        $model = $this->getPayPalModel($gateway, $id);
+        $model = $this->getPayPalModel($gatewayMock, $id);
 
         $this->assertTrue($model->load());
         $this->assertEquals($data, $model->getData());
@@ -53,12 +53,10 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $id = 'RecordIdToLoad';
         $data = array('testkey' => 'testValue');
 
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class);
-        $mockBuilder->setMethods(['load']);
-        $gateway = $mockBuilder->getMock();
-        $gateway->expects($this->any())->method('load')->with($id)->will($this->returnValue($data));
+        $gatewayMock = $this->createPartialMock(OrderPaymentDbGateway::class, ['load']);
+        $gatewayMock->method('load')->with($id)->willReturn($data);
 
-        $model = $this->getPayPalModel($gateway, $id, $id);
+        $model = $this->getPayPalModel($gatewayMock, $id);
 
         $this->assertTrue($model->load($id));
         $this->assertEquals($data, $model->getData());
@@ -69,7 +67,7 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsLoaded_DatabaseRecordNotFound()
     {
-        $gateway = $this->createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => null));
+        $gateway = $this->createStub(OrderPaymentDbGateway::class);
 
         $model = $this->getPayPalModel($gateway);
         $model->load();
@@ -82,9 +80,10 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsLoaded_DatabaseRecordFound()
     {
-        $gateway = $this->createStub(\OxidEsales\PayPalModule\Model\DbGateways\OrderPaymentDbGateway::class, array('load' => array('oePayPalId' => 'testId')));
+        $gatewayMock = $this->createPartialMock(OrderPaymentDbGateway::class, ['load']);
+        $gatewayMock->method('load')->willReturn(array('oePayPalId' => 'testId'));
 
-        $model = $this->getPayPalModel($gateway);
+        $model = $this->getPayPalModel($gatewayMock);
         $model->load();
 
         $this->assertTrue($model->isLoaded());
@@ -99,12 +98,15 @@ class ModelTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @return \OxidEsales\PayPalModule\Core\Model
      */
-    protected function getPayPalModel($gateway, $getId = null, $setId = null)
+    protected function getPayPalModel($gateway, $getId = null)
     {
-        $model = $this->createStub(\OxidEsales\PayPalModule\Core\Model::class, array('getDbGateway' => $gateway, 'getId' => $getId), array('setId'));
-        if ($setId) {
-            $model->expects($this->any())->method('setId')->with($setId);
-        }
+        $model = $this->createPartialMock(
+            \OxidEsales\PayPalModule\Core\Model::class,
+            ['getDbGateway', 'getId', 'setId']
+        );
+
+        $model->method('getDbGateway')->willReturn($gateway);
+        $model->method('getId')->willReturn($getId);
 
         return $model;
     }

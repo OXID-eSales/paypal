@@ -76,16 +76,22 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payment->setAmount($amount);
         $payment->setCurrency($currency);
 
-        $paymentList = $this->getPaymentList(array('addPayment'));
+        $paymentList = $this->createPartialMock(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, ['addPayment']);
         $paymentList->expects($this->once())
             ->method('addPayment')
-            ->with($payment)
-            ->will($this->returnValue($payment));
+            ->willReturn($payment);
 
-        $order = $this->getOrder(array('getPaymentList'));
+        $partialMethods = [
+            'getPaymentList',
+            'save'
+        ];
+
+        /** @var MockObject $order */
+        $order = $this->createPartialMock(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $partialMethods);
+        $order->method('save')->willReturn(true);
         $order->expects($this->once())
             ->method('getPaymentList')
-            ->will($this->returnValue($paymentList));
+            ->willReturn($paymentList);
 
         $action = $this->getAction($payPalResponse, $order);
 
@@ -118,8 +124,7 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $mockBuilder->onlyMethods(['getTime']);
         $utilsDate = $mockBuilder->getMock();
         $utilsDate->expects($this->any())->method('getTime')->will($this->returnValue(1410431540));
-        
-        //todo ??
+
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\UtilsDate::class, $utilsDate);
 
         $commentContent = 'testComment';
@@ -235,8 +240,12 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getPaymentList($testMethods = array())
     {
-        $methods = array('addPayment' => $this->getPayment());
-        $paymentList = $this->createStub(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $methods, $testMethods);
+        $partialMethods = ['addPayment'];
+
+        $mockedMethods = array_unique(array_merge($partialMethods, $testMethods));
+
+        $paymentList = $this->createPartialMock(\OxidEsales\PayPalModule\Model\OrderPaymentList::class, $mockedMethods);
+        $paymentList->method('addPayment')->willReturn($this->getPayment());
 
         return $paymentList;
     }
@@ -250,10 +259,6 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getOrder($testMethods = array())
     {
-        $methods = array('getPaymentList' => $this->getPaymentList(), 'save' => true);
-        // $order = $this->createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, $methods, $testMethods);
-
-//todo merge other methods names into arr
         $partialMethods = [
             'getPaymentList',
             'save'
@@ -300,10 +305,6 @@ class OrderCaptureActionTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $handler = $this->createConfiguredMock(\OxidEsales\PayPalModule\Model\Action\Handler\OrderCaptureActionHandler::class, array('getPayPalResponse' => $payPalResponse, 'getData' => $data));
         $reauthorizeHandler = $reauthorizeHandler ? $reauthorizeHandler : $this->createStub(\OxidEsales\PayPalModule\Model\Action\Handler\OrderReauthorizeActionHandler::class);
 
-
-        // var_dump($handler->getPayPalResponse());
-        // die(1);
-        //todo touch
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\Action\OrderCaptureAction::class);
         $mockBuilder->onlyMethods(['getDate']);
         $mockBuilder->setConstructorArgs([$handler, $order, $reauthorizeHandler]);

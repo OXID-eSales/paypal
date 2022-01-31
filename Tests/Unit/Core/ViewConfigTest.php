@@ -59,16 +59,27 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Test case for ViewConfig::isExpressCheckoutEnabledInDetails()
+     *
+     * @dataProvider isExpressCheckoutEnabledCheckoutIsEnabledDataProvider
      */
-    public function testIsExpressCheckoutEnabledCheckoutIsEnabledTrue()
+    public function testIsExpressCheckoutEnabledCheckoutIsEnabledTrue($value)
     {
         $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
         $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
 
-        $validator = $this->createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
+        $validator = $this->createPartialMock(\OxidEsales\PayPalModule\Model\PaymentValidator::class, ['isPaymentValid']);
+        $validator->method('isPaymentValid')->willReturn($value);
         $view->setPaymentValidator($validator);
 
-        $this->assertTrue($view->isExpressCheckoutEnabled());
+        $this->assertSame($value, $view->isExpressCheckoutEnabled());
+    }
+
+    public function isExpressCheckoutEnabledCheckoutIsEnabledDataProvider(): array
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 
     /**
@@ -80,20 +91,6 @@ class ViewConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $view = oxNew(\OxidEsales\Eshop\Core\ViewConfig::class);
 
         $validator = $this->createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => true));
-        $view->setPaymentValidator($validator);
-
-        $this->assertFalse($view->isExpressCheckoutEnabled());
-    }
-
-    /**
-     * Test case for ViewConfig::isExpressCheckoutEnabledInDetails()
-     */
-    public function testIsExpressCheckoutEnabledWhenPaymentNotValid()
-    {
-        $this->getConfig()->setConfigParam('blOEPayPalExpressCheckout', true);
-        $view = oxNew(\OxidEsales\PayPalModule\Core\ViewConfig::class);
-
-        $validator = $this->createStub(\OxidEsales\PayPalModule\Model\PaymentValidator::class, array('isPaymentValid' => false));
         $view->setPaymentValidator($validator);
 
         $this->assertFalse($view->isExpressCheckoutEnabled());

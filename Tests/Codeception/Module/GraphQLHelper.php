@@ -13,7 +13,8 @@ use Codeception\Lib\Interfaces\DependsOnModule;
 use Codeception\Module;
 use Codeception\Module\REST;
 use InvalidArgumentException;
-use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Token\Parser;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
 use PHPUnit\Framework\AssertionFailedError;
@@ -107,11 +108,10 @@ class GraphQLHelper extends Module implements DependsOnModule
 
     public function seeResponseContainsValidJWTToken(): void
     {
-        $parser = new Parser();
         $token  = $this->grabTokenFromResponse();
 
         try {
-            $parser->parse($token);
+            (new Parser(new JoseEncoder()))->parse($token);
         } catch (InvalidArgumentException $e) {
             throw new AssertionFailedError(sprintf('Not a valid JWT token: %s', $token));
         }

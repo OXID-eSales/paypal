@@ -35,7 +35,7 @@ $aModule = array(
         'en' => 'Module for PayPal payment.',
     ),
     'thumbnail'    => 'logo.jpg',
-    'version'      => '6.3.2',
+    'version'      => '6.4.0',
     'author'       => 'OXID eSales AG',
     'url'          => 'https://www.oxid-esales.com',
     'email'        => 'info@oxid-esales.com',

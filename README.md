@@ -25,7 +25,10 @@ In order to install the module via composer run one of the following commands in
 * **composer require oxid-esales/paypal-module:^5.0.0** to install the released version compatible with OXID eShop Compilation 6.1
 * **composer require oxid-esales/paypal-module:6.2.3** to install the released version compatible with OXID eShop Compilation 6.2
 * **composer require oxid-esales/paypal-module:^6.3.0** to install the released version compatible with OXID eShop Compilation 6.3
-    Please note that 6.3.1 patch release is also compatible with OXID eShop Compilation 6.2 (PHP 7.1 and higher).
+  * Please note that 6.3.1 patch release is also compatible with OXID eShop Compilation 6.2 (PHP 7.1 and higher).
+  * Please note that PayPal ^v6.3.0 is compatible with GraphQL Storefront ^v1.0.0.
+* **composer require oxid-esales/paypal-module:^6.4.0** to install the released version compatible with OXID eShop Compilation 6.4
+  * Please note that PayPal ^v6.4.0 is compatible with GraphQL Storefront ^v2.0.0.
 * **composer require oxid-esales/paypal-module:dev-master** to install the latest unreleased version from github
 
 ### Running tests locally

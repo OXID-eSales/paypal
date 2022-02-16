@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Controller\Admin;
 
+use OxidEsales\Eshop\Core\Registry;
+
 /**
  * Adds additional functionality needed for PayPal when managing delivery sets.
  *
@@ -58,7 +60,7 @@ class DeliverySetMain extends DeliverySetMain_parent
         parent::save();
 
         $config = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+        $request = Registry::getRequest();
         /** @var \OxidEsales\PayPalModule\Core\Config $payPalConfig */
         $payPalConfig = oxNew(\OxidEsales\PayPalModule\Core\Config::class);
 

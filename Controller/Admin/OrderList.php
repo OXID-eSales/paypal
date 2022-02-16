@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Controller\Admin;
 
+use OxidEsales\Eshop\Core\Registry;
+
 /**
  * Order list class wrapper for PayPal module
  *
@@ -37,8 +39,7 @@ class OrderList extends OrderList_parent
     public function render()
     {
         $template = parent::render();
-
-        $request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+        $request = Registry::getRequest();
 
         $paymentStatus = $request->getRequestParameter("paypalpaymentstatus");
         $payment = $request->getRequestParameter("paypalpayment");
@@ -93,7 +94,7 @@ class OrderList extends OrderList_parent
         $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $query = parent::_prepareWhereQuery($where, $fullQuery);
 
-        $request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+        $request = Registry::getRequest();
 
         $paymentStatus = $request->getRequestParameter("paypalpaymentstatus");
         $paymentStatusList = new \OxidEsales\PayPalModule\Model\OrderPaymentStatusList();

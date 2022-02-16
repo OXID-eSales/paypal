@@ -21,6 +21,7 @@
 
 namespace OxidEsales\PayPalModule\Controller;
 
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\PayPalModule\Model\PaymentManager;
 use OxidEsales\PayPalModule\Core\PayPalService;
 
@@ -39,7 +40,7 @@ class PaymentController extends PaymentController_parent
      */
     public function validatePayment()
     {
-        $request = oxNew(\OxidEsales\PayPalModule\Core\Request::class);
+        $request = Registry::getRequest();
         $paymentId = $request->getRequestParameter('paymentid');
         $session = \OxidEsales\Eshop\Core\Registry::getSession();
         $basket = $session->getBasket();

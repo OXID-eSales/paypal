@@ -180,36 +180,6 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
     }
 
-
-    /**
-     */
-    public function testSetBasket_OnUpdateCalledOnBasket()
-    {
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
-        $mockBuilder->setMethods(
-            ['onUpdate',
-             'calculateBasket',
-             'isVirtualPayPalBasket',
-             'getSumOfCostOfAllItemsPayPalBasket',
-             'getDiscountSumPayPalBasket']
-        );
-        $basket= $mockBuilder->getMock();
-        $basket->expects($this->at(0))->method('onUpdate');
-        $basket->expects($this->at(1))->method('calculateBasket');
-        $basket->expects($this->atLeastOnce())->method('isVirtualPayPalBasket');
-        $basket->expects($this->atLeastOnce())->method('getSumOfCostOfAllItemsPayPalBasket');
-        $basket->expects($this->atLeastOnce())->method('getDiscountSumPayPalBasket');
-
-        $builder = $this->getPayPalRequestBuilder();
-        $builder->setBasket($basket);
-        $builder->addBasketParams();
-
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
-        $mockBuilder->setMethods(['setParameter']);
-        $payPalService = $mockBuilder->getMock();
-        $payPalService->expects($this->any())->method("setParameter");
-    }
-
     public function testSetBasket_NotVirtualBasket_ShippingReconfirmNotSet()
     {
         $basketMethodValues = array(

@@ -23,6 +23,7 @@ namespace OxidEsales\PayPalModule\Core;
 
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\Facts\Facts;
 
 /**
  * Class defines what module does on Shop events.
@@ -188,7 +189,7 @@ class Events
     public static function enablePayPalRDFA()
     {
         // If PayPal activated on other sub shops do not change global RDF setting.
-        if ('EE' == \OxidEsales\Eshop\Core\Registry::getConfig()->getEdition() && self::isPayPalActiveOnSubShops()) {
+        if ('EE' == (new Facts())->getEdition() && self::isPayPalActiveOnSubShops()) {
             return;
         }
 
@@ -309,7 +310,7 @@ class Events
     public static function onDeactivate()
     {
         // If PayPal activated on other sub shops do not remove payment method and RDF setting
-        if ('EE' == \OxidEsales\Eshop\Core\Registry::getConfig()->getEdition() && self::isPayPalActiveOnSubShops()) {
+        if ('EE' == (new Facts())->getEdition() && self::isPayPalActiveOnSubShops()) {
             return;
         }
         self::disablePaymentMethod();

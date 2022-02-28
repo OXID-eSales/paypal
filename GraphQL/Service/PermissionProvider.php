@@ -38,6 +38,7 @@ final class PermissionProvider
             ],
             'oxidanonymous' => [
                 'CREATE_BASKET',
+                'VIEW_BASKET',
                 'ADD_PRODUCT_TO_BASKET',
                 'REMOVE_BASKET_PRODUCT',
                 'ADD_VOUCHER',

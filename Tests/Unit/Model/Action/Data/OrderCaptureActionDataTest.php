@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Data;
 
+use OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData;
+
 /**
  * Testing \OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData class.
  */
@@ -51,7 +53,11 @@ class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'capture_amount' => $captureAmount,
             'capture_type'   => $type,
         );
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => $params));
+        $request = $this->createPartialMock(
+            \OxidEsales\PayPalModule\Core\Request::class,
+            array('getPost')
+        );
+        $request->method('getPost')->willReturn($params);
 
         $order = $this->getOrder();
 
@@ -68,11 +74,20 @@ class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $remainingOrderSum = 59.67;
 
-        $payPalOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $remainingOrderSum));
-        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
+        $payPalOrder = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Model\PayPalOrder::class,
+            array('getRemainingOrderSum' => $remainingOrderSum)
+        );
+        $order = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Model\Order::class,
+            array('getPayPalOrder' => $payPalOrder)
+        );
+        $request = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Core\Request::class,
+            array('getPost' => array())
+        );
 
-        $actionData = new \OxidEsales\PayPalModule\Model\Action\Data\OrderCaptureActionData($request, $order);
+        $actionData = new OrderCaptureActionData($request, $order);
 
         $this->assertEquals($remainingOrderSum, $actionData->getAmount());
     }
@@ -86,7 +101,10 @@ class OrderCaptureActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getRequest($params)
     {
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
+        $request = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Core\Request::class,
+            array('getGet' => $params)
+        );
 
         return $request;
     }

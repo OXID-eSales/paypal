@@ -171,7 +171,7 @@ class User extends User_parent
         $this->oxuser__oxbirthdate = new \OxidEsales\Eshop\Core\Field('');
 
         if ($this->save()) {
-            $this->_setAutoGroups($this->oxuser__oxcountryid->value);
+            $this->setAutoGroups($this->oxuser__oxcountryid->value);
 
             // and adding to group "oxidnotyetordered"
             $this->addToGroup("oxidnotyetordered");
@@ -367,11 +367,14 @@ class User extends User_parent
      */
     public function load($id)
     {
+        $result = true;
         if (!parent::load($id)) {
-            return !empty($id) ? parent::load($this->getAnonymousId($id)) : false;
+            $result = !empty($id) ? parent::load($this->getAnonymousId($id)) : false;
+            $this->setId($id);
+            $this->_isLoaded = false;
         }
 
-        return true;
+        return $result;
     }
 
     public function hasNoInvoiceAddress(): bool
@@ -381,7 +384,7 @@ class User extends User_parent
 
     public function setGroupsAfterUserCreation(): void
     {
-        $this->_setAutoGroups($this->oxuser__oxcountryid->value);
+        $this->setAutoGroups($this->oxuser__oxcountryid->value);
 
         // and adding to group "oxidnotyetordered"
         $this->addToGroup("oxidnotyetordered");

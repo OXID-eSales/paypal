@@ -33,9 +33,18 @@ class OrderVoidActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $remainingOrderSum = 59.67;
 
-        $payPalOrder = $this->_createStub(\OxidEsales\PayPalModule\Model\PayPalOrder::class, array('getRemainingOrderSum' => $remainingOrderSum));
-        $order = $this->_createStub(\OxidEsales\PayPalModule\Model\Order::class, array('getPayPalOrder' => $payPalOrder));
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getPost' => array()));
+        $payPalOrder = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Model\PayPalOrder::class,
+            array('getRemainingOrderSum' => $remainingOrderSum)
+        );
+        $order = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Model\Order::class,
+            array('getPayPalOrder' => $payPalOrder)
+        );
+        $request = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Core\Request::class,
+            array('getPost' => array())
+        );
 
         $action = new \OxidEsales\PayPalModule\Model\Action\Data\OrderVoidActionData($request, $order);
 
@@ -51,7 +60,10 @@ class OrderVoidActionDataTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getRequest($params)
     {
-        $request = $this->_createStub(\OxidEsales\PayPalModule\Core\Request::class, array('getGet' => $params));
+        $request = $this->createConfiguredMock(
+            \OxidEsales\PayPalModule\Core\Request::class,
+            array('getGet' => $params)
+        );
 
         return $request;
     }

@@ -71,7 +71,7 @@ class Order extends Order_parent
         if ($this->oxorder__oxordernr->value) {
             $updated = (bool) oxNew(\OxidEsales\Eshop\Core\Counter::class)->update($this->_getCounterIdent(), $this->oxorder__oxordernr->value);
         } else {
-            $updated = $this->_setNumber();
+            $updated = $this->setNumber();
         }
 
         return $updated;
@@ -192,12 +192,12 @@ class Order extends Order_parent
      *
      * @param string $status order transaction status
      */
-    protected function _setOrderStatus($status)
+    protected function setOrderStatus($status)
     {
         $paymentTypeObject = $this->getPaymentType();
         $paymentType = $paymentTypeObject ? $paymentTypeObject->getFieldData('oxpaymentsid') : null;
         if ($paymentType != 'oxidpaypal' || $status != self::OEPAYPAL_TRANSACTION_STATUS_OK) {
-            parent::_setOrderStatus($status);
+            parent::setOrderStatus($status);
         }
     }
 
@@ -206,7 +206,7 @@ class Order extends Order_parent
      */
     public function markOrderPaid()
     {
-        parent::_setOrderStatus(self::OEPAYPAL_TRANSACTION_STATUS_OK);
+        parent::setOrderStatus(self::OEPAYPAL_TRANSACTION_STATUS_OK);
 
         $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $utilsDate = \OxidEsales\Eshop\Core\Registry::getUtilsDate();

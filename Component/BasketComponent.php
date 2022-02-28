@@ -51,7 +51,7 @@ class BasketComponent extends BasketComponent_parent
             //Make express checkout
             $res = $this->actionAddToBasketAndGoToCheckout();
         } else {
-            $res = $this->_getRedirectUrl();
+            $res = $this->getRedirectUrl();
             //if amount is more than 0, do not redirect, show ESC popup instead
             if ($currentArticle->getArticleAmount() > 0) {
                 $this->shopPopUp = true;
@@ -111,8 +111,8 @@ class BasketComponent extends BasketComponent_parent
      */
     public function getCurrentArticleInfo()
     {
-        $products = $this->_getItems();
-        $currentArticleId = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('aid');
+        $products = $this->getItems();
+        $currentArticleId = $this->getRequest()->getRequestParameter('aid');
         $params = null;
         if (!is_null($products[$currentArticleId])) {
             $params = $products[$currentArticleId];
@@ -130,7 +130,7 @@ class BasketComponent extends BasketComponent_parent
     {
         $currentItem = oxNew(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class);
         $currentArticleId = $this->getRequest()->getPostParameter('aid');
-        $products = $this->_getItems();
+        $products = $this->getItems();
         $productInfo = $products[$currentArticleId];
         $currentItem->setArticleId($currentArticleId);
         $currentItem->setSelectList($productInfo['sel']);
@@ -169,7 +169,7 @@ class BasketComponent extends BasketComponent_parent
      */
     public function getPayPalCancelURL()
     {
-        $url = $this->formatUrl($this->_getRedirectUrl());
+        $url = $this->formatUrl($this->getRedirectUrl());
         $replacedURL = str_replace('showECSPopup=1', 'showECSPopup=0', $url);
 
         return urlencode($replacedURL);

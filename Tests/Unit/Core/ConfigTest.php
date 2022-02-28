@@ -23,6 +23,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Utils;
+use OxidEsales\Facts\Facts;
 
 /**
  * Testing \OxidEsales\PayPalModule\Core\Config class.
@@ -715,14 +716,14 @@ class ConfigTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetPartnerCode()
     {
-        $config = $this->getConfig();
-        if ($config->getEdition() == 'EE') {
+        $facts = new Facts();
+        if ($facts->getEdition() == 'EE') {
             $result = 'OXID_Cart_EnterpriseECS';
         } else {
-            if ($config->getEdition() == 'PE') {
+            if ($facts->getEdition() == 'PE') {
                 $result = 'OXID_Cart_ProfessionalECS';
             } else {
-                if ($config->getEdition() == 'CE') {
+                if ($facts->getEdition() == 'CE') {
                     $result = 'OXID_Cart_CommunityECS';
                 }
             }

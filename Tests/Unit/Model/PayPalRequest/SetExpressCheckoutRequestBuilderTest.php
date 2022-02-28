@@ -50,7 +50,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getLogoUrl'        => 'LogoImg',
             'isGuestBuyEnabled' => true,
         );
-        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
+        $config = $this->createConfiguredMock(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setPayPalConfig($config);
@@ -68,7 +68,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'isGuestBuyEnabled' => true,
             'getLogoUrl'        => null,
         );
-        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
+        $config = $this->createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setPayPalConfig($config);
@@ -124,7 +124,6 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPrice'                           => oxNew(\OxidEsales\Eshop\Core\Price::class),
             'getPayPalBasketVatValue'            => '88.88',
             'isCalculationModeNetto'             => true,
-            'getTransactionMode'                 => '88.88',
             'getSumOfCostOfAllItemsPayPalBasket' => '77.77',
             'getDeliveryCosts'                   => '66.66',
             'getDiscountSumPayPalBasket'         => '55.55',
@@ -135,7 +134,21 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             $basketMethodValues[$key] = $value;
         }
 
-        return $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        class_alias(
+            \OxidEsales\Eshop\Application\Model\Basket::class,
+            '\OxidEsales\PayPalModule\Model\Basket_parent'
+        );
+
+        $basket = $this->createPartialMock(
+            \OxidEsales\PayPalModule\Model\Basket::class,
+            array_keys($basketMethodValues)
+        );
+
+        foreach ($basketMethodValues as $method => $value) {
+            $basket->method($method)->willReturn($value);
+        }
+
+        return $basket;
     }
 
     public function testSetBasket_AllParamsSet()
@@ -154,7 +167,8 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'L_SHIPPINGOPTIONAMOUNT0'       => '66.66',
         );
 
-        $price = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, array('getBruttoPrice' => '99.99'));
+        $price = $this->createStub(\OxidEsales\Eshop\Core\Price::class);
+        $price->method('getBruttoPrice')->willReturn('99.99');
 
         $basketMethodValues = array('getPrice' => $price);
         $basket = $this->getBasketStub($basketMethodValues);
@@ -164,36 +178,6 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $builder->addBasketParams();
 
         $this->assertArraysEqual($expectedParams, $builder->getPayPalRequest()->getData());
-    }
-
-
-    /**
-     */
-    public function testSetBasket_OnUpdateCalledOnBasket()
-    {
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Basket::class);
-        $mockBuilder->setMethods(
-            ['onUpdate',
-             'calculateBasket',
-             'isVirtualPayPalBasket',
-             'getSumOfCostOfAllItemsPayPalBasket',
-             'getDiscountSumPayPalBasket']
-        );
-        $basket= $mockBuilder->getMock();
-        $basket->expects($this->at(0))->method('onUpdate');
-        $basket->expects($this->at(1))->method('calculateBasket');
-        $basket->expects($this->atLeastOnce())->method('isVirtualPayPalBasket');
-        $basket->expects($this->atLeastOnce())->method('getSumOfCostOfAllItemsPayPalBasket');
-        $basket->expects($this->atLeastOnce())->method('getDiscountSumPayPalBasket');
-
-        $builder = $this->getPayPalRequestBuilder();
-        $builder->setBasket($basket);
-        $builder->addBasketParams();
-
-        $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
-        $mockBuilder->setMethods(['setParameter']);
-        $payPalService = $mockBuilder->getMock();
-        $payPalService->expects($this->any())->method("setParameter");
     }
 
     public function testSetBasket_NotVirtualBasket_ShippingReconfirmNotSet()
@@ -238,15 +222,15 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'PAYMENTREQUEST_0_DESC'   => 'ShopName 99.99 EUR',
             'PAYMENTREQUEST_0_CUSTOM' => 'ShopName 99.99 EUR',
         );
-        $basketMethodValues = array(
-            'getFPrice' => '99.99',
-        );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
-        $configMethodValues = array('getBrandName' => 'ShopName');
-        $config = $this->_createStub(\OxidEsales\PayPalModule\Core\Config::class, $configMethodValues);
+        $basket = $this->createPartialMock(\OxidEsales\Eshop\Application\Model\Basket::class, ['getFPrice']);
+        $basket->method('getFPrice')->willReturn('99.99');
 
-        $lang = $this->_createStub(\OxidEsales\Eshop\Core\Language::class, array('translateString' => '%s %s %s'));
+        $config = $this->createStub(\OxidEsales\PayPalModule\Core\Config::class);
+        $config->method('getBrandName')->willReturn('ShopName');
+
+        $lang = $this->createStub(\OxidEsales\Eshop\Core\Language::class);
+        $lang->method('translateString')->willReturn('%s %s %s');
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setLang($lang);
@@ -283,10 +267,8 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $article = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
         $article->oxarticles__oxartnum = new \OxidEsales\Eshop\Core\Field('BasketItemArtNum');
 
-        $priceMethodValues = array(
-            'getPrice' => '99.99',
-        );
-        $price = $this->_createStub(\OxidEsales\Eshop\Core\Price::class, $priceMethodValues);
+        $price = $this->createPartialMock(\OxidEsales\Eshop\Core\Price::class, ['getBruttoPrice']);
+        $price->method('getBruttoPrice')->willReturn('99.99');
 
         $basketItemMethodValues = array(
             'getTitle'     => 'BasketItemTitle',
@@ -296,7 +278,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getArticle'   => $article,
         );
 
-        $basketItem = $this->_createStub(\OxidEsales\Eshop\Application\Model\BasketItem::class, $basketItemMethodValues);
+        $basketItem = $this->createConfiguredMock(
+            \OxidEsales\Eshop\Application\Model\BasketItem::class,
+            $basketItemMethodValues
+        );
         $basketItems = array($basketItem, $basketItem);
 
         $basketMethodValues = array(
@@ -305,7 +290,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 0
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createConfiguredMock(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -328,7 +313,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 0
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createConfiguredMock(
+            \OxidEsales\Eshop\Application\Model\Basket::class,
+            $basketMethodValues
+        );
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -351,7 +339,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 100,
             'getPayPalGiftCardCosts'     => 0
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createConfiguredMock(
+            \OxidEsales\Eshop\Application\Model\Basket::class,
+            $basketMethodValues
+        );
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -374,7 +365,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'getPayPalWrappingCosts'     => 0,
             'getPayPalGiftCardCosts'     => 100.99
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createConfiguredMock(
+            \OxidEsales\Eshop\Application\Model\Basket::class,
+            $basketMethodValues
+        );
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -394,7 +388,10 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
         $basketMethodValues = array(
             'getSumOfCostOfAllItemsPayPalBasket' => '99.99'
         );
-        $basket = $this->_createStub(\OxidEsales\Eshop\Application\Model\Basket::class, $basketMethodValues);
+        $basket = $this->createConfiguredMock(
+            \OxidEsales\Eshop\Application\Model\Basket::class,
+            $basketMethodValues
+        );
 
         $builder = $this->getPayPalRequestBuilder();
         $builder->setBasket($basket);
@@ -415,16 +412,17 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
             'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => null,
         );
 
-        $userMethodValues = array(
-            'getSelectedAddressId' => null,
+        $user = $this->createPartialMock(
+            \OxidEsales\Eshop\Application\Model\User::class,
+            ['getSelectedAddressId']
         );
-        $user = $this->_createStub(\OxidEsales\Eshop\Application\Model\User::class, $userMethodValues);
+        $user->method('getSelectedAddressId')->willReturn(null);
+
         $user->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field('test@test.com');
         $user->oxuser__oxfname = new \OxidEsales\Eshop\Core\Field('FirstName');
         $user->oxuser__oxlname = new \OxidEsales\Eshop\Core\Field('LastName');
         $user->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field('Street');
         $user->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field('StreetNr');
-        $user->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
         $user->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field('Zip');
         $user->oxuser__oxfon = new \OxidEsales\Eshop\Core\Field('PhoneNum');
         $user->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field('City');
@@ -442,7 +440,7 @@ class SetExpressCheckoutRequestBuilderTest extends \OxidEsales\TestingLibrary\Un
     protected function getPayPalRequestBuilder()
     {
         $mockBuilder = $this->getMockBuilder(\OxidEsales\Eshop\Core\Language::class);
-        $mockBuilder->setMethods(['translateString']);
+        $mockBuilder->onlyMethods(['translateString']);
         $lang = $mockBuilder->getMock();
         $lang->expects($this->any())
             ->method('translateString')

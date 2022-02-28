@@ -237,7 +237,7 @@ final class Payment
         $paymentManager = $this->requestInfrastructure->getPaymentManager();
         $shipToAddressId = $this->getDeliveryAddressId($basket);
         $deliveryMethod = $this->basketRelationService->deliveryMethod($basket);
-        $shippingMethodId = $deliveryMethod ? (string) $deliveryMethod->id() : '';
+        $shippingMethodId = $deliveryMethod ? (string) $deliveryMethod->id() : 'oxidstandard';
 
         //for Express checkout, the user might not yet exist (anonymous user)
         try {

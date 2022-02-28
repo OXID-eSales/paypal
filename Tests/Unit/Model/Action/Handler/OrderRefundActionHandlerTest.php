@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Tests\Unit\Model\Action\Handler;
 
+use OxidEsales\PayPalModule\Model\Action\Data\OrderRefundActionData;
+
 /**
  * Testing \OxidEsales\PayPalModule\Model\Action\Handler\OrderRefundActionHandler class.
  */
@@ -48,7 +50,7 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
         $comment = 'Comment';
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequestBuilder::class);
-        $mockBuilder->setMethods(['setTransactionId', 'setAmount', 'setRefundType', 'getRequest', 'setComment']);
+        $mockBuilder->onlyMethods(['setTransactionId', 'setAmount', 'setRefundType', 'getRequest', 'setComment']);
         $builder = $mockBuilder->getMock();
         $builder->expects($this->atLeastOnce())->method('setTransactionId')->with($this->equalTo($transId));
         $builder->expects($this->atLeastOnce())->method('setAmount')->with($this->equalTo($amount), $this->equalTo($currency));
@@ -56,15 +58,20 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
         $builder->expects($this->atLeastOnce())->method('setComment')->with($this->equalTo($comment));
         $builder->expects($this->any())->method('getRequest')->will($this->returnValue(new \OxidEsales\PayPalModule\Model\PayPalRequest\PayPalRequest()));
 
-        $data = $this->_createStub(
-            'Data', array(
-                'getTransactionId' => $transId,
-                'getAmount'        => $amount,
-                'getType'          => $type,
-                'getComment'       => $comment,
-                'getCurrency'      => $currency,
+        $data = $this->createPartialMock(
+            OrderRefundActionData::class, array(
+                'getTransactionId',
+                'getAmount',
+                'getType',
+                'getComment',
+                'getCurrency',
             )
         );
+        $data->method('getTransactionId')->willReturn($transId);
+        $data->method('getAmount')->willReturn($amount);
+        $data->method('getType')->willReturn($type);
+        $data->method('getComment')->willReturn($comment);
+        $data->method('getCurrency')->willReturn($currency);
 
         $actionHandler = $this->getActionHandler($data);
         $actionHandler->setPayPalRequestBuilder($builder);
@@ -81,7 +88,7 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
         $payPalRequest = $mockBuilder->getMock();
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
-        $mockBuilder->setMethods(['refundTransaction']);
+        $mockBuilder->onlyMethods(['refundTransaction']);
         $checkoutService = $mockBuilder->getMock();
         $checkoutService->expects($this->once())
             ->method('refundTransaction')
@@ -104,7 +111,7 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
         $payPalResponse = new \OxidEsales\PayPalModule\Model\Response\ResponseDoRefund();
 
         $mockBuilder = $this->getMockBuilder(\OxidEsales\PayPalModule\Core\PayPalService::class);
-        $mockBuilder->setMethods(['refundTransaction']);
+        $mockBuilder->onlyMethods(['refundTransaction']);
         $checkoutService = $mockBuilder->getMock();
         $checkoutService->expects($this->once())
             ->method('refundTransaction')

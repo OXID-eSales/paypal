@@ -21,6 +21,8 @@
 
 namespace OxidEsales\PayPalModule\Controller\Admin;
 
+use OxidEsales\Eshop\Core\Registry;
+
 /**
  * Order list class wrapper for PayPal module
  *
@@ -37,9 +39,10 @@ class OrderList extends OrderList_parent
     public function render()
     {
         $template = parent::render();
+        $request = Registry::getRequest();
 
-        $paymentStatus = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpaymentstatus");
-        $payment = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpayment");
+        $paymentStatus = $request->getRequestParameter("paypalpaymentstatus");
+        $payment = $request->getRequestParameter("paypalpayment");
 
         $this->_aViewData["spaypalpaymentstatus"] = $paymentStatus ? $paymentStatus : -1;
         $this->_aViewData["opaypalpaymentstatuslist"] = new \OxidEsales\PayPalModule\Model\OrderPaymentStatusList();
@@ -91,7 +94,9 @@ class OrderList extends OrderList_parent
         $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $query = parent::_prepareWhereQuery($where, $fullQuery);
 
-        $paymentStatus = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpaymentstatus");
+        $request = Registry::getRequest();
+
+        $paymentStatus = $request->getRequestParameter("paypalpaymentstatus");
         $paymentStatusList = new \OxidEsales\PayPalModule\Model\OrderPaymentStatusList();
 
         if ($paymentStatus && $paymentStatus != '-1' && in_array($paymentStatus, $paymentStatusList->getArray())) {
@@ -99,7 +104,7 @@ class OrderList extends OrderList_parent
             $query .= " AND ( `oepaypal_order`.`oepaypal_orderid` IS NOT NULL ) ";
         }
 
-        $payment = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter("paypalpayment");
+        $payment = $request->getRequestParameter("paypalpayment");
         if ($payment && $payment != '-1') {
             $query .= " and ( oxorder.oxpaymenttype = " . $database->quote($payment) . " )";
         }

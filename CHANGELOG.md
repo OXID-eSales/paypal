@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Test compatibility with shop master.
 - Documentation link in README now points to latest version [PR-55](https://github.com/SvenBrunk/paypal.git)
 
+## [6.4.0] - 2021-11-29
+
+### Changed
+- Update tests and module to work with GraphQL Storefront v2.0.
+
 ## [6.3.2] - 2021-07-19
 
 ### Fixed
@@ -270,6 +275,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
+[6.4.0]: https://github.com/OXID-eSales/paypal/compare/v6.3.2...v6.4.0
 [6.3.2]: https://github.com/OXID-eSales/paypal/compare/v6.3.1...v6.3.2
 [6.3.1]: https://github.com/OXID-eSales/paypal/compare/v6.3.0...v6.3.1
 [6.3.0]: https://github.com/OXID-eSales/paypal/compare/v6.2.3...v6.3.0

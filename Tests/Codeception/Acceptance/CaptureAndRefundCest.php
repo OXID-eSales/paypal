@@ -26,7 +26,15 @@ class CaptureAndRefundCest
     {
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
         $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->updateInDatabase('oxuser', Fixtures::get('adminData'), ['OXUSERNAME' => 'admin']);
+
+        // Create an admin in case it does not exist
+        $adminData = Fixtures::get('adminData');
+        $admin = $I->grabFromDatabase('oxuser', 'OXUSERNAME', ['OXUSERNAME' => $adminData['OXUSERNAME']]);
+        if (!$admin) {
+            $I->haveInDatabase('oxuser', $adminData);
+        }
+
+        $I->activatePaypalModule();
     }
 
     /**
@@ -38,7 +46,6 @@ class CaptureAndRefundCest
      */
     public function orderCaptureAndRefundAmount(AcceptanceTester $I)
     {
-        $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('sOEPayPalTransactionMode', 'Authorization', 'str');
         $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', true, 'bool');
 
@@ -53,8 +60,8 @@ class CaptureAndRefundCest
         $I->click("#paypalExpressCheckoutMiniBasketImage");
 
         $loginPage = new PayPalLogin($I);
-        $paypalUserEmail = Fixtures::get('sBuyerLogin');
-        $paypalUserPassword = Fixtures::get('sBuyerPassword');
+        $paypalUserEmail = $_ENV['sBuyerLogin'];
+        $paypalUserPassword = $_ENV['sBuyerPassword'];
 
         $loginPage->loginAndCheckout($paypalUserEmail, $paypalUserPassword);
 

@@ -48,7 +48,6 @@ class StandardPaymentCest
      */
     public function checkoutWithPaypalStandard(AcceptanceTester $I)
     {
-        $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('sOEPayPalTransactionMode', 'Authorization', 'str');
         $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', false, 'bool');
 
@@ -73,8 +72,8 @@ class StandardPaymentCest
         $I->click($paymentPage->nextStepButton);
 
         $loginPage = new PayPalLogin($I);
-        $paypalUserEmail = Fixtures::get('sBuyerLogin');
-        $paypalUserPassword = Fixtures::get('sBuyerPassword');
+        $paypalUserEmail = $_ENV['sBuyerLogin'];
+        $paypalUserPassword = $_ENV['sBuyerPassword'];
 
         $orderCheckout = $loginPage->checkoutWithStandardPayPal($paypalUserEmail, $paypalUserPassword);
         $orderCheckout->submitOrder();
@@ -95,7 +94,6 @@ class StandardPaymentCest
      */
     public function checkoutWithPaypalExpress(AcceptanceTester $I)
     {
-        $I->setPayPalSettingsData();
         $I->updateConfigInDatabase('sOEPayPalTransactionMode', 'Authorization', 'str');
         $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', true, 'bool');
 
@@ -110,8 +108,8 @@ class StandardPaymentCest
         $I->click("#paypalExpressCheckoutMiniBasketImage");
 
         $loginPage = new PayPalLogin($I);
-        $paypalUserEmail = Fixtures::get('sBuyerLogin');
-        $paypalUserPassword = Fixtures::get('sBuyerPassword');
+        $paypalUserEmail = $_ENV['sBuyerLogin'];
+        $paypalUserPassword = $_ENV['sBuyerPassword'];
 
         $loginPage->loginAndCheckout($paypalUserEmail, $paypalUserPassword);
 

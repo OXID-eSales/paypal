@@ -75,6 +75,7 @@ $data = array(
         'sOEPayPalSandboxSignature' => 'testSignature',
         'sOEPayPalTransactionMode'  => 'Sale',
         'sOEPayPalEmptyStockLevel'  => 10,
+        'OEPayPalDisableIPN'        => false,
     ),
     'session' => ['oepaypal' => 2],
     'expected'  => array(

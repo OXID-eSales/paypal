@@ -19,6 +19,8 @@
  * @copyright (C) OXID eSales AG 2003-2018
  */
 
+use OxidEsales\Eshop\Core\Registry as EshopRegistry;
+
 $data = array(
     'class'         => \OxidEsales\PayPalModule\Controller\StandardDispatcher::class,
     'action'        => 'setExpressCheckout',
@@ -47,7 +49,8 @@ $data = array(
         ),
     ),
     'config'        => array(
-        'blSeoMode' => false
+        'blSeoMode' => false,
+        'sOEPayPalTransactionMode' => 'Sale',
     ),
     'requestToShop' => array(
         'displayCartInPayPal' => true,
@@ -55,9 +58,9 @@ $data = array(
     'expected'      => array(
         'requestToPayPal' => array(
             'VERSION'                            => '84.0',
-            'PWD'                                => '',
-            'USER'                               => '',
-            'SIGNATURE'                          => '',
+            'PWD'                                => EshopRegistry::getConfig()->getConfigParam('sOEPayPalSandboxPassword'),
+            'USER'                               => EshopRegistry::getConfig()->getConfigParam('sOEPayPalSandboxUsername'),
+            'SIGNATURE'                          => EshopRegistry::getConfig()->getConfigParam('sOEPayPalSandboxSignature'),
             'CALLBACKVERSION'                    => '84.0',
             'LOCALECODE'                         => 'de_DE',
             'SOLUTIONTYPE'                       => 'Mark',

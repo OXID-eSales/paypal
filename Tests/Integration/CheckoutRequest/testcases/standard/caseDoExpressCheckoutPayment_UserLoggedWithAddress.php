@@ -91,6 +91,7 @@ $data = array(
         'sOEPayPalSandboxSignature' => 'testSignature',
         'sOEPayPalTransactionMode'  => 'Sale',
         'sOEPayPalEmptyStockLevel'  => 10,
+        'OEPayPalDisableIPN'        => false,
     ),
     'session'   => array(
         'deladrid' => 'TestUserAddressId',

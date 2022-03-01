@@ -24,7 +24,7 @@ namespace OxidEsales\PayPalModule\Tests\Unit\Core;
 /**
  * Testing PayPal service class.
  */
-class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class PayPalServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * \OxidEsales\PayPalModule\Core\Config setter getter test

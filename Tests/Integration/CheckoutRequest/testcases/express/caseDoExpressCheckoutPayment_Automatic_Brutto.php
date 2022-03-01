@@ -129,6 +129,7 @@ $data = array(
         'sOEPayPalSandboxSignature' => 'testSignature',
         'sOEPayPalTransactionMode'  => 'Automatic',
         'sOEPayPalEmptyStockLevel'  => 1,
+        'OEPayPalDisableIPN'        => false,
     ),
     'session' => ['oepaypal' => 2],
     'expected'  => array(

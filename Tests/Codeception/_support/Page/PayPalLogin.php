@@ -74,14 +74,19 @@ class PayPalLogin extends Page
 
         $this->waitForPayPalPage();
 
+        // In case we have cookie message, accept all cookies
+        $this->acceptAllPayPalCookies();
+
         // new login page
         if ($I->seePageHasElement($this->userLoginEmail)) {
             $I->waitForElementVisible($this->userLoginEmail, 30);
             $I->fillField($this->userLoginEmail, $userName);
-            $I->click($this->nextButton);
+            $I->retryClick($this->nextButton);
+            $this->waitForPayPalPage();
+
             $I->waitForElementVisible($this->userPassword, 10);
             $I->fillField($this->userPassword, $userPassword);
-            $I->click($this->loginButton);
+            $I->retryClick($this->loginButton);
         }
 
         // old login page
@@ -92,29 +97,26 @@ class PayPalLogin extends Page
             $I->fillField($this->oldUserLoginEmail, $userName);
             $I->waitForElementVisible($this->oldUserPassword, 5);
             $I->fillField($this->oldUserPassword, $userPassword);
-            $I->click($this->oldLoginButton);
+            $I->retryClick($this->oldLoginButton);
         }
 
+        $this->waitForPayPalPage();
+
         if ($I->seePageHasElement($this->oneTouchNotNowLink)) {
-            $I->click($this->oneTouchNotNowLink);
+            $I->retryClick($this->oneTouchNotNowLink);
         }
 
         $confirmButton = $usingNewLogin ? $this->newConfirmButton : $this->oldConfirmButton;
         $I->waitForElementClickable($confirmButton, 60);
-        $I->waitForElementNotVisible($this->spinner, 90);
 
-        // In case we have cookie message, accept all cookies
-        $this->acceptAllPayPalCookies();
-
-        $I->waitForElementNotVisible($this->spinner, 90);
-        $this->acceptAllPayPalCookies();
-        $I->waitForElementNotVisible($this->spinner, 90);
-        $I->click($confirmButton);
         $this->waitForPayPalPage();
+
+        $I->retryClick($confirmButton);
+        $I->waitForDocumentReadyState();
 
         return new OrderCheckout($I);
     }
-    
+
     /**
      * @param string $userName
      * @param string $userPassword
@@ -261,10 +263,10 @@ class PayPalLogin extends Page
 
         $I->waitForDocumentReadyState();
         $I->waitForElementNotVisible($this->spinner, 90);
-        $I->wait(8);
+        $I->wait(10);
 
         if ($I->seePageHasElement($this->loginSection)) {
-            $I->click('.loginRedirect a');
+            $I->retryClick('.loginRedirect a');
             $I->waitForDocumentReadyState();
             $this->waitForSpinnerDisappearance();
             $I->waitForElementNotVisible($this->loginSection);
@@ -302,15 +304,9 @@ class PayPalLogin extends Page
         $I = $this->user;
 
         // In case we have cookie message, accept all cookies
-        if ($I->seePageHasElement($this->gdprCookieBanner)) {
-            $I->click($this->acceptAllPaypalCookies);
-            // In case that the content blocking is enabled,
-            // because the cookie came from a tracker
-            // we wont be able to accept it, then remove the message
-            if ($I->seePageHasElement($this->gdprCookieBanner)) {
-                $I->executeJS("document.getElementById('".substr($this->gdprCookieBanner, 1)."').remove();");
-            }
-            $I->waitForElementNotVisible($this->gdprCookieBanner);
+        if ($I->seePageHasElement($this->acceptAllPaypalCookies)) {
+            $I->retryClick($this->acceptAllPaypalCookies);
+            $I->waitForElementNotVisible($this->acceptAllPaypalCookies);
         }
     }
 

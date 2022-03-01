@@ -16,9 +16,8 @@ use OxidEsales\Codeception\Step\ProductNavigation;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 
 /**
- * Class InstallmentBannersCest
- *
- * @package OxidEsales\PayPalModule\Tests\Codeception\Acceptance
+ * @group oepaypal
+ * @group oepaypal_installment_banners
  */
 class InstallmentBannersCest
 {

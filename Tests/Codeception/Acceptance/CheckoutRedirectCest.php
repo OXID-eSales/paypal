@@ -11,9 +11,8 @@ use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use \Codeception\Util\Locator;
 
 /**
- * Class CheckoutRedirectCest
- *
- * @package OxidEsales\PayPalModule\Tests\Codeception\Acceptance
+ * @group oepaypal
+ * @group oepaypal_checkout_redirect
  */
 class CheckoutRedirectCest
 {

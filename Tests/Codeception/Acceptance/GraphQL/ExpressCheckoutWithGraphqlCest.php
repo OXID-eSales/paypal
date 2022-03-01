@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
+namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance\GraphQL;
 
 use OxidEsales\GraphQL\Storefront\Basket\Exception\BasketAccessForbidden;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
@@ -15,6 +15,10 @@ use Codeception\Scenario;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 
+/**
+ * @group oepaypal
+ * @group oepaypal_graphql
+ */
 class ExpressCheckoutWithGraphqlCest
 {
     private const EXPIRED_TOKEN = 'EC-20P17490LV1421614';

@@ -13,8 +13,8 @@ use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 
 /**
- * Class ProductQuantityCest
- * @package OxidEsales\PayPalModule\Tests\Codeception\Acceptance
+ * @group oepaypal
+ * @group oepaypal_product_quantity
  */
 class ProductQuantityCest
 {

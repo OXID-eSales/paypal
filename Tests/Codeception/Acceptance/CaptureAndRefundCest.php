@@ -15,8 +15,8 @@ use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use OxidEsales\Codeception\Module\Translation\Translator;
 
 /**
- * Class CaptureAndRefundCest
- * @package OxidEsales\PayPalModule\Tests\Codeception\Acceptance
+ * @group oepaypal
+ * @group oepaypal_capture_and_refund
  */
 class CaptureAndRefundCest
 {

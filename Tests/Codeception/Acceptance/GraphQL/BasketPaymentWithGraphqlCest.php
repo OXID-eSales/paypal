@@ -5,12 +5,16 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
+namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance\GraphQL;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use Codeception\Util\Fixtures;
 
+/**
+ * @group oepaypal
+ * @group oepaypal_graphql
+ */
 class BasketPaymentWithGraphqlCest
 {
     use GraphqlCheckoutTrait;

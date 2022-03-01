@@ -17,9 +17,9 @@ use OxidEsales\Codeception\Module\Translation\Translator;
 
 /**
  * @group oepaypal
- * @group oepaypal_standard
+ * @group oepaypal_express
  */
-class StandardPaymentCest
+class ExpressCheckoutCest
 {
     public function _before(AcceptanceTester $I)
     {
@@ -42,40 +42,31 @@ class StandardPaymentCest
      *
      * @group paypal_external
      * @group paypal_buyerlogin
-     * @group paypal_standard
+     * @group paypal_express
      * @group paypal_checkout
      */
-    public function checkoutWithPaypalStandard(AcceptanceTester $I)
+    public function checkoutWithPaypalExpress(AcceptanceTester $I)
     {
-        $I->updateConfigInDatabase('sOEPayPalTransactionMode', 'Authorization', 'str');
-        $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', false, 'bool');
+        $I->wantToTest('checking out with PayPal express as anonymous user');
 
-        //log user in
-        $homePage = $I->openShop()
-            ->loginUser($I->getDemoUserName(), $I->getExistingUserPassword());
+        $I->updateConfigInDatabase('sOEPayPalTransactionMode', 'Authorization', 'str');
+        $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', true, 'bool');
+
+        $basket = new Basket($I);
+
+        $basketItem = Fixtures::get('product');
 
         //add Product to basket
-        $basket = new Basket($I);
-        $basketItem = Fixtures::get('product');
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-
-        $I->amOnPage('/en/cart');
-        $basketPage = new BasketCheckout($I);
-        $basketPage->goToNextStep()
-            ->goToNextStep();
-
-        $I->see(Translator::translate('PAYMENT_METHOD'));
-
-        $paymentPage = new PaymentCheckout($I);
-        $paymentPage = $paymentPage->selectPayment('oxidpaypal');
-        $I->click($paymentPage->nextStepButton);
+        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $I->waitForElementVisible("#paypalExpressCheckoutMiniBasketImage", 10);
+        $I->click("#paypalExpressCheckoutMiniBasketImage");
 
         $loginPage = new PayPalLogin($I);
         $paypalUserEmail = $_ENV['sBuyerLogin'];
         $paypalUserPassword = $_ENV['sBuyerPassword'];
 
-        $orderCheckout = $loginPage->checkoutWithStandardPayPal($paypalUserEmail, $paypalUserPassword);
-        $orderCheckout->submitOrder();
+        $loginPage->loginAndCheckout($paypalUserEmail, $paypalUserPassword);
 
         $thankYouPage = new ThankYou($I);
         $orderNumber = $thankYouPage->grabOrderNumber();

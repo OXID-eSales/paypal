@@ -379,7 +379,7 @@ class User extends User_parent
 
     public function hasNoInvoiceAddress(): bool
     {
-        return $this->getFieldData('oxusername') === $this->_getMergedAddressFields();
+        return $this->getFieldData('oxusername') === $this->getMergedAddressFields();
     }
 
     public function setGroupsAfterUserCreation(): void

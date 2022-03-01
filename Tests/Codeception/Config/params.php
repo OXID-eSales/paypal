@@ -12,7 +12,7 @@ $facts = new Facts();
 $selenium_server_port = getenv('SELENIUM_SERVER_PORT');
 $selenium_server_port = ($selenium_server_port) ? $selenium_server_port : '4444';
 $selenium_server_host = getenv('SELENIUM_SERVER_HOST');
-$selenium_server_host = ($selenium_server_host) ? : '127.0.0.1';
+$selenium_server_host = ($selenium_server_host) ? : 'selenium';
 $php = (getenv('PHPBIN')) ? getenv('PHPBIN') : 'php';
 
 return [
@@ -28,6 +28,7 @@ return [
     'MYSQL_CONFIG_PATH' => getMysqlConfigPath(),
     'SELENIUM_SERVER_PORT' => $selenium_server_port,
     'SELENIUM_SERVER_HOST' => $selenium_server_host,
+    'BROWSER_NAME' => getenv('BROWSER_NAME') ?: 'chrome',
     'PHP_BIN' => $php,
 ];
 

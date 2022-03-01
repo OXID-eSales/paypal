@@ -23,9 +23,11 @@ namespace OxidEsales\PayPalModule\Tests\Codeception;
 
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Admin\AdminLoginPage;
+use OxidEsales\Codeception\Admin\AdminPanel;
 use OxidEsales\Codeception\Page\Home;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Facts\Facts;
+use OxidEsales\PayPalModule\Tests\Codeception\Admin\PayPalOrder;
 
 /**
  * Inherited Methods
@@ -45,6 +47,8 @@ use OxidEsales\Facts\Facts;
 class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
+
+    protected $maxRetries = 20;
 
     /**
      * Open shop first page.
@@ -84,6 +88,22 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
         throw new \Exception('Could not find script "/bin/oe-console" to activate module');
+    }
+
+    public function deactivatePaypalModule(): void
+    {
+        $rootPath = (new Facts())->getShopRootPath();
+        $possiblePaths = [
+            '/bin/oe-console',
+            '/vendor/bin/oe-console',
+        ];
+        foreach ($possiblePaths as $path) {
+            if (is_file($rootPath . $path)) {
+                exec($rootPath . $path . ' oe:module:deactivate oepaypal');
+                return;
+            }
+        }
+        throw new \Exception('Could not find script "/bin/oe-console" to deactivate module');
     }
 
     /**
@@ -213,5 +233,88 @@ class AcceptanceTester extends \Codeception\Actor
     protected function prepareMessagePartRegex($part)
     {
         return "/paypal.Messages\(\{[^}\)]*{$part}/";
+    }
+
+    public function openAdmin(): AdminLoginPage
+    {
+        $I = $this;
+        $adminLogin = new AdminLoginPage($I);
+        $I->amOnPage($adminLogin->URL);
+        return $adminLogin;
+    }
+
+    public function loginAdmin(): AdminPanel
+    {
+        $adminPage = $this->openAdmin();
+        $admin = Fixtures::get('adminUser');
+        return $adminPage->login($admin['userLoginName'], $admin['userPassword']);
+    }
+
+    public function getShopUrl(): string
+    {
+        $facts = new Facts();
+
+        return $facts->getShopUrl();
+    }
+
+    public function switchToLastWindow()
+    {
+        $I = $this;
+        $I->executeInSelenium(function (\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {
+            $handles=$webdriver->getWindowHandles();
+            $last_window = end($handles);
+            $webdriver->switchTo()->window($last_window);
+            $size = new \Facebook\WebDriver\WebDriverDimension(1920, 1280);
+            $webdriver->manage()->window()->setSize($size);
+        });
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @param int              $orderNumber
+     *
+     * @return PayPalOrder
+     * @throws \Exception
+     */
+    public function openAdminOrder(int $orderNumber, int $retry = 0)
+    {
+        $I = $this;
+
+        if ($retry >= $this->maxRetries) {
+            $I->makeScreenshot();
+            $I->makeHtmlSnapshot();
+            $I->markTestIncomplete('Did not manage to open the PayPal order tab');
+        }
+
+        $adminLoginPage = $I->openAdminLoginPage();
+        $adminUser = Fixtures::get('adminUser');
+        $adminPanel = $adminLoginPage->login($adminUser['userLoginName'], $adminUser['userPassword']);
+
+        $ordersList = $adminPanel->openOrders($adminPanel);
+
+        $ordersList->searchByOrderNumber($orderNumber);
+        $I->wait(1);
+        if ($I->seePageHasElement('//a[text()="' . $orderNumber . '"]')) {
+            $I->retryClick('//a[text()="' . $orderNumber . '"]');
+        } elseif ($I->seePageHasElement('//a[text()="PayPal"]')) {
+            $I->retryClick('//a[text()="PayPal"]');
+        } else {
+            $this->openAdminOrder($orderNumber, ++$retry);
+        }
+
+        $I->wait(1);
+        $paypalOrder = new PayPalOrder($I);
+        if (!$I->seePageHasElement($paypalOrder->paypalTab)) {
+            $this->openAdminOrder($orderNumber, ++$retry);
+        }
+
+        $I->retryClick($paypalOrder->paypalTab);
+        $I->selectEditFrame();
+
+        if (!$I->seePageHasElement($paypalOrder->captureButton)) {
+            $this->openAdminOrder($orderNumber, ++$retry);
+        }
+
+        return $paypalOrder;
     }
 }

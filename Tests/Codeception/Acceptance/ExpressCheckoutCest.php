@@ -18,6 +18,8 @@ use OxidEsales\Codeception\Module\Translation\Translator;
 /**
  * @group oepaypal
  * @group oepaypal_express
+ *
+ * Tests for checkout with payment process started via paypal button
  */
 class ExpressCheckoutCest
 {
@@ -38,12 +40,7 @@ class ExpressCheckoutCest
     }
 
     /**
-     * @param AcceptanceTester $I
-     *
-     * @group paypal_external
-     * @group paypal_buyerlogin
-     * @group paypal_express
-     * @group paypal_checkout
+     * @group oepaypal_mandatory_test_with_graphql
      */
     public function checkoutWithPaypalExpress(AcceptanceTester $I)
     {

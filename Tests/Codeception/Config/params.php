@@ -26,11 +26,18 @@ return [
     'DB_PORT' => $facts->getDatabasePort(),
     'DUMP_PATH' => getTestDataDumpFilePath(),
     'MYSQL_CONFIG_PATH' => getMysqlConfigPath(),
+    'MODULE_DUMP_PATH' => getModuleTestDataDumpFilePath(),
     'SELENIUM_SERVER_PORT' => $selenium_server_port,
     'SELENIUM_SERVER_HOST' => $selenium_server_host,
     'BROWSER_NAME' => getenv('BROWSER_NAME') ?: 'chrome',
     'PHP_BIN' => $php,
 ];
+
+
+function getModuleTestDataDumpFilePath()
+{
+    return __DIR__ . '/../_data/dump.sql';
+}
 
 function getTestDataDumpFilePath()
 {

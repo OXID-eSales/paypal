@@ -12,7 +12,9 @@ use \Codeception\Util\Locator;
 
 /**
  * @group oepaypal
+ * @group oepaypal_checkout
  * @group oepaypal_checkout_redirect
+ * @group oepaypal_checkout_finalizeonpaypal
  */
 class CheckoutRedirectCest
 {
@@ -39,7 +41,7 @@ class CheckoutRedirectCest
      */
     public function checkRedirectOnCheckout(AcceptanceTester $I, Example $example)
     {
-        $I->wantToTest('redirect to finalize order on successful PayPal checkout');
+        $I->wantToTest('redirect to finalize order on successful PayPal checkout during express checkout');
         $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', $example['setting'], 'bool');
 
         $basket = new Basket($I);

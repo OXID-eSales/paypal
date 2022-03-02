@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © OXID eSales AG. All rights reserved.
  * See LICENSE file for license details.
@@ -210,6 +211,50 @@ class ExpressCheckoutCest extends BaseCest
                 'OXBILLFNAME' => Fixtures::get('details')['firstname'],
                 'OXBILLCITY' => Fixtures::get('details')['oxcity'],
                 'OXDELCITY' => ''
+            ]
+        );
+
+        //Order was captured, so it should be marked as paid
+        $oxPaid = $I->grabFromDatabase('oxorder', 'oxpaid', ['OXORDERNR' => $orderNumber]);
+        $I->assertStringStartsWith(date('Y-m-d'), $oxPaid);
+    }
+
+    /**
+     * NOTE: this test relies on the shipping cost callback NOT being accessible by PayPal
+     *
+     * @group oepaypal_will_fail_without_public_url
+     * @group oepaypal_express_checkout_callback
+     */
+    public function testExpressCheckoutWithCallback(AcceptanceTester $I): void
+    {
+        $I->wantToTest('checkout from details page with empty cart. Customer has no account in shop.');
+
+        $I->openShop();
+        $I->waitForText(Translator::translate('HOME'));
+
+        $productNavigation = new ProductNavigation($I);
+        $productNavigation->openProductDetailsPage(Fixtures::get('product')['id']);
+        $I->seeElement("#paypalExpressCheckoutDetailsButton");
+        $I->click("#paypalExpressCheckoutDetailsButton");
+
+        $loginPage = new PayPalLogin($I);
+        $loginPage->approveExpressPayPal($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
+
+        $orderCheckout = new OrderCheckout($I);
+        $orderCheckout->submitOrder();
+
+        $thankYouPage = new ThankYou($I);
+        $orderNumber = $thankYouPage->grabOrderNumber();
+
+        $I->assertGreaterThan(1, $orderNumber);
+
+        $I->seeInDataBase(
+            'oxorder',
+            [
+                'OXORDERNR' => $orderNumber,
+                'OXTOTALORDERSUM' => Fixtures::get('totalordersum_ecswithshipping'),
+                'OXBILLFNAME' => $_ENV['sBuyerFirstName'],
+                'OXBILLCITY' => 'Freiburg',
             ]
         );
 

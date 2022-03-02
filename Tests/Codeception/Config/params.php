@@ -33,7 +33,6 @@ return [
     'PHP_BIN' => $php,
 ];
 
-
 function getModuleTestDataDumpFilePath()
 {
     return __DIR__ . '/../_data/dump.sql';

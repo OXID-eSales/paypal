@@ -8,18 +8,19 @@
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance\GraphQL;
 
 use OxidEsales\GraphQL\Storefront\Basket\Exception\BasketAccessForbidden;
+use OxidEsales\PayPalModule\Tests\Codeception\Acceptance\BaseCest;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\Facts\Facts;
 use Codeception\Util\Fixtures;
-use Codeception\Scenario;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 
 /**
  * @group oepaypal
  * @group oepaypal_graphql
+ * @group oepaypal_graphql_express
  */
-class ExpressCheckoutWithGraphqlCest
+class ExpressCheckoutWithGraphqlCest extends BaseCest
 {
     private const EXPIRED_TOKEN = 'EC-20P17490LV1421614';
 
@@ -28,49 +29,17 @@ class ExpressCheckoutWithGraphqlCest
     use GraphqlCheckoutTrait;
     use GraphqlExpressCheckoutTrait;
 
-    public function _before(AcceptanceTester $I, Scenario $scenario): void
+    public function _before(AcceptanceTester $I): void
     {
         if (!($I->checkGraphBaseActive() && $I->checkGraphStorefrontActive())) {
             $I->markTestSkipped('GraphQL modules are not active');
         }
 
+        parent::_before($I);
+
         $I->updateConfigInDatabase('blPerfNoBasketSaving', false);
         $I->updateConfigInDatabase('blCalculateDelCostIfNotLoggedIn', false);
         $I->updateConfigInDatabase('iVoucherTimeout', 10800, 'int'); // matches default value
-
-        $I->activateFlowTheme();
-        $I->clearShopCache();
-        $I->updateConfigInDatabase('blUseStock', false);
-
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->updateInDatabase('oxuser', Fixtures::get('adminData'), ['OXUSERNAME' => 'admin']);
-        $I->updateInDatabase(
-            'oxuser',
-            [
-                'oxusername' => $I->getDemoUserName(),
-                'oxcity'     => 'Freiburg',
-                'oxstreet'   => 'Hauptstr.',
-                'oxstreetnr' => '13',
-                'oxzip'      => '79098',
-                'oxfname'    => 'Marc',
-                'oxlname'    => 'Muster'
-            ],
-            [
-                'oxusername' => $_ENV['sBuyerLogin']
-            ]
-        );
-        $I->updateInDatabase(
-            'oxuser',
-            [
-                'oxpassword' => '$2y$10$b186f117054b700a89de9uXDzfahkizUucitfPov3C2cwF5eit2M2',
-                'oxpasssalt' => 'b186f117054b700a89de929ce90c6aef'
-            ],
-            [
-                'oxusername' => $I->getDemoUserName()
-            ]
-        );
-
         $this->deactivateDiscount($I);
     }
 

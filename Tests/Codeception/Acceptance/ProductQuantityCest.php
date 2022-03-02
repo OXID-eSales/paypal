@@ -7,61 +7,37 @@
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
-use OxidEsales\Codeception\Step\Basket;
 use OxidEsales\Codeception\Step\ProductNavigation;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
+use OxidEsales\Codeception\Module\Translation\Translator;
 
 /**
  * @group oepaypal
  * @group oepaypal_standard
  * @group oepaypal_product_quantity
  */
-class ProductQuantityCest
+class ProductQuantityCest extends BaseCest
 {
-    public function _before(AcceptanceTester $I)
-    {
-        $I->clearShopCache();
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->updateConfigInDatabase('iNewBasketItemMessage', false);
-    }
-
     /**
-     * @param AcceptanceTester $I
-     *                           
      * @group product_quantity_paypal                          
      */
     public function increaseProductQuantity(AcceptanceTester $I)
     {
-        $I->activatePaypalModule();
+        $I->wantToTest('product details add items popup');
 
-        $basket = new Basket($I);
-
-        $basketItem = Fixtures::get('product');
-
-        $expectedBasketContent = [
-            'id' => $basketItem['id'],
-            'title' => $basketItem['title'],
-            'amount' => 5,
-            'price' => '149,50 €'
-        ];
-
-        $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
+        $this->proceedToBasketStep($I, null, false);
 
         $productNavigation = new ProductNavigation($I);
-        $productNavigation->openProductDetailsPage($basketItem['id']);
-        $I->waitForElementVisible('#paypalExpressCheckoutDetailsButton', 20);
+        $productNavigation->openProductDetailsPage(Fixtures::get('product')['id']);
+        $I->seeElement("#paypalExpressCheckoutDetailsButton");
         $I->click("#paypalExpressCheckoutDetailsButton");
-        $I->waitForElementVisible('#actionAddToBasketAndGoToCheckout', 20);
+        $I->see(substr(sprintf(Translator::translate('OEPAYPAL_SAME_ITEM_QUESTION'), 1), 0, 30));
+        $I->seeElement("#actionAddToBasketAndGoToCheckout");
         $I->click("#actionAddToBasketAndGoToCheckout");
-        $I->waitForDocumentReadyState();
 
-        $paypalPage = new PaypalLogin($I);
-        $paypalPage->acceptAllPaypalCookies;
-        $paypalPage->cancelPayPal();
-
-        $I->openShop()->seeMiniBasketContains([$expectedBasketContent], $expectedBasketContent['price'], (string) $expectedBasketContent['amount']);
+        $basketItem = Fixtures::get('product');
+        $I->amOnUrl($I->getShopUrl());
+        $I->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) ($basketItem['amount'] + 1));
     }
 }

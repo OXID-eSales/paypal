@@ -8,14 +8,16 @@
 namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance\GraphQL;
 
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\PayPalModule\Tests\Codeception\Acceptance\BaseCest;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use Codeception\Util\Fixtures;
 
 /**
  * @group oepaypal
  * @group oepaypal_graphql
+ * @group oepaypal_graphql_basketpayment
  */
-class BasketPaymentWithGraphqlCest
+class BasketPaymentWithGraphqlCest extends BaseCest
 {
     use GraphqlCheckoutTrait;
     use GraphqlExpressCheckoutTrait;
@@ -26,31 +28,17 @@ class BasketPaymentWithGraphqlCest
             $I->markTestSkipped('GraphQL modules are not active');
         }
 
+        parent::_before($I);
+
         $I->updateConfigInDatabase('blPerfNoBasketSaving', false, 'bool');
-
-        $I->activateFlowTheme();
-        $I->clearShopCache();
-        $I->updateConfigInDatabase('blUseStock', false, 'bool');
-
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->updateInDatabase(
-            'oxuser',
-            [
-                'oxpassword' => '$2y$10$b186f117054b700a89de9uXDzfahkizUucitfPov3C2cwF5eit2M2',
-                'oxpasssalt' => 'b186f117054b700a89de929ce90c6aef'
-            ],
-            [
-                'oxusername' => $I->getDemoUserName()
-            ]
-        );
-
         $this->enablePayments();
     }
 
-    public function _after()
+    public function _after(AcceptanceTester $I): void
     {
         $this->enablePayments();
+
+        parent::_after($I);
     }
 
     /**

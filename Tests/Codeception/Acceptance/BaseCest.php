@@ -93,13 +93,14 @@ abstract class BaseCest
         $I->updateInDatabase(
             'oxuser',
             [
-                'oxusername' => Fixtures::get('userName'),
-                'oxcity'     => Fixtures::get('details')['oxcity'],
-                'oxstreet'   => Fixtures::get('details')['oxstreet'],
-                'oxstreetnr' => Fixtures::get('details')['oxstreetnr'],
-                'oxzip'      => Fixtures::get('details')['oxzip'],
-                'oxfname'    => Fixtures::get('details')['firstname'],
-                'oxlname'    => Fixtures::get('details')['lastname'],
+                'oxusername'  => Fixtures::get('userName'),
+                'oxcity'      => Fixtures::get('details')['oxcity'],
+                'oxstreet'    => Fixtures::get('details')['oxstreet'],
+                'oxstreetnr'  => Fixtures::get('details')['oxstreetnr'],
+                'oxzip'       => Fixtures::get('details')['oxzip'],
+                'oxfname'     => Fixtures::get('details')['firstname'],
+                'oxlname'     => Fixtures::get('details')['lastname'],
+                'oxcountryid' => 'a7c40f631fc920687.20179984' //DE
             ],
             [
                 'oxusername' => $toBeUpdated

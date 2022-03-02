@@ -237,12 +237,12 @@ class PayPalLogin extends Page
      */
     public function approveGraphqlExpressPayPal(string $userName, string $userPassword): void
     {
-        $I = $this;
+        $I = $this->user;
 
         $this->approveExpressPayPal($userName, $userPassword);
 
         //we should be back to shop frontend as we sent a redirect url to paypal
-        $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
+        $I->seePageHasElement($this->paypalBannerContainer);
     }
 
     /**
@@ -266,6 +266,9 @@ class PayPalLogin extends Page
         //retry
         $this->waitForSpinnerDisappearance();
         $this->confirmPayPal();
+
+        //we should be back to shop frontend as we sent a redirect url to paypal
+        $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
     }
 
     public function waitForPayPalPage(): PayPalLogin

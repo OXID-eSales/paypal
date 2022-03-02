@@ -20,26 +20,14 @@ use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
  * @group oepaypal_standard
  * @group oepaypal_installment_banners
  */
-class InstallmentBannersCest
+class InstallmentBannersCest extends BaseCest
 {
-    /**
-     * @param AcceptanceTester $I
-     */
-    public function _before(AcceptanceTester $I)
+    public function _after(AcceptanceTester $I): void
     {
         $I->activateFlowTheme();
         $I->clearShopCache();
-        $I->activatePaypalModule();
-        $I->updateConfigInDatabase('blUseStock', false, 'bool');
-    }
 
-    /**
-     * @param AcceptanceTester $I
-     */
-    public function _after(AcceptanceTester $I)
-    {
-        $I->activateFlowTheme();
-        $I->clearShopCache();
+        parent::_after($I);
     }
 
     /**

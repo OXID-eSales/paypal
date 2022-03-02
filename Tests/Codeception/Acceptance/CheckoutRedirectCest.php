@@ -16,19 +16,8 @@ use \Codeception\Util\Locator;
  * @group oepaypal_checkout_redirect
  * @group oepaypal_checkout_finalizeonpaypal
  */
-class CheckoutRedirectCest
+class CheckoutRedirectCest extends BaseCest
 {
-    /**
-     * @param AcceptanceTester $I
-     */
-    public function _before(AcceptanceTester $I)
-    {
-        $I->clearShopCache();
-        $I->activatePaypalModule();
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-    }
-
     /**
      * @group checkoutFrontend
      * @group paypal_external

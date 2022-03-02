@@ -9,9 +9,9 @@ namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance\GraphQL;
 use OxidEsales\GraphQL\Storefront\Basket\Exception\BasketAccessForbidden;
 use OxidEsales\GraphQL\Storefront\Country\Exception\CountryNotFound;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketCommunication;
+use OxidEsales\PayPalModule\Tests\Codeception\Acceptance\BaseCest;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use Codeception\Util\Fixtures;
-use Codeception\Scenario;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use OxidEsales\PayPalModule\GraphQL\Exception\PaymentValidation;
 use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
@@ -19,40 +19,23 @@ use OxidEsales\PayPalModule\GraphQL\Exception\BasketValidation;
 /**
  * @group oepaypal
  * @group oepaypal_graphql
+ * @group oepaypal_graphql_checkout
  */
-class CheckoutWithGraphqlCest
+class CheckoutWithGraphqlCest extends BaseCest
 {
     private const EXPIRED_TOKEN = 'EC-20P17490LV1421614';
 
     use GraphqlCheckoutTrait;
 
-    public function _before(AcceptanceTester $I, Scenario $scenario): void
+    public function _before(AcceptanceTester $I): void
     {
         if (!($I->checkGraphBaseActive() && $I->checkGraphStorefrontActive())) {
             $I->markTestSkipped('GraphQL modules are not active');
         }
 
+        parent::_before($I);
+
         $I->updateConfigInDatabase('blPerfNoBasketSaving', false, 'bool');
-        $I->updateConfigInDatabase('blCalculateDelCostIfNotLoggedIn', false, 'bool');
-        $I->updateConfigInDatabase('iVoucherTimeout', 10800, 'int'); // matches default value
-
-        $I->activateFlowTheme();
-        $I->clearShopCache();
-        $I->updateConfigInDatabase('blUseStock', false, 'bool');
-
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-        $I->updateInDatabase('oxuser', Fixtures::get('adminData'), ['OXUSERNAME' => 'admin']);
-        $I->updateInDatabase(
-            'oxuser',
-            [
-                'oxpassword' => '$2y$10$b186f117054b700a89de9uXDzfahkizUucitfPov3C2cwF5eit2M2',
-                'oxpasssalt' => 'b186f117054b700a89de929ce90c6aef'
-            ],
-            [
-                'oxusername' => $I->getDemoUserName()
-            ]
-        );
     }
 
     /**

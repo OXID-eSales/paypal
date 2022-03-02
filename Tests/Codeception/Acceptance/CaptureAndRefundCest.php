@@ -56,7 +56,7 @@ class CaptureAndRefundCest
 
         //add Product to basket
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
         $I->waitForElementVisible("#paypalExpressCheckoutMiniBasketImage", 10);
         $I->click("#paypalExpressCheckoutMiniBasketImage");
 

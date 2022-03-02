@@ -61,7 +61,7 @@ class InstallmentBannersCest
         $basket = new Basket($I);
         $basket->addProductToBasket($basketItem['id'], (int)$basketItem['amount']);
         $homePage
-            ->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount'])
+            ->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount'])
             ->searchFor("3503");
 
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
@@ -96,7 +96,7 @@ class InstallmentBannersCest
         $basket = new Basket($I);
         $basket->addProductToBasket($product['id'], (int)$product['amount']);
         $homePage
-            ->seeMiniBasketContains([$product], $product['price'], $product['amount'])
+            ->seeMiniBasketContains([$product], $product['price'], (string) $product['amount'])
             ->searchFor($product['title']);
 
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme(100.52);
@@ -194,7 +194,7 @@ class InstallmentBannersCest
         $basketItem = Fixtures::get('product');
         $basket->addProductToBasket($basketItem['id'], (int)$basketItem['amount']);
         $homePage
-            ->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount'])
+            ->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount'])
             ->openCategoryPage("Kiteboarding");
 
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
@@ -228,7 +228,7 @@ class InstallmentBannersCest
         $basketItem['price'] = '100,52 €';
         $basket->addProductToBasket($basketItem['id'], (int)$basketItem['amount']);
         $homePage
-            ->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount'])
+            ->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount'])
             ->openCategoryPage("Kiteboarding");
 
         $I->seePayPalInstallmentBannerInFlowAndWaveTheme(100.52);
@@ -282,8 +282,8 @@ class InstallmentBannersCest
         $homePage = $I->openShop();
         $basket = new Basket($I);
         $basketItem = Fixtures::get('product');
-        $basket->addProductToBasket($basketItem['id'], (int)$basketItem['amount']);
-        $homePage->seeMiniBasketContains([$basketItem], $basketItem['price'], (string)$basketItem['amount']);
+        $basket->addProductToBasket($basketItem['id'], (int) $basketItem['amount']);
+        $homePage->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
 
         $I->checkInstallmentBannerData(119.6);
     }
@@ -305,7 +305,7 @@ class InstallmentBannersCest
         $basketItem = Fixtures::get('product');
         $basketItem['price'] = '100,52 €';
         $basket->addProductToBasket($basketItem['id'], (int)$basketItem['amount']);
-        $homePage->seeMiniBasketContains([$basketItem], $basketItem['price'], (string)$basketItem['amount']);
+        $homePage->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
 
         $I->checkInstallmentBannerData(100.52);
     }

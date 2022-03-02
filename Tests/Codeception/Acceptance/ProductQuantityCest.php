@@ -48,7 +48,7 @@ class ProductQuantityCest
         ];
 
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
 
         $productNavigation = new ProductNavigation($I);
         $productNavigation->openProductDetailsPage($basketItem['id']);
@@ -62,6 +62,6 @@ class ProductQuantityCest
         $paypalPage->acceptAllPaypalCookies;
         $paypalPage->cancelPayPal();
 
-        $I->openShop()->seeMiniBasketContains([$expectedBasketContent], $expectedBasketContent['price'], $expectedBasketContent['amount']);
+        $I->openShop()->seeMiniBasketContains([$expectedBasketContent], $expectedBasketContent['price'], (string) $expectedBasketContent['amount']);
     }
 }

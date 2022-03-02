@@ -49,7 +49,7 @@ class CheckoutRedirectCest
         $basketItem = Fixtures::get('product');
 
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
 
         $I->openShop()->openMiniBasket();
 

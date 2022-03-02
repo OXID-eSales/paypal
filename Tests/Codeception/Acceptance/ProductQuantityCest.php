@@ -14,6 +14,7 @@ use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 
 /**
  * @group oepaypal
+ * @group oepaypal_standard
  * @group oepaypal_product_quantity
  */
 class ProductQuantityCest

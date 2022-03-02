@@ -205,7 +205,7 @@ abstract class BaseCest
 
         //add product to basket and start checkout
         $this->fillBasket($I);
-        $I->seeElement("#paypalExpressCheckoutButtonECS");
+        $I->seeElement('//input[@name="paypalExpressCheckoutButtonECS"]');
     }
 
     protected function fillBasket(AcceptanceTester $I): void

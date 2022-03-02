@@ -10,7 +10,6 @@ namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Page\Checkout\ThankYou;
 use OxidEsales\Codeception\Step\Basket;
-use OxidEsales\Codeception\Page\Checkout\Basket as BasketCheckout;
 use OxidEsales\Codeception\Page\Checkout\PaymentCheckout;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
@@ -20,7 +19,6 @@ use OxidEsales\Codeception\Module\Translation\Translator;
  * @group oepaypal
  * @group oepaypal_standard
  * @group oepaypal_standard_checkout
- * @group paypal_checkout
  *
  * Tests for checkout with regular payment method 'oxidpaypal'
  */
@@ -55,7 +53,9 @@ class StandardPaymentCest extends BaseCest
             [
                 'OXORDERNR' => $orderNumber,
                 'OXTOTALORDERSUM' => '119.6',
-                'OXBILLFNAME' => Fixtures::get('details')['firstname']
+                'OXBILLFNAME' => Fixtures::get('details')['firstname'],
+                'OXBILLCITY' => Fixtures::get('details')['oxcity'],
+                'OXDELCITY' => ''
             ]
         );
 
@@ -93,11 +93,13 @@ class StandardPaymentCest extends BaseCest
             [
                 'OXID' => $orderId,
                 'OXTOTALORDERSUM' => '119.6',
-                'OXBILLFNAME' => $_ENV['sBuyerFirstName']
+                'OXBILLFNAME' => $_ENV['sBuyerFirstName'],
+                'OXBILLCITY' => 'Freiburg',
+                'OXDELCITY' => ''
             ]
         );
 
-        //Oder was only authorized, so it should not yet be marked as paid
+        //Order was only authorized, so it should not yet be marked as paid
         $oxPaid = $I->grabFromDatabase('oxorder', 'oxpaid', ['OXORDERNR' => $orderNumber]);
         $I->assertStringStartsWith(date('0000-00-00'), $oxPaid);
     }

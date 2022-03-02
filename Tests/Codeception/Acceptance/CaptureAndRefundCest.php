@@ -16,6 +16,7 @@ use OxidEsales\Codeception\Module\Translation\Translator;
 
 /**
  * @group oepaypal
+ * @group oepaypal_standard
  * @group oepaypal_capture_and_refund
  */
 class CaptureAndRefundCest

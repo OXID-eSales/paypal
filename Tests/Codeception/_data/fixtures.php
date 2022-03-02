@@ -20,11 +20,13 @@ return [
     'details' => [
         'firstname' => 'TestUserName',
         'lastname' => 'TestUserSurname',
-        'oxcity' => 'Freiburg',
+        'oxcity' => 'Hamburg',
         'oxstreet' => 'Hauptstr.',
         'oxstreetnr' => '13',
-        'oxzip' => '79098'
+        'oxzip' => '22547'
     ],
+    'totalordersum_ecsdetails' => 149.5,
+    'totalordersum_ecswithshipping' => 33.80,
     // This user will be created and will be available in ce|pe|ee demodata
     'user' => [
         'oxid'         => 'pptestuser',

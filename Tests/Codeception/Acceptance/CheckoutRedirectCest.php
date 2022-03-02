@@ -12,7 +12,7 @@ use \Codeception\Util\Locator;
 
 /**
  * @group oepaypal
- * @group oepaypal_checkout
+ * @group oepaypal_standard
  * @group oepaypal_checkout_redirect
  * @group oepaypal_checkout_finalizeonpaypal
  */

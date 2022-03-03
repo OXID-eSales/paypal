@@ -94,7 +94,7 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalIPNHandler->setIPNRequestVerifier($ipnRequestVerifier);
         $payPalIPNHandler->handleRequest();
 
-        $logHelper = new \OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper();
+        $logHelper = new \OxidEsales\PayPalModule\Tests\Unit\PayPalLogHelper();
         $logData = $logHelper->getLogData();
         $lastLogItem = end($logData);
         $requestHandled = $lastLogItem->data['Result'] == 'true';

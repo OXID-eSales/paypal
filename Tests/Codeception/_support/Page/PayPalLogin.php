@@ -266,9 +266,6 @@ class PayPalLogin extends Page
         //retry
         $this->waitForSpinnerDisappearance();
         $this->confirmPayPal();
-
-        //we should be back to shop frontend as we sent a redirect url to paypal
-        $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
     }
 
     public function waitForPayPalPage(): PayPalLogin

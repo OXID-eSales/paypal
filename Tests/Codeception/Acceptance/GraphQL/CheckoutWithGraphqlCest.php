@@ -36,6 +36,17 @@ class CheckoutWithGraphqlCest extends BaseCest
         parent::_before($I);
 
         $I->updateConfigInDatabase('blPerfNoBasketSaving', false, 'bool');
+
+        $I->updateInDatabase(
+            'oxuser',
+            [
+                'oxpassword' => '$2y$10$b186f117054b700a89de9uXDzfahkizUucitfPov3C2cwF5eit2M2',
+                'oxpasssalt' => 'b186f117054b700a89de929ce90c6aef'
+            ],
+            [
+                'oxusername' => $I->getDemoUserName()
+            ]
+        );
     }
 
     /**

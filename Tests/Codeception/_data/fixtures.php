@@ -7,8 +7,8 @@
 return [
     'adminUser' => [
         "userId" => "admin",
-        "userLoginName" => "admin@myoxideshop.com",
-        "userPassword" => "admin0303",
+        "userLoginName" => "admin",
+        "userPassword" => "admin",
         "userName" => "John",
         "userLastName" => "Doe",
     ],

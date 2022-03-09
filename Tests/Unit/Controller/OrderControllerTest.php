@@ -37,7 +37,7 @@ if (!class_exists('oePayPalOrder_parent')) {
 class OrderControllerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     use AdminUserTrait;
-    
+
     /**
      * Tear down the fixture.
      */

@@ -5,13 +5,19 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
+namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance\GraphQL;
 
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\PayPalModule\Tests\Codeception\Acceptance\BaseCest;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
 use Codeception\Util\Fixtures;
 
-class BasketPaymentWithGraphqlCest
+/**
+ * @group oepaypal
+ * @group oepaypal_graphql
+ * @group oepaypal_graphql_basketpayment
+ */
+class BasketPaymentWithGraphqlCest extends BaseCest
 {
     use GraphqlCheckoutTrait;
     use GraphqlExpressCheckoutTrait;
@@ -22,14 +28,8 @@ class BasketPaymentWithGraphqlCest
             $I->markTestSkipped('GraphQL modules are not active');
         }
 
-        $I->updateConfigInDatabase('blPerfNoBasketSaving', false, 'bool');
+        parent::_before($I);
 
-        $I->activateFlowTheme();
-        $I->clearShopCache();
-        $I->updateConfigInDatabase('blUseStock', false, 'bool');
-
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
         $I->updateInDatabase(
             'oxuser',
             [
@@ -41,12 +41,15 @@ class BasketPaymentWithGraphqlCest
             ]
         );
 
+        $I->updateConfigInDatabase('blPerfNoBasketSaving', false, 'bool');
         $this->enablePayments();
     }
 
-    public function _after()
+    public function _after(AcceptanceTester $I): void
     {
         $this->enablePayments();
+
+        parent::_after($I);
     }
 
     /**

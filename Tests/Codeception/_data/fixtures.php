@@ -7,11 +7,26 @@
 return [
     'adminUser' => [
         "userId" => "admin",
-        "userLoginName" => "admin@myoxideshop.com",
-        "userPassword" => "admin0303",
+        "userLoginName" => "admin",
+        "userPassword" => "admin",
         "userName" => "John",
         "userLastName" => "Doe",
     ],
+    'userPassword' => 'useruser',
+    'defaultUserName' => 'defaultuser@oxid-esales.dev',
+    'defaultUserFirstName' => 'UserName',
+    'userName' => 'paypaluser@oxid-esales.dev',
+    'demoUserName'  => 'user@oxid-esales.com',
+    'details' => [
+        'firstname' => 'TestUserName',
+        'lastname' => 'TestUserSurname',
+        'oxcity' => 'Hamburg',
+        'oxstreet' => 'Hauptstr.',
+        'oxstreetnr' => '13',
+        'oxzip' => '22547'
+    ],
+    'totalordersum_ecsdetails' => 149.5,
+    'totalordersum_ecswithshipping' => 33.80,
     // This user will be created and will be available in ce|pe|ee demodata
     'user' => [
         'oxid'         => 'pptestuser',
@@ -38,13 +53,11 @@ return [
         'oxobjectid' => 'pptestuser',
         'oxgroupsid' => 'oxidcustomer'
     ],
-    'userPassword'  => 'useruser',
-    'demoUserName'  => 'user@oxid-esales.com',
     // This product is available in ce|pe|ee demodata
     'product' => [
         'id' => 'dc5ffdf380e15674b56dd562a7cb6aec',
         'title' => 'Kuyichi leather belt JEVER',
-        'amount' => '4',
+        'amount' => 4,
         'price' => '119,60 €',
         'bruttoprice_single' => '29.9',
         'nettoprice_single' => '25.13'

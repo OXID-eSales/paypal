@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Test compatibility with shop master.
 - Documentation link in README now points to latest version [PR-55](https://github.com/SvenBrunk/paypal.git)
 
+## [Undecided] - unreleased
+
+### Changed
+- Add codeception tests, remove selenium tests. Use .env and environment.yaml to inject test credentials.
+
 ## [6.4.0] - 2021-11-29
 
 ### Changed

@@ -239,6 +239,20 @@ class PayPalLogin extends Page
     {
         $I = $this->user;
 
+        $this->approveExpressPayPal($userName, $userPassword);
+
+        //we should be back to shop frontend as we sent a redirect url to paypal
+        $I->seePageHasElement($this->paypalBannerContainer);
+    }
+
+    /**
+     * @param string $userName
+     * @param string $userPassword
+     */
+    public function approveExpressPayPal(string $userName, string $userPassword): void
+    {
+        $I = $this->user;
+
         $this->waitForPayPalPage();
         $this->waitForSpinnerDisappearance();
         $this->removeCookieConsent();
@@ -252,9 +266,6 @@ class PayPalLogin extends Page
         //retry
         $this->waitForSpinnerDisappearance();
         $this->confirmPayPal();
-
-        //we should be back to shop frontend as we sent a redirect url to paypal
-        $I->assertTrue($I->seePageHasElement($this->paypalBannerContainer));
     }
 
     public function waitForPayPalPage(): PayPalLogin

@@ -4,7 +4,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance;
+namespace OxidEsales\PayPalModule\Tests\Codeception\Acceptance\GraphQL;
 
 use OxidEsales\Eshop\Core\Registry as EshopRegistry;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;

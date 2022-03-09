@@ -42,7 +42,7 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $payPalIPNHandler = new \OxidEsales\PayPalModule\Controller\IPNHandler();
         $payPalIPNHandler->handleRequest();
 
-        $logHelper = new \OxidEsales\PayPalModule\Tests\Acceptance\PayPalLogHelper();
+        $logHelper = new \OxidEsales\PayPalModule\Tests\Unit\PayPalLogHelper();
         $logData = $logHelper->getLogData();
         $lastLogItem = end($logData);
         $requestHandled = $lastLogItem->data['Result'] == 'true';

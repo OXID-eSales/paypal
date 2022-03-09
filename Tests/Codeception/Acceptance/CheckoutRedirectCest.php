@@ -11,23 +11,13 @@ use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use \Codeception\Util\Locator;
 
 /**
- * Class CheckoutRedirectCest
- *
- * @package OxidEsales\PayPalModule\Tests\Codeception\Acceptance
+ * @group oepaypal
+ * @group oepaypal_standard
+ * @group oepaypal_checkout_redirect
+ * @group oepaypal_checkout_finalizeonpaypal
  */
-class CheckoutRedirectCest
+class CheckoutRedirectCest extends BaseCest
 {
-    /**
-     * @param AcceptanceTester $I
-     */
-    public function _before(AcceptanceTester $I)
-    {
-        $I->clearShopCache();
-        $I->activatePaypalModule();
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-    }
-
     /**
      * @group checkoutFrontend
      * @group paypal_external
@@ -40,7 +30,7 @@ class CheckoutRedirectCest
      */
     public function checkRedirectOnCheckout(AcceptanceTester $I, Example $example)
     {
-        $I->wantToTest('redirect to finalize order on successful PayPal checkout');
+        $I->wantToTest('redirect to finalize order on successful PayPal checkout during express checkout');
         $I->updateConfigInDatabase('blOEPayPalFinalizeOrderOnPayPal', $example['setting'], 'bool');
 
         $basket = new Basket($I);
@@ -48,7 +38,7 @@ class CheckoutRedirectCest
         $basketItem = Fixtures::get('product');
 
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
 
         $I->openShop()->openMiniBasket();
 

@@ -10,33 +10,16 @@ use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Page\Checkout\ThankYou;
 use OxidEsales\Codeception\Step\Basket;
 use OxidEsales\PayPalModule\Tests\Codeception\AcceptanceTester;
-use OxidEsales\PayPalModule\Tests\Codeception\Admin\PayPalOrder;
 use OxidEsales\PayPalModule\Tests\Codeception\Page\PayPalLogin;
 use OxidEsales\Codeception\Module\Translation\Translator;
 
 /**
- * Class CaptureAndRefundCest
- * @package OxidEsales\PayPalModule\Tests\Codeception\Acceptance
+ * @group oepaypal
+ * @group oepaypal_standard
+ * @group oepaypal_capture_and_refund
  */
-class CaptureAndRefundCest
+class CaptureAndRefundCest extends BaseCest
 {
-    private $maxRetries = 20;
-
-    public function _before(AcceptanceTester $I)
-    {
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentMethod'));
-        $I->haveInDatabase('oxobject2payment', Fixtures::get('paymentCountry'));
-
-        // Create an admin in case it does not exist
-        $adminData = Fixtures::get('adminData');
-        $admin = $I->grabFromDatabase('oxuser', 'OXUSERNAME', ['OXUSERNAME' => $adminData['OXUSERNAME']]);
-        if (!$admin) {
-            $I->haveInDatabase('oxuser', $adminData);
-        }
-
-        $I->activatePaypalModule();
-    }
-
     /**
      * @param AcceptanceTester $I
      * 
@@ -55,15 +38,12 @@ class CaptureAndRefundCest
 
         //add Product to basket
         $basket->addProductToBasket($basketItem['id'], $basketItem['amount']);
-        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], $basketItem['amount']);
+        $I->openShop()->seeMiniBasketContains([$basketItem], $basketItem['price'], (string) $basketItem['amount']);
         $I->waitForElementVisible("#paypalExpressCheckoutMiniBasketImage", 10);
         $I->click("#paypalExpressCheckoutMiniBasketImage");
 
         $loginPage = new PayPalLogin($I);
-        $paypalUserEmail = $_ENV['sBuyerLogin'];
-        $paypalUserPassword = $_ENV['sBuyerPassword'];
-
-        $loginPage->loginAndCheckout($paypalUserEmail, $paypalUserPassword);
+        $loginPage->loginAndCheckout($_ENV['sBuyerLogin'], $_ENV['sBuyerPassword']);
 
         $thankYouPage = new ThankYou($I);
         $orderNumber = $thankYouPage->grabOrderNumber();
@@ -77,7 +57,7 @@ class CaptureAndRefundCest
             'refund_type'    => 'Partial',
         ];
 
-        $paypalOrder = $this->openAdminOrder($I, (int) $orderNumber);
+        $paypalOrder = $I->openAdminOrder((int) $orderNumber);
 
         $paypalOrder->captureAmount($order['capture_amount'], $order['capture_type']);
         $I->dontSee($paypalOrder->captureErrorText, $paypalOrder->errorBox);
@@ -89,52 +69,5 @@ class CaptureAndRefundCest
         $I->dontSee($paypalOrder->refundErrorText, $paypalOrder->errorBox);
         $I->see(Translator::translate('OEPAYPAL_REFUND'), $paypalOrder->lastHistoryRowAction);
         $I->see('49.50', $paypalOrder->lastHistoryRowAmount);
-    }
-
-    /**
-     * @param AcceptanceTester $I
-     * @param int              $orderNumber
-     *
-     * @return PayPalOrder
-     * @throws \Exception
-     */
-    protected function openAdminOrder(AcceptanceTester $I, int $orderNumber, int $retry = 0)
-    {
-        if ($retry >= $this->maxRetries) {
-            $I->makeScreenshot();
-            $I->makeHtmlSnapshot();
-            $I->markTestIncomplete('Did not manage to open the PayPal order tab');
-        }
-
-        $adminLoginPage = $I->openAdminLoginPage();
-        $adminUser = Fixtures::get('adminUser');
-        $adminPanel = $adminLoginPage->login($adminUser['userLoginName'], $adminUser['userPassword']);
-
-        $ordersList = $adminPanel->openOrders($adminPanel);
-
-        $ordersList->searchByOrderNumber($orderNumber);
-        $I->wait(1);
-        if ($I->seePageHasElement('//a[text()="' . $orderNumber . '"]')) {
-            $I->retryClick('//a[text()="' . $orderNumber . '"]');
-        } elseif ($I->seePageHasElement('//a[text()="PayPal"]')) {
-            $I->retryClick('//a[text()="PayPal"]');
-        } else {
-            $this->openAdminOrder($I, $orderNumber, ++$retry);
-        }
-
-        $I->wait(1);
-        $paypalOrder = new PayPalOrder($I);
-        if (!$I->seePageHasElement($paypalOrder->paypalTab)) {
-            $this->openAdminOrder($I, $orderNumber, ++$retry);
-        }
-
-        $I->retryClick($paypalOrder->paypalTab);
-        $I->selectEditFrame();
-
-        if (!$I->seePageHasElement($paypalOrder->captureButton)) {
-            $this->openAdminOrder($I, $orderNumber, ++$retry);
-        }
-
-        return $paypalOrder;
     }
 }

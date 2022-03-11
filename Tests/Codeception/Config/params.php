@@ -12,7 +12,7 @@ $facts = new Facts();
 $selenium_server_port = getenv('SELENIUM_SERVER_PORT');
 $selenium_server_port = ($selenium_server_port) ? $selenium_server_port : '4444';
 $selenium_server_host = getenv('SELENIUM_SERVER_HOST');
-$selenium_server_host = ($selenium_server_host) ? : 'selenium';
+$selenium_server_host = ($selenium_server_host) ? : 'localhost';
 $php = (getenv('PHPBIN')) ? getenv('PHPBIN') : 'php';
 
 return [

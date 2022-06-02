@@ -24,8 +24,7 @@ declare(strict_types=1);
 namespace OxidEsales\PayPalModule\GraphQL\Subscriber;
 
 use OxidEsales\PayPalModule\GraphQL\Exception\GraphQLServiceNotFound;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 use OxidEsales\EshopCommunity\Internal\Framework\Event\AbstractShopAwareEventSubscriber;
 use OxidEsales\PayPalModule\GraphQL\Service\BeforePlaceOrder as BeforePlaceOrderService;
 

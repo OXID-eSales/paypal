@@ -37,7 +37,7 @@ final class BasketExtendType
      */
     public function paypalToken(BasketDataType $basket): string
     {
-        return $basket->getEshopModel()->getFieldData('OEPAYPAL_PAYMENT_TOKEN');
+        return (string) $basket->getEshopModel()->getFieldData('OEPAYPAL_PAYMENT_TOKEN');
     }
 
     /**

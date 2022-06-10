@@ -240,13 +240,15 @@ final class Payment
         $shippingMethodId = $deliveryMethod ? (string) $deliveryMethod->id() : 'oxidstandard';
 
         //for Express checkout, the user might not yet exist (anonymous user)
+        $user = null;
         try {
-            /** @var BasketOwnerDataType $customer */
-            $owner = $this->basketRelationService->owner($basket);
-            $user = $owner->getEshopModel();
-            $user->setSelectedAddressId($shipToAddressId);
+            /** @var ?BasketOwnerDataType $customer */
+            if ($owner = $this->basketRelationService->owner($basket)) {
+                $user = $owner->getEshopModel();
+                $user->setSelectedAddressId($shipToAddressId);
+            }
         } catch (CustomerNotFound $e) {
-            $user = null;
+            // no need to do anything in here
         }
 
         $response = $paymentManager->setExpressCheckout(

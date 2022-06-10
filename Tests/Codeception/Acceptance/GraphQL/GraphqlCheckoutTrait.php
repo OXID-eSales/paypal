@@ -35,6 +35,83 @@ trait GraphqlCheckoutTrait
             mutation ($title: String!){
                 basketCreate(basket: {title: $title}) {
                     id
+                    title
+                    creationDate
+                    lastUpdateDate
+                    owner {
+                      firstName
+                      lastName
+                    }
+                    items(pagination: null) {
+                      id
+                      amount
+                      lastUpdateDate
+                      product {
+                         id
+                      }
+                    }
+                    cost {
+                      voucher
+                      discount
+                      total
+                      productNet {
+                         vat
+                      }
+                      productGross {
+                         vats {
+                           vatRate
+                        }
+                      }
+                      payment {
+                         vat
+                      }
+                      currency {
+                         rate
+                      }
+                      delivery {
+                         price
+                      }
+                    }
+                    vouchers {
+                      id
+                      voucher
+                      number
+                      reserved
+                      discount
+                      redeemedAt
+                      series {
+                         title
+                      }
+                    }
+                    deliveryAddress {
+                      id
+                      salutation
+                      firstName
+                      lastName
+                      company
+                      additionalInfo
+                      street
+                      streetNumber
+                      zipCode
+                      city
+                      phone
+                      fax
+                      updated
+                      country {
+                        title
+                      }
+                      state {
+                        id
+                      }
+                    }
+                    payment {
+                       title
+                    }
+                    deliveryMethod {
+                       id
+                    }
+                    paypalToken
+                    paypalServiceType
                 }
             }
         ';
@@ -66,6 +143,8 @@ trait GraphqlCheckoutTrait
                         }
                         amount
                     }
+                    paypalToken
+                    paypalServiceType
                 }
             }
         ';

@@ -5,7 +5,6 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         printerClass="\OxidEsales\TestingLibrary\Printer"
          forceCoversAnnotation="false"
          processIsolation="false"
          stopOnError="false"

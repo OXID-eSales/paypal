@@ -4,6 +4,19 @@ services:
     public: false
     autowire: true
 
+  OxidEsales\Eshop\Core\Registry:
+    class: OxidEsales\Eshop\Core\Registry
+
+  OxidEsales\PayPalModule\Core\Config:
+    factory: [ '@OxidEsales\Eshop\Core\Registry', 'get' ]
+    arguments:
+      $className: 'OxidEsales\PayPalModule\Core\Config'
+
+  OxidEsales\PayPalModule\GraphQL\Infrastructure\Request:
+    factory: [ '@OxidEsales\Eshop\Core\Registry', 'get' ]
+    arguments:
+      $className: 'OxidEsales\PayPalModule\GraphQL\Infrastructure\Request'
+
   OxidEsales\PayPalModule\GraphQL\Controller\:
     resource: 'GraphQL/Controller/*'
     public: true

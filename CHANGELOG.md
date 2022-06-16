@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Add codeception tests, remove selenium tests. Use .env and environment.yaml to inject test credentials.
+- Adapt module to work with OXID eShop 6.5.x compilation.
+- Namespace pointer changed to use files from vendor directory.
 
 ## [6.4.0] - 2021-11-29
 

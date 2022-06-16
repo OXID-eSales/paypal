@@ -241,10 +241,12 @@ final class Payment
 
         //for Express checkout, the user might not yet exist (anonymous user)
         try {
-            /** @var BasketOwnerDataType $customer */
-            $owner = $this->basketRelationService->owner($basket);
-            $user = $owner->getEshopModel();
-            $user->setSelectedAddressId($shipToAddressId);
+            /** @var ?BasketOwnerDataType $user */
+            $user = $this->basketRelationService->owner($basket);
+            if ($user) {
+                $user = $user->getEshopModel();
+                $user->setSelectedAddressId($shipToAddressId);
+            }
         } catch (CustomerNotFound $e) {
             $user = null;
         }

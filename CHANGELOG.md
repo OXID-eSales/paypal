@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Undecided] - unreleased
+## [6.4.1] - 2022-06-28
 
 ### Changed
 - Add codeception tests, remove selenium tests. Use .env and environment.yaml to inject test credentials.
@@ -270,6 +270,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
+[6.4.1]: https://github.com/OXID-eSales/paypal/compare/v6.4.0...v6.4.1
 [6.4.0]: https://github.com/OXID-eSales/paypal/compare/v6.3.2...v6.4.0
 [6.3.2]: https://github.com/OXID-eSales/paypal/compare/v6.3.1...v6.3.2
 [6.3.1]: https://github.com/OXID-eSales/paypal/compare/v6.3.0...v6.3.1

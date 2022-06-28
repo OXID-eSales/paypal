@@ -13,12 +13,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Test compatibility with shop master.
 - Documentation link in README now points to latest version [PR-55](https://github.com/SvenBrunk/paypal.git)
 
-## [Undecided] - unreleased
+## [Undecided] - Unreleased
+
+### Changed
+- Adapt module to work with OXID eShop 6.5.x compilation.
+- Namespace pointer changed to use files from vendor directory.
+
+## [6.4.1] - 2022-06-28
 
 ### Changed
 - Add codeception tests, remove selenium tests. Use .env and environment.yaml to inject test credentials.
-- Adapt module to work with OXID eShop 6.5.x compilation.
-- Namespace pointer changed to use files from vendor directory.
 
 ## [6.4.0] - 2021-11-29
 
@@ -282,6 +286,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Additional PayPal express checkout button in user checkout step in case no user is logged in.
 
 [7.0.0]: https://github.com/OXID-eSales/paypal/compare/b-6.x...master
+[6.4.1]: https://github.com/OXID-eSales/paypal/compare/v6.4.0...v6.4.1
 [6.4.0]: https://github.com/OXID-eSales/paypal/compare/v6.3.2...v6.4.0
 [6.3.2]: https://github.com/OXID-eSales/paypal/compare/v6.3.1...v6.3.2
 [6.3.1]: https://github.com/OXID-eSales/paypal/compare/v6.3.0...v6.3.1

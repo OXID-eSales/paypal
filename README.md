@@ -73,4 +73,4 @@ If you experience any bugs or issues, please report them in the section **module
 
 ### Documentation
 
-The module documentation can be found on our documentation platform: https://docs.oxid-esales.com/modules/paypal/en/6.3/index.html.
+The module documentation can be found on our documentation platform: https://docs.oxid-esales.com/modules/paypal/en/6.5/index.html.

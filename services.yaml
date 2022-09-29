@@ -33,10 +33,6 @@ services:
     class: OxidEsales\PayPalModule\GraphQL\Subscriber\BeforeBasketPayments
     tags: [ 'kernel.event_subscriber' ]
 
-  OxidEsales\PayPalModule\GraphQL\Infrastructure\Request:
-    class: OxidEsales\PayPalModule\GraphQL\Infrastructure\Request
-    public: true
-
   OxidEsales\PayPalModule\GraphQL\Service\Basket:
     class: OxidEsales\PayPalModule\GraphQL\Service\Basket
     public: true
@@ -56,7 +52,3 @@ services:
   OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider:
     class: OxidEsales\PayPalModule\GraphQL\Service\PermissionProvider
     tags: ['graphql_permission_provider']
-
-  OxidEsales\PayPalModule\Core\Config:
-    class: OxidEsales\PayPalModule\Core\Config
-

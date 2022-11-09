@@ -62,7 +62,7 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
         $listCalculator->setPaymentList($orderPaymentList);
         $listCalculator->calculate();
 
-        $this->assertEquals('11.22', $listCalculator->getCapturedAmount());
+        $this->assertEqualsWithDelta('11.22', $listCalculator->getCapturedAmount(), 1);
     }
 
     /**
@@ -91,7 +91,7 @@ class OrderPaymentListCalculatorTest extends \OxidEsales\TestingLibrary\UnitTest
         $listCalculator->setPaymentList($orderPaymentList);
         $listCalculator->calculate();
 
-        $this->assertEquals('6.78', $listCalculator->getRefundedAmount());
+        $this->assertEqualsWithDelta('6.78', $listCalculator->getRefundedAmount(), 1);
     }
 
     /**

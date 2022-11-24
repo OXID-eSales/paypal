@@ -125,12 +125,11 @@ class IPNHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function providerHandlingPendingRequest()
     {
-        $order = oxNew(Order::class);
-        return array(
-            array('Completed', $order::OEPAYPAL_TRANSACTION_STATUS_OK),
-            array('Pending', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
-            array('Failed', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
-        );
+        return [
+            ['Completed', 'OK'],
+            ['Pending', 'NOT_FINISHED'],
+            ['Failed', 'NOT_FINISHED'],
+        ];
     }
 
     /**

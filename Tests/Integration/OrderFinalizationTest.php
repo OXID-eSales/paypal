@@ -31,12 +31,11 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function providerFinalizeOrder_TransStatusNotChange()
     {
-        $order = oxNew(Order::class);
-        return array(
-            array('Pending', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
-            array('Failed', $order::OEPAYPAL_TRANSACTION_STATUS_NOT_FINISHED),
-            array('Complete', $order::OEPAYPAL_TRANSACTION_STATUS_OK)
-        );
+        return [
+            ['Pending', 'NOT_FINISHED'],
+            ['Failed', 'NOT_FINISHED'],
+            ['Complete', 'OK']
+        ];
     }
 
     /**

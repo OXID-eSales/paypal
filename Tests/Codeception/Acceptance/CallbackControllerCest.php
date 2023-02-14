@@ -41,8 +41,15 @@ class CallbackControllerCest extends BaseCest
             $this->fillBasket($I);
         }
 
-        $token = (string) $I->grabValueFrom('//input[@name="stoken"]');
         $sid = (string) $I->grabCookie('sid');
+        $token = '';
+        if ($data['doFillBasket']) {
+            $I->seeElement('//input[@name="paypalExpressCheckoutButtonECS"]');
+            $I->click('//input[@name="paypalExpressCheckoutButtonECS"]');
+            $savedSession = file_get_contents('/tmp/sess_' . $sid);
+            preg_match('/(?:;_rtoken\|s:8:")([a-z0-9]*)/', $savedSession, $matches);
+            $token = $matches[1];
+        }
 
         //Check callback
         $callbackUrl = $this->getCallbackUrl($I, $sid, $token, $data['payPalData']);

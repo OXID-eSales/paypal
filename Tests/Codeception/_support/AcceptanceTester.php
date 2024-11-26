@@ -113,7 +113,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function seePayPalInstallmentBanner()
     {
         $I = $this;
-$I->makeScreenshot(microtime(true));
+$I->makeScreenshot(microtime(true) . '.png');
         $I->waitForElement("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
         $I->switchToIFrame("//div[contains(@id, 'paypal-installment-banner-container')]//iframe");
         $I->waitForElementVisible("//body[node()]");

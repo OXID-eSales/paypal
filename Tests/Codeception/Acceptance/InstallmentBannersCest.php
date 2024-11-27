@@ -35,6 +35,7 @@ class InstallmentBannersCest extends BaseCest
      *
      * @group installment_banners_paypal
      * @group installment_banners_paypal_search
+     * @group investigate
      */
     public function searchPageBannerInBruttoMode(AcceptanceTester $I)
     {
@@ -46,6 +47,9 @@ class InstallmentBannersCest extends BaseCest
         $basketItem = Fixtures::get('product');
 
         $homePage = $I->openShop();
+
+        $I->makeScreenshot(microtime(true) . '.png');
+
         $basket = new Basket($I);
         $basket->addProductToBasket($basketItem['id'], (int)$basketItem['amount']);
         $homePage
@@ -53,6 +57,8 @@ class InstallmentBannersCest extends BaseCest
             ->searchFor("3503");
 
         $I->dontSeeElementInDOM('#paypal-installment-banner-container');
+
+        $I->makeScreenshot(microtime(true) . '.png');
 
         //Check installment banner body in Flow theme
         $I->updateConfigInDatabase('oePayPalBannersSearchResultsPage', true, 'bool');
